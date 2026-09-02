@@ -119,7 +119,8 @@ def get_ipam_preview_next_cidr(disallowed_cidrs: Optional[Sequence[_builtins.str
         netmask_length=28)
     test_vpc_ipam_pool_cidr_allocation = aws.ec2.VpcIpamPoolCidrAllocation("test",
         ipam_pool_id=test_aws_vpc_ipam_pool["id"],
-        cidr=test.cidr)
+        cidr=test.cidr,
+        opts = pulumi.ResourceOptions(ignore_changes=["cidr"]))
     ```
 
 
@@ -143,10 +144,10 @@ def get_ipam_preview_next_cidr(disallowed_cidrs: Optional[Sequence[_builtins.str
         ipam_pool_id=pulumi.get(__ret__, 'ipam_pool_id'),
         netmask_length=pulumi.get(__ret__, 'netmask_length'),
         region=pulumi.get(__ret__, 'region'))
-def get_ipam_preview_next_cidr_output(disallowed_cidrs: Optional[pulumi.Input[Optional[Sequence[_builtins.str]]]] = None,
-                                      ipam_pool_id: Optional[pulumi.Input[_builtins.str]] = None,
-                                      netmask_length: Optional[pulumi.Input[Optional[_builtins.int]]] = None,
-                                      region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_ipam_preview_next_cidr_output(disallowed_cidrs: pulumi.Input[Optional[Optional[Sequence[_builtins.str]]]] = None,
+                                      ipam_pool_id: pulumi.Input[Optional[_builtins.str]] = None,
+                                      netmask_length: pulumi.Input[Optional[Optional[_builtins.int]]] = None,
+                                      region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                       opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetIpamPreviewNextCidrResult]:
     """
     Previews a CIDR from an IPAM address pool. Only works for private IPv4.
@@ -165,7 +166,8 @@ def get_ipam_preview_next_cidr_output(disallowed_cidrs: Optional[pulumi.Input[Op
         netmask_length=28)
     test_vpc_ipam_pool_cidr_allocation = aws.ec2.VpcIpamPoolCidrAllocation("test",
         ipam_pool_id=test_aws_vpc_ipam_pool["id"],
-        cidr=test.cidr)
+        cidr=test.cidr,
+        opts = pulumi.ResourceOptions(ignore_changes=["cidr"]))
     ```
 
 

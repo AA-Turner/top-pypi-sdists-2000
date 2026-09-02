@@ -22,25 +22,26 @@ __all__ = ['GlobalSecondaryIndexArgs', 'GlobalSecondaryIndex']
 class GlobalSecondaryIndexArgs:
     def __init__(__self__, *,
                  index_name: pulumi.Input[_builtins.str],
+                 key_schemas: pulumi.Input[Sequence[pulumi.Input['GlobalSecondaryIndexKeySchemaArgs']]],
                  table_name: pulumi.Input[_builtins.str],
-                 key_schemas: Optional[pulumi.Input[Sequence[pulumi.Input['GlobalSecondaryIndexKeySchemaArgs']]]] = None,
-                 on_demand_throughput: Optional[pulumi.Input['GlobalSecondaryIndexOnDemandThroughputArgs']] = None,
-                 projection: Optional[pulumi.Input['GlobalSecondaryIndexProjectionArgs']] = None,
-                 provisioned_throughput: Optional[pulumi.Input['GlobalSecondaryIndexProvisionedThroughputArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['GlobalSecondaryIndexTimeoutsArgs']] = None,
-                 warm_throughput: Optional[pulumi.Input['GlobalSecondaryIndexWarmThroughputArgs']] = None):
+                 on_demand_throughput: pulumi.Input[Optional['GlobalSecondaryIndexOnDemandThroughputArgs']] = None,
+                 projection: pulumi.Input[Optional['GlobalSecondaryIndexProjectionArgs']] = None,
+                 provisioned_throughput: pulumi.Input[Optional['GlobalSecondaryIndexProvisionedThroughputArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['GlobalSecondaryIndexTimeoutsArgs']] = None,
+                 warm_throughput: pulumi.Input[Optional['GlobalSecondaryIndexWarmThroughputArgs']] = None):
         """
         The set of arguments for constructing a GlobalSecondaryIndex resource.
+
         :param pulumi.Input[_builtins.str] index_name: Name of the index.
-        :param pulumi.Input[_builtins.str] table_name: Name of the table this index belongs to.
-               
-               The following arguments are optional:
         :param pulumi.Input[Sequence[pulumi.Input['GlobalSecondaryIndexKeySchemaArgs']]] key_schemas: Set of nested attribute definitions.
                At least 1 element defining a `HASH` is required.
                All elements with the `key_type` of `HASH` must precede elements with `key_type` of `RANGE`.
                Changing any values in `key_schema` will re-create the resource.
                See `key_schema` below.
+        :param pulumi.Input[_builtins.str] table_name: Name of the table this index belongs to.
+               
+               The following arguments are optional:
         :param pulumi.Input['GlobalSecondaryIndexOnDemandThroughputArgs'] on_demand_throughput: Sets the maximum number of read and write units for the index.
                See `on_demand_throughput` below.
                Only valid if the table's `billing_mode` is `PAY_PER_REQUEST`.
@@ -54,9 +55,8 @@ class GlobalSecondaryIndexArgs:
                See `warm_throughput` below.
         """
         pulumi.set(__self__, "index_name", index_name)
+        pulumi.set(__self__, "key_schemas", key_schemas)
         pulumi.set(__self__, "table_name", table_name)
-        if key_schemas is not None:
-            pulumi.set(__self__, "key_schemas", key_schemas)
         if on_demand_throughput is not None:
             pulumi.set(__self__, "on_demand_throughput", on_demand_throughput)
         if projection is not None:
@@ -83,6 +83,22 @@ class GlobalSecondaryIndexArgs:
         pulumi.set(self, "index_name", value)
 
     @_builtins.property
+    @pulumi.getter(name="keySchemas")
+    def key_schemas(self) -> pulumi.Input[Sequence[pulumi.Input['GlobalSecondaryIndexKeySchemaArgs']]]:
+        """
+        Set of nested attribute definitions.
+        At least 1 element defining a `HASH` is required.
+        All elements with the `key_type` of `HASH` must precede elements with `key_type` of `RANGE`.
+        Changing any values in `key_schema` will re-create the resource.
+        See `key_schema` below.
+        """
+        return pulumi.get(self, "key_schemas")
+
+    @key_schemas.setter
+    def key_schemas(self, value: pulumi.Input[Sequence[pulumi.Input['GlobalSecondaryIndexKeySchemaArgs']]]):
+        pulumi.set(self, "key_schemas", value)
+
+    @_builtins.property
     @pulumi.getter(name="tableName")
     def table_name(self) -> pulumi.Input[_builtins.str]:
         """
@@ -97,24 +113,8 @@ class GlobalSecondaryIndexArgs:
         pulumi.set(self, "table_name", value)
 
     @_builtins.property
-    @pulumi.getter(name="keySchemas")
-    def key_schemas(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['GlobalSecondaryIndexKeySchemaArgs']]]]:
-        """
-        Set of nested attribute definitions.
-        At least 1 element defining a `HASH` is required.
-        All elements with the `key_type` of `HASH` must precede elements with `key_type` of `RANGE`.
-        Changing any values in `key_schema` will re-create the resource.
-        See `key_schema` below.
-        """
-        return pulumi.get(self, "key_schemas")
-
-    @key_schemas.setter
-    def key_schemas(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['GlobalSecondaryIndexKeySchemaArgs']]]]):
-        pulumi.set(self, "key_schemas", value)
-
-    @_builtins.property
     @pulumi.getter(name="onDemandThroughput")
-    def on_demand_throughput(self) -> Optional[pulumi.Input['GlobalSecondaryIndexOnDemandThroughputArgs']]:
+    def on_demand_throughput(self) -> pulumi.Input[Optional['GlobalSecondaryIndexOnDemandThroughputArgs']]:
         """
         Sets the maximum number of read and write units for the index.
         See `on_demand_throughput` below.
@@ -123,12 +123,12 @@ class GlobalSecondaryIndexArgs:
         return pulumi.get(self, "on_demand_throughput")
 
     @on_demand_throughput.setter
-    def on_demand_throughput(self, value: Optional[pulumi.Input['GlobalSecondaryIndexOnDemandThroughputArgs']]):
+    def on_demand_throughput(self, value: pulumi.Input[Optional['GlobalSecondaryIndexOnDemandThroughputArgs']]):
         pulumi.set(self, "on_demand_throughput", value)
 
     @_builtins.property
     @pulumi.getter
-    def projection(self) -> Optional[pulumi.Input['GlobalSecondaryIndexProjectionArgs']]:
+    def projection(self) -> pulumi.Input[Optional['GlobalSecondaryIndexProjectionArgs']]:
         """
         Describes which attributes from the table are represented in the index.
         See `projection` below.
@@ -136,12 +136,12 @@ class GlobalSecondaryIndexArgs:
         return pulumi.get(self, "projection")
 
     @projection.setter
-    def projection(self, value: Optional[pulumi.Input['GlobalSecondaryIndexProjectionArgs']]):
+    def projection(self, value: pulumi.Input[Optional['GlobalSecondaryIndexProjectionArgs']]):
         pulumi.set(self, "projection", value)
 
     @_builtins.property
     @pulumi.getter(name="provisionedThroughput")
-    def provisioned_throughput(self) -> Optional[pulumi.Input['GlobalSecondaryIndexProvisionedThroughputArgs']]:
+    def provisioned_throughput(self) -> pulumi.Input[Optional['GlobalSecondaryIndexProvisionedThroughputArgs']]:
         """
         Provisioned throughput for the index.
         See `provisioned_throughput` below.
@@ -150,33 +150,33 @@ class GlobalSecondaryIndexArgs:
         return pulumi.get(self, "provisioned_throughput")
 
     @provisioned_throughput.setter
-    def provisioned_throughput(self, value: Optional[pulumi.Input['GlobalSecondaryIndexProvisionedThroughputArgs']]):
+    def provisioned_throughput(self, value: pulumi.Input[Optional['GlobalSecondaryIndexProvisionedThroughputArgs']]):
         pulumi.set(self, "provisioned_throughput", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['GlobalSecondaryIndexTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['GlobalSecondaryIndexTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['GlobalSecondaryIndexTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['GlobalSecondaryIndexTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter(name="warmThroughput")
-    def warm_throughput(self) -> Optional[pulumi.Input['GlobalSecondaryIndexWarmThroughputArgs']]:
+    def warm_throughput(self) -> pulumi.Input[Optional['GlobalSecondaryIndexWarmThroughputArgs']]:
         """
         Sets the number of warm read and write units for this index.
         See `warm_throughput` below.
@@ -184,25 +184,26 @@ class GlobalSecondaryIndexArgs:
         return pulumi.get(self, "warm_throughput")
 
     @warm_throughput.setter
-    def warm_throughput(self, value: Optional[pulumi.Input['GlobalSecondaryIndexWarmThroughputArgs']]):
+    def warm_throughput(self, value: pulumi.Input[Optional['GlobalSecondaryIndexWarmThroughputArgs']]):
         pulumi.set(self, "warm_throughput", value)
 
 
 @pulumi.input_type
 class _GlobalSecondaryIndexState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 index_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 key_schemas: Optional[pulumi.Input[Sequence[pulumi.Input['GlobalSecondaryIndexKeySchemaArgs']]]] = None,
-                 on_demand_throughput: Optional[pulumi.Input['GlobalSecondaryIndexOnDemandThroughputArgs']] = None,
-                 projection: Optional[pulumi.Input['GlobalSecondaryIndexProjectionArgs']] = None,
-                 provisioned_throughput: Optional[pulumi.Input['GlobalSecondaryIndexProvisionedThroughputArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 table_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['GlobalSecondaryIndexTimeoutsArgs']] = None,
-                 warm_throughput: Optional[pulumi.Input['GlobalSecondaryIndexWarmThroughputArgs']] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 index_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 key_schemas: pulumi.Input[Optional[Sequence[pulumi.Input['GlobalSecondaryIndexKeySchemaArgs']]]] = None,
+                 on_demand_throughput: pulumi.Input[Optional['GlobalSecondaryIndexOnDemandThroughputArgs']] = None,
+                 projection: pulumi.Input[Optional['GlobalSecondaryIndexProjectionArgs']] = None,
+                 provisioned_throughput: pulumi.Input[Optional['GlobalSecondaryIndexProvisionedThroughputArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 table_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['GlobalSecondaryIndexTimeoutsArgs']] = None,
+                 warm_throughput: pulumi.Input[Optional['GlobalSecondaryIndexWarmThroughputArgs']] = None):
         """
         Input properties used for looking up and filtering GlobalSecondaryIndex resources.
+
         :param pulumi.Input[_builtins.str] arn: ARN of the GSI.
         :param pulumi.Input[_builtins.str] index_name: Name of the index.
         :param pulumi.Input[Sequence[pulumi.Input['GlobalSecondaryIndexKeySchemaArgs']]] key_schemas: Set of nested attribute definitions.
@@ -248,31 +249,31 @@ class _GlobalSecondaryIndexState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the GSI.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="indexName")
-    def index_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def index_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the index.
         """
         return pulumi.get(self, "index_name")
 
     @index_name.setter
-    def index_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def index_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "index_name", value)
 
     @_builtins.property
     @pulumi.getter(name="keySchemas")
-    def key_schemas(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['GlobalSecondaryIndexKeySchemaArgs']]]]:
+    def key_schemas(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['GlobalSecondaryIndexKeySchemaArgs']]]]:
         """
         Set of nested attribute definitions.
         At least 1 element defining a `HASH` is required.
@@ -283,12 +284,12 @@ class _GlobalSecondaryIndexState:
         return pulumi.get(self, "key_schemas")
 
     @key_schemas.setter
-    def key_schemas(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['GlobalSecondaryIndexKeySchemaArgs']]]]):
+    def key_schemas(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['GlobalSecondaryIndexKeySchemaArgs']]]]):
         pulumi.set(self, "key_schemas", value)
 
     @_builtins.property
     @pulumi.getter(name="onDemandThroughput")
-    def on_demand_throughput(self) -> Optional[pulumi.Input['GlobalSecondaryIndexOnDemandThroughputArgs']]:
+    def on_demand_throughput(self) -> pulumi.Input[Optional['GlobalSecondaryIndexOnDemandThroughputArgs']]:
         """
         Sets the maximum number of read and write units for the index.
         See `on_demand_throughput` below.
@@ -297,12 +298,12 @@ class _GlobalSecondaryIndexState:
         return pulumi.get(self, "on_demand_throughput")
 
     @on_demand_throughput.setter
-    def on_demand_throughput(self, value: Optional[pulumi.Input['GlobalSecondaryIndexOnDemandThroughputArgs']]):
+    def on_demand_throughput(self, value: pulumi.Input[Optional['GlobalSecondaryIndexOnDemandThroughputArgs']]):
         pulumi.set(self, "on_demand_throughput", value)
 
     @_builtins.property
     @pulumi.getter
-    def projection(self) -> Optional[pulumi.Input['GlobalSecondaryIndexProjectionArgs']]:
+    def projection(self) -> pulumi.Input[Optional['GlobalSecondaryIndexProjectionArgs']]:
         """
         Describes which attributes from the table are represented in the index.
         See `projection` below.
@@ -310,12 +311,12 @@ class _GlobalSecondaryIndexState:
         return pulumi.get(self, "projection")
 
     @projection.setter
-    def projection(self, value: Optional[pulumi.Input['GlobalSecondaryIndexProjectionArgs']]):
+    def projection(self, value: pulumi.Input[Optional['GlobalSecondaryIndexProjectionArgs']]):
         pulumi.set(self, "projection", value)
 
     @_builtins.property
     @pulumi.getter(name="provisionedThroughput")
-    def provisioned_throughput(self) -> Optional[pulumi.Input['GlobalSecondaryIndexProvisionedThroughputArgs']]:
+    def provisioned_throughput(self) -> pulumi.Input[Optional['GlobalSecondaryIndexProvisionedThroughputArgs']]:
         """
         Provisioned throughput for the index.
         See `provisioned_throughput` below.
@@ -324,24 +325,24 @@ class _GlobalSecondaryIndexState:
         return pulumi.get(self, "provisioned_throughput")
 
     @provisioned_throughput.setter
-    def provisioned_throughput(self, value: Optional[pulumi.Input['GlobalSecondaryIndexProvisionedThroughputArgs']]):
+    def provisioned_throughput(self, value: pulumi.Input[Optional['GlobalSecondaryIndexProvisionedThroughputArgs']]):
         pulumi.set(self, "provisioned_throughput", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="tableName")
-    def table_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def table_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the table this index belongs to.
 
@@ -350,21 +351,21 @@ class _GlobalSecondaryIndexState:
         return pulumi.get(self, "table_name")
 
     @table_name.setter
-    def table_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def table_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "table_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['GlobalSecondaryIndexTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['GlobalSecondaryIndexTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['GlobalSecondaryIndexTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['GlobalSecondaryIndexTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter(name="warmThroughput")
-    def warm_throughput(self) -> Optional[pulumi.Input['GlobalSecondaryIndexWarmThroughputArgs']]:
+    def warm_throughput(self) -> pulumi.Input[Optional['GlobalSecondaryIndexWarmThroughputArgs']]:
         """
         Sets the number of warm read and write units for this index.
         See `warm_throughput` below.
@@ -372,7 +373,7 @@ class _GlobalSecondaryIndexState:
         return pulumi.get(self, "warm_throughput")
 
     @warm_throughput.setter
-    def warm_throughput(self, value: Optional[pulumi.Input['GlobalSecondaryIndexWarmThroughputArgs']]):
+    def warm_throughput(self, value: pulumi.Input[Optional['GlobalSecondaryIndexWarmThroughputArgs']]):
         pulumi.set(self, "warm_throughput", value)
 
 
@@ -382,24 +383,18 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 index_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 key_schemas: Optional[pulumi.Input[Sequence[pulumi.Input[Union['GlobalSecondaryIndexKeySchemaArgs', 'GlobalSecondaryIndexKeySchemaArgsDict']]]]] = None,
-                 on_demand_throughput: Optional[pulumi.Input[Union['GlobalSecondaryIndexOnDemandThroughputArgs', 'GlobalSecondaryIndexOnDemandThroughputArgsDict']]] = None,
-                 projection: Optional[pulumi.Input[Union['GlobalSecondaryIndexProjectionArgs', 'GlobalSecondaryIndexProjectionArgsDict']]] = None,
-                 provisioned_throughput: Optional[pulumi.Input[Union['GlobalSecondaryIndexProvisionedThroughputArgs', 'GlobalSecondaryIndexProvisionedThroughputArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 table_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['GlobalSecondaryIndexTimeoutsArgs', 'GlobalSecondaryIndexTimeoutsArgsDict']]] = None,
-                 warm_throughput: Optional[pulumi.Input[Union['GlobalSecondaryIndexWarmThroughputArgs', 'GlobalSecondaryIndexWarmThroughputArgsDict']]] = None,
+                 index_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 key_schemas: pulumi.Input[Optional[Sequence[pulumi.Input[Union['GlobalSecondaryIndexKeySchemaArgs', 'GlobalSecondaryIndexKeySchemaArgsDict']]]]] = None,
+                 on_demand_throughput: pulumi.Input[Optional[Union['GlobalSecondaryIndexOnDemandThroughputArgs', 'GlobalSecondaryIndexOnDemandThroughputArgsDict']]] = None,
+                 projection: pulumi.Input[Optional[Union['GlobalSecondaryIndexProjectionArgs', 'GlobalSecondaryIndexProjectionArgsDict']]] = None,
+                 provisioned_throughput: pulumi.Input[Optional[Union['GlobalSecondaryIndexProvisionedThroughputArgs', 'GlobalSecondaryIndexProvisionedThroughputArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 table_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['GlobalSecondaryIndexTimeoutsArgs', 'GlobalSecondaryIndexTimeoutsArgsDict']]] = None,
+                 warm_throughput: pulumi.Input[Optional[Union['GlobalSecondaryIndexWarmThroughputArgs', 'GlobalSecondaryIndexWarmThroughputArgsDict']]] = None,
                  __props__=None):
         """
-        !> The resource type `dynamodb.GlobalSecondaryIndex` is an experimental feature. The schema or behavior may change without notice, and it is not subject to the backwards compatibility guarantee of the provider.
-
-        > The resource type `dynamodb.GlobalSecondaryIndex` can be enabled by setting the environment variable `TF_AWS_EXPERIMENT_dynamodb_global_secondary_index` to any value. If not enabled, use of `dynamodb.GlobalSecondaryIndex` will result in an error when running Terraform.
-
-        > Please provide feedback, positive or negative, at https://github.com/hashicorp/terraform-provider-aws/issues/45640. User feedback will determine if this experiment is a success.
-
-        !> **WARNING:** Do not combine `dynamodb.GlobalSecondaryIndex` resources in conjunction with `global_secondary_index` on `dynamodb.Table`. Doing so may cause conflicts, perpertual differences, and Global Secondary Indexes being overwritten.
+        > **WARNING:** Do not combine `dynamodb.GlobalSecondaryIndex` resources in conjunction with `global_secondary_index` on `dynamodb.Table`. Doing so may cause conflicts, perpertual differences, and Global Secondary Indexes being overwritten.
 
         ## Example Usage
 
@@ -408,12 +403,6 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example_table = aws.dynamodb.Table("example",
-            name="example",
-            billing_mode="PROVISIONED",
-            read_capacity=20,
-            write_capacity=20,
-            hash_key="UserId",
-            range_key="GameTitle",
             attributes=[
                 {
                     "name": "UserId",
@@ -423,10 +412,14 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
                     "name": "GameTitle",
                     "type": "S",
                 },
-            ])
+            ],
+            name="example",
+            billing_mode="PROVISIONED",
+            read_capacity=20,
+            write_capacity=20,
+            hash_key="UserId",
+            range_key="GameTitle")
         example = aws.dynamodb.GlobalSecondaryIndex("example",
-            table_name=example_table.name,
-            index_name="GameTitleIndex",
             projection={
                 "projection_type": "INCLUDE",
                 "non_key_attributes": ["UserId"],
@@ -439,10 +432,12 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
                 "attribute_name": "GameTitle",
                 "attribute_type": "S",
                 "key_type": "HASH",
-            }])
+            }],
+            table_name=example_table.name,
+            index_name="GameTitleIndex")
         ```
 
-        ## Migrating
+        ### Migrating
 
         Use the following steps to migrate existing Global Secondary Indexes defined inline in `global_secondary_index` on an `dynamodb.Table`.
 
@@ -455,10 +450,20 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.dynamodb.Table("example",
-            name="example-table",
-            hash_key="example-key",
-            read_capacity=1,
-            write_capacity=1,
+            attributes=[
+                {
+                    "name": "example-key",
+                    "type": "S",
+                },
+                {
+                    "name": "example-gsi-key-1",
+                    "type": "S",
+                },
+                {
+                    "name": "example-gsi-key-2",
+                    "type": "S",
+                },
+            ],
             global_secondary_indexes=[
                 {
                     "name": "example-index-1",
@@ -475,20 +480,10 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
                     "write_capacity": 1,
                 },
             ],
-            attributes=[
-                {
-                    "name": "example-key",
-                    "type": "S",
-                },
-                {
-                    "name": "example-gsi-key-1",
-                    "type": "S",
-                },
-                {
-                    "name": "example-gsi-key-2",
-                    "type": "S",
-                },
-            ])
+            name="example-table",
+            hash_key="example-key",
+            read_capacity=1,
+            write_capacity=1)
         ```
 
         Update the configuration to the following. Note that the schema of `dynamodb.GlobalSecondaryIndex` has some differences with `global_secondary_index` on `dynamodb.Table`.
@@ -505,6 +500,7 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:dynamodb/globalSecondaryIndex:GlobalSecondaryIndex example 'example-table,example-index'
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -536,13 +532,7 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
                  args: GlobalSecondaryIndexArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        !> The resource type `dynamodb.GlobalSecondaryIndex` is an experimental feature. The schema or behavior may change without notice, and it is not subject to the backwards compatibility guarantee of the provider.
-
-        > The resource type `dynamodb.GlobalSecondaryIndex` can be enabled by setting the environment variable `TF_AWS_EXPERIMENT_dynamodb_global_secondary_index` to any value. If not enabled, use of `dynamodb.GlobalSecondaryIndex` will result in an error when running Terraform.
-
-        > Please provide feedback, positive or negative, at https://github.com/hashicorp/terraform-provider-aws/issues/45640. User feedback will determine if this experiment is a success.
-
-        !> **WARNING:** Do not combine `dynamodb.GlobalSecondaryIndex` resources in conjunction with `global_secondary_index` on `dynamodb.Table`. Doing so may cause conflicts, perpertual differences, and Global Secondary Indexes being overwritten.
+        > **WARNING:** Do not combine `dynamodb.GlobalSecondaryIndex` resources in conjunction with `global_secondary_index` on `dynamodb.Table`. Doing so may cause conflicts, perpertual differences, and Global Secondary Indexes being overwritten.
 
         ## Example Usage
 
@@ -551,12 +541,6 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example_table = aws.dynamodb.Table("example",
-            name="example",
-            billing_mode="PROVISIONED",
-            read_capacity=20,
-            write_capacity=20,
-            hash_key="UserId",
-            range_key="GameTitle",
             attributes=[
                 {
                     "name": "UserId",
@@ -566,10 +550,14 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
                     "name": "GameTitle",
                     "type": "S",
                 },
-            ])
+            ],
+            name="example",
+            billing_mode="PROVISIONED",
+            read_capacity=20,
+            write_capacity=20,
+            hash_key="UserId",
+            range_key="GameTitle")
         example = aws.dynamodb.GlobalSecondaryIndex("example",
-            table_name=example_table.name,
-            index_name="GameTitleIndex",
             projection={
                 "projection_type": "INCLUDE",
                 "non_key_attributes": ["UserId"],
@@ -582,10 +570,12 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
                 "attribute_name": "GameTitle",
                 "attribute_type": "S",
                 "key_type": "HASH",
-            }])
+            }],
+            table_name=example_table.name,
+            index_name="GameTitleIndex")
         ```
 
-        ## Migrating
+        ### Migrating
 
         Use the following steps to migrate existing Global Secondary Indexes defined inline in `global_secondary_index` on an `dynamodb.Table`.
 
@@ -598,10 +588,20 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.dynamodb.Table("example",
-            name="example-table",
-            hash_key="example-key",
-            read_capacity=1,
-            write_capacity=1,
+            attributes=[
+                {
+                    "name": "example-key",
+                    "type": "S",
+                },
+                {
+                    "name": "example-gsi-key-1",
+                    "type": "S",
+                },
+                {
+                    "name": "example-gsi-key-2",
+                    "type": "S",
+                },
+            ],
             global_secondary_indexes=[
                 {
                     "name": "example-index-1",
@@ -618,20 +618,10 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
                     "write_capacity": 1,
                 },
             ],
-            attributes=[
-                {
-                    "name": "example-key",
-                    "type": "S",
-                },
-                {
-                    "name": "example-gsi-key-1",
-                    "type": "S",
-                },
-                {
-                    "name": "example-gsi-key-2",
-                    "type": "S",
-                },
-            ])
+            name="example-table",
+            hash_key="example-key",
+            read_capacity=1,
+            write_capacity=1)
         ```
 
         Update the configuration to the following. Note that the schema of `dynamodb.GlobalSecondaryIndex` has some differences with `global_secondary_index` on `dynamodb.Table`.
@@ -649,6 +639,7 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
         $ pulumi import aws:dynamodb/globalSecondaryIndex:GlobalSecondaryIndex example 'example-table,example-index'
         ```
 
+
         :param str resource_name: The name of the resource.
         :param GlobalSecondaryIndexArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -664,15 +655,15 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 index_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 key_schemas: Optional[pulumi.Input[Sequence[pulumi.Input[Union['GlobalSecondaryIndexKeySchemaArgs', 'GlobalSecondaryIndexKeySchemaArgsDict']]]]] = None,
-                 on_demand_throughput: Optional[pulumi.Input[Union['GlobalSecondaryIndexOnDemandThroughputArgs', 'GlobalSecondaryIndexOnDemandThroughputArgsDict']]] = None,
-                 projection: Optional[pulumi.Input[Union['GlobalSecondaryIndexProjectionArgs', 'GlobalSecondaryIndexProjectionArgsDict']]] = None,
-                 provisioned_throughput: Optional[pulumi.Input[Union['GlobalSecondaryIndexProvisionedThroughputArgs', 'GlobalSecondaryIndexProvisionedThroughputArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 table_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['GlobalSecondaryIndexTimeoutsArgs', 'GlobalSecondaryIndexTimeoutsArgsDict']]] = None,
-                 warm_throughput: Optional[pulumi.Input[Union['GlobalSecondaryIndexWarmThroughputArgs', 'GlobalSecondaryIndexWarmThroughputArgsDict']]] = None,
+                 index_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 key_schemas: pulumi.Input[Optional[Sequence[pulumi.Input[Union['GlobalSecondaryIndexKeySchemaArgs', 'GlobalSecondaryIndexKeySchemaArgsDict']]]]] = None,
+                 on_demand_throughput: pulumi.Input[Optional[Union['GlobalSecondaryIndexOnDemandThroughputArgs', 'GlobalSecondaryIndexOnDemandThroughputArgsDict']]] = None,
+                 projection: pulumi.Input[Optional[Union['GlobalSecondaryIndexProjectionArgs', 'GlobalSecondaryIndexProjectionArgsDict']]] = None,
+                 provisioned_throughput: pulumi.Input[Optional[Union['GlobalSecondaryIndexProvisionedThroughputArgs', 'GlobalSecondaryIndexProvisionedThroughputArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 table_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['GlobalSecondaryIndexTimeoutsArgs', 'GlobalSecondaryIndexTimeoutsArgsDict']]] = None,
+                 warm_throughput: pulumi.Input[Optional[Union['GlobalSecondaryIndexWarmThroughputArgs', 'GlobalSecondaryIndexWarmThroughputArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -685,6 +676,8 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
             if index_name is None and not opts.urn:
                 raise TypeError("Missing required property 'index_name'")
             __props__.__dict__["index_name"] = index_name
+            if key_schemas is None and not opts.urn:
+                raise TypeError("Missing required property 'key_schemas'")
             __props__.__dict__["key_schemas"] = key_schemas
             __props__.__dict__["on_demand_throughput"] = on_demand_throughput
             __props__.__dict__["projection"] = projection
@@ -706,16 +699,16 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            index_name: Optional[pulumi.Input[_builtins.str]] = None,
-            key_schemas: Optional[pulumi.Input[Sequence[pulumi.Input[Union['GlobalSecondaryIndexKeySchemaArgs', 'GlobalSecondaryIndexKeySchemaArgsDict']]]]] = None,
-            on_demand_throughput: Optional[pulumi.Input[Union['GlobalSecondaryIndexOnDemandThroughputArgs', 'GlobalSecondaryIndexOnDemandThroughputArgsDict']]] = None,
-            projection: Optional[pulumi.Input[Union['GlobalSecondaryIndexProjectionArgs', 'GlobalSecondaryIndexProjectionArgsDict']]] = None,
-            provisioned_throughput: Optional[pulumi.Input[Union['GlobalSecondaryIndexProvisionedThroughputArgs', 'GlobalSecondaryIndexProvisionedThroughputArgsDict']]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            table_name: Optional[pulumi.Input[_builtins.str]] = None,
-            timeouts: Optional[pulumi.Input[Union['GlobalSecondaryIndexTimeoutsArgs', 'GlobalSecondaryIndexTimeoutsArgsDict']]] = None,
-            warm_throughput: Optional[pulumi.Input[Union['GlobalSecondaryIndexWarmThroughputArgs', 'GlobalSecondaryIndexWarmThroughputArgsDict']]] = None) -> 'GlobalSecondaryIndex':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            index_name: pulumi.Input[Optional[_builtins.str]] = None,
+            key_schemas: pulumi.Input[Optional[Sequence[pulumi.Input[Union['GlobalSecondaryIndexKeySchemaArgs', 'GlobalSecondaryIndexKeySchemaArgsDict']]]]] = None,
+            on_demand_throughput: pulumi.Input[Optional[Union['GlobalSecondaryIndexOnDemandThroughputArgs', 'GlobalSecondaryIndexOnDemandThroughputArgsDict']]] = None,
+            projection: pulumi.Input[Optional[Union['GlobalSecondaryIndexProjectionArgs', 'GlobalSecondaryIndexProjectionArgsDict']]] = None,
+            provisioned_throughput: pulumi.Input[Optional[Union['GlobalSecondaryIndexProvisionedThroughputArgs', 'GlobalSecondaryIndexProvisionedThroughputArgsDict']]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            table_name: pulumi.Input[Optional[_builtins.str]] = None,
+            timeouts: pulumi.Input[Optional[Union['GlobalSecondaryIndexTimeoutsArgs', 'GlobalSecondaryIndexTimeoutsArgsDict']]] = None,
+            warm_throughput: pulumi.Input[Optional[Union['GlobalSecondaryIndexWarmThroughputArgs', 'GlobalSecondaryIndexWarmThroughputArgsDict']]] = None) -> 'GlobalSecondaryIndex':
         """
         Get an existing GlobalSecondaryIndex resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -779,7 +772,7 @@ class GlobalSecondaryIndex(pulumi.CustomResource):
 
     @_builtins.property
     @pulumi.getter(name="keySchemas")
-    def key_schemas(self) -> pulumi.Output[Optional[Sequence['outputs.GlobalSecondaryIndexKeySchema']]]:
+    def key_schemas(self) -> pulumi.Output[Sequence['outputs.GlobalSecondaryIndexKeySchema']]:
         """
         Set of nested attribute definitions.
         At least 1 element defining a `HASH` is required.

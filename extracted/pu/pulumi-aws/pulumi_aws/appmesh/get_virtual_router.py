@@ -179,6 +179,7 @@ def get_virtual_router(mesh_name: Optional[_builtins.str] = None,
 
 
     :param _builtins.str mesh_name: Name of the mesh in which the virtual router exists
+    :param _builtins.str mesh_owner: AWS account ID of the service mesh's owner.
     :param _builtins.str name: Name of the virtual router.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     :param Mapping[str, _builtins.str] tags: Map of tags.
@@ -204,11 +205,11 @@ def get_virtual_router(mesh_name: Optional[_builtins.str] = None,
         resource_owner=pulumi.get(__ret__, 'resource_owner'),
         specs=pulumi.get(__ret__, 'specs'),
         tags=pulumi.get(__ret__, 'tags'))
-def get_virtual_router_output(mesh_name: Optional[pulumi.Input[_builtins.str]] = None,
-                              mesh_owner: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              name: Optional[pulumi.Input[_builtins.str]] = None,
-                              region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_virtual_router_output(mesh_name: pulumi.Input[Optional[_builtins.str]] = None,
+                              mesh_owner: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              name: pulumi.Input[Optional[_builtins.str]] = None,
+                              region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                               opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetVirtualRouterResult]:
     """
     The App Mesh Virtual Router data source allows details of an App Mesh Virtual Service to be retrieved by its name and mesh_name.
@@ -225,6 +226,7 @@ def get_virtual_router_output(mesh_name: Optional[pulumi.Input[_builtins.str]] =
 
 
     :param _builtins.str mesh_name: Name of the mesh in which the virtual router exists
+    :param _builtins.str mesh_owner: AWS account ID of the service mesh's owner.
     :param _builtins.str name: Name of the virtual router.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     :param Mapping[str, _builtins.str] tags: Map of tags.

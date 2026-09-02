@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import warnings
-from typing import List, Tuple
 
 import numpy as np
 
@@ -26,6 +24,7 @@ import cvxpy.utilities as u
 from cvxpy.atoms.affine.affine_atom import AffAtom
 from cvxpy.constraints.constraint import Constraint
 from cvxpy.expressions.constants.parameter import is_param_free
+from cvxpy.utilities.warn import CvxpyDeprecationWarning, warn
 
 
 class conv(AffAtom):
@@ -48,7 +47,7 @@ class conv(AffAtom):
     """
 
     def __init__(self, lh_expr, rh_expr) -> None:
-        warnings.warn("conv is deprecated. Use convolve instead.", DeprecationWarning)
+        warn("conv is deprecated. Use convolve instead.", CvxpyDeprecationWarning)
         super(conv, self).__init__(lh_expr, rh_expr)
 
     @AffAtom.numpy_numeric
@@ -66,7 +65,7 @@ class conv(AffAtom):
         """Checks that both arguments are vectors, and the first is constant.
         """
         if not self.args[0].is_vector() or not self.args[1].is_vector():
-            raise ValueError("The arguments to conv must resolve to vectors.")
+            raise ValueError("The arguments to conv must resolve to a 1-d array")
         if not self.args[0].is_constant():
             raise ValueError("The first argument to conv must be constant.")
 
@@ -86,7 +85,7 @@ class conv(AffAtom):
         """
         return self.is_atom_convex()
 
-    def shape_from_args(self) -> Tuple[int, int]:
+    def shape_from_args(self) -> tuple[int, int]:
         """The sum of the argument dimensions - 1.
         """
         lh_length = self.args[0].size
@@ -97,7 +96,7 @@ class conv(AffAtom):
         else:
             return (output_length,)
 
-    def sign_from_args(self) -> Tuple[bool, bool]:
+    def sign_from_args(self) -> tuple[bool, bool]:
         """Same as times.
         """
         return u.sign.mul_sign(self.args[0], self.args[1])
@@ -113,8 +112,8 @@ class conv(AffAtom):
         return self.args[0].is_nonpos()
 
     def graph_implementation(
-        self, arg_objs, shape: Tuple[int, ...], data=None
-    ) -> Tuple[lo.LinOp, List[Constraint]]:
+        self, arg_objs, shape: tuple[int, ...], data=None
+    ) -> tuple[lo.LinOp, list[Constraint]]:
         """Convolve two vectors.
 
         Parameters
@@ -187,14 +186,14 @@ class convolve(AffAtom):
         """
         return self.is_atom_convex()
 
-    def shape_from_args(self) -> Tuple[int, int]:
+    def shape_from_args(self) -> tuple[int, int]:
         """The sum of the argument dimensions - 1.
         """
         lh_length = self.args[0].size
         rh_length = self.args[1].size
         return (lh_length + rh_length - 1,)
 
-    def sign_from_args(self) -> Tuple[bool, bool]:
+    def sign_from_args(self) -> tuple[bool, bool]:
         """Same as times.
         """
         return u.sign.mul_sign(self.args[0], self.args[1])
@@ -210,8 +209,8 @@ class convolve(AffAtom):
         return self.args[0].is_nonpos()
 
     def graph_implementation(
-        self, arg_objs, shape: Tuple[int, ...], data=None
-    ) -> Tuple[lo.LinOp, List[Constraint]]:
+        self, arg_objs, shape: tuple[int, ...], data=None
+    ) -> tuple[lo.LinOp, list[Constraint]]:
         """Convolve two vectors.
 
         Parameters

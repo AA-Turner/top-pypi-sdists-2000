@@ -14,16 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+from collections.abc import Iterable
+
 import numpy as np
 
 import cvxpy.settings as s
 from cvxpy.constraints import SOC
+from cvxpy.reductions.matrix_stuffing import extract_mip_idx
 from cvxpy.reductions.solution import Solution
 from cvxpy.reductions.solvers import utilities
 from cvxpy.reductions.solvers.conic_solvers.conic_solver import (
     ConicSolver,
     dims_to_solver_dict,
 )
+from cvxpy.utilities.citations import CITATION_DICT
 from cvxpy.utilities.versioning import Version
 
 
@@ -36,6 +40,41 @@ def makeMstart(A, n, ifCol: int = 1):
     return mstart
 
 
+def make_unique_names(names: Iterable[str]) -> list[str]:
+    """Disambiguate duplicate Xpress column names with a "__dup<n>" suffix.
+
+    Avoids a "Duplicate column names are not allowed" error on Xpress >= 9.5
+    when any Variables share the same .name().
+
+    Only repeated entries are altered (the first occurrence of each name is kept
+    unchanged), and every generated suffix is checked against the names already
+    emitted, so a pre-existing "foo__dup1" cannot collide with the
+    disambiguated form of a duplicated "foo".
+    """
+    seen = set()
+    dup_counts = {}
+    unique_names = []
+    for name in names:
+        if name not in seen:
+            seen.add(name)
+            unique_names.append(name)
+            continue
+        count = dup_counts.get(name, 0)
+        while True:
+            # unlikely to iterate more than once
+            # for each outer name, unless the model
+            # variables themselves use the __dup<n>
+            # name pattern
+            count += 1
+            candidate = f"{name}__dup{count}"
+            if candidate not in seen:
+                break
+        dup_counts[name] = count
+        seen.add(candidate)
+        unique_names.append(candidate)
+    return unique_names
+
+
 class XPRESS(ConicSolver):
     """An interface for the Xpress solver.
     """
@@ -44,6 +83,7 @@ class XPRESS(ConicSolver):
 
     # Solver capabilities.
     MIP_CAPABLE = True
+    BOUNDED_VARIABLES = True
     SUPPORTED_CONSTRAINTS = ConicSolver.SUPPORTED_CONSTRAINTS + [SOC]
     MI_SUPPORTED_CONSTRAINTS = SUPPORTED_CONSTRAINTS
 
@@ -61,7 +101,10 @@ class XPRESS(ConicSolver):
         """Imports the solver.
         """
         import xpress
-        self.version = xpress.getversion()
+        try:
+            self.version = xpress.getVersion()
+        except AttributeError:
+            self.version = xpress.getversion()
 
     def accepts(self, problem) -> bool:
         """Can Xpress solve the problem?
@@ -93,10 +136,35 @@ class XPRESS(ConicSolver):
             (dict of arguments needed for the solver, inverse data)
         """
         data, inv_data = super(XPRESS, self).apply(problem)
-        variables = problem.x
-        data[s.BOOL_IDX] = [int(t[0]) for t in variables.boolean_idx]
-        data[s.INT_IDX] = [int(t[0]) for t in variables.integer_idx]
+        variables, x = problem.variables, problem.x
+        data[s.BOOL_IDX] = [int(t[0]) for t in x.boolean_idx]
+        data[s.INT_IDX] = [int(t[0]) for t in x.integer_idx]
         inv_data['is_mip'] = data[s.BOOL_IDX] or data[s.INT_IDX]
+
+        # Setup MIP warmstart
+        fortran_boolidxs, fortran_intidxs = extract_mip_idx(variables)
+        mipidxs = np.union1d(fortran_boolidxs, fortran_intidxs).astype(int)
+        values = utilities.stack_vals(variables, np.nan, order="F")
+        mipidxs = np.intersect1d(mipidxs, np.argwhere(~np.isnan(values)))
+        data["initial_mip_values"] = values[mipidxs] if mipidxs.size > 0 else []
+        data["initial_mip_idxs"] = mipidxs
+
+        # Setup names. Variable names are derived from user-supplied
+        # Variable.name() values, which need not be unique; de-duplicate so
+        # Xpress >= 9.5 does not reject the problem (?1030).
+        data["variable_names"] = make_unique_names(
+            f"{var.name()}_x_{i:09d}"
+            for var in variables for i in range(var.size)
+        )
+        if problem.constraints:
+            data["constraint_names"] = np.concatenate([
+                np.ravel([
+                    f"{eq.constr_id}_eq_{i:09d}" for i in range(eq.size)
+                ], order="F")
+                for eq in problem.constraints
+            ]).tolist()
+        else:
+            data["constraint_names"] = []
 
         return data, inv_data
 
@@ -164,8 +232,11 @@ class XPRESS(ConicSolver):
         # Uses flat naming. Warning: this mixes
         # original with auxiliary variables.
 
-        varnames = ['x_{0:05d}'. format(i) for i in range(len(c))]
-        linRownames = ['lc_{0:05d}'.format(i) for i in range(len(b))]
+        if len(c) == len(data["variable_names"]):
+            varnames = data["variable_names"]
+        else:
+            varnames = [f"x_{i:05d}" for i in range(len(c))]
+        lin_rownames = ['lc_{0:05d}'.format(i) for i in range(len(b))]
 
         if verbose:
             self.prob_.controls.miplog = 2
@@ -177,25 +248,55 @@ class XPRESS(ConicSolver):
             self.prob_.controls.outputlog = 0
             self.prob_.controls.xslp_log = -1
 
-        self.prob_.loadproblem(probname="CVX_xpress_conic",
-                               # constraint types
-                               qrtypes=['E'] * nrowsEQ + ['L'] * nrowsLEQ,
-                               rhs=b,                               # rhs
-                               range=None,                          # range
-                               obj=c,                               # obj coeff
-                               mstart=mstart,                       # mstart
-                               mnel=None,                           # mnel (unused)
-                               # linear coefficients
-                               mrwind=A.indices[A.data != 0],       # row indices
-                               dmatval=A.data[A.data != 0],         # coefficients
-                               dlb=[-xp.infinity] * len(c),         # lower bound
-                               dub=[xp.infinity] * len(c),          # upper bound
-                               colnames=varnames,                   # column names
-                               rownames=linRownames)                # row    names
+        # Prepare MIP variable types (empty lists for LP)
+        coltype = ['B'] * len(data[s.BOOL_IDX]) + ['I'] * len(data[s.INT_IDX])
+        entind = data[s.BOOL_IDX] + data[s.INT_IDX]
 
-        # Set variable types for discrete variables
-        self.prob_.chgcoltype(data[s.BOOL_IDX] + data[s.INT_IDX],
-                              'B' * len(data[s.BOOL_IDX]) + 'I' * len(data[s.INT_IDX]))
+        # Variable bounds (use native bounds if available, otherwise unbounded)
+        n_vars = len(c)
+        lower_bounds = data[s.LOWER_BOUNDS]
+        upper_bounds = data[s.UPPER_BOUNDS]
+        lb = [-xp.infinity] * n_vars if lower_bounds is None else list(lower_bounds)
+        ub = [xp.infinity] * n_vars if upper_bounds is None else list(upper_bounds)
+
+        # Load problem using new API (Xpress 9.8+), fall back to deprecated API
+        # Always use loadMIP - if coltype/entind are empty, it becomes an LP
+        try:
+            self.prob_.loadMIP(
+                probname="CVX_xpress_conic",
+                rowtype=['E'] * nrowsEQ + ['L'] * nrowsLEQ,
+                rhs=b,
+                objcoef=c,
+                start=mstart,
+                rowind=A.indices[A.data != 0],
+                rowcoef=A.data[A.data != 0],
+                lb=lb,
+                ub=ub,
+                coltype=coltype,
+                entind=entind)
+
+            # Add variable and constraint names separately (new API)
+            if varnames:
+                self.prob_.addNames(xp.Namespaces.COLUMN, varnames, 0, len(varnames) - 1)
+            if lin_rownames:
+                self.prob_.addNames(xp.Namespaces.ROW, lin_rownames, 0, len(lin_rownames) - 1)
+        except AttributeError:
+            # Xpress < 9.8 API (deprecated functions)
+            # Pass coltype/entind to loadproblem to avoid chgcoltype which resets bounds
+            self.prob_.loadproblem(
+                probname="CVX_xpress_conic",
+                rowtype=['E'] * nrowsEQ + ['L'] * nrowsLEQ,
+                rhs=b,
+                objcoef=c,
+                start=mstart,
+                rowind=A.indices[A.data != 0],
+                rowcoef=A.data[A.data != 0],
+                lb=lb,
+                ub=ub,
+                coltype=coltype if coltype else None,
+                entind=entind if entind else None,
+                colnames=varnames,
+                rownames=lin_rownames)
 
         currow = nrows
 
@@ -237,15 +338,26 @@ class XPRESS(ConicSolver):
             trNames = ['linT_qc{0:d}_{1:d}'.format(iCone, i) for i in range(k)]
 
             # Linear transformation for cone variables <--> original variables
-            self.prob_.addrows(['E'] * k,        # qrtypes
-                               b,                # rhs
-                               mstart,           # mstart
-                               A.indices[A.data != 0],        # ind
-                               A.data[A.data != 0],           # dmatval
-                               names=trNames)  # row names
-
-            self.prob_.chgmcoef([initrow + i for i in range(k)],
-                                conevar, [1] * k)
+            try:  # New API (Xpress 9.8+)
+                self.prob_.addRows(rowtype=['E'] * k,
+                                   rhs=b,
+                                   start=list(mstart),
+                                   colind=list(A.indices[A.data != 0]),
+                                   rowcoef=list(A.data[A.data != 0]))
+                endrow = self.prob_.attributes.rows - 1
+                self.prob_.addNames(xp.Namespaces.ROW, trNames, initrow, endrow)
+                self.prob_.chgMCoef([initrow + i for i in range(k)],
+                                    conevar, [1] * k)
+            except AttributeError:  # Fallback to deprecated API
+                self.prob_.addrows(
+                    rowtype=['E'] * k,
+                    rhs=b,
+                    start=mstart,
+                    colind=A.indices[A.data != 0],
+                    rowcoef=A.data[A.data != 0],
+                    names=trNames)
+                self.prob_.chgmcoef([initrow + i for i in range(k)],
+                                    conevar, [1] * k)
 
             conename = 'cone_qc{0:d}'.format(iCone)
             # Real cone on the cone variables (if k == 1 there's no
@@ -269,6 +381,19 @@ class XPRESS(ConicSolver):
 
         # End of the conditional (warm-start vs. no warm-start) code,
         # set options, solve, and report.
+        if warm_start and data["initial_mip_idxs"].size > 0:
+            try:  # New API (Xpress 9.8+)
+                self.prob_.addMipSol(
+                    data["initial_mip_values"],
+                    data["initial_mip_idxs"],
+                    "warmstart",
+                )
+            except AttributeError:  # Fallback to deprecated API
+                self.prob_.addmipsol(
+                    data["initial_mip_values"],
+                    data["initial_mip_idxs"],
+                    "warmstart",
+                )
 
         # Set options
         #
@@ -288,24 +413,23 @@ class XPRESS(ConicSolver):
 
         # If option given, write file before solving
         if 'write_mps' in solver_opts:
-            self.prob_.write(solver_opts['write_mps'])
+            try:  # New API (Xpress 9.8+)
+                self.prob_.writeProb(solver_opts['write_mps'])
+            except AttributeError:  # Fallback to deprecated API
+                self.prob_.write(solver_opts['write_mps'])
 
         # Solve
-        self.prob_.solve()
+        self.prob_.optimize()
 
         results_dict = {
 
             'problem':   self.prob_,
-            'status':    self.prob_.getProbStatus(),
-            'obj_value': self.prob_.getObjVal(),
+            'status':    self.prob_.attributes.solstatus,
+            'obj_value': self.prob_.attributes.objval,
         }
 
-        status_map_lp, status_map_mip = get_status_maps()
-
-        if 'mip_' in self.prob_.getProbStatusString():
-            status = status_map_mip[results_dict['status']]
-        else:
-            status = status_map_lp[results_dict['status']]
+        status_map = get_status_map()
+        status = status_map[results_dict['status']]
 
         results_dict[s.XPRESS_TROW] = transf2Orig
 
@@ -314,7 +438,10 @@ class XPRESS(ConicSolver):
         if status in s.SOLUTION_PRESENT:
             results_dict['x'] = self.prob_.getSolution()
             if not (data[s.BOOL_IDX] or data[s.INT_IDX]):
-                results_dict['y'] = - np.array(self.prob_.getDual())
+                if nrows > 0:
+                    results_dict['y'] = - np.array(self.prob_.getDuals())
+                else:
+                    results_dict['y'] = np.array([])
 
         elif status == s.INFEASIBLE and 'save_iis' in solver_opts and solver_opts['save_iis'] != 0:
 
@@ -323,49 +450,77 @@ class XPRESS(ConicSolver):
 
             iisIndex = 0
 
-            self.prob_.iisfirst(0)  # compute all IIS
+            try:  # New API (Xpress 9.8+)
+                self.prob_.firstIIS(0)  # compute all IIS
+                row, col, rtype, btype, duals, rdcs, isrows, icols = self.prob_.getIISData(0)
 
-            row, col, rtype, btype, duals, rdcs, isrows, icols = [], [], [], [], [], [], [], []
+                # Convert row indices to constraint objects to access their names
+                origrow = []
+                if row:
+                    ctrs = self.prob_.getConstraint(row)
+                    for ctr in ctrs:
+                        row_name = ctr.name
+                        name = transf2Orig.get(row_name, row_name)
+                        if name not in origrow:
+                            origrow.append(name)
 
-            self.prob_.getiisdata(0, row, col, rtype, btype, duals, rdcs, isrows, icols)
+                results_dict[s.XPRESS_IIS] = [{'orig_row': origrow,
+                                               'row':      row,
+                                               'col':      col,
+                                               'rtype':    rtype,
+                                               'btype':    btype,
+                                               'duals':    duals,
+                                               'redcost':  rdcs,
+                                               'isolrow':  isrows,
+                                               'isolcol':  icols}]
 
-            origrow = []
-            for iRow in row:
-                if iRow.name in transf2Orig:
-                    name = transf2Orig[iRow.name]
-                else:
-                    name = iRow.name
+                while self.prob_.nextIIS() == 0 and (solver_opts['save_iis'] < 0 or
+                                                     iisIndex < solver_opts['save_iis']):
+                    iisIndex += 1
+                    iis_data = self.prob_.getIISData(iisIndex)
+                    row, col, rtype, btype, duals, rdcs, isrows, icols = iis_data
+                    results_dict[s.XPRESS_IIS].append((
+                        row, col, rtype, btype, duals, rdcs, isrows, icols))
+            except AttributeError:  # Fallback to deprecated API
+                self.prob_.iisfirst(0)  # compute all IIS
+                row, col, rtype, btype, duals, rdcs, isrows, icols = [], [], [], [], [], [], [], []
+                self.prob_.getiisdata(0, row, col, rtype, btype, duals, rdcs, isrows, icols)
 
-                if name not in origrow:
-                    origrow.append(name)
+                origrow = []
+                for iRow in row:
+                    # iRow is an object with .name attribute in old API
+                    if iRow.name in transf2Orig:
+                        name = transf2Orig[iRow.name]
+                    else:
+                        name = iRow.name
+                    if name not in origrow:
+                        origrow.append(name)
 
-            results_dict[s.XPRESS_IIS] = [{'orig_row': origrow,
-                                           'row':      row,
-                                           'col':      col,
-                                           'rtype':    rtype,
-                                           'btype':    btype,
-                                           'duals':    duals,
-                                           'redcost':  rdcs,
-                                           'isolrow':  isrows,
-                                           'isolcol':  icols}]
+                results_dict[s.XPRESS_IIS] = [{'orig_row': origrow,
+                                               'row':      row,
+                                               'col':      col,
+                                               'rtype':    rtype,
+                                               'btype':    btype,
+                                               'duals':    duals,
+                                               'redcost':  rdcs,
+                                               'isolrow':  isrows,
+                                               'isolcol':  icols}]
 
-            while self.prob_.iisnext() == 0 and (solver_opts['save_iis'] < 0 or
-                                                 iisIndex < solver_opts['save_iis']):
-                iisIndex += 1
-                self.prob_.getiisdata(iisIndex,
-                                      row, col, rtype, btype, duals, rdcs, isrows, icols)
-                results_dict[s.XPRESS_IIS].append((
-                    row, col, rtype, btype, duals, rdcs, isrows, icols))
+                while self.prob_.iisnext() == 0 and (solver_opts['save_iis'] < 0 or
+                                                     iisIndex < solver_opts['save_iis']):
+                    iisIndex += 1
+                    row, col = [], []
+                    rtype, btype, duals, rdcs, isrows, icols = [], [], [], [], [], []
+                    self.prob_.getiisdata(
+                        iisIndex, row, col, rtype, btype, duals, rdcs, isrows, icols)
+                    results_dict[s.XPRESS_IIS].append((
+                        row, col, rtype, btype, duals, rdcs, isrows, icols))
 
         # Generate solution.
         solution = {}
 
-        status_map_lp, status_map_mip = get_status_maps()
-
-        if data[s.BOOL_IDX] or data[s.INT_IDX]:
-            solution[s.STATUS] = status_map_mip[results_dict['status']]
-        else:
-            solution[s.STATUS] = status_map_lp[results_dict['status']]
+        status_map = get_status_map()
+        solution[s.STATUS] = status_map[results_dict['status']]
 
         if solution[s.STATUS] in s.SOLUTION_PRESENT:
 
@@ -379,7 +534,7 @@ class XPRESS(ConicSolver):
         solution[s.XPRESS_IIS] = results_dict[s.XPRESS_IIS]
         solution[s.XPRESS_TROW] = results_dict[s.XPRESS_TROW]
 
-        solution['getObjVal'] = self.prob_.getObjVal()
+        solution['getObjVal'] = self.prob_.attributes.objval
 
         solution[s.SOLVE_TIME] = self.prob_.attributes.time
 
@@ -387,38 +542,28 @@ class XPRESS(ConicSolver):
 
         return solution
 
+    def cite(self, data):
+        """Returns bibtex citation for the solver.
 
-def get_status_maps():
-    """Create status maps from Xpress to CVXPY
+        Parameters
+        ----------
+        data : dict
+            Data generated via an apply call.
+        """
+        return CITATION_DICT["XPRESS"]
+
+def get_status_map():
+    """Create status map from Xpress to CVXPY
     """
 
     import xpress as xp
 
-    # Map of Xpress' LP status to CVXPY status.
-    status_map_lp = {
-
-        xp.lp_unstarted:       s.SOLVER_ERROR,
-        xp.lp_optimal:         s.OPTIMAL,
-        xp.lp_infeas:          s.INFEASIBLE,
-        xp.lp_cutoff:          s.OPTIMAL_INACCURATE,
-        xp.lp_unfinished:      s.OPTIMAL_INACCURATE,
-        xp.lp_unbounded:       s.UNBOUNDED,
-        xp.lp_cutoff_in_dual:  s.OPTIMAL_INACCURATE,
-        xp.lp_unsolved:        s.OPTIMAL_INACCURATE,
-        xp.lp_nonconvex:       s.SOLVER_ERROR
+    status_map = {
+        xp.SolStatus.NOTFOUND:        s.SOLVER_ERROR,
+        xp.SolStatus.OPTIMAL:         s.OPTIMAL,
+        xp.SolStatus.INFEASIBLE:      s.INFEASIBLE,
+        xp.SolStatus.UNBOUNDED:       s.UNBOUNDED,
+        xp.SolStatus.FEASIBLE:       s.OPTIMAL_INACCURATE,
     }
 
-    # Same map, for MIPs
-    status_map_mip = {
-
-        xp.mip_not_loaded:     s.SOLVER_ERROR,
-        xp.mip_lp_not_optimal: s.SOLVER_ERROR,
-        xp.mip_lp_optimal:     s.SOLVER_ERROR,
-        xp.mip_no_sol_found:   s.SOLVER_ERROR,
-        xp.mip_solution:       s.OPTIMAL_INACCURATE,
-        xp.mip_infeas:         s.INFEASIBLE,
-        xp.mip_optimal:        s.OPTIMAL,
-        xp.mip_unbounded:      s.UNBOUNDED
-    }
-
-    return (status_map_lp, status_map_mip)
+    return status_map

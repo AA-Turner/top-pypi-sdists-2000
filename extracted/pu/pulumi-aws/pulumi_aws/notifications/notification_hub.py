@@ -22,9 +22,10 @@ __all__ = ['NotificationHubArgs', 'NotificationHub']
 class NotificationHubArgs:
     def __init__(__self__, *,
                  notification_hub_region: pulumi.Input[_builtins.str],
-                 timeouts: Optional[pulumi.Input['NotificationHubTimeoutsArgs']] = None):
+                 timeouts: pulumi.Input[Optional['NotificationHubTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a NotificationHub resource.
+
         :param pulumi.Input[_builtins.str] notification_hub_region: Notification Hub region.
         """
         pulumi.set(__self__, "notification_hub_region", notification_hub_region)
@@ -45,21 +46,22 @@ class NotificationHubArgs:
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['NotificationHubTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['NotificationHubTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['NotificationHubTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['NotificationHubTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _NotificationHubState:
     def __init__(__self__, *,
-                 notification_hub_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['NotificationHubTimeoutsArgs']] = None):
+                 notification_hub_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['NotificationHubTimeoutsArgs']] = None):
         """
         Input properties used for looking up and filtering NotificationHub resources.
+
         :param pulumi.Input[_builtins.str] notification_hub_region: Notification Hub region.
         """
         if notification_hub_region is not None:
@@ -69,23 +71,23 @@ class _NotificationHubState:
 
     @_builtins.property
     @pulumi.getter(name="notificationHubRegion")
-    def notification_hub_region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def notification_hub_region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Notification Hub region.
         """
         return pulumi.get(self, "notification_hub_region")
 
     @notification_hub_region.setter
-    def notification_hub_region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def notification_hub_region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "notification_hub_region", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['NotificationHubTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['NotificationHubTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['NotificationHubTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['NotificationHubTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
@@ -95,8 +97,8 @@ class NotificationHub(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 notification_hub_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['NotificationHubTimeoutsArgs', 'NotificationHubTimeoutsArgsDict']]] = None,
+                 notification_hub_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['NotificationHubTimeoutsArgs', 'NotificationHubTimeoutsArgsDict']]] = None,
                  __props__=None):
         """
         Resource for managing an AWS User Notifications Notification Hub.
@@ -119,6 +121,7 @@ class NotificationHub(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:notifications/notificationHub:NotificationHub example us-west-2
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -152,6 +155,7 @@ class NotificationHub(pulumi.CustomResource):
         $ pulumi import aws:notifications/notificationHub:NotificationHub example us-west-2
         ```
 
+
         :param str resource_name: The name of the resource.
         :param NotificationHubArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -167,8 +171,8 @@ class NotificationHub(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 notification_hub_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['NotificationHubTimeoutsArgs', 'NotificationHubTimeoutsArgsDict']]] = None,
+                 notification_hub_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['NotificationHubTimeoutsArgs', 'NotificationHubTimeoutsArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -192,8 +196,8 @@ class NotificationHub(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            notification_hub_region: Optional[pulumi.Input[_builtins.str]] = None,
-            timeouts: Optional[pulumi.Input[Union['NotificationHubTimeoutsArgs', 'NotificationHubTimeoutsArgsDict']]] = None) -> 'NotificationHub':
+            notification_hub_region: pulumi.Input[Optional[_builtins.str]] = None,
+            timeouts: pulumi.Input[Optional[Union['NotificationHubTimeoutsArgs', 'NotificationHubTimeoutsArgsDict']]] = None) -> 'NotificationHub':
         """
         Get an existing NotificationHub resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

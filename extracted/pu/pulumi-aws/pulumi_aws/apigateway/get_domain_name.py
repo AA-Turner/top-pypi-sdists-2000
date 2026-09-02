@@ -148,7 +148,7 @@ class GetDomainNameResult:
     @pulumi.getter(name="endpointAccessMode")
     def endpoint_access_mode(self) -> _builtins.str:
         """
-        (Optional) Endpoint access mode of the DomainName. Only available for domain names that use security policies that start with `SecurityPolicy_`.
+        Endpoint access mode of the DomainName. Only available for domain names that use security policies that start with `SecurityPolicy_`.
         """
         return pulumi.get(self, "endpoint_access_mode")
 
@@ -156,7 +156,7 @@ class GetDomainNameResult:
     @pulumi.getter(name="endpointConfigurations")
     def endpoint_configurations(self) -> Sequence['outputs.GetDomainNameEndpointConfigurationResult']:
         """
-        List of objects with the endpoint configuration of this domain name.
+        List of objects with the endpoint configuration of this domain name. See below.
         """
         return pulumi.get(self, "endpoint_configurations")
 
@@ -172,7 +172,7 @@ class GetDomainNameResult:
     @pulumi.getter
     def policy(self) -> _builtins.str:
         """
-        A stringified JSON policy document that applies to the execute-api service for this DomainName regardless of the caller and Method configuration. Supported only for private custom domain names.
+        Stringified JSON policy document that applies to the execute-api service for this DomainName regardless of the caller and Method configuration. Supported only for private custom domain names.
         """
         return pulumi.get(self, "policy")
 
@@ -276,7 +276,7 @@ def get_domain_name(domain_name: Optional[_builtins.str] = None,
 
 
     :param _builtins.str domain_name: Fully-qualified domain name to look up. If no domain name is found, an error will be returned.
-    :param _builtins.str domain_name_id: The identifier for the domain name resource. Supported only for private custom domain names.
+    :param _builtins.str domain_name_id: Identifier for the domain name resource. Supported only for private custom domain names.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     :param Mapping[str, _builtins.str] tags: Key-value map of tags for the resource.
     """
@@ -308,10 +308,10 @@ def get_domain_name(domain_name: Optional[_builtins.str] = None,
         regional_zone_id=pulumi.get(__ret__, 'regional_zone_id'),
         security_policy=pulumi.get(__ret__, 'security_policy'),
         tags=pulumi.get(__ret__, 'tags'))
-def get_domain_name_output(domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-                           domain_name_id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                           region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                           tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_domain_name_output(domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+                           domain_name_id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                           region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                           tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                            opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetDomainNameResult]:
     """
     Use this data source to get the custom domain name for use with AWS API Gateway.
@@ -327,7 +327,7 @@ def get_domain_name_output(domain_name: Optional[pulumi.Input[_builtins.str]] = 
 
 
     :param _builtins.str domain_name: Fully-qualified domain name to look up. If no domain name is found, an error will be returned.
-    :param _builtins.str domain_name_id: The identifier for the domain name resource. Supported only for private custom domain names.
+    :param _builtins.str domain_name_id: Identifier for the domain name resource. Supported only for private custom domain names.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     :param Mapping[str, _builtins.str] tags: Key-value map of tags for the resource.
     """

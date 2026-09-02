@@ -21,35 +21,37 @@ __all__ = ['TableArgs', 'Table']
 @pulumi.input_type
 class TableArgs:
     def __init__(__self__, *,
-                 attributes: Optional[pulumi.Input[Sequence[pulumi.Input['TableAttributeArgs']]]] = None,
-                 billing_mode: Optional[pulumi.Input[_builtins.str]] = None,
-                 deletion_protection_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 global_secondary_indexes: Optional[pulumi.Input[Sequence[pulumi.Input['TableGlobalSecondaryIndexArgs']]]] = None,
-                 global_table_witness: Optional[pulumi.Input['TableGlobalTableWitnessArgs']] = None,
-                 hash_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 import_table: Optional[pulumi.Input['TableImportTableArgs']] = None,
-                 local_secondary_indexes: Optional[pulumi.Input[Sequence[pulumi.Input['TableLocalSecondaryIndexArgs']]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 on_demand_throughput: Optional[pulumi.Input['TableOnDemandThroughputArgs']] = None,
-                 point_in_time_recovery: Optional[pulumi.Input['TablePointInTimeRecoveryArgs']] = None,
-                 range_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 read_capacity: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 replicas: Optional[pulumi.Input[Sequence[pulumi.Input['TableReplicaArgs']]]] = None,
-                 restore_date_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 restore_source_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 restore_source_table_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 restore_to_latest_time: Optional[pulumi.Input[_builtins.bool]] = None,
-                 server_side_encryption: Optional[pulumi.Input['TableServerSideEncryptionArgs']] = None,
-                 stream_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 stream_view_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 table_class: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 ttl: Optional[pulumi.Input['TableTtlArgs']] = None,
-                 warm_throughput: Optional[pulumi.Input['TableWarmThroughputArgs']] = None,
-                 write_capacity: Optional[pulumi.Input[_builtins.int]] = None):
+                 attributes: pulumi.Input[Optional[Sequence[pulumi.Input['TableAttributeArgs']]]] = None,
+                 billing_mode: pulumi.Input[Optional[_builtins.str]] = None,
+                 deletion_protection_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 global_secondary_indexes: pulumi.Input[Optional[Sequence[pulumi.Input['TableGlobalSecondaryIndexArgs']]]] = None,
+                 global_table_witness: pulumi.Input[Optional['TableGlobalTableWitnessArgs']] = None,
+                 hash_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 import_table: pulumi.Input[Optional['TableImportTableArgs']] = None,
+                 local_secondary_indexes: pulumi.Input[Optional[Sequence[pulumi.Input['TableLocalSecondaryIndexArgs']]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 on_demand_throughput: pulumi.Input[Optional['TableOnDemandThroughputArgs']] = None,
+                 point_in_time_recovery: pulumi.Input[Optional['TablePointInTimeRecoveryArgs']] = None,
+                 range_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 read_capacity: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 replicas: pulumi.Input[Optional[Sequence[pulumi.Input['TableReplicaArgs']]]] = None,
+                 restore_backup_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 restore_date_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 restore_source_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 restore_source_table_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 restore_to_latest_time: pulumi.Input[Optional[_builtins.bool]] = None,
+                 server_side_encryption: pulumi.Input[Optional['TableServerSideEncryptionArgs']] = None,
+                 stream_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 stream_view_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 table_class: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 ttl: pulumi.Input[Optional['TableTtlArgs']] = None,
+                 warm_throughput: pulumi.Input[Optional['TableWarmThroughputArgs']] = None,
+                 write_capacity: pulumi.Input[Optional[_builtins.int]] = None):
         """
         The set of arguments for constructing a Table resource.
+
         :param pulumi.Input[Sequence[pulumi.Input['TableAttributeArgs']]] attributes: Set of nested attribute definitions. Only required for `hash_key` and `range_key` attributes. See below.
         :param pulumi.Input[_builtins.str] billing_mode: Controls how you are charged for read and write throughput and how you manage capacity. The valid values are `PROVISIONED` and `PAY_PER_REQUEST`. Defaults to `PROVISIONED`.
         :param pulumi.Input[_builtins.bool] deletion_protection_enabled: Enables deletion protection for table. Defaults to `false`.
@@ -67,6 +69,7 @@ class TableArgs:
         :param pulumi.Input[_builtins.int] read_capacity: Number of read units for this table. If the `billing_mode` is `PROVISIONED`, this field is required.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Sequence[pulumi.Input['TableReplicaArgs']]] replicas: Configuration block(s) with [DynamoDB Global Tables V2 (version 2019.11.21)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html) replication configurations. See below.
+        :param pulumi.Input[_builtins.str] restore_backup_arn: ARN of backup to restore.
         :param pulumi.Input[_builtins.str] restore_date_time: Time of the point-in-time recovery point to restore.
         :param pulumi.Input[_builtins.str] restore_source_name: Name of the table to restore. Must match the name of an existing table.
         :param pulumi.Input[_builtins.str] restore_source_table_arn: ARN of the source table to restore. Must be supplied for cross-region restores.
@@ -114,6 +117,8 @@ class TableArgs:
             pulumi.set(__self__, "region", region)
         if replicas is not None:
             pulumi.set(__self__, "replicas", replicas)
+        if restore_backup_arn is not None:
+            pulumi.set(__self__, "restore_backup_arn", restore_backup_arn)
         if restore_date_time is not None:
             pulumi.set(__self__, "restore_date_time", restore_date_time)
         if restore_source_name is not None:
@@ -141,103 +146,103 @@ class TableArgs:
 
     @_builtins.property
     @pulumi.getter
-    def attributes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TableAttributeArgs']]]]:
+    def attributes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['TableAttributeArgs']]]]:
         """
         Set of nested attribute definitions. Only required for `hash_key` and `range_key` attributes. See below.
         """
         return pulumi.get(self, "attributes")
 
     @attributes.setter
-    def attributes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['TableAttributeArgs']]]]):
+    def attributes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['TableAttributeArgs']]]]):
         pulumi.set(self, "attributes", value)
 
     @_builtins.property
     @pulumi.getter(name="billingMode")
-    def billing_mode(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def billing_mode(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Controls how you are charged for read and write throughput and how you manage capacity. The valid values are `PROVISIONED` and `PAY_PER_REQUEST`. Defaults to `PROVISIONED`.
         """
         return pulumi.get(self, "billing_mode")
 
     @billing_mode.setter
-    def billing_mode(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def billing_mode(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "billing_mode", value)
 
     @_builtins.property
     @pulumi.getter(name="deletionProtectionEnabled")
-    def deletion_protection_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def deletion_protection_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Enables deletion protection for table. Defaults to `false`.
         """
         return pulumi.get(self, "deletion_protection_enabled")
 
     @deletion_protection_enabled.setter
-    def deletion_protection_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def deletion_protection_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "deletion_protection_enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="globalSecondaryIndexes")
-    def global_secondary_indexes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TableGlobalSecondaryIndexArgs']]]]:
+    def global_secondary_indexes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['TableGlobalSecondaryIndexArgs']]]]:
         """
         Describe a GSI for the table; subject to the normal limits on the number of GSIs, projected attributes, etc. See below.
         """
         return pulumi.get(self, "global_secondary_indexes")
 
     @global_secondary_indexes.setter
-    def global_secondary_indexes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['TableGlobalSecondaryIndexArgs']]]]):
+    def global_secondary_indexes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['TableGlobalSecondaryIndexArgs']]]]):
         pulumi.set(self, "global_secondary_indexes", value)
 
     @_builtins.property
     @pulumi.getter(name="globalTableWitness")
-    def global_table_witness(self) -> Optional[pulumi.Input['TableGlobalTableWitnessArgs']]:
+    def global_table_witness(self) -> pulumi.Input[Optional['TableGlobalTableWitnessArgs']]:
         """
         Witness Region in a Multi-Region Strong Consistency deployment. **Note** This must be used alongside a single `replica` with `consistency_mode` set to `STRONG`. Other combinations will fail to provision. See below.
         """
         return pulumi.get(self, "global_table_witness")
 
     @global_table_witness.setter
-    def global_table_witness(self, value: Optional[pulumi.Input['TableGlobalTableWitnessArgs']]):
+    def global_table_witness(self, value: pulumi.Input[Optional['TableGlobalTableWitnessArgs']]):
         pulumi.set(self, "global_table_witness", value)
 
     @_builtins.property
     @pulumi.getter(name="hashKey")
-    def hash_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def hash_key(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Attribute to use as the hash (partition) key. Must also be defined as an `attribute`. See below.
         """
         return pulumi.get(self, "hash_key")
 
     @hash_key.setter
-    def hash_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def hash_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "hash_key", value)
 
     @_builtins.property
     @pulumi.getter(name="importTable")
-    def import_table(self) -> Optional[pulumi.Input['TableImportTableArgs']]:
+    def import_table(self) -> pulumi.Input[Optional['TableImportTableArgs']]:
         """
         Import Amazon S3 data into a new table. See below.
         """
         return pulumi.get(self, "import_table")
 
     @import_table.setter
-    def import_table(self, value: Optional[pulumi.Input['TableImportTableArgs']]):
+    def import_table(self, value: pulumi.Input[Optional['TableImportTableArgs']]):
         pulumi.set(self, "import_table", value)
 
     @_builtins.property
     @pulumi.getter(name="localSecondaryIndexes")
-    def local_secondary_indexes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TableLocalSecondaryIndexArgs']]]]:
+    def local_secondary_indexes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['TableLocalSecondaryIndexArgs']]]]:
         """
         Describe an LSI on the table; these can only be allocated _at creation_ so you cannot change this definition after you have created the resource. See below.
         """
         return pulumi.get(self, "local_secondary_indexes")
 
     @local_secondary_indexes.setter
-    def local_secondary_indexes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['TableLocalSecondaryIndexArgs']]]]):
+    def local_secondary_indexes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['TableLocalSecondaryIndexArgs']]]]):
         pulumi.set(self, "local_secondary_indexes", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique within a region name of the table.
 
@@ -246,156 +251,168 @@ class TableArgs:
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="onDemandThroughput")
-    def on_demand_throughput(self) -> Optional[pulumi.Input['TableOnDemandThroughputArgs']]:
+    def on_demand_throughput(self) -> pulumi.Input[Optional['TableOnDemandThroughputArgs']]:
         """
         Sets the maximum number of read and write units for the specified on-demand table. See below.
         """
         return pulumi.get(self, "on_demand_throughput")
 
     @on_demand_throughput.setter
-    def on_demand_throughput(self, value: Optional[pulumi.Input['TableOnDemandThroughputArgs']]):
+    def on_demand_throughput(self, value: pulumi.Input[Optional['TableOnDemandThroughputArgs']]):
         pulumi.set(self, "on_demand_throughput", value)
 
     @_builtins.property
     @pulumi.getter(name="pointInTimeRecovery")
-    def point_in_time_recovery(self) -> Optional[pulumi.Input['TablePointInTimeRecoveryArgs']]:
+    def point_in_time_recovery(self) -> pulumi.Input[Optional['TablePointInTimeRecoveryArgs']]:
         """
         Enable point-in-time recovery options. See below.
         """
         return pulumi.get(self, "point_in_time_recovery")
 
     @point_in_time_recovery.setter
-    def point_in_time_recovery(self, value: Optional[pulumi.Input['TablePointInTimeRecoveryArgs']]):
+    def point_in_time_recovery(self, value: pulumi.Input[Optional['TablePointInTimeRecoveryArgs']]):
         pulumi.set(self, "point_in_time_recovery", value)
 
     @_builtins.property
     @pulumi.getter(name="rangeKey")
-    def range_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def range_key(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Attribute to use as the range (sort) key. Must also be defined as an `attribute`, see below.
         """
         return pulumi.get(self, "range_key")
 
     @range_key.setter
-    def range_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def range_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "range_key", value)
 
     @_builtins.property
     @pulumi.getter(name="readCapacity")
-    def read_capacity(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def read_capacity(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Number of read units for this table. If the `billing_mode` is `PROVISIONED`, this field is required.
         """
         return pulumi.get(self, "read_capacity")
 
     @read_capacity.setter
-    def read_capacity(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def read_capacity(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "read_capacity", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def replicas(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TableReplicaArgs']]]]:
+    def replicas(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['TableReplicaArgs']]]]:
         """
         Configuration block(s) with [DynamoDB Global Tables V2 (version 2019.11.21)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html) replication configurations. See below.
         """
         return pulumi.get(self, "replicas")
 
     @replicas.setter
-    def replicas(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['TableReplicaArgs']]]]):
+    def replicas(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['TableReplicaArgs']]]]):
         pulumi.set(self, "replicas", value)
 
     @_builtins.property
+    @pulumi.getter(name="restoreBackupArn")
+    def restore_backup_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        ARN of backup to restore.
+        """
+        return pulumi.get(self, "restore_backup_arn")
+
+    @restore_backup_arn.setter
+    def restore_backup_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "restore_backup_arn", value)
+
+    @_builtins.property
     @pulumi.getter(name="restoreDateTime")
-    def restore_date_time(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def restore_date_time(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Time of the point-in-time recovery point to restore.
         """
         return pulumi.get(self, "restore_date_time")
 
     @restore_date_time.setter
-    def restore_date_time(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def restore_date_time(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "restore_date_time", value)
 
     @_builtins.property
     @pulumi.getter(name="restoreSourceName")
-    def restore_source_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def restore_source_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the table to restore. Must match the name of an existing table.
         """
         return pulumi.get(self, "restore_source_name")
 
     @restore_source_name.setter
-    def restore_source_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def restore_source_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "restore_source_name", value)
 
     @_builtins.property
     @pulumi.getter(name="restoreSourceTableArn")
-    def restore_source_table_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def restore_source_table_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the source table to restore. Must be supplied for cross-region restores.
         """
         return pulumi.get(self, "restore_source_table_arn")
 
     @restore_source_table_arn.setter
-    def restore_source_table_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def restore_source_table_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "restore_source_table_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="restoreToLatestTime")
-    def restore_to_latest_time(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def restore_to_latest_time(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         If set, restores table to the most recent point-in-time recovery point.
         """
         return pulumi.get(self, "restore_to_latest_time")
 
     @restore_to_latest_time.setter
-    def restore_to_latest_time(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def restore_to_latest_time(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "restore_to_latest_time", value)
 
     @_builtins.property
     @pulumi.getter(name="serverSideEncryption")
-    def server_side_encryption(self) -> Optional[pulumi.Input['TableServerSideEncryptionArgs']]:
+    def server_side_encryption(self) -> pulumi.Input[Optional['TableServerSideEncryptionArgs']]:
         """
         Encryption at rest options. AWS DynamoDB tables are automatically encrypted at rest with an AWS-owned Customer Master Key if this argument isn't specified. Must be supplied for cross-region restores. See below.
         """
         return pulumi.get(self, "server_side_encryption")
 
     @server_side_encryption.setter
-    def server_side_encryption(self, value: Optional[pulumi.Input['TableServerSideEncryptionArgs']]):
+    def server_side_encryption(self, value: pulumi.Input[Optional['TableServerSideEncryptionArgs']]):
         pulumi.set(self, "server_side_encryption", value)
 
     @_builtins.property
     @pulumi.getter(name="streamEnabled")
-    def stream_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def stream_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether Streams are enabled.
         """
         return pulumi.get(self, "stream_enabled")
 
     @stream_enabled.setter
-    def stream_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def stream_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "stream_enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="streamViewType")
-    def stream_view_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def stream_view_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         When an item in the table is modified, StreamViewType determines what information is written to the table's stream.
         Valid values are `KEYS_ONLY`, `NEW_IMAGE`, `OLD_IMAGE`, `NEW_AND_OLD_IMAGES`.
@@ -404,12 +421,12 @@ class TableArgs:
         return pulumi.get(self, "stream_view_type")
 
     @stream_view_type.setter
-    def stream_view_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def stream_view_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "stream_view_type", value)
 
     @_builtins.property
     @pulumi.getter(name="tableClass")
-    def table_class(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def table_class(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Storage class of the table.
         Valid values are `STANDARD` and `STANDARD_INFREQUENT_ACCESS`.
@@ -418,95 +435,100 @@ class TableArgs:
         return pulumi.get(self, "table_class")
 
     @table_class.setter
-    def table_class(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def table_class(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "table_class", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags to populate on the created table. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter
-    def ttl(self) -> Optional[pulumi.Input['TableTtlArgs']]:
+    def ttl(self) -> pulumi.Input[Optional['TableTtlArgs']]:
         """
         Configuration block for TTL. See below.
         """
         return pulumi.get(self, "ttl")
 
     @ttl.setter
-    def ttl(self, value: Optional[pulumi.Input['TableTtlArgs']]):
+    def ttl(self, value: pulumi.Input[Optional['TableTtlArgs']]):
         pulumi.set(self, "ttl", value)
 
     @_builtins.property
     @pulumi.getter(name="warmThroughput")
-    def warm_throughput(self) -> Optional[pulumi.Input['TableWarmThroughputArgs']]:
+    def warm_throughput(self) -> pulumi.Input[Optional['TableWarmThroughputArgs']]:
         """
         Sets the number of warm read and write units for the specified table. See below.
         """
         return pulumi.get(self, "warm_throughput")
 
     @warm_throughput.setter
-    def warm_throughput(self, value: Optional[pulumi.Input['TableWarmThroughputArgs']]):
+    def warm_throughput(self, value: pulumi.Input[Optional['TableWarmThroughputArgs']]):
         pulumi.set(self, "warm_throughput", value)
 
     @_builtins.property
     @pulumi.getter(name="writeCapacity")
-    def write_capacity(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def write_capacity(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Number of write units for this table. If the `billing_mode` is `PROVISIONED`, this field is required.
         """
         return pulumi.get(self, "write_capacity")
 
     @write_capacity.setter
-    def write_capacity(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def write_capacity(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "write_capacity", value)
 
 
 @pulumi.input_type
 class _TableState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 attributes: Optional[pulumi.Input[Sequence[pulumi.Input['TableAttributeArgs']]]] = None,
-                 billing_mode: Optional[pulumi.Input[_builtins.str]] = None,
-                 deletion_protection_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 global_secondary_indexes: Optional[pulumi.Input[Sequence[pulumi.Input['TableGlobalSecondaryIndexArgs']]]] = None,
-                 global_table_witness: Optional[pulumi.Input['TableGlobalTableWitnessArgs']] = None,
-                 hash_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 import_table: Optional[pulumi.Input['TableImportTableArgs']] = None,
-                 local_secondary_indexes: Optional[pulumi.Input[Sequence[pulumi.Input['TableLocalSecondaryIndexArgs']]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 on_demand_throughput: Optional[pulumi.Input['TableOnDemandThroughputArgs']] = None,
-                 point_in_time_recovery: Optional[pulumi.Input['TablePointInTimeRecoveryArgs']] = None,
-                 range_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 read_capacity: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 replicas: Optional[pulumi.Input[Sequence[pulumi.Input['TableReplicaArgs']]]] = None,
-                 restore_date_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 restore_source_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 restore_source_table_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 restore_to_latest_time: Optional[pulumi.Input[_builtins.bool]] = None,
-                 server_side_encryption: Optional[pulumi.Input['TableServerSideEncryptionArgs']] = None,
-                 stream_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 stream_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 stream_label: Optional[pulumi.Input[_builtins.str]] = None,
-                 stream_view_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 table_class: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 ttl: Optional[pulumi.Input['TableTtlArgs']] = None,
-                 warm_throughput: Optional[pulumi.Input['TableWarmThroughputArgs']] = None,
-                 write_capacity: Optional[pulumi.Input[_builtins.int]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 attributes: pulumi.Input[Optional[Sequence[pulumi.Input['TableAttributeArgs']]]] = None,
+                 billing_mode: pulumi.Input[Optional[_builtins.str]] = None,
+                 deletion_protection_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 global_secondary_indexes: pulumi.Input[Optional[Sequence[pulumi.Input['TableGlobalSecondaryIndexArgs']]]] = None,
+                 global_table_witness: pulumi.Input[Optional['TableGlobalTableWitnessArgs']] = None,
+                 hash_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 import_table: pulumi.Input[Optional['TableImportTableArgs']] = None,
+                 local_secondary_indexes: pulumi.Input[Optional[Sequence[pulumi.Input['TableLocalSecondaryIndexArgs']]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 on_demand_throughput: pulumi.Input[Optional['TableOnDemandThroughputArgs']] = None,
+                 point_in_time_recovery: pulumi.Input[Optional['TablePointInTimeRecoveryArgs']] = None,
+                 range_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 read_capacity: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 replicas: pulumi.Input[Optional[Sequence[pulumi.Input['TableReplicaArgs']]]] = None,
+                 restore_backup_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 restore_date_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 restore_source_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 restore_source_table_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 restore_to_latest_time: pulumi.Input[Optional[_builtins.bool]] = None,
+                 server_side_encryption: pulumi.Input[Optional['TableServerSideEncryptionArgs']] = None,
+                 stream_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 stream_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 stream_label: pulumi.Input[Optional[_builtins.str]] = None,
+                 stream_view_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 table_class: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 ttl: pulumi.Input[Optional['TableTtlArgs']] = None,
+                 warm_throughput: pulumi.Input[Optional['TableWarmThroughputArgs']] = None,
+                 write_capacity: pulumi.Input[Optional[_builtins.int]] = None):
         """
         Input properties used for looking up and filtering Table resources.
+
         :param pulumi.Input[_builtins.str] arn: ARN of the table
+               * `replica.*.arn` - ARN of the replica
+               * `replica.*.stream_arn` - ARN of the replica Table Stream. Only available when `stream_enabled = true`.
+               * `replica.*.stream_label` - Timestamp, in ISO 8601 format, for the replica stream. Note that this timestamp is not a unique identifier for the stream on its own. However, the combination of AWS customer ID, table name and this field is guaranteed to be unique. It can be used for creating CloudWatch Alarms. Only available when `stream_enabled = true`.
         :param pulumi.Input[Sequence[pulumi.Input['TableAttributeArgs']]] attributes: Set of nested attribute definitions. Only required for `hash_key` and `range_key` attributes. See below.
         :param pulumi.Input[_builtins.str] billing_mode: Controls how you are charged for read and write throughput and how you manage capacity. The valid values are `PROVISIONED` and `PAY_PER_REQUEST`. Defaults to `PROVISIONED`.
         :param pulumi.Input[_builtins.bool] deletion_protection_enabled: Enables deletion protection for table. Defaults to `false`.
@@ -524,6 +546,7 @@ class _TableState:
         :param pulumi.Input[_builtins.int] read_capacity: Number of read units for this table. If the `billing_mode` is `PROVISIONED`, this field is required.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Sequence[pulumi.Input['TableReplicaArgs']]] replicas: Configuration block(s) with [DynamoDB Global Tables V2 (version 2019.11.21)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html) replication configurations. See below.
+        :param pulumi.Input[_builtins.str] restore_backup_arn: ARN of backup to restore.
         :param pulumi.Input[_builtins.str] restore_date_time: Time of the point-in-time recovery point to restore.
         :param pulumi.Input[_builtins.str] restore_source_name: Name of the table to restore. Must match the name of an existing table.
         :param pulumi.Input[_builtins.str] restore_source_table_arn: ARN of the source table to restore. Must be supplied for cross-region restores.
@@ -576,6 +599,8 @@ class _TableState:
             pulumi.set(__self__, "region", region)
         if replicas is not None:
             pulumi.set(__self__, "replicas", replicas)
+        if restore_backup_arn is not None:
+            pulumi.set(__self__, "restore_backup_arn", restore_backup_arn)
         if restore_date_time is not None:
             pulumi.set(__self__, "restore_date_time", restore_date_time)
         if restore_source_name is not None:
@@ -609,115 +634,118 @@ class _TableState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the table
+        * `replica.*.arn` - ARN of the replica
+        * `replica.*.stream_arn` - ARN of the replica Table Stream. Only available when `stream_enabled = true`.
+        * `replica.*.stream_label` - Timestamp, in ISO 8601 format, for the replica stream. Note that this timestamp is not a unique identifier for the stream on its own. However, the combination of AWS customer ID, table name and this field is guaranteed to be unique. It can be used for creating CloudWatch Alarms. Only available when `stream_enabled = true`.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def attributes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TableAttributeArgs']]]]:
+    def attributes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['TableAttributeArgs']]]]:
         """
         Set of nested attribute definitions. Only required for `hash_key` and `range_key` attributes. See below.
         """
         return pulumi.get(self, "attributes")
 
     @attributes.setter
-    def attributes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['TableAttributeArgs']]]]):
+    def attributes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['TableAttributeArgs']]]]):
         pulumi.set(self, "attributes", value)
 
     @_builtins.property
     @pulumi.getter(name="billingMode")
-    def billing_mode(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def billing_mode(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Controls how you are charged for read and write throughput and how you manage capacity. The valid values are `PROVISIONED` and `PAY_PER_REQUEST`. Defaults to `PROVISIONED`.
         """
         return pulumi.get(self, "billing_mode")
 
     @billing_mode.setter
-    def billing_mode(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def billing_mode(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "billing_mode", value)
 
     @_builtins.property
     @pulumi.getter(name="deletionProtectionEnabled")
-    def deletion_protection_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def deletion_protection_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Enables deletion protection for table. Defaults to `false`.
         """
         return pulumi.get(self, "deletion_protection_enabled")
 
     @deletion_protection_enabled.setter
-    def deletion_protection_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def deletion_protection_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "deletion_protection_enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="globalSecondaryIndexes")
-    def global_secondary_indexes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TableGlobalSecondaryIndexArgs']]]]:
+    def global_secondary_indexes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['TableGlobalSecondaryIndexArgs']]]]:
         """
         Describe a GSI for the table; subject to the normal limits on the number of GSIs, projected attributes, etc. See below.
         """
         return pulumi.get(self, "global_secondary_indexes")
 
     @global_secondary_indexes.setter
-    def global_secondary_indexes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['TableGlobalSecondaryIndexArgs']]]]):
+    def global_secondary_indexes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['TableGlobalSecondaryIndexArgs']]]]):
         pulumi.set(self, "global_secondary_indexes", value)
 
     @_builtins.property
     @pulumi.getter(name="globalTableWitness")
-    def global_table_witness(self) -> Optional[pulumi.Input['TableGlobalTableWitnessArgs']]:
+    def global_table_witness(self) -> pulumi.Input[Optional['TableGlobalTableWitnessArgs']]:
         """
         Witness Region in a Multi-Region Strong Consistency deployment. **Note** This must be used alongside a single `replica` with `consistency_mode` set to `STRONG`. Other combinations will fail to provision. See below.
         """
         return pulumi.get(self, "global_table_witness")
 
     @global_table_witness.setter
-    def global_table_witness(self, value: Optional[pulumi.Input['TableGlobalTableWitnessArgs']]):
+    def global_table_witness(self, value: pulumi.Input[Optional['TableGlobalTableWitnessArgs']]):
         pulumi.set(self, "global_table_witness", value)
 
     @_builtins.property
     @pulumi.getter(name="hashKey")
-    def hash_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def hash_key(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Attribute to use as the hash (partition) key. Must also be defined as an `attribute`. See below.
         """
         return pulumi.get(self, "hash_key")
 
     @hash_key.setter
-    def hash_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def hash_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "hash_key", value)
 
     @_builtins.property
     @pulumi.getter(name="importTable")
-    def import_table(self) -> Optional[pulumi.Input['TableImportTableArgs']]:
+    def import_table(self) -> pulumi.Input[Optional['TableImportTableArgs']]:
         """
         Import Amazon S3 data into a new table. See below.
         """
         return pulumi.get(self, "import_table")
 
     @import_table.setter
-    def import_table(self, value: Optional[pulumi.Input['TableImportTableArgs']]):
+    def import_table(self, value: pulumi.Input[Optional['TableImportTableArgs']]):
         pulumi.set(self, "import_table", value)
 
     @_builtins.property
     @pulumi.getter(name="localSecondaryIndexes")
-    def local_secondary_indexes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TableLocalSecondaryIndexArgs']]]]:
+    def local_secondary_indexes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['TableLocalSecondaryIndexArgs']]]]:
         """
         Describe an LSI on the table; these can only be allocated _at creation_ so you cannot change this definition after you have created the resource. See below.
         """
         return pulumi.get(self, "local_secondary_indexes")
 
     @local_secondary_indexes.setter
-    def local_secondary_indexes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['TableLocalSecondaryIndexArgs']]]]):
+    def local_secondary_indexes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['TableLocalSecondaryIndexArgs']]]]):
         pulumi.set(self, "local_secondary_indexes", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique within a region name of the table.
 
@@ -726,180 +754,192 @@ class _TableState:
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="onDemandThroughput")
-    def on_demand_throughput(self) -> Optional[pulumi.Input['TableOnDemandThroughputArgs']]:
+    def on_demand_throughput(self) -> pulumi.Input[Optional['TableOnDemandThroughputArgs']]:
         """
         Sets the maximum number of read and write units for the specified on-demand table. See below.
         """
         return pulumi.get(self, "on_demand_throughput")
 
     @on_demand_throughput.setter
-    def on_demand_throughput(self, value: Optional[pulumi.Input['TableOnDemandThroughputArgs']]):
+    def on_demand_throughput(self, value: pulumi.Input[Optional['TableOnDemandThroughputArgs']]):
         pulumi.set(self, "on_demand_throughput", value)
 
     @_builtins.property
     @pulumi.getter(name="pointInTimeRecovery")
-    def point_in_time_recovery(self) -> Optional[pulumi.Input['TablePointInTimeRecoveryArgs']]:
+    def point_in_time_recovery(self) -> pulumi.Input[Optional['TablePointInTimeRecoveryArgs']]:
         """
         Enable point-in-time recovery options. See below.
         """
         return pulumi.get(self, "point_in_time_recovery")
 
     @point_in_time_recovery.setter
-    def point_in_time_recovery(self, value: Optional[pulumi.Input['TablePointInTimeRecoveryArgs']]):
+    def point_in_time_recovery(self, value: pulumi.Input[Optional['TablePointInTimeRecoveryArgs']]):
         pulumi.set(self, "point_in_time_recovery", value)
 
     @_builtins.property
     @pulumi.getter(name="rangeKey")
-    def range_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def range_key(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Attribute to use as the range (sort) key. Must also be defined as an `attribute`, see below.
         """
         return pulumi.get(self, "range_key")
 
     @range_key.setter
-    def range_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def range_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "range_key", value)
 
     @_builtins.property
     @pulumi.getter(name="readCapacity")
-    def read_capacity(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def read_capacity(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Number of read units for this table. If the `billing_mode` is `PROVISIONED`, this field is required.
         """
         return pulumi.get(self, "read_capacity")
 
     @read_capacity.setter
-    def read_capacity(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def read_capacity(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "read_capacity", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def replicas(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TableReplicaArgs']]]]:
+    def replicas(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['TableReplicaArgs']]]]:
         """
         Configuration block(s) with [DynamoDB Global Tables V2 (version 2019.11.21)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html) replication configurations. See below.
         """
         return pulumi.get(self, "replicas")
 
     @replicas.setter
-    def replicas(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['TableReplicaArgs']]]]):
+    def replicas(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['TableReplicaArgs']]]]):
         pulumi.set(self, "replicas", value)
 
     @_builtins.property
+    @pulumi.getter(name="restoreBackupArn")
+    def restore_backup_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        ARN of backup to restore.
+        """
+        return pulumi.get(self, "restore_backup_arn")
+
+    @restore_backup_arn.setter
+    def restore_backup_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "restore_backup_arn", value)
+
+    @_builtins.property
     @pulumi.getter(name="restoreDateTime")
-    def restore_date_time(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def restore_date_time(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Time of the point-in-time recovery point to restore.
         """
         return pulumi.get(self, "restore_date_time")
 
     @restore_date_time.setter
-    def restore_date_time(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def restore_date_time(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "restore_date_time", value)
 
     @_builtins.property
     @pulumi.getter(name="restoreSourceName")
-    def restore_source_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def restore_source_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the table to restore. Must match the name of an existing table.
         """
         return pulumi.get(self, "restore_source_name")
 
     @restore_source_name.setter
-    def restore_source_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def restore_source_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "restore_source_name", value)
 
     @_builtins.property
     @pulumi.getter(name="restoreSourceTableArn")
-    def restore_source_table_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def restore_source_table_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the source table to restore. Must be supplied for cross-region restores.
         """
         return pulumi.get(self, "restore_source_table_arn")
 
     @restore_source_table_arn.setter
-    def restore_source_table_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def restore_source_table_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "restore_source_table_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="restoreToLatestTime")
-    def restore_to_latest_time(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def restore_to_latest_time(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         If set, restores table to the most recent point-in-time recovery point.
         """
         return pulumi.get(self, "restore_to_latest_time")
 
     @restore_to_latest_time.setter
-    def restore_to_latest_time(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def restore_to_latest_time(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "restore_to_latest_time", value)
 
     @_builtins.property
     @pulumi.getter(name="serverSideEncryption")
-    def server_side_encryption(self) -> Optional[pulumi.Input['TableServerSideEncryptionArgs']]:
+    def server_side_encryption(self) -> pulumi.Input[Optional['TableServerSideEncryptionArgs']]:
         """
         Encryption at rest options. AWS DynamoDB tables are automatically encrypted at rest with an AWS-owned Customer Master Key if this argument isn't specified. Must be supplied for cross-region restores. See below.
         """
         return pulumi.get(self, "server_side_encryption")
 
     @server_side_encryption.setter
-    def server_side_encryption(self, value: Optional[pulumi.Input['TableServerSideEncryptionArgs']]):
+    def server_side_encryption(self, value: pulumi.Input[Optional['TableServerSideEncryptionArgs']]):
         pulumi.set(self, "server_side_encryption", value)
 
     @_builtins.property
     @pulumi.getter(name="streamArn")
-    def stream_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def stream_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the Table Stream. Only available when `stream_enabled = true`
         """
         return pulumi.get(self, "stream_arn")
 
     @stream_arn.setter
-    def stream_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def stream_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "stream_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="streamEnabled")
-    def stream_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def stream_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether Streams are enabled.
         """
         return pulumi.get(self, "stream_enabled")
 
     @stream_enabled.setter
-    def stream_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def stream_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "stream_enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="streamLabel")
-    def stream_label(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def stream_label(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Timestamp, in ISO 8601 format, for this stream. Note that this timestamp is not a unique identifier for the stream on its own. However, the combination of AWS customer ID, table name and this field is guaranteed to be unique. It can be used for creating CloudWatch Alarms. Only available when `stream_enabled = true`.
         """
         return pulumi.get(self, "stream_label")
 
     @stream_label.setter
-    def stream_label(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def stream_label(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "stream_label", value)
 
     @_builtins.property
     @pulumi.getter(name="streamViewType")
-    def stream_view_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def stream_view_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         When an item in the table is modified, StreamViewType determines what information is written to the table's stream.
         Valid values are `KEYS_ONLY`, `NEW_IMAGE`, `OLD_IMAGE`, `NEW_AND_OLD_IMAGES`.
@@ -908,12 +948,12 @@ class _TableState:
         return pulumi.get(self, "stream_view_type")
 
     @stream_view_type.setter
-    def stream_view_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def stream_view_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "stream_view_type", value)
 
     @_builtins.property
     @pulumi.getter(name="tableClass")
-    def table_class(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def table_class(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Storage class of the table.
         Valid values are `STANDARD` and `STANDARD_INFREQUENT_ACCESS`.
@@ -922,67 +962,67 @@ class _TableState:
         return pulumi.get(self, "table_class")
 
     @table_class.setter
-    def table_class(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def table_class(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "table_class", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags to populate on the created table. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter
-    def ttl(self) -> Optional[pulumi.Input['TableTtlArgs']]:
+    def ttl(self) -> pulumi.Input[Optional['TableTtlArgs']]:
         """
         Configuration block for TTL. See below.
         """
         return pulumi.get(self, "ttl")
 
     @ttl.setter
-    def ttl(self, value: Optional[pulumi.Input['TableTtlArgs']]):
+    def ttl(self, value: pulumi.Input[Optional['TableTtlArgs']]):
         pulumi.set(self, "ttl", value)
 
     @_builtins.property
     @pulumi.getter(name="warmThroughput")
-    def warm_throughput(self) -> Optional[pulumi.Input['TableWarmThroughputArgs']]:
+    def warm_throughput(self) -> pulumi.Input[Optional['TableWarmThroughputArgs']]:
         """
         Sets the number of warm read and write units for the specified table. See below.
         """
         return pulumi.get(self, "warm_throughput")
 
     @warm_throughput.setter
-    def warm_throughput(self, value: Optional[pulumi.Input['TableWarmThroughputArgs']]):
+    def warm_throughput(self, value: pulumi.Input[Optional['TableWarmThroughputArgs']]):
         pulumi.set(self, "warm_throughput", value)
 
     @_builtins.property
     @pulumi.getter(name="writeCapacity")
-    def write_capacity(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def write_capacity(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Number of write units for this table. If the `billing_mode` is `PROVISIONED`, this field is required.
         """
         return pulumi.get(self, "write_capacity")
 
     @write_capacity.setter
-    def write_capacity(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def write_capacity(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "write_capacity", value)
 
 
@@ -992,33 +1032,34 @@ class Table(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 attributes: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TableAttributeArgs', 'TableAttributeArgsDict']]]]] = None,
-                 billing_mode: Optional[pulumi.Input[_builtins.str]] = None,
-                 deletion_protection_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 global_secondary_indexes: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TableGlobalSecondaryIndexArgs', 'TableGlobalSecondaryIndexArgsDict']]]]] = None,
-                 global_table_witness: Optional[pulumi.Input[Union['TableGlobalTableWitnessArgs', 'TableGlobalTableWitnessArgsDict']]] = None,
-                 hash_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 import_table: Optional[pulumi.Input[Union['TableImportTableArgs', 'TableImportTableArgsDict']]] = None,
-                 local_secondary_indexes: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TableLocalSecondaryIndexArgs', 'TableLocalSecondaryIndexArgsDict']]]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 on_demand_throughput: Optional[pulumi.Input[Union['TableOnDemandThroughputArgs', 'TableOnDemandThroughputArgsDict']]] = None,
-                 point_in_time_recovery: Optional[pulumi.Input[Union['TablePointInTimeRecoveryArgs', 'TablePointInTimeRecoveryArgsDict']]] = None,
-                 range_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 read_capacity: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 replicas: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TableReplicaArgs', 'TableReplicaArgsDict']]]]] = None,
-                 restore_date_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 restore_source_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 restore_source_table_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 restore_to_latest_time: Optional[pulumi.Input[_builtins.bool]] = None,
-                 server_side_encryption: Optional[pulumi.Input[Union['TableServerSideEncryptionArgs', 'TableServerSideEncryptionArgsDict']]] = None,
-                 stream_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 stream_view_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 table_class: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 ttl: Optional[pulumi.Input[Union['TableTtlArgs', 'TableTtlArgsDict']]] = None,
-                 warm_throughput: Optional[pulumi.Input[Union['TableWarmThroughputArgs', 'TableWarmThroughputArgsDict']]] = None,
-                 write_capacity: Optional[pulumi.Input[_builtins.int]] = None,
+                 attributes: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TableAttributeArgs', 'TableAttributeArgsDict']]]]] = None,
+                 billing_mode: pulumi.Input[Optional[_builtins.str]] = None,
+                 deletion_protection_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 global_secondary_indexes: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TableGlobalSecondaryIndexArgs', 'TableGlobalSecondaryIndexArgsDict']]]]] = None,
+                 global_table_witness: pulumi.Input[Optional[Union['TableGlobalTableWitnessArgs', 'TableGlobalTableWitnessArgsDict']]] = None,
+                 hash_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 import_table: pulumi.Input[Optional[Union['TableImportTableArgs', 'TableImportTableArgsDict']]] = None,
+                 local_secondary_indexes: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TableLocalSecondaryIndexArgs', 'TableLocalSecondaryIndexArgsDict']]]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 on_demand_throughput: pulumi.Input[Optional[Union['TableOnDemandThroughputArgs', 'TableOnDemandThroughputArgsDict']]] = None,
+                 point_in_time_recovery: pulumi.Input[Optional[Union['TablePointInTimeRecoveryArgs', 'TablePointInTimeRecoveryArgsDict']]] = None,
+                 range_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 read_capacity: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 replicas: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TableReplicaArgs', 'TableReplicaArgsDict']]]]] = None,
+                 restore_backup_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 restore_date_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 restore_source_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 restore_source_table_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 restore_to_latest_time: pulumi.Input[Optional[_builtins.bool]] = None,
+                 server_side_encryption: pulumi.Input[Optional[Union['TableServerSideEncryptionArgs', 'TableServerSideEncryptionArgsDict']]] = None,
+                 stream_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 stream_view_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 table_class: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 ttl: pulumi.Input[Optional[Union['TableTtlArgs', 'TableTtlArgsDict']]] = None,
+                 warm_throughput: pulumi.Input[Optional[Union['TableWarmThroughputArgs', 'TableWarmThroughputArgsDict']]] = None,
+                 write_capacity: pulumi.Input[Optional[_builtins.int]] = None,
                  __props__=None):
         """
         Provides a DynamoDB table resource.
@@ -1029,16 +1070,7 @@ class Table(pulumi.CustomResource):
 
         > **Note:** If autoscaling creates drift for your `global_secondary_index` blocks and/or more granular `lifecycle` management for GSIs, we recommend using the new **experimental** resource `dynamodb.GlobalSecondaryIndex`.
 
-        ## DynamoDB Table attributes
-
-        Only define attributes on the table object that are going to be used as:
-
-        * Table hash key or range key
-        * LSI or GSI hash key or range key
-
-        The DynamoDB API expects attribute structure (name and type) to be passed along when creating or updating GSI/LSIs or creating the initial table. In these cases it expects the Hash / Range keys to be provided. Because these get re-used in numerous places (i.e the table's range key could be a part of one or more GSIs), they are stored on the table object to prevent duplication and increase consistency. If you add attributes here that are not used in these scenarios it can cause an infinite loop in planning.
-
-        > **Note:** When using the `dynamodb.GlobalSecondaryIndex` resource, you do not need to define the attributes for externally managed GSIs in the `dynamodb.Table` resource.
+        > **Note:** Only define attributes on the table object that are going to be used as a hash key or range key for the table itself, or for LSI/GSI keys. Adding attributes not used in these scenarios causes an infinite plan loop. When using `dynamodb.GlobalSecondaryIndex`, you do not need to define attributes for externally managed GSIs in the `dynamodb.Table` resource.
 
         ## Example Usage
 
@@ -1051,12 +1083,10 @@ class Table(pulumi.CustomResource):
         import pulumi_aws as aws
 
         basic_dynamodb_table = aws.dynamodb.Table("basic-dynamodb-table",
-            name="GameScores",
-            billing_mode="PROVISIONED",
-            read_capacity=20,
-            write_capacity=20,
-            hash_key="UserId",
-            range_key="GameTitle",
+            ttl={
+                "attribute_name": "TimeToExist",
+                "enabled": True,
+            },
             attributes=[
                 {
                     "name": "UserId",
@@ -1071,10 +1101,6 @@ class Table(pulumi.CustomResource):
                     "type": "N",
                 },
             ],
-            ttl={
-                "attribute_name": "TimeToExist",
-                "enabled": True,
-            },
             global_secondary_indexes=[{
                 "name": "GameTitleIndex",
                 "hash_key": "GameTitle",
@@ -1084,6 +1110,12 @@ class Table(pulumi.CustomResource):
                 "projection_type": "INCLUDE",
                 "non_key_attributes": ["UserId"],
             }],
+            name="GameScores",
+            billing_mode="PROVISIONED",
+            read_capacity=20,
+            write_capacity=20,
+            hash_key="UserId",
+            range_key="GameTitle",
             tags={
                 "Name": "dynamodb-table-1",
                 "Environment": "production",
@@ -1101,11 +1133,10 @@ class Table(pulumi.CustomResource):
         import pulumi_aws as aws
 
         basic_dynamodb_table = aws.dynamodb.Table("basic-dynamodb-table",
-            name="TournamentMatches",
-            billing_mode="PROVISIONED",
-            read_capacity=20,
-            write_capacity=20,
-            hash_key="matchId",
+            ttl={
+                "attribute_name": "TimeToExist",
+                "enabled": True,
+            },
             attributes=[
                 {
                     "name": "matchId",
@@ -1136,13 +1167,8 @@ class Table(pulumi.CustomResource):
                     "type": "S",
                 },
             ],
-            ttl={
-                "attribute_name": "TimeToExist",
-                "enabled": True,
-            },
             global_secondary_indexes=[
                 {
-                    "name": "TournamentRegionIndex",
                     "key_schemas": [
                         {
                             "attribute_name": "tournamentId",
@@ -1165,12 +1191,12 @@ class Table(pulumi.CustomResource):
                             "key_type": "RANGE",
                         },
                     ],
+                    "name": "TournamentRegionIndex",
                     "write_capacity": 10,
                     "read_capacity": 10,
                     "projection_type": "ALL",
                 },
                 {
-                    "name": "PlayerMatchHistoryIndex",
                     "key_schemas": [
                         {
                             "attribute_name": "playerId",
@@ -1185,11 +1211,17 @@ class Table(pulumi.CustomResource):
                             "key_type": "RANGE",
                         },
                     ],
+                    "name": "PlayerMatchHistoryIndex",
                     "write_capacity": 10,
                     "read_capacity": 10,
                     "projection_type": "ALL",
                 },
             ],
+            name="TournamentMatches",
+            billing_mode="PROVISIONED",
+            read_capacity=20,
+            write_capacity=20,
+            hash_key="matchId",
             tags={
                 "Name": "dynamodb-table-1",
                 "Environment": "production",
@@ -1207,11 +1239,6 @@ class Table(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.dynamodb.Table("example",
-            name="example",
-            hash_key="TestTableHashKey",
-            billing_mode="PAY_PER_REQUEST",
-            stream_enabled=True,
-            stream_view_type="NEW_AND_OLD_IMAGES",
             attributes=[{
                 "name": "TestTableHashKey",
                 "type": "S",
@@ -1223,7 +1250,12 @@ class Table(pulumi.CustomResource):
                 {
                     "region_name": "us-west-2",
                 },
-            ])
+            ],
+            name="example",
+            hash_key="TestTableHashKey",
+            billing_mode="PAY_PER_REQUEST",
+            stream_enabled=True,
+            stream_view_type="NEW_AND_OLD_IMAGES")
         ```
 
         ### Global Tables with Multi-Region Strong Consistency
@@ -1243,11 +1275,6 @@ class Table(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.dynamodb.Table("example",
-            name="example",
-            hash_key="TestTableHashKey",
-            billing_mode="PAY_PER_REQUEST",
-            stream_enabled=True,
-            stream_view_type="NEW_AND_OLD_IMAGES",
             attributes=[{
                 "name": "TestTableHashKey",
                 "type": "S",
@@ -1261,7 +1288,12 @@ class Table(pulumi.CustomResource):
                     "region_name": "us-west-2",
                     "consistency_mode": "STRONG",
                 },
-            ])
+            ],
+            name="example",
+            hash_key="TestTableHashKey",
+            billing_mode="PAY_PER_REQUEST",
+            stream_enabled=True,
+            stream_view_type="NEW_AND_OLD_IMAGES")
         ```
 
         ##### Consistency Mode with 2 Replicas and Witness Region
@@ -1271,11 +1303,9 @@ class Table(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.dynamodb.Table("example",
-            name="example",
-            hash_key="TestTableHashKey",
-            billing_mode="PAY_PER_REQUEST",
-            stream_enabled=True,
-            stream_view_type="NEW_AND_OLD_IMAGES",
+            global_table_witness={
+                "region_name": "us-west-2",
+            },
             attributes=[{
                 "name": "TestTableHashKey",
                 "type": "S",
@@ -1284,9 +1314,11 @@ class Table(pulumi.CustomResource):
                 "region_name": "us-east-2",
                 "consistency_mode": "STRONG",
             }],
-            global_table_witness={
-                "region_name": "us-west-2",
-            })
+            name="example",
+            hash_key="TestTableHashKey",
+            billing_mode="PAY_PER_REQUEST",
+            stream_enabled=True,
+            stream_view_type="NEW_AND_OLD_IMAGES")
         ```
 
         ### Replica Tagging
@@ -1302,43 +1334,55 @@ class Table(pulumi.CustomResource):
         alternate = aws.get_region()
         third = aws.get_region()
         example = aws.dynamodb.Table("example",
-            billing_mode="PAY_PER_REQUEST",
-            hash_key="TestTableHashKey",
-            name="example-13281",
-            stream_enabled=True,
-            stream_view_type="NEW_AND_OLD_IMAGES",
             attributes=[{
                 "name": "TestTableHashKey",
                 "type": "S",
             }],
             replicas=[
                 {
-                    "region_name": alternate.name,
+                    "region_name": alternate.region,
                 },
                 {
-                    "region_name": third.name,
+                    "region_name": third.region,
                     "propagate_tags": True,
                 },
             ],
+            billing_mode="PAY_PER_REQUEST",
+            hash_key="TestTableHashKey",
+            name="example-13281",
+            stream_enabled=True,
+            stream_view_type="NEW_AND_OLD_IMAGES",
             tags={
                 "Architect": "Eleanor",
                 "Zone": "SW",
             })
         example_tag = aws.dynamodb.Tag("example",
-            resource_arn=example.arn.apply(lambda arn: std.replace(text=arn,
+            resource_arn=std.replace_output(text=example.arn,
                 search=current.region,
-                replace=alternate.name)).apply(lambda invoke: invoke.result),
+                replace=alternate.region).result,
             key="Architect",
             value="Gigi")
         ```
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `name` (String) Name of the DynamoDB Table.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
         Using `pulumi import`, import DynamoDB tables using the `name`. For example:
 
         ```sh
         $ pulumi import aws:dynamodb/table:Table basic-dynamodb-table GameScores
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -1359,6 +1403,7 @@ class Table(pulumi.CustomResource):
         :param pulumi.Input[_builtins.int] read_capacity: Number of read units for this table. If the `billing_mode` is `PROVISIONED`, this field is required.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Sequence[pulumi.Input[Union['TableReplicaArgs', 'TableReplicaArgsDict']]]] replicas: Configuration block(s) with [DynamoDB Global Tables V2 (version 2019.11.21)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html) replication configurations. See below.
+        :param pulumi.Input[_builtins.str] restore_backup_arn: ARN of backup to restore.
         :param pulumi.Input[_builtins.str] restore_date_time: Time of the point-in-time recovery point to restore.
         :param pulumi.Input[_builtins.str] restore_source_name: Name of the table to restore. Must match the name of an existing table.
         :param pulumi.Input[_builtins.str] restore_source_table_arn: ARN of the source table to restore. Must be supplied for cross-region restores.
@@ -1391,16 +1436,7 @@ class Table(pulumi.CustomResource):
 
         > **Note:** If autoscaling creates drift for your `global_secondary_index` blocks and/or more granular `lifecycle` management for GSIs, we recommend using the new **experimental** resource `dynamodb.GlobalSecondaryIndex`.
 
-        ## DynamoDB Table attributes
-
-        Only define attributes on the table object that are going to be used as:
-
-        * Table hash key or range key
-        * LSI or GSI hash key or range key
-
-        The DynamoDB API expects attribute structure (name and type) to be passed along when creating or updating GSI/LSIs or creating the initial table. In these cases it expects the Hash / Range keys to be provided. Because these get re-used in numerous places (i.e the table's range key could be a part of one or more GSIs), they are stored on the table object to prevent duplication and increase consistency. If you add attributes here that are not used in these scenarios it can cause an infinite loop in planning.
-
-        > **Note:** When using the `dynamodb.GlobalSecondaryIndex` resource, you do not need to define the attributes for externally managed GSIs in the `dynamodb.Table` resource.
+        > **Note:** Only define attributes on the table object that are going to be used as a hash key or range key for the table itself, or for LSI/GSI keys. Adding attributes not used in these scenarios causes an infinite plan loop. When using `dynamodb.GlobalSecondaryIndex`, you do not need to define attributes for externally managed GSIs in the `dynamodb.Table` resource.
 
         ## Example Usage
 
@@ -1413,12 +1449,10 @@ class Table(pulumi.CustomResource):
         import pulumi_aws as aws
 
         basic_dynamodb_table = aws.dynamodb.Table("basic-dynamodb-table",
-            name="GameScores",
-            billing_mode="PROVISIONED",
-            read_capacity=20,
-            write_capacity=20,
-            hash_key="UserId",
-            range_key="GameTitle",
+            ttl={
+                "attribute_name": "TimeToExist",
+                "enabled": True,
+            },
             attributes=[
                 {
                     "name": "UserId",
@@ -1433,10 +1467,6 @@ class Table(pulumi.CustomResource):
                     "type": "N",
                 },
             ],
-            ttl={
-                "attribute_name": "TimeToExist",
-                "enabled": True,
-            },
             global_secondary_indexes=[{
                 "name": "GameTitleIndex",
                 "hash_key": "GameTitle",
@@ -1446,6 +1476,12 @@ class Table(pulumi.CustomResource):
                 "projection_type": "INCLUDE",
                 "non_key_attributes": ["UserId"],
             }],
+            name="GameScores",
+            billing_mode="PROVISIONED",
+            read_capacity=20,
+            write_capacity=20,
+            hash_key="UserId",
+            range_key="GameTitle",
             tags={
                 "Name": "dynamodb-table-1",
                 "Environment": "production",
@@ -1463,11 +1499,10 @@ class Table(pulumi.CustomResource):
         import pulumi_aws as aws
 
         basic_dynamodb_table = aws.dynamodb.Table("basic-dynamodb-table",
-            name="TournamentMatches",
-            billing_mode="PROVISIONED",
-            read_capacity=20,
-            write_capacity=20,
-            hash_key="matchId",
+            ttl={
+                "attribute_name": "TimeToExist",
+                "enabled": True,
+            },
             attributes=[
                 {
                     "name": "matchId",
@@ -1498,13 +1533,8 @@ class Table(pulumi.CustomResource):
                     "type": "S",
                 },
             ],
-            ttl={
-                "attribute_name": "TimeToExist",
-                "enabled": True,
-            },
             global_secondary_indexes=[
                 {
-                    "name": "TournamentRegionIndex",
                     "key_schemas": [
                         {
                             "attribute_name": "tournamentId",
@@ -1527,12 +1557,12 @@ class Table(pulumi.CustomResource):
                             "key_type": "RANGE",
                         },
                     ],
+                    "name": "TournamentRegionIndex",
                     "write_capacity": 10,
                     "read_capacity": 10,
                     "projection_type": "ALL",
                 },
                 {
-                    "name": "PlayerMatchHistoryIndex",
                     "key_schemas": [
                         {
                             "attribute_name": "playerId",
@@ -1547,11 +1577,17 @@ class Table(pulumi.CustomResource):
                             "key_type": "RANGE",
                         },
                     ],
+                    "name": "PlayerMatchHistoryIndex",
                     "write_capacity": 10,
                     "read_capacity": 10,
                     "projection_type": "ALL",
                 },
             ],
+            name="TournamentMatches",
+            billing_mode="PROVISIONED",
+            read_capacity=20,
+            write_capacity=20,
+            hash_key="matchId",
             tags={
                 "Name": "dynamodb-table-1",
                 "Environment": "production",
@@ -1569,11 +1605,6 @@ class Table(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.dynamodb.Table("example",
-            name="example",
-            hash_key="TestTableHashKey",
-            billing_mode="PAY_PER_REQUEST",
-            stream_enabled=True,
-            stream_view_type="NEW_AND_OLD_IMAGES",
             attributes=[{
                 "name": "TestTableHashKey",
                 "type": "S",
@@ -1585,7 +1616,12 @@ class Table(pulumi.CustomResource):
                 {
                     "region_name": "us-west-2",
                 },
-            ])
+            ],
+            name="example",
+            hash_key="TestTableHashKey",
+            billing_mode="PAY_PER_REQUEST",
+            stream_enabled=True,
+            stream_view_type="NEW_AND_OLD_IMAGES")
         ```
 
         ### Global Tables with Multi-Region Strong Consistency
@@ -1605,11 +1641,6 @@ class Table(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.dynamodb.Table("example",
-            name="example",
-            hash_key="TestTableHashKey",
-            billing_mode="PAY_PER_REQUEST",
-            stream_enabled=True,
-            stream_view_type="NEW_AND_OLD_IMAGES",
             attributes=[{
                 "name": "TestTableHashKey",
                 "type": "S",
@@ -1623,7 +1654,12 @@ class Table(pulumi.CustomResource):
                     "region_name": "us-west-2",
                     "consistency_mode": "STRONG",
                 },
-            ])
+            ],
+            name="example",
+            hash_key="TestTableHashKey",
+            billing_mode="PAY_PER_REQUEST",
+            stream_enabled=True,
+            stream_view_type="NEW_AND_OLD_IMAGES")
         ```
 
         ##### Consistency Mode with 2 Replicas and Witness Region
@@ -1633,11 +1669,9 @@ class Table(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.dynamodb.Table("example",
-            name="example",
-            hash_key="TestTableHashKey",
-            billing_mode="PAY_PER_REQUEST",
-            stream_enabled=True,
-            stream_view_type="NEW_AND_OLD_IMAGES",
+            global_table_witness={
+                "region_name": "us-west-2",
+            },
             attributes=[{
                 "name": "TestTableHashKey",
                 "type": "S",
@@ -1646,9 +1680,11 @@ class Table(pulumi.CustomResource):
                 "region_name": "us-east-2",
                 "consistency_mode": "STRONG",
             }],
-            global_table_witness={
-                "region_name": "us-west-2",
-            })
+            name="example",
+            hash_key="TestTableHashKey",
+            billing_mode="PAY_PER_REQUEST",
+            stream_enabled=True,
+            stream_view_type="NEW_AND_OLD_IMAGES")
         ```
 
         ### Replica Tagging
@@ -1664,43 +1700,55 @@ class Table(pulumi.CustomResource):
         alternate = aws.get_region()
         third = aws.get_region()
         example = aws.dynamodb.Table("example",
-            billing_mode="PAY_PER_REQUEST",
-            hash_key="TestTableHashKey",
-            name="example-13281",
-            stream_enabled=True,
-            stream_view_type="NEW_AND_OLD_IMAGES",
             attributes=[{
                 "name": "TestTableHashKey",
                 "type": "S",
             }],
             replicas=[
                 {
-                    "region_name": alternate.name,
+                    "region_name": alternate.region,
                 },
                 {
-                    "region_name": third.name,
+                    "region_name": third.region,
                     "propagate_tags": True,
                 },
             ],
+            billing_mode="PAY_PER_REQUEST",
+            hash_key="TestTableHashKey",
+            name="example-13281",
+            stream_enabled=True,
+            stream_view_type="NEW_AND_OLD_IMAGES",
             tags={
                 "Architect": "Eleanor",
                 "Zone": "SW",
             })
         example_tag = aws.dynamodb.Tag("example",
-            resource_arn=example.arn.apply(lambda arn: std.replace(text=arn,
+            resource_arn=std.replace_output(text=example.arn,
                 search=current.region,
-                replace=alternate.name)).apply(lambda invoke: invoke.result),
+                replace=alternate.region).result,
             key="Architect",
             value="Gigi")
         ```
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `name` (String) Name of the DynamoDB Table.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
         Using `pulumi import`, import DynamoDB tables using the `name`. For example:
 
         ```sh
         $ pulumi import aws:dynamodb/table:Table basic-dynamodb-table GameScores
         ```
+
 
         :param str resource_name: The name of the resource.
         :param TableArgs args: The arguments to use to populate this resource's properties.
@@ -1717,33 +1765,34 @@ class Table(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 attributes: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TableAttributeArgs', 'TableAttributeArgsDict']]]]] = None,
-                 billing_mode: Optional[pulumi.Input[_builtins.str]] = None,
-                 deletion_protection_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 global_secondary_indexes: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TableGlobalSecondaryIndexArgs', 'TableGlobalSecondaryIndexArgsDict']]]]] = None,
-                 global_table_witness: Optional[pulumi.Input[Union['TableGlobalTableWitnessArgs', 'TableGlobalTableWitnessArgsDict']]] = None,
-                 hash_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 import_table: Optional[pulumi.Input[Union['TableImportTableArgs', 'TableImportTableArgsDict']]] = None,
-                 local_secondary_indexes: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TableLocalSecondaryIndexArgs', 'TableLocalSecondaryIndexArgsDict']]]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 on_demand_throughput: Optional[pulumi.Input[Union['TableOnDemandThroughputArgs', 'TableOnDemandThroughputArgsDict']]] = None,
-                 point_in_time_recovery: Optional[pulumi.Input[Union['TablePointInTimeRecoveryArgs', 'TablePointInTimeRecoveryArgsDict']]] = None,
-                 range_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 read_capacity: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 replicas: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TableReplicaArgs', 'TableReplicaArgsDict']]]]] = None,
-                 restore_date_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 restore_source_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 restore_source_table_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 restore_to_latest_time: Optional[pulumi.Input[_builtins.bool]] = None,
-                 server_side_encryption: Optional[pulumi.Input[Union['TableServerSideEncryptionArgs', 'TableServerSideEncryptionArgsDict']]] = None,
-                 stream_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 stream_view_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 table_class: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 ttl: Optional[pulumi.Input[Union['TableTtlArgs', 'TableTtlArgsDict']]] = None,
-                 warm_throughput: Optional[pulumi.Input[Union['TableWarmThroughputArgs', 'TableWarmThroughputArgsDict']]] = None,
-                 write_capacity: Optional[pulumi.Input[_builtins.int]] = None,
+                 attributes: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TableAttributeArgs', 'TableAttributeArgsDict']]]]] = None,
+                 billing_mode: pulumi.Input[Optional[_builtins.str]] = None,
+                 deletion_protection_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 global_secondary_indexes: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TableGlobalSecondaryIndexArgs', 'TableGlobalSecondaryIndexArgsDict']]]]] = None,
+                 global_table_witness: pulumi.Input[Optional[Union['TableGlobalTableWitnessArgs', 'TableGlobalTableWitnessArgsDict']]] = None,
+                 hash_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 import_table: pulumi.Input[Optional[Union['TableImportTableArgs', 'TableImportTableArgsDict']]] = None,
+                 local_secondary_indexes: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TableLocalSecondaryIndexArgs', 'TableLocalSecondaryIndexArgsDict']]]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 on_demand_throughput: pulumi.Input[Optional[Union['TableOnDemandThroughputArgs', 'TableOnDemandThroughputArgsDict']]] = None,
+                 point_in_time_recovery: pulumi.Input[Optional[Union['TablePointInTimeRecoveryArgs', 'TablePointInTimeRecoveryArgsDict']]] = None,
+                 range_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 read_capacity: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 replicas: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TableReplicaArgs', 'TableReplicaArgsDict']]]]] = None,
+                 restore_backup_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 restore_date_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 restore_source_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 restore_source_table_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 restore_to_latest_time: pulumi.Input[Optional[_builtins.bool]] = None,
+                 server_side_encryption: pulumi.Input[Optional[Union['TableServerSideEncryptionArgs', 'TableServerSideEncryptionArgsDict']]] = None,
+                 stream_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 stream_view_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 table_class: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 ttl: pulumi.Input[Optional[Union['TableTtlArgs', 'TableTtlArgsDict']]] = None,
+                 warm_throughput: pulumi.Input[Optional[Union['TableWarmThroughputArgs', 'TableWarmThroughputArgsDict']]] = None,
+                 write_capacity: pulumi.Input[Optional[_builtins.int]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -1768,6 +1817,7 @@ class Table(pulumi.CustomResource):
             __props__.__dict__["read_capacity"] = read_capacity
             __props__.__dict__["region"] = region
             __props__.__dict__["replicas"] = replicas
+            __props__.__dict__["restore_backup_arn"] = restore_backup_arn
             __props__.__dict__["restore_date_time"] = restore_date_time
             __props__.__dict__["restore_source_name"] = restore_source_name
             __props__.__dict__["restore_source_table_arn"] = restore_source_table_arn
@@ -1794,37 +1844,38 @@ class Table(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            attributes: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TableAttributeArgs', 'TableAttributeArgsDict']]]]] = None,
-            billing_mode: Optional[pulumi.Input[_builtins.str]] = None,
-            deletion_protection_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-            global_secondary_indexes: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TableGlobalSecondaryIndexArgs', 'TableGlobalSecondaryIndexArgsDict']]]]] = None,
-            global_table_witness: Optional[pulumi.Input[Union['TableGlobalTableWitnessArgs', 'TableGlobalTableWitnessArgsDict']]] = None,
-            hash_key: Optional[pulumi.Input[_builtins.str]] = None,
-            import_table: Optional[pulumi.Input[Union['TableImportTableArgs', 'TableImportTableArgsDict']]] = None,
-            local_secondary_indexes: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TableLocalSecondaryIndexArgs', 'TableLocalSecondaryIndexArgsDict']]]]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            on_demand_throughput: Optional[pulumi.Input[Union['TableOnDemandThroughputArgs', 'TableOnDemandThroughputArgsDict']]] = None,
-            point_in_time_recovery: Optional[pulumi.Input[Union['TablePointInTimeRecoveryArgs', 'TablePointInTimeRecoveryArgsDict']]] = None,
-            range_key: Optional[pulumi.Input[_builtins.str]] = None,
-            read_capacity: Optional[pulumi.Input[_builtins.int]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            replicas: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TableReplicaArgs', 'TableReplicaArgsDict']]]]] = None,
-            restore_date_time: Optional[pulumi.Input[_builtins.str]] = None,
-            restore_source_name: Optional[pulumi.Input[_builtins.str]] = None,
-            restore_source_table_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            restore_to_latest_time: Optional[pulumi.Input[_builtins.bool]] = None,
-            server_side_encryption: Optional[pulumi.Input[Union['TableServerSideEncryptionArgs', 'TableServerSideEncryptionArgsDict']]] = None,
-            stream_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            stream_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-            stream_label: Optional[pulumi.Input[_builtins.str]] = None,
-            stream_view_type: Optional[pulumi.Input[_builtins.str]] = None,
-            table_class: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            ttl: Optional[pulumi.Input[Union['TableTtlArgs', 'TableTtlArgsDict']]] = None,
-            warm_throughput: Optional[pulumi.Input[Union['TableWarmThroughputArgs', 'TableWarmThroughputArgsDict']]] = None,
-            write_capacity: Optional[pulumi.Input[_builtins.int]] = None) -> 'Table':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            attributes: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TableAttributeArgs', 'TableAttributeArgsDict']]]]] = None,
+            billing_mode: pulumi.Input[Optional[_builtins.str]] = None,
+            deletion_protection_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+            global_secondary_indexes: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TableGlobalSecondaryIndexArgs', 'TableGlobalSecondaryIndexArgsDict']]]]] = None,
+            global_table_witness: pulumi.Input[Optional[Union['TableGlobalTableWitnessArgs', 'TableGlobalTableWitnessArgsDict']]] = None,
+            hash_key: pulumi.Input[Optional[_builtins.str]] = None,
+            import_table: pulumi.Input[Optional[Union['TableImportTableArgs', 'TableImportTableArgsDict']]] = None,
+            local_secondary_indexes: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TableLocalSecondaryIndexArgs', 'TableLocalSecondaryIndexArgsDict']]]]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            on_demand_throughput: pulumi.Input[Optional[Union['TableOnDemandThroughputArgs', 'TableOnDemandThroughputArgsDict']]] = None,
+            point_in_time_recovery: pulumi.Input[Optional[Union['TablePointInTimeRecoveryArgs', 'TablePointInTimeRecoveryArgsDict']]] = None,
+            range_key: pulumi.Input[Optional[_builtins.str]] = None,
+            read_capacity: pulumi.Input[Optional[_builtins.int]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            replicas: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TableReplicaArgs', 'TableReplicaArgsDict']]]]] = None,
+            restore_backup_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            restore_date_time: pulumi.Input[Optional[_builtins.str]] = None,
+            restore_source_name: pulumi.Input[Optional[_builtins.str]] = None,
+            restore_source_table_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            restore_to_latest_time: pulumi.Input[Optional[_builtins.bool]] = None,
+            server_side_encryption: pulumi.Input[Optional[Union['TableServerSideEncryptionArgs', 'TableServerSideEncryptionArgsDict']]] = None,
+            stream_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            stream_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+            stream_label: pulumi.Input[Optional[_builtins.str]] = None,
+            stream_view_type: pulumi.Input[Optional[_builtins.str]] = None,
+            table_class: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            ttl: pulumi.Input[Optional[Union['TableTtlArgs', 'TableTtlArgsDict']]] = None,
+            warm_throughput: pulumi.Input[Optional[Union['TableWarmThroughputArgs', 'TableWarmThroughputArgsDict']]] = None,
+            write_capacity: pulumi.Input[Optional[_builtins.int]] = None) -> 'Table':
         """
         Get an existing Table resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -1833,6 +1884,9 @@ class Table(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.str] arn: ARN of the table
+               * `replica.*.arn` - ARN of the replica
+               * `replica.*.stream_arn` - ARN of the replica Table Stream. Only available when `stream_enabled = true`.
+               * `replica.*.stream_label` - Timestamp, in ISO 8601 format, for the replica stream. Note that this timestamp is not a unique identifier for the stream on its own. However, the combination of AWS customer ID, table name and this field is guaranteed to be unique. It can be used for creating CloudWatch Alarms. Only available when `stream_enabled = true`.
         :param pulumi.Input[Sequence[pulumi.Input[Union['TableAttributeArgs', 'TableAttributeArgsDict']]]] attributes: Set of nested attribute definitions. Only required for `hash_key` and `range_key` attributes. See below.
         :param pulumi.Input[_builtins.str] billing_mode: Controls how you are charged for read and write throughput and how you manage capacity. The valid values are `PROVISIONED` and `PAY_PER_REQUEST`. Defaults to `PROVISIONED`.
         :param pulumi.Input[_builtins.bool] deletion_protection_enabled: Enables deletion protection for table. Defaults to `false`.
@@ -1850,6 +1904,7 @@ class Table(pulumi.CustomResource):
         :param pulumi.Input[_builtins.int] read_capacity: Number of read units for this table. If the `billing_mode` is `PROVISIONED`, this field is required.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Sequence[pulumi.Input[Union['TableReplicaArgs', 'TableReplicaArgsDict']]]] replicas: Configuration block(s) with [DynamoDB Global Tables V2 (version 2019.11.21)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html) replication configurations. See below.
+        :param pulumi.Input[_builtins.str] restore_backup_arn: ARN of backup to restore.
         :param pulumi.Input[_builtins.str] restore_date_time: Time of the point-in-time recovery point to restore.
         :param pulumi.Input[_builtins.str] restore_source_name: Name of the table to restore. Must match the name of an existing table.
         :param pulumi.Input[_builtins.str] restore_source_table_arn: ARN of the source table to restore. Must be supplied for cross-region restores.
@@ -1890,6 +1945,7 @@ class Table(pulumi.CustomResource):
         __props__.__dict__["read_capacity"] = read_capacity
         __props__.__dict__["region"] = region
         __props__.__dict__["replicas"] = replicas
+        __props__.__dict__["restore_backup_arn"] = restore_backup_arn
         __props__.__dict__["restore_date_time"] = restore_date_time
         __props__.__dict__["restore_source_name"] = restore_source_name
         __props__.__dict__["restore_source_table_arn"] = restore_source_table_arn
@@ -1912,6 +1968,9 @@ class Table(pulumi.CustomResource):
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
         ARN of the table
+        * `replica.*.arn` - ARN of the replica
+        * `replica.*.stream_arn` - ARN of the replica Table Stream. Only available when `stream_enabled = true`.
+        * `replica.*.stream_label` - Timestamp, in ISO 8601 format, for the replica stream. Note that this timestamp is not a unique identifier for the stream on its own. However, the combination of AWS customer ID, table name and this field is guaranteed to be unique. It can be used for creating CloudWatch Alarms. Only available when `stream_enabled = true`.
         """
         return pulumi.get(self, "arn")
 
@@ -2036,6 +2095,14 @@ class Table(pulumi.CustomResource):
         Configuration block(s) with [DynamoDB Global Tables V2 (version 2019.11.21)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html) replication configurations. See below.
         """
         return pulumi.get(self, "replicas")
+
+    @_builtins.property
+    @pulumi.getter(name="restoreBackupArn")
+    def restore_backup_arn(self) -> pulumi.Output[Optional[_builtins.str]]:
+        """
+        ARN of backup to restore.
+        """
+        return pulumi.get(self, "restore_backup_arn")
 
     @_builtins.property
     @pulumi.getter(name="restoreDateTime")

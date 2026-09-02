@@ -22,12 +22,13 @@ __all__ = ['ContactListArgs', 'ContactList']
 class ContactListArgs:
     def __init__(__self__, *,
                  contact_list_name: pulumi.Input[_builtins.str],
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 topics: Optional[pulumi.Input[Sequence[pulumi.Input['ContactListTopicArgs']]]] = None):
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 topics: pulumi.Input[Optional[Sequence[pulumi.Input['ContactListTopicArgs']]]] = None):
         """
         The set of arguments for constructing a ContactList resource.
+
         :param pulumi.Input[_builtins.str] contact_list_name: Name of the contact list.
                
                The following arguments are optional:
@@ -62,67 +63,69 @@ class ContactListArgs:
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of what the contact list is about.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of resource tags for the contact list. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter
-    def topics(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ContactListTopicArgs']]]]:
+    def topics(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ContactListTopicArgs']]]]:
         """
         Configuration block(s) with topic for the contact list. Detailed below.
         """
         return pulumi.get(self, "topics")
 
     @topics.setter
-    def topics(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ContactListTopicArgs']]]]):
+    def topics(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ContactListTopicArgs']]]]):
         pulumi.set(self, "topics", value)
 
 
 @pulumi.input_type
 class _ContactListState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 contact_list_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 created_timestamp: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 last_updated_timestamp: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 topics: Optional[pulumi.Input[Sequence[pulumi.Input['ContactListTopicArgs']]]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 contact_list_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 created_timestamp: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 last_updated_timestamp: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 topics: pulumi.Input[Optional[Sequence[pulumi.Input['ContactListTopicArgs']]]] = None):
         """
         Input properties used for looking up and filtering ContactList resources.
+
+        :param pulumi.Input[_builtins.str] arn: ARN of the contact list.
         :param pulumi.Input[_builtins.str] contact_list_name: Name of the contact list.
                
                The following arguments are optional:
@@ -154,16 +157,19 @@ class _ContactListState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        ARN of the contact list.
+        """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="contactListName")
-    def contact_list_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def contact_list_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the contact list.
 
@@ -172,88 +178,88 @@ class _ContactListState:
         return pulumi.get(self, "contact_list_name")
 
     @contact_list_name.setter
-    def contact_list_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def contact_list_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "contact_list_name", value)
 
     @_builtins.property
     @pulumi.getter(name="createdTimestamp")
-    def created_timestamp(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def created_timestamp(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Timestamp noting when the contact list was created in ISO 8601 format.
         """
         return pulumi.get(self, "created_timestamp")
 
     @created_timestamp.setter
-    def created_timestamp(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def created_timestamp(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "created_timestamp", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of what the contact list is about.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="lastUpdatedTimestamp")
-    def last_updated_timestamp(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def last_updated_timestamp(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Timestamp noting the last time the contact list was updated in ISO 8601 format.
         """
         return pulumi.get(self, "last_updated_timestamp")
 
     @last_updated_timestamp.setter
-    def last_updated_timestamp(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def last_updated_timestamp(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "last_updated_timestamp", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of resource tags for the contact list. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter
-    def topics(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ContactListTopicArgs']]]]:
+    def topics(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ContactListTopicArgs']]]]:
         """
         Configuration block(s) with topic for the contact list. Detailed below.
         """
         return pulumi.get(self, "topics")
 
     @topics.setter
-    def topics(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ContactListTopicArgs']]]]):
+    def topics(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ContactListTopicArgs']]]]):
         pulumi.set(self, "topics", value)
 
 
@@ -263,11 +269,11 @@ class ContactList(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 contact_list_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 topics: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ContactListTopicArgs', 'ContactListTopicArgsDict']]]]] = None,
+                 contact_list_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 topics: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ContactListTopicArgs', 'ContactListTopicArgsDict']]]]] = None,
                  __props__=None):
         """
         Resource for managing an AWS SESv2 (Simple Email V2) Contact List.
@@ -290,14 +296,14 @@ class ContactList(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.sesv2.ContactList("example",
-            contact_list_name="example",
-            description="description",
             topics=[{
                 "default_subscription_status": "OPT_IN",
                 "description": "topic description",
                 "display_name": "Example Topic",
                 "topic_name": "example-topic",
-            }])
+            }],
+            contact_list_name="example",
+            description="description")
         ```
 
         ## Import
@@ -307,6 +313,7 @@ class ContactList(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:sesv2/contactList:ContactList example example
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -345,14 +352,14 @@ class ContactList(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.sesv2.ContactList("example",
-            contact_list_name="example",
-            description="description",
             topics=[{
                 "default_subscription_status": "OPT_IN",
                 "description": "topic description",
                 "display_name": "Example Topic",
                 "topic_name": "example-topic",
-            }])
+            }],
+            contact_list_name="example",
+            description="description")
         ```
 
         ## Import
@@ -362,6 +369,7 @@ class ContactList(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:sesv2/contactList:ContactList example example
         ```
+
 
         :param str resource_name: The name of the resource.
         :param ContactListArgs args: The arguments to use to populate this resource's properties.
@@ -378,11 +386,11 @@ class ContactList(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 contact_list_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 topics: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ContactListTopicArgs', 'ContactListTopicArgsDict']]]]] = None,
+                 contact_list_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 topics: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ContactListTopicArgs', 'ContactListTopicArgsDict']]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -413,15 +421,15 @@ class ContactList(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            contact_list_name: Optional[pulumi.Input[_builtins.str]] = None,
-            created_timestamp: Optional[pulumi.Input[_builtins.str]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            last_updated_timestamp: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            topics: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ContactListTopicArgs', 'ContactListTopicArgsDict']]]]] = None) -> 'ContactList':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            contact_list_name: pulumi.Input[Optional[_builtins.str]] = None,
+            created_timestamp: pulumi.Input[Optional[_builtins.str]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            last_updated_timestamp: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            topics: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ContactListTopicArgs', 'ContactListTopicArgsDict']]]]] = None) -> 'ContactList':
         """
         Get an existing ContactList resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -429,6 +437,7 @@ class ContactList(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[_builtins.str] arn: ARN of the contact list.
         :param pulumi.Input[_builtins.str] contact_list_name: Name of the contact list.
                
                The following arguments are optional:
@@ -457,6 +466,9 @@ class ContactList(pulumi.CustomResource):
     @_builtins.property
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
+        """
+        ARN of the contact list.
+        """
         return pulumi.get(self, "arn")
 
     @_builtins.property

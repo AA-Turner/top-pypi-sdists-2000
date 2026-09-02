@@ -20,17 +20,20 @@ __all__ = ['GcmChannelArgs', 'GcmChannel']
 class GcmChannelArgs:
     def __init__(__self__, *,
                  application_id: pulumi.Input[_builtins.str],
-                 api_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 default_authentication_method: Optional[pulumi.Input[_builtins.str]] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 service_json: Optional[pulumi.Input[_builtins.str]] = None):
+                 api_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 default_authentication_method: pulumi.Input[Optional[_builtins.str]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 service_json: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a GcmChannel resource.
-        :param pulumi.Input[_builtins.str] application_id: The application ID.
-        :param pulumi.Input[_builtins.str] api_key: Platform credential API key from Google.
+
+        :param pulumi.Input[_builtins.str] application_id: Application ID.
+        :param pulumi.Input[_builtins.str] api_key: Platform credential API key from Google. Conflicts with `service_json`.
+        :param pulumi.Input[_builtins.str] default_authentication_method: Default authentication method used for GCM. Valid values: `KEY`, `TOKEN`. Defaults to `KEY`.
         :param pulumi.Input[_builtins.bool] enabled: Whether the channel is enabled or disabled. Defaults to `true`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[_builtins.str] service_json: Service Account JSON from Google to use with the GCM API. Conflicts with `api_key`.
         """
         pulumi.set(__self__, "application_id", application_id)
         if api_key is not None:
@@ -48,7 +51,7 @@ class GcmChannelArgs:
     @pulumi.getter(name="applicationId")
     def application_id(self) -> pulumi.Input[_builtins.str]:
         """
-        The application ID.
+        Application ID.
         """
         return pulumi.get(self, "application_id")
 
@@ -58,74 +61,83 @@ class GcmChannelArgs:
 
     @_builtins.property
     @pulumi.getter(name="apiKey")
-    def api_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def api_key(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Platform credential API key from Google.
+        Platform credential API key from Google. Conflicts with `service_json`.
         """
         return pulumi.get(self, "api_key")
 
     @api_key.setter
-    def api_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def api_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "api_key", value)
 
     @_builtins.property
     @pulumi.getter(name="defaultAuthenticationMethod")
-    def default_authentication_method(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def default_authentication_method(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Default authentication method used for GCM. Valid values: `KEY`, `TOKEN`. Defaults to `KEY`.
+        """
         return pulumi.get(self, "default_authentication_method")
 
     @default_authentication_method.setter
-    def default_authentication_method(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def default_authentication_method(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "default_authentication_method", value)
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the channel is enabled or disabled. Defaults to `true`.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="serviceJson")
-    def service_json(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def service_json(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Service Account JSON from Google to use with the GCM API. Conflicts with `api_key`.
+        """
         return pulumi.get(self, "service_json")
 
     @service_json.setter
-    def service_json(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def service_json(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "service_json", value)
 
 
 @pulumi.input_type
 class _GcmChannelState:
     def __init__(__self__, *,
-                 api_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 application_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 default_authentication_method: Optional[pulumi.Input[_builtins.str]] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 service_json: Optional[pulumi.Input[_builtins.str]] = None):
+                 api_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 application_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 default_authentication_method: pulumi.Input[Optional[_builtins.str]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 service_json: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering GcmChannel resources.
-        :param pulumi.Input[_builtins.str] api_key: Platform credential API key from Google.
-        :param pulumi.Input[_builtins.str] application_id: The application ID.
+
+        :param pulumi.Input[_builtins.str] api_key: Platform credential API key from Google. Conflicts with `service_json`.
+        :param pulumi.Input[_builtins.str] application_id: Application ID.
+        :param pulumi.Input[_builtins.str] default_authentication_method: Default authentication method used for GCM. Valid values: `KEY`, `TOKEN`. Defaults to `KEY`.
         :param pulumi.Input[_builtins.bool] enabled: Whether the channel is enabled or disabled. Defaults to `true`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[_builtins.str] service_json: Service Account JSON from Google to use with the GCM API. Conflicts with `api_key`.
         """
         if api_key is not None:
             pulumi.set(__self__, "api_key", api_key)
@@ -142,68 +154,74 @@ class _GcmChannelState:
 
     @_builtins.property
     @pulumi.getter(name="apiKey")
-    def api_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def api_key(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Platform credential API key from Google.
+        Platform credential API key from Google. Conflicts with `service_json`.
         """
         return pulumi.get(self, "api_key")
 
     @api_key.setter
-    def api_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def api_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "api_key", value)
 
     @_builtins.property
     @pulumi.getter(name="applicationId")
-    def application_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def application_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The application ID.
+        Application ID.
         """
         return pulumi.get(self, "application_id")
 
     @application_id.setter
-    def application_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def application_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "application_id", value)
 
     @_builtins.property
     @pulumi.getter(name="defaultAuthenticationMethod")
-    def default_authentication_method(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def default_authentication_method(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Default authentication method used for GCM. Valid values: `KEY`, `TOKEN`. Defaults to `KEY`.
+        """
         return pulumi.get(self, "default_authentication_method")
 
     @default_authentication_method.setter
-    def default_authentication_method(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def default_authentication_method(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "default_authentication_method", value)
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the channel is enabled or disabled. Defaults to `true`.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="serviceJson")
-    def service_json(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def service_json(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Service Account JSON from Google to use with the GCM API. Conflicts with `api_key`.
+        """
         return pulumi.get(self, "service_json")
 
     @service_json.setter
-    def service_json(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def service_json(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "service_json", value)
 
 
@@ -213,31 +231,34 @@ class GcmChannel(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 api_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 application_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 default_authentication_method: Optional[pulumi.Input[_builtins.str]] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 service_json: Optional[pulumi.Input[_builtins.str]] = None,
+                 api_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 application_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 default_authentication_method: pulumi.Input[Optional[_builtins.str]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 service_json: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
-        Provides a Pinpoint GCM Channel resource.
+        Provides an End User Messaging GCM Channel resource.
 
         > **Note:** Credentials (Service Account JSON and API Key) will be stored in the raw state as plain-text.
         ## Import
 
-        Using `pulumi import`, import Pinpoint GCM Channel using the `application-id`. For example:
+        Using `pulumi import`, import End User Messaging GCM Channel using the `application-id`. For example:
 
         ```sh
         $ pulumi import aws:pinpoint/gcmChannel:GcmChannel gcm application-id
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] api_key: Platform credential API key from Google.
-        :param pulumi.Input[_builtins.str] application_id: The application ID.
+        :param pulumi.Input[_builtins.str] api_key: Platform credential API key from Google. Conflicts with `service_json`.
+        :param pulumi.Input[_builtins.str] application_id: Application ID.
+        :param pulumi.Input[_builtins.str] default_authentication_method: Default authentication method used for GCM. Valid values: `KEY`, `TOKEN`. Defaults to `KEY`.
         :param pulumi.Input[_builtins.bool] enabled: Whether the channel is enabled or disabled. Defaults to `true`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[_builtins.str] service_json: Service Account JSON from Google to use with the GCM API. Conflicts with `api_key`.
         """
         ...
     @overload
@@ -246,16 +267,17 @@ class GcmChannel(pulumi.CustomResource):
                  args: GcmChannelArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Provides a Pinpoint GCM Channel resource.
+        Provides an End User Messaging GCM Channel resource.
 
         > **Note:** Credentials (Service Account JSON and API Key) will be stored in the raw state as plain-text.
         ## Import
 
-        Using `pulumi import`, import Pinpoint GCM Channel using the `application-id`. For example:
+        Using `pulumi import`, import End User Messaging GCM Channel using the `application-id`. For example:
 
         ```sh
         $ pulumi import aws:pinpoint/gcmChannel:GcmChannel gcm application-id
         ```
+
 
         :param str resource_name: The name of the resource.
         :param GcmChannelArgs args: The arguments to use to populate this resource's properties.
@@ -272,12 +294,12 @@ class GcmChannel(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 api_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 application_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 default_authentication_method: Optional[pulumi.Input[_builtins.str]] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 service_json: Optional[pulumi.Input[_builtins.str]] = None,
+                 api_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 application_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 default_authentication_method: pulumi.Input[Optional[_builtins.str]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 service_json: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -307,12 +329,12 @@ class GcmChannel(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            api_key: Optional[pulumi.Input[_builtins.str]] = None,
-            application_id: Optional[pulumi.Input[_builtins.str]] = None,
-            default_authentication_method: Optional[pulumi.Input[_builtins.str]] = None,
-            enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            service_json: Optional[pulumi.Input[_builtins.str]] = None) -> 'GcmChannel':
+            api_key: pulumi.Input[Optional[_builtins.str]] = None,
+            application_id: pulumi.Input[Optional[_builtins.str]] = None,
+            default_authentication_method: pulumi.Input[Optional[_builtins.str]] = None,
+            enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            service_json: pulumi.Input[Optional[_builtins.str]] = None) -> 'GcmChannel':
         """
         Get an existing GcmChannel resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -320,10 +342,12 @@ class GcmChannel(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] api_key: Platform credential API key from Google.
-        :param pulumi.Input[_builtins.str] application_id: The application ID.
+        :param pulumi.Input[_builtins.str] api_key: Platform credential API key from Google. Conflicts with `service_json`.
+        :param pulumi.Input[_builtins.str] application_id: Application ID.
+        :param pulumi.Input[_builtins.str] default_authentication_method: Default authentication method used for GCM. Valid values: `KEY`, `TOKEN`. Defaults to `KEY`.
         :param pulumi.Input[_builtins.bool] enabled: Whether the channel is enabled or disabled. Defaults to `true`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[_builtins.str] service_json: Service Account JSON from Google to use with the GCM API. Conflicts with `api_key`.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -341,7 +365,7 @@ class GcmChannel(pulumi.CustomResource):
     @pulumi.getter(name="apiKey")
     def api_key(self) -> pulumi.Output[Optional[_builtins.str]]:
         """
-        Platform credential API key from Google.
+        Platform credential API key from Google. Conflicts with `service_json`.
         """
         return pulumi.get(self, "api_key")
 
@@ -349,13 +373,16 @@ class GcmChannel(pulumi.CustomResource):
     @pulumi.getter(name="applicationId")
     def application_id(self) -> pulumi.Output[_builtins.str]:
         """
-        The application ID.
+        Application ID.
         """
         return pulumi.get(self, "application_id")
 
     @_builtins.property
     @pulumi.getter(name="defaultAuthenticationMethod")
     def default_authentication_method(self) -> pulumi.Output[Optional[_builtins.str]]:
+        """
+        Default authentication method used for GCM. Valid values: `KEY`, `TOKEN`. Defaults to `KEY`.
+        """
         return pulumi.get(self, "default_authentication_method")
 
     @_builtins.property
@@ -377,5 +404,8 @@ class GcmChannel(pulumi.CustomResource):
     @_builtins.property
     @pulumi.getter(name="serviceJson")
     def service_json(self) -> pulumi.Output[Optional[_builtins.str]]:
+        """
+        Service Account JSON from Google to use with the GCM API. Conflicts with `api_key`.
+        """
         return pulumi.get(self, "service_json")
 

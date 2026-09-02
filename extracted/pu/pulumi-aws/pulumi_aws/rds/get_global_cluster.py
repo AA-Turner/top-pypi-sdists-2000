@@ -27,7 +27,7 @@ class GetGlobalClusterResult:
     """
     A collection of values returned by getGlobalCluster.
     """
-    def __init__(__self__, arn=None, database_name=None, deletion_protection=None, endpoint=None, engine=None, engine_lifecycle_support=None, engine_version=None, id=None, identifier=None, members=None, region=None, resource_id=None, storage_encrypted=None, tags=None):
+    def __init__(__self__, arn=None, database_name=None, deletion_protection=None, endpoint=None, engine=None, engine_lifecycle_support=None, engine_version=None, identifier=None, members=None, region=None, resource_id=None, storage_encrypted=None, tags=None):
         if arn and not isinstance(arn, str):
             raise TypeError("Expected argument 'arn' to be a str")
         pulumi.set(__self__, "arn", arn)
@@ -49,9 +49,6 @@ class GetGlobalClusterResult:
         if engine_version and not isinstance(engine_version, str):
             raise TypeError("Expected argument 'engine_version' to be a str")
         pulumi.set(__self__, "engine_version", engine_version)
-        if id and not isinstance(id, str):
-            raise TypeError("Expected argument 'id' to be a str")
-        pulumi.set(__self__, "id", id)
         if identifier and not isinstance(identifier, str):
             raise TypeError("Expected argument 'identifier' to be a str")
         pulumi.set(__self__, "identifier", identifier)
@@ -75,7 +72,7 @@ class GetGlobalClusterResult:
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        RDS Global Cluster Amazon Resource Name (ARN)
+        RDS Global Cluster ARN
         """
         return pulumi.get(self, "arn")
 
@@ -126,14 +123,6 @@ class GetGlobalClusterResult:
         Version of the database engine for this Global Cluster.
         """
         return pulumi.get(self, "engine_version")
-
-    @_builtins.property
-    @pulumi.getter
-    def id(self) -> _builtins.str:
-        """
-        The provider-assigned unique ID for this managed resource.
-        """
-        return pulumi.get(self, "id")
 
     @_builtins.property
     @pulumi.getter
@@ -191,7 +180,6 @@ class AwaitableGetGlobalClusterResult(GetGlobalClusterResult):
             engine=self.engine,
             engine_lifecycle_support=self.engine_lifecycle_support,
             engine_version=self.engine_version,
-            id=self.id,
             identifier=self.identifier,
             members=self.members,
             region=self.region,
@@ -237,15 +225,14 @@ def get_global_cluster(identifier: Optional[_builtins.str] = None,
         engine=pulumi.get(__ret__, 'engine'),
         engine_lifecycle_support=pulumi.get(__ret__, 'engine_lifecycle_support'),
         engine_version=pulumi.get(__ret__, 'engine_version'),
-        id=pulumi.get(__ret__, 'id'),
         identifier=pulumi.get(__ret__, 'identifier'),
         members=pulumi.get(__ret__, 'members'),
         region=pulumi.get(__ret__, 'region'),
         resource_id=pulumi.get(__ret__, 'resource_id'),
         storage_encrypted=pulumi.get(__ret__, 'storage_encrypted'),
         tags=pulumi.get(__ret__, 'tags'))
-def get_global_cluster_output(identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                              region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_global_cluster_output(identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                              region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                               opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetGlobalClusterResult]:
     """
     Data source for managing an AWS RDS (Relational Database) Global Cluster.
@@ -280,7 +267,6 @@ def get_global_cluster_output(identifier: Optional[pulumi.Input[_builtins.str]] 
         engine=pulumi.get(__response__, 'engine'),
         engine_lifecycle_support=pulumi.get(__response__, 'engine_lifecycle_support'),
         engine_version=pulumi.get(__response__, 'engine_version'),
-        id=pulumi.get(__response__, 'id'),
         identifier=pulumi.get(__response__, 'identifier'),
         members=pulumi.get(__response__, 'members'),
         region=pulumi.get(__response__, 'region'),

@@ -27,7 +27,7 @@ class GetWindowsFileSystemResult:
     """
     A collection of values returned by getWindowsFileSystem.
     """
-    def __init__(__self__, active_directory_id=None, aliases=None, arn=None, audit_log_configurations=None, automatic_backup_retention_days=None, backup_id=None, copy_tags_to_backups=None, daily_automatic_backup_start_time=None, deployment_type=None, disk_iops_configurations=None, dns_name=None, id=None, kms_key_id=None, network_interface_ids=None, owner_id=None, preferred_file_server_ip=None, preferred_subnet_id=None, region=None, security_group_ids=None, skip_final_backup=None, storage_capacity=None, storage_type=None, subnet_ids=None, tags=None, throughput_capacity=None, vpc_id=None, weekly_maintenance_start_time=None):
+    def __init__(__self__, active_directory_id=None, aliases=None, arn=None, audit_log_configurations=None, automatic_backup_retention_days=None, backup_id=None, copy_tags_to_backups=None, daily_automatic_backup_start_time=None, deployment_type=None, disk_iops_configurations=None, dns_name=None, id=None, kms_key_id=None, network_interface_ids=None, network_type=None, owner_id=None, preferred_file_server_ip=None, preferred_subnet_id=None, region=None, security_group_ids=None, skip_final_backup=None, storage_capacity=None, storage_type=None, subnet_ids=None, tags=None, throughput_capacity=None, vpc_id=None, weekly_maintenance_start_time=None):
         if active_directory_id and not isinstance(active_directory_id, str):
             raise TypeError("Expected argument 'active_directory_id' to be a str")
         pulumi.set(__self__, "active_directory_id", active_directory_id)
@@ -70,6 +70,9 @@ class GetWindowsFileSystemResult:
         if network_interface_ids and not isinstance(network_interface_ids, list):
             raise TypeError("Expected argument 'network_interface_ids' to be a list")
         pulumi.set(__self__, "network_interface_ids", network_interface_ids)
+        if network_type and not isinstance(network_type, str):
+            raise TypeError("Expected argument 'network_type' to be a str")
+        pulumi.set(__self__, "network_type", network_type)
         if owner_id and not isinstance(owner_id, str):
             raise TypeError("Expected argument 'owner_id' to be a str")
         pulumi.set(__self__, "owner_id", owner_id)
@@ -114,7 +117,7 @@ class GetWindowsFileSystemResult:
     @pulumi.getter(name="activeDirectoryId")
     def active_directory_id(self) -> _builtins.str:
         """
-        The ID for Microsoft Active Directory instance that the file system is join to.
+        ID for Microsoft Active Directory instance that the file system is joined to.
         """
         return pulumi.get(self, "active_directory_id")
 
@@ -122,7 +125,7 @@ class GetWindowsFileSystemResult:
     @pulumi.getter
     def aliases(self) -> Sequence[_builtins.str]:
         """
-        An array DNS alias names associated with the Amazon FSx file system.
+        Set of DNS alias names associated with the Amazon FSx file system.
         """
         return pulumi.get(self, "aliases")
 
@@ -130,7 +133,7 @@ class GetWindowsFileSystemResult:
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        Amazon Resource Name of the file system.
+        ARN of the file system.
         """
         return pulumi.get(self, "arn")
 
@@ -138,7 +141,7 @@ class GetWindowsFileSystemResult:
     @pulumi.getter(name="auditLogConfigurations")
     def audit_log_configurations(self) -> Sequence['outputs.GetWindowsFileSystemAuditLogConfigurationResult']:
         """
-        The configuration that Amazon FSx for Windows File Server uses to audit and log user accesses of files, folders, and file shares on the Amazon FSx for Windows File Server file system.
+        Configuration that Amazon FSx for Windows File Server uses to audit and log user accesses of files, folders, and file shares on the Amazon FSx for Windows File Server file system.
         """
         return pulumi.get(self, "audit_log_configurations")
 
@@ -146,20 +149,23 @@ class GetWindowsFileSystemResult:
     @pulumi.getter(name="automaticBackupRetentionDays")
     def automatic_backup_retention_days(self) -> _builtins.int:
         """
-        The number of days to retain automatic backups.
+        Number of days to retain automatic backups.
         """
         return pulumi.get(self, "automatic_backup_retention_days")
 
     @_builtins.property
     @pulumi.getter(name="backupId")
     def backup_id(self) -> _builtins.str:
+        """
+        Identifier of the source backup used to create the file system.
+        """
         return pulumi.get(self, "backup_id")
 
     @_builtins.property
     @pulumi.getter(name="copyTagsToBackups")
     def copy_tags_to_backups(self) -> _builtins.bool:
         """
-        A boolean flag indicating whether tags on the file system should be copied to backups.
+        Whether tags on the file system are copied to backups.
         """
         return pulumi.get(self, "copy_tags_to_backups")
 
@@ -167,7 +173,7 @@ class GetWindowsFileSystemResult:
     @pulumi.getter(name="dailyAutomaticBackupStartTime")
     def daily_automatic_backup_start_time(self) -> _builtins.str:
         """
-        The preferred time (in `HH:MM` format) to take daily automatic backups, in the UTC time zone.
+        Preferred time (in `HH:MM` format) to take daily automatic backups, in the UTC time zone.
         """
         return pulumi.get(self, "daily_automatic_backup_start_time")
 
@@ -175,7 +181,7 @@ class GetWindowsFileSystemResult:
     @pulumi.getter(name="deploymentType")
     def deployment_type(self) -> _builtins.str:
         """
-        The file system deployment type.
+        File system deployment type.
         """
         return pulumi.get(self, "deployment_type")
 
@@ -183,7 +189,7 @@ class GetWindowsFileSystemResult:
     @pulumi.getter(name="diskIopsConfigurations")
     def disk_iops_configurations(self) -> Sequence['outputs.GetWindowsFileSystemDiskIopsConfigurationResult']:
         """
-        The SSD IOPS configuration for the file system.
+        SSD IOPS configuration for the file system.
         """
         return pulumi.get(self, "disk_iops_configurations")
 
@@ -214,7 +220,18 @@ class GetWindowsFileSystemResult:
     @_builtins.property
     @pulumi.getter(name="networkInterfaceIds")
     def network_interface_ids(self) -> Sequence[_builtins.str]:
+        """
+        Set of network interface identifiers for the file system.
+        """
         return pulumi.get(self, "network_interface_ids")
+
+    @_builtins.property
+    @pulumi.getter(name="networkType")
+    def network_type(self) -> _builtins.str:
+        """
+        Network type (`IPV4` or `DUAL`).
+        """
+        return pulumi.get(self, "network_type")
 
     @_builtins.property
     @pulumi.getter(name="ownerId")
@@ -228,7 +245,7 @@ class GetWindowsFileSystemResult:
     @pulumi.getter(name="preferredFileServerIp")
     def preferred_file_server_ip(self) -> _builtins.str:
         """
-        The IP address of the primary, or preferred, file server.
+        IP address of the primary, or preferred, file server.
         """
         return pulumi.get(self, "preferred_file_server_ip")
 
@@ -236,7 +253,7 @@ class GetWindowsFileSystemResult:
     @pulumi.getter(name="preferredSubnetId")
     def preferred_subnet_id(self) -> _builtins.str:
         """
-        Specifies the subnet in which you want the preferred file server to be located.
+        Subnet in which the preferred file server is located.
         """
         return pulumi.get(self, "preferred_subnet_id")
 
@@ -248,18 +265,24 @@ class GetWindowsFileSystemResult:
     @_builtins.property
     @pulumi.getter(name="securityGroupIds")
     def security_group_ids(self) -> Sequence[_builtins.str]:
+        """
+        Set of security group identifiers associated with the file system.
+        """
         return pulumi.get(self, "security_group_ids")
 
     @_builtins.property
     @pulumi.getter(name="skipFinalBackup")
     def skip_final_backup(self) -> _builtins.bool:
+        """
+        Whether a final backup is skipped when the file system is deleted.
+        """
         return pulumi.get(self, "skip_final_backup")
 
     @_builtins.property
     @pulumi.getter(name="storageCapacity")
     def storage_capacity(self) -> _builtins.int:
         """
-        The storage capacity of the file system in gibibytes (GiB).
+        Storage capacity of the file system in gibibytes (GiB).
         """
         return pulumi.get(self, "storage_capacity")
 
@@ -267,7 +290,7 @@ class GetWindowsFileSystemResult:
     @pulumi.getter(name="storageType")
     def storage_type(self) -> _builtins.str:
         """
-        The type of storage the file system is using. If set to `SSD`, the file system uses solid state drive storage. If set to `HDD`, the file system uses hard disk drive storage.
+        Type of storage the file system is using. If set to `SSD`, the file system uses solid state drive storage. If set to `HDD`, the file system uses hard disk drive storage.
         """
         return pulumi.get(self, "storage_type")
 
@@ -275,7 +298,7 @@ class GetWindowsFileSystemResult:
     @pulumi.getter(name="subnetIds")
     def subnet_ids(self) -> Sequence[_builtins.str]:
         """
-        Specifies the IDs of the subnets that the file system is accessible from.
+        IDs of the subnets that the file system is accessible from.
         """
         return pulumi.get(self, "subnet_ids")
 
@@ -283,7 +306,7 @@ class GetWindowsFileSystemResult:
     @pulumi.getter
     def tags(self) -> Mapping[str, _builtins.str]:
         """
-        The tags to associate with the file system.
+        Tags to associate with the file system.
         """
         return pulumi.get(self, "tags")
 
@@ -299,7 +322,7 @@ class GetWindowsFileSystemResult:
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> _builtins.str:
         """
-        The ID of the primary virtual private cloud (VPC) for the file system.
+        ID of the primary VPC for the file system.
         """
         return pulumi.get(self, "vpc_id")
 
@@ -307,7 +330,7 @@ class GetWindowsFileSystemResult:
     @pulumi.getter(name="weeklyMaintenanceStartTime")
     def weekly_maintenance_start_time(self) -> _builtins.str:
         """
-        The preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
+        Preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
         """
         return pulumi.get(self, "weekly_maintenance_start_time")
 
@@ -332,6 +355,7 @@ class AwaitableGetWindowsFileSystemResult(GetWindowsFileSystemResult):
             id=self.id,
             kms_key_id=self.kms_key_id,
             network_interface_ids=self.network_interface_ids,
+            network_type=self.network_type,
             owner_id=self.owner_id,
             preferred_file_server_ip=self.preferred_file_server_ip,
             preferred_subnet_id=self.preferred_subnet_id,
@@ -368,7 +392,7 @@ def get_windows_file_system(id: Optional[_builtins.str] = None,
 
     :param _builtins.str id: Identifier of the file system (e.g. `fs-12345678`).
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param Mapping[str, _builtins.str] tags: The tags to associate with the file system.
+    :param Mapping[str, _builtins.str] tags: Tags to associate with the file system.
     """
     __args__ = dict()
     __args__['id'] = id
@@ -392,6 +416,7 @@ def get_windows_file_system(id: Optional[_builtins.str] = None,
         id=pulumi.get(__ret__, 'id'),
         kms_key_id=pulumi.get(__ret__, 'kms_key_id'),
         network_interface_ids=pulumi.get(__ret__, 'network_interface_ids'),
+        network_type=pulumi.get(__ret__, 'network_type'),
         owner_id=pulumi.get(__ret__, 'owner_id'),
         preferred_file_server_ip=pulumi.get(__ret__, 'preferred_file_server_ip'),
         preferred_subnet_id=pulumi.get(__ret__, 'preferred_subnet_id'),
@@ -405,9 +430,9 @@ def get_windows_file_system(id: Optional[_builtins.str] = None,
         throughput_capacity=pulumi.get(__ret__, 'throughput_capacity'),
         vpc_id=pulumi.get(__ret__, 'vpc_id'),
         weekly_maintenance_start_time=pulumi.get(__ret__, 'weekly_maintenance_start_time'))
-def get_windows_file_system_output(id: Optional[pulumi.Input[_builtins.str]] = None,
-                                   region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                   tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_windows_file_system_output(id: pulumi.Input[Optional[_builtins.str]] = None,
+                                   region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                   tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                                    opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetWindowsFileSystemResult]:
     """
     Retrieve information on FSx Windows File System.
@@ -426,7 +451,7 @@ def get_windows_file_system_output(id: Optional[pulumi.Input[_builtins.str]] = N
 
     :param _builtins.str id: Identifier of the file system (e.g. `fs-12345678`).
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param Mapping[str, _builtins.str] tags: The tags to associate with the file system.
+    :param Mapping[str, _builtins.str] tags: Tags to associate with the file system.
     """
     __args__ = dict()
     __args__['id'] = id
@@ -449,6 +474,7 @@ def get_windows_file_system_output(id: Optional[pulumi.Input[_builtins.str]] = N
         id=pulumi.get(__response__, 'id'),
         kms_key_id=pulumi.get(__response__, 'kms_key_id'),
         network_interface_ids=pulumi.get(__response__, 'network_interface_ids'),
+        network_type=pulumi.get(__response__, 'network_type'),
         owner_id=pulumi.get(__response__, 'owner_id'),
         preferred_file_server_ip=pulumi.get(__response__, 'preferred_file_server_ip'),
         preferred_subnet_id=pulumi.get(__response__, 'preferred_subnet_id'),

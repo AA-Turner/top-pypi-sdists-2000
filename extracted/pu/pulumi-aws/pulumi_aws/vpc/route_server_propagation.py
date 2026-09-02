@@ -23,10 +23,11 @@ class RouteServerPropagationArgs:
     def __init__(__self__, *,
                  route_server_id: pulumi.Input[_builtins.str],
                  route_table_id: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['RouteServerPropagationTimeoutsArgs']] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['RouteServerPropagationTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a RouteServerPropagation resource.
+
         :param pulumi.Input[_builtins.str] route_server_id: The unique identifier for the route server to be associated.
         :param pulumi.Input[_builtins.str] route_table_id: The ID of the route table to which route server will propagate routes.
                
@@ -68,35 +69,36 @@ class RouteServerPropagationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['RouteServerPropagationTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['RouteServerPropagationTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['RouteServerPropagationTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['RouteServerPropagationTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _RouteServerPropagationState:
     def __init__(__self__, *,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 route_server_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 route_table_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['RouteServerPropagationTimeoutsArgs']] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 route_server_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 route_table_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['RouteServerPropagationTimeoutsArgs']] = None):
         """
         Input properties used for looking up and filtering RouteServerPropagation resources.
+
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[_builtins.str] route_server_id: The unique identifier for the route server to be associated.
         :param pulumi.Input[_builtins.str] route_table_id: The ID of the route table to which route server will propagate routes.
@@ -114,31 +116,31 @@ class _RouteServerPropagationState:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="routeServerId")
-    def route_server_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def route_server_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The unique identifier for the route server to be associated.
         """
         return pulumi.get(self, "route_server_id")
 
     @route_server_id.setter
-    def route_server_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def route_server_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "route_server_id", value)
 
     @_builtins.property
     @pulumi.getter(name="routeTableId")
-    def route_table_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def route_table_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the route table to which route server will propagate routes.
 
@@ -147,16 +149,16 @@ class _RouteServerPropagationState:
         return pulumi.get(self, "route_table_id")
 
     @route_table_id.setter
-    def route_table_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def route_table_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "route_table_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['RouteServerPropagationTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['RouteServerPropagationTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['RouteServerPropagationTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['RouteServerPropagationTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
@@ -166,13 +168,13 @@ class RouteServerPropagation(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 route_server_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 route_table_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['RouteServerPropagationTimeoutsArgs', 'RouteServerPropagationTimeoutsArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 route_server_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 route_table_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['RouteServerPropagationTimeoutsArgs', 'RouteServerPropagationTimeoutsArgsDict']]] = None,
                  __props__=None):
         """
-        Provides a resource for managing propagation between VPC (Virtual Private Cloud) route server and a route table.
+        Provides a resource for managing propagation between VPC route server and a route table.
 
         ## Example Usage
 
@@ -189,11 +191,12 @@ class RouteServerPropagation(pulumi.CustomResource):
 
         ## Import
 
-        Using `pulumi import`, to  to import VPC (Virtual Private Cloud) Route Server Propagation using the associated resource ID and route table ID separated by a comma (,). For example:
+        Using `pulumi import`, to  to import VPC Route Server Propagation using the associated resource ID and route table ID separated by a comma (,). For example:
 
         ```sh
         $ pulumi import aws:vpc/routeServerPropagation:RouteServerPropagation example rs-12345678,rtb-656c65616e6f72
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -210,7 +213,7 @@ class RouteServerPropagation(pulumi.CustomResource):
                  args: RouteServerPropagationArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Provides a resource for managing propagation between VPC (Virtual Private Cloud) route server and a route table.
+        Provides a resource for managing propagation between VPC route server and a route table.
 
         ## Example Usage
 
@@ -227,11 +230,12 @@ class RouteServerPropagation(pulumi.CustomResource):
 
         ## Import
 
-        Using `pulumi import`, to  to import VPC (Virtual Private Cloud) Route Server Propagation using the associated resource ID and route table ID separated by a comma (,). For example:
+        Using `pulumi import`, to  to import VPC Route Server Propagation using the associated resource ID and route table ID separated by a comma (,). For example:
 
         ```sh
         $ pulumi import aws:vpc/routeServerPropagation:RouteServerPropagation example rs-12345678,rtb-656c65616e6f72
         ```
+
 
         :param str resource_name: The name of the resource.
         :param RouteServerPropagationArgs args: The arguments to use to populate this resource's properties.
@@ -248,10 +252,10 @@ class RouteServerPropagation(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 route_server_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 route_table_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['RouteServerPropagationTimeoutsArgs', 'RouteServerPropagationTimeoutsArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 route_server_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 route_table_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['RouteServerPropagationTimeoutsArgs', 'RouteServerPropagationTimeoutsArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -279,10 +283,10 @@ class RouteServerPropagation(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            route_server_id: Optional[pulumi.Input[_builtins.str]] = None,
-            route_table_id: Optional[pulumi.Input[_builtins.str]] = None,
-            timeouts: Optional[pulumi.Input[Union['RouteServerPropagationTimeoutsArgs', 'RouteServerPropagationTimeoutsArgsDict']]] = None) -> 'RouteServerPropagation':
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            route_server_id: pulumi.Input[Optional[_builtins.str]] = None,
+            route_table_id: pulumi.Input[Optional[_builtins.str]] = None,
+            timeouts: pulumi.Input[Optional[Union['RouteServerPropagationTimeoutsArgs', 'RouteServerPropagationTimeoutsArgsDict']]] = None) -> 'RouteServerPropagation':
         """
         Get an existing RouteServerPropagation resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

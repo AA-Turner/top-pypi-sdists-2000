@@ -394,7 +394,7 @@ class DomainAssociationCertificateSettings(dict):
         :param _builtins.str type: The certificate type.
                Valid values are `AMPLIFY_MANAGED` and `CUSTOM`.
         :param _builtins.str certificate_verification_dns_record: DNS records for certificate verification in a space-delimited format (`<record> CNAME <target>`).
-        :param _builtins.str custom_certificate_arn: The Amazon resource name (ARN) for the custom certificate.
+        :param _builtins.str custom_certificate_arn: ARN for the custom certificate.
                Required when `type` is `CUSTOM`.
         """
         pulumi.set(__self__, "type", type)
@@ -424,7 +424,7 @@ class DomainAssociationCertificateSettings(dict):
     @pulumi.getter(name="customCertificateArn")
     def custom_certificate_arn(self) -> Optional[_builtins.str]:
         """
-        The Amazon resource name (ARN) for the custom certificate.
+        ARN for the custom certificate.
         Required when `type` is `CUSTOM`.
         """
         return pulumi.get(self, "custom_certificate_arn")
@@ -459,7 +459,7 @@ class DomainAssociationSubDomain(dict):
         """
         :param _builtins.str branch_name: Branch name setting for the subdomain.
         :param _builtins.str prefix: Prefix setting for the subdomain.
-        :param _builtins.str dns_record: DNS record for the subdomain in a space-prefixed and space-delimited format (` CNAME <target>`).
+        :param _builtins.str dns_record: DNS record for the subdomain in a space-prefixed and space-delimited format (`  CNAME <target> `).
         :param _builtins.bool verified: Verified status of the subdomain.
         """
         pulumi.set(__self__, "branch_name", branch_name)
@@ -489,7 +489,7 @@ class DomainAssociationSubDomain(dict):
     @pulumi.getter(name="dnsRecord")
     def dns_record(self) -> Optional[_builtins.str]:
         """
-        DNS record for the subdomain in a space-prefixed and space-delimited format (` CNAME <target>`).
+        DNS record for the subdomain in a space-prefixed and space-delimited format (`  CNAME <target> `).
         """
         return pulumi.get(self, "dns_record")
 

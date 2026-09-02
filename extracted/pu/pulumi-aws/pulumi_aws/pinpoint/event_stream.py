@@ -22,25 +22,36 @@ class EventStreamArgs:
                  application_id: pulumi.Input[_builtins.str],
                  destination_stream_arn: pulumi.Input[_builtins.str],
                  role_arn: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a EventStream resource.
-        :param pulumi.Input[_builtins.str] application_id: The application ID.
-        :param pulumi.Input[_builtins.str] destination_stream_arn: The Amazon Resource Name (ARN) of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.
-        :param pulumi.Input[_builtins.str] role_arn: The IAM role that authorizes Amazon Pinpoint to publish events to the stream in your account.
+
+        :param pulumi.Input[_builtins.str] application_id: Application ID.
+        :param pulumi.Input[_builtins.str] destination_stream_arn: ARN of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.
+        :param pulumi.Input[_builtins.str] role_arn: IAM role that authorizes AWS End User Messaging to publish events to the stream in your account.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
+        if application_id is not None:
+            warnings.warn("""application_id is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""", DeprecationWarning)
+            pulumi.log.warn("""application_id is deprecated: application_id is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""")
         pulumi.set(__self__, "application_id", application_id)
+        if destination_stream_arn is not None:
+            warnings.warn("""destination_stream_arn is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""", DeprecationWarning)
+            pulumi.log.warn("""destination_stream_arn is deprecated: destination_stream_arn is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""")
         pulumi.set(__self__, "destination_stream_arn", destination_stream_arn)
+        if role_arn is not None:
+            warnings.warn("""role_arn is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""", DeprecationWarning)
+            pulumi.log.warn("""role_arn is deprecated: role_arn is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""")
         pulumi.set(__self__, "role_arn", role_arn)
         if region is not None:
             pulumi.set(__self__, "region", region)
 
     @_builtins.property
     @pulumi.getter(name="applicationId")
+    @_utilities.deprecated("""application_id is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""")
     def application_id(self) -> pulumi.Input[_builtins.str]:
         """
-        The application ID.
+        Application ID.
         """
         return pulumi.get(self, "application_id")
 
@@ -50,9 +61,10 @@ class EventStreamArgs:
 
     @_builtins.property
     @pulumi.getter(name="destinationStreamArn")
+    @_utilities.deprecated("""destination_stream_arn is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""")
     def destination_stream_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.
+        ARN of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.
         """
         return pulumi.get(self, "destination_stream_arn")
 
@@ -62,9 +74,10 @@ class EventStreamArgs:
 
     @_builtins.property
     @pulumi.getter(name="roleArn")
+    @_utilities.deprecated("""role_arn is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""")
     def role_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The IAM role that authorizes Amazon Pinpoint to publish events to the stream in your account.
+        IAM role that authorizes AWS End User Messaging to publish events to the stream in your account.
         """
         return pulumi.get(self, "role_arn")
 
@@ -74,86 +87,99 @@ class EventStreamArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _EventStreamState:
     def __init__(__self__, *,
-                 application_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 destination_stream_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None):
+                 application_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 destination_stream_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering EventStream resources.
-        :param pulumi.Input[_builtins.str] application_id: The application ID.
-        :param pulumi.Input[_builtins.str] destination_stream_arn: The Amazon Resource Name (ARN) of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.
+
+        :param pulumi.Input[_builtins.str] application_id: Application ID.
+        :param pulumi.Input[_builtins.str] destination_stream_arn: ARN of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] role_arn: The IAM role that authorizes Amazon Pinpoint to publish events to the stream in your account.
+        :param pulumi.Input[_builtins.str] role_arn: IAM role that authorizes AWS End User Messaging to publish events to the stream in your account.
         """
         if application_id is not None:
+            warnings.warn("""application_id is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""", DeprecationWarning)
+            pulumi.log.warn("""application_id is deprecated: application_id is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""")
+        if application_id is not None:
             pulumi.set(__self__, "application_id", application_id)
+        if destination_stream_arn is not None:
+            warnings.warn("""destination_stream_arn is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""", DeprecationWarning)
+            pulumi.log.warn("""destination_stream_arn is deprecated: destination_stream_arn is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""")
         if destination_stream_arn is not None:
             pulumi.set(__self__, "destination_stream_arn", destination_stream_arn)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if role_arn is not None:
+            warnings.warn("""role_arn is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""", DeprecationWarning)
+            pulumi.log.warn("""role_arn is deprecated: role_arn is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""")
+        if role_arn is not None:
             pulumi.set(__self__, "role_arn", role_arn)
 
     @_builtins.property
     @pulumi.getter(name="applicationId")
-    def application_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    @_utilities.deprecated("""application_id is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""")
+    def application_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The application ID.
+        Application ID.
         """
         return pulumi.get(self, "application_id")
 
     @application_id.setter
-    def application_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def application_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "application_id", value)
 
     @_builtins.property
     @pulumi.getter(name="destinationStreamArn")
-    def destination_stream_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    @_utilities.deprecated("""destination_stream_arn is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""")
+    def destination_stream_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.
+        ARN of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.
         """
         return pulumi.get(self, "destination_stream_arn")
 
     @destination_stream_arn.setter
-    def destination_stream_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def destination_stream_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "destination_stream_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="roleArn")
-    def role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    @_utilities.deprecated("""role_arn is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""")
+    def role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The IAM role that authorizes Amazon Pinpoint to publish events to the stream in your account.
+        IAM role that authorizes AWS End User Messaging to publish events to the stream in your account.
         """
         return pulumi.get(self, "role_arn")
 
     @role_arn.setter
-    def role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "role_arn", value)
 
 
@@ -163,13 +189,15 @@ class EventStream(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 application_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 destination_stream_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 application_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 destination_stream_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
-        Provides a Pinpoint Event Stream resource.
+        > **NOTE:** This resource is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026. After that date, this resource will no longer be available. For SMS/Voice event delivery, use `pinpoint.Smsvoicev2ConfigurationSet` with an event destination.
+
+        Provides an End User Messaging Event Stream resource.
 
         ## Example Usage
 
@@ -182,11 +210,11 @@ class EventStream(pulumi.CustomResource):
             name="pinpoint-kinesis-test",
             shard_count=1)
         assume_role = aws.iam.get_policy_document(statements=[{
-            "effect": "Allow",
             "principals": [{
                 "type": "Service",
                 "identifiers": ["pinpoint.us-east-1.amazonaws.com"],
             }],
+            "effect": "Allow",
             "actions": ["sts:AssumeRole"],
         }])
         test_role = aws.iam.Role("test_role", assume_role_policy=assume_role.json)
@@ -210,18 +238,19 @@ class EventStream(pulumi.CustomResource):
 
         ## Import
 
-        Using `pulumi import`, import Pinpoint Event Stream using the `application-id`. For example:
+        Using `pulumi import`, import End User Messaging Event Stream using the `application-id`. For example:
 
         ```sh
         $ pulumi import aws:pinpoint/eventStream:EventStream stream application-id
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] application_id: The application ID.
-        :param pulumi.Input[_builtins.str] destination_stream_arn: The Amazon Resource Name (ARN) of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.
+        :param pulumi.Input[_builtins.str] application_id: Application ID.
+        :param pulumi.Input[_builtins.str] destination_stream_arn: ARN of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] role_arn: The IAM role that authorizes Amazon Pinpoint to publish events to the stream in your account.
+        :param pulumi.Input[_builtins.str] role_arn: IAM role that authorizes AWS End User Messaging to publish events to the stream in your account.
         """
         ...
     @overload
@@ -230,7 +259,9 @@ class EventStream(pulumi.CustomResource):
                  args: EventStreamArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Provides a Pinpoint Event Stream resource.
+        > **NOTE:** This resource is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026. After that date, this resource will no longer be available. For SMS/Voice event delivery, use `pinpoint.Smsvoicev2ConfigurationSet` with an event destination.
+
+        Provides an End User Messaging Event Stream resource.
 
         ## Example Usage
 
@@ -243,11 +274,11 @@ class EventStream(pulumi.CustomResource):
             name="pinpoint-kinesis-test",
             shard_count=1)
         assume_role = aws.iam.get_policy_document(statements=[{
-            "effect": "Allow",
             "principals": [{
                 "type": "Service",
                 "identifiers": ["pinpoint.us-east-1.amazonaws.com"],
             }],
+            "effect": "Allow",
             "actions": ["sts:AssumeRole"],
         }])
         test_role = aws.iam.Role("test_role", assume_role_policy=assume_role.json)
@@ -271,11 +302,12 @@ class EventStream(pulumi.CustomResource):
 
         ## Import
 
-        Using `pulumi import`, import Pinpoint Event Stream using the `application-id`. For example:
+        Using `pulumi import`, import End User Messaging Event Stream using the `application-id`. For example:
 
         ```sh
         $ pulumi import aws:pinpoint/eventStream:EventStream stream application-id
         ```
+
 
         :param str resource_name: The name of the resource.
         :param EventStreamArgs args: The arguments to use to populate this resource's properties.
@@ -292,10 +324,10 @@ class EventStream(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 application_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 destination_stream_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 application_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 destination_stream_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -325,10 +357,10 @@ class EventStream(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            application_id: Optional[pulumi.Input[_builtins.str]] = None,
-            destination_stream_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            role_arn: Optional[pulumi.Input[_builtins.str]] = None) -> 'EventStream':
+            application_id: pulumi.Input[Optional[_builtins.str]] = None,
+            destination_stream_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            role_arn: pulumi.Input[Optional[_builtins.str]] = None) -> 'EventStream':
         """
         Get an existing EventStream resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -336,10 +368,10 @@ class EventStream(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] application_id: The application ID.
-        :param pulumi.Input[_builtins.str] destination_stream_arn: The Amazon Resource Name (ARN) of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.
+        :param pulumi.Input[_builtins.str] application_id: Application ID.
+        :param pulumi.Input[_builtins.str] destination_stream_arn: ARN of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] role_arn: The IAM role that authorizes Amazon Pinpoint to publish events to the stream in your account.
+        :param pulumi.Input[_builtins.str] role_arn: IAM role that authorizes AWS End User Messaging to publish events to the stream in your account.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -353,17 +385,19 @@ class EventStream(pulumi.CustomResource):
 
     @_builtins.property
     @pulumi.getter(name="applicationId")
+    @_utilities.deprecated("""application_id is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""")
     def application_id(self) -> pulumi.Output[_builtins.str]:
         """
-        The application ID.
+        Application ID.
         """
         return pulumi.get(self, "application_id")
 
     @_builtins.property
     @pulumi.getter(name="destinationStreamArn")
+    @_utilities.deprecated("""destination_stream_arn is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""")
     def destination_stream_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.
+        ARN of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.
         """
         return pulumi.get(self, "destination_stream_arn")
 
@@ -377,9 +411,10 @@ class EventStream(pulumi.CustomResource):
 
     @_builtins.property
     @pulumi.getter(name="roleArn")
+    @_utilities.deprecated("""role_arn is deprecated. AWS End User Messaging event streams are being discontinued on October 30, 2026.""")
     def role_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The IAM role that authorizes Amazon Pinpoint to publish events to the stream in your account.
+        IAM role that authorizes AWS End User Messaging to publish events to the stream in your account.
         """
         return pulumi.get(self, "role_arn")
 

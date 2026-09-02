@@ -27,7 +27,7 @@ class GetOntapFileSystemResult:
     """
     A collection of values returned by getOntapFileSystem.
     """
-    def __init__(__self__, arn=None, automatic_backup_retention_days=None, daily_automatic_backup_start_time=None, deployment_type=None, disk_iops_configurations=None, dns_name=None, endpoint_ip_address_range=None, endpoints=None, ha_pairs=None, id=None, kms_key_id=None, network_interface_ids=None, owner_id=None, preferred_subnet_id=None, region=None, route_table_ids=None, storage_capacity=None, storage_type=None, subnet_ids=None, tags=None, throughput_capacity=None, throughput_capacity_per_ha_pair=None, vpc_id=None, weekly_maintenance_start_time=None):
+    def __init__(__self__, arn=None, automatic_backup_retention_days=None, daily_automatic_backup_start_time=None, deployment_type=None, disk_iops_configurations=None, dns_name=None, endpoint_ip_address_range=None, endpoints=None, ha_pairs=None, id=None, kms_key_id=None, network_interface_ids=None, network_type=None, owner_id=None, preferred_subnet_id=None, region=None, route_table_ids=None, storage_capacity=None, storage_type=None, subnet_ids=None, tags=None, throughput_capacity=None, throughput_capacity_per_ha_pair=None, vpc_id=None, weekly_maintenance_start_time=None):
         if arn and not isinstance(arn, str):
             raise TypeError("Expected argument 'arn' to be a str")
         pulumi.set(__self__, "arn", arn)
@@ -64,6 +64,9 @@ class GetOntapFileSystemResult:
         if network_interface_ids and not isinstance(network_interface_ids, list):
             raise TypeError("Expected argument 'network_interface_ids' to be a list")
         pulumi.set(__self__, "network_interface_ids", network_interface_ids)
+        if network_type and not isinstance(network_type, str):
+            raise TypeError("Expected argument 'network_type' to be a str")
+        pulumi.set(__self__, "network_type", network_type)
         if owner_id and not isinstance(owner_id, str):
             raise TypeError("Expected argument 'owner_id' to be a str")
         pulumi.set(__self__, "owner_id", owner_id)
@@ -105,7 +108,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        Amazon Resource Name of the file system.
+        ARN of the file system.
         """
         return pulumi.get(self, "arn")
 
@@ -113,7 +116,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter(name="automaticBackupRetentionDays")
     def automatic_backup_retention_days(self) -> _builtins.int:
         """
-        The number of days to retain automatic backups.
+        Number of days to retain automatic backups.
         """
         return pulumi.get(self, "automatic_backup_retention_days")
 
@@ -121,7 +124,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter(name="dailyAutomaticBackupStartTime")
     def daily_automatic_backup_start_time(self) -> _builtins.str:
         """
-        The preferred time (in `HH:MM` format) to take daily automatic backups, in the UTC time zone.
+        Preferred time (in `HH:MM` format) to take daily automatic backups, in the UTC time zone.
         """
         return pulumi.get(self, "daily_automatic_backup_start_time")
 
@@ -129,7 +132,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter(name="deploymentType")
     def deployment_type(self) -> _builtins.str:
         """
-        The file system deployment type.
+        File system deployment type.
         """
         return pulumi.get(self, "deployment_type")
 
@@ -137,7 +140,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter(name="diskIopsConfigurations")
     def disk_iops_configurations(self) -> Sequence['outputs.GetOntapFileSystemDiskIopsConfigurationResult']:
         """
-        The SSD IOPS configuration for the Amazon FSx for NetApp ONTAP file system, specifying the number of provisioned IOPS and the provision mode. See Disk IOPS Below.
+        SSD IOPS configuration for the Amazon FSx for NetApp ONTAP file system, specifying the number of provisioned IOPS and the provision mode. See Disk IOPS Below.
         """
         return pulumi.get(self, "disk_iops_configurations")
 
@@ -153,7 +156,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter(name="endpointIpAddressRange")
     def endpoint_ip_address_range(self) -> _builtins.str:
         """
-        (Multi-AZ only) Specifies the IP address range in which the endpoints to access your file system exist.
+        (Multi-AZ only) IP address range in which the endpoints to access your file system exist.
         """
         return pulumi.get(self, "endpoint_ip_address_range")
 
@@ -161,7 +164,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter
     def endpoints(self) -> Sequence['outputs.GetOntapFileSystemEndpointResult']:
         """
-        The Management and Intercluster FileSystemEndpoints that are used to access data or to manage the file system using the NetApp ONTAP CLI, REST API, or NetApp SnapMirror. See FileSystemEndpoints below.
+        Management and Intercluster FileSystemEndpoints that are used to access data or to manage the file system using the NetApp ONTAP CLI, REST API, or NetApp SnapMirror. See FileSystemEndpoints below.
         """
         return pulumi.get(self, "endpoints")
 
@@ -169,7 +172,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter(name="haPairs")
     def ha_pairs(self) -> _builtins.int:
         """
-        The number of HA pairs for the file system.
+        Number of HA pairs for the file system.
         """
         return pulumi.get(self, "ha_pairs")
 
@@ -193,9 +196,17 @@ class GetOntapFileSystemResult:
     @pulumi.getter(name="networkInterfaceIds")
     def network_interface_ids(self) -> Sequence[_builtins.str]:
         """
-        The IDs of the elastic network interfaces from which a specific file system is accessible.
+        IDs of the elastic network interfaces from which a specific file system is accessible.
         """
         return pulumi.get(self, "network_interface_ids")
+
+    @_builtins.property
+    @pulumi.getter(name="networkType")
+    def network_type(self) -> _builtins.str:
+        """
+        Network type (`IPV4` or `DUAL`).
+        """
+        return pulumi.get(self, "network_type")
 
     @_builtins.property
     @pulumi.getter(name="ownerId")
@@ -209,7 +220,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter(name="preferredSubnetId")
     def preferred_subnet_id(self) -> _builtins.str:
         """
-        Specifies the subnet in which you want the preferred file server to be located.
+        Subnet in which you want the preferred file server to be located.
         """
         return pulumi.get(self, "preferred_subnet_id")
 
@@ -222,7 +233,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter(name="routeTableIds")
     def route_table_ids(self) -> Sequence[_builtins.str]:
         """
-        (Multi-AZ only) The VPC route tables in which your file system's endpoints exist.
+        (Multi-AZ only) VPC route tables in which your file system's endpoints exist.
         """
         return pulumi.get(self, "route_table_ids")
 
@@ -230,7 +241,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter(name="storageCapacity")
     def storage_capacity(self) -> _builtins.int:
         """
-        The storage capacity of the file system in gibibytes (GiB).
+        Storage capacity of the file system in gibibytes (GiB).
         """
         return pulumi.get(self, "storage_capacity")
 
@@ -238,7 +249,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter(name="storageType")
     def storage_type(self) -> _builtins.str:
         """
-        The type of storage the file system is using. If set to `SSD`, the file system uses solid state drive storage. If set to `HDD`, the file system uses hard disk drive storage.
+        Type of storage the file system is using. If set to `SSD`, the file system uses solid state drive storage. If set to `HDD`, the file system uses hard disk drive storage.
         """
         return pulumi.get(self, "storage_type")
 
@@ -246,7 +257,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter(name="subnetIds")
     def subnet_ids(self) -> Sequence[_builtins.str]:
         """
-        Specifies the IDs of the subnets that the file system is accessible from. For the MULTI_AZ_1 file system deployment type, there are two subnet IDs, one for the preferred file server and one for the standby file server. The preferred file server subnet identified in the `preferred_subnet_id` property.
+        IDs of the subnets that the file system is accessible from. For the MULTI_AZ_1 file system deployment type, there are two subnet IDs, one for the preferred file server and one for the standby file server. The preferred file server subnet identified in the `preferred_subnet_id` property.
         """
         return pulumi.get(self, "subnet_ids")
 
@@ -254,7 +265,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter
     def tags(self) -> Mapping[str, _builtins.str]:
         """
-        The tags associated with the file system.
+        Tags associated with the file system.
         """
         return pulumi.get(self, "tags")
 
@@ -262,7 +273,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter(name="throughputCapacity")
     def throughput_capacity(self) -> _builtins.int:
         """
-        The sustained throughput of an Amazon FSx file system in Megabytes per second (MBps). If the file system uses multiple HA pairs this will equal throuthput_capacity_per_ha_pair x ha_pairs
+        Sustained throughput of an Amazon FSx file system in Megabytes per second (MBps). If the file system uses multiple HA pairs this will equal throuthput_capacity_per_ha_pair x ha_pairs
         """
         return pulumi.get(self, "throughput_capacity")
 
@@ -270,7 +281,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter(name="throughputCapacityPerHaPair")
     def throughput_capacity_per_ha_pair(self) -> _builtins.int:
         """
-        The sustained throughput of each HA pair for an Amazon FSx file system in Megabytes per second (MBps).
+        Sustained throughput of each HA pair for an Amazon FSx file system in Megabytes per second (MBps).
         """
         return pulumi.get(self, "throughput_capacity_per_ha_pair")
 
@@ -278,7 +289,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> _builtins.str:
         """
-        The ID of the primary virtual private cloud (VPC) for the file system.
+        ID of the primary VPC for the file system.
         """
         return pulumi.get(self, "vpc_id")
 
@@ -286,7 +297,7 @@ class GetOntapFileSystemResult:
     @pulumi.getter(name="weeklyMaintenanceStartTime")
     def weekly_maintenance_start_time(self) -> _builtins.str:
         """
-        The preferred start time (in `D:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
+        Preferred start time (in `D:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
         """
         return pulumi.get(self, "weekly_maintenance_start_time")
 
@@ -309,6 +320,7 @@ class AwaitableGetOntapFileSystemResult(GetOntapFileSystemResult):
             id=self.id,
             kms_key_id=self.kms_key_id,
             network_interface_ids=self.network_interface_ids,
+            network_type=self.network_type,
             owner_id=self.owner_id,
             preferred_subnet_id=self.preferred_subnet_id,
             region=self.region,
@@ -344,7 +356,7 @@ def get_ontap_file_system(id: Optional[_builtins.str] = None,
 
     :param _builtins.str id: Identifier of the file system (e.g. `fs-12345678`).
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param Mapping[str, _builtins.str] tags: The tags associated with the file system.
+    :param Mapping[str, _builtins.str] tags: Tags associated with the file system.
     """
     __args__ = dict()
     __args__['id'] = id
@@ -366,6 +378,7 @@ def get_ontap_file_system(id: Optional[_builtins.str] = None,
         id=pulumi.get(__ret__, 'id'),
         kms_key_id=pulumi.get(__ret__, 'kms_key_id'),
         network_interface_ids=pulumi.get(__ret__, 'network_interface_ids'),
+        network_type=pulumi.get(__ret__, 'network_type'),
         owner_id=pulumi.get(__ret__, 'owner_id'),
         preferred_subnet_id=pulumi.get(__ret__, 'preferred_subnet_id'),
         region=pulumi.get(__ret__, 'region'),
@@ -378,9 +391,9 @@ def get_ontap_file_system(id: Optional[_builtins.str] = None,
         throughput_capacity_per_ha_pair=pulumi.get(__ret__, 'throughput_capacity_per_ha_pair'),
         vpc_id=pulumi.get(__ret__, 'vpc_id'),
         weekly_maintenance_start_time=pulumi.get(__ret__, 'weekly_maintenance_start_time'))
-def get_ontap_file_system_output(id: Optional[pulumi.Input[_builtins.str]] = None,
-                                 region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                 tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_ontap_file_system_output(id: pulumi.Input[Optional[_builtins.str]] = None,
+                                 region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                 tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                                  opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetOntapFileSystemResult]:
     """
     Retrieve information on FSx ONTAP File System.
@@ -399,7 +412,7 @@ def get_ontap_file_system_output(id: Optional[pulumi.Input[_builtins.str]] = Non
 
     :param _builtins.str id: Identifier of the file system (e.g. `fs-12345678`).
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param Mapping[str, _builtins.str] tags: The tags associated with the file system.
+    :param Mapping[str, _builtins.str] tags: Tags associated with the file system.
     """
     __args__ = dict()
     __args__['id'] = id
@@ -420,6 +433,7 @@ def get_ontap_file_system_output(id: Optional[pulumi.Input[_builtins.str]] = Non
         id=pulumi.get(__response__, 'id'),
         kms_key_id=pulumi.get(__response__, 'kms_key_id'),
         network_interface_ids=pulumi.get(__response__, 'network_interface_ids'),
+        network_type=pulumi.get(__response__, 'network_type'),
         owner_id=pulumi.get(__response__, 'owner_id'),
         preferred_subnet_id=pulumi.get(__response__, 'preferred_subnet_id'),
         region=pulumi.get(__response__, 'region'),

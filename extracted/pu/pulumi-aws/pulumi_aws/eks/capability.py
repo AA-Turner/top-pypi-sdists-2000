@@ -26,12 +26,13 @@ class CapabilityArgs:
                  delete_propagation_policy: pulumi.Input[_builtins.str],
                  role_arn: pulumi.Input[_builtins.str],
                  type: pulumi.Input[_builtins.str],
-                 configuration: Optional[pulumi.Input['CapabilityConfigurationArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['CapabilityTimeoutsArgs']] = None):
+                 configuration: pulumi.Input[Optional['CapabilityConfigurationArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['CapabilityTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a Capability resource.
+
         :param pulumi.Input[_builtins.str] capability_name: Name of the capability. Must be unique within the cluster.
         :param pulumi.Input[_builtins.str] cluster_name: Name of the EKS cluster.
         :param pulumi.Input[_builtins.str] delete_propagation_policy: Delete propagation policy for the capability. Valid values: `RETAIN`.
@@ -117,67 +118,68 @@ class CapabilityArgs:
 
     @_builtins.property
     @pulumi.getter
-    def configuration(self) -> Optional[pulumi.Input['CapabilityConfigurationArgs']]:
+    def configuration(self) -> pulumi.Input[Optional['CapabilityConfigurationArgs']]:
         """
         Configuration for the capability. See `configuration` below.
         """
         return pulumi.get(self, "configuration")
 
     @configuration.setter
-    def configuration(self, value: Optional[pulumi.Input['CapabilityConfigurationArgs']]):
+    def configuration(self, value: pulumi.Input[Optional['CapabilityConfigurationArgs']]):
         pulumi.set(self, "configuration", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of resource tags.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['CapabilityTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['CapabilityTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['CapabilityTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['CapabilityTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _CapabilityState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 capability_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 cluster_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 configuration: Optional[pulumi.Input['CapabilityConfigurationArgs']] = None,
-                 delete_propagation_policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['CapabilityTimeoutsArgs']] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None,
-                 version: Optional[pulumi.Input[_builtins.str]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 capability_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 cluster_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 configuration: pulumi.Input[Optional['CapabilityConfigurationArgs']] = None,
+                 delete_propagation_policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['CapabilityTimeoutsArgs']] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None,
+                 version: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering Capability resources.
+
         :param pulumi.Input[_builtins.str] arn: ARN of the capability.
         :param pulumi.Input[_builtins.str] capability_name: Name of the capability. Must be unique within the cluster.
         :param pulumi.Input[_builtins.str] cluster_name: Name of the EKS cluster.
@@ -217,143 +219,143 @@ class _CapabilityState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the capability.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="capabilityName")
-    def capability_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def capability_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the capability. Must be unique within the cluster.
         """
         return pulumi.get(self, "capability_name")
 
     @capability_name.setter
-    def capability_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def capability_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "capability_name", value)
 
     @_builtins.property
     @pulumi.getter(name="clusterName")
-    def cluster_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def cluster_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the EKS cluster.
         """
         return pulumi.get(self, "cluster_name")
 
     @cluster_name.setter
-    def cluster_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def cluster_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "cluster_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def configuration(self) -> Optional[pulumi.Input['CapabilityConfigurationArgs']]:
+    def configuration(self) -> pulumi.Input[Optional['CapabilityConfigurationArgs']]:
         """
         Configuration for the capability. See `configuration` below.
         """
         return pulumi.get(self, "configuration")
 
     @configuration.setter
-    def configuration(self, value: Optional[pulumi.Input['CapabilityConfigurationArgs']]):
+    def configuration(self, value: pulumi.Input[Optional['CapabilityConfigurationArgs']]):
         pulumi.set(self, "configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="deletePropagationPolicy")
-    def delete_propagation_policy(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete_propagation_policy(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Delete propagation policy for the capability. Valid values: `RETAIN`.
         """
         return pulumi.get(self, "delete_propagation_policy")
 
     @delete_propagation_policy.setter
-    def delete_propagation_policy(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete_propagation_policy(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete_propagation_policy", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="roleArn")
-    def role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the IAM role to associate with the capability.
         """
         return pulumi.get(self, "role_arn")
 
     @role_arn.setter
-    def role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "role_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of resource tags.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['CapabilityTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['CapabilityTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['CapabilityTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['CapabilityTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Type of the capability. Valid values: `ACK`, `KRO`, `ARGOCD`.
         """
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
     @_builtins.property
     @pulumi.getter
-    def version(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def version(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Version of the capability.
         """
         return pulumi.get(self, "version")
 
     @version.setter
-    def version(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def version(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "version", value)
 
 
@@ -363,15 +365,15 @@ class Capability(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 capability_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 cluster_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 configuration: Optional[pulumi.Input[Union['CapabilityConfigurationArgs', 'CapabilityConfigurationArgsDict']]] = None,
-                 delete_propagation_policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['CapabilityTimeoutsArgs', 'CapabilityTimeoutsArgsDict']]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None,
+                 capability_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 cluster_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 configuration: pulumi.Input[Optional[Union['CapabilityConfigurationArgs', 'CapabilityConfigurationArgsDict']]] = None,
+                 delete_propagation_policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['CapabilityTimeoutsArgs', 'CapabilityTimeoutsArgsDict']]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Manages an EKS Capability for an EKS cluster.
@@ -383,11 +385,6 @@ class Capability(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.eks.Capability("example",
-            cluster_name=example_aws_eks_cluster["name"],
-            capability_name="argocd",
-            type="ARGOCD",
-            role_arn=example_aws_iam_role["arn"],
-            delete_propagation_policy="RETAIN",
             configuration={
                 "argo_cd": {
                     "aws_idc": {
@@ -396,6 +393,11 @@ class Capability(pulumi.CustomResource):
                     "namespace": "argocd",
                 },
             },
+            cluster_name=example_aws_eks_cluster["name"],
+            capability_name="argocd",
+            type="ARGOCD",
+            role_arn=example_aws_iam_role["arn"],
+            delete_propagation_policy="RETAIN",
             tags={
                 "Name": "example-capability",
             })
@@ -403,11 +405,24 @@ class Capability(pulumi.CustomResource):
 
         ## Import
 
-        Using `pulumi import`, import EKS Capability using the `cluster_name` and `capability_name` separated by a comma (`,`). For example:
+        ### Identity Schema
+
+        #### Required
+
+        * `cluster_name` (String) Name of the EKS Cluster.
+        * `capability_name` (String) Name of the capability.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
+        Using `pulumi import`, import Capabilities using `cluster_name` and `capability_name` separated by a comma (`,`). For example:
 
         ```sh
-        $ pulumi import aws:eks/capability:Capability example my-cluster,my-capability
+        $ pulumi import aws:eks/capability:Capability example example-cluster,example-capability
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -436,11 +451,6 @@ class Capability(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.eks.Capability("example",
-            cluster_name=example_aws_eks_cluster["name"],
-            capability_name="argocd",
-            type="ARGOCD",
-            role_arn=example_aws_iam_role["arn"],
-            delete_propagation_policy="RETAIN",
             configuration={
                 "argo_cd": {
                     "aws_idc": {
@@ -449,6 +459,11 @@ class Capability(pulumi.CustomResource):
                     "namespace": "argocd",
                 },
             },
+            cluster_name=example_aws_eks_cluster["name"],
+            capability_name="argocd",
+            type="ARGOCD",
+            role_arn=example_aws_iam_role["arn"],
+            delete_propagation_policy="RETAIN",
             tags={
                 "Name": "example-capability",
             })
@@ -456,11 +471,24 @@ class Capability(pulumi.CustomResource):
 
         ## Import
 
-        Using `pulumi import`, import EKS Capability using the `cluster_name` and `capability_name` separated by a comma (`,`). For example:
+        ### Identity Schema
+
+        #### Required
+
+        * `cluster_name` (String) Name of the EKS Cluster.
+        * `capability_name` (String) Name of the capability.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
+        Using `pulumi import`, import Capabilities using `cluster_name` and `capability_name` separated by a comma (`,`). For example:
 
         ```sh
-        $ pulumi import aws:eks/capability:Capability example my-cluster,my-capability
+        $ pulumi import aws:eks/capability:Capability example example-cluster,example-capability
         ```
+
 
         :param str resource_name: The name of the resource.
         :param CapabilityArgs args: The arguments to use to populate this resource's properties.
@@ -477,15 +505,15 @@ class Capability(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 capability_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 cluster_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 configuration: Optional[pulumi.Input[Union['CapabilityConfigurationArgs', 'CapabilityConfigurationArgsDict']]] = None,
-                 delete_propagation_policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['CapabilityTimeoutsArgs', 'CapabilityTimeoutsArgsDict']]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None,
+                 capability_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 cluster_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 configuration: pulumi.Input[Optional[Union['CapabilityConfigurationArgs', 'CapabilityConfigurationArgsDict']]] = None,
+                 delete_propagation_policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['CapabilityTimeoutsArgs', 'CapabilityTimeoutsArgsDict']]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -527,18 +555,18 @@ class Capability(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            capability_name: Optional[pulumi.Input[_builtins.str]] = None,
-            cluster_name: Optional[pulumi.Input[_builtins.str]] = None,
-            configuration: Optional[pulumi.Input[Union['CapabilityConfigurationArgs', 'CapabilityConfigurationArgsDict']]] = None,
-            delete_propagation_policy: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            timeouts: Optional[pulumi.Input[Union['CapabilityTimeoutsArgs', 'CapabilityTimeoutsArgsDict']]] = None,
-            type: Optional[pulumi.Input[_builtins.str]] = None,
-            version: Optional[pulumi.Input[_builtins.str]] = None) -> 'Capability':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            capability_name: pulumi.Input[Optional[_builtins.str]] = None,
+            cluster_name: pulumi.Input[Optional[_builtins.str]] = None,
+            configuration: pulumi.Input[Optional[Union['CapabilityConfigurationArgs', 'CapabilityConfigurationArgsDict']]] = None,
+            delete_propagation_policy: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            timeouts: pulumi.Input[Optional[Union['CapabilityTimeoutsArgs', 'CapabilityTimeoutsArgsDict']]] = None,
+            type: pulumi.Input[Optional[_builtins.str]] = None,
+            version: pulumi.Input[Optional[_builtins.str]] = None) -> 'Capability':
         """
         Get an existing Capability resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

@@ -113,7 +113,7 @@ class GetReportPlanResult:
     @pulumi.getter(name="reportDeliveryChannels")
     def report_delivery_channels(self) -> Sequence['outputs.GetReportPlanReportDeliveryChannelResult']:
         """
-        An object that contains information about where and how to deliver your reports, specifically your Amazon S3 bucket name, S3 key prefix, and the formats of your reports. Detailed below.
+        Object that contains information about where and how to deliver your reports, specifically your Amazon S3 bucket name, S3 key prefix, and the formats of your reports. Detailed below.
         """
         return pulumi.get(self, "report_delivery_channels")
 
@@ -121,7 +121,7 @@ class GetReportPlanResult:
     @pulumi.getter(name="reportSettings")
     def report_settings(self) -> Sequence['outputs.GetReportPlanReportSettingResult']:
         """
-        An object that identifies the report template for the report. Reports are built using a report template. Detailed below.
+        Object that identifies the report template for the report. Reports are built using a report template. Detailed below.
         """
         return pulumi.get(self, "report_settings")
 
@@ -191,9 +191,9 @@ def get_report_plan(name: Optional[_builtins.str] = None,
         report_delivery_channels=pulumi.get(__ret__, 'report_delivery_channels'),
         report_settings=pulumi.get(__ret__, 'report_settings'),
         tags=pulumi.get(__ret__, 'tags'))
-def get_report_plan_output(name: Optional[pulumi.Input[_builtins.str]] = None,
-                           region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                           tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_report_plan_output(name: pulumi.Input[Optional[_builtins.str]] = None,
+                           region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                           tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                            opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetReportPlanResult]:
     """
     Use this data source to get information on an existing backup report plan.

@@ -1,6 +1,6 @@
 [project]
 name = "environs"
-version = "15.0.1"
+version = "15.2.0"
 description = "simplified environment variable parsing"
 readme = "README.md"
 license = "MIT"
@@ -32,12 +32,20 @@ django = ["dj-database-url", "dj-email-url", "django-cache-url"]
 
 [dependency-groups]
 django = ["dj-database-url", "dj-email-url", "django-cache-url"]
+lint = ["pre-commit>=4.0,<5.0"]
+mypy = ["mypy"]
 tests = [
   { include-group = "django" },
   "pytest",
   "backports.strenum; python_version < '3.11'",
 ]
-dev = [{ include-group = "tests" }, "tox", "tox-uv", "pre-commit>=4.0,<5.0"]
+dev = [
+  { include-group = "tests" },
+  { include-group = "lint" },
+  { include-group = "mypy" },
+  "tox",
+  "tox-uv",
+]
 
 [build-system]
 requires = ["flit_core<4"]
@@ -67,6 +75,7 @@ ignore = [
   "ARG",     # unused arguments are common w/ interfaces
   "COM",     # let formatter take care commas
   "C901",    # don't enforce complexity level
+  "CPY001",  # don't require copyright notices at top of files
   "PLR0912", # don't enforce max branches
   "D",       # don't require docstrings
   "E501",    # leave line-length enforcement to formatter

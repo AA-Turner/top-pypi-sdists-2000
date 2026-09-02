@@ -41,8 +41,12 @@ __all__ = [
     'CloudVmClusterIormConfigCacheDbPlanArgsDict',
     'CloudVmClusterTimeoutsArgs',
     'CloudVmClusterTimeoutsArgsDict',
+    'IamRoleAssociationTimeoutsArgs',
+    'IamRoleAssociationTimeoutsArgsDict',
     'NetworkManagedServiceArgs',
     'NetworkManagedServiceArgsDict',
+    'NetworkManagedServiceCrossRegionS3RestoreSourcesAccessArgs',
+    'NetworkManagedServiceCrossRegionS3RestoreSourcesAccessArgsDict',
     'NetworkManagedServiceKmsAccessArgs',
     'NetworkManagedServiceKmsAccessArgsDict',
     'NetworkManagedServiceManagedS3BackupAccessArgs',
@@ -66,45 +70,45 @@ __all__ = [
 class CloudAutonomousVmClusterMaintenanceWindowArgsDict(TypedDict):
     preference: pulumi.Input[_builtins.str]
     """
-    The preference for the maintenance window scheduling. Changing this will force terraform to create new resource.
+    Preference for the maintenance window scheduling. Changing this will force terraform to create new resource.
     """
-    days_of_weeks: NotRequired[pulumi.Input[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowDaysOfWeekArgsDict']]]]
+    days_of_weeks: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowDaysOfWeekArgsDict']]]]]
     """
-    The days of the week when maintenance can be performed. Changing this will force terraform to create new resource.
+    Days of the week when maintenance can be performed. Changing this will force terraform to create new resource. See `days_of_week` Block below.
     """
-    hours_of_days: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]
+    hours_of_days: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]]
     """
-    The hours of the day when maintenance can be performed. Changing this will force terraform to create new resource.
+    Hours of the day when maintenance can be performed. Changing this will force terraform to create new resource.
     """
-    lead_time_in_weeks: NotRequired[pulumi.Input[_builtins.int]]
+    lead_time_in_weeks: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The lead time in weeks before the maintenance window. Changing this will force terraform to create new resource.
+    Lead time in weeks before the maintenance window. Changing this will force terraform to create new resource.
     """
-    months: NotRequired[pulumi.Input[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowMonthArgsDict']]]]
+    months: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowMonthArgsDict']]]]]
     """
-    The months when maintenance can be performed. Changing this will force terraform to create new resource.
+    Months when maintenance can be performed. Changing this will force terraform to create new resource. See `months` Block below.
     """
-    weeks_of_months: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]
+    weeks_of_months: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]]
     """
-    Indicates whether to skip release updates during maintenance. Changing this will force terraform to create new resource.
+    Whether to skip release updates during maintenance. Changing this will force terraform to create new resource.
     """
 
 @pulumi.input_type
 class CloudAutonomousVmClusterMaintenanceWindowArgs:
     def __init__(__self__, *,
                  preference: pulumi.Input[_builtins.str],
-                 days_of_weeks: Optional[pulumi.Input[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowDaysOfWeekArgs']]]] = None,
-                 hours_of_days: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]] = None,
-                 lead_time_in_weeks: Optional[pulumi.Input[_builtins.int]] = None,
-                 months: Optional[pulumi.Input[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowMonthArgs']]]] = None,
-                 weeks_of_months: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]] = None):
+                 days_of_weeks: pulumi.Input[Optional[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowDaysOfWeekArgs']]]] = None,
+                 hours_of_days: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]] = None,
+                 lead_time_in_weeks: pulumi.Input[Optional[_builtins.int]] = None,
+                 months: pulumi.Input[Optional[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowMonthArgs']]]] = None,
+                 weeks_of_months: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]] = None):
         """
-        :param pulumi.Input[_builtins.str] preference: The preference for the maintenance window scheduling. Changing this will force terraform to create new resource.
-        :param pulumi.Input[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowDaysOfWeekArgs']]] days_of_weeks: The days of the week when maintenance can be performed. Changing this will force terraform to create new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.int]]] hours_of_days: The hours of the day when maintenance can be performed. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.int] lead_time_in_weeks: The lead time in weeks before the maintenance window. Changing this will force terraform to create new resource.
-        :param pulumi.Input[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowMonthArgs']]] months: The months when maintenance can be performed. Changing this will force terraform to create new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.int]]] weeks_of_months: Indicates whether to skip release updates during maintenance. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.str] preference: Preference for the maintenance window scheduling. Changing this will force terraform to create new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowDaysOfWeekArgs']]] days_of_weeks: Days of the week when maintenance can be performed. Changing this will force terraform to create new resource. See `days_of_week` Block below.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.int]]] hours_of_days: Hours of the day when maintenance can be performed. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] lead_time_in_weeks: Lead time in weeks before the maintenance window. Changing this will force terraform to create new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowMonthArgs']]] months: Months when maintenance can be performed. Changing this will force terraform to create new resource. See `months` Block below.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.int]]] weeks_of_months: Whether to skip release updates during maintenance. Changing this will force terraform to create new resource.
         """
         pulumi.set(__self__, "preference", preference)
         if days_of_weeks is not None:
@@ -122,7 +126,7 @@ class CloudAutonomousVmClusterMaintenanceWindowArgs:
     @pulumi.getter
     def preference(self) -> pulumi.Input[_builtins.str]:
         """
-        The preference for the maintenance window scheduling. Changing this will force terraform to create new resource.
+        Preference for the maintenance window scheduling. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "preference")
 
@@ -132,77 +136,86 @@ class CloudAutonomousVmClusterMaintenanceWindowArgs:
 
     @_builtins.property
     @pulumi.getter(name="daysOfWeeks")
-    def days_of_weeks(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowDaysOfWeekArgs']]]]:
+    def days_of_weeks(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowDaysOfWeekArgs']]]]:
         """
-        The days of the week when maintenance can be performed. Changing this will force terraform to create new resource.
+        Days of the week when maintenance can be performed. Changing this will force terraform to create new resource. See `days_of_week` Block below.
         """
         return pulumi.get(self, "days_of_weeks")
 
     @days_of_weeks.setter
-    def days_of_weeks(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowDaysOfWeekArgs']]]]):
+    def days_of_weeks(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowDaysOfWeekArgs']]]]):
         pulumi.set(self, "days_of_weeks", value)
 
     @_builtins.property
     @pulumi.getter(name="hoursOfDays")
-    def hours_of_days(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]:
+    def hours_of_days(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]:
         """
-        The hours of the day when maintenance can be performed. Changing this will force terraform to create new resource.
+        Hours of the day when maintenance can be performed. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "hours_of_days")
 
     @hours_of_days.setter
-    def hours_of_days(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]):
+    def hours_of_days(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]):
         pulumi.set(self, "hours_of_days", value)
 
     @_builtins.property
     @pulumi.getter(name="leadTimeInWeeks")
-    def lead_time_in_weeks(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def lead_time_in_weeks(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The lead time in weeks before the maintenance window. Changing this will force terraform to create new resource.
+        Lead time in weeks before the maintenance window. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "lead_time_in_weeks")
 
     @lead_time_in_weeks.setter
-    def lead_time_in_weeks(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def lead_time_in_weeks(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "lead_time_in_weeks", value)
 
     @_builtins.property
     @pulumi.getter
-    def months(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowMonthArgs']]]]:
+    def months(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowMonthArgs']]]]:
         """
-        The months when maintenance can be performed. Changing this will force terraform to create new resource.
+        Months when maintenance can be performed. Changing this will force terraform to create new resource. See `months` Block below.
         """
         return pulumi.get(self, "months")
 
     @months.setter
-    def months(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowMonthArgs']]]]):
+    def months(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowMonthArgs']]]]):
         pulumi.set(self, "months", value)
 
     @_builtins.property
     @pulumi.getter(name="weeksOfMonths")
-    def weeks_of_months(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]:
+    def weeks_of_months(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]:
         """
-        Indicates whether to skip release updates during maintenance. Changing this will force terraform to create new resource.
+        Whether to skip release updates during maintenance. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "weeks_of_months")
 
     @weeks_of_months.setter
-    def weeks_of_months(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]):
+    def weeks_of_months(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]):
         pulumi.set(self, "weeks_of_months", value)
 
 
 class CloudAutonomousVmClusterMaintenanceWindowDaysOfWeekArgsDict(TypedDict):
     name: pulumi.Input[_builtins.str]
+    """
+    Name of the day of the week. Valid values are `MONDAY`, `TUESDAY`, `WEDNESDAY`, `THURSDAY`, `FRIDAY`, `SATURDAY`, and `SUNDAY`.
+    """
 
 @pulumi.input_type
 class CloudAutonomousVmClusterMaintenanceWindowDaysOfWeekArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] name: Name of the day of the week. Valid values are `MONDAY`, `TUESDAY`, `WEDNESDAY`, `THURSDAY`, `FRIDAY`, `SATURDAY`, and `SUNDAY`.
+        """
         pulumi.set(__self__, "name", name)
 
     @_builtins.property
     @pulumi.getter
     def name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Name of the day of the week. Valid values are `MONDAY`, `TUESDAY`, `WEDNESDAY`, `THURSDAY`, `FRIDAY`, `SATURDAY`, and `SUNDAY`.
+        """
         return pulumi.get(self, "name")
 
     @name.setter
@@ -212,16 +225,25 @@ class CloudAutonomousVmClusterMaintenanceWindowDaysOfWeekArgs:
 
 class CloudAutonomousVmClusterMaintenanceWindowMonthArgsDict(TypedDict):
     name: pulumi.Input[_builtins.str]
+    """
+    Name of the month. Valid values are `JANUARY`, `FEBRUARY`, `MARCH`, `APRIL`, `MAY`, `JUNE`, `JULY`, `AUGUST`, `SEPTEMBER`, `OCTOBER`, `NOVEMBER`, and `DECEMBER`.
+    """
 
 @pulumi.input_type
 class CloudAutonomousVmClusterMaintenanceWindowMonthArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] name: Name of the month. Valid values are `JANUARY`, `FEBRUARY`, `MARCH`, `APRIL`, `MAY`, `JUNE`, `JULY`, `AUGUST`, `SEPTEMBER`, `OCTOBER`, `NOVEMBER`, and `DECEMBER`.
+        """
         pulumi.set(__self__, "name", name)
 
     @_builtins.property
     @pulumi.getter
     def name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Name of the month. Valid values are `JANUARY`, `FEBRUARY`, `MARCH`, `APRIL`, `MAY`, `JUNE`, `JULY`, `AUGUST`, `SEPTEMBER`, `OCTOBER`, `NOVEMBER`, and `DECEMBER`.
+        """
         return pulumi.get(self, "name")
 
     @name.setter
@@ -230,15 +252,15 @@ class CloudAutonomousVmClusterMaintenanceWindowMonthArgs:
 
 
 class CloudAutonomousVmClusterTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
-    update: NotRequired[pulumi.Input[_builtins.str]]
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -246,9 +268,9 @@ class CloudAutonomousVmClusterTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class CloudAutonomousVmClusterTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None,
-                 update: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -263,53 +285,62 @@ class CloudAutonomousVmClusterTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def update(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "update")
 
     @update.setter
-    def update(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update", value)
 
 
 class CloudExadataInfrastructureCustomerContactsToSendToOciArgsDict(TypedDict):
     email: pulumi.Input[_builtins.str]
+    """
+    Email address of the contact.
+    """
 
 @pulumi.input_type
 class CloudExadataInfrastructureCustomerContactsToSendToOciArgs:
     def __init__(__self__, *,
                  email: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] email: Email address of the contact.
+        """
         pulumi.set(__self__, "email", email)
 
     @_builtins.property
     @pulumi.getter
     def email(self) -> pulumi.Input[_builtins.str]:
+        """
+        Email address of the contact.
+        """
         return pulumi.get(self, "email")
 
     @email.setter
@@ -320,39 +351,39 @@ class CloudExadataInfrastructureCustomerContactsToSendToOciArgs:
 class CloudExadataInfrastructureMaintenanceWindowArgsDict(TypedDict):
     custom_action_timeout_in_mins: pulumi.Input[_builtins.int]
     """
-    The custom action timeout in minutes for the maintenance window.
+    Custom action timeout in minutes for the maintenance window.
     """
     is_custom_action_timeout_enabled: pulumi.Input[_builtins.bool]
     """
-    ndicates whether custom action timeout is enabled for the maintenance window.
+    Whether custom action timeout is enabled for the maintenance window.
     """
     patching_mode: pulumi.Input[_builtins.str]
     """
-    The patching mode for the maintenance window.
+    Patching mode for the maintenance window.
     """
     preference: pulumi.Input[_builtins.str]
     """
-    The preference for the maintenance window scheduling.
+    Preference for the maintenance window scheduling.
     """
-    days_of_weeks: NotRequired[pulumi.Input[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowDaysOfWeekArgsDict']]]]
+    days_of_weeks: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowDaysOfWeekArgsDict']]]]]
     """
-    The days of the week when maintenance can be performed.
+    Days of the week when maintenance can be performed. See `days_of_week` Block below.
     """
-    hours_of_days: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]
+    hours_of_days: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]]
     """
-    The hours of the day when maintenance can be performed.
+    Hours of the day when maintenance can be performed.
     """
-    lead_time_in_weeks: NotRequired[pulumi.Input[_builtins.int]]
+    lead_time_in_weeks: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The lead time in weeks before the maintenance window.
+    Lead time in weeks before the maintenance window.
     """
-    months: NotRequired[pulumi.Input[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowMonthArgsDict']]]]
+    months: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowMonthArgsDict']]]]]
     """
-    The months when maintenance can be performed.
+    Months when maintenance can be performed. See `months` Block below.
     """
-    weeks_of_months: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]
+    weeks_of_months: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]]
     """
-    The weeks of the month when maintenance can be performed.
+    Weeks of the month when maintenance can be performed.
     """
 
 @pulumi.input_type
@@ -362,21 +393,21 @@ class CloudExadataInfrastructureMaintenanceWindowArgs:
                  is_custom_action_timeout_enabled: pulumi.Input[_builtins.bool],
                  patching_mode: pulumi.Input[_builtins.str],
                  preference: pulumi.Input[_builtins.str],
-                 days_of_weeks: Optional[pulumi.Input[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowDaysOfWeekArgs']]]] = None,
-                 hours_of_days: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]] = None,
-                 lead_time_in_weeks: Optional[pulumi.Input[_builtins.int]] = None,
-                 months: Optional[pulumi.Input[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowMonthArgs']]]] = None,
-                 weeks_of_months: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]] = None):
+                 days_of_weeks: pulumi.Input[Optional[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowDaysOfWeekArgs']]]] = None,
+                 hours_of_days: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]] = None,
+                 lead_time_in_weeks: pulumi.Input[Optional[_builtins.int]] = None,
+                 months: pulumi.Input[Optional[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowMonthArgs']]]] = None,
+                 weeks_of_months: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]] = None):
         """
-        :param pulumi.Input[_builtins.int] custom_action_timeout_in_mins: The custom action timeout in minutes for the maintenance window.
-        :param pulumi.Input[_builtins.bool] is_custom_action_timeout_enabled: ndicates whether custom action timeout is enabled for the maintenance window.
-        :param pulumi.Input[_builtins.str] patching_mode: The patching mode for the maintenance window.
-        :param pulumi.Input[_builtins.str] preference: The preference for the maintenance window scheduling.
-        :param pulumi.Input[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowDaysOfWeekArgs']]] days_of_weeks: The days of the week when maintenance can be performed.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.int]]] hours_of_days: The hours of the day when maintenance can be performed.
-        :param pulumi.Input[_builtins.int] lead_time_in_weeks: The lead time in weeks before the maintenance window.
-        :param pulumi.Input[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowMonthArgs']]] months: The months when maintenance can be performed.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.int]]] weeks_of_months: The weeks of the month when maintenance can be performed.
+        :param pulumi.Input[_builtins.int] custom_action_timeout_in_mins: Custom action timeout in minutes for the maintenance window.
+        :param pulumi.Input[_builtins.bool] is_custom_action_timeout_enabled: Whether custom action timeout is enabled for the maintenance window.
+        :param pulumi.Input[_builtins.str] patching_mode: Patching mode for the maintenance window.
+        :param pulumi.Input[_builtins.str] preference: Preference for the maintenance window scheduling.
+        :param pulumi.Input[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowDaysOfWeekArgs']]] days_of_weeks: Days of the week when maintenance can be performed. See `days_of_week` Block below.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.int]]] hours_of_days: Hours of the day when maintenance can be performed.
+        :param pulumi.Input[_builtins.int] lead_time_in_weeks: Lead time in weeks before the maintenance window.
+        :param pulumi.Input[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowMonthArgs']]] months: Months when maintenance can be performed. See `months` Block below.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.int]]] weeks_of_months: Weeks of the month when maintenance can be performed.
         """
         pulumi.set(__self__, "custom_action_timeout_in_mins", custom_action_timeout_in_mins)
         pulumi.set(__self__, "is_custom_action_timeout_enabled", is_custom_action_timeout_enabled)
@@ -397,7 +428,7 @@ class CloudExadataInfrastructureMaintenanceWindowArgs:
     @pulumi.getter(name="customActionTimeoutInMins")
     def custom_action_timeout_in_mins(self) -> pulumi.Input[_builtins.int]:
         """
-        The custom action timeout in minutes for the maintenance window.
+        Custom action timeout in minutes for the maintenance window.
         """
         return pulumi.get(self, "custom_action_timeout_in_mins")
 
@@ -409,7 +440,7 @@ class CloudExadataInfrastructureMaintenanceWindowArgs:
     @pulumi.getter(name="isCustomActionTimeoutEnabled")
     def is_custom_action_timeout_enabled(self) -> pulumi.Input[_builtins.bool]:
         """
-        ndicates whether custom action timeout is enabled for the maintenance window.
+        Whether custom action timeout is enabled for the maintenance window.
         """
         return pulumi.get(self, "is_custom_action_timeout_enabled")
 
@@ -421,7 +452,7 @@ class CloudExadataInfrastructureMaintenanceWindowArgs:
     @pulumi.getter(name="patchingMode")
     def patching_mode(self) -> pulumi.Input[_builtins.str]:
         """
-        The patching mode for the maintenance window.
+        Patching mode for the maintenance window.
         """
         return pulumi.get(self, "patching_mode")
 
@@ -433,7 +464,7 @@ class CloudExadataInfrastructureMaintenanceWindowArgs:
     @pulumi.getter
     def preference(self) -> pulumi.Input[_builtins.str]:
         """
-        The preference for the maintenance window scheduling.
+        Preference for the maintenance window scheduling.
         """
         return pulumi.get(self, "preference")
 
@@ -443,77 +474,86 @@ class CloudExadataInfrastructureMaintenanceWindowArgs:
 
     @_builtins.property
     @pulumi.getter(name="daysOfWeeks")
-    def days_of_weeks(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowDaysOfWeekArgs']]]]:
+    def days_of_weeks(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowDaysOfWeekArgs']]]]:
         """
-        The days of the week when maintenance can be performed.
+        Days of the week when maintenance can be performed. See `days_of_week` Block below.
         """
         return pulumi.get(self, "days_of_weeks")
 
     @days_of_weeks.setter
-    def days_of_weeks(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowDaysOfWeekArgs']]]]):
+    def days_of_weeks(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowDaysOfWeekArgs']]]]):
         pulumi.set(self, "days_of_weeks", value)
 
     @_builtins.property
     @pulumi.getter(name="hoursOfDays")
-    def hours_of_days(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]:
+    def hours_of_days(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]:
         """
-        The hours of the day when maintenance can be performed.
+        Hours of the day when maintenance can be performed.
         """
         return pulumi.get(self, "hours_of_days")
 
     @hours_of_days.setter
-    def hours_of_days(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]):
+    def hours_of_days(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]):
         pulumi.set(self, "hours_of_days", value)
 
     @_builtins.property
     @pulumi.getter(name="leadTimeInWeeks")
-    def lead_time_in_weeks(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def lead_time_in_weeks(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The lead time in weeks before the maintenance window.
+        Lead time in weeks before the maintenance window.
         """
         return pulumi.get(self, "lead_time_in_weeks")
 
     @lead_time_in_weeks.setter
-    def lead_time_in_weeks(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def lead_time_in_weeks(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "lead_time_in_weeks", value)
 
     @_builtins.property
     @pulumi.getter
-    def months(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowMonthArgs']]]]:
+    def months(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowMonthArgs']]]]:
         """
-        The months when maintenance can be performed.
+        Months when maintenance can be performed. See `months` Block below.
         """
         return pulumi.get(self, "months")
 
     @months.setter
-    def months(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowMonthArgs']]]]):
+    def months(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['CloudExadataInfrastructureMaintenanceWindowMonthArgs']]]]):
         pulumi.set(self, "months", value)
 
     @_builtins.property
     @pulumi.getter(name="weeksOfMonths")
-    def weeks_of_months(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]:
+    def weeks_of_months(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]:
         """
-        The weeks of the month when maintenance can be performed.
+        Weeks of the month when maintenance can be performed.
         """
         return pulumi.get(self, "weeks_of_months")
 
     @weeks_of_months.setter
-    def weeks_of_months(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]):
+    def weeks_of_months(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]):
         pulumi.set(self, "weeks_of_months", value)
 
 
 class CloudExadataInfrastructureMaintenanceWindowDaysOfWeekArgsDict(TypedDict):
     name: pulumi.Input[_builtins.str]
+    """
+    Name of the day of the week. Valid values are `MONDAY`, `TUESDAY`, `WEDNESDAY`, `THURSDAY`, `FRIDAY`, `SATURDAY`, and `SUNDAY`.
+    """
 
 @pulumi.input_type
 class CloudExadataInfrastructureMaintenanceWindowDaysOfWeekArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] name: Name of the day of the week. Valid values are `MONDAY`, `TUESDAY`, `WEDNESDAY`, `THURSDAY`, `FRIDAY`, `SATURDAY`, and `SUNDAY`.
+        """
         pulumi.set(__self__, "name", name)
 
     @_builtins.property
     @pulumi.getter
     def name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Name of the day of the week. Valid values are `MONDAY`, `TUESDAY`, `WEDNESDAY`, `THURSDAY`, `FRIDAY`, `SATURDAY`, and `SUNDAY`.
+        """
         return pulumi.get(self, "name")
 
     @name.setter
@@ -523,16 +563,25 @@ class CloudExadataInfrastructureMaintenanceWindowDaysOfWeekArgs:
 
 class CloudExadataInfrastructureMaintenanceWindowMonthArgsDict(TypedDict):
     name: pulumi.Input[_builtins.str]
+    """
+    Name of the month. Valid values are `JANUARY`, `FEBRUARY`, `MARCH`, `APRIL`, `MAY`, `JUNE`, `JULY`, `AUGUST`, `SEPTEMBER`, `OCTOBER`, `NOVEMBER`, and `DECEMBER`.
+    """
 
 @pulumi.input_type
 class CloudExadataInfrastructureMaintenanceWindowMonthArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] name: Name of the month. Valid values are `JANUARY`, `FEBRUARY`, `MARCH`, `APRIL`, `MAY`, `JUNE`, `JULY`, `AUGUST`, `SEPTEMBER`, `OCTOBER`, `NOVEMBER`, and `DECEMBER`.
+        """
         pulumi.set(__self__, "name", name)
 
     @_builtins.property
     @pulumi.getter
     def name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Name of the month. Valid values are `JANUARY`, `FEBRUARY`, `MARCH`, `APRIL`, `MAY`, `JUNE`, `JULY`, `AUGUST`, `SEPTEMBER`, `OCTOBER`, `NOVEMBER`, and `DECEMBER`.
+        """
         return pulumi.get(self, "name")
 
     @name.setter
@@ -541,15 +590,15 @@ class CloudExadataInfrastructureMaintenanceWindowMonthArgs:
 
 
 class CloudExadataInfrastructureTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
-    update: NotRequired[pulumi.Input[_builtins.str]]
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -557,9 +606,9 @@ class CloudExadataInfrastructureTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class CloudExadataInfrastructureTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None,
-                 update: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -574,45 +623,54 @@ class CloudExadataInfrastructureTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def update(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "update")
 
     @update.setter
-    def update(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update", value)
 
 
 class CloudVmClusterDataCollectionOptionsArgsDict(TypedDict):
     is_diagnostics_events_enabled: pulumi.Input[_builtins.bool]
+    """
+    Whether to enable diagnostic events for the VM cluster. Changing this will create a new resource.
+    """
     is_health_monitoring_enabled: pulumi.Input[_builtins.bool]
+    """
+    Whether to enable health monitoring for the VM cluster. Changing this will create a new resource.
+    """
     is_incident_logs_enabled: pulumi.Input[_builtins.bool]
+    """
+    Whether to enable incident logs for the VM cluster. Changing this will create a new resource.
+    """
 
 @pulumi.input_type
 class CloudVmClusterDataCollectionOptionsArgs:
@@ -620,6 +678,11 @@ class CloudVmClusterDataCollectionOptionsArgs:
                  is_diagnostics_events_enabled: pulumi.Input[_builtins.bool],
                  is_health_monitoring_enabled: pulumi.Input[_builtins.bool],
                  is_incident_logs_enabled: pulumi.Input[_builtins.bool]):
+        """
+        :param pulumi.Input[_builtins.bool] is_diagnostics_events_enabled: Whether to enable diagnostic events for the VM cluster. Changing this will create a new resource.
+        :param pulumi.Input[_builtins.bool] is_health_monitoring_enabled: Whether to enable health monitoring for the VM cluster. Changing this will create a new resource.
+        :param pulumi.Input[_builtins.bool] is_incident_logs_enabled: Whether to enable incident logs for the VM cluster. Changing this will create a new resource.
+        """
         pulumi.set(__self__, "is_diagnostics_events_enabled", is_diagnostics_events_enabled)
         pulumi.set(__self__, "is_health_monitoring_enabled", is_health_monitoring_enabled)
         pulumi.set(__self__, "is_incident_logs_enabled", is_incident_logs_enabled)
@@ -627,6 +690,9 @@ class CloudVmClusterDataCollectionOptionsArgs:
     @_builtins.property
     @pulumi.getter(name="isDiagnosticsEventsEnabled")
     def is_diagnostics_events_enabled(self) -> pulumi.Input[_builtins.bool]:
+        """
+        Whether to enable diagnostic events for the VM cluster. Changing this will create a new resource.
+        """
         return pulumi.get(self, "is_diagnostics_events_enabled")
 
     @is_diagnostics_events_enabled.setter
@@ -636,6 +702,9 @@ class CloudVmClusterDataCollectionOptionsArgs:
     @_builtins.property
     @pulumi.getter(name="isHealthMonitoringEnabled")
     def is_health_monitoring_enabled(self) -> pulumi.Input[_builtins.bool]:
+        """
+        Whether to enable health monitoring for the VM cluster. Changing this will create a new resource.
+        """
         return pulumi.get(self, "is_health_monitoring_enabled")
 
     @is_health_monitoring_enabled.setter
@@ -645,6 +714,9 @@ class CloudVmClusterDataCollectionOptionsArgs:
     @_builtins.property
     @pulumi.getter(name="isIncidentLogsEnabled")
     def is_incident_logs_enabled(self) -> pulumi.Input[_builtins.bool]:
+        """
+        Whether to enable incident logs for the VM cluster. Changing this will create a new resource.
+        """
         return pulumi.get(self, "is_incident_logs_enabled")
 
     @is_incident_logs_enabled.setter
@@ -654,9 +726,21 @@ class CloudVmClusterDataCollectionOptionsArgs:
 
 class CloudVmClusterIormConfigCacheArgsDict(TypedDict):
     db_plans: pulumi.Input[Sequence[pulumi.Input['CloudVmClusterIormConfigCacheDbPlanArgsDict']]]
+    """
+    List of IORM (I/O Resource Manager) database plans for the VM cluster. See `db_plans` Block below.
+    """
     lifecycle_details: pulumi.Input[_builtins.str]
+    """
+    Additional information about the current lifecycle state of the IORM configuration.
+    """
     lifecycle_state: pulumi.Input[_builtins.str]
+    """
+    Current lifecycle state of the IORM configuration.
+    """
     objective: pulumi.Input[_builtins.str]
+    """
+    Current value for the IORM objective.
+    """
 
 @pulumi.input_type
 class CloudVmClusterIormConfigCacheArgs:
@@ -665,6 +749,12 @@ class CloudVmClusterIormConfigCacheArgs:
                  lifecycle_details: pulumi.Input[_builtins.str],
                  lifecycle_state: pulumi.Input[_builtins.str],
                  objective: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input['CloudVmClusterIormConfigCacheDbPlanArgs']]] db_plans: List of IORM (I/O Resource Manager) database plans for the VM cluster. See `db_plans` Block below.
+        :param pulumi.Input[_builtins.str] lifecycle_details: Additional information about the current lifecycle state of the IORM configuration.
+        :param pulumi.Input[_builtins.str] lifecycle_state: Current lifecycle state of the IORM configuration.
+        :param pulumi.Input[_builtins.str] objective: Current value for the IORM objective.
+        """
         pulumi.set(__self__, "db_plans", db_plans)
         pulumi.set(__self__, "lifecycle_details", lifecycle_details)
         pulumi.set(__self__, "lifecycle_state", lifecycle_state)
@@ -673,6 +763,9 @@ class CloudVmClusterIormConfigCacheArgs:
     @_builtins.property
     @pulumi.getter(name="dbPlans")
     def db_plans(self) -> pulumi.Input[Sequence[pulumi.Input['CloudVmClusterIormConfigCacheDbPlanArgs']]]:
+        """
+        List of IORM (I/O Resource Manager) database plans for the VM cluster. See `db_plans` Block below.
+        """
         return pulumi.get(self, "db_plans")
 
     @db_plans.setter
@@ -682,6 +775,9 @@ class CloudVmClusterIormConfigCacheArgs:
     @_builtins.property
     @pulumi.getter(name="lifecycleDetails")
     def lifecycle_details(self) -> pulumi.Input[_builtins.str]:
+        """
+        Additional information about the current lifecycle state of the IORM configuration.
+        """
         return pulumi.get(self, "lifecycle_details")
 
     @lifecycle_details.setter
@@ -691,6 +787,9 @@ class CloudVmClusterIormConfigCacheArgs:
     @_builtins.property
     @pulumi.getter(name="lifecycleState")
     def lifecycle_state(self) -> pulumi.Input[_builtins.str]:
+        """
+        Current lifecycle state of the IORM configuration.
+        """
         return pulumi.get(self, "lifecycle_state")
 
     @lifecycle_state.setter
@@ -700,6 +799,9 @@ class CloudVmClusterIormConfigCacheArgs:
     @_builtins.property
     @pulumi.getter
     def objective(self) -> pulumi.Input[_builtins.str]:
+        """
+        Current value for the IORM objective.
+        """
         return pulumi.get(self, "objective")
 
     @objective.setter
@@ -709,8 +811,17 @@ class CloudVmClusterIormConfigCacheArgs:
 
 class CloudVmClusterIormConfigCacheDbPlanArgsDict(TypedDict):
     db_name: pulumi.Input[_builtins.str]
+    """
+    Database name to which the IORM plan applies.
+    """
     flash_cache_limit: pulumi.Input[_builtins.str]
+    """
+    Flash cache limit for the database plan.
+    """
     share: pulumi.Input[_builtins.int]
+    """
+    Relative priority of the database in the IORM plan.
+    """
 
 @pulumi.input_type
 class CloudVmClusterIormConfigCacheDbPlanArgs:
@@ -718,6 +829,11 @@ class CloudVmClusterIormConfigCacheDbPlanArgs:
                  db_name: pulumi.Input[_builtins.str],
                  flash_cache_limit: pulumi.Input[_builtins.str],
                  share: pulumi.Input[_builtins.int]):
+        """
+        :param pulumi.Input[_builtins.str] db_name: Database name to which the IORM plan applies.
+        :param pulumi.Input[_builtins.str] flash_cache_limit: Flash cache limit for the database plan.
+        :param pulumi.Input[_builtins.int] share: Relative priority of the database in the IORM plan.
+        """
         pulumi.set(__self__, "db_name", db_name)
         pulumi.set(__self__, "flash_cache_limit", flash_cache_limit)
         pulumi.set(__self__, "share", share)
@@ -725,6 +841,9 @@ class CloudVmClusterIormConfigCacheDbPlanArgs:
     @_builtins.property
     @pulumi.getter(name="dbName")
     def db_name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Database name to which the IORM plan applies.
+        """
         return pulumi.get(self, "db_name")
 
     @db_name.setter
@@ -734,6 +853,9 @@ class CloudVmClusterIormConfigCacheDbPlanArgs:
     @_builtins.property
     @pulumi.getter(name="flashCacheLimit")
     def flash_cache_limit(self) -> pulumi.Input[_builtins.str]:
+        """
+        Flash cache limit for the database plan.
+        """
         return pulumi.get(self, "flash_cache_limit")
 
     @flash_cache_limit.setter
@@ -743,6 +865,9 @@ class CloudVmClusterIormConfigCacheDbPlanArgs:
     @_builtins.property
     @pulumi.getter
     def share(self) -> pulumi.Input[_builtins.int]:
+        """
+        Relative priority of the database in the IORM plan.
+        """
         return pulumi.get(self, "share")
 
     @share.setter
@@ -751,15 +876,15 @@ class CloudVmClusterIormConfigCacheDbPlanArgs:
 
 
 class CloudVmClusterTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
-    update: NotRequired[pulumi.Input[_builtins.str]]
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -767,9 +892,9 @@ class CloudVmClusterTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class CloudVmClusterTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None,
-                 update: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -784,62 +909,150 @@ class CloudVmClusterTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def update(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "update")
 
     @update.setter
-    def update(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "update", value)
+
+
+class IamRoleAssociationTimeoutsArgsDict(TypedDict):
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+    """
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+    """
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+    """
+
+@pulumi.input_type
+class IamRoleAssociationTimeoutsArgs:
+    def __init__(__self__, *,
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
+        """
+        :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        :param pulumi.Input[_builtins.str] update: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        if create is not None:
+            pulumi.set(__self__, "create", create)
+        if delete is not None:
+            pulumi.set(__self__, "delete", delete)
+        if update is not None:
+            pulumi.set(__self__, "update", update)
+
+    @_builtins.property
+    @pulumi.getter
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "create")
+
+    @create.setter
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "create", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        return pulumi.get(self, "delete")
+
+    @delete.setter
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "delete", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "update")
+
+    @update.setter
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update", value)
 
 
 class NetworkManagedServiceArgsDict(TypedDict):
+    cross_region_s3_restore_sources_accesses: pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceCrossRegionS3RestoreSourcesAccessArgsDict']]]
+    """
+    List of regions enabled for cross-region restore in the ODB network.
+    """
     kms_accesses: pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceKmsAccessArgsDict']]]
     """
-    Specifies the configuration for KMS access from the ODB network.
+    Configuration for KMS access from the ODB network.
     """
     managed_s3_backup_accesses: pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceManagedS3BackupAccessArgsDict']]]
+    """
+    Managed S3 backup access configuration. See `managed_s3_backup_access` Block below.
+    """
     managed_service_ipv4_cidrs: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
+    """
+    List of IPv4 CIDR ranges used by the managed services.
+    """
     resource_gateway_arn: pulumi.Input[_builtins.str]
+    """
+    ARN of the resource gateway.
+    """
     s3_accesses: pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceS3AccessArgsDict']]]
     """
-    Specifies the configuration for Amazon S3 access from the ODB network.
+    Configuration for Amazon S3 access from the ODB network.
     """
     service_network_arn: pulumi.Input[_builtins.str]
+    """
+    ARN of the service network.
+    """
     service_network_endpoints: pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceServiceNetworkEndpointArgsDict']]]
+    """
+    Service network endpoint configuration. See `service_network_endpoint` Block below.
+    """
     sts_accesses: pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceStsAccessArgsDict']]]
     """
-    Specifies the configuration for STS access from the ODB network.
+    Configuration for STS access from the ODB network.
     """
     zero_etl_accesses: pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceZeroEtlAccessArgsDict']]]
     """
-    Specifies the configuration for Zero-ETL access from the ODB network.
+    Configuration for Zero-ETL access from the ODB network.
 
     The following arguments are optional:
     """
@@ -847,6 +1060,7 @@ class NetworkManagedServiceArgsDict(TypedDict):
 @pulumi.input_type
 class NetworkManagedServiceArgs:
     def __init__(__self__, *,
+                 cross_region_s3_restore_sources_accesses: pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceCrossRegionS3RestoreSourcesAccessArgs']]],
                  kms_accesses: pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceKmsAccessArgs']]],
                  managed_s3_backup_accesses: pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceManagedS3BackupAccessArgs']]],
                  managed_service_ipv4_cidrs: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
@@ -857,13 +1071,20 @@ class NetworkManagedServiceArgs:
                  sts_accesses: pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceStsAccessArgs']]],
                  zero_etl_accesses: pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceZeroEtlAccessArgs']]]):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceKmsAccessArgs']]] kms_accesses: Specifies the configuration for KMS access from the ODB network.
-        :param pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceS3AccessArgs']]] s3_accesses: Specifies the configuration for Amazon S3 access from the ODB network.
-        :param pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceStsAccessArgs']]] sts_accesses: Specifies the configuration for STS access from the ODB network.
-        :param pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceZeroEtlAccessArgs']]] zero_etl_accesses: Specifies the configuration for Zero-ETL access from the ODB network.
+        :param pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceCrossRegionS3RestoreSourcesAccessArgs']]] cross_region_s3_restore_sources_accesses: List of regions enabled for cross-region restore in the ODB network.
+        :param pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceKmsAccessArgs']]] kms_accesses: Configuration for KMS access from the ODB network.
+        :param pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceManagedS3BackupAccessArgs']]] managed_s3_backup_accesses: Managed S3 backup access configuration. See `managed_s3_backup_access` Block below.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] managed_service_ipv4_cidrs: List of IPv4 CIDR ranges used by the managed services.
+        :param pulumi.Input[_builtins.str] resource_gateway_arn: ARN of the resource gateway.
+        :param pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceS3AccessArgs']]] s3_accesses: Configuration for Amazon S3 access from the ODB network.
+        :param pulumi.Input[_builtins.str] service_network_arn: ARN of the service network.
+        :param pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceServiceNetworkEndpointArgs']]] service_network_endpoints: Service network endpoint configuration. See `service_network_endpoint` Block below.
+        :param pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceStsAccessArgs']]] sts_accesses: Configuration for STS access from the ODB network.
+        :param pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceZeroEtlAccessArgs']]] zero_etl_accesses: Configuration for Zero-ETL access from the ODB network.
                
                The following arguments are optional:
         """
+        pulumi.set(__self__, "cross_region_s3_restore_sources_accesses", cross_region_s3_restore_sources_accesses)
         pulumi.set(__self__, "kms_accesses", kms_accesses)
         pulumi.set(__self__, "managed_s3_backup_accesses", managed_s3_backup_accesses)
         pulumi.set(__self__, "managed_service_ipv4_cidrs", managed_service_ipv4_cidrs)
@@ -875,10 +1096,22 @@ class NetworkManagedServiceArgs:
         pulumi.set(__self__, "zero_etl_accesses", zero_etl_accesses)
 
     @_builtins.property
+    @pulumi.getter(name="crossRegionS3RestoreSourcesAccesses")
+    def cross_region_s3_restore_sources_accesses(self) -> pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceCrossRegionS3RestoreSourcesAccessArgs']]]:
+        """
+        List of regions enabled for cross-region restore in the ODB network.
+        """
+        return pulumi.get(self, "cross_region_s3_restore_sources_accesses")
+
+    @cross_region_s3_restore_sources_accesses.setter
+    def cross_region_s3_restore_sources_accesses(self, value: pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceCrossRegionS3RestoreSourcesAccessArgs']]]):
+        pulumi.set(self, "cross_region_s3_restore_sources_accesses", value)
+
+    @_builtins.property
     @pulumi.getter(name="kmsAccesses")
     def kms_accesses(self) -> pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceKmsAccessArgs']]]:
         """
-        Specifies the configuration for KMS access from the ODB network.
+        Configuration for KMS access from the ODB network.
         """
         return pulumi.get(self, "kms_accesses")
 
@@ -889,6 +1122,9 @@ class NetworkManagedServiceArgs:
     @_builtins.property
     @pulumi.getter(name="managedS3BackupAccesses")
     def managed_s3_backup_accesses(self) -> pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceManagedS3BackupAccessArgs']]]:
+        """
+        Managed S3 backup access configuration. See `managed_s3_backup_access` Block below.
+        """
         return pulumi.get(self, "managed_s3_backup_accesses")
 
     @managed_s3_backup_accesses.setter
@@ -898,6 +1134,9 @@ class NetworkManagedServiceArgs:
     @_builtins.property
     @pulumi.getter(name="managedServiceIpv4Cidrs")
     def managed_service_ipv4_cidrs(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
+        """
+        List of IPv4 CIDR ranges used by the managed services.
+        """
         return pulumi.get(self, "managed_service_ipv4_cidrs")
 
     @managed_service_ipv4_cidrs.setter
@@ -907,6 +1146,9 @@ class NetworkManagedServiceArgs:
     @_builtins.property
     @pulumi.getter(name="resourceGatewayArn")
     def resource_gateway_arn(self) -> pulumi.Input[_builtins.str]:
+        """
+        ARN of the resource gateway.
+        """
         return pulumi.get(self, "resource_gateway_arn")
 
     @resource_gateway_arn.setter
@@ -917,7 +1159,7 @@ class NetworkManagedServiceArgs:
     @pulumi.getter(name="s3Accesses")
     def s3_accesses(self) -> pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceS3AccessArgs']]]:
         """
-        Specifies the configuration for Amazon S3 access from the ODB network.
+        Configuration for Amazon S3 access from the ODB network.
         """
         return pulumi.get(self, "s3_accesses")
 
@@ -928,6 +1170,9 @@ class NetworkManagedServiceArgs:
     @_builtins.property
     @pulumi.getter(name="serviceNetworkArn")
     def service_network_arn(self) -> pulumi.Input[_builtins.str]:
+        """
+        ARN of the service network.
+        """
         return pulumi.get(self, "service_network_arn")
 
     @service_network_arn.setter
@@ -937,6 +1182,9 @@ class NetworkManagedServiceArgs:
     @_builtins.property
     @pulumi.getter(name="serviceNetworkEndpoints")
     def service_network_endpoints(self) -> pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceServiceNetworkEndpointArgs']]]:
+        """
+        Service network endpoint configuration. See `service_network_endpoint` Block below.
+        """
         return pulumi.get(self, "service_network_endpoints")
 
     @service_network_endpoints.setter
@@ -947,7 +1195,7 @@ class NetworkManagedServiceArgs:
     @pulumi.getter(name="stsAccesses")
     def sts_accesses(self) -> pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceStsAccessArgs']]]:
         """
-        Specifies the configuration for STS access from the ODB network.
+        Configuration for STS access from the ODB network.
         """
         return pulumi.get(self, "sts_accesses")
 
@@ -959,7 +1207,7 @@ class NetworkManagedServiceArgs:
     @pulumi.getter(name="zeroEtlAccesses")
     def zero_etl_accesses(self) -> pulumi.Input[Sequence[pulumi.Input['NetworkManagedServiceZeroEtlAccessArgs']]]:
         """
-        Specifies the configuration for Zero-ETL access from the ODB network.
+        Configuration for Zero-ETL access from the ODB network.
 
         The following arguments are optional:
         """
@@ -970,16 +1218,88 @@ class NetworkManagedServiceArgs:
         pulumi.set(self, "zero_etl_accesses", value)
 
 
-class NetworkManagedServiceKmsAccessArgsDict(TypedDict):
-    domain_name: pulumi.Input[_builtins.str]
+class NetworkManagedServiceCrossRegionS3RestoreSourcesAccessArgsDict(TypedDict):
     ipv4_addresses: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
-    kms_policy_document: pulumi.Input[_builtins.str]
     """
-    Specifies the endpoint policy for KMS access from the ODB network.
+    List of IPv4 addresses for the Amazon STS access.
+    """
+    region: pulumi.Input[_builtins.str]
+    """
+    Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     """
     status: pulumi.Input[_builtins.str]
     """
-    The status of the network resource.
+    Status of the Zero-ETL access.
+    """
+
+@pulumi.input_type
+class NetworkManagedServiceCrossRegionS3RestoreSourcesAccessArgs:
+    def __init__(__self__, *,
+                 ipv4_addresses: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
+                 region: pulumi.Input[_builtins.str],
+                 status: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] ipv4_addresses: List of IPv4 addresses for the Amazon STS access.
+        :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[_builtins.str] status: Status of the Zero-ETL access.
+        """
+        pulumi.set(__self__, "ipv4_addresses", ipv4_addresses)
+        pulumi.set(__self__, "region", region)
+        pulumi.set(__self__, "status", status)
+
+    @_builtins.property
+    @pulumi.getter(name="ipv4Addresses")
+    def ipv4_addresses(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
+        """
+        List of IPv4 addresses for the Amazon STS access.
+        """
+        return pulumi.get(self, "ipv4_addresses")
+
+    @ipv4_addresses.setter
+    def ipv4_addresses(self, value: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]):
+        pulumi.set(self, "ipv4_addresses", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def region(self) -> pulumi.Input[_builtins.str]:
+        """
+        Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        """
+        return pulumi.get(self, "region")
+
+    @region.setter
+    def region(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "region", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def status(self) -> pulumi.Input[_builtins.str]:
+        """
+        Status of the Zero-ETL access.
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "status", value)
+
+
+class NetworkManagedServiceKmsAccessArgsDict(TypedDict):
+    domain_name: pulumi.Input[_builtins.str]
+    """
+    Domain name for which the DNS queries are forwarded.
+    """
+    ipv4_addresses: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
+    """
+    List of IPv4 addresses for the Amazon STS access.
+    """
+    kms_policy_document: pulumi.Input[_builtins.str]
+    """
+    Endpoint policy for KMS access from the ODB network.
+    """
+    status: pulumi.Input[_builtins.str]
+    """
+    Status of the Zero-ETL access.
     """
 
 @pulumi.input_type
@@ -990,8 +1310,10 @@ class NetworkManagedServiceKmsAccessArgs:
                  kms_policy_document: pulumi.Input[_builtins.str],
                  status: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] kms_policy_document: Specifies the endpoint policy for KMS access from the ODB network.
-        :param pulumi.Input[_builtins.str] status: The status of the network resource.
+        :param pulumi.Input[_builtins.str] domain_name: Domain name for which the DNS queries are forwarded.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] ipv4_addresses: List of IPv4 addresses for the Amazon STS access.
+        :param pulumi.Input[_builtins.str] kms_policy_document: Endpoint policy for KMS access from the ODB network.
+        :param pulumi.Input[_builtins.str] status: Status of the Zero-ETL access.
         """
         pulumi.set(__self__, "domain_name", domain_name)
         pulumi.set(__self__, "ipv4_addresses", ipv4_addresses)
@@ -1001,6 +1323,9 @@ class NetworkManagedServiceKmsAccessArgs:
     @_builtins.property
     @pulumi.getter(name="domainName")
     def domain_name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Domain name for which the DNS queries are forwarded.
+        """
         return pulumi.get(self, "domain_name")
 
     @domain_name.setter
@@ -1010,6 +1335,9 @@ class NetworkManagedServiceKmsAccessArgs:
     @_builtins.property
     @pulumi.getter(name="ipv4Addresses")
     def ipv4_addresses(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
+        """
+        List of IPv4 addresses for the Amazon STS access.
+        """
         return pulumi.get(self, "ipv4_addresses")
 
     @ipv4_addresses.setter
@@ -1020,7 +1348,7 @@ class NetworkManagedServiceKmsAccessArgs:
     @pulumi.getter(name="kmsPolicyDocument")
     def kms_policy_document(self) -> pulumi.Input[_builtins.str]:
         """
-        Specifies the endpoint policy for KMS access from the ODB network.
+        Endpoint policy for KMS access from the ODB network.
         """
         return pulumi.get(self, "kms_policy_document")
 
@@ -1032,7 +1360,7 @@ class NetworkManagedServiceKmsAccessArgs:
     @pulumi.getter
     def status(self) -> pulumi.Input[_builtins.str]:
         """
-        The status of the network resource.
+        Status of the Zero-ETL access.
         """
         return pulumi.get(self, "status")
 
@@ -1043,9 +1371,12 @@ class NetworkManagedServiceKmsAccessArgs:
 
 class NetworkManagedServiceManagedS3BackupAccessArgsDict(TypedDict):
     ipv4_addresses: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
+    """
+    List of IPv4 addresses for the Amazon STS access.
+    """
     status: pulumi.Input[_builtins.str]
     """
-    The status of the network resource.
+    Status of the Zero-ETL access.
     """
 
 @pulumi.input_type
@@ -1054,7 +1385,8 @@ class NetworkManagedServiceManagedS3BackupAccessArgs:
                  ipv4_addresses: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
                  status: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] status: The status of the network resource.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] ipv4_addresses: List of IPv4 addresses for the Amazon STS access.
+        :param pulumi.Input[_builtins.str] status: Status of the Zero-ETL access.
         """
         pulumi.set(__self__, "ipv4_addresses", ipv4_addresses)
         pulumi.set(__self__, "status", status)
@@ -1062,6 +1394,9 @@ class NetworkManagedServiceManagedS3BackupAccessArgs:
     @_builtins.property
     @pulumi.getter(name="ipv4Addresses")
     def ipv4_addresses(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
+        """
+        List of IPv4 addresses for the Amazon STS access.
+        """
         return pulumi.get(self, "ipv4_addresses")
 
     @ipv4_addresses.setter
@@ -1072,7 +1407,7 @@ class NetworkManagedServiceManagedS3BackupAccessArgs:
     @pulumi.getter
     def status(self) -> pulumi.Input[_builtins.str]:
         """
-        The status of the network resource.
+        Status of the Zero-ETL access.
         """
         return pulumi.get(self, "status")
 
@@ -1083,14 +1418,20 @@ class NetworkManagedServiceManagedS3BackupAccessArgs:
 
 class NetworkManagedServiceS3AccessArgsDict(TypedDict):
     domain_name: pulumi.Input[_builtins.str]
+    """
+    Domain name for which the DNS queries are forwarded.
+    """
     ipv4_addresses: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
+    """
+    List of IPv4 addresses for the Amazon STS access.
+    """
     s3_policy_document: pulumi.Input[_builtins.str]
     """
-    Specifies the endpoint policy for Amazon S3 access from the ODB network.
+    Endpoint policy for Amazon S3 access from the ODB network.
     """
     status: pulumi.Input[_builtins.str]
     """
-    The status of the network resource.
+    Status of the Zero-ETL access.
     """
 
 @pulumi.input_type
@@ -1101,8 +1442,10 @@ class NetworkManagedServiceS3AccessArgs:
                  s3_policy_document: pulumi.Input[_builtins.str],
                  status: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] s3_policy_document: Specifies the endpoint policy for Amazon S3 access from the ODB network.
-        :param pulumi.Input[_builtins.str] status: The status of the network resource.
+        :param pulumi.Input[_builtins.str] domain_name: Domain name for which the DNS queries are forwarded.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] ipv4_addresses: List of IPv4 addresses for the Amazon STS access.
+        :param pulumi.Input[_builtins.str] s3_policy_document: Endpoint policy for Amazon S3 access from the ODB network.
+        :param pulumi.Input[_builtins.str] status: Status of the Zero-ETL access.
         """
         pulumi.set(__self__, "domain_name", domain_name)
         pulumi.set(__self__, "ipv4_addresses", ipv4_addresses)
@@ -1112,6 +1455,9 @@ class NetworkManagedServiceS3AccessArgs:
     @_builtins.property
     @pulumi.getter(name="domainName")
     def domain_name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Domain name for which the DNS queries are forwarded.
+        """
         return pulumi.get(self, "domain_name")
 
     @domain_name.setter
@@ -1121,6 +1467,9 @@ class NetworkManagedServiceS3AccessArgs:
     @_builtins.property
     @pulumi.getter(name="ipv4Addresses")
     def ipv4_addresses(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
+        """
+        List of IPv4 addresses for the Amazon STS access.
+        """
         return pulumi.get(self, "ipv4_addresses")
 
     @ipv4_addresses.setter
@@ -1131,7 +1480,7 @@ class NetworkManagedServiceS3AccessArgs:
     @pulumi.getter(name="s3PolicyDocument")
     def s3_policy_document(self) -> pulumi.Input[_builtins.str]:
         """
-        Specifies the endpoint policy for Amazon S3 access from the ODB network.
+        Endpoint policy for Amazon S3 access from the ODB network.
         """
         return pulumi.get(self, "s3_policy_document")
 
@@ -1143,7 +1492,7 @@ class NetworkManagedServiceS3AccessArgs:
     @pulumi.getter
     def status(self) -> pulumi.Input[_builtins.str]:
         """
-        The status of the network resource.
+        Status of the Zero-ETL access.
         """
         return pulumi.get(self, "status")
 
@@ -1154,19 +1503,32 @@ class NetworkManagedServiceS3AccessArgs:
 
 class NetworkManagedServiceServiceNetworkEndpointArgsDict(TypedDict):
     vpc_endpoint_id: pulumi.Input[_builtins.str]
+    """
+    Unique identifier of the VPC endpoint.
+    """
     vpc_endpoint_type: pulumi.Input[_builtins.str]
+    """
+    Type of the VPC endpoint.
+    """
 
 @pulumi.input_type
 class NetworkManagedServiceServiceNetworkEndpointArgs:
     def __init__(__self__, *,
                  vpc_endpoint_id: pulumi.Input[_builtins.str],
                  vpc_endpoint_type: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] vpc_endpoint_id: Unique identifier of the VPC endpoint.
+        :param pulumi.Input[_builtins.str] vpc_endpoint_type: Type of the VPC endpoint.
+        """
         pulumi.set(__self__, "vpc_endpoint_id", vpc_endpoint_id)
         pulumi.set(__self__, "vpc_endpoint_type", vpc_endpoint_type)
 
     @_builtins.property
     @pulumi.getter(name="vpcEndpointId")
     def vpc_endpoint_id(self) -> pulumi.Input[_builtins.str]:
+        """
+        Unique identifier of the VPC endpoint.
+        """
         return pulumi.get(self, "vpc_endpoint_id")
 
     @vpc_endpoint_id.setter
@@ -1176,6 +1538,9 @@ class NetworkManagedServiceServiceNetworkEndpointArgs:
     @_builtins.property
     @pulumi.getter(name="vpcEndpointType")
     def vpc_endpoint_type(self) -> pulumi.Input[_builtins.str]:
+        """
+        Type of the VPC endpoint.
+        """
         return pulumi.get(self, "vpc_endpoint_type")
 
     @vpc_endpoint_type.setter
@@ -1185,14 +1550,20 @@ class NetworkManagedServiceServiceNetworkEndpointArgs:
 
 class NetworkManagedServiceStsAccessArgsDict(TypedDict):
     domain_name: pulumi.Input[_builtins.str]
+    """
+    Domain name for which the DNS queries are forwarded.
+    """
     ipv4_addresses: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
+    """
+    List of IPv4 addresses for the Amazon STS access.
+    """
     status: pulumi.Input[_builtins.str]
     """
-    The status of the network resource.
+    Status of the Zero-ETL access.
     """
     sts_policy_document: pulumi.Input[_builtins.str]
     """
-    Specifies the endpoint policy for STS access from the ODB network.
+    Endpoint policy for STS access from the ODB network.
     """
 
 @pulumi.input_type
@@ -1203,8 +1574,10 @@ class NetworkManagedServiceStsAccessArgs:
                  status: pulumi.Input[_builtins.str],
                  sts_policy_document: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] status: The status of the network resource.
-        :param pulumi.Input[_builtins.str] sts_policy_document: Specifies the endpoint policy for STS access from the ODB network.
+        :param pulumi.Input[_builtins.str] domain_name: Domain name for which the DNS queries are forwarded.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] ipv4_addresses: List of IPv4 addresses for the Amazon STS access.
+        :param pulumi.Input[_builtins.str] status: Status of the Zero-ETL access.
+        :param pulumi.Input[_builtins.str] sts_policy_document: Endpoint policy for STS access from the ODB network.
         """
         pulumi.set(__self__, "domain_name", domain_name)
         pulumi.set(__self__, "ipv4_addresses", ipv4_addresses)
@@ -1214,6 +1587,9 @@ class NetworkManagedServiceStsAccessArgs:
     @_builtins.property
     @pulumi.getter(name="domainName")
     def domain_name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Domain name for which the DNS queries are forwarded.
+        """
         return pulumi.get(self, "domain_name")
 
     @domain_name.setter
@@ -1223,6 +1599,9 @@ class NetworkManagedServiceStsAccessArgs:
     @_builtins.property
     @pulumi.getter(name="ipv4Addresses")
     def ipv4_addresses(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
+        """
+        List of IPv4 addresses for the Amazon STS access.
+        """
         return pulumi.get(self, "ipv4_addresses")
 
     @ipv4_addresses.setter
@@ -1233,7 +1612,7 @@ class NetworkManagedServiceStsAccessArgs:
     @pulumi.getter
     def status(self) -> pulumi.Input[_builtins.str]:
         """
-        The status of the network resource.
+        Status of the Zero-ETL access.
         """
         return pulumi.get(self, "status")
 
@@ -1245,7 +1624,7 @@ class NetworkManagedServiceStsAccessArgs:
     @pulumi.getter(name="stsPolicyDocument")
     def sts_policy_document(self) -> pulumi.Input[_builtins.str]:
         """
-        Specifies the endpoint policy for STS access from the ODB network.
+        Endpoint policy for STS access from the ODB network.
         """
         return pulumi.get(self, "sts_policy_document")
 
@@ -1256,9 +1635,12 @@ class NetworkManagedServiceStsAccessArgs:
 
 class NetworkManagedServiceZeroEtlAccessArgsDict(TypedDict):
     cidr: pulumi.Input[_builtins.str]
+    """
+    CIDR range for the Zero-ETL access.
+    """
     status: pulumi.Input[_builtins.str]
     """
-    The status of the network resource.
+    Status of the Zero-ETL access.
     """
 
 @pulumi.input_type
@@ -1267,7 +1649,8 @@ class NetworkManagedServiceZeroEtlAccessArgs:
                  cidr: pulumi.Input[_builtins.str],
                  status: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] status: The status of the network resource.
+        :param pulumi.Input[_builtins.str] cidr: CIDR range for the Zero-ETL access.
+        :param pulumi.Input[_builtins.str] status: Status of the Zero-ETL access.
         """
         pulumi.set(__self__, "cidr", cidr)
         pulumi.set(__self__, "status", status)
@@ -1275,6 +1658,9 @@ class NetworkManagedServiceZeroEtlAccessArgs:
     @_builtins.property
     @pulumi.getter
     def cidr(self) -> pulumi.Input[_builtins.str]:
+        """
+        CIDR range for the Zero-ETL access.
+        """
         return pulumi.get(self, "cidr")
 
     @cidr.setter
@@ -1285,7 +1671,7 @@ class NetworkManagedServiceZeroEtlAccessArgs:
     @pulumi.getter
     def status(self) -> pulumi.Input[_builtins.str]:
         """
-        The status of the network resource.
+        Status of the Zero-ETL access.
         """
         return pulumi.get(self, "status")
 
@@ -1296,19 +1682,32 @@ class NetworkManagedServiceZeroEtlAccessArgs:
 
 class NetworkOciDnsForwardingConfigArgsDict(TypedDict):
     domain_name: pulumi.Input[_builtins.str]
+    """
+    Domain name for which the DNS queries are forwarded.
+    """
     oci_dns_listener_ip: pulumi.Input[_builtins.str]
+    """
+    IP address of the OCI DNS listener.
+    """
 
 @pulumi.input_type
 class NetworkOciDnsForwardingConfigArgs:
     def __init__(__self__, *,
                  domain_name: pulumi.Input[_builtins.str],
                  oci_dns_listener_ip: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] domain_name: Domain name for which the DNS queries are forwarded.
+        :param pulumi.Input[_builtins.str] oci_dns_listener_ip: IP address of the OCI DNS listener.
+        """
         pulumi.set(__self__, "domain_name", domain_name)
         pulumi.set(__self__, "oci_dns_listener_ip", oci_dns_listener_ip)
 
     @_builtins.property
     @pulumi.getter(name="domainName")
     def domain_name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Domain name for which the DNS queries are forwarded.
+        """
         return pulumi.get(self, "domain_name")
 
     @domain_name.setter
@@ -1318,6 +1717,9 @@ class NetworkOciDnsForwardingConfigArgs:
     @_builtins.property
     @pulumi.getter(name="ociDnsListenerIp")
     def oci_dns_listener_ip(self) -> pulumi.Input[_builtins.str]:
+        """
+        IP address of the OCI DNS listener.
+        """
         return pulumi.get(self, "oci_dns_listener_ip")
 
     @oci_dns_listener_ip.setter
@@ -1326,15 +1728,15 @@ class NetworkOciDnsForwardingConfigArgs:
 
 
 class NetworkPeeringConnectionTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
-    update: NotRequired[pulumi.Input[_builtins.str]]
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -1342,9 +1744,9 @@ class NetworkPeeringConnectionTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class NetworkPeeringConnectionTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None,
-                 update: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -1359,51 +1761,51 @@ class NetworkPeeringConnectionTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def update(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "update")
 
     @update.setter
-    def update(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update", value)
 
 
 class NetworkTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
-    update: NotRequired[pulumi.Input[_builtins.str]]
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -1411,9 +1813,9 @@ class NetworkTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class NetworkTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None,
-                 update: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -1428,38 +1830,38 @@ class NetworkTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def update(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "update")
 
     @update.setter
-    def update(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update", value)
 
 

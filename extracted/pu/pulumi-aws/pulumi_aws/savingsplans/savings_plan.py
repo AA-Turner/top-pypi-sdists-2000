@@ -23,19 +23,20 @@ class SavingsPlanArgs:
     def __init__(__self__, *,
                  commitment: pulumi.Input[_builtins.str],
                  savings_plan_offering_id: pulumi.Input[_builtins.str],
-                 purchase_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['SavingsPlanTimeoutsArgs']] = None,
-                 upfront_payment_amount: Optional[pulumi.Input[_builtins.str]] = None):
+                 purchase_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['SavingsPlanTimeoutsArgs']] = None,
+                 upfront_payment_amount: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a SavingsPlan resource.
+
         :param pulumi.Input[_builtins.str] commitment: The hourly commitment, in USD. This is the amount you commit to pay per hour, regardless of actual usage.
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] savings_plan_offering_id: The unique ID of a Savings Plan offering. You can find available offerings using the `aws savingsplans describe-savings-plans-offerings` CLI command.
-        :param pulumi.Input[_builtins.str] purchase_time: The time at which to purchase the Savings Plan, in UTC format (YYYY-MM-DDTHH:MM:SSZ). If not specified, the plan is purchased immediately. Plans with a future purchase time are placed in `queued` state and can be deleted before they become active.
+        :param pulumi.Input[_builtins.str] purchase_time: The time at which to purchase the Savings Plan, in UTC format (`YYYY-MM-DDTHH:MM:SSZ`). If not specified, the plan is purchased immediately. Plans with a future purchase time are placed in `queued` state and can be deleted before they become active.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[_builtins.str] upfront_payment_amount: The up-front payment amount.
+        :param pulumi.Input[_builtins.str] upfront_payment_amount: The up-front payment amount. Required for offerings with an `All Upfront` or `Partial Upfront` payment option. Must be omitted for `No Upfront` offerings.
         """
         pulumi.set(__self__, "commitment", commitment)
         pulumi.set(__self__, "savings_plan_offering_id", savings_plan_offering_id)
@@ -76,78 +77,79 @@ class SavingsPlanArgs:
 
     @_builtins.property
     @pulumi.getter(name="purchaseTime")
-    def purchase_time(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def purchase_time(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The time at which to purchase the Savings Plan, in UTC format (YYYY-MM-DDTHH:MM:SSZ). If not specified, the plan is purchased immediately. Plans with a future purchase time are placed in `queued` state and can be deleted before they become active.
+        The time at which to purchase the Savings Plan, in UTC format (`YYYY-MM-DDTHH:MM:SSZ`). If not specified, the plan is purchased immediately. Plans with a future purchase time are placed in `queued` state and can be deleted before they become active.
         """
         return pulumi.get(self, "purchase_time")
 
     @purchase_time.setter
-    def purchase_time(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def purchase_time(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "purchase_time", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['SavingsPlanTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['SavingsPlanTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['SavingsPlanTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['SavingsPlanTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter(name="upfrontPaymentAmount")
-    def upfront_payment_amount(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def upfront_payment_amount(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The up-front payment amount.
+        The up-front payment amount. Required for offerings with an `All Upfront` or `Partial Upfront` payment option. Must be omitted for `No Upfront` offerings.
         """
         return pulumi.get(self, "upfront_payment_amount")
 
     @upfront_payment_amount.setter
-    def upfront_payment_amount(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def upfront_payment_amount(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "upfront_payment_amount", value)
 
 
 @pulumi.input_type
 class _SavingsPlanState:
     def __init__(__self__, *,
-                 commitment: Optional[pulumi.Input[_builtins.str]] = None,
-                 currency: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 ec2_instance_family: Optional[pulumi.Input[_builtins.str]] = None,
-                 end: Optional[pulumi.Input[_builtins.str]] = None,
-                 offering_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 payment_option: Optional[pulumi.Input[_builtins.str]] = None,
-                 product_types: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 purchase_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 recurring_payment_amount: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 returnable_until: Optional[pulumi.Input[_builtins.str]] = None,
-                 savings_plan_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 savings_plan_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 savings_plan_offering_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 savings_plan_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 start: Optional[pulumi.Input[_builtins.str]] = None,
-                 state: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 term_duration_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 timeouts: Optional[pulumi.Input['SavingsPlanTimeoutsArgs']] = None,
-                 upfront_payment_amount: Optional[pulumi.Input[_builtins.str]] = None):
+                 commitment: pulumi.Input[Optional[_builtins.str]] = None,
+                 currency: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 ec2_instance_family: pulumi.Input[Optional[_builtins.str]] = None,
+                 end: pulumi.Input[Optional[_builtins.str]] = None,
+                 offering_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 payment_option: pulumi.Input[Optional[_builtins.str]] = None,
+                 product_types: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 purchase_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 recurring_payment_amount: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 returnable_until: pulumi.Input[Optional[_builtins.str]] = None,
+                 savings_plan_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 savings_plan_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 savings_plan_offering_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 savings_plan_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 start: pulumi.Input[Optional[_builtins.str]] = None,
+                 state: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 term_duration_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 timeouts: pulumi.Input[Optional['SavingsPlanTimeoutsArgs']] = None,
+                 upfront_payment_amount: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering SavingsPlan resources.
+
         :param pulumi.Input[_builtins.str] commitment: The hourly commitment, in USD. This is the amount you commit to pay per hour, regardless of actual usage.
                
                The following arguments are optional:
@@ -158,7 +160,7 @@ class _SavingsPlanState:
         :param pulumi.Input[_builtins.str] offering_id: The ID of the offering.
         :param pulumi.Input[_builtins.str] payment_option: The payment option for the Savings Plan (e.g., `All Upfront`, `Partial Upfront`, `No Upfront`).
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] product_types: The product types.
-        :param pulumi.Input[_builtins.str] purchase_time: The time at which to purchase the Savings Plan, in UTC format (YYYY-MM-DDTHH:MM:SSZ). If not specified, the plan is purchased immediately. Plans with a future purchase time are placed in `queued` state and can be deleted before they become active.
+        :param pulumi.Input[_builtins.str] purchase_time: The time at which to purchase the Savings Plan, in UTC format (`YYYY-MM-DDTHH:MM:SSZ`). If not specified, the plan is purchased immediately. Plans with a future purchase time are placed in `queued` state and can be deleted before they become active.
         :param pulumi.Input[_builtins.str] recurring_payment_amount: The recurring payment amount.
         :param pulumi.Input[_builtins.str] region: The AWS Region.
         :param pulumi.Input[_builtins.str] returnable_until: The recurring payment amount.
@@ -171,7 +173,7 @@ class _SavingsPlanState:
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         :param pulumi.Input[_builtins.int] term_duration_in_seconds: The duration of the term, in seconds.
-        :param pulumi.Input[_builtins.str] upfront_payment_amount: The up-front payment amount.
+        :param pulumi.Input[_builtins.str] upfront_payment_amount: The up-front payment amount. Required for offerings with an `All Upfront` or `Partial Upfront` payment option. Must be omitted for `No Upfront` offerings.
         """
         if commitment is not None:
             pulumi.set(__self__, "commitment", commitment)
@@ -183,6 +185,9 @@ class _SavingsPlanState:
             pulumi.set(__self__, "ec2_instance_family", ec2_instance_family)
         if end is not None:
             pulumi.set(__self__, "end", end)
+        if offering_id is not None:
+            warnings.warn("""offering_id is deprecated. Use savings_plan_offering_id instead.""", DeprecationWarning)
+            pulumi.log.warn("""offering_id is deprecated: offering_id is deprecated. Use savings_plan_offering_id instead.""")
         if offering_id is not None:
             pulumi.set(__self__, "offering_id", offering_id)
         if payment_option is not None:
@@ -222,7 +227,7 @@ class _SavingsPlanState:
 
     @_builtins.property
     @pulumi.getter
-    def commitment(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def commitment(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The hourly commitment, in USD. This is the amount you commit to pay per hour, regardless of actual usage.
 
@@ -231,268 +236,269 @@ class _SavingsPlanState:
         return pulumi.get(self, "commitment")
 
     @commitment.setter
-    def commitment(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def commitment(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "commitment", value)
 
     @_builtins.property
     @pulumi.getter
-    def currency(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def currency(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The currency of the Savings Plan (e.g., `USD`).
         """
         return pulumi.get(self, "currency")
 
     @currency.setter
-    def currency(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def currency(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "currency", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The description.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="ec2InstanceFamily")
-    def ec2_instance_family(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def ec2_instance_family(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The EC2 instance family for the Savings Plan (only applicable to EC2 Instance Savings Plans).
         """
         return pulumi.get(self, "ec2_instance_family")
 
     @ec2_instance_family.setter
-    def ec2_instance_family(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def ec2_instance_family(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "ec2_instance_family", value)
 
     @_builtins.property
     @pulumi.getter
-    def end(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def end(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The end time of the Savings Plan in RFC3339 format.
         """
         return pulumi.get(self, "end")
 
     @end.setter
-    def end(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def end(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "end", value)
 
     @_builtins.property
     @pulumi.getter(name="offeringId")
-    def offering_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    @_utilities.deprecated("""offering_id is deprecated. Use savings_plan_offering_id instead.""")
+    def offering_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the offering.
         """
         return pulumi.get(self, "offering_id")
 
     @offering_id.setter
-    def offering_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def offering_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "offering_id", value)
 
     @_builtins.property
     @pulumi.getter(name="paymentOption")
-    def payment_option(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def payment_option(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The payment option for the Savings Plan (e.g., `All Upfront`, `Partial Upfront`, `No Upfront`).
         """
         return pulumi.get(self, "payment_option")
 
     @payment_option.setter
-    def payment_option(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def payment_option(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "payment_option", value)
 
     @_builtins.property
     @pulumi.getter(name="productTypes")
-    def product_types(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def product_types(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         The product types.
         """
         return pulumi.get(self, "product_types")
 
     @product_types.setter
-    def product_types(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def product_types(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "product_types", value)
 
     @_builtins.property
     @pulumi.getter(name="purchaseTime")
-    def purchase_time(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def purchase_time(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The time at which to purchase the Savings Plan, in UTC format (YYYY-MM-DDTHH:MM:SSZ). If not specified, the plan is purchased immediately. Plans with a future purchase time are placed in `queued` state and can be deleted before they become active.
+        The time at which to purchase the Savings Plan, in UTC format (`YYYY-MM-DDTHH:MM:SSZ`). If not specified, the plan is purchased immediately. Plans with a future purchase time are placed in `queued` state and can be deleted before they become active.
         """
         return pulumi.get(self, "purchase_time")
 
     @purchase_time.setter
-    def purchase_time(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def purchase_time(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "purchase_time", value)
 
     @_builtins.property
     @pulumi.getter(name="recurringPaymentAmount")
-    def recurring_payment_amount(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def recurring_payment_amount(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The recurring payment amount.
         """
         return pulumi.get(self, "recurring_payment_amount")
 
     @recurring_payment_amount.setter
-    def recurring_payment_amount(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def recurring_payment_amount(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "recurring_payment_amount", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The AWS Region.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="returnableUntil")
-    def returnable_until(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def returnable_until(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The recurring payment amount.
         """
         return pulumi.get(self, "returnable_until")
 
     @returnable_until.setter
-    def returnable_until(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def returnable_until(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "returnable_until", value)
 
     @_builtins.property
     @pulumi.getter(name="savingsPlanArn")
-    def savings_plan_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def savings_plan_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of the Savings Plan.
         """
         return pulumi.get(self, "savings_plan_arn")
 
     @savings_plan_arn.setter
-    def savings_plan_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def savings_plan_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "savings_plan_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="savingsPlanId")
-    def savings_plan_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def savings_plan_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the Savings Plan.
         """
         return pulumi.get(self, "savings_plan_id")
 
     @savings_plan_id.setter
-    def savings_plan_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def savings_plan_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "savings_plan_id", value)
 
     @_builtins.property
     @pulumi.getter(name="savingsPlanOfferingId")
-    def savings_plan_offering_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def savings_plan_offering_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The unique ID of a Savings Plan offering. You can find available offerings using the `aws savingsplans describe-savings-plans-offerings` CLI command.
         """
         return pulumi.get(self, "savings_plan_offering_id")
 
     @savings_plan_offering_id.setter
-    def savings_plan_offering_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def savings_plan_offering_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "savings_plan_offering_id", value)
 
     @_builtins.property
     @pulumi.getter(name="savingsPlanType")
-    def savings_plan_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def savings_plan_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The type of Savings Plan (e.g., `Compute`, `EC2Instance`).
         """
         return pulumi.get(self, "savings_plan_type")
 
     @savings_plan_type.setter
-    def savings_plan_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def savings_plan_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "savings_plan_type", value)
 
     @_builtins.property
     @pulumi.getter
-    def start(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def start(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The start time of the Savings Plan in RFC3339 format.
         """
         return pulumi.get(self, "start")
 
     @start.setter
-    def start(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def start(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "start", value)
 
     @_builtins.property
     @pulumi.getter
-    def state(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def state(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The current state of the Savings Plan (e.g., `active`, `queued`, `retired`).
         """
         return pulumi.get(self, "state")
 
     @state.setter
-    def state(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def state(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "state", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter(name="termDurationInSeconds")
-    def term_duration_in_seconds(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def term_duration_in_seconds(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         The duration of the term, in seconds.
         """
         return pulumi.get(self, "term_duration_in_seconds")
 
     @term_duration_in_seconds.setter
-    def term_duration_in_seconds(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def term_duration_in_seconds(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "term_duration_in_seconds", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['SavingsPlanTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['SavingsPlanTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['SavingsPlanTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['SavingsPlanTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter(name="upfrontPaymentAmount")
-    def upfront_payment_amount(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def upfront_payment_amount(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The up-front payment amount.
+        The up-front payment amount. Required for offerings with an `All Upfront` or `Partial Upfront` payment option. Must be omitted for `No Upfront` offerings.
         """
         return pulumi.get(self, "upfront_payment_amount")
 
     @upfront_payment_amount.setter
-    def upfront_payment_amount(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def upfront_payment_amount(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "upfront_payment_amount", value)
 
 
@@ -502,19 +508,19 @@ class SavingsPlan(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 commitment: Optional[pulumi.Input[_builtins.str]] = None,
-                 purchase_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 savings_plan_offering_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['SavingsPlanTimeoutsArgs', 'SavingsPlanTimeoutsArgsDict']]] = None,
-                 upfront_payment_amount: Optional[pulumi.Input[_builtins.str]] = None,
+                 commitment: pulumi.Input[Optional[_builtins.str]] = None,
+                 purchase_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 savings_plan_offering_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['SavingsPlanTimeoutsArgs', 'SavingsPlanTimeoutsArgsDict']]] = None,
+                 upfront_payment_amount: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides an AWS Savings Plan resource.
 
-        > **WARNING:** Savings Plans represent a financial commitment. Once a Savings Plan becomes active, it **cannot be cancelled or deleted**. Only Savings Plans in the `queued` state (scheduled for future purchase) can be deleted. Use this resource with caution.
+        > Savings Plans represent a financial commitment. Once a Savings Plan becomes active, it **cannot be cancelled or deleted**. Only Savings Plans in the `queued` state (scheduled for future purchase) can be deleted. Use this resource with caution.
 
-        > **Note:** Importing an active Savings Plan will add it to your Terraform state, but destroying it will only remove it from state - the actual Savings Plan will continue until its term ends.
+        > Importing an active Savings Plan will add it to your Terraform state, but destroying it will only remove it from state - the actual Savings Plan will continue until its term ends.
 
         ## Example Usage
 
@@ -557,15 +563,16 @@ class SavingsPlan(pulumi.CustomResource):
         $ pulumi import aws:savingsplans/savingsPlan:SavingsPlan example sp-12345678901234567
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.str] commitment: The hourly commitment, in USD. This is the amount you commit to pay per hour, regardless of actual usage.
                
                The following arguments are optional:
-        :param pulumi.Input[_builtins.str] purchase_time: The time at which to purchase the Savings Plan, in UTC format (YYYY-MM-DDTHH:MM:SSZ). If not specified, the plan is purchased immediately. Plans with a future purchase time are placed in `queued` state and can be deleted before they become active.
+        :param pulumi.Input[_builtins.str] purchase_time: The time at which to purchase the Savings Plan, in UTC format (`YYYY-MM-DDTHH:MM:SSZ`). If not specified, the plan is purchased immediately. Plans with a future purchase time are placed in `queued` state and can be deleted before they become active.
         :param pulumi.Input[_builtins.str] savings_plan_offering_id: The unique ID of a Savings Plan offering. You can find available offerings using the `aws savingsplans describe-savings-plans-offerings` CLI command.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[_builtins.str] upfront_payment_amount: The up-front payment amount.
+        :param pulumi.Input[_builtins.str] upfront_payment_amount: The up-front payment amount. Required for offerings with an `All Upfront` or `Partial Upfront` payment option. Must be omitted for `No Upfront` offerings.
         """
         ...
     @overload
@@ -576,9 +583,9 @@ class SavingsPlan(pulumi.CustomResource):
         """
         Provides an AWS Savings Plan resource.
 
-        > **WARNING:** Savings Plans represent a financial commitment. Once a Savings Plan becomes active, it **cannot be cancelled or deleted**. Only Savings Plans in the `queued` state (scheduled for future purchase) can be deleted. Use this resource with caution.
+        > Savings Plans represent a financial commitment. Once a Savings Plan becomes active, it **cannot be cancelled or deleted**. Only Savings Plans in the `queued` state (scheduled for future purchase) can be deleted. Use this resource with caution.
 
-        > **Note:** Importing an active Savings Plan will add it to your Terraform state, but destroying it will only remove it from state - the actual Savings Plan will continue until its term ends.
+        > Importing an active Savings Plan will add it to your Terraform state, but destroying it will only remove it from state - the actual Savings Plan will continue until its term ends.
 
         ## Example Usage
 
@@ -620,6 +627,7 @@ class SavingsPlan(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:savingsplans/savingsPlan:SavingsPlan example sp-12345678901234567
         ```
+
 
         :param str resource_name: The name of the resource.
         :param SavingsPlanArgs args: The arguments to use to populate this resource's properties.
@@ -636,12 +644,12 @@ class SavingsPlan(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 commitment: Optional[pulumi.Input[_builtins.str]] = None,
-                 purchase_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 savings_plan_offering_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['SavingsPlanTimeoutsArgs', 'SavingsPlanTimeoutsArgsDict']]] = None,
-                 upfront_payment_amount: Optional[pulumi.Input[_builtins.str]] = None,
+                 commitment: pulumi.Input[Optional[_builtins.str]] = None,
+                 purchase_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 savings_plan_offering_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['SavingsPlanTimeoutsArgs', 'SavingsPlanTimeoutsArgsDict']]] = None,
+                 upfront_payment_amount: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -688,29 +696,29 @@ class SavingsPlan(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            commitment: Optional[pulumi.Input[_builtins.str]] = None,
-            currency: Optional[pulumi.Input[_builtins.str]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            ec2_instance_family: Optional[pulumi.Input[_builtins.str]] = None,
-            end: Optional[pulumi.Input[_builtins.str]] = None,
-            offering_id: Optional[pulumi.Input[_builtins.str]] = None,
-            payment_option: Optional[pulumi.Input[_builtins.str]] = None,
-            product_types: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            purchase_time: Optional[pulumi.Input[_builtins.str]] = None,
-            recurring_payment_amount: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            returnable_until: Optional[pulumi.Input[_builtins.str]] = None,
-            savings_plan_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            savings_plan_id: Optional[pulumi.Input[_builtins.str]] = None,
-            savings_plan_offering_id: Optional[pulumi.Input[_builtins.str]] = None,
-            savings_plan_type: Optional[pulumi.Input[_builtins.str]] = None,
-            start: Optional[pulumi.Input[_builtins.str]] = None,
-            state: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            term_duration_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-            timeouts: Optional[pulumi.Input[Union['SavingsPlanTimeoutsArgs', 'SavingsPlanTimeoutsArgsDict']]] = None,
-            upfront_payment_amount: Optional[pulumi.Input[_builtins.str]] = None) -> 'SavingsPlan':
+            commitment: pulumi.Input[Optional[_builtins.str]] = None,
+            currency: pulumi.Input[Optional[_builtins.str]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            ec2_instance_family: pulumi.Input[Optional[_builtins.str]] = None,
+            end: pulumi.Input[Optional[_builtins.str]] = None,
+            offering_id: pulumi.Input[Optional[_builtins.str]] = None,
+            payment_option: pulumi.Input[Optional[_builtins.str]] = None,
+            product_types: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            purchase_time: pulumi.Input[Optional[_builtins.str]] = None,
+            recurring_payment_amount: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            returnable_until: pulumi.Input[Optional[_builtins.str]] = None,
+            savings_plan_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            savings_plan_id: pulumi.Input[Optional[_builtins.str]] = None,
+            savings_plan_offering_id: pulumi.Input[Optional[_builtins.str]] = None,
+            savings_plan_type: pulumi.Input[Optional[_builtins.str]] = None,
+            start: pulumi.Input[Optional[_builtins.str]] = None,
+            state: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            term_duration_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+            timeouts: pulumi.Input[Optional[Union['SavingsPlanTimeoutsArgs', 'SavingsPlanTimeoutsArgsDict']]] = None,
+            upfront_payment_amount: pulumi.Input[Optional[_builtins.str]] = None) -> 'SavingsPlan':
         """
         Get an existing SavingsPlan resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -728,7 +736,7 @@ class SavingsPlan(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] offering_id: The ID of the offering.
         :param pulumi.Input[_builtins.str] payment_option: The payment option for the Savings Plan (e.g., `All Upfront`, `Partial Upfront`, `No Upfront`).
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] product_types: The product types.
-        :param pulumi.Input[_builtins.str] purchase_time: The time at which to purchase the Savings Plan, in UTC format (YYYY-MM-DDTHH:MM:SSZ). If not specified, the plan is purchased immediately. Plans with a future purchase time are placed in `queued` state and can be deleted before they become active.
+        :param pulumi.Input[_builtins.str] purchase_time: The time at which to purchase the Savings Plan, in UTC format (`YYYY-MM-DDTHH:MM:SSZ`). If not specified, the plan is purchased immediately. Plans with a future purchase time are placed in `queued` state and can be deleted before they become active.
         :param pulumi.Input[_builtins.str] recurring_payment_amount: The recurring payment amount.
         :param pulumi.Input[_builtins.str] region: The AWS Region.
         :param pulumi.Input[_builtins.str] returnable_until: The recurring payment amount.
@@ -741,7 +749,7 @@ class SavingsPlan(pulumi.CustomResource):
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         :param pulumi.Input[_builtins.int] term_duration_in_seconds: The duration of the term, in seconds.
-        :param pulumi.Input[_builtins.str] upfront_payment_amount: The up-front payment amount.
+        :param pulumi.Input[_builtins.str] upfront_payment_amount: The up-front payment amount. Required for offerings with an `All Upfront` or `Partial Upfront` payment option. Must be omitted for `No Upfront` offerings.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -816,6 +824,7 @@ class SavingsPlan(pulumi.CustomResource):
 
     @_builtins.property
     @pulumi.getter(name="offeringId")
+    @_utilities.deprecated("""offering_id is deprecated. Use savings_plan_offering_id instead.""")
     def offering_id(self) -> pulumi.Output[_builtins.str]:
         """
         The ID of the offering.
@@ -840,9 +849,9 @@ class SavingsPlan(pulumi.CustomResource):
 
     @_builtins.property
     @pulumi.getter(name="purchaseTime")
-    def purchase_time(self) -> pulumi.Output[Optional[_builtins.str]]:
+    def purchase_time(self) -> pulumi.Output[_builtins.str]:
         """
-        The time at which to purchase the Savings Plan, in UTC format (YYYY-MM-DDTHH:MM:SSZ). If not specified, the plan is purchased immediately. Plans with a future purchase time are placed in `queued` state and can be deleted before they become active.
+        The time at which to purchase the Savings Plan, in UTC format (`YYYY-MM-DDTHH:MM:SSZ`). If not specified, the plan is purchased immediately. Plans with a future purchase time are placed in `queued` state and can be deleted before they become active.
         """
         return pulumi.get(self, "purchase_time")
 
@@ -949,9 +958,9 @@ class SavingsPlan(pulumi.CustomResource):
 
     @_builtins.property
     @pulumi.getter(name="upfrontPaymentAmount")
-    def upfront_payment_amount(self) -> pulumi.Output[Optional[_builtins.str]]:
+    def upfront_payment_amount(self) -> pulumi.Output[_builtins.str]:
         """
-        The up-front payment amount.
+        The up-front payment amount. Required for offerings with an `All Upfront` or `Partial Upfront` payment option. Must be omitted for `No Upfront` offerings.
         """
         return pulumi.get(self, "upfront_payment_amount")
 

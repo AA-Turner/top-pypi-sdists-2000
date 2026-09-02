@@ -25,6 +25,7 @@ class ProactiveEngagementArgs:
                  enabled: pulumi.Input[_builtins.bool]):
         """
         The set of arguments for constructing a ProactiveEngagement resource.
+
         :param pulumi.Input[Sequence[pulumi.Input['ProactiveEngagementEmergencyContactArgs']]] emergency_contacts: One or more emergency contacts. You must provide at least one phone number in the emergency contact list. See `emergency_contacts`.
         :param pulumi.Input[_builtins.bool] enabled: Boolean value indicating if Proactive Engagement should be enabled or not.
         """
@@ -59,10 +60,11 @@ class ProactiveEngagementArgs:
 @pulumi.input_type
 class _ProactiveEngagementState:
     def __init__(__self__, *,
-                 emergency_contacts: Optional[pulumi.Input[Sequence[pulumi.Input['ProactiveEngagementEmergencyContactArgs']]]] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None):
+                 emergency_contacts: pulumi.Input[Optional[Sequence[pulumi.Input['ProactiveEngagementEmergencyContactArgs']]]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None):
         """
         Input properties used for looking up and filtering ProactiveEngagement resources.
+
         :param pulumi.Input[Sequence[pulumi.Input['ProactiveEngagementEmergencyContactArgs']]] emergency_contacts: One or more emergency contacts. You must provide at least one phone number in the emergency contact list. See `emergency_contacts`.
         :param pulumi.Input[_builtins.bool] enabled: Boolean value indicating if Proactive Engagement should be enabled or not.
         """
@@ -73,26 +75,26 @@ class _ProactiveEngagementState:
 
     @_builtins.property
     @pulumi.getter(name="emergencyContacts")
-    def emergency_contacts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ProactiveEngagementEmergencyContactArgs']]]]:
+    def emergency_contacts(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ProactiveEngagementEmergencyContactArgs']]]]:
         """
         One or more emergency contacts. You must provide at least one phone number in the emergency contact list. See `emergency_contacts`.
         """
         return pulumi.get(self, "emergency_contacts")
 
     @emergency_contacts.setter
-    def emergency_contacts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ProactiveEngagementEmergencyContactArgs']]]]):
+    def emergency_contacts(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ProactiveEngagementEmergencyContactArgs']]]]):
         pulumi.set(self, "emergency_contacts", value)
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Boolean value indicating if Proactive Engagement should be enabled or not.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
 
@@ -102,8 +104,8 @@ class ProactiveEngagement(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 emergency_contacts: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProactiveEngagementEmergencyContactArgs', 'ProactiveEngagementEmergencyContactArgsDict']]]]] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
+                 emergency_contacts: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ProactiveEngagementEmergencyContactArgs', 'ProactiveEngagementEmergencyContactArgsDict']]]]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
                  __props__=None):
         """
         Resource for managing a AWS Shield Proactive Engagement.
@@ -133,7 +135,6 @@ class ProactiveEngagement(pulumi.CustomResource):
             }))
         example_drt_access_role_arn_association = aws.shield.DrtAccessRoleArnAssociation("example", role_arn=example_role.arn)
         example = aws.shield.ProactiveEngagement("example",
-            enabled=True,
             emergency_contacts=[
                 {
                     "contact_notes": "Notes",
@@ -146,6 +147,7 @@ class ProactiveEngagement(pulumi.CustomResource):
                     "phone_number": "+12358132134",
                 },
             ],
+            enabled=True,
             opts = pulumi.ResourceOptions(depends_on=[example_drt_access_role_arn_association]))
         example_role_policy_attachment = aws.iam.RolePolicyAttachment("example",
             role=example_role.name,
@@ -163,6 +165,7 @@ class ProactiveEngagement(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:shield/proactiveEngagement:ProactiveEngagement example 123456789012
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -203,7 +206,6 @@ class ProactiveEngagement(pulumi.CustomResource):
             }))
         example_drt_access_role_arn_association = aws.shield.DrtAccessRoleArnAssociation("example", role_arn=example_role.arn)
         example = aws.shield.ProactiveEngagement("example",
-            enabled=True,
             emergency_contacts=[
                 {
                     "contact_notes": "Notes",
@@ -216,6 +218,7 @@ class ProactiveEngagement(pulumi.CustomResource):
                     "phone_number": "+12358132134",
                 },
             ],
+            enabled=True,
             opts = pulumi.ResourceOptions(depends_on=[example_drt_access_role_arn_association]))
         example_role_policy_attachment = aws.iam.RolePolicyAttachment("example",
             role=example_role.name,
@@ -234,6 +237,7 @@ class ProactiveEngagement(pulumi.CustomResource):
         $ pulumi import aws:shield/proactiveEngagement:ProactiveEngagement example 123456789012
         ```
 
+
         :param str resource_name: The name of the resource.
         :param ProactiveEngagementArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -249,8 +253,8 @@ class ProactiveEngagement(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 emergency_contacts: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProactiveEngagementEmergencyContactArgs', 'ProactiveEngagementEmergencyContactArgsDict']]]]] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
+                 emergency_contacts: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ProactiveEngagementEmergencyContactArgs', 'ProactiveEngagementEmergencyContactArgsDict']]]]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -276,8 +280,8 @@ class ProactiveEngagement(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            emergency_contacts: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProactiveEngagementEmergencyContactArgs', 'ProactiveEngagementEmergencyContactArgsDict']]]]] = None,
-            enabled: Optional[pulumi.Input[_builtins.bool]] = None) -> 'ProactiveEngagement':
+            emergency_contacts: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ProactiveEngagementEmergencyContactArgs', 'ProactiveEngagementEmergencyContactArgsDict']]]]] = None,
+            enabled: pulumi.Input[Optional[_builtins.bool]] = None) -> 'ProactiveEngagement':
         """
         Get an existing ProactiveEngagement resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

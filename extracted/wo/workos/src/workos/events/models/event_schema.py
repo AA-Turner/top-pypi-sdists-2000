@@ -3,12 +3,23 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, ClassVar, Dict, Union, cast
-from workos._types import _raise_deserialize_error
+from typing import Any, ClassVar, Union, cast
 
+from workos._types import _raise_deserialize_error
 from workos.common.models.action_authentication_denied import ActionAuthenticationDenied
 from workos.common.models.action_user_registration_denied import (
     ActionUserRegistrationDenied,
+)
+from workos.common.models.agent_blueprint_created import AgentBlueprintCreated
+from workos.common.models.agent_blueprint_deleted import AgentBlueprintDeleted
+from workos.common.models.agent_blueprint_updated import AgentBlueprintUpdated
+from workos.common.models.agent_instance_created import AgentInstanceCreated
+from workos.common.models.agent_instance_deleted import AgentInstanceDeleted
+from workos.common.models.agent_instance_session_created import (
+    AgentInstanceSessionCreated,
+)
+from workos.common.models.agent_instance_session_revoked import (
+    AgentInstanceSessionRevoked,
 )
 from workos.common.models.agent_registration_claim_attempt_created import (
     AgentRegistrationClaimAttemptCreated,
@@ -25,6 +36,7 @@ from workos.common.models.agent_registration_expired import AgentRegistrationExp
 from workos.common.models.agent_registration_organization_switched import (
     AgentRegistrationOrganizationSwitched,
 )
+from workos.common.models.agent_registration_refreshed import AgentRegistrationRefreshed
 from workos.common.models.agent_registration_revoked import AgentRegistrationRevoked
 from workos.common.models.api_key_created import ApiKeyCreated
 from workos.common.models.api_key_revoked import ApiKeyRevoked
@@ -145,6 +157,10 @@ from workos.common.models.pipes_connected_account_reauthorization_needed import 
     PipesConnectedAccountReauthorizationNeeded,
 )
 from workos.common.models.radar_challenge_created import RadarChallengeCreated
+from workos.common.models.resource_export_completed import ResourceExportCompleted
+from workos.common.models.resource_export_created import ResourceExportCreated
+from workos.common.models.resource_export_downloaded import ResourceExportDownloaded
+from workos.common.models.resource_export_failed import ResourceExportFailed
 from workos.common.models.role_created import RoleCreated
 from workos.common.models.role_deleted import RoleDeleted
 from workos.common.models.role_updated import RoleUpdated
@@ -176,15 +192,15 @@ from workos.common.models.waitlist_user_denied import WaitlistUserDenied
 class EventSchemaUnknown:
     """Unknown variant of EventSchema not yet recognized by this SDK version."""
 
-    raw_data: Dict[str, Any]
+    raw_data: dict[str, Any]
     """The raw payload, preserved so callers can still inspect the data."""
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "EventSchemaUnknown":
+    def from_dict(cls, data: dict[str, Any]) -> EventSchemaUnknown:
         """Wrap raw data in an unknown variant."""
         return cls(raw_data=data)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Return the original raw data."""
         return dict(self.raw_data)
 
@@ -192,6 +208,13 @@ class EventSchemaUnknown:
 EventSchemaVariant = Union[
     ActionAuthenticationDenied,
     ActionUserRegistrationDenied,
+    AgentBlueprintCreated,
+    AgentBlueprintDeleted,
+    AgentBlueprintUpdated,
+    AgentInstanceCreated,
+    AgentInstanceDeleted,
+    AgentInstanceSessionCreated,
+    AgentInstanceSessionRevoked,
     AgentRegistrationClaimAttemptCreated,
     AgentRegistrationClaimCompleted,
     AgentRegistrationCreated,
@@ -199,6 +222,7 @@ EventSchemaVariant = Union[
     AgentRegistrationDeleted,
     AgentRegistrationExpired,
     AgentRegistrationOrganizationSwitched,
+    AgentRegistrationRefreshed,
     AgentRegistrationRevoked,
     ApiKeyCreated,
     ApiKeyRevoked,
@@ -277,6 +301,10 @@ EventSchemaVariant = Union[
     PipesConnectedAccountDisconnected,
     PipesConnectedAccountReauthorizationNeeded,
     RadarChallengeCreated,
+    ResourceExportCompleted,
+    ResourceExportCreated,
+    ResourceExportDownloaded,
+    ResourceExportFailed,
     RoleCreated,
     RoleDeleted,
     RoleUpdated,
@@ -307,9 +335,16 @@ EventSchemaVariant = Union[
 class EventSchema:
     """An event emitted by WorkOS."""
 
-    _DISPATCH: ClassVar[Dict[str, type]] = {
+    _DISPATCH: ClassVar[dict[str, type]] = {
         "action.authentication.denied": ActionAuthenticationDenied,
         "action.user_registration.denied": ActionUserRegistrationDenied,
+        "agent.blueprint.created": AgentBlueprintCreated,
+        "agent.blueprint.deleted": AgentBlueprintDeleted,
+        "agent.blueprint.updated": AgentBlueprintUpdated,
+        "agent.instance.created": AgentInstanceCreated,
+        "agent.instance.deleted": AgentInstanceDeleted,
+        "agent.instance.session.created": AgentInstanceSessionCreated,
+        "agent.instance.session.revoked": AgentInstanceSessionRevoked,
         "agent.registration.claim.attempt.created": AgentRegistrationClaimAttemptCreated,
         "agent.registration.claim.completed": AgentRegistrationClaimCompleted,
         "agent.registration.created": AgentRegistrationCreated,
@@ -317,6 +352,7 @@ class EventSchema:
         "agent.registration.deleted": AgentRegistrationDeleted,
         "agent.registration.expired": AgentRegistrationExpired,
         "agent.registration.organization.switched": AgentRegistrationOrganizationSwitched,
+        "agent.registration.refreshed": AgentRegistrationRefreshed,
         "agent.registration.revoked": AgentRegistrationRevoked,
         "api_key.created": ApiKeyCreated,
         "api_key.revoked": ApiKeyRevoked,
@@ -395,6 +431,10 @@ class EventSchema:
         "pipes.connected_account.disconnected": PipesConnectedAccountDisconnected,
         "pipes.connected_account.reauthorization_needed": PipesConnectedAccountReauthorizationNeeded,
         "radar.challenge_created": RadarChallengeCreated,
+        "resource_export.completed": ResourceExportCompleted,
+        "resource_export.created": ResourceExportCreated,
+        "resource_export.downloaded": ResourceExportDownloaded,
+        "resource_export.failed": ResourceExportFailed,
         "role.created": RoleCreated,
         "role.deleted": RoleDeleted,
         "role.updated": RoleUpdated,
@@ -421,7 +461,7 @@ class EventSchema:
     }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "EventSchemaVariant":
+    def from_dict(cls, data: dict[str, Any]) -> EventSchemaVariant:
         """Deserialize from a dictionary, dispatching to the correct variant."""
         if "event" not in data:
             _raise_deserialize_error(

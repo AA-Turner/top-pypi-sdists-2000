@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-from typing import List, Tuple, Union
 
 import numpy as np
 import scipy.sparse as sp
@@ -25,7 +24,8 @@ from cvxpy.constraints.constraint import Constraint
 from cvxpy.utilities.power_tools import pow_high, pow_mid, pow_neg
 
 
-def pnorm(x, p: Union[int, str] = 2, axis=None, keepdims: bool = False, max_denom: int = 1024):
+def pnorm(x, p: int | str = 2, axis: int | tuple[int, ...] | None = None,
+          keepdims: bool = False, max_denom: int = 1024, approx: bool = True):
     """Factory function for a mathematical p-norm.
 
     Parameters
@@ -43,6 +43,8 @@ def pnorm(x, p: Union[int, str] = 2, axis=None, keepdims: bool = False, max_deno
         return norm1(x, axis=axis, keepdims=keepdims)
     elif p in [np.inf, 'inf', 'Inf']:
         return norm_inf(x, axis=axis, keepdims=keepdims)
+    elif approx:
+        return PnormApprox(x, p=p, axis=axis, keepdims=keepdims, max_denom=max_denom)
     else:
         return Pnorm(x, p=p, axis=axis, keepdims=keepdims, max_denom=max_denom)
 
@@ -118,30 +120,24 @@ class Pnorm(AxisAtom):
     """
     _allow_complex = True
 
-    def __init__(self, x, p: int = 2, axis=None,
+    def __init__(self, x, p: int = 2, axis: None | int | tuple[int, ...] = None,
                  keepdims: bool = False, max_denom: int = 1024) -> None:
-        if p < 0:
-            # TODO(akshayka): Why do we accept p < 0?
-            self.p, _ = pow_neg(p, max_denom)
-        elif 0 < p < 1:
-            self.p, _ = pow_mid(p, max_denom)
-        elif p > 1:
-            self.p, _ = pow_high(p, max_denom)
-        elif p == 1:
+        if p == 1:
             raise ValueError('Use the norm1 class to instantiate a one norm.')
         elif p == 'inf' or p == 'Inf' or p == np.inf:
             raise ValueError('Use the norm_inf class to instantiate an '
                              'infinity norm.')
-        else:
+        elif p == 0:
             raise ValueError('Invalid p: {}'.format(p))
-        self.approx_error = float(abs(self.p - p))
+        self.max_denom = max_denom
         self.original_p = p
+        self.p = p
+        self.approx_error = 0.0
         super(Pnorm, self).__init__(x, axis=axis, keepdims=keepdims)
 
     def numeric(self, values):
         """Returns the p-norm of x.
         """
-
         if self.axis is None:
             values = np.array(values[0]).flatten()
         else:
@@ -157,14 +153,15 @@ class Pnorm(AxisAtom):
 
     def validate_arguments(self) -> None:
         super(Pnorm, self).validate_arguments()
-        # TODO(akshayka): Why is axis not supported for other norms?
         if self.axis is not None and self.p != 2:
             raise ValueError(
                 "The axis parameter is only supported for p=2.")
+        if isinstance(self.axis, tuple):
+            raise ValueError("The axis parameter of pnorm must be an int or None.")
         if self.p < 1 and self.args[0].is_complex():
             raise ValueError("pnorm(x, p) cannot have x complex for p < 1.")
 
-    def sign_from_args(self) -> Tuple[bool, bool]:
+    def sign_from_args(self) -> tuple[bool, bool]:
         """Returns sign (is positive, is negative) of the expression.
         """
         # Always positive.
@@ -183,12 +180,12 @@ class Pnorm(AxisAtom):
     def is_atom_log_log_convex(self) -> bool:
         """Is the atom log-log convex?
         """
-        return True
+        return self.p > 0
 
     def is_atom_log_log_concave(self) -> bool:
         """Is the atom log-log concave?
         """
-        return False
+        return self.p < 0
 
     def is_incr(self, idx) -> bool:
         """Is the composition non-decreasing in argument idx?
@@ -206,14 +203,17 @@ class Pnorm(AxisAtom):
         return False
 
     def get_data(self):
-        return [self.p, self.axis]
+        return [self.original_p, self.axis, self.keepdims, self.max_denom]
 
     def name(self) -> str:
-        return "%s(%s, %s)" % (self.__class__.__name__,
-                               self.args[0].name(),
-                               self.p)
+        return f"{type(self).__name__}({self.args[0].name()}, {self.p})"
 
-    def _domain(self) -> List[Constraint]:
+    def format_labeled(self) -> str:
+        if self._label is not None:
+            return self._label
+        return f"{type(self).__name__}({self.args[0].format_labeled()}, {self.p})"
+
+    def _domain(self) -> list[Constraint]:
         """Returns constraints describing the domain of the node.
         """
         if self.p < 1 and self.p != 0:
@@ -249,16 +249,41 @@ class Pnorm(AxisAtom):
         # Outside domain.
         if self.p < 1 and np.any(value <= 0):
             return None
-        D_null = sp.csc_matrix((rows, 1), dtype='float64')
+        D_null = sp.csc_array((rows, 1), dtype='float64')
+        # Ensure vector semantics and consistent column-major vectorization.
+        value = np.asarray(value).ravel(order='F')
         denominator = np.linalg.norm(value, float(self.p))
-        denominator = np.power(denominator, self.p - 1)
+        exp = float(self.p - 1)  # cast to float to avoid dtype=object with Fraction exponents
+        denominator = np.power(denominator, exp)
         # Subgrad is 0 when denom is 0 (or undefined).
         if denominator == 0:
             if self.p > 1:
                 return D_null.todense()
             else:
                 return None
+        if self.p > 1:
+            # nominator = sign(value) * |value|^(p-1)
+            nominator = np.sign(value) * np.power(np.abs(value), exp)
         else:
-            nominator = np.power(value, self.p - 1)
-            frac = np.divide(nominator, denominator)
-            return np.reshape(frac, (frac.size, 1))
+            nominator = np.power(value, exp)
+        frac = np.divide(nominator, denominator)
+        return np.reshape(frac, (frac.size, 1))
+
+
+class PnormApprox(Pnorm):
+    """Pnorm with SOC-based rational approximation of p.
+
+    Overrides ``self.p`` with a rational approximation of the exponent,
+    which allows canonicalization via second-order cones.
+    """
+
+    def __init__(self, x, p: int = 2, axis: None | int | tuple[int, ...] = None,
+                 keepdims: bool = False, max_denom: int = 1024) -> None:
+        super().__init__(x, p=p, axis=axis, keepdims=keepdims, max_denom=max_denom)
+        if p < 0:
+            self.p, _ = pow_neg(p, max_denom)
+        elif 0 < p < 1:
+            self.p, _ = pow_mid(p, max_denom)
+        elif p > 1:
+            self.p, _ = pow_high(p, max_denom)
+        self.approx_error = float(abs(self.p - p))

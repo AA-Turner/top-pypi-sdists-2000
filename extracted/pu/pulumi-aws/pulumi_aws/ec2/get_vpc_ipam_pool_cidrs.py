@@ -126,17 +126,17 @@ def get_vpc_ipam_pool_cidrs(filters: Optional[Sequence[Union['GetVpcIpamPoolCidr
     import pulumi
     import pulumi_aws as aws
 
-    c = aws.ec2.get_vpc_ipam_pool_cidrs(ipam_pool_id="ipam-pool-123",
-        filters=[{
+    c = aws.ec2.get_vpc_ipam_pool_cidrs(filters=[{
             "name": "cidr",
             "values": ["10.*"],
-        }])
+        }],
+        ipam_pool_id="ipam-pool-123")
     mycidrs = [cidr.cidr for cidr in c.ipam_pool_cidrs if cidr.state == "provisioned"]
     pls = aws.ec2.ManagedPrefixList("pls",
-        entries=[{"key": k, "value": v} for k, v in mycidrs].apply(lambda entries: [{
-            "cidr": entry["value"],
-            "description": entry["value"],
-        } for entry in entries]),
+        entries=[{
+            "cidr": entry,
+            "description": entry,
+        } for entry in mycidrs],
         name=f"IPAM Pool ({test['id']}) Cidrs",
         address_family="IPv4",
         max_entries=len(mycidrs))
@@ -160,9 +160,9 @@ def get_vpc_ipam_pool_cidrs(filters: Optional[Sequence[Union['GetVpcIpamPoolCidr
         ipam_pool_cidrs=pulumi.get(__ret__, 'ipam_pool_cidrs'),
         ipam_pool_id=pulumi.get(__ret__, 'ipam_pool_id'),
         region=pulumi.get(__ret__, 'region'))
-def get_vpc_ipam_pool_cidrs_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['GetVpcIpamPoolCidrsFilterArgs', 'GetVpcIpamPoolCidrsFilterArgsDict']]]]] = None,
-                                   ipam_pool_id: Optional[pulumi.Input[_builtins.str]] = None,
-                                   region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_vpc_ipam_pool_cidrs_output(filters: pulumi.Input[Optional[Optional[Sequence[Union['GetVpcIpamPoolCidrsFilterArgs', 'GetVpcIpamPoolCidrsFilterArgsDict']]]]] = None,
+                                   ipam_pool_id: pulumi.Input[Optional[_builtins.str]] = None,
+                                   region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                    opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetVpcIpamPoolCidrsResult]:
     """
     `ec2_get_vpc_ipam_pool_cidrs` provides details about an IPAM pool.
@@ -196,17 +196,17 @@ def get_vpc_ipam_pool_cidrs_output(filters: Optional[pulumi.Input[Optional[Seque
     import pulumi
     import pulumi_aws as aws
 
-    c = aws.ec2.get_vpc_ipam_pool_cidrs(ipam_pool_id="ipam-pool-123",
-        filters=[{
+    c = aws.ec2.get_vpc_ipam_pool_cidrs(filters=[{
             "name": "cidr",
             "values": ["10.*"],
-        }])
+        }],
+        ipam_pool_id="ipam-pool-123")
     mycidrs = [cidr.cidr for cidr in c.ipam_pool_cidrs if cidr.state == "provisioned"]
     pls = aws.ec2.ManagedPrefixList("pls",
-        entries=[{"key": k, "value": v} for k, v in mycidrs].apply(lambda entries: [{
-            "cidr": entry["value"],
-            "description": entry["value"],
-        } for entry in entries]),
+        entries=[{
+            "cidr": entry,
+            "description": entry,
+        } for entry in mycidrs],
         name=f"IPAM Pool ({test['id']}) Cidrs",
         address_family="IPv4",
         max_entries=len(mycidrs))

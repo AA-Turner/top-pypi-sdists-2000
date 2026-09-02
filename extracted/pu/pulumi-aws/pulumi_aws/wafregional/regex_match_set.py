@@ -21,11 +21,12 @@ __all__ = ['RegexMatchSetArgs', 'RegexMatchSet']
 @pulumi.input_type
 class RegexMatchSetArgs:
     def __init__(__self__, *,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 regex_match_tuples: Optional[pulumi.Input[Sequence[pulumi.Input['RegexMatchSetRegexMatchTupleArgs']]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 regex_match_tuples: pulumi.Input[Optional[Sequence[pulumi.Input['RegexMatchSetRegexMatchTupleArgs']]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a RegexMatchSet resource.
+
         :param pulumi.Input[_builtins.str] name: The name or description of the Regex Match Set.
         :param pulumi.Input[Sequence[pulumi.Input['RegexMatchSetRegexMatchTupleArgs']]] regex_match_tuples: The regular expression pattern that you want AWS WAF to search for in web requests, the location in requests that you want AWS WAF to search, and other settings. See below.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -39,49 +40,50 @@ class RegexMatchSetArgs:
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name or description of the Regex Match Set.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="regexMatchTuples")
-    def regex_match_tuples(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['RegexMatchSetRegexMatchTupleArgs']]]]:
+    def regex_match_tuples(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['RegexMatchSetRegexMatchTupleArgs']]]]:
         """
         The regular expression pattern that you want AWS WAF to search for in web requests, the location in requests that you want AWS WAF to search, and other settings. See below.
         """
         return pulumi.get(self, "regex_match_tuples")
 
     @regex_match_tuples.setter
-    def regex_match_tuples(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['RegexMatchSetRegexMatchTupleArgs']]]]):
+    def regex_match_tuples(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['RegexMatchSetRegexMatchTupleArgs']]]]):
         pulumi.set(self, "regex_match_tuples", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _RegexMatchSetState:
     def __init__(__self__, *,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 regex_match_tuples: Optional[pulumi.Input[Sequence[pulumi.Input['RegexMatchSetRegexMatchTupleArgs']]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 regex_match_tuples: pulumi.Input[Optional[Sequence[pulumi.Input['RegexMatchSetRegexMatchTupleArgs']]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering RegexMatchSet resources.
+
         :param pulumi.Input[_builtins.str] name: The name or description of the Regex Match Set.
         :param pulumi.Input[Sequence[pulumi.Input['RegexMatchSetRegexMatchTupleArgs']]] regex_match_tuples: The regular expression pattern that you want AWS WAF to search for in web requests, the location in requests that you want AWS WAF to search, and other settings. See below.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -95,38 +97,38 @@ class _RegexMatchSetState:
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name or description of the Regex Match Set.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="regexMatchTuples")
-    def regex_match_tuples(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['RegexMatchSetRegexMatchTupleArgs']]]]:
+    def regex_match_tuples(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['RegexMatchSetRegexMatchTupleArgs']]]]:
         """
         The regular expression pattern that you want AWS WAF to search for in web requests, the location in requests that you want AWS WAF to search, and other settings. See below.
         """
         return pulumi.get(self, "regex_match_tuples")
 
     @regex_match_tuples.setter
-    def regex_match_tuples(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['RegexMatchSetRegexMatchTupleArgs']]]]):
+    def regex_match_tuples(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['RegexMatchSetRegexMatchTupleArgs']]]]):
         pulumi.set(self, "regex_match_tuples", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -136,9 +138,9 @@ class RegexMatchSet(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 regex_match_tuples: Optional[pulumi.Input[Sequence[pulumi.Input[Union['RegexMatchSetRegexMatchTupleArgs', 'RegexMatchSetRegexMatchTupleArgsDict']]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 regex_match_tuples: pulumi.Input[Optional[Sequence[pulumi.Input[Union['RegexMatchSetRegexMatchTupleArgs', 'RegexMatchSetRegexMatchTupleArgsDict']]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides a WAF Regional Regex Match Set Resource
@@ -156,7 +158,6 @@ class RegexMatchSet(pulumi.CustomResource):
                 "two",
             ])
         example = aws.wafregional.RegexMatchSet("example",
-            name="example",
             regex_match_tuples=[{
                 "field_to_match": {
                     "data": "User-Agent",
@@ -164,7 +165,8 @@ class RegexMatchSet(pulumi.CustomResource):
                 },
                 "regex_pattern_set_id": example_regex_pattern_set.id,
                 "text_transformation": "NONE",
-            }])
+            }],
+            name="example")
         ```
 
         ## Import
@@ -174,6 +176,7 @@ class RegexMatchSet(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:wafregional/regexMatchSet:RegexMatchSet example a1b2c3d4-d5f6-7777-8888-9999aaaabbbbcccc
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -203,7 +206,6 @@ class RegexMatchSet(pulumi.CustomResource):
                 "two",
             ])
         example = aws.wafregional.RegexMatchSet("example",
-            name="example",
             regex_match_tuples=[{
                 "field_to_match": {
                     "data": "User-Agent",
@@ -211,7 +213,8 @@ class RegexMatchSet(pulumi.CustomResource):
                 },
                 "regex_pattern_set_id": example_regex_pattern_set.id,
                 "text_transformation": "NONE",
-            }])
+            }],
+            name="example")
         ```
 
         ## Import
@@ -221,6 +224,7 @@ class RegexMatchSet(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:wafregional/regexMatchSet:RegexMatchSet example a1b2c3d4-d5f6-7777-8888-9999aaaabbbbcccc
         ```
+
 
         :param str resource_name: The name of the resource.
         :param RegexMatchSetArgs args: The arguments to use to populate this resource's properties.
@@ -237,9 +241,9 @@ class RegexMatchSet(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 regex_match_tuples: Optional[pulumi.Input[Sequence[pulumi.Input[Union['RegexMatchSetRegexMatchTupleArgs', 'RegexMatchSetRegexMatchTupleArgsDict']]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 regex_match_tuples: pulumi.Input[Optional[Sequence[pulumi.Input[Union['RegexMatchSetRegexMatchTupleArgs', 'RegexMatchSetRegexMatchTupleArgsDict']]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -262,9 +266,9 @@ class RegexMatchSet(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            regex_match_tuples: Optional[pulumi.Input[Sequence[pulumi.Input[Union['RegexMatchSetRegexMatchTupleArgs', 'RegexMatchSetRegexMatchTupleArgsDict']]]]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'RegexMatchSet':
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            regex_match_tuples: pulumi.Input[Optional[Sequence[pulumi.Input[Union['RegexMatchSetRegexMatchTupleArgs', 'RegexMatchSetRegexMatchTupleArgsDict']]]]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'RegexMatchSet':
         """
         Get an existing RegexMatchSet resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

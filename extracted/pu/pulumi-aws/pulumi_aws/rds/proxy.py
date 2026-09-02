@@ -24,31 +24,32 @@ class ProxyArgs:
                  engine_family: pulumi.Input[_builtins.str],
                  role_arn: pulumi.Input[_builtins.str],
                  vpc_subnet_ids: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
-                 auths: Optional[pulumi.Input[Sequence[pulumi.Input['ProxyAuthArgs']]]] = None,
-                 debug_logging: Optional[pulumi.Input[_builtins.bool]] = None,
-                 default_auth_scheme: Optional[pulumi.Input[_builtins.str]] = None,
-                 endpoint_network_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 idle_client_timeout: Optional[pulumi.Input[_builtins.int]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 require_tls: Optional[pulumi.Input[_builtins.bool]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 target_connection_network_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 auths: pulumi.Input[Optional[Sequence[pulumi.Input['ProxyAuthArgs']]]] = None,
+                 debug_logging: pulumi.Input[Optional[_builtins.bool]] = None,
+                 default_auth_scheme: pulumi.Input[Optional[_builtins.str]] = None,
+                 endpoint_network_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 idle_client_timeout: pulumi.Input[Optional[_builtins.int]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 require_tls: pulumi.Input[Optional[_builtins.bool]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 target_connection_network_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a Proxy resource.
-        :param pulumi.Input[_builtins.str] engine_family: The kinds of databases that the proxy can connect to. This value determines which database network protocol the proxy recognizes when it interprets network traffic to and from the database. For Aurora MySQL, RDS for MariaDB, and RDS for MySQL databases, specify `MYSQL`. For Aurora PostgreSQL and RDS for PostgreSQL databases, specify `POSTGRESQL`. For RDS for Microsoft SQL Server, specify `SQLSERVER`. Valid values are `MYSQL`, `POSTGRESQL`, and `SQLSERVER`.
-        :param pulumi.Input[_builtins.str] role_arn: The Amazon Resource Name (ARN) of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
+
+        :param pulumi.Input[_builtins.str] engine_family: Kinds of databases that the proxy can connect to. This value determines which database network protocol the proxy recognizes when it interprets network traffic to and from the database. For Aurora MySQL, RDS for MariaDB, and RDS for MySQL databases, specify `MYSQL`. For Aurora PostgreSQL and RDS for PostgreSQL databases, specify `POSTGRESQL`. For RDS for Microsoft SQL Server, specify `SQLSERVER`. Valid values are `MYSQL`, `POSTGRESQL`, and `SQLSERVER`.
+        :param pulumi.Input[_builtins.str] role_arn: ARN of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] vpc_subnet_ids: One or more VPC subnet IDs to associate with the new proxy.
-        :param pulumi.Input[Sequence[pulumi.Input['ProxyAuthArgs']]] auths: Configuration block(s) with authorization mechanisms to connect to the associated instances or clusters. Required when `default_auth_scheme` is `NONE` or unspecified. Described below.
+        :param pulumi.Input[Sequence[pulumi.Input['ProxyAuthArgs']]] auths: Configuration block(s) with authorization mechanisms to connect to the associated instances or clusters. Required when `default_auth_scheme` is `NONE` or unspecified. See the `auth` block below.
         :param pulumi.Input[_builtins.bool] debug_logging: Whether the proxy includes detailed information about SQL statements in its logs. This information helps you to debug issues involving SQL behavior or the performance and scalability of the proxy connections. The debug information includes the text of SQL statements that you submit through the proxy. Thus, only enable this setting when needed for debugging, and only when you have security measures in place to safeguard any sensitive information that appears in the logs.
         :param pulumi.Input[_builtins.str] default_auth_scheme: Default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. Valid values are `NONE` and `IAM_AUTH`. Defaults to `NONE`.
         :param pulumi.Input[_builtins.str] endpoint_network_type: Network type of the DB proxy endpoint. Valid values are `IPV4`, `IPV6` and `DUAL`. Defaults to `IPV4`. If `IPV6` is specified, the subnets associated with the proxy must be IPv6-only, and `target_connection_network_type` must be `IPV6`.
-        :param pulumi.Input[_builtins.int] idle_client_timeout: The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database.
-        :param pulumi.Input[_builtins.str] name: The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.
+        :param pulumi.Input[_builtins.int] idle_client_timeout: Number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database.
+        :param pulumi.Input[_builtins.str] name: Identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.bool] require_tls: A Boolean parameter that specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A mapping of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[_builtins.bool] require_tls: Whether TLS encryption is required for connections to the proxy. Enabling this setting enforces encrypted TLS connections to the proxy.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[_builtins.str] target_connection_network_type: Network type that the proxy uses to connect to the target database. Valid values are `IPV4` and `IPV6`. Defaults to `IPV4`.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] vpc_security_group_ids: One or more VPC security group IDs to associate with the new proxy.
         """
@@ -82,7 +83,7 @@ class ProxyArgs:
     @pulumi.getter(name="engineFamily")
     def engine_family(self) -> pulumi.Input[_builtins.str]:
         """
-        The kinds of databases that the proxy can connect to. This value determines which database network protocol the proxy recognizes when it interprets network traffic to and from the database. For Aurora MySQL, RDS for MariaDB, and RDS for MySQL databases, specify `MYSQL`. For Aurora PostgreSQL and RDS for PostgreSQL databases, specify `POSTGRESQL`. For RDS for Microsoft SQL Server, specify `SQLSERVER`. Valid values are `MYSQL`, `POSTGRESQL`, and `SQLSERVER`.
+        Kinds of databases that the proxy can connect to. This value determines which database network protocol the proxy recognizes when it interprets network traffic to and from the database. For Aurora MySQL, RDS for MariaDB, and RDS for MySQL databases, specify `MYSQL`. For Aurora PostgreSQL and RDS for PostgreSQL databases, specify `POSTGRESQL`. For RDS for Microsoft SQL Server, specify `SQLSERVER`. Valid values are `MYSQL`, `POSTGRESQL`, and `SQLSERVER`.
         """
         return pulumi.get(self, "engine_family")
 
@@ -94,7 +95,7 @@ class ProxyArgs:
     @pulumi.getter(name="roleArn")
     def role_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
+        ARN of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
         """
         return pulumi.get(self, "role_arn")
 
@@ -116,173 +117,174 @@ class ProxyArgs:
 
     @_builtins.property
     @pulumi.getter
-    def auths(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ProxyAuthArgs']]]]:
+    def auths(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ProxyAuthArgs']]]]:
         """
-        Configuration block(s) with authorization mechanisms to connect to the associated instances or clusters. Required when `default_auth_scheme` is `NONE` or unspecified. Described below.
+        Configuration block(s) with authorization mechanisms to connect to the associated instances or clusters. Required when `default_auth_scheme` is `NONE` or unspecified. See the `auth` block below.
         """
         return pulumi.get(self, "auths")
 
     @auths.setter
-    def auths(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ProxyAuthArgs']]]]):
+    def auths(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ProxyAuthArgs']]]]):
         pulumi.set(self, "auths", value)
 
     @_builtins.property
     @pulumi.getter(name="debugLogging")
-    def debug_logging(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def debug_logging(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the proxy includes detailed information about SQL statements in its logs. This information helps you to debug issues involving SQL behavior or the performance and scalability of the proxy connections. The debug information includes the text of SQL statements that you submit through the proxy. Thus, only enable this setting when needed for debugging, and only when you have security measures in place to safeguard any sensitive information that appears in the logs.
         """
         return pulumi.get(self, "debug_logging")
 
     @debug_logging.setter
-    def debug_logging(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def debug_logging(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "debug_logging", value)
 
     @_builtins.property
     @pulumi.getter(name="defaultAuthScheme")
-    def default_auth_scheme(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def default_auth_scheme(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. Valid values are `NONE` and `IAM_AUTH`. Defaults to `NONE`.
         """
         return pulumi.get(self, "default_auth_scheme")
 
     @default_auth_scheme.setter
-    def default_auth_scheme(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def default_auth_scheme(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "default_auth_scheme", value)
 
     @_builtins.property
     @pulumi.getter(name="endpointNetworkType")
-    def endpoint_network_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def endpoint_network_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Network type of the DB proxy endpoint. Valid values are `IPV4`, `IPV6` and `DUAL`. Defaults to `IPV4`. If `IPV6` is specified, the subnets associated with the proxy must be IPv6-only, and `target_connection_network_type` must be `IPV6`.
         """
         return pulumi.get(self, "endpoint_network_type")
 
     @endpoint_network_type.setter
-    def endpoint_network_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def endpoint_network_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "endpoint_network_type", value)
 
     @_builtins.property
     @pulumi.getter(name="idleClientTimeout")
-    def idle_client_timeout(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def idle_client_timeout(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database.
+        Number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database.
         """
         return pulumi.get(self, "idle_client_timeout")
 
     @idle_client_timeout.setter
-    def idle_client_timeout(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def idle_client_timeout(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "idle_client_timeout", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.
+        Identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="requireTls")
-    def require_tls(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def require_tls(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        A Boolean parameter that specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy.
+        Whether TLS encryption is required for connections to the proxy. Enabling this setting enforces encrypted TLS connections to the proxy.
         """
         return pulumi.get(self, "require_tls")
 
     @require_tls.setter
-    def require_tls(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def require_tls(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "require_tls", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A mapping of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="targetConnectionNetworkType")
-    def target_connection_network_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def target_connection_network_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Network type that the proxy uses to connect to the target database. Valid values are `IPV4` and `IPV6`. Defaults to `IPV4`.
         """
         return pulumi.get(self, "target_connection_network_type")
 
     @target_connection_network_type.setter
-    def target_connection_network_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def target_connection_network_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "target_connection_network_type", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcSecurityGroupIds")
-    def vpc_security_group_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def vpc_security_group_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         One or more VPC security group IDs to associate with the new proxy.
         """
         return pulumi.get(self, "vpc_security_group_ids")
 
     @vpc_security_group_ids.setter
-    def vpc_security_group_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def vpc_security_group_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "vpc_security_group_ids", value)
 
 
 @pulumi.input_type
 class _ProxyState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 auths: Optional[pulumi.Input[Sequence[pulumi.Input['ProxyAuthArgs']]]] = None,
-                 debug_logging: Optional[pulumi.Input[_builtins.bool]] = None,
-                 default_auth_scheme: Optional[pulumi.Input[_builtins.str]] = None,
-                 endpoint: Optional[pulumi.Input[_builtins.str]] = None,
-                 endpoint_network_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 engine_family: Optional[pulumi.Input[_builtins.str]] = None,
-                 idle_client_timeout: Optional[pulumi.Input[_builtins.int]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 require_tls: Optional[pulumi.Input[_builtins.bool]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 target_connection_network_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 vpc_subnet_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 auths: pulumi.Input[Optional[Sequence[pulumi.Input['ProxyAuthArgs']]]] = None,
+                 debug_logging: pulumi.Input[Optional[_builtins.bool]] = None,
+                 default_auth_scheme: pulumi.Input[Optional[_builtins.str]] = None,
+                 endpoint: pulumi.Input[Optional[_builtins.str]] = None,
+                 endpoint_network_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 engine_family: pulumi.Input[Optional[_builtins.str]] = None,
+                 idle_client_timeout: pulumi.Input[Optional[_builtins.int]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 require_tls: pulumi.Input[Optional[_builtins.bool]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 target_connection_network_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 vpc_subnet_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         Input properties used for looking up and filtering Proxy resources.
-        :param pulumi.Input[_builtins.str] arn: The Amazon Resource Name (ARN) for the proxy.
-        :param pulumi.Input[Sequence[pulumi.Input['ProxyAuthArgs']]] auths: Configuration block(s) with authorization mechanisms to connect to the associated instances or clusters. Required when `default_auth_scheme` is `NONE` or unspecified. Described below.
+
+        :param pulumi.Input[_builtins.str] arn: ARN for the proxy.
+        :param pulumi.Input[Sequence[pulumi.Input['ProxyAuthArgs']]] auths: Configuration block(s) with authorization mechanisms to connect to the associated instances or clusters. Required when `default_auth_scheme` is `NONE` or unspecified. See the `auth` block below.
         :param pulumi.Input[_builtins.bool] debug_logging: Whether the proxy includes detailed information about SQL statements in its logs. This information helps you to debug issues involving SQL behavior or the performance and scalability of the proxy connections. The debug information includes the text of SQL statements that you submit through the proxy. Thus, only enable this setting when needed for debugging, and only when you have security measures in place to safeguard any sensitive information that appears in the logs.
         :param pulumi.Input[_builtins.str] default_auth_scheme: Default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. Valid values are `NONE` and `IAM_AUTH`. Defaults to `NONE`.
-        :param pulumi.Input[_builtins.str] endpoint: The endpoint that you can use to connect to the proxy. You include the endpoint value in the connection string for a database client application.
+        :param pulumi.Input[_builtins.str] endpoint: Endpoint that you can use to connect to the proxy. You include the endpoint value in the connection string for a database client application.
         :param pulumi.Input[_builtins.str] endpoint_network_type: Network type of the DB proxy endpoint. Valid values are `IPV4`, `IPV6` and `DUAL`. Defaults to `IPV4`. If `IPV6` is specified, the subnets associated with the proxy must be IPv6-only, and `target_connection_network_type` must be `IPV6`.
-        :param pulumi.Input[_builtins.str] engine_family: The kinds of databases that the proxy can connect to. This value determines which database network protocol the proxy recognizes when it interprets network traffic to and from the database. For Aurora MySQL, RDS for MariaDB, and RDS for MySQL databases, specify `MYSQL`. For Aurora PostgreSQL and RDS for PostgreSQL databases, specify `POSTGRESQL`. For RDS for Microsoft SQL Server, specify `SQLSERVER`. Valid values are `MYSQL`, `POSTGRESQL`, and `SQLSERVER`.
-        :param pulumi.Input[_builtins.int] idle_client_timeout: The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database.
-        :param pulumi.Input[_builtins.str] name: The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.
+        :param pulumi.Input[_builtins.str] engine_family: Kinds of databases that the proxy can connect to. This value determines which database network protocol the proxy recognizes when it interprets network traffic to and from the database. For Aurora MySQL, RDS for MariaDB, and RDS for MySQL databases, specify `MYSQL`. For Aurora PostgreSQL and RDS for PostgreSQL databases, specify `POSTGRESQL`. For RDS for Microsoft SQL Server, specify `SQLSERVER`. Valid values are `MYSQL`, `POSTGRESQL`, and `SQLSERVER`.
+        :param pulumi.Input[_builtins.int] idle_client_timeout: Number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database.
+        :param pulumi.Input[_builtins.str] name: Identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.bool] require_tls: A Boolean parameter that specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy.
-        :param pulumi.Input[_builtins.str] role_arn: The Amazon Resource Name (ARN) of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A mapping of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        :param pulumi.Input[_builtins.bool] require_tls: Whether TLS encryption is required for connections to the proxy. Enabling this setting enforces encrypted TLS connections to the proxy.
+        :param pulumi.Input[_builtins.str] role_arn: ARN of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         :param pulumi.Input[_builtins.str] target_connection_network_type: Network type that the proxy uses to connect to the target database. Valid values are `IPV4` and `IPV6`. Defaults to `IPV4`.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] vpc_security_group_ids: One or more VPC security group IDs to associate with the new proxy.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] vpc_subnet_ids: One or more VPC subnet IDs to associate with the new proxy.
@@ -324,206 +326,206 @@ class _ProxyState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) for the proxy.
+        ARN for the proxy.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def auths(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ProxyAuthArgs']]]]:
+    def auths(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ProxyAuthArgs']]]]:
         """
-        Configuration block(s) with authorization mechanisms to connect to the associated instances or clusters. Required when `default_auth_scheme` is `NONE` or unspecified. Described below.
+        Configuration block(s) with authorization mechanisms to connect to the associated instances or clusters. Required when `default_auth_scheme` is `NONE` or unspecified. See the `auth` block below.
         """
         return pulumi.get(self, "auths")
 
     @auths.setter
-    def auths(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ProxyAuthArgs']]]]):
+    def auths(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ProxyAuthArgs']]]]):
         pulumi.set(self, "auths", value)
 
     @_builtins.property
     @pulumi.getter(name="debugLogging")
-    def debug_logging(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def debug_logging(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the proxy includes detailed information about SQL statements in its logs. This information helps you to debug issues involving SQL behavior or the performance and scalability of the proxy connections. The debug information includes the text of SQL statements that you submit through the proxy. Thus, only enable this setting when needed for debugging, and only when you have security measures in place to safeguard any sensitive information that appears in the logs.
         """
         return pulumi.get(self, "debug_logging")
 
     @debug_logging.setter
-    def debug_logging(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def debug_logging(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "debug_logging", value)
 
     @_builtins.property
     @pulumi.getter(name="defaultAuthScheme")
-    def default_auth_scheme(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def default_auth_scheme(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. Valid values are `NONE` and `IAM_AUTH`. Defaults to `NONE`.
         """
         return pulumi.get(self, "default_auth_scheme")
 
     @default_auth_scheme.setter
-    def default_auth_scheme(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def default_auth_scheme(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "default_auth_scheme", value)
 
     @_builtins.property
     @pulumi.getter
-    def endpoint(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def endpoint(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The endpoint that you can use to connect to the proxy. You include the endpoint value in the connection string for a database client application.
+        Endpoint that you can use to connect to the proxy. You include the endpoint value in the connection string for a database client application.
         """
         return pulumi.get(self, "endpoint")
 
     @endpoint.setter
-    def endpoint(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def endpoint(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "endpoint", value)
 
     @_builtins.property
     @pulumi.getter(name="endpointNetworkType")
-    def endpoint_network_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def endpoint_network_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Network type of the DB proxy endpoint. Valid values are `IPV4`, `IPV6` and `DUAL`. Defaults to `IPV4`. If `IPV6` is specified, the subnets associated with the proxy must be IPv6-only, and `target_connection_network_type` must be `IPV6`.
         """
         return pulumi.get(self, "endpoint_network_type")
 
     @endpoint_network_type.setter
-    def endpoint_network_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def endpoint_network_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "endpoint_network_type", value)
 
     @_builtins.property
     @pulumi.getter(name="engineFamily")
-    def engine_family(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def engine_family(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The kinds of databases that the proxy can connect to. This value determines which database network protocol the proxy recognizes when it interprets network traffic to and from the database. For Aurora MySQL, RDS for MariaDB, and RDS for MySQL databases, specify `MYSQL`. For Aurora PostgreSQL and RDS for PostgreSQL databases, specify `POSTGRESQL`. For RDS for Microsoft SQL Server, specify `SQLSERVER`. Valid values are `MYSQL`, `POSTGRESQL`, and `SQLSERVER`.
+        Kinds of databases that the proxy can connect to. This value determines which database network protocol the proxy recognizes when it interprets network traffic to and from the database. For Aurora MySQL, RDS for MariaDB, and RDS for MySQL databases, specify `MYSQL`. For Aurora PostgreSQL and RDS for PostgreSQL databases, specify `POSTGRESQL`. For RDS for Microsoft SQL Server, specify `SQLSERVER`. Valid values are `MYSQL`, `POSTGRESQL`, and `SQLSERVER`.
         """
         return pulumi.get(self, "engine_family")
 
     @engine_family.setter
-    def engine_family(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def engine_family(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "engine_family", value)
 
     @_builtins.property
     @pulumi.getter(name="idleClientTimeout")
-    def idle_client_timeout(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def idle_client_timeout(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database.
+        Number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database.
         """
         return pulumi.get(self, "idle_client_timeout")
 
     @idle_client_timeout.setter
-    def idle_client_timeout(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def idle_client_timeout(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "idle_client_timeout", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.
+        Identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="requireTls")
-    def require_tls(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def require_tls(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        A Boolean parameter that specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy.
+        Whether TLS encryption is required for connections to the proxy. Enabling this setting enforces encrypted TLS connections to the proxy.
         """
         return pulumi.get(self, "require_tls")
 
     @require_tls.setter
-    def require_tls(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def require_tls(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "require_tls", value)
 
     @_builtins.property
     @pulumi.getter(name="roleArn")
-    def role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
+        ARN of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
         """
         return pulumi.get(self, "role_arn")
 
     @role_arn.setter
-    def role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "role_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A mapping of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter(name="targetConnectionNetworkType")
-    def target_connection_network_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def target_connection_network_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Network type that the proxy uses to connect to the target database. Valid values are `IPV4` and `IPV6`. Defaults to `IPV4`.
         """
         return pulumi.get(self, "target_connection_network_type")
 
     @target_connection_network_type.setter
-    def target_connection_network_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def target_connection_network_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "target_connection_network_type", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcSecurityGroupIds")
-    def vpc_security_group_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def vpc_security_group_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         One or more VPC security group IDs to associate with the new proxy.
         """
         return pulumi.get(self, "vpc_security_group_ids")
 
     @vpc_security_group_ids.setter
-    def vpc_security_group_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def vpc_security_group_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "vpc_security_group_ids", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcSubnetIds")
-    def vpc_subnet_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def vpc_subnet_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         One or more VPC subnet IDs to associate with the new proxy.
         """
         return pulumi.get(self, "vpc_subnet_ids")
 
     @vpc_subnet_ids.setter
-    def vpc_subnet_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def vpc_subnet_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "vpc_subnet_ids", value)
 
 
@@ -533,20 +535,20 @@ class Proxy(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 auths: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProxyAuthArgs', 'ProxyAuthArgsDict']]]]] = None,
-                 debug_logging: Optional[pulumi.Input[_builtins.bool]] = None,
-                 default_auth_scheme: Optional[pulumi.Input[_builtins.str]] = None,
-                 endpoint_network_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 engine_family: Optional[pulumi.Input[_builtins.str]] = None,
-                 idle_client_timeout: Optional[pulumi.Input[_builtins.int]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 require_tls: Optional[pulumi.Input[_builtins.bool]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 target_connection_network_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 vpc_subnet_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 auths: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ProxyAuthArgs', 'ProxyAuthArgsDict']]]]] = None,
+                 debug_logging: pulumi.Input[Optional[_builtins.bool]] = None,
+                 default_auth_scheme: pulumi.Input[Optional[_builtins.str]] = None,
+                 endpoint_network_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 engine_family: pulumi.Input[Optional[_builtins.str]] = None,
+                 idle_client_timeout: pulumi.Input[Optional[_builtins.int]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 require_tls: pulumi.Input[Optional[_builtins.bool]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 target_connection_network_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 vpc_subnet_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Provides an RDS DB proxy resource. For additional information, see the [RDS User Guide](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html).
@@ -562,6 +564,12 @@ class Proxy(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.rds.Proxy("example",
+            auths=[{
+                "auth_scheme": "SECRETS",
+                "description": "example",
+                "iam_auth": "DISABLED",
+                "secret_arn": example_aws_secretsmanager_secret["arn"],
+            }],
             name="example",
             debug_logging=False,
             engine_family="MYSQL",
@@ -570,12 +578,6 @@ class Proxy(pulumi.CustomResource):
             role_arn=example_aws_iam_role["arn"],
             vpc_security_group_ids=[example_aws_security_group["id"]],
             vpc_subnet_ids=[example_aws_subnet["id"]],
-            auths=[{
-                "auth_scheme": "SECRETS",
-                "description": "example",
-                "iam_auth": "DISABLED",
-                "secret_arn": example_aws_secretsmanager_secret["arn"],
-            }],
             tags={
                 "Name": "example",
                 "Key": "value",
@@ -590,23 +592,24 @@ class Proxy(pulumi.CustomResource):
 
         ```python
         import pulumi
+        from typing import Any
         import pulumi_aws as aws
         import pulumi_std as std
 
-        available = aws.get_availability_zones(exclude_zone_ids=["use1-az3"],
-            state="available",
-            filters=[{
+        available = aws.get_availability_zones(filters=[{
                 "name": "opt-in-status",
                 "values": ["opt-in-not-required"],
-            }])
+            }],
+            exclude_zone_ids=["use1-az3"],
+            state="available")
         example = aws.ec2.Vpc("example", cidr_block="10.0.0.0/16")
-        example_subnet = []
-        for range in [{"value": i} for i in range(0, 5)]:
-            example_subnet.append(aws.ec2.Subnet(f"example-{range['value']}",
-                cidr_block=example.cidr_block.apply(lambda cidr_block: std.cidrsubnet_output(input=cidr_block,
+        example_subnet: list[aws.ec2.Subnet] = []
+        for example_subnet_range in [{"value": i} for i in range(0, 5)]:
+            example_subnet.append(aws.ec2.Subnet(f"example-{example_subnet_range['value']}",
+                cidr_block=std.cidrsubnet_output(input=example.cidr_block,
                     newbits=8,
-                    netnum=range["value"])).apply(lambda invoke: invoke.result),
-                availability_zone=available.names[range["value"]],
+                    netnum=example_subnet_range["value"]).result,
+                availability_zone=available.names[example_subnet_range["value"]],
                 vpc_id=example.id))
         example_proxy = aws.rds.Proxy("example",
             name="example",
@@ -621,7 +624,8 @@ class Proxy(pulumi.CustomResource):
 
         example = aws.rds.Proxy("example",
             name="example",
-            vpc_subnet_ids=[example_aws_subnet["id"]])
+            vpc_subnet_ids=[example_aws_subnet["id"]],
+            opts = pulumi.ResourceOptions(ignore_changes=["vpcSubnetIds"]))
         ```
 
         ## Import
@@ -632,19 +636,20 @@ class Proxy(pulumi.CustomResource):
         $ pulumi import aws:rds/proxy:Proxy example example
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['ProxyAuthArgs', 'ProxyAuthArgsDict']]]] auths: Configuration block(s) with authorization mechanisms to connect to the associated instances or clusters. Required when `default_auth_scheme` is `NONE` or unspecified. Described below.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ProxyAuthArgs', 'ProxyAuthArgsDict']]]] auths: Configuration block(s) with authorization mechanisms to connect to the associated instances or clusters. Required when `default_auth_scheme` is `NONE` or unspecified. See the `auth` block below.
         :param pulumi.Input[_builtins.bool] debug_logging: Whether the proxy includes detailed information about SQL statements in its logs. This information helps you to debug issues involving SQL behavior or the performance and scalability of the proxy connections. The debug information includes the text of SQL statements that you submit through the proxy. Thus, only enable this setting when needed for debugging, and only when you have security measures in place to safeguard any sensitive information that appears in the logs.
         :param pulumi.Input[_builtins.str] default_auth_scheme: Default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. Valid values are `NONE` and `IAM_AUTH`. Defaults to `NONE`.
         :param pulumi.Input[_builtins.str] endpoint_network_type: Network type of the DB proxy endpoint. Valid values are `IPV4`, `IPV6` and `DUAL`. Defaults to `IPV4`. If `IPV6` is specified, the subnets associated with the proxy must be IPv6-only, and `target_connection_network_type` must be `IPV6`.
-        :param pulumi.Input[_builtins.str] engine_family: The kinds of databases that the proxy can connect to. This value determines which database network protocol the proxy recognizes when it interprets network traffic to and from the database. For Aurora MySQL, RDS for MariaDB, and RDS for MySQL databases, specify `MYSQL`. For Aurora PostgreSQL and RDS for PostgreSQL databases, specify `POSTGRESQL`. For RDS for Microsoft SQL Server, specify `SQLSERVER`. Valid values are `MYSQL`, `POSTGRESQL`, and `SQLSERVER`.
-        :param pulumi.Input[_builtins.int] idle_client_timeout: The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database.
-        :param pulumi.Input[_builtins.str] name: The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.
+        :param pulumi.Input[_builtins.str] engine_family: Kinds of databases that the proxy can connect to. This value determines which database network protocol the proxy recognizes when it interprets network traffic to and from the database. For Aurora MySQL, RDS for MariaDB, and RDS for MySQL databases, specify `MYSQL`. For Aurora PostgreSQL and RDS for PostgreSQL databases, specify `POSTGRESQL`. For RDS for Microsoft SQL Server, specify `SQLSERVER`. Valid values are `MYSQL`, `POSTGRESQL`, and `SQLSERVER`.
+        :param pulumi.Input[_builtins.int] idle_client_timeout: Number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database.
+        :param pulumi.Input[_builtins.str] name: Identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.bool] require_tls: A Boolean parameter that specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy.
-        :param pulumi.Input[_builtins.str] role_arn: The Amazon Resource Name (ARN) of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A mapping of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[_builtins.bool] require_tls: Whether TLS encryption is required for connections to the proxy. Enabling this setting enforces encrypted TLS connections to the proxy.
+        :param pulumi.Input[_builtins.str] role_arn: ARN of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[_builtins.str] target_connection_network_type: Network type that the proxy uses to connect to the target database. Valid values are `IPV4` and `IPV6`. Defaults to `IPV4`.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] vpc_security_group_ids: One or more VPC security group IDs to associate with the new proxy.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] vpc_subnet_ids: One or more VPC subnet IDs to associate with the new proxy.
@@ -669,6 +674,12 @@ class Proxy(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.rds.Proxy("example",
+            auths=[{
+                "auth_scheme": "SECRETS",
+                "description": "example",
+                "iam_auth": "DISABLED",
+                "secret_arn": example_aws_secretsmanager_secret["arn"],
+            }],
             name="example",
             debug_logging=False,
             engine_family="MYSQL",
@@ -677,12 +688,6 @@ class Proxy(pulumi.CustomResource):
             role_arn=example_aws_iam_role["arn"],
             vpc_security_group_ids=[example_aws_security_group["id"]],
             vpc_subnet_ids=[example_aws_subnet["id"]],
-            auths=[{
-                "auth_scheme": "SECRETS",
-                "description": "example",
-                "iam_auth": "DISABLED",
-                "secret_arn": example_aws_secretsmanager_secret["arn"],
-            }],
             tags={
                 "Name": "example",
                 "Key": "value",
@@ -697,23 +702,24 @@ class Proxy(pulumi.CustomResource):
 
         ```python
         import pulumi
+        from typing import Any
         import pulumi_aws as aws
         import pulumi_std as std
 
-        available = aws.get_availability_zones(exclude_zone_ids=["use1-az3"],
-            state="available",
-            filters=[{
+        available = aws.get_availability_zones(filters=[{
                 "name": "opt-in-status",
                 "values": ["opt-in-not-required"],
-            }])
+            }],
+            exclude_zone_ids=["use1-az3"],
+            state="available")
         example = aws.ec2.Vpc("example", cidr_block="10.0.0.0/16")
-        example_subnet = []
-        for range in [{"value": i} for i in range(0, 5)]:
-            example_subnet.append(aws.ec2.Subnet(f"example-{range['value']}",
-                cidr_block=example.cidr_block.apply(lambda cidr_block: std.cidrsubnet_output(input=cidr_block,
+        example_subnet: list[aws.ec2.Subnet] = []
+        for example_subnet_range in [{"value": i} for i in range(0, 5)]:
+            example_subnet.append(aws.ec2.Subnet(f"example-{example_subnet_range['value']}",
+                cidr_block=std.cidrsubnet_output(input=example.cidr_block,
                     newbits=8,
-                    netnum=range["value"])).apply(lambda invoke: invoke.result),
-                availability_zone=available.names[range["value"]],
+                    netnum=example_subnet_range["value"]).result,
+                availability_zone=available.names[example_subnet_range["value"]],
                 vpc_id=example.id))
         example_proxy = aws.rds.Proxy("example",
             name="example",
@@ -728,7 +734,8 @@ class Proxy(pulumi.CustomResource):
 
         example = aws.rds.Proxy("example",
             name="example",
-            vpc_subnet_ids=[example_aws_subnet["id"]])
+            vpc_subnet_ids=[example_aws_subnet["id"]],
+            opts = pulumi.ResourceOptions(ignore_changes=["vpcSubnetIds"]))
         ```
 
         ## Import
@@ -738,6 +745,7 @@ class Proxy(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:rds/proxy:Proxy example example
         ```
+
 
         :param str resource_name: The name of the resource.
         :param ProxyArgs args: The arguments to use to populate this resource's properties.
@@ -754,20 +762,20 @@ class Proxy(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 auths: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProxyAuthArgs', 'ProxyAuthArgsDict']]]]] = None,
-                 debug_logging: Optional[pulumi.Input[_builtins.bool]] = None,
-                 default_auth_scheme: Optional[pulumi.Input[_builtins.str]] = None,
-                 endpoint_network_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 engine_family: Optional[pulumi.Input[_builtins.str]] = None,
-                 idle_client_timeout: Optional[pulumi.Input[_builtins.int]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 require_tls: Optional[pulumi.Input[_builtins.bool]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 target_connection_network_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 vpc_subnet_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 auths: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ProxyAuthArgs', 'ProxyAuthArgsDict']]]]] = None,
+                 debug_logging: pulumi.Input[Optional[_builtins.bool]] = None,
+                 default_auth_scheme: pulumi.Input[Optional[_builtins.str]] = None,
+                 endpoint_network_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 engine_family: pulumi.Input[Optional[_builtins.str]] = None,
+                 idle_client_timeout: pulumi.Input[Optional[_builtins.int]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 require_tls: pulumi.Input[Optional[_builtins.bool]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 target_connection_network_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 vpc_subnet_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -810,23 +818,23 @@ class Proxy(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            auths: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ProxyAuthArgs', 'ProxyAuthArgsDict']]]]] = None,
-            debug_logging: Optional[pulumi.Input[_builtins.bool]] = None,
-            default_auth_scheme: Optional[pulumi.Input[_builtins.str]] = None,
-            endpoint: Optional[pulumi.Input[_builtins.str]] = None,
-            endpoint_network_type: Optional[pulumi.Input[_builtins.str]] = None,
-            engine_family: Optional[pulumi.Input[_builtins.str]] = None,
-            idle_client_timeout: Optional[pulumi.Input[_builtins.int]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            require_tls: Optional[pulumi.Input[_builtins.bool]] = None,
-            role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            target_connection_network_type: Optional[pulumi.Input[_builtins.str]] = None,
-            vpc_security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            vpc_subnet_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None) -> 'Proxy':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            auths: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ProxyAuthArgs', 'ProxyAuthArgsDict']]]]] = None,
+            debug_logging: pulumi.Input[Optional[_builtins.bool]] = None,
+            default_auth_scheme: pulumi.Input[Optional[_builtins.str]] = None,
+            endpoint: pulumi.Input[Optional[_builtins.str]] = None,
+            endpoint_network_type: pulumi.Input[Optional[_builtins.str]] = None,
+            engine_family: pulumi.Input[Optional[_builtins.str]] = None,
+            idle_client_timeout: pulumi.Input[Optional[_builtins.int]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            require_tls: pulumi.Input[Optional[_builtins.bool]] = None,
+            role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            target_connection_network_type: pulumi.Input[Optional[_builtins.str]] = None,
+            vpc_security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            vpc_subnet_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None) -> 'Proxy':
         """
         Get an existing Proxy resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -834,20 +842,20 @@ class Proxy(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] arn: The Amazon Resource Name (ARN) for the proxy.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['ProxyAuthArgs', 'ProxyAuthArgsDict']]]] auths: Configuration block(s) with authorization mechanisms to connect to the associated instances or clusters. Required when `default_auth_scheme` is `NONE` or unspecified. Described below.
+        :param pulumi.Input[_builtins.str] arn: ARN for the proxy.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ProxyAuthArgs', 'ProxyAuthArgsDict']]]] auths: Configuration block(s) with authorization mechanisms to connect to the associated instances or clusters. Required when `default_auth_scheme` is `NONE` or unspecified. See the `auth` block below.
         :param pulumi.Input[_builtins.bool] debug_logging: Whether the proxy includes detailed information about SQL statements in its logs. This information helps you to debug issues involving SQL behavior or the performance and scalability of the proxy connections. The debug information includes the text of SQL statements that you submit through the proxy. Thus, only enable this setting when needed for debugging, and only when you have security measures in place to safeguard any sensitive information that appears in the logs.
         :param pulumi.Input[_builtins.str] default_auth_scheme: Default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. Valid values are `NONE` and `IAM_AUTH`. Defaults to `NONE`.
-        :param pulumi.Input[_builtins.str] endpoint: The endpoint that you can use to connect to the proxy. You include the endpoint value in the connection string for a database client application.
+        :param pulumi.Input[_builtins.str] endpoint: Endpoint that you can use to connect to the proxy. You include the endpoint value in the connection string for a database client application.
         :param pulumi.Input[_builtins.str] endpoint_network_type: Network type of the DB proxy endpoint. Valid values are `IPV4`, `IPV6` and `DUAL`. Defaults to `IPV4`. If `IPV6` is specified, the subnets associated with the proxy must be IPv6-only, and `target_connection_network_type` must be `IPV6`.
-        :param pulumi.Input[_builtins.str] engine_family: The kinds of databases that the proxy can connect to. This value determines which database network protocol the proxy recognizes when it interprets network traffic to and from the database. For Aurora MySQL, RDS for MariaDB, and RDS for MySQL databases, specify `MYSQL`. For Aurora PostgreSQL and RDS for PostgreSQL databases, specify `POSTGRESQL`. For RDS for Microsoft SQL Server, specify `SQLSERVER`. Valid values are `MYSQL`, `POSTGRESQL`, and `SQLSERVER`.
-        :param pulumi.Input[_builtins.int] idle_client_timeout: The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database.
-        :param pulumi.Input[_builtins.str] name: The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.
+        :param pulumi.Input[_builtins.str] engine_family: Kinds of databases that the proxy can connect to. This value determines which database network protocol the proxy recognizes when it interprets network traffic to and from the database. For Aurora MySQL, RDS for MariaDB, and RDS for MySQL databases, specify `MYSQL`. For Aurora PostgreSQL and RDS for PostgreSQL databases, specify `POSTGRESQL`. For RDS for Microsoft SQL Server, specify `SQLSERVER`. Valid values are `MYSQL`, `POSTGRESQL`, and `SQLSERVER`.
+        :param pulumi.Input[_builtins.int] idle_client_timeout: Number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database.
+        :param pulumi.Input[_builtins.str] name: Identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.bool] require_tls: A Boolean parameter that specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy.
-        :param pulumi.Input[_builtins.str] role_arn: The Amazon Resource Name (ARN) of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A mapping of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        :param pulumi.Input[_builtins.bool] require_tls: Whether TLS encryption is required for connections to the proxy. Enabling this setting enforces encrypted TLS connections to the proxy.
+        :param pulumi.Input[_builtins.str] role_arn: ARN of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         :param pulumi.Input[_builtins.str] target_connection_network_type: Network type that the proxy uses to connect to the target database. Valid values are `IPV4` and `IPV6`. Defaults to `IPV4`.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] vpc_security_group_ids: One or more VPC security group IDs to associate with the new proxy.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] vpc_subnet_ids: One or more VPC subnet IDs to associate with the new proxy.
@@ -879,7 +887,7 @@ class Proxy(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) for the proxy.
+        ARN for the proxy.
         """
         return pulumi.get(self, "arn")
 
@@ -887,7 +895,7 @@ class Proxy(pulumi.CustomResource):
     @pulumi.getter
     def auths(self) -> pulumi.Output[Optional[Sequence['outputs.ProxyAuth']]]:
         """
-        Configuration block(s) with authorization mechanisms to connect to the associated instances or clusters. Required when `default_auth_scheme` is `NONE` or unspecified. Described below.
+        Configuration block(s) with authorization mechanisms to connect to the associated instances or clusters. Required when `default_auth_scheme` is `NONE` or unspecified. See the `auth` block below.
         """
         return pulumi.get(self, "auths")
 
@@ -911,7 +919,7 @@ class Proxy(pulumi.CustomResource):
     @pulumi.getter
     def endpoint(self) -> pulumi.Output[_builtins.str]:
         """
-        The endpoint that you can use to connect to the proxy. You include the endpoint value in the connection string for a database client application.
+        Endpoint that you can use to connect to the proxy. You include the endpoint value in the connection string for a database client application.
         """
         return pulumi.get(self, "endpoint")
 
@@ -927,7 +935,7 @@ class Proxy(pulumi.CustomResource):
     @pulumi.getter(name="engineFamily")
     def engine_family(self) -> pulumi.Output[_builtins.str]:
         """
-        The kinds of databases that the proxy can connect to. This value determines which database network protocol the proxy recognizes when it interprets network traffic to and from the database. For Aurora MySQL, RDS for MariaDB, and RDS for MySQL databases, specify `MYSQL`. For Aurora PostgreSQL and RDS for PostgreSQL databases, specify `POSTGRESQL`. For RDS for Microsoft SQL Server, specify `SQLSERVER`. Valid values are `MYSQL`, `POSTGRESQL`, and `SQLSERVER`.
+        Kinds of databases that the proxy can connect to. This value determines which database network protocol the proxy recognizes when it interprets network traffic to and from the database. For Aurora MySQL, RDS for MariaDB, and RDS for MySQL databases, specify `MYSQL`. For Aurora PostgreSQL and RDS for PostgreSQL databases, specify `POSTGRESQL`. For RDS for Microsoft SQL Server, specify `SQLSERVER`. Valid values are `MYSQL`, `POSTGRESQL`, and `SQLSERVER`.
         """
         return pulumi.get(self, "engine_family")
 
@@ -935,7 +943,7 @@ class Proxy(pulumi.CustomResource):
     @pulumi.getter(name="idleClientTimeout")
     def idle_client_timeout(self) -> pulumi.Output[_builtins.int]:
         """
-        The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database.
+        Number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database.
         """
         return pulumi.get(self, "idle_client_timeout")
 
@@ -943,7 +951,7 @@ class Proxy(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[_builtins.str]:
         """
-        The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.
+        Identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.
         """
         return pulumi.get(self, "name")
 
@@ -959,7 +967,7 @@ class Proxy(pulumi.CustomResource):
     @pulumi.getter(name="requireTls")
     def require_tls(self) -> pulumi.Output[Optional[_builtins.bool]]:
         """
-        A Boolean parameter that specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy.
+        Whether TLS encryption is required for connections to the proxy. Enabling this setting enforces encrypted TLS connections to the proxy.
         """
         return pulumi.get(self, "require_tls")
 
@@ -967,7 +975,7 @@ class Proxy(pulumi.CustomResource):
     @pulumi.getter(name="roleArn")
     def role_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
+        ARN of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
         """
         return pulumi.get(self, "role_arn")
 
@@ -975,7 +983,7 @@ class Proxy(pulumi.CustomResource):
     @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, _builtins.str]]]:
         """
-        A mapping of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
@@ -983,7 +991,7 @@ class Proxy(pulumi.CustomResource):
     @pulumi.getter(name="tagsAll")
     def tags_all(self) -> pulumi.Output[Mapping[str, _builtins.str]]:
         """
-        A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 

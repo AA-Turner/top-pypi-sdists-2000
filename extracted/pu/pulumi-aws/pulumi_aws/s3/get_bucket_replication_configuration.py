@@ -27,13 +27,10 @@ class GetBucketReplicationConfigurationResult:
     """
     A collection of values returned by getBucketReplicationConfiguration.
     """
-    def __init__(__self__, bucket=None, id=None, region=None, role=None, rules=None):
+    def __init__(__self__, bucket=None, region=None, role=None, rules=None):
         if bucket and not isinstance(bucket, str):
             raise TypeError("Expected argument 'bucket' to be a str")
         pulumi.set(__self__, "bucket", bucket)
-        if id and not isinstance(id, str):
-            raise TypeError("Expected argument 'id' to be a str")
-        pulumi.set(__self__, "id", id)
         if region and not isinstance(region, str):
             raise TypeError("Expected argument 'region' to be a str")
         pulumi.set(__self__, "region", region)
@@ -47,15 +44,10 @@ class GetBucketReplicationConfigurationResult:
     @_builtins.property
     @pulumi.getter
     def bucket(self) -> _builtins.str:
+        """
+        ARN of the bucket where Amazon S3 stores the results.
+        """
         return pulumi.get(self, "bucket")
-
-    @_builtins.property
-    @pulumi.getter
-    def id(self) -> _builtins.str:
-        """
-        The provider-assigned unique ID for this managed resource.
-        """
-        return pulumi.get(self, "id")
 
     @_builtins.property
     @pulumi.getter
@@ -66,7 +58,7 @@ class GetBucketReplicationConfigurationResult:
     @pulumi.getter
     def role(self) -> _builtins.str:
         """
-        The ARN of the IAM role that Amazon S3 assumes when replicating objects.
+        ARN of the IAM role that Amazon S3 assumes when replicating objects.
         """
         return pulumi.get(self, "role")
 
@@ -74,7 +66,7 @@ class GetBucketReplicationConfigurationResult:
     @pulumi.getter
     def rules(self) -> Sequence['outputs.GetBucketReplicationConfigurationRuleResult']:
         """
-        An unordered list of configuration blocks that define the rules managing replication.
+        List of configuration blocks that define the rules managing replication. See `rule` Block below.
         """
         return pulumi.get(self, "rules")
 
@@ -86,7 +78,6 @@ class AwaitableGetBucketReplicationConfigurationResult(GetBucketReplicationConfi
             yield self
         return GetBucketReplicationConfigurationResult(
             bucket=self.bucket,
-            id=self.id,
             region=self.region,
             role=self.role,
             rules=self.rules)
@@ -110,7 +101,7 @@ def get_bucket_replication_configuration(bucket: Optional[_builtins.str] = None,
     ```
 
 
-    :param _builtins.str bucket: The name of the bucket to get the replication configuration for.
+    :param _builtins.str bucket: Name of the bucket to get the replication configuration for.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     """
     __args__ = dict()
@@ -121,12 +112,11 @@ def get_bucket_replication_configuration(bucket: Optional[_builtins.str] = None,
 
     return AwaitableGetBucketReplicationConfigurationResult(
         bucket=pulumi.get(__ret__, 'bucket'),
-        id=pulumi.get(__ret__, 'id'),
         region=pulumi.get(__ret__, 'region'),
         role=pulumi.get(__ret__, 'role'),
         rules=pulumi.get(__ret__, 'rules'))
-def get_bucket_replication_configuration_output(bucket: Optional[pulumi.Input[_builtins.str]] = None,
-                                                region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_bucket_replication_configuration_output(bucket: pulumi.Input[Optional[_builtins.str]] = None,
+                                                region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                                 opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetBucketReplicationConfigurationResult]:
     """
     Data source for managing an AWS S3 (Simple Storage) Bucket Replication Configuration.
@@ -143,7 +133,7 @@ def get_bucket_replication_configuration_output(bucket: Optional[pulumi.Input[_b
     ```
 
 
-    :param _builtins.str bucket: The name of the bucket to get the replication configuration for.
+    :param _builtins.str bucket: Name of the bucket to get the replication configuration for.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     """
     __args__ = dict()
@@ -153,7 +143,6 @@ def get_bucket_replication_configuration_output(bucket: Optional[pulumi.Input[_b
     __ret__ = pulumi.runtime.invoke_output('aws:s3/getBucketReplicationConfiguration:getBucketReplicationConfiguration', __args__, opts=opts, typ=GetBucketReplicationConfigurationResult)
     return __ret__.apply(lambda __response__: GetBucketReplicationConfigurationResult(
         bucket=pulumi.get(__response__, 'bucket'),
-        id=pulumi.get(__response__, 'id'),
         region=pulumi.get(__response__, 'region'),
         role=pulumi.get(__response__, 'role'),
         rules=pulumi.get(__response__, 'rules')))

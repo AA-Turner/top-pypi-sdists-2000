@@ -13,7 +13,6 @@ class UserIdentitiesGetItemProvider(str, Enum):
 
     APPLE_OAUTH = "AppleOAuth"
     BITBUCKET_OAUTH = "BitbucketOAuth"
-    DISCORD_OAUTH = "DiscordOAuth"
     GITHUB_OAUTH = "GithubOAuth"
     GIT_LAB_OAUTH = "GitLabOAuth"
     GOOGLE_OAUTH = "GoogleOAuth"
@@ -39,7 +38,6 @@ class UserIdentitiesGetItemProvider(str, Enum):
 UserIdentitiesGetItemProviderLiteral: TypeAlias = Literal[
     "AppleOAuth",
     "BitbucketOAuth",
-    "DiscordOAuth",
     "GithubOAuth",
     "GitLabOAuth",
     "GoogleOAuth",

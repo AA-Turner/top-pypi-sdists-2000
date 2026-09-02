@@ -21,9 +21,10 @@ class RedriveAllowPolicyArgs:
     def __init__(__self__, *,
                  queue_url: pulumi.Input[_builtins.str],
                  redrive_allow_policy: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a RedriveAllowPolicy resource.
+
         :param pulumi.Input[_builtins.str] queue_url: The URL of the SQS Queue to which to attach the policy
         :param pulumi.Input[_builtins.str] redrive_allow_policy: The JSON redrive allow policy for the SQS queue. Learn more in the [Amazon SQS dead-letter queues documentation](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html).
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -59,25 +60,26 @@ class RedriveAllowPolicyArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _RedriveAllowPolicyState:
     def __init__(__self__, *,
-                 queue_url: Optional[pulumi.Input[_builtins.str]] = None,
-                 redrive_allow_policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 queue_url: pulumi.Input[Optional[_builtins.str]] = None,
+                 redrive_allow_policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering RedriveAllowPolicy resources.
+
         :param pulumi.Input[_builtins.str] queue_url: The URL of the SQS Queue to which to attach the policy
         :param pulumi.Input[_builtins.str] redrive_allow_policy: The JSON redrive allow policy for the SQS queue. Learn more in the [Amazon SQS dead-letter queues documentation](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html).
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -91,38 +93,38 @@ class _RedriveAllowPolicyState:
 
     @_builtins.property
     @pulumi.getter(name="queueUrl")
-    def queue_url(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def queue_url(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The URL of the SQS Queue to which to attach the policy
         """
         return pulumi.get(self, "queue_url")
 
     @queue_url.setter
-    def queue_url(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def queue_url(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "queue_url", value)
 
     @_builtins.property
     @pulumi.getter(name="redriveAllowPolicy")
-    def redrive_allow_policy(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def redrive_allow_policy(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The JSON redrive allow policy for the SQS queue. Learn more in the [Amazon SQS dead-letter queues documentation](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html).
         """
         return pulumi.get(self, "redrive_allow_policy")
 
     @redrive_allow_policy.setter
-    def redrive_allow_policy(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def redrive_allow_policy(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "redrive_allow_policy", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -132,9 +134,9 @@ class RedriveAllowPolicy(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 queue_url: Optional[pulumi.Input[_builtins.str]] = None,
-                 redrive_allow_policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 queue_url: pulumi.Input[Optional[_builtins.str]] = None,
+                 redrive_allow_policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides a SQS Queue Redrive Allow Policy resource.
@@ -163,11 +165,18 @@ class RedriveAllowPolicy(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `queue_url` (String) URL of the SQS Queue.
+
         Using `pulumi import`, import SQS Queue Redrive Allow Policies using the queue URL. For example:
 
         ```sh
         $ pulumi import aws:sqs/redriveAllowPolicy:RedriveAllowPolicy test https://queue.amazonaws.com/123456789012/myqueue
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -208,11 +217,18 @@ class RedriveAllowPolicy(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `queue_url` (String) URL of the SQS Queue.
+
         Using `pulumi import`, import SQS Queue Redrive Allow Policies using the queue URL. For example:
 
         ```sh
         $ pulumi import aws:sqs/redriveAllowPolicy:RedriveAllowPolicy test https://queue.amazonaws.com/123456789012/myqueue
         ```
+
 
         :param str resource_name: The name of the resource.
         :param RedriveAllowPolicyArgs args: The arguments to use to populate this resource's properties.
@@ -229,9 +245,9 @@ class RedriveAllowPolicy(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 queue_url: Optional[pulumi.Input[_builtins.str]] = None,
-                 redrive_allow_policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 queue_url: pulumi.Input[Optional[_builtins.str]] = None,
+                 redrive_allow_policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -258,9 +274,9 @@ class RedriveAllowPolicy(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            queue_url: Optional[pulumi.Input[_builtins.str]] = None,
-            redrive_allow_policy: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'RedriveAllowPolicy':
+            queue_url: pulumi.Input[Optional[_builtins.str]] = None,
+            redrive_allow_policy: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'RedriveAllowPolicy':
         """
         Get an existing RedriveAllowPolicy resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

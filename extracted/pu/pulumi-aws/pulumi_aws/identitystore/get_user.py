@@ -28,7 +28,7 @@ class GetUserResult:
     """
     A collection of values returned by getUser.
     """
-    def __init__(__self__, addresses=None, alternate_identifier=None, display_name=None, emails=None, external_ids=None, id=None, identity_store_id=None, locale=None, names=None, nickname=None, phone_numbers=None, preferred_language=None, profile_url=None, region=None, timezone=None, title=None, user_id=None, user_name=None, user_type=None):
+    def __init__(__self__, addresses=None, alternate_identifier=None, display_name=None, emails=None, external_ids=None, id=None, identity_store_id=None, locale=None, names=None, nickname=None, phone_numbers=None, preferred_language=None, profile_url=None, region=None, timezone=None, title=None, user_id=None, user_name=None, user_status=None, user_type=None):
         if addresses and not isinstance(addresses, list):
             raise TypeError("Expected argument 'addresses' to be a list")
         pulumi.set(__self__, "addresses", addresses)
@@ -83,6 +83,9 @@ class GetUserResult:
         if user_name and not isinstance(user_name, str):
             raise TypeError("Expected argument 'user_name' to be a str")
         pulumi.set(__self__, "user_name", user_name)
+        if user_status and not isinstance(user_status, str):
+            raise TypeError("Expected argument 'user_status' to be a str")
+        pulumi.set(__self__, "user_status", user_status)
         if user_type and not isinstance(user_type, str):
             raise TypeError("Expected argument 'user_type' to be a str")
         pulumi.set(__self__, "user_type", user_type)
@@ -223,6 +226,14 @@ class GetUserResult:
         return pulumi.get(self, "user_name")
 
     @_builtins.property
+    @pulumi.getter(name="userStatus")
+    def user_status(self) -> _builtins.str:
+        """
+        The current status of the user account.
+        """
+        return pulumi.get(self, "user_status")
+
+    @_builtins.property
     @pulumi.getter(name="userType")
     def user_type(self) -> _builtins.str:
         """
@@ -255,6 +266,7 @@ class AwaitableGetUserResult(GetUserResult):
             title=self.title,
             user_id=self.user_id,
             user_name=self.user_name,
+            user_status=self.user_status,
             user_type=self.user_type)
 
 
@@ -273,13 +285,13 @@ def get_user(alternate_identifier: Optional[Union['GetUserAlternateIdentifierArg
     import pulumi_aws as aws
 
     example = aws.ssoadmin.get_instances()
-    example_get_user = aws.identitystore.get_user(identity_store_id=example.identity_store_ids[0],
-        alternate_identifier={
+    example_get_user = aws.identitystore.get_user(alternate_identifier={
             "unique_attribute": {
                 "attribute_path": "UserName",
                 "attribute_value": "ExampleUser",
             },
-        })
+        },
+        identity_store_id=example.identity_store_ids[0])
     pulumi.export("userId", example_get_user.user_id)
     ```
 
@@ -320,11 +332,12 @@ def get_user(alternate_identifier: Optional[Union['GetUserAlternateIdentifierArg
         title=pulumi.get(__ret__, 'title'),
         user_id=pulumi.get(__ret__, 'user_id'),
         user_name=pulumi.get(__ret__, 'user_name'),
+        user_status=pulumi.get(__ret__, 'user_status'),
         user_type=pulumi.get(__ret__, 'user_type'))
-def get_user_output(alternate_identifier: Optional[pulumi.Input[Optional[Union['GetUserAlternateIdentifierArgs', 'GetUserAlternateIdentifierArgsDict']]]] = None,
-                    identity_store_id: Optional[pulumi.Input[_builtins.str]] = None,
-                    region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                    user_id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_user_output(alternate_identifier: pulumi.Input[Optional[Optional[Union['GetUserAlternateIdentifierArgs', 'GetUserAlternateIdentifierArgsDict']]]] = None,
+                    identity_store_id: pulumi.Input[Optional[_builtins.str]] = None,
+                    region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                    user_id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                     opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetUserResult]:
     """
     Use this data source to get an Identity Store User.
@@ -336,13 +349,13 @@ def get_user_output(alternate_identifier: Optional[pulumi.Input[Optional[Union['
     import pulumi_aws as aws
 
     example = aws.ssoadmin.get_instances()
-    example_get_user = aws.identitystore.get_user(identity_store_id=example.identity_store_ids[0],
-        alternate_identifier={
+    example_get_user = aws.identitystore.get_user(alternate_identifier={
             "unique_attribute": {
                 "attribute_path": "UserName",
                 "attribute_value": "ExampleUser",
             },
-        })
+        },
+        identity_store_id=example.identity_store_ids[0])
     pulumi.export("userId", example_get_user.user_id)
     ```
 
@@ -382,4 +395,5 @@ def get_user_output(alternate_identifier: Optional[pulumi.Input[Optional[Union['
         title=pulumi.get(__response__, 'title'),
         user_id=pulumi.get(__response__, 'user_id'),
         user_name=pulumi.get(__response__, 'user_name'),
+        user_status=pulumi.get(__response__, 'user_status'),
         user_type=pulumi.get(__response__, 'user_type')))

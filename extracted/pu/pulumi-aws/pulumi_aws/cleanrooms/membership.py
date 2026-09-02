@@ -23,12 +23,13 @@ class MembershipArgs:
     def __init__(__self__, *,
                  collaboration_id: pulumi.Input[_builtins.str],
                  query_log_status: pulumi.Input[_builtins.str],
-                 default_result_configuration: Optional[pulumi.Input['MembershipDefaultResultConfigurationArgs']] = None,
-                 payment_configuration: Optional[pulumi.Input['MembershipPaymentConfigurationArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 default_result_configuration: pulumi.Input[Optional['MembershipDefaultResultConfigurationArgs']] = None,
+                 payment_configuration: pulumi.Input[Optional['MembershipPaymentConfigurationArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a Membership resource.
+
         :param pulumi.Input[_builtins.str] collaboration_id: The ID of the collaboration to which the member was invited.
         :param pulumi.Input[_builtins.str] query_log_status: An indicator as to whether query logging has been enabled or disabled for the membership.
         :param pulumi.Input['MembershipDefaultResultConfigurationArgs'] default_result_configuration: The default configuration for a query result.
@@ -72,71 +73,72 @@ class MembershipArgs:
 
     @_builtins.property
     @pulumi.getter(name="defaultResultConfiguration")
-    def default_result_configuration(self) -> Optional[pulumi.Input['MembershipDefaultResultConfigurationArgs']]:
+    def default_result_configuration(self) -> pulumi.Input[Optional['MembershipDefaultResultConfigurationArgs']]:
         """
         The default configuration for a query result.
         """
         return pulumi.get(self, "default_result_configuration")
 
     @default_result_configuration.setter
-    def default_result_configuration(self, value: Optional[pulumi.Input['MembershipDefaultResultConfigurationArgs']]):
+    def default_result_configuration(self, value: pulumi.Input[Optional['MembershipDefaultResultConfigurationArgs']]):
         pulumi.set(self, "default_result_configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="paymentConfiguration")
-    def payment_configuration(self) -> Optional[pulumi.Input['MembershipPaymentConfigurationArgs']]:
+    def payment_configuration(self) -> pulumi.Input[Optional['MembershipPaymentConfigurationArgs']]:
         return pulumi.get(self, "payment_configuration")
 
     @payment_configuration.setter
-    def payment_configuration(self, value: Optional[pulumi.Input['MembershipPaymentConfigurationArgs']]):
+    def payment_configuration(self, value: pulumi.Input[Optional['MembershipPaymentConfigurationArgs']]):
         pulumi.set(self, "payment_configuration", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key value pairs which tag the membership.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _MembershipState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 collaboration_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 collaboration_creator_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 collaboration_creator_display_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 collaboration_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 collaboration_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 create_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 default_result_configuration: Optional[pulumi.Input['MembershipDefaultResultConfigurationArgs']] = None,
-                 member_abilities: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 payment_configuration: Optional[pulumi.Input['MembershipPaymentConfigurationArgs']] = None,
-                 query_log_status: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 update_time: Optional[pulumi.Input[_builtins.str]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 collaboration_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 collaboration_creator_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 collaboration_creator_display_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 collaboration_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 collaboration_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 create_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 default_result_configuration: pulumi.Input[Optional['MembershipDefaultResultConfigurationArgs']] = None,
+                 member_abilities: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 payment_configuration: pulumi.Input[Optional['MembershipPaymentConfigurationArgs']] = None,
+                 query_log_status: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 update_time: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering Membership resources.
+
         :param pulumi.Input[_builtins.str] arn: The ARN of the membership.
         :param pulumi.Input[_builtins.str] collaboration_arn: The ARN of the joined collaboration.
         :param pulumi.Input[_builtins.str] collaboration_creator_account_id: The account ID of the collaboration's creator.
@@ -187,188 +189,188 @@ class _MembershipState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of the membership.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="collaborationArn")
-    def collaboration_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def collaboration_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of the joined collaboration.
         """
         return pulumi.get(self, "collaboration_arn")
 
     @collaboration_arn.setter
-    def collaboration_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def collaboration_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "collaboration_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="collaborationCreatorAccountId")
-    def collaboration_creator_account_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def collaboration_creator_account_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The account ID of the collaboration's creator.
         """
         return pulumi.get(self, "collaboration_creator_account_id")
 
     @collaboration_creator_account_id.setter
-    def collaboration_creator_account_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def collaboration_creator_account_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "collaboration_creator_account_id", value)
 
     @_builtins.property
     @pulumi.getter(name="collaborationCreatorDisplayName")
-    def collaboration_creator_display_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def collaboration_creator_display_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The display name of the collaboration's creator.
         """
         return pulumi.get(self, "collaboration_creator_display_name")
 
     @collaboration_creator_display_name.setter
-    def collaboration_creator_display_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def collaboration_creator_display_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "collaboration_creator_display_name", value)
 
     @_builtins.property
     @pulumi.getter(name="collaborationId")
-    def collaboration_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def collaboration_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the collaboration to which the member was invited.
         """
         return pulumi.get(self, "collaboration_id")
 
     @collaboration_id.setter
-    def collaboration_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def collaboration_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "collaboration_id", value)
 
     @_builtins.property
     @pulumi.getter(name="collaborationName")
-    def collaboration_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def collaboration_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the joined collaboration.
         """
         return pulumi.get(self, "collaboration_name")
 
     @collaboration_name.setter
-    def collaboration_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def collaboration_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "collaboration_name", value)
 
     @_builtins.property
     @pulumi.getter(name="createTime")
-    def create_time(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create_time(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The date and time the membership was created.
         """
         return pulumi.get(self, "create_time")
 
     @create_time.setter
-    def create_time(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create_time(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create_time", value)
 
     @_builtins.property
     @pulumi.getter(name="defaultResultConfiguration")
-    def default_result_configuration(self) -> Optional[pulumi.Input['MembershipDefaultResultConfigurationArgs']]:
+    def default_result_configuration(self) -> pulumi.Input[Optional['MembershipDefaultResultConfigurationArgs']]:
         """
         The default configuration for a query result.
         """
         return pulumi.get(self, "default_result_configuration")
 
     @default_result_configuration.setter
-    def default_result_configuration(self, value: Optional[pulumi.Input['MembershipDefaultResultConfigurationArgs']]):
+    def default_result_configuration(self, value: pulumi.Input[Optional['MembershipDefaultResultConfigurationArgs']]):
         pulumi.set(self, "default_result_configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="memberAbilities")
-    def member_abilities(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def member_abilities(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         The list of abilities for the invited member.
         """
         return pulumi.get(self, "member_abilities")
 
     @member_abilities.setter
-    def member_abilities(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def member_abilities(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "member_abilities", value)
 
     @_builtins.property
     @pulumi.getter(name="paymentConfiguration")
-    def payment_configuration(self) -> Optional[pulumi.Input['MembershipPaymentConfigurationArgs']]:
+    def payment_configuration(self) -> pulumi.Input[Optional['MembershipPaymentConfigurationArgs']]:
         return pulumi.get(self, "payment_configuration")
 
     @payment_configuration.setter
-    def payment_configuration(self, value: Optional[pulumi.Input['MembershipPaymentConfigurationArgs']]):
+    def payment_configuration(self, value: pulumi.Input[Optional['MembershipPaymentConfigurationArgs']]):
         pulumi.set(self, "payment_configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="queryLogStatus")
-    def query_log_status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def query_log_status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         An indicator as to whether query logging has been enabled or disabled for the membership.
         """
         return pulumi.get(self, "query_log_status")
 
     @query_log_status.setter
-    def query_log_status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def query_log_status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "query_log_status", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The status of the membership.
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key value pairs which tag the membership.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter(name="updateTime")
-    def update_time(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update_time(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The date and time the membership was last updated.
         """
         return pulumi.get(self, "update_time")
 
     @update_time.setter
-    def update_time(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update_time(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update_time", value)
 
 
@@ -378,12 +380,12 @@ class Membership(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 collaboration_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 default_result_configuration: Optional[pulumi.Input[Union['MembershipDefaultResultConfigurationArgs', 'MembershipDefaultResultConfigurationArgsDict']]] = None,
-                 payment_configuration: Optional[pulumi.Input[Union['MembershipPaymentConfigurationArgs', 'MembershipPaymentConfigurationArgsDict']]] = None,
-                 query_log_status: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 collaboration_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 default_result_configuration: pulumi.Input[Optional[Union['MembershipDefaultResultConfigurationArgs', 'MembershipDefaultResultConfigurationArgsDict']]] = None,
+                 payment_configuration: pulumi.Input[Optional[Union['MembershipPaymentConfigurationArgs', 'MembershipPaymentConfigurationArgsDict']]] = None,
+                 query_log_status: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Provides a AWS Clean Rooms membership. Memberships are used to join a Clean Rooms collaboration by the invited member.
@@ -397,10 +399,7 @@ class Membership(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test_membership = aws.cleanrooms.Membership("test_membership",
-            collaboration_id="1234abcd-12ab-34cd-56ef-1234567890ab",
-            query_log_status="DISABLED",
             default_result_configuration={
-                "role_arn": "arn:aws:iam::123456789012:role/role-name",
                 "output_configuration": {
                     "s3": {
                         "bucket": "test-bucket",
@@ -408,7 +407,10 @@ class Membership(pulumi.CustomResource):
                         "key_prefix": "test-prefix",
                     },
                 },
+                "role_arn": "arn:aws:iam::123456789012:role/role-name",
             },
+            collaboration_id="1234abcd-12ab-34cd-56ef-1234567890ab",
+            query_log_status="DISABLED",
             tags={
                 "Project": "Terraform",
             })
@@ -416,11 +418,23 @@ class Membership(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `id` - (String) ID of the membership.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
         Using `pulumi import`, import `cleanrooms.Membership` using the `id`. For example:
 
         ```sh
         $ pulumi import aws:cleanrooms/membership:Membership membership 1234abcd-12ab-34cd-56ef-1234567890ab
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -448,10 +462,7 @@ class Membership(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test_membership = aws.cleanrooms.Membership("test_membership",
-            collaboration_id="1234abcd-12ab-34cd-56ef-1234567890ab",
-            query_log_status="DISABLED",
             default_result_configuration={
-                "role_arn": "arn:aws:iam::123456789012:role/role-name",
                 "output_configuration": {
                     "s3": {
                         "bucket": "test-bucket",
@@ -459,7 +470,10 @@ class Membership(pulumi.CustomResource):
                         "key_prefix": "test-prefix",
                     },
                 },
+                "role_arn": "arn:aws:iam::123456789012:role/role-name",
             },
+            collaboration_id="1234abcd-12ab-34cd-56ef-1234567890ab",
+            query_log_status="DISABLED",
             tags={
                 "Project": "Terraform",
             })
@@ -467,11 +481,23 @@ class Membership(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `id` - (String) ID of the membership.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
         Using `pulumi import`, import `cleanrooms.Membership` using the `id`. For example:
 
         ```sh
         $ pulumi import aws:cleanrooms/membership:Membership membership 1234abcd-12ab-34cd-56ef-1234567890ab
         ```
+
 
         :param str resource_name: The name of the resource.
         :param MembershipArgs args: The arguments to use to populate this resource's properties.
@@ -488,12 +514,12 @@ class Membership(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 collaboration_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 default_result_configuration: Optional[pulumi.Input[Union['MembershipDefaultResultConfigurationArgs', 'MembershipDefaultResultConfigurationArgsDict']]] = None,
-                 payment_configuration: Optional[pulumi.Input[Union['MembershipPaymentConfigurationArgs', 'MembershipPaymentConfigurationArgsDict']]] = None,
-                 query_log_status: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 collaboration_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 default_result_configuration: pulumi.Input[Optional[Union['MembershipDefaultResultConfigurationArgs', 'MembershipDefaultResultConfigurationArgsDict']]] = None,
+                 payment_configuration: pulumi.Input[Optional[Union['MembershipPaymentConfigurationArgs', 'MembershipPaymentConfigurationArgsDict']]] = None,
+                 query_log_status: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -533,22 +559,22 @@ class Membership(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            collaboration_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            collaboration_creator_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-            collaboration_creator_display_name: Optional[pulumi.Input[_builtins.str]] = None,
-            collaboration_id: Optional[pulumi.Input[_builtins.str]] = None,
-            collaboration_name: Optional[pulumi.Input[_builtins.str]] = None,
-            create_time: Optional[pulumi.Input[_builtins.str]] = None,
-            default_result_configuration: Optional[pulumi.Input[Union['MembershipDefaultResultConfigurationArgs', 'MembershipDefaultResultConfigurationArgsDict']]] = None,
-            member_abilities: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            payment_configuration: Optional[pulumi.Input[Union['MembershipPaymentConfigurationArgs', 'MembershipPaymentConfigurationArgsDict']]] = None,
-            query_log_status: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            status: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            update_time: Optional[pulumi.Input[_builtins.str]] = None) -> 'Membership':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            collaboration_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            collaboration_creator_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+            collaboration_creator_display_name: pulumi.Input[Optional[_builtins.str]] = None,
+            collaboration_id: pulumi.Input[Optional[_builtins.str]] = None,
+            collaboration_name: pulumi.Input[Optional[_builtins.str]] = None,
+            create_time: pulumi.Input[Optional[_builtins.str]] = None,
+            default_result_configuration: pulumi.Input[Optional[Union['MembershipDefaultResultConfigurationArgs', 'MembershipDefaultResultConfigurationArgsDict']]] = None,
+            member_abilities: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            payment_configuration: pulumi.Input[Optional[Union['MembershipPaymentConfigurationArgs', 'MembershipPaymentConfigurationArgsDict']]] = None,
+            query_log_status: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            status: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            update_time: pulumi.Input[Optional[_builtins.str]] = None) -> 'Membership':
         """
         Get an existing Membership resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

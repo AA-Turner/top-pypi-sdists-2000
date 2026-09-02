@@ -137,11 +137,11 @@ def get_network_acls(filters: Optional[Sequence[Union['GetNetworkAclsFilterArgs'
     import pulumi
     import pulumi_aws as aws
 
-    example = aws.ec2.get_network_acls(vpc_id=vpc_id,
-        filters=[{
+    example = aws.ec2.get_network_acls(filters=[{
             "name": "association.subnet-id",
             "values": [test["id"]],
-        }])
+        }],
+        vpc_id=vpc_id)
     ```
 
 
@@ -166,10 +166,10 @@ def get_network_acls(filters: Optional[Sequence[Union['GetNetworkAclsFilterArgs'
         region=pulumi.get(__ret__, 'region'),
         tags=pulumi.get(__ret__, 'tags'),
         vpc_id=pulumi.get(__ret__, 'vpc_id'))
-def get_network_acls_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['GetNetworkAclsFilterArgs', 'GetNetworkAclsFilterArgsDict']]]]] = None,
-                            region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                            tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
-                            vpc_id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_network_acls_output(filters: pulumi.Input[Optional[Optional[Sequence[Union['GetNetworkAclsFilterArgs', 'GetNetworkAclsFilterArgsDict']]]]] = None,
+                            region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                            tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
+                            vpc_id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                             opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetNetworkAclsResult]:
     """
     ## Example Usage
@@ -204,11 +204,11 @@ def get_network_acls_output(filters: Optional[pulumi.Input[Optional[Sequence[Uni
     import pulumi
     import pulumi_aws as aws
 
-    example = aws.ec2.get_network_acls(vpc_id=vpc_id,
-        filters=[{
+    example = aws.ec2.get_network_acls(filters=[{
             "name": "association.subnet-id",
             "values": [test["id"]],
-        }])
+        }],
+        vpc_id=vpc_id)
     ```
 
 

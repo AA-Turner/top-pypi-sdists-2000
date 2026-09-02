@@ -14,17 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import contextlib
 import math
+import os
 import re
+import string
+import sys
+import tempfile
 import unittest
 
 import numpy as np
 import pytest
 import scipy.linalg as la
+import scipy.sparse as sp
 import scipy.stats as st
 
 import cvxpy as cp
 import cvxpy.tests.solver_test_helpers as sths
+from cvxpy.constraints import SOC
+from cvxpy.problems.problem_form import ProblemForm
+from cvxpy.reductions.solvers.compr_matrix import compress_matrix, get_row_nnz
+from cvxpy.reductions.solvers.conic_solvers.conic_solver import ConicSolver
+from cvxpy.reductions.solvers.conic_solvers.cuopt_conif import CUOPT
 from cvxpy.reductions.solvers.defines import (
     INSTALLED_MI_SOLVERS,
     INSTALLED_SOLVERS,
@@ -32,6 +43,7 @@ from cvxpy.reductions.solvers.defines import (
 from cvxpy.tests.base_test import BaseTest
 from cvxpy.tests.solver_test_helpers import (
     StandardTestECPs,
+    StandardTestInfeasibleProblems,
     StandardTestLPs,
     StandardTestMixedCPs,
     StandardTestPCPs,
@@ -39,7 +51,37 @@ from cvxpy.tests.solver_test_helpers import (
     StandardTestSDPs,
     StandardTestSOCPs,
 )
+from cvxpy.transforms.partial_optimize import partial_optimize
 from cvxpy.utilities.versioning import Version
+
+
+def test_compress_matrix_eliminates_empty_and_duplicate_rows() -> None:
+    A = sp.csr_matrix(
+        [
+            [1.0, 2.0, 0.0],
+            [2.0, 4.0, 0.0],
+            [0.0, 0.0, 0.0],
+            [1.0, 0.0, 1.0],
+            [1.0, 0.0, 2.0],
+            [2.0, 0.0, 2.0],
+        ]
+    )
+    b = np.array([3.0, 6.0, 0.0, 2.0, 3.0, 4.0])
+
+    assert get_row_nnz(A, 0) == 2
+    A_compr, b_compr, P = compress_matrix(A, b)
+
+    np.testing.assert_allclose(A_compr.toarray(), A[[0, 3, 4], :].toarray())
+    np.testing.assert_allclose(b_compr, b[[0, 3, 4]])
+    np.testing.assert_allclose((P @ A_compr).toarray(), A.toarray())
+    np.testing.assert_allclose(P @ b_compr, b)
+
+    A_empty = sp.csr_matrix([[0.0, 0.0], [1.0, 0.0]])
+    b_empty = np.array([0.0, 1.0])
+    A_compr, b_compr, P = compress_matrix(A_empty, b_empty)
+    np.testing.assert_allclose(A_compr.toarray(), [[1.0, 0.0]])
+    np.testing.assert_allclose(b_compr, [1.0])
+    np.testing.assert_allclose((P @ A_compr).toarray(), [[0.0, 0.0], [1.0, 0.0]])
 
 
 @unittest.skipUnless('ECOS' in INSTALLED_SOLVERS, 'ECOS is not installed.')
@@ -367,7 +409,7 @@ class TestSCS(BaseTest):
         if Version(scs.__version__) >= Version('3.0.0'):
             # See https://github.com/cvxpy/cvxpy/issues/2059
             x = cp.Variable()
-            prob = cp.Problem(cp.Minimize(x**1.6 + x**2), [x >= 1])
+            prob = cp.Problem(cp.Minimize(cp.power(x, 1.6, approx=True) + x**2), [x >= 1])
             prob.solve(solver=cp.SCS, use_quad_obj=True)
             self.assertAlmostEqual(prob.value, 2)
             self.assertAlmostEqual(x.value, 1)
@@ -402,6 +444,9 @@ class TestSCS(BaseTest):
     def test_scs_sdp_2(self) -> None:
         StandardTestSDPs.test_sdp_2(solver='SCS', eps=1e-5)
 
+    def test_scs_sdp_batched(self) -> None:
+        StandardTestSDPs.test_sdp_batched(solver='SCS', eps=1e-5)
+
     def test_scs_expcone_1(self) -> None:
         StandardTestECPs.test_expcone_1(solver='SCS', eps=1e-5)
 
@@ -410,7 +455,7 @@ class TestSCS(BaseTest):
 
     def test_scs_sdp_pcp_1(self):
         StandardTestMixedCPs.test_sdp_pcp_1(solver='SCS')
-        
+
     def test_scs_pcp_1(self) -> None:
         StandardTestPCPs.test_pcp_1(solver='SCS')
 
@@ -419,6 +464,30 @@ class TestSCS(BaseTest):
 
     def test_scs_pcp_3(self) -> None:
         StandardTestPCPs.test_pcp_3(solver='SCS', eps=1e-12)
+
+    def test_infeasible_lp_ineq_constraints(self):
+        StandardTestInfeasibleProblems.test_lp_ineq_constraints(solver="SCS")
+
+    def test_infeasible_lp_eq_constraints(self):
+        StandardTestInfeasibleProblems.test_lp_eq_constraints(solver="SCS")
+
+    def test_infeasible_soc(self):
+        StandardTestInfeasibleProblems.test_soc(solver="SCS")
+
+    def test_infeasible_power_cone_3d(self):
+        StandardTestInfeasibleProblems.test_power_cone_3d(solver="SCS")
+
+    def test_infeasible_power_cone_nd(self):
+        StandardTestInfeasibleProblems.test_power_cone_nd(solver="SCS")
+
+    def test_infeasible_exp_cone(self):
+        StandardTestInfeasibleProblems.test_exp_cone(solver="SCS")
+
+    def test_infeasible_psd_cone(self):
+        StandardTestInfeasibleProblems.test_psd_cone(solver="SCS")
+
+    def test_infeasible_soc_exp_mixed(self):
+        StandardTestInfeasibleProblems.test_soc_exp_mixed(solver="SCS")
 
 
 @unittest.skipUnless('CLARABEL' in INSTALLED_SOLVERS, 'CLARABEL is not installed.')
@@ -532,7 +601,7 @@ class TestClarabel(BaseTest):
         StandardTestSDPs.test_sdp_1min(solver='CLARABEL')
 
     def test_clarabel_sdp_2(self) -> None:
-        # produces a different optimizer than 
+        # produces a different optimizer than
         # the one expected by the standard test
         places = 3
         sth = sths.sdp_2()
@@ -543,8 +612,349 @@ class TestClarabel(BaseTest):
         sth.check_complementarity(places)
         sth.check_dual_domains(places)
 
+    def test_clarabel_sdp_batched(self) -> None:
+        StandardTestSDPs.test_sdp_batched(solver='CLARABEL')
 
-@unittest.skipUnless('MOSEK' in INSTALLED_SOLVERS, 'MOSEK is not installed.')
+    def test_infeasible_lp_ineq_constraints(self):
+        StandardTestInfeasibleProblems.test_lp_ineq_constraints(solver="CLARABEL")
+
+    def test_infeasible_lp_eq_constraints(self):
+        StandardTestInfeasibleProblems.test_lp_eq_constraints(solver="CLARABEL")
+
+    def test_infeasible_soc(self):
+        StandardTestInfeasibleProblems.test_soc(solver="CLARABEL")
+
+    def test_infeasible_power_cone_3d(self):
+        StandardTestInfeasibleProblems.test_power_cone_3d(solver="CLARABEL")
+
+    def test_infeasible_power_cone_nd(self):
+        StandardTestInfeasibleProblems.test_power_cone_nd(solver="CLARABEL")
+
+    def test_infeasible_exp_cone(self):
+        StandardTestInfeasibleProblems.test_exp_cone(solver="CLARABEL")
+
+    def test_infeasible_psd_cone(self):
+        StandardTestInfeasibleProblems.test_psd_cone(solver="CLARABEL")
+
+    def test_infeasible_soc_exp_mixed(self):
+        StandardTestInfeasibleProblems.test_soc_exp_mixed(solver="CLARABEL")
+
+
+
+@unittest.skipUnless('CUCLARABEL' in INSTALLED_SOLVERS, 'CLARABEL is not installed.')
+class TestCuClarabel(BaseTest):
+
+    """ Unit tests for Clarabel. """
+    def setUp(self) -> None:
+
+        self.x = cp.Variable(2, name='x')
+        self.y = cp.Variable(3, name='y')
+
+        self.A = cp.Variable((2, 2), name='A')
+        self.B = cp.Variable((2, 2), name='B')
+        self.C = cp.Variable((3, 2), name='C')
+
+    def test_clarabel_parameter_update(self) -> None:
+        """Test warm start.
+        """
+        x = cp.Variable(2)
+        P = cp.Parameter(nonneg=True),
+        A = cp.Parameter(4)
+        b = cp.Parameter(2, nonneg=True)
+        q = cp.Parameter(2)
+
+        def update_parameters(P, A, b, q):
+            P[0].value = np.random.rand()
+            A.value = np.random.randn(4)
+            b.value = np.random.rand(2)
+            q.value = np.random.randn(2)
+
+        prob = cp.Problem(
+                cp.Minimize(P[0]*cp.square(x[0]) + cp.quad_form(x, np.ones([2, 2])) + q.T @ x),
+                [A[0] * x[0] + A[1] * x[1] == b[0],
+                 A[2] * x[0] + A[3] * x[1] <= b[1]]
+            )
+
+        update_parameters(P, A, b, q)
+        result1 = prob.solve(solver=cp.CLARABEL, warm_start=False)
+        result2 = prob.solve(solver=cp.CLARABEL, warm_start=True)
+        self.assertAlmostEqual(result1, result2)
+
+        update_parameters(P, A, b, q)
+        result1 = prob.solve(solver=cp.CLARABEL, warm_start=True)
+        result2 = prob.solve(solver=cp.CLARABEL, warm_start=False)
+        self.assertAlmostEqual(result1, result2)
+
+        # consecutive solves, no data update
+        result1 = prob.solve(solver=cp.CLARABEL, warm_start=False)
+        self.assertAlmostEqual(result1, result2)
+
+
+    def test_clarabel_lp_0(self) -> None:
+        StandardTestLPs.test_lp_0(solver=cp.CUCLARABEL)
+
+    def test_clarabel_nonstandard_name(self) -> None:
+        # Test that solver name with non-standard capitalization works.
+        StandardTestLPs.test_lp_0(solver="CuClarabel")
+
+    def test_clarabel_lp_1(self) -> None:
+        StandardTestLPs.test_lp_1(solver='CUCLARABEL')
+
+    def test_clarabel_lp_2(self) -> None:
+        StandardTestLPs.test_lp_2(solver='CUCLARABEL')
+
+    def test_clarabel_lp_3(self) -> None:
+        StandardTestLPs.test_lp_3(solver='CUCLARABEL')
+
+    def test_clarabel_lp_4(self) -> None:
+        StandardTestLPs.test_lp_4(solver='CUCLARABEL')
+
+    def test_clarabel_lp_5(self) -> None:
+        StandardTestLPs.test_lp_5(solver='CUCLARABEL')
+
+    def test_clarabel_qp_0(self) -> None:
+        StandardTestQPs.test_qp_0(solver='CUCLARABEL')
+
+    def test_clarabel_qp_0_linear_obj(self) -> None:
+        StandardTestQPs.test_qp_0(solver='CUCLARABEL', use_quad_obj=False)
+
+    def test_clarabel_socp_0(self) -> None:
+        StandardTestSOCPs.test_socp_0(solver='CUCLARABEL')
+
+    def test_clarabel_socp_1(self) -> None:
+        StandardTestSOCPs.test_socp_1(solver='CUCLARABEL')
+
+    def test_clarabel_socp_2(self) -> None:
+        StandardTestSOCPs.test_socp_2(solver='CUCLARABEL')
+
+    def test_clarabel_socp_3(self) -> None:
+        # axis 0
+        StandardTestSOCPs.test_socp_3ax0(solver='CUCLARABEL')
+        # axis 1
+        StandardTestSOCPs.test_socp_3ax1(solver='CUCLARABEL')
+
+    def test_clarabel_expcone_1(self) -> None:
+        StandardTestECPs.test_expcone_1(solver='CUCLARABEL')
+
+    def test_clarabel_exp_soc_1(self) -> None:
+        StandardTestMixedCPs.test_exp_soc_1(solver='CUCLARABEL')
+
+    def test_clarabel_pcp_0(self) -> None:
+        StandardTestSOCPs.test_socp_0(solver='CUCLARABEL')
+
+    def test_clarabel_pcp_1(self) -> None:
+        StandardTestSOCPs.test_socp_1(solver='CUCLARABEL')
+
+    def test_clarabel_pcp_2(self) -> None:
+        StandardTestSOCPs.test_socp_2(solver='CUCLARABEL')
+
+
+@unittest.skipUnless('PDCS' in INSTALLED_SOLVERS, 'PDCS is not installed.')
+class TestPDCS(BaseTest):
+
+    """ Unit tests for PDCS. """
+    def setUp(self) -> None:
+
+        self.x = cp.Variable(2, name='x')
+        self.y = cp.Variable(3, name='y')
+
+        self.A = cp.Variable((2, 2), name='A')
+        self.B = cp.Variable((2, 2), name='B')
+        self.C = cp.Variable((3, 2), name='C')
+
+    def test_pdcs_parameter_update(self) -> None:
+        """Test warm start.
+        """
+        x = cp.Variable(2)
+        P = cp.Parameter(nonneg=True),
+        A = cp.Parameter(4)
+        b = cp.Parameter(2, nonneg=True)
+        q = cp.Parameter(2)
+
+        def update_parameters(P, A, b, q):
+            P[0].value = np.random.rand()
+            A.value = np.random.randn(4)
+            b.value = np.random.rand(2)
+            q.value = np.random.randn(2)
+
+        prob = cp.Problem(
+                cp.Minimize(P[0]*cp.square(x[0]) + cp.quad_form(x, np.ones([2, 2])) + q.T @ x),
+                [A[0] * x[0] + A[1] * x[1] == b[0],
+                 A[2] * x[0] + A[3] * x[1] <= b[1]]
+            )
+
+        update_parameters(P, A, b, q)
+        result1 = prob.solve(solver=cp.PDCS, warm_start=False)
+        result2 = prob.solve(solver=cp.PDCS, warm_start=True)
+        self.assertAlmostEqual(result1, result2)
+
+        update_parameters(P, A, b, q)
+        result1 = prob.solve(solver=cp.PDCS, warm_start=True)
+        result2 = prob.solve(solver=cp.PDCS, warm_start=False)
+        self.assertAlmostEqual(result1, result2)
+
+        # consecutive solves, no data update
+        result1 = prob.solve(solver=cp.PDCS, warm_start=False)
+        self.assertAlmostEqual(result1, result2)
+
+    def test_pdcs_socp_0(self) -> None:
+        StandardTestSOCPs.test_socp_0(solver='PDCS')
+
+    def test_pdcs_expcone_1(self) -> None:
+        StandardTestECPs.test_expcone_1(solver='PDCS')
+
+    def test_pdcs_exp_soc_1(self) -> None:
+        print("test_pdcs_exp_soc_1")
+        StandardTestMixedCPs.test_exp_soc_1(solver='PDCS')
+
+    def test_pdcs_pcp_0(self) -> None:
+        print("test_pdcs_pcp_0")
+        StandardTestSOCPs.test_socp_0(solver='PDCS')
+
+    def test_pdcs_socp_1(self) -> None:
+        print("test_pdcs_socp_1")
+        StandardTestSOCPs.test_socp_1(solver='PDCS')
+
+    def test_pdcs_socp_2(self) -> None:
+        print("test_pdcs_socp_2")
+        StandardTestSOCPs.test_socp_2(solver='PDCS')
+
+
+@unittest.skipUnless('MOREAU' in INSTALLED_SOLVERS, 'MOREAU is not installed.')
+class TestMoreau(BaseTest):
+
+    """ Unit tests for Moreau. """
+    def setUp(self) -> None:
+
+        self.x = cp.Variable(2, name='x')
+        self.y = cp.Variable(3, name='y')
+
+        self.A = cp.Variable((2, 2), name='A')
+        self.B = cp.Variable((2, 2), name='B')
+        self.C = cp.Variable((3, 2), name='C')
+
+    def test_moreau_parameter_update(self) -> None:
+        """Test warm start.
+        """
+        x = cp.Variable(2)
+        P = cp.Parameter(nonneg=True),
+        A = cp.Parameter(4)
+        b = cp.Parameter(2, nonneg=True)
+        q = cp.Parameter(2)
+
+        def update_parameters(P, A, b, q):
+            P[0].value = np.random.rand()
+            A.value = np.random.randn(4)
+            b.value = np.random.rand(2)
+            q.value = np.random.randn(2)
+
+        prob = cp.Problem(
+                cp.Minimize(P[0]*cp.square(x[0]) + cp.quad_form(x, np.ones([2, 2])) + q.T @ x),
+                [A[0] * x[0] + A[1] * x[1] == b[0],
+                 A[2] * x[0] + A[3] * x[1] <= b[1]]
+            )
+
+        update_parameters(P, A, b, q)
+        result1 = prob.solve(solver=cp.MOREAU, warm_start=False)
+        result2 = prob.solve(solver=cp.MOREAU, warm_start=True)
+        self.assertAlmostEqual(result1, result2)
+
+        update_parameters(P, A, b, q)
+        result1 = prob.solve(solver=cp.MOREAU, warm_start=True)
+        result2 = prob.solve(solver=cp.MOREAU, warm_start=False)
+        self.assertAlmostEqual(result1, result2)
+
+        # consecutive solves, no data update
+        result1 = prob.solve(solver=cp.MOREAU, warm_start=False)
+        self.assertAlmostEqual(result1, result2)
+
+
+    def test_moreau_lp_0(self) -> None:
+        StandardTestLPs.test_lp_0(solver=cp.MOREAU)
+
+    def test_moreau_nonstandard_name(self) -> None:
+        # Test that solver name with non-standard capitalization works.
+        StandardTestLPs.test_lp_0(solver="MOREAU")
+
+    def test_moreau_lp_1(self) -> None:
+        StandardTestLPs.test_lp_1(solver='MOREAU')
+
+    def test_moreau_lp_2(self) -> None:
+        StandardTestLPs.test_lp_2(solver='MOREAU')
+
+    def test_moreau_lp_3(self) -> None:
+        StandardTestLPs.test_lp_3(solver='MOREAU')
+
+    def test_moreau_lp_4(self) -> None:
+        StandardTestLPs.test_lp_4(solver='MOREAU')
+
+    def test_moreau_lp_5(self) -> None:
+        StandardTestLPs.test_lp_5(solver='MOREAU')
+
+    def test_moreau_qp_0(self) -> None:
+        StandardTestQPs.test_qp_0(solver='MOREAU')
+
+    def test_moreau_qp_0_linear_obj(self) -> None:
+        StandardTestQPs.test_qp_0(solver='MOREAU', use_quad_obj=False)
+
+    def test_moreau_socp_0(self) -> None:
+        StandardTestSOCPs.test_socp_0(solver='MOREAU')
+
+    def test_moreau_socp_1(self) -> None:
+        ipm_settings = {"tol_gap_abs": 1e-9, "tol_gap_rel": 1e-9, "tol_feas": 1e-9}
+        StandardTestSOCPs.test_socp_1(solver='MOREAU', ipm_settings=ipm_settings)
+
+    def test_moreau_socp_2(self) -> None:
+        StandardTestSOCPs.test_socp_2(solver='MOREAU')
+
+    def test_moreau_socp_3(self) -> None:
+        # axis 0
+        StandardTestSOCPs.test_socp_3ax0(solver='MOREAU')
+        # axis 1
+        StandardTestSOCPs.test_socp_3ax1(solver='MOREAU')
+
+    def test_moreau_expcone_1(self) -> None:
+        StandardTestECPs.test_expcone_1(solver='MOREAU')
+
+    def test_moreau_exp_soc_1(self) -> None:
+        StandardTestMixedCPs.test_exp_soc_1(solver='MOREAU')
+
+    def test_moreau_pcp_1(self) -> None:
+        ipm_settings = {"tol_gap_abs": 1e-9, "tol_gap_rel": 1e-9, "tol_feas": 1e-9}
+        StandardTestPCPs.test_pcp_1(solver='MOREAU', ipm_settings=ipm_settings)
+
+    def test_moreau_pcp_2(self) -> None:
+        ipm_settings = {"tol_gap_abs": 1e-9, "tol_gap_rel": 1e-9, "tol_feas": 1e-9}
+        StandardTestPCPs.test_pcp_2(solver='MOREAU', ipm_settings=ipm_settings)
+
+    def test_moreau_variable_soc_dims(self) -> None:
+        """Test that Moreau handles SOC constraints of dimension > 3 directly."""
+        x = cp.Variable(5)
+        t = cp.Variable()
+        # SOC constraint: ||x|| <= t, which is a dim-6 SOC
+        prob = cp.Problem(cp.Minimize(t), [cp.SOC(t, x), x == 1])
+        prob.solve(solver=cp.MOREAU)
+        self.assertEqual(prob.status, cp.OPTIMAL)
+        self.assertAlmostEqual(prob.value, np.sqrt(5), places=4)
+
+        # Verify the solver receives variable-length SOC dims (not all dim-3)
+        data, _, _ = prob.get_problem_data(solver=cp.MOREAU)
+        soc_dims = data[ConicSolver.DIMS].soc
+        self.assertTrue(any(d > 3 for d in soc_dims))
+
+
+def is_mosek_available():
+    """Check if MOSEK is installed and a license is available."""
+    if 'MOSEK' not in INSTALLED_SOLVERS:
+        return False
+    try:
+        x = cp.Variable()
+        cp.Problem(cp.Minimize(x), [x >= 0]).solve(solver=cp.MOSEK)
+        return True
+    except Exception:
+        return False
+
+@unittest.skipUnless(is_mosek_available(), 'MOSEK is not installed or license is not available.')
 class TestMosek(unittest.TestCase):
 
     def test_mosek_lp_0(self) -> None:
@@ -567,6 +977,14 @@ class TestMosek(unittest.TestCase):
 
     def test_mosek_lp_5(self) -> None:
         StandardTestLPs.test_lp_5(solver='MOSEK')
+
+    @pytest.mark.xfail(
+        reason="MOSEK does not support native variable bounds yet "
+               "(BOUNDED_VARIABLES is False); bounds are desugared to constraints.",
+        strict=True,
+    )
+    def test_mosek_lp_bound_attr(self) -> None:
+        StandardTestLPs.test_lp_bound_attr(solver='MOSEK')
 
     def test_mosek_socp_0(self) -> None:
         StandardTestSOCPs.test_socp_0(solver='MOSEK')
@@ -591,6 +1009,9 @@ class TestMosek(unittest.TestCase):
 
     def test_mosek_sdp_2(self) -> None:
         StandardTestSDPs.test_sdp_2(solver='MOSEK')
+
+    def test_mosek_sdp_batched(self) -> None:
+        StandardTestSDPs.test_sdp_batched(solver='MOSEK')
 
     def test_mosek_expcone_1(self) -> None:
         StandardTestECPs.test_expcone_1(solver='MOSEK')
@@ -718,7 +1139,7 @@ class TestMosek(unittest.TestCase):
     def test_mosek_sdp_power(self) -> None:
         """Test the problem in issue #2128"""
         StandardTestMixedCPs.test_sdp_pcp_1(solver='MOSEK')
-        
+
 
     def test_power_portfolio(self) -> None:
         """Test the portfolio problem in issue #2042"""
@@ -975,7 +1396,8 @@ def fflush() -> None:
 
 # We can't inherit from unittest.TestCase since we access some advanced pytest features.
 # As a result, we use the pytest skipif decorator instead of unittest.skipUnless.
-@pytest.mark.skipif('CBC' not in INSTALLED_SOLVERS, reason='CBC is not installed.')
+@pytest.mark.skipif(('CBC' not in INSTALLED_SOLVERS) or sys.platform.startswith("win"),
+                    reason='CBC is not installed or tests are being run on Windows.')
 class TestCBC:
 
     def _cylp_checks_isProvenInfeasible():
@@ -1087,6 +1509,9 @@ class TestCBC:
         fflush()
         verbose_output = capfd.readouterr()
         assert len(verbose_output.out) > len(quiet_output.out)
+
+    def test_cbc_lp_bound_attr(self) -> None:
+        StandardTestLPs.test_lp_bound_attr(solver='CBC', duals=False)
 
 
 @unittest.skipUnless('GLPK' in INSTALLED_SOLVERS, 'GLPK is not installed.')
@@ -1207,6 +1632,9 @@ class TestGLOP(unittest.TestCase):
         # a large instance and check that the time limit is hit.
         sth.solve(solver='GLOP', time_limit_sec=1.0)
 
+    def test_glop_lp_bound_attr(self) -> None:
+        StandardTestLPs.test_lp_bound_attr(solver='GLOP', duals=False)
+
 
 @unittest.skipUnless('PDLP' in INSTALLED_SOLVERS, 'PDLP is not installed.')
 class TestPDLP(unittest.TestCase):
@@ -1296,7 +1724,7 @@ class TestQOCO(BaseTest):
     def test_qoco_socp_0(self) -> None:
         StandardTestSOCPs.test_socp_0(solver='QOCO')
     def test_qoco_socp_1(self) -> None:
-        StandardTestSOCPs.test_socp_1(solver='QOCO')
+        StandardTestSOCPs.test_socp_1(solver='QOCO', reltol=1e-8)
     def test_qoco_socp_2(self) -> None:
         StandardTestSOCPs.test_socp_2(solver='QOCO')
     def test_qoco_socp_3(self) -> None:
@@ -1486,6 +1914,9 @@ class TestCPLEX(BaseTest):
 
     def test_cplex_mi_socp_2(self) -> None:
         StandardTestSOCPs.test_mi_socp_2(solver='CPLEX')
+
+    def test_cplex_lp_bound_attr(self) -> None:
+        StandardTestLPs.test_lp_bound_attr(solver='CPLEX')
 
 
 @unittest.skipUnless('GUROBI' in INSTALLED_SOLVERS, 'GUROBI is not installed.')
@@ -1711,6 +2142,15 @@ class TestGUROBI(BaseTest):
     def test_gurobi_lp_5(self) -> None:
         StandardTestLPs.test_lp_5(solver='GUROBI')
 
+    def test_gurobi_lp_bound_attr(self) -> None:
+        sth = StandardTestLPs.test_lp_bound_attr(solver='GUROBI')
+        # check that the bounds do reach the solver and don't just generate constraints
+        model = sth.prob.solver_stats.extra_stats
+        expected_bounds = sth.prob.variables()[0].bounds
+        actual_lb = [v.LB for v in model.getVars()]
+        actual_ub = [v.UB for v in model.getVars()]
+        np.testing.assert_equal([actual_lb, actual_ub], expected_bounds)
+
     def test_gurobi_socp_0(self) -> None:
         StandardTestSOCPs.test_socp_0(solver='GUROBI')
 
@@ -1725,6 +2165,15 @@ class TestGUROBI(BaseTest):
         StandardTestSOCPs.test_socp_3ax0(solver='GUROBI')
         # axis 1
         StandardTestSOCPs.test_socp_3ax1(solver='GUROBI')
+
+    def test_gurobi_socp_bound_attr(self) -> None:
+        sth = StandardTestSOCPs.test_socp_bounds_attr(solver='GUROBI')
+        # check that the bounds do reach the solver and don't just generate constraints
+        model = sth.prob.solver_stats.extra_stats
+        x = model.getVarByName("x_0")
+        expected_bounds = sth.prob.variables()[0].bounds
+        actual_bounds = [x.LB, x.UB]
+        np.testing.assert_equal(actual_bounds, expected_bounds)
 
     def test_gurobi_mi_lp_0(self) -> None:
         StandardTestLPs.test_mi_lp_0(solver='GUROBI')
@@ -1748,6 +2197,47 @@ class TestGUROBI(BaseTest):
         StandardTestSOCPs.test_mi_socp_2(solver='GUROBI')
 
 
+def test_xpress_make_unique_names() -> None:
+    """Unit test for the Xpress column-name de-duplication helper.
+
+    Runs without an Xpress installation since it exercises pure-Python logic.
+    """
+    from cvxpy.reductions.solvers.conic_solvers.xpress_conif import (
+        make_unique_names,
+    )
+
+    # Duplicates (e.g. two variables sharing a name()) are disambiguated, while
+    # the first occurrence of each name is kept unchanged.
+    assert make_unique_names(["g_x_0", "g_x_1", "g_x_0", "g_x_1"]) == [
+        "g_x_0", "g_x_1", "g_x_0__dup1", "g_x_1__dup1",
+    ]
+
+    # A pre-existing ``__dupN`` name cannot collide with a generated suffix: the
+    # duplicated "foo" takes "foo__dup1", so the literal "foo__dup1" already in
+    # the input is itself bumped to "foo__dup1__dup1".
+    assert make_unique_names(["foo", "foo", "foo__dup1"]) == [
+        "foo", "foo__dup1", "foo__dup1__dup1",
+    ]
+
+    # Triple duplicates all become unique with an incrementing suffix.
+    assert make_unique_names(["v", "v", "v"]) == ["v", "v__dup1", "v__dup2"]
+
+    # Pre-existing ``__dup1``/``__dup2`` ahead of the duplicate force the inner
+    # suffix-search loop through multiple iterations: resolving the final "a"
+    # probes "a__dup1" (taken) and "a__dup2" (taken) before settling on
+    # "a__dup3". A second duplicate must resume from the cached counter rather
+    # than rescan from 1, landing on "a__dup4".
+    assert make_unique_names(["a", "a__dup1", "a__dup2", "a"]) == [
+        "a", "a__dup1", "a__dup2", "a__dup3",
+    ]
+    assert make_unique_names(["a", "a__dup1", "a__dup2", "a", "a"]) == [
+        "a", "a__dup1", "a__dup2", "a__dup3", "a__dup4",
+    ]
+
+    # Collision-free input is returned unchanged.
+    assert make_unique_names(["a", "b", "c"]) == ["a", "b", "c"]
+
+
 @unittest.skipUnless('XPRESS' in INSTALLED_SOLVERS, 'XPRESS is not installed.')
 class TestXPRESS(BaseTest):
 
@@ -1756,13 +2246,32 @@ class TestXPRESS(BaseTest):
         self.b = cp.Variable(name='b')
         self.c = cp.Variable(name='c')
 
-        self.x = cp.Variable(2, name='x')
+        self.x = cp.Variable(2, name='x', integer=True)
         self.y = cp.Variable(3, name='y')
         self.z = cp.Variable(2, name='z')
 
         self.A = cp.Variable((2, 2), name='A')
         self.B = cp.Variable((2, 2), name='B')
         self.C = cp.Variable((3, 2), name='C')
+
+    def test_xpress_duplicate_variable_names(self) -> None:
+        """Two variables that share a name() must not crash the conic interface.
+
+        cvxpy derives Xpress column names from ``Variable.name()``, so two
+        variables created with the same name previously produced duplicate
+        columns, which Xpress >= 9.5 rejects with ``?1030``. The SOC constraints
+        force the problem through the conic interface.
+        """
+        x = cp.Variable(2, name='dup')
+        y = cp.Variable(2, name='dup')
+        prob = cp.Problem(
+            cp.Minimize(cp.sum(x) + cp.sum(y)),
+            [x >= 1, y >= 2, cp.norm(x, 2) <= 10, cp.norm(y, 2) <= 10],
+        )
+        prob.solve(solver=cp.XPRESS)
+        assert prob.status in (cp.OPTIMAL, cp.OPTIMAL_INACCURATE)
+        self.assertItemsAlmostEqual(x.value, [1, 1], places=3)
+        self.assertItemsAlmostEqual(y.value, [2, 2], places=3)
 
     def test_xpress_warm_start(self) -> None:
         """Make sure that warm starting Xpress behaves as expected
@@ -1927,6 +2436,9 @@ class TestXPRESS(BaseTest):
     def test_xpress_mi_socp_2(self) -> None:
         StandardTestSOCPs.test_mi_socp_2(solver='XPRESS')
 
+    def test_xpress_lp_bound_attr(self) -> None:
+        StandardTestLPs.test_lp_bound_attr(solver='XPRESS')
+
 
 @unittest.skipUnless('NAG' in INSTALLED_SOLVERS, 'NAG is not installed.')
 class TestNAG(BaseTest):
@@ -1966,7 +2478,7 @@ class TestNAG(BaseTest):
 
     def test_nag_quad_obj(self) -> None:
         """Test NAG canonicalization with a quadratic objective.
-        """    
+        """
         x = cp.Variable(2)
         expr = cp.sum_squares(x)
         constr = [x >= 1]
@@ -2111,6 +2623,21 @@ class TestSCIP(unittest.TestCase):
                   "Try another solver, or solve with verbose=True for more information."
             assert str(se.value) == exc
 
+    def test_scip_solver_stats(self) -> None:
+        import pyscipopt
+
+        sth = sths.lp_0()
+        sth.solve(solver="SCIP")
+        stats = sth.prob.solver_stats
+        assert stats.solver_name == "SCIP"
+        assert stats.solve_time is not None
+        assert stats.num_iters is not None
+        assert stats.extra_stats["scip_status"] == "optimal"
+        assert isinstance(stats.extra_stats["model"], pyscipopt.Model)
+
+    def test_scip_lp_bound_attr(self) -> None:
+        StandardTestLPs.test_lp_bound_attr(solver='SCIP', duals=False)
+
 
 # We can't inherit from unittest.TestCase since we access some advanced pytest features.
 # As a result, we use the pytest skipif decorator instead of unittest.skipUnless.
@@ -2131,21 +2658,22 @@ class TestHIGHS:
             StandardTestLPs.test_mi_lp_3,
             StandardTestLPs.test_mi_lp_4,
             StandardTestLPs.test_mi_lp_5,
+            StandardTestLPs.test_mi_lp_6,
         ],
     )
     def test_highs_solving(self, problem) -> None:
-        problem(solver=cp.HIGHS)
-
-    def test_highs_nonstandard_name(self) -> None:
-        """Test HiGHS solver with non-capitalized solver name."""
-        # https://github.com/cvxpy/cvxpy/issues/2751
-        StandardTestLPs.test_lp_0(solver="HiGHS")
+        # HACK needed to use the HiGHS conic interface rather than
+        # the QP interface for LPs.
+        from cvxpy.reductions.solvers.conic_solvers.highs_conif import HIGHS
+        solver = HIGHS()
+        solver.name = lambda: "HIGHS CONIC"
+        problem(solver=solver)
 
     @pytest.mark.parametrize(
         ["problem", "confirmation_string"],
         [
-            (StandardTestLPs.test_lp_2, "Solving LP .* with basis"),
-            (StandardTestLPs.test_mi_lp_2, "MIP start solution is feasible"),
+            (StandardTestLPs.test_lp_2, "Solving LP with useful basis"),
+            (StandardTestLPs.test_mi_lp_2, "Assessing feasibility of MIP"),
         ],
     )
     def test_highs_warm_start(self, problem, confirmation_string, capfd) -> None:
@@ -2161,17 +2689,143 @@ class TestHIGHS:
         captured = capfd.readouterr()
         assert re.search(confirmation_string, captured.out) is not None
 
+    def test_highs_validate_column_name(self) -> None:
+        """Test that HiGHS column name check is working correctly.
+
+        For more information about the rules, see:
+        cvxpy.reductions.solvers.conic_solvers.highs_conif.INVALID_COLUMN_NAME_MESSAGE_TEMPLATE
+        """
+        from cvxpy.reductions.solvers.conic_solvers.highs_conif import validate_column_name
+
+        must_not_be_a_keyword = set(
+            ["st", "bounds", "min", "max", "bin", "binary", "gen", "semi", "end"]
+        )
+        must_not_begin_with = set(string.digits + "eE.=()<>[]")
+        may_contain = set(string.ascii_letters + string.digits + "\"!#$%&/}{,;?@_‘’'`|~.=()<>")
+        must_not_contain = set(string.printable) - set(may_contain)
+        may_begin_with = (set(may_contain) - set(must_not_begin_with)).union(
+            set(must_not_be_a_keyword) - set(["end"])
+        )
+
+        # Happy path: valid names
+        valid_names = (
+            ["a" * 255]
+            + [single_char_name for single_char_name in may_begin_with - must_not_be_a_keyword]
+            + [name for beginning, contains in zip(may_begin_with, may_contain)
+               if (name := f"{beginning}{contains}") not in must_not_be_a_keyword]
+        )
+        for name in valid_names:
+            validate_column_name(name)
+
+        # Unhappy path: invalid names
+        invalid_names = (
+            ["a" * 256]
+            + [keyword for keyword in must_not_be_a_keyword]
+            + [f"{beginning}_with" for beginning in must_not_begin_with]
+            + [f"a_{containing}_name" for containing in must_not_contain]
+        )
+        for name in invalid_names:
+            with pytest.raises(ValueError):
+                validate_column_name(name)
+
+    @pytest.mark.parametrize(
+        "variables",
+        [
+            [
+                cp.Variable(name="var_with_no_shape"),
+                cp.Variable(name="var_with_shape_1", shape=1),
+                cp.Variable(name="var_with_shape_2_by_2_by_2", shape=[2, 2, 2]),
+                cp.Variable(name="nonneg_var_with_no_shape", nonneg=True),
+                cp.Variable(name="nonneg_var_with_shape_1", nonneg=True, shape=1),
+                cp.Variable(name="nonneg_var_with_shape_2_by_2", nonneg=True, shape=[2, 2]),
+                cp.Variable(name="boolean_variable_to_test_conif", boolean=True),
+            ],
+            [
+                cp.Variable(name="var_with_no_shape"),
+                cp.Variable(name="var_with_shape_1", shape=1),
+                cp.Variable(name="var_with_shape_2_by_2_by_2", shape=[2, 2, 2]),
+                cp.Variable(name="nonneg_var_with_no_shape", nonneg=True),
+                cp.Variable(name="nonneg_var_with_shape_1", nonneg=True, shape=1),
+                cp.Variable(name="nonneg_var_with_shape_2_by_2", nonneg=True, shape=[2, 2]),
+                cp.Variable(name="no_boolean_variable_to_test_qpif", boolean=False),
+            ],
+        ],
+    )
+    def test_highs_written_model_contains_variable_names(self, variables, capfd) -> None:
+        """Test that HiGHS actually receives and writes out the variable names.
+
+        Args:
+            variables: List of cvxpy variables to be used in the test.
+            capfd: Captures stdout to search for confirmation_string.
+        """
+        prob = cp.Problem(cp.Minimize(cp.sum(cp.sum(variables))), [cp.sum(cp.sum(variables)) >= 1])
+
+        fd, model_path = tempfile.mkstemp(suffix=".lp")
+        os.close(fd)
+        try:
+            prob.solve(cp.HIGHS, verbose=True, write_model_file=model_path)
+
+            captured = capfd.readouterr().out
+            # Check that the model is written to the file
+            assert re.search(
+                rf"\nWriting the model to {re.escape(model_path)}\n", captured
+            ), f"Expected model file to be written to {model_path}."
+
+            # Check that the model contains the variable names as expected.
+            # We search the entire model file because some variables (e.g.,
+            # nonneg variables with BOUNDED_VARIABLES=True) may not appear
+            # in the bounds section when their bounds match the LP default.
+            with open(model_path, "r", encoding="utf-8") as model_file:
+                model = model_file.read()
+
+            for expected_var in variables:
+                if expected_var.ndim == 0:
+                    # Scalar variables appear by their plain name.
+                    assert expected_var.name() in model, (
+                        f"Expected variable {expected_var.name()} to appear "
+                        f"in the model file."
+                    )
+                else:
+                    # Array variables appear as name(idx) entries (parentheses,
+                    # not brackets, because HiGHS uses [] for quadratic objectives).
+                    sanitized_name = expected_var.name().replace("[", "(").replace("]", ")")
+                    actual_var_count = len(re.findall(
+                        re.escape(sanitized_name) + r"\(", model
+                    ))
+                    # Each element appears at least twice (objective + constraint),
+                    # and possibly once more in the bounds section.
+                    assert actual_var_count >= expected_var.size, (
+                        f"Expected variable {sanitized_name} to appear "
+                        f"at least {expected_var.size} times in the model file "
+                        f"but found {actual_var_count}."
+                    )
+        finally:
+            with contextlib.suppress(FileNotFoundError):
+                os.remove(model_path)
+
+    def test_highs_nonstandard_name(self) -> None:
+        """Test HiGHS solver with non-capitalized solver name."""
+        # https://github.com/cvxpy/cvxpy/issues/2751
+        StandardTestLPs.test_lp_0(solver="HiGHS")
+
     @pytest.mark.parametrize(
         "problem",
         # it is enough to validate the options with one problem from each type
         [StandardTestLPs.test_lp_0, StandardTestLPs.test_mi_lp_0],
     )
     def test_highs_options(self, problem) -> None:
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             problem(solver=cp.HIGHS, highs_options={"invalid_highs_option": None})
 
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             problem(solver=cp.HIGHS, invalid_highs_option=None)
+
+        invalid_value = "_invalid_value_"
+        with pytest.raises(ValueError):
+            problem(solver=cp.HIGHS, highs_options={"threads": invalid_value})
+
+        with pytest.raises(ValueError):
+            problem(solver=cp.HIGHS, threads=invalid_value)
 
         # Duplicate options
         with pytest.raises(TypeError):
@@ -2184,11 +2838,14 @@ class TestHIGHS:
             "time_limit": 0.123,  # double option
             "random_seed": 1234,  # int option
             # no need to optimize for real
-            "mip_rel_gap": 1.0,  
+            "mip_rel_gap": 1.0,
             "primal_feasibility_tolerance": 1e-3,
             "dual_feasibility_tolerance": 1e-3,
+            # advanced option, not available on HighsOptions
+            "presolve_rule_off": 2**10,
         }
         problem(solver=cp.HIGHS, highs_options=highs_options)
+
 
 
 class TestAllSolvers(BaseTest):
@@ -2217,9 +2874,14 @@ class TestAllSolvers(BaseTest):
         prob = cp.Problem(cp.Minimize(cp.norm(self.x, 1) + 1.0), [self.x == 0])
         for solver in SOLVER_MAP_CONIC.keys():
             if solver in INSTALLED_SOLVERS:
-                prob.solve(solver=solver)
-                self.assertAlmostEqual(prob.value, 1.0)
-                self.assertItemsAlmostEqual(self.x.value, [0, 0])
+                if solver is cp.MOSEK and not is_mosek_available():
+                    pass
+                elif solver is cp.KNITRO and not is_knitro_available():
+                    pass
+                else:
+                    prob.solve(solver=solver)
+                    self.assertAlmostEqual(prob.value, 1.0)
+                    self.assertItemsAlmostEqual(self.x.value, [0, 0])
             else:
                 with self.assertRaises(Exception) as cm:
                     prob.solve(solver=solver)
@@ -2227,8 +2889,11 @@ class TestAllSolvers(BaseTest):
 
         for solver in SOLVER_MAP_QP.keys():
             if solver in INSTALLED_SOLVERS:
-                prob.solve(solver=solver)
-                self.assertItemsAlmostEqual(self.x.value, [0, 0])
+                if solver is cp.KNITRO and not is_knitro_available():
+                    pass
+                else:
+                    prob.solve(solver=solver)
+                    self.assertItemsAlmostEqual(self.x.value, [0, 0])
             else:
                 with self.assertRaises(Exception) as cm:
                     prob.solve(solver=solver)
@@ -2242,9 +2907,14 @@ class TestAllSolvers(BaseTest):
             with pytest.raises(cp.error.SolverError, match="You need a mixed-integer "
                                                            "solver for this model"):
                 prob.solve()
-        else:
-            prob.solve()
+        elif is_mosek_available() and cp.MOSEK in INSTALLED_MI_SOLVERS:
+            prob.solve(solver=cp.MOSEK)
             self.assertItemsAlmostEqual(x.value, [0, 0])
+        elif cp.HIGHS in INSTALLED_MI_SOLVERS:
+            prob.solve(solver=cp.HIGHS)
+            self.assertItemsAlmostEqual(x.value, [0, 0])
+        else:
+            pass
 
 
 @unittest.skipUnless('ECOS' in INSTALLED_SOLVERS, 'ECOS_BB is not installed.')
@@ -2256,13 +2926,17 @@ class TestECOS_BB(unittest.TestCase):
         x = cp.Variable(1, name='x', integer=True)
         objective = cp.Minimize(cp.sum(x))
         prob = cp.Problem(objective, [x >= 0])
-        if INSTALLED_MI_SOLVERS != [cp.ECOS_BB]:
+        if INSTALLED_MI_SOLVERS != [cp.ECOS_BB] and is_mosek_available():
             prob.solve()
             assert prob.solver_stats.solver_name != cp.ECOS_BB
+        # The optional solvers build will always have MOSEK installed.
+        """
         else:
-            with pytest.raises(cp.error.SolverError, match="You need a mixed-integer "
-                                                           "solver for this model"):
-                prob.solve()
+            if not is_mosek_available():
+                with pytest.raises(cp.error.SolverError, match="You need a mixed-integer "
+                                                            "solver for this model"):
+                    prob.solve()
+        """
 
     def test_ecos_bb_lp_0(self) -> None:
         StandardTestLPs.test_lp_0(solver='ECOS_BB')
@@ -2394,6 +3068,9 @@ class TestSCIPY(unittest.TestCase):
         self.assertTrue("mip_node_count" in sth.prob.solver_stats.extra_stats)
         self.assertTrue("mip_dual_bound" in sth.prob.solver_stats.extra_stats)
 
+    def test_scipy_lp_bound_attr(self) -> None:
+        StandardTestLPs.test_lp_bound_attr(solver='SCIPY', duals=self.d)
+
 @unittest.skipUnless('COPT' in INSTALLED_SOLVERS, 'COPT is not installed.')
 class TestCOPT(unittest.TestCase):
 
@@ -2434,7 +3111,9 @@ class TestCOPT(unittest.TestCase):
         StandardTestECPs.test_expcone_1(solver='COPT')
 
     def test_copt_exp_soc_1(self) -> None:
-        StandardTestMixedCPs.test_exp_soc_1(solver='COPT')
+        # Tighten tolerances so the exponential-cone dual values converge
+        # to the 3 decimal places the test checks.
+        StandardTestMixedCPs.test_exp_soc_1(solver='COPT', FeasTol=1e-9, DualTol=1e-9)
 
     def test_copt_mi_lp_0(self) -> None:
         StandardTestLPs.test_mi_lp_0(solver='COPT')
@@ -2451,8 +3130,17 @@ class TestCOPT(unittest.TestCase):
     def test_copt_mi_lp_5(self) -> None:
         StandardTestLPs.test_mi_lp_5(solver='COPT')
 
+    def test_copt_mi_lp_inf_or_unb(self) -> None:
+        """COPT status 4 must map to the INFEASIBLE_OR_UNBOUNDED status
+        string, not the s.INF_OR_UNB status list (which made unpack raise).
+        """
+        y = cp.Variable(integer=True)
+        prob = cp.Problem(cp.Minimize(y), [y <= 10])
+        prob.solve(solver='COPT')
+        self.assertEqual(prob.status, cp.settings.INFEASIBLE_OR_UNBOUNDED)
+
     def test_copt_mi_socp_1(self) -> None:
-        StandardTestSOCPs.test_mi_socp_1(solver='COPT')
+        StandardTestSOCPs.test_mi_socp_1(solver='COPT', places=3)
 
     def test_copt_mi_socp_2(self) -> None:
         StandardTestSOCPs.test_mi_socp_2(solver='COPT')
@@ -2485,3 +3173,450 @@ class TestCOPT(unittest.TestCase):
 
         # Valid arg.
         problem.solve(solver=cp.COPT, feastol=1e-9)
+
+    def test_copt_lp_bound_attr(self) -> None:
+        StandardTestLPs.test_lp_bound_attr(solver='COPT', duals=False)
+
+    def test_copt_sdp_bound_attr(self) -> None:
+        """Test COPT PSD path with variable bounds.
+
+        Exercises the PSD branch in copt_conif.py where bounds are
+        converted to explicit inequality constraints for loadConeMatrix.
+        Uses tight bounds so the bound constraint is active.
+        """
+        X = cp.Variable((2, 2), symmetric=True)
+        t = cp.Variable(bounds=[2, 5])
+        prob = cp.Problem(cp.Minimize(t), [X >> 0, cp.trace(X) == 1])
+        prob.solve(solver='COPT')
+        self.assertAlmostEqual(t.value, 2.0, places=3)
+
+    def test_copt_infeasible_lp_ineq(self) -> None:
+        # Verifies COPT returns a valid dual Farkas infeasibility certificate.
+        StandardTestInfeasibleProblems.test_lp_ineq_constraints(solver='COPT')
+
+    def test_copt_infeasible_lp_eq(self) -> None:
+        StandardTestInfeasibleProblems.test_lp_eq_constraints(solver='COPT')
+
+
+@unittest.skipUnless('COSMO' in INSTALLED_SOLVERS, 'COSMO is not installed.')
+class TestCOSMO(BaseTest):
+    """Unit tests for COSMO solver interface."""
+
+    def setUp(self) -> None:
+        self.a = cp.Variable(name='a')
+        self.b = cp.Variable(name='b')
+        self.c = cp.Variable(name='c')
+
+        self.x = cp.Variable(2, name='x')
+        self.y = cp.Variable(3, name='y')
+        self.z = cp.Variable(2, name='z')
+
+        self.A = cp.Variable((2, 2), name='A')
+        self.B = cp.Variable((2, 2), name='B')
+        self.C = cp.Variable((3, 2), name='C')
+
+    def test_cosmo_options(self) -> None:
+        """Test that COSMO solver options work."""
+        # Test basic options with simple problem
+        prob = cp.Problem(cp.Minimize(cp.norm(self.x, 1) + 1.0), [self.x == 0])
+
+        # Test with default settings
+        prob.solve(solver=cp.COSMO, verbose=True)
+        self.assertAlmostEqual(prob.value, 1.0)
+        self.assertItemsAlmostEqual(self.x.value, [0, 0])
+
+        # Test with custom settings
+        prob.solve(solver=cp.COSMO, eps_abs=1e-4, verbose=True)
+        self.assertAlmostEqual(prob.value, 1.0)
+        self.assertItemsAlmostEqual(self.x.value, [0, 0])
+
+    def test_cosmo_lp_0(self) -> None:
+        StandardTestLPs.test_lp_0(solver='COSMO')
+
+    def test_cosmo_lp_1(self) -> None:
+        StandardTestLPs.test_lp_1(solver='COSMO')
+
+    def test_cosmo_lp_2(self) -> None:
+        StandardTestLPs.test_lp_2(solver='COSMO')
+
+    def test_cosmo_lp_3(self) -> None:
+        StandardTestLPs.test_lp_3(solver='COSMO')
+
+    def test_cosmo_lp_4(self) -> None:
+        StandardTestLPs.test_lp_4(solver='COSMO')
+
+    def test_cosmo_lp_5(self) -> None:
+        StandardTestLPs.test_lp_5(solver='COSMO')
+
+    def test_cosmo_qp_0(self) -> None:
+        StandardTestQPs.test_qp_0(solver='COSMO')
+
+    def test_cosmo_socp_0(self) -> None:
+        StandardTestSOCPs.test_socp_0(solver='COSMO')
+
+    def test_cosmo_socp_1(self) -> None:
+        StandardTestSOCPs.test_socp_1(solver='COSMO')
+
+    def test_cosmo_socp_2(self) -> None:
+        StandardTestSOCPs.test_socp_2(solver='COSMO')
+
+    def test_cosmo_socp_3(self) -> None:
+        # axis 0
+        StandardTestSOCPs.test_socp_3ax0(solver='COSMO')
+        # axis 1
+        StandardTestSOCPs.test_socp_3ax1(solver='COSMO')
+
+    def test_cosmo_expcone_1(self) -> None:
+        StandardTestECPs.test_expcone_1(solver='COSMO')
+
+    def test_cosmo_exp_soc_1(self) -> None:
+        StandardTestMixedCPs.test_exp_soc_1(solver='COSMO')
+
+    def test_cosmo_pcp_1(self) -> None:
+        StandardTestPCPs.test_pcp_1(solver='COSMO')
+
+    def test_cosmo_pcp_2(self) -> None:
+        StandardTestPCPs.test_pcp_2(solver='COSMO')
+
+    def test_cosmo_pcp_3(self) -> None:
+        StandardTestPCPs.test_pcp_3(solver='COSMO')
+
+    def test_cosmo_sdp_1min(self) -> None:
+        StandardTestSDPs.test_sdp_1min(solver='COSMO')
+
+    def test_cosmo_sdp_2(self) -> None:
+        places = 3
+        sth = sths.sdp_2()
+        sth.solve(solver='COSMO')
+        sth.verify_objective(places)
+        sth.check_primal_feasibility(places)
+        sth.verify_primal_values(places)
+        sth.check_complementarity(places)
+        sth.check_dual_domains(places)
+
+    def test_warm_start(self) -> None:
+        """Test warm starting.
+        """
+        x = cp.Variable(10)
+        obj = cp.Minimize(cp.sum(cp.exp(x)))
+        prob = cp.Problem(obj, [cp.sum(x) == 1])
+        result = prob.solve(solver=cp.COSMO)
+        time = prob.solver_stats.solve_time
+        result2 = prob.solve(solver=cp.COSMO, warm_start=True)
+        time2 = prob.solver_stats.solve_time
+        self.assertAlmostEqual(result2, result, places=2)
+        print(time > time2)
+
+def is_knitro_available():
+    """Check if KNITRO is installed and a license is available.
+
+    Detection is intentionally based on environment variables rather than
+    importing ``knitro``: importing it loads the native KNITRO runtime (and
+    a bundled OpenMP library on macOS) into the test process, which can
+    crash other solvers -- e.g. an IPOPT solve segfaults on macOS once
+    knitro has been imported.
+    """
+    if 'KNITRO' not in INSTALLED_SOLVERS:
+        return False
+    return bool(
+        os.environ.get('ARTELYS_LICENSE')
+        or os.environ.get('ARTELYS_LICENSE_NETWORK_ADDR')
+    )
+
+@pytest.mark.knitro
+@unittest.skipUnless(is_knitro_available(), 'KNITRO is not installed or license is not available.')
+class TestKNITRO(BaseTest):
+
+    def test_knitro_lp_0(self) -> None:
+        StandardTestLPs.test_lp_0(solver=cp.KNITRO)
+
+    def test_knitro_lp_1(self) -> None:
+        StandardTestLPs.test_lp_1(solver=cp.KNITRO)
+
+    def test_knitro_lp_2(self) -> None:
+        StandardTestLPs.test_lp_2(solver=cp.KNITRO)
+
+    def test_knitro_lp_3(self) -> None:
+        StandardTestLPs.test_lp_3(solver=cp.KNITRO)
+
+    def test_knitro_lp_4(self) -> None:
+        StandardTestLPs.test_lp_4(solver=cp.KNITRO)
+
+    def test_knitro_lp_5(self) -> None:
+        StandardTestLPs.test_lp_5(solver=cp.KNITRO)
+
+    def test_knitro_lp_6(self) -> None:
+        StandardTestLPs.test_lp_6(solver=cp.KNITRO)
+
+    def test_knitro_lp_bound_attr(self) -> None:
+        StandardTestLPs.test_lp_bound_attr(solver=cp.KNITRO)
+
+    def test_knitro_socp_0(self) -> None:
+        StandardTestSOCPs.test_socp_0(solver=cp.KNITRO)
+
+    def test_knitro_socp_1(self) -> None:
+        StandardTestSOCPs.test_socp_1(solver=cp.KNITRO)
+
+    def test_knitro_socp_2(self) -> None:
+        StandardTestSOCPs.test_socp_2(solver=cp.KNITRO)
+
+    def test_knitro_socp_3(self) -> None:
+        # axis 0
+        StandardTestSOCPs.test_socp_3ax0(solver=cp.KNITRO)
+        # axis 1
+        StandardTestSOCPs.test_socp_3ax1(solver=cp.KNITRO)
+
+    def test_knitro_socp_bounds_attr(self) -> None:
+        StandardTestSOCPs.test_socp_bounds_attr(solver=cp.KNITRO)
+
+    def test_knitro_mi_lp_0(self) -> None:
+        StandardTestLPs.test_mi_lp_0(solver=cp.KNITRO)
+
+    def test_knitro_mi_lp_1(self) -> None:
+        StandardTestLPs.test_mi_lp_1(solver=cp.KNITRO)
+
+    def test_knitro_mi_lp_2(self) -> None:
+        StandardTestLPs.test_mi_lp_2(solver=cp.KNITRO)
+
+    def test_knitro_mi_lp_3(self) -> None:
+        StandardTestLPs.test_mi_lp_3(solver=cp.KNITRO)
+
+    def test_knitro_mi_lp_5(self) -> None:
+        StandardTestLPs.test_mi_lp_5(solver=cp.KNITRO)
+
+    def test_knitro_mi_socp_1(self) -> None:
+        StandardTestSOCPs.test_mi_socp_1(solver=cp.KNITRO)
+
+    def test_knitro_mi_socp_2(self) -> None:
+        StandardTestSOCPs.test_mi_socp_2(solver=cp.KNITRO)
+
+    def test_knitro_qp_0(self) -> None:
+        StandardTestQPs.test_qp_0(solver=cp.KNITRO)
+
+    def test_knitro_expcone_1(self) -> None:
+        StandardTestECPs.test_expcone_1(solver=cp.KNITRO)
+
+    def test_knitro_pcp_1(self) -> None:
+        StandardTestPCPs.test_pcp_1(solver=cp.KNITRO)
+
+    def test_knitro_pcp_2(self) -> None:
+        StandardTestPCPs.test_pcp_2(solver=cp.KNITRO)
+
+    def test_knitro_pcp_3(self) -> None:
+        StandardTestPCPs.test_pcp_3(solver=cp.KNITRO)
+
+    def test_knitro_mi_pcp_0(self) -> None:
+        StandardTestPCPs.test_mi_pcp_0(solver=cp.KNITRO)
+
+    def test_knitro_sdp_1min(self) -> None:
+        StandardTestSDPs.test_sdp_1min(solver=cp.KNITRO)
+
+    def test_knitro_sdp_1max(self) -> None:
+        StandardTestSDPs.test_sdp_1max(solver=cp.KNITRO)
+
+    def test_knitro_sdp_2(self) -> None:
+        StandardTestSDPs.test_sdp_2(solver=cp.KNITRO)
+
+    def test_knitro_exp_soc_1(self) -> None:
+        StandardTestMixedCPs.test_exp_soc_1(solver=cp.KNITRO)
+
+    def test_knitro_sdp_pcp_1(self) -> None:
+        StandardTestMixedCPs.test_sdp_pcp_1(solver=cp.KNITRO)
+
+    def test_knitro_params(self) -> None:
+        n = 10
+        m = 4
+        np.random.seed(0)
+        A = np.random.randn(m, n)
+        x = np.random.randn(n)
+        y = A.dot(x)
+
+        # Solve a simple basis pursuit problem for testing purposes.
+        z = cp.Variable(n)
+        objective = cp.Minimize(cp.norm1(z))
+        constraints = [A @ z == y]
+        problem = cp.Problem(objective, constraints)
+
+        with self.assertRaises(Exception):
+            opts = {"a": "invalid"}
+            problem.solve(solver=cp.KNITRO, **opts)
+
+        with self.assertRaises(Exception):
+            opts = {"algorithm": "invalid"}
+            problem.solve(solver=cp.KNITRO, **opts)
+
+        opts = {"algorithm": 0}
+        problem.solve(solver=cp.KNITRO, **opts)
+
+@unittest.skipUnless("CUOPT" in INSTALLED_SOLVERS, "CUOPT is not installed.")
+class TestCUOPT(unittest.TestCase):
+    import os
+
+    kwargs = {
+        "pdlp_solver_mode": os.environ.get("CUOPT_PDLP_SOLVER_MODE", "Stable2"),
+        "solver_method": os.environ.get("CUOPT_SOLVER_METHOD", 0),
+    }
+
+    def test_cuopt_lp_0(self) -> None:
+        StandardTestLPs.test_lp_0(solver="CUOPT", duals=True, places=4, **TestCUOPT.kwargs)
+
+    def test_cuopt_lp_1(self) -> None:
+        StandardTestLPs.test_lp_1(solver="CUOPT", duals=True, places=4, **TestCUOPT.kwargs)
+
+    def test_cuopt_lp_2(self) -> None:
+        StandardTestLPs.test_lp_2(solver="CUOPT", duals=True, places=4, **TestCUOPT.kwargs)
+
+    def test_cuopt_lp_3(self) -> None:
+        # cuOpt's PSLP presolve returns UnboundedOrInfeasible for this
+        # unbounded LP, which maps to INFEASIBLE_OR_UNBOUNDED (prob.value
+        # is None rather than -inf). Assert status directly instead of
+        # calling verify_objective (which would assertAlmostEqual(None, -inf)).
+        # Precedent: test_pdlp_lp_4 handles the same situation for PDLP.
+        sth = sths.lp_3()
+        sth.solve(solver="CUOPT", duals=True, **TestCUOPT.kwargs)
+        self.assertIn(
+            sth.prob.status,
+            [cp.settings.UNBOUNDED, cp.settings.INFEASIBLE_OR_UNBOUNDED],
+        )
+
+    def test_cuopt_lp_4(self) -> None:
+        # In this case cuopt throws an exception because there are crossing
+        # variable bounds x <= 0 and x >= 1
+        try:
+            StandardTestLPs.test_lp_4(solver="CUOPT", duals=True, places=4, **TestCUOPT.kwargs)
+        except Exception as e:
+            assert "crossing bounds" in str(e)
+
+    def test_cuopt_lp_5(self) -> None:
+        StandardTestLPs.test_lp_5(solver="CUOPT", duals=True, places=4, **TestCUOPT.kwargs)
+
+    def test_cuopt_lp_6(self) -> None:
+        StandardTestLPs.test_lp_5(solver="CUOPT", duals=True, places=4, **TestCUOPT.kwargs)
+
+    def test_cuopt_lp_7(self) -> None:
+        StandardTestLPs.test_lp_5(solver="CUOPT", duals=True, places=4, **TestCUOPT.kwargs)
+
+    def test_cuopt_mi_lp_0(self) -> None:
+        StandardTestLPs.test_mi_lp_0(solver="CUOPT", **TestCUOPT.kwargs)
+
+    def test_cuopt_mi_lp_1(self) -> None:
+        StandardTestLPs.test_mi_lp_1(solver="CUOPT", **TestCUOPT.kwargs)
+
+    def test_cuopt_mi_lp_2(self) -> None:
+        StandardTestLPs.test_mi_lp_2(solver="CUOPT", **TestCUOPT.kwargs)
+
+    def test_cuopt_mi_lp_3(self) -> None:
+        TestCUOPT.kwargs["time_limit"] = 5
+        try:
+            StandardTestLPs.test_mi_lp_3(solver="CUOPT", **TestCUOPT.kwargs)
+        finally:
+            del TestCUOPT.kwargs["time_limit"]
+
+    # This is an unconstrained problem, which cuopt doesn't handle.
+    # Error message from cvxpy should be returned
+    def test_cuopt_mi_lp_4(self) -> None:
+        try:
+            StandardTestLPs.test_mi_lp_4(solver="CUOPT", **TestCUOPT.kwargs)
+        except Exception as e:
+            assert "cannot solve this problem" in str(e)
+
+    def test_cuopt_mi_lp_5(self) -> None:
+        StandardTestLPs.test_mi_lp_5(solver="CUOPT", **TestCUOPT.kwargs, time_limit=5)
+
+    def test_cuopt_mi_lp_7(self) -> None:
+        StandardTestLPs.test_mi_lp_5(solver="CUOPT", **TestCUOPT.kwargs, time_limit=5)
+
+    def test_cuopt_qp_0(self) -> None:
+        StandardTestQPs.test_qp_0(solver="CUOPT", **TestCUOPT.kwargs, time_limit=5)
+
+    socp_kwargs = {
+        **kwargs,
+        "solver_method": "Barrier",
+        "presolve": 0,
+    }
+
+    def test_cuopt_socp_0(self) -> None:
+        StandardTestSOCPs.test_socp_0(
+            solver="CUOPT", duals=False, places=3, **TestCUOPT.socp_kwargs
+        )
+
+    def test_cuopt_socp_1(self) -> None:
+        StandardTestSOCPs.test_socp_1(
+            solver="CUOPT", duals=False, places=3, **TestCUOPT.socp_kwargs
+        )
+
+    def test_cuopt_socp_2(self) -> None:
+        StandardTestSOCPs.test_socp_2(
+            solver="CUOPT", duals=False, places=3, **TestCUOPT.socp_kwargs
+        )
+
+    def test_cuopt_socp_3(self) -> None:
+        StandardTestSOCPs.test_socp_3ax0(
+            solver="CUOPT", duals=False, places=3, **TestCUOPT.socp_kwargs
+        )
+        StandardTestSOCPs.test_socp_3ax1(
+            solver="CUOPT", duals=False, places=3, **TestCUOPT.socp_kwargs
+        )
+
+    def test_cuopt_socp_lorentz_min_x0(self) -> None:
+        """Matches cuOpt barrier Lorentz QCMATRIX smoke test (min x0, x1=1, SOC).
+
+        x0 is unconstrained below; cuOpt still requires a non-negative lower
+        bound on the lifted SOC head auxiliary variable.
+        """
+        x0 = cp.Variable()
+        x1 = cp.Variable(nonneg=True)
+        x2 = cp.Variable()
+        prob = cp.Problem(cp.Minimize(x0), [x1 == 1, cp.norm(cp.hstack([x1, x2])) <= x0])
+        prob.solve(solver="CUOPT", **TestCUOPT.socp_kwargs)
+        self.assertEqual(prob.status, cp.OPTIMAL)
+        self.assertAlmostEqual(prob.value, 1.0, places=3)
+        self.assertAlmostEqual(x0.value, 1.0, places=3)
+        self.assertAlmostEqual(x1.value, 1.0, places=3)
+        self.assertAlmostEqual(x2.value, 0.0, places=3)
+
+    def test_cuopt_mi_socp_error(self) -> None:
+        sth = sths.mi_socp_1()
+        with self.assertRaises(cp.error.SolverError):
+            sth.solve(solver="CUOPT", **TestCUOPT.kwargs)
+
+    def test_cuopt_mi_socp_not_advertised(self) -> None:
+        """cuOpt must not advertise mixed-integer SOC support.
+
+        Otherwise solver selection routes an MI-SOCP to cuOpt and the user
+        hits a hard SolverError at solve time (see test_cuopt_mi_socp_error)
+        instead of the problem being deferred to a capable backend.
+        """
+        # SOC is fine for continuous problems but not for mixed-integer ones.
+        self.assertIn(SOC, CUOPT.SUPPORTED_CONSTRAINTS)
+        self.assertNotIn(SOC, CUOPT.MI_SUPPORTED_CONSTRAINTS)
+
+        x = cp.Variable(2, integer=True)
+        mi_socp = cp.Problem(
+            cp.Minimize(cp.norm(x, 2)), [x[0] + x[1] >= 3, x >= 0, x <= 5]
+        )
+        pf = ProblemForm(mi_socp)
+        self.assertTrue(pf.is_mixed_integer())
+        self.assertFalse(CUOPT().can_solve(pf))
+
+
+@pytest.mark.parametrize("solver", INSTALLED_SOLVERS)
+def test_offset_in_opt_val(solver):
+    """Solvers must add the constant OFFSET back in invert().
+
+    partial_optimize uses prob._solution.opt_val directly, so a missing
+    OFFSET causes it to return the wrong value.  A large constant in the
+    objective makes the error obvious.
+    """
+    x = cp.Variable()
+    t = cp.Variable()
+    inner = cp.Problem(cp.Minimize(t + 1000), [t >= x])
+    try:
+        f = partial_optimize(inner, opt_vars=[t], solver=solver)
+        x.value = 0.0
+        f.value
+    except (cp.error.SolverError, Exception) as e:
+        if "SolverError" in type(e).__name__ or "license" in str(e).lower():
+            pytest.skip(f"Solver {solver} cannot solve this problem")
+        raise
+    assert abs(f.value - 1000.0) < 1e-2

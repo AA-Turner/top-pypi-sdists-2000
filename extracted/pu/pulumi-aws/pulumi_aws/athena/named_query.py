@@ -21,12 +21,13 @@ class NamedQueryArgs:
     def __init__(__self__, *,
                  database: pulumi.Input[_builtins.str],
                  query: pulumi.Input[_builtins.str],
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 workgroup: Optional[pulumi.Input[_builtins.str]] = None):
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 workgroup: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a NamedQuery resource.
+
         :param pulumi.Input[_builtins.str] database: Database to which the query belongs.
         :param pulumi.Input[_builtins.str] query: Text of the query itself. In other words, all query statements. Maximum length of 262144.
         :param pulumi.Input[_builtins.str] description: Brief explanation of the query. Maximum length of 1024.
@@ -71,64 +72,65 @@ class NamedQueryArgs:
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Brief explanation of the query. Maximum length of 1024.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Plain language name for the query. Maximum length of 128.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def workgroup(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def workgroup(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Workgroup to which the query belongs. Defaults to `primary`
         """
         return pulumi.get(self, "workgroup")
 
     @workgroup.setter
-    def workgroup(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def workgroup(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "workgroup", value)
 
 
 @pulumi.input_type
 class _NamedQueryState:
     def __init__(__self__, *,
-                 database: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 query: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 workgroup: Optional[pulumi.Input[_builtins.str]] = None):
+                 database: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 query: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 workgroup: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering NamedQuery resources.
+
         :param pulumi.Input[_builtins.str] database: Database to which the query belongs.
         :param pulumi.Input[_builtins.str] description: Brief explanation of the query. Maximum length of 1024.
         :param pulumi.Input[_builtins.str] name: Plain language name for the query. Maximum length of 128.
@@ -151,74 +153,74 @@ class _NamedQueryState:
 
     @_builtins.property
     @pulumi.getter
-    def database(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def database(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Database to which the query belongs.
         """
         return pulumi.get(self, "database")
 
     @database.setter
-    def database(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def database(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "database", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Brief explanation of the query. Maximum length of 1024.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Plain language name for the query. Maximum length of 128.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def query(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def query(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Text of the query itself. In other words, all query statements. Maximum length of 262144.
         """
         return pulumi.get(self, "query")
 
     @query.setter
-    def query(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def query(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "query", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def workgroup(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def workgroup(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Workgroup to which the query belongs. Defaults to `primary`
         """
         return pulumi.get(self, "workgroup")
 
     @workgroup.setter
-    def workgroup(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def workgroup(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "workgroup", value)
 
 
@@ -228,12 +230,12 @@ class NamedQuery(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 database: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 query: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 workgroup: Optional[pulumi.Input[_builtins.str]] = None,
+                 database: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 query: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 workgroup: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides an Athena Named Query resource.
@@ -249,7 +251,6 @@ class NamedQuery(pulumi.CustomResource):
             deletion_window_in_days=7,
             description="Athena KMS Key")
         test_workgroup = aws.athena.Workgroup("test",
-            name="example",
             configuration={
                 "result_configuration": {
                     "encryption_configuration": {
@@ -257,7 +258,8 @@ class NamedQuery(pulumi.CustomResource):
                         "kms_key_arn": test.arn,
                     },
                 },
-            })
+            },
+            name="example")
         hoge_database = aws.athena.Database("hoge",
             name="users",
             bucket=hoge.id)
@@ -275,6 +277,7 @@ class NamedQuery(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:athena/namedQuery:NamedQuery example 0123456789
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -305,7 +308,6 @@ class NamedQuery(pulumi.CustomResource):
             deletion_window_in_days=7,
             description="Athena KMS Key")
         test_workgroup = aws.athena.Workgroup("test",
-            name="example",
             configuration={
                 "result_configuration": {
                     "encryption_configuration": {
@@ -313,7 +315,8 @@ class NamedQuery(pulumi.CustomResource):
                         "kms_key_arn": test.arn,
                     },
                 },
-            })
+            },
+            name="example")
         hoge_database = aws.athena.Database("hoge",
             name="users",
             bucket=hoge.id)
@@ -332,6 +335,7 @@ class NamedQuery(pulumi.CustomResource):
         $ pulumi import aws:athena/namedQuery:NamedQuery example 0123456789
         ```
 
+
         :param str resource_name: The name of the resource.
         :param NamedQueryArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -347,12 +351,12 @@ class NamedQuery(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 database: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 query: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 workgroup: Optional[pulumi.Input[_builtins.str]] = None,
+                 database: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 query: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 workgroup: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -382,12 +386,12 @@ class NamedQuery(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            database: Optional[pulumi.Input[_builtins.str]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            query: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            workgroup: Optional[pulumi.Input[_builtins.str]] = None) -> 'NamedQuery':
+            database: pulumi.Input[Optional[_builtins.str]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            query: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            workgroup: pulumi.Input[Optional[_builtins.str]] = None) -> 'NamedQuery':
         """
         Get an existing NamedQuery resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

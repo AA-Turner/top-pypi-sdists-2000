@@ -426,19 +426,19 @@ __all__ = [
 ]
 
 class GatewayRouteSpecArgsDict(TypedDict):
-    grpc_route: NotRequired[pulumi.Input['GatewayRouteSpecGrpcRouteArgsDict']]
+    grpc_route: NotRequired[pulumi.Input[Optional['GatewayRouteSpecGrpcRouteArgsDict']]]
     """
-    Specification of a gRPC gateway route.
+    Specification of a gRPC gateway route. See `grpc_route` Block for details.
     """
-    http2_route: NotRequired[pulumi.Input['GatewayRouteSpecHttp2RouteArgsDict']]
+    http2_route: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttp2RouteArgsDict']]]
     """
-    Specification of an HTTP/2 gateway route.
+    Specification of an HTTP/2 gateway route. See `http2_route` Block for details.
     """
-    http_route: NotRequired[pulumi.Input['GatewayRouteSpecHttpRouteArgsDict']]
+    http_route: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttpRouteArgsDict']]]
     """
-    Specification of an HTTP gateway route.
+    Specification of an HTTP gateway route. See `http_route` Block for details.
     """
-    priority: NotRequired[pulumi.Input[_builtins.int]]
+    priority: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Priority for the gateway route, between `0` and `1000`.
     """
@@ -446,14 +446,14 @@ class GatewayRouteSpecArgsDict(TypedDict):
 @pulumi.input_type
 class GatewayRouteSpecArgs:
     def __init__(__self__, *,
-                 grpc_route: Optional[pulumi.Input['GatewayRouteSpecGrpcRouteArgs']] = None,
-                 http2_route: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteArgs']] = None,
-                 http_route: Optional[pulumi.Input['GatewayRouteSpecHttpRouteArgs']] = None,
-                 priority: Optional[pulumi.Input[_builtins.int]] = None):
+                 grpc_route: pulumi.Input[Optional['GatewayRouteSpecGrpcRouteArgs']] = None,
+                 http2_route: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteArgs']] = None,
+                 http_route: pulumi.Input[Optional['GatewayRouteSpecHttpRouteArgs']] = None,
+                 priority: pulumi.Input[Optional[_builtins.int]] = None):
         """
-        :param pulumi.Input['GatewayRouteSpecGrpcRouteArgs'] grpc_route: Specification of a gRPC gateway route.
-        :param pulumi.Input['GatewayRouteSpecHttp2RouteArgs'] http2_route: Specification of an HTTP/2 gateway route.
-        :param pulumi.Input['GatewayRouteSpecHttpRouteArgs'] http_route: Specification of an HTTP gateway route.
+        :param pulumi.Input['GatewayRouteSpecGrpcRouteArgs'] grpc_route: Specification of a gRPC gateway route. See `grpc_route` Block for details.
+        :param pulumi.Input['GatewayRouteSpecHttp2RouteArgs'] http2_route: Specification of an HTTP/2 gateway route. See `http2_route` Block for details.
+        :param pulumi.Input['GatewayRouteSpecHttpRouteArgs'] http_route: Specification of an HTTP gateway route. See `http_route` Block for details.
         :param pulumi.Input[_builtins.int] priority: Priority for the gateway route, between `0` and `1000`.
         """
         if grpc_route is not None:
@@ -467,61 +467,61 @@ class GatewayRouteSpecArgs:
 
     @_builtins.property
     @pulumi.getter(name="grpcRoute")
-    def grpc_route(self) -> Optional[pulumi.Input['GatewayRouteSpecGrpcRouteArgs']]:
+    def grpc_route(self) -> pulumi.Input[Optional['GatewayRouteSpecGrpcRouteArgs']]:
         """
-        Specification of a gRPC gateway route.
+        Specification of a gRPC gateway route. See `grpc_route` Block for details.
         """
         return pulumi.get(self, "grpc_route")
 
     @grpc_route.setter
-    def grpc_route(self, value: Optional[pulumi.Input['GatewayRouteSpecGrpcRouteArgs']]):
+    def grpc_route(self, value: pulumi.Input[Optional['GatewayRouteSpecGrpcRouteArgs']]):
         pulumi.set(self, "grpc_route", value)
 
     @_builtins.property
     @pulumi.getter(name="http2Route")
-    def http2_route(self) -> Optional[pulumi.Input['GatewayRouteSpecHttp2RouteArgs']]:
+    def http2_route(self) -> pulumi.Input[Optional['GatewayRouteSpecHttp2RouteArgs']]:
         """
-        Specification of an HTTP/2 gateway route.
+        Specification of an HTTP/2 gateway route. See `http2_route` Block for details.
         """
         return pulumi.get(self, "http2_route")
 
     @http2_route.setter
-    def http2_route(self, value: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteArgs']]):
+    def http2_route(self, value: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteArgs']]):
         pulumi.set(self, "http2_route", value)
 
     @_builtins.property
     @pulumi.getter(name="httpRoute")
-    def http_route(self) -> Optional[pulumi.Input['GatewayRouteSpecHttpRouteArgs']]:
+    def http_route(self) -> pulumi.Input[Optional['GatewayRouteSpecHttpRouteArgs']]:
         """
-        Specification of an HTTP gateway route.
+        Specification of an HTTP gateway route. See `http_route` Block for details.
         """
         return pulumi.get(self, "http_route")
 
     @http_route.setter
-    def http_route(self, value: Optional[pulumi.Input['GatewayRouteSpecHttpRouteArgs']]):
+    def http_route(self, value: pulumi.Input[Optional['GatewayRouteSpecHttpRouteArgs']]):
         pulumi.set(self, "http_route", value)
 
     @_builtins.property
     @pulumi.getter
-    def priority(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def priority(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Priority for the gateway route, between `0` and `1000`.
         """
         return pulumi.get(self, "priority")
 
     @priority.setter
-    def priority(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def priority(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "priority", value)
 
 
 class GatewayRouteSpecGrpcRouteArgsDict(TypedDict):
     action: pulumi.Input['GatewayRouteSpecGrpcRouteActionArgsDict']
     """
-    Action to take if a match is determined.
+    Action to take if a match is determined. See `spec.grpc_route.action` Block for details.
     """
     match: pulumi.Input['GatewayRouteSpecGrpcRouteMatchArgsDict']
     """
-    Criteria for determining a request match.
+    Criteria for determining a request match. See `spec.grpc_route.match` Block for details.
     """
 
 @pulumi.input_type
@@ -530,8 +530,8 @@ class GatewayRouteSpecGrpcRouteArgs:
                  action: pulumi.Input['GatewayRouteSpecGrpcRouteActionArgs'],
                  match: pulumi.Input['GatewayRouteSpecGrpcRouteMatchArgs']):
         """
-        :param pulumi.Input['GatewayRouteSpecGrpcRouteActionArgs'] action: Action to take if a match is determined.
-        :param pulumi.Input['GatewayRouteSpecGrpcRouteMatchArgs'] match: Criteria for determining a request match.
+        :param pulumi.Input['GatewayRouteSpecGrpcRouteActionArgs'] action: Action to take if a match is determined. See `spec.grpc_route.action` Block for details.
+        :param pulumi.Input['GatewayRouteSpecGrpcRouteMatchArgs'] match: Criteria for determining a request match. See `spec.grpc_route.match` Block for details.
         """
         pulumi.set(__self__, "action", action)
         pulumi.set(__self__, "match", match)
@@ -540,7 +540,7 @@ class GatewayRouteSpecGrpcRouteArgs:
     @pulumi.getter
     def action(self) -> pulumi.Input['GatewayRouteSpecGrpcRouteActionArgs']:
         """
-        Action to take if a match is determined.
+        Action to take if a match is determined. See `spec.grpc_route.action` Block for details.
         """
         return pulumi.get(self, "action")
 
@@ -552,7 +552,7 @@ class GatewayRouteSpecGrpcRouteArgs:
     @pulumi.getter
     def match(self) -> pulumi.Input['GatewayRouteSpecGrpcRouteMatchArgs']:
         """
-        Criteria for determining a request match.
+        Criteria for determining a request match. See `spec.grpc_route.match` Block for details.
         """
         return pulumi.get(self, "match")
 
@@ -564,7 +564,7 @@ class GatewayRouteSpecGrpcRouteArgs:
 class GatewayRouteSpecGrpcRouteActionArgsDict(TypedDict):
     target: pulumi.Input['GatewayRouteSpecGrpcRouteActionTargetArgsDict']
     """
-    Target that traffic is routed to when a request matches the gateway route.
+    Target that traffic is routed to when a request matches the gateway route. See `spec.http2_route.action.target` Block for details.
     """
 
 @pulumi.input_type
@@ -572,7 +572,7 @@ class GatewayRouteSpecGrpcRouteActionArgs:
     def __init__(__self__, *,
                  target: pulumi.Input['GatewayRouteSpecGrpcRouteActionTargetArgs']):
         """
-        :param pulumi.Input['GatewayRouteSpecGrpcRouteActionTargetArgs'] target: Target that traffic is routed to when a request matches the gateway route.
+        :param pulumi.Input['GatewayRouteSpecGrpcRouteActionTargetArgs'] target: Target that traffic is routed to when a request matches the gateway route. See `spec.http2_route.action.target` Block for details.
         """
         pulumi.set(__self__, "target", target)
 
@@ -580,7 +580,7 @@ class GatewayRouteSpecGrpcRouteActionArgs:
     @pulumi.getter
     def target(self) -> pulumi.Input['GatewayRouteSpecGrpcRouteActionTargetArgs']:
         """
-        Target that traffic is routed to when a request matches the gateway route.
+        Target that traffic is routed to when a request matches the gateway route. See `spec.http2_route.action.target` Block for details.
         """
         return pulumi.get(self, "target")
 
@@ -592,21 +592,21 @@ class GatewayRouteSpecGrpcRouteActionArgs:
 class GatewayRouteSpecGrpcRouteActionTargetArgsDict(TypedDict):
     virtual_service: pulumi.Input['GatewayRouteSpecGrpcRouteActionTargetVirtualServiceArgsDict']
     """
-    Virtual service gateway route target.
+    Virtual service gateway route target. See `spec.http2_route.action.target.virtual_service` Block for details.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The port number that corresponds to the target for Virtual Service provider port. This is required when the provider (router or node) of the Virtual Service has multiple listeners.
+    Port number to match from the request.
     """
 
 @pulumi.input_type
 class GatewayRouteSpecGrpcRouteActionTargetArgs:
     def __init__(__self__, *,
                  virtual_service: pulumi.Input['GatewayRouteSpecGrpcRouteActionTargetVirtualServiceArgs'],
-                 port: Optional[pulumi.Input[_builtins.int]] = None):
+                 port: pulumi.Input[Optional[_builtins.int]] = None):
         """
-        :param pulumi.Input['GatewayRouteSpecGrpcRouteActionTargetVirtualServiceArgs'] virtual_service: Virtual service gateway route target.
-        :param pulumi.Input[_builtins.int] port: The port number that corresponds to the target for Virtual Service provider port. This is required when the provider (router or node) of the Virtual Service has multiple listeners.
+        :param pulumi.Input['GatewayRouteSpecGrpcRouteActionTargetVirtualServiceArgs'] virtual_service: Virtual service gateway route target. See `spec.http2_route.action.target.virtual_service` Block for details.
+        :param pulumi.Input[_builtins.int] port: Port number to match from the request.
         """
         pulumi.set(__self__, "virtual_service", virtual_service)
         if port is not None:
@@ -616,7 +616,7 @@ class GatewayRouteSpecGrpcRouteActionTargetArgs:
     @pulumi.getter(name="virtualService")
     def virtual_service(self) -> pulumi.Input['GatewayRouteSpecGrpcRouteActionTargetVirtualServiceArgs']:
         """
-        Virtual service gateway route target.
+        Virtual service gateway route target. See `spec.http2_route.action.target.virtual_service` Block for details.
         """
         return pulumi.get(self, "virtual_service")
 
@@ -626,14 +626,14 @@ class GatewayRouteSpecGrpcRouteActionTargetArgs:
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The port number that corresponds to the target for Virtual Service provider port. This is required when the provider (router or node) of the Virtual Service has multiple listeners.
+        Port number to match from the request.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
 
@@ -670,19 +670,19 @@ class GatewayRouteSpecGrpcRouteMatchArgsDict(TypedDict):
     """
     Fully qualified domain name for the service to match from the request.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The port number to match from the request.
+    Port number to match from the request.
     """
 
 @pulumi.input_type
 class GatewayRouteSpecGrpcRouteMatchArgs:
     def __init__(__self__, *,
                  service_name: pulumi.Input[_builtins.str],
-                 port: Optional[pulumi.Input[_builtins.int]] = None):
+                 port: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.str] service_name: Fully qualified domain name for the service to match from the request.
-        :param pulumi.Input[_builtins.int] port: The port number to match from the request.
+        :param pulumi.Input[_builtins.int] port: Port number to match from the request.
         """
         pulumi.set(__self__, "service_name", service_name)
         if port is not None:
@@ -702,25 +702,25 @@ class GatewayRouteSpecGrpcRouteMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The port number to match from the request.
+        Port number to match from the request.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
 
 class GatewayRouteSpecHttp2RouteArgsDict(TypedDict):
     action: pulumi.Input['GatewayRouteSpecHttp2RouteActionArgsDict']
     """
-    Action to take if a match is determined.
+    Action to take if a match is determined. See `spec.http2_route.action` Block for details.
     """
     match: pulumi.Input['GatewayRouteSpecHttp2RouteMatchArgsDict']
     """
-    Criteria for determining a request match.
+    Criteria for determining a request match. See `spec.http2_route.match` Block for details.
     """
 
 @pulumi.input_type
@@ -729,8 +729,8 @@ class GatewayRouteSpecHttp2RouteArgs:
                  action: pulumi.Input['GatewayRouteSpecHttp2RouteActionArgs'],
                  match: pulumi.Input['GatewayRouteSpecHttp2RouteMatchArgs']):
         """
-        :param pulumi.Input['GatewayRouteSpecHttp2RouteActionArgs'] action: Action to take if a match is determined.
-        :param pulumi.Input['GatewayRouteSpecHttp2RouteMatchArgs'] match: Criteria for determining a request match.
+        :param pulumi.Input['GatewayRouteSpecHttp2RouteActionArgs'] action: Action to take if a match is determined. See `spec.http2_route.action` Block for details.
+        :param pulumi.Input['GatewayRouteSpecHttp2RouteMatchArgs'] match: Criteria for determining a request match. See `spec.http2_route.match` Block for details.
         """
         pulumi.set(__self__, "action", action)
         pulumi.set(__self__, "match", match)
@@ -739,7 +739,7 @@ class GatewayRouteSpecHttp2RouteArgs:
     @pulumi.getter
     def action(self) -> pulumi.Input['GatewayRouteSpecHttp2RouteActionArgs']:
         """
-        Action to take if a match is determined.
+        Action to take if a match is determined. See `spec.http2_route.action` Block for details.
         """
         return pulumi.get(self, "action")
 
@@ -751,7 +751,7 @@ class GatewayRouteSpecHttp2RouteArgs:
     @pulumi.getter
     def match(self) -> pulumi.Input['GatewayRouteSpecHttp2RouteMatchArgs']:
         """
-        Criteria for determining a request match.
+        Criteria for determining a request match. See `spec.http2_route.match` Block for details.
         """
         return pulumi.get(self, "match")
 
@@ -763,21 +763,21 @@ class GatewayRouteSpecHttp2RouteArgs:
 class GatewayRouteSpecHttp2RouteActionArgsDict(TypedDict):
     target: pulumi.Input['GatewayRouteSpecHttp2RouteActionTargetArgsDict']
     """
-    Target that traffic is routed to when a request matches the gateway route.
+    Target that traffic is routed to when a request matches the gateway route. See `spec.http2_route.action.target` Block for details.
     """
-    rewrite: NotRequired[pulumi.Input['GatewayRouteSpecHttp2RouteActionRewriteArgsDict']]
+    rewrite: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttp2RouteActionRewriteArgsDict']]]
     """
-    Gateway route action to rewrite.
+    Gateway route action to rewrite. See `spec.http2_route.action.rewrite` Block for details.
     """
 
 @pulumi.input_type
 class GatewayRouteSpecHttp2RouteActionArgs:
     def __init__(__self__, *,
                  target: pulumi.Input['GatewayRouteSpecHttp2RouteActionTargetArgs'],
-                 rewrite: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteActionRewriteArgs']] = None):
+                 rewrite: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteActionRewriteArgs']] = None):
         """
-        :param pulumi.Input['GatewayRouteSpecHttp2RouteActionTargetArgs'] target: Target that traffic is routed to when a request matches the gateway route.
-        :param pulumi.Input['GatewayRouteSpecHttp2RouteActionRewriteArgs'] rewrite: Gateway route action to rewrite.
+        :param pulumi.Input['GatewayRouteSpecHttp2RouteActionTargetArgs'] target: Target that traffic is routed to when a request matches the gateway route. See `spec.http2_route.action.target` Block for details.
+        :param pulumi.Input['GatewayRouteSpecHttp2RouteActionRewriteArgs'] rewrite: Gateway route action to rewrite. See `spec.http2_route.action.rewrite` Block for details.
         """
         pulumi.set(__self__, "target", target)
         if rewrite is not None:
@@ -787,7 +787,7 @@ class GatewayRouteSpecHttp2RouteActionArgs:
     @pulumi.getter
     def target(self) -> pulumi.Input['GatewayRouteSpecHttp2RouteActionTargetArgs']:
         """
-        Target that traffic is routed to when a request matches the gateway route.
+        Target that traffic is routed to when a request matches the gateway route. See `spec.http2_route.action.target` Block for details.
         """
         return pulumi.get(self, "target")
 
@@ -797,41 +797,41 @@ class GatewayRouteSpecHttp2RouteActionArgs:
 
     @_builtins.property
     @pulumi.getter
-    def rewrite(self) -> Optional[pulumi.Input['GatewayRouteSpecHttp2RouteActionRewriteArgs']]:
+    def rewrite(self) -> pulumi.Input[Optional['GatewayRouteSpecHttp2RouteActionRewriteArgs']]:
         """
-        Gateway route action to rewrite.
+        Gateway route action to rewrite. See `spec.http2_route.action.rewrite` Block for details.
         """
         return pulumi.get(self, "rewrite")
 
     @rewrite.setter
-    def rewrite(self, value: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteActionRewriteArgs']]):
+    def rewrite(self, value: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteActionRewriteArgs']]):
         pulumi.set(self, "rewrite", value)
 
 
 class GatewayRouteSpecHttp2RouteActionRewriteArgsDict(TypedDict):
-    hostname: NotRequired[pulumi.Input['GatewayRouteSpecHttp2RouteActionRewriteHostnameArgsDict']]
+    hostname: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttp2RouteActionRewriteHostnameArgsDict']]]
     """
-    Host name to rewrite.
+    Host name to match on. See `spec.http2_route.match.hostname` Block for details.
     """
-    path: NotRequired[pulumi.Input['GatewayRouteSpecHttp2RouteActionRewritePathArgsDict']]
+    path: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttp2RouteActionRewritePathArgsDict']]]
     """
-    Exact path to rewrite.
+    Client request path to match on. See `spec.http2_route.match.path` Block for details.
     """
-    prefix: NotRequired[pulumi.Input['GatewayRouteSpecHttp2RouteActionRewritePrefixArgsDict']]
+    prefix: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttp2RouteActionRewritePrefixArgsDict']]]
     """
-    Specified beginning characters to rewrite.
+    Header value sent by the client must begin with the specified characters.
     """
 
 @pulumi.input_type
 class GatewayRouteSpecHttp2RouteActionRewriteArgs:
     def __init__(__self__, *,
-                 hostname: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteActionRewriteHostnameArgs']] = None,
-                 path: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteActionRewritePathArgs']] = None,
-                 prefix: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteActionRewritePrefixArgs']] = None):
+                 hostname: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteActionRewriteHostnameArgs']] = None,
+                 path: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteActionRewritePathArgs']] = None,
+                 prefix: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteActionRewritePrefixArgs']] = None):
         """
-        :param pulumi.Input['GatewayRouteSpecHttp2RouteActionRewriteHostnameArgs'] hostname: Host name to rewrite.
-        :param pulumi.Input['GatewayRouteSpecHttp2RouteActionRewritePathArgs'] path: Exact path to rewrite.
-        :param pulumi.Input['GatewayRouteSpecHttp2RouteActionRewritePrefixArgs'] prefix: Specified beginning characters to rewrite.
+        :param pulumi.Input['GatewayRouteSpecHttp2RouteActionRewriteHostnameArgs'] hostname: Host name to match on. See `spec.http2_route.match.hostname` Block for details.
+        :param pulumi.Input['GatewayRouteSpecHttp2RouteActionRewritePathArgs'] path: Client request path to match on. See `spec.http2_route.match.path` Block for details.
+        :param pulumi.Input['GatewayRouteSpecHttp2RouteActionRewritePrefixArgs'] prefix: Header value sent by the client must begin with the specified characters.
         """
         if hostname is not None:
             pulumi.set(__self__, "hostname", hostname)
@@ -842,38 +842,38 @@ class GatewayRouteSpecHttp2RouteActionRewriteArgs:
 
     @_builtins.property
     @pulumi.getter
-    def hostname(self) -> Optional[pulumi.Input['GatewayRouteSpecHttp2RouteActionRewriteHostnameArgs']]:
+    def hostname(self) -> pulumi.Input[Optional['GatewayRouteSpecHttp2RouteActionRewriteHostnameArgs']]:
         """
-        Host name to rewrite.
+        Host name to match on. See `spec.http2_route.match.hostname` Block for details.
         """
         return pulumi.get(self, "hostname")
 
     @hostname.setter
-    def hostname(self, value: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteActionRewriteHostnameArgs']]):
+    def hostname(self, value: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteActionRewriteHostnameArgs']]):
         pulumi.set(self, "hostname", value)
 
     @_builtins.property
     @pulumi.getter
-    def path(self) -> Optional[pulumi.Input['GatewayRouteSpecHttp2RouteActionRewritePathArgs']]:
+    def path(self) -> pulumi.Input[Optional['GatewayRouteSpecHttp2RouteActionRewritePathArgs']]:
         """
-        Exact path to rewrite.
+        Client request path to match on. See `spec.http2_route.match.path` Block for details.
         """
         return pulumi.get(self, "path")
 
     @path.setter
-    def path(self, value: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteActionRewritePathArgs']]):
+    def path(self, value: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteActionRewritePathArgs']]):
         pulumi.set(self, "path", value)
 
     @_builtins.property
     @pulumi.getter
-    def prefix(self) -> Optional[pulumi.Input['GatewayRouteSpecHttp2RouteActionRewritePrefixArgs']]:
+    def prefix(self) -> pulumi.Input[Optional['GatewayRouteSpecHttp2RouteActionRewritePrefixArgs']]:
         """
-        Specified beginning characters to rewrite.
+        Header value sent by the client must begin with the specified characters.
         """
         return pulumi.get(self, "prefix")
 
     @prefix.setter
-    def prefix(self, value: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteActionRewritePrefixArgs']]):
+    def prefix(self, value: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteActionRewritePrefixArgs']]):
         pulumi.set(self, "prefix", value)
 
 
@@ -908,7 +908,7 @@ class GatewayRouteSpecHttp2RouteActionRewriteHostnameArgs:
 class GatewayRouteSpecHttp2RouteActionRewritePathArgsDict(TypedDict):
     exact: pulumi.Input[_builtins.str]
     """
-    The exact path to match on.
+    Exact query parameter to match on.
     """
 
 @pulumi.input_type
@@ -916,7 +916,7 @@ class GatewayRouteSpecHttp2RouteActionRewritePathArgs:
     def __init__(__self__, *,
                  exact: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] exact: The exact path to match on.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
         """
         pulumi.set(__self__, "exact", exact)
 
@@ -924,7 +924,7 @@ class GatewayRouteSpecHttp2RouteActionRewritePathArgs:
     @pulumi.getter
     def exact(self) -> pulumi.Input[_builtins.str]:
         """
-        The exact path to match on.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
@@ -934,11 +934,11 @@ class GatewayRouteSpecHttp2RouteActionRewritePathArgs:
 
 
 class GatewayRouteSpecHttp2RouteActionRewritePrefixArgsDict(TypedDict):
-    default_prefix: NotRequired[pulumi.Input[_builtins.str]]
+    default_prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Default prefix used to replace the incoming route prefix when rewritten. Valid values: `ENABLED`, `DISABLED`.
     """
-    value: NotRequired[pulumi.Input[_builtins.str]]
+    value: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Value used to replace the incoming route prefix when rewritten.
     """
@@ -946,8 +946,8 @@ class GatewayRouteSpecHttp2RouteActionRewritePrefixArgsDict(TypedDict):
 @pulumi.input_type
 class GatewayRouteSpecHttp2RouteActionRewritePrefixArgs:
     def __init__(__self__, *,
-                 default_prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 value: Optional[pulumi.Input[_builtins.str]] = None):
+                 default_prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 value: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] default_prefix: Default prefix used to replace the incoming route prefix when rewritten. Valid values: `ENABLED`, `DISABLED`.
         :param pulumi.Input[_builtins.str] value: Value used to replace the incoming route prefix when rewritten.
@@ -959,47 +959,47 @@ class GatewayRouteSpecHttp2RouteActionRewritePrefixArgs:
 
     @_builtins.property
     @pulumi.getter(name="defaultPrefix")
-    def default_prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def default_prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Default prefix used to replace the incoming route prefix when rewritten. Valid values: `ENABLED`, `DISABLED`.
         """
         return pulumi.get(self, "default_prefix")
 
     @default_prefix.setter
-    def default_prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def default_prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "default_prefix", value)
 
     @_builtins.property
     @pulumi.getter
-    def value(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def value(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Value used to replace the incoming route prefix when rewritten.
         """
         return pulumi.get(self, "value")
 
     @value.setter
-    def value(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def value(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "value", value)
 
 
 class GatewayRouteSpecHttp2RouteActionTargetArgsDict(TypedDict):
     virtual_service: pulumi.Input['GatewayRouteSpecHttp2RouteActionTargetVirtualServiceArgsDict']
     """
-    Virtual service gateway route target.
+    Virtual service gateway route target. See `spec.http2_route.action.target.virtual_service` Block for details.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The port number that corresponds to the target for Virtual Service provider port. This is required when the provider (router or node) of the Virtual Service has multiple listeners.
+    Port number to match from the request.
     """
 
 @pulumi.input_type
 class GatewayRouteSpecHttp2RouteActionTargetArgs:
     def __init__(__self__, *,
                  virtual_service: pulumi.Input['GatewayRouteSpecHttp2RouteActionTargetVirtualServiceArgs'],
-                 port: Optional[pulumi.Input[_builtins.int]] = None):
+                 port: pulumi.Input[Optional[_builtins.int]] = None):
         """
-        :param pulumi.Input['GatewayRouteSpecHttp2RouteActionTargetVirtualServiceArgs'] virtual_service: Virtual service gateway route target.
-        :param pulumi.Input[_builtins.int] port: The port number that corresponds to the target for Virtual Service provider port. This is required when the provider (router or node) of the Virtual Service has multiple listeners.
+        :param pulumi.Input['GatewayRouteSpecHttp2RouteActionTargetVirtualServiceArgs'] virtual_service: Virtual service gateway route target. See `spec.http2_route.action.target.virtual_service` Block for details.
+        :param pulumi.Input[_builtins.int] port: Port number to match from the request.
         """
         pulumi.set(__self__, "virtual_service", virtual_service)
         if port is not None:
@@ -1009,7 +1009,7 @@ class GatewayRouteSpecHttp2RouteActionTargetArgs:
     @pulumi.getter(name="virtualService")
     def virtual_service(self) -> pulumi.Input['GatewayRouteSpecHttp2RouteActionTargetVirtualServiceArgs']:
         """
-        Virtual service gateway route target.
+        Virtual service gateway route target. See `spec.http2_route.action.target.virtual_service` Block for details.
         """
         return pulumi.get(self, "virtual_service")
 
@@ -1019,14 +1019,14 @@ class GatewayRouteSpecHttp2RouteActionTargetArgs:
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The port number that corresponds to the target for Virtual Service provider port. This is required when the provider (router or node) of the Virtual Service has multiple listeners.
+        Port number to match from the request.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
 
@@ -1059,47 +1059,47 @@ class GatewayRouteSpecHttp2RouteActionTargetVirtualServiceArgs:
 
 
 class GatewayRouteSpecHttp2RouteMatchArgsDict(TypedDict):
-    headers: NotRequired[pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderArgsDict']]]]
+    headers: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderArgsDict']]]]]
     """
-    Client request headers to match on.
+    Client request headers to match on. See `spec.http2_route.match.header` Block for details.
     """
-    hostname: NotRequired[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHostnameArgsDict']]
+    hostname: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchHostnameArgsDict']]]
     """
-    Host name to match on.
+    Host name to match on. See `spec.http2_route.match.hostname` Block for details.
     """
-    path: NotRequired[pulumi.Input['GatewayRouteSpecHttp2RouteMatchPathArgsDict']]
+    path: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchPathArgsDict']]]
     """
-    Client request path to match on.
+    Client request path to match on. See `spec.http2_route.match.path` Block for details.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The port number to match from the request.
+    Port number to match from the request.
     """
-    prefix: NotRequired[pulumi.Input[_builtins.str]]
+    prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Path to match requests with. This parameter must always start with `/`, which by itself matches all requests to the virtual service name.
+    Header value sent by the client must begin with the specified characters.
     """
-    query_parameters: NotRequired[pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchQueryParameterArgsDict']]]]
+    query_parameters: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchQueryParameterArgsDict']]]]]
     """
-    Client request query parameters to match on.
+    Client request query parameters to match on. See `spec.http2_route.match.query_parameter` Block for details.
     """
 
 @pulumi.input_type
 class GatewayRouteSpecHttp2RouteMatchArgs:
     def __init__(__self__, *,
-                 headers: Optional[pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderArgs']]]] = None,
-                 hostname: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHostnameArgs']] = None,
-                 path: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteMatchPathArgs']] = None,
-                 port: Optional[pulumi.Input[_builtins.int]] = None,
-                 prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 query_parameters: Optional[pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchQueryParameterArgs']]]] = None):
+                 headers: pulumi.Input[Optional[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderArgs']]]] = None,
+                 hostname: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchHostnameArgs']] = None,
+                 path: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchPathArgs']] = None,
+                 port: pulumi.Input[Optional[_builtins.int]] = None,
+                 prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 query_parameters: pulumi.Input[Optional[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchQueryParameterArgs']]]] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderArgs']]] headers: Client request headers to match on.
-        :param pulumi.Input['GatewayRouteSpecHttp2RouteMatchHostnameArgs'] hostname: Host name to match on.
-        :param pulumi.Input['GatewayRouteSpecHttp2RouteMatchPathArgs'] path: Client request path to match on.
-        :param pulumi.Input[_builtins.int] port: The port number to match from the request.
-        :param pulumi.Input[_builtins.str] prefix: Path to match requests with. This parameter must always start with `/`, which by itself matches all requests to the virtual service name.
-        :param pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchQueryParameterArgs']]] query_parameters: Client request query parameters to match on.
+        :param pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderArgs']]] headers: Client request headers to match on. See `spec.http2_route.match.header` Block for details.
+        :param pulumi.Input['GatewayRouteSpecHttp2RouteMatchHostnameArgs'] hostname: Host name to match on. See `spec.http2_route.match.hostname` Block for details.
+        :param pulumi.Input['GatewayRouteSpecHttp2RouteMatchPathArgs'] path: Client request path to match on. See `spec.http2_route.match.path` Block for details.
+        :param pulumi.Input[_builtins.int] port: Port number to match from the request.
+        :param pulumi.Input[_builtins.str] prefix: Header value sent by the client must begin with the specified characters.
+        :param pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchQueryParameterArgs']]] query_parameters: Client request query parameters to match on. See `spec.http2_route.match.query_parameter` Block for details.
         """
         if headers is not None:
             pulumi.set(__self__, "headers", headers)
@@ -1116,101 +1116,97 @@ class GatewayRouteSpecHttp2RouteMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def headers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderArgs']]]]:
+    def headers(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderArgs']]]]:
         """
-        Client request headers to match on.
+        Client request headers to match on. See `spec.http2_route.match.header` Block for details.
         """
         return pulumi.get(self, "headers")
 
     @headers.setter
-    def headers(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderArgs']]]]):
+    def headers(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderArgs']]]]):
         pulumi.set(self, "headers", value)
 
     @_builtins.property
     @pulumi.getter
-    def hostname(self) -> Optional[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHostnameArgs']]:
+    def hostname(self) -> pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchHostnameArgs']]:
         """
-        Host name to match on.
+        Host name to match on. See `spec.http2_route.match.hostname` Block for details.
         """
         return pulumi.get(self, "hostname")
 
     @hostname.setter
-    def hostname(self, value: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHostnameArgs']]):
+    def hostname(self, value: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchHostnameArgs']]):
         pulumi.set(self, "hostname", value)
 
     @_builtins.property
     @pulumi.getter
-    def path(self) -> Optional[pulumi.Input['GatewayRouteSpecHttp2RouteMatchPathArgs']]:
+    def path(self) -> pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchPathArgs']]:
         """
-        Client request path to match on.
+        Client request path to match on. See `spec.http2_route.match.path` Block for details.
         """
         return pulumi.get(self, "path")
 
     @path.setter
-    def path(self, value: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteMatchPathArgs']]):
+    def path(self, value: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchPathArgs']]):
         pulumi.set(self, "path", value)
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The port number to match from the request.
+        Port number to match from the request.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
     @_builtins.property
     @pulumi.getter
-    def prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Path to match requests with. This parameter must always start with `/`, which by itself matches all requests to the virtual service name.
+        Header value sent by the client must begin with the specified characters.
         """
         return pulumi.get(self, "prefix")
 
     @prefix.setter
-    def prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "prefix", value)
 
     @_builtins.property
     @pulumi.getter(name="queryParameters")
-    def query_parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchQueryParameterArgs']]]]:
+    def query_parameters(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchQueryParameterArgs']]]]:
         """
-        Client request query parameters to match on.
+        Client request query parameters to match on. See `spec.http2_route.match.query_parameter` Block for details.
         """
         return pulumi.get(self, "query_parameters")
 
     @query_parameters.setter
-    def query_parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchQueryParameterArgs']]]]):
+    def query_parameters(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['GatewayRouteSpecHttp2RouteMatchQueryParameterArgs']]]]):
         pulumi.set(self, "query_parameters", value)
 
 
 class GatewayRouteSpecHttp2RouteMatchHeaderArgsDict(TypedDict):
     name: pulumi.Input[_builtins.str]
     """
-    Name for the HTTP header in the client request that will be matched on.
+    Name to use for the gateway route. Must be between 1 and 255 characters in length.
     """
-    invert: NotRequired[pulumi.Input[_builtins.bool]]
+    invert: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     If `true`, the match is on the opposite of the `match` method and value. Default is `false`.
     """
-    match: NotRequired[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderMatchArgsDict']]
-    """
-    Method and value to match the header value sent with a request. Specify one match method.
-    """
+    match: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchHeaderMatchArgsDict']]]
 
 @pulumi.input_type
 class GatewayRouteSpecHttp2RouteMatchHeaderArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str],
-                 invert: Optional[pulumi.Input[_builtins.bool]] = None,
-                 match: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderMatchArgs']] = None):
+                 invert: pulumi.Input[Optional[_builtins.bool]] = None,
+                 match: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchHeaderMatchArgs']] = None):
         """
-        :param pulumi.Input[_builtins.str] name: Name for the HTTP header in the client request that will be matched on.
+        :param pulumi.Input[_builtins.str] name: Name to use for the gateway route. Must be between 1 and 255 characters in length.
         :param pulumi.Input[_builtins.bool] invert: If `true`, the match is on the opposite of the `match` method and value. Default is `false`.
-        :param pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderMatchArgs'] match: Method and value to match the header value sent with a request. Specify one match method.
         """
         pulumi.set(__self__, "name", name)
         if invert is not None:
@@ -1222,7 +1218,7 @@ class GatewayRouteSpecHttp2RouteMatchHeaderArgs:
     @pulumi.getter
     def name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name for the HTTP header in the client request that will be matched on.
+        Name to use for the gateway route. Must be between 1 and 255 characters in length.
         """
         return pulumi.get(self, "name")
 
@@ -1232,65 +1228,62 @@ class GatewayRouteSpecHttp2RouteMatchHeaderArgs:
 
     @_builtins.property
     @pulumi.getter
-    def invert(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def invert(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         If `true`, the match is on the opposite of the `match` method and value. Default is `false`.
         """
         return pulumi.get(self, "invert")
 
     @invert.setter
-    def invert(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def invert(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "invert", value)
 
     @_builtins.property
     @pulumi.getter
-    def match(self) -> Optional[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderMatchArgs']]:
-        """
-        Method and value to match the header value sent with a request. Specify one match method.
-        """
+    def match(self) -> pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchHeaderMatchArgs']]:
         return pulumi.get(self, "match")
 
     @match.setter
-    def match(self, value: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderMatchArgs']]):
+    def match(self, value: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchHeaderMatchArgs']]):
         pulumi.set(self, "match", value)
 
 
 class GatewayRouteSpecHttp2RouteMatchHeaderMatchArgsDict(TypedDict):
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Header value sent by the client must match the specified value exactly.
+    Exact query parameter to match on.
     """
-    prefix: NotRequired[pulumi.Input[_builtins.str]]
+    prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Header value sent by the client must begin with the specified characters.
     """
-    range: NotRequired[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderMatchRangeArgsDict']]
+    range: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchHeaderMatchRangeArgsDict']]]
     """
-    Object that specifies the range of numbers that the header value sent by the client must be included in.
+    Object that specifies the range of numbers that the header value sent by the client must be included in. See `spec.http2_route.match.header.match.range` Block for details.
     """
-    regex: NotRequired[pulumi.Input[_builtins.str]]
+    regex: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Header value sent by the client must include the specified characters.
+    Regex used to match the path.
     """
-    suffix: NotRequired[pulumi.Input[_builtins.str]]
+    suffix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Header value sent by the client must end with the specified characters.
+    Specified ending characters of the host name to match on.
     """
 
 @pulumi.input_type
 class GatewayRouteSpecHttp2RouteMatchHeaderMatchArgs:
     def __init__(__self__, *,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None,
-                 prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 range: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderMatchRangeArgs']] = None,
-                 regex: Optional[pulumi.Input[_builtins.str]] = None,
-                 suffix: Optional[pulumi.Input[_builtins.str]] = None):
+                 exact: pulumi.Input[Optional[_builtins.str]] = None,
+                 prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 range: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchHeaderMatchRangeArgs']] = None,
+                 regex: pulumi.Input[Optional[_builtins.str]] = None,
+                 suffix: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] exact: Header value sent by the client must match the specified value exactly.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
         :param pulumi.Input[_builtins.str] prefix: Header value sent by the client must begin with the specified characters.
-        :param pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderMatchRangeArgs'] range: Object that specifies the range of numbers that the header value sent by the client must be included in.
-        :param pulumi.Input[_builtins.str] regex: Header value sent by the client must include the specified characters.
-        :param pulumi.Input[_builtins.str] suffix: Header value sent by the client must end with the specified characters.
+        :param pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderMatchRangeArgs'] range: Object that specifies the range of numbers that the header value sent by the client must be included in. See `spec.http2_route.match.header.match.range` Block for details.
+        :param pulumi.Input[_builtins.str] regex: Regex used to match the path.
+        :param pulumi.Input[_builtins.str] suffix: Specified ending characters of the host name to match on.
         """
         if exact is not None:
             pulumi.set(__self__, "exact", exact)
@@ -1305,62 +1298,62 @@ class GatewayRouteSpecHttp2RouteMatchHeaderMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Header value sent by the client must match the specified value exactly.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
     @_builtins.property
     @pulumi.getter
-    def prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Header value sent by the client must begin with the specified characters.
         """
         return pulumi.get(self, "prefix")
 
     @prefix.setter
-    def prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "prefix", value)
 
     @_builtins.property
     @pulumi.getter
-    def range(self) -> Optional[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderMatchRangeArgs']]:
+    def range(self) -> pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchHeaderMatchRangeArgs']]:
         """
-        Object that specifies the range of numbers that the header value sent by the client must be included in.
+        Object that specifies the range of numbers that the header value sent by the client must be included in. See `spec.http2_route.match.header.match.range` Block for details.
         """
         return pulumi.get(self, "range")
 
     @range.setter
-    def range(self, value: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteMatchHeaderMatchRangeArgs']]):
+    def range(self, value: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchHeaderMatchRangeArgs']]):
         pulumi.set(self, "range", value)
 
     @_builtins.property
     @pulumi.getter
-    def regex(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def regex(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Header value sent by the client must include the specified characters.
+        Regex used to match the path.
         """
         return pulumi.get(self, "regex")
 
     @regex.setter
-    def regex(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def regex(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "regex", value)
 
     @_builtins.property
     @pulumi.getter
-    def suffix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def suffix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Header value sent by the client must end with the specified characters.
+        Specified ending characters of the host name to match on.
         """
         return pulumi.get(self, "suffix")
 
     @suffix.setter
-    def suffix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def suffix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "suffix", value)
 
 
@@ -1412,11 +1405,11 @@ class GatewayRouteSpecHttp2RouteMatchHeaderMatchRangeArgs:
 
 
 class GatewayRouteSpecHttp2RouteMatchHostnameArgsDict(TypedDict):
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Exact host name to match on.
+    Exact query parameter to match on.
     """
-    suffix: NotRequired[pulumi.Input[_builtins.str]]
+    suffix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Specified ending characters of the host name to match on.
     """
@@ -1424,10 +1417,10 @@ class GatewayRouteSpecHttp2RouteMatchHostnameArgsDict(TypedDict):
 @pulumi.input_type
 class GatewayRouteSpecHttp2RouteMatchHostnameArgs:
     def __init__(__self__, *,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None,
-                 suffix: Optional[pulumi.Input[_builtins.str]] = None):
+                 exact: pulumi.Input[Optional[_builtins.str]] = None,
+                 suffix: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] exact: Exact host name to match on.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
         :param pulumi.Input[_builtins.str] suffix: Specified ending characters of the host name to match on.
         """
         if exact is not None:
@@ -1437,47 +1430,47 @@ class GatewayRouteSpecHttp2RouteMatchHostnameArgs:
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Exact host name to match on.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
     @_builtins.property
     @pulumi.getter
-    def suffix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def suffix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Specified ending characters of the host name to match on.
         """
         return pulumi.get(self, "suffix")
 
     @suffix.setter
-    def suffix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def suffix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "suffix", value)
 
 
 class GatewayRouteSpecHttp2RouteMatchPathArgsDict(TypedDict):
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The exact path to match on.
+    Exact query parameter to match on.
     """
-    regex: NotRequired[pulumi.Input[_builtins.str]]
+    regex: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The regex used to match the path.
+    Regex used to match the path.
     """
 
 @pulumi.input_type
 class GatewayRouteSpecHttp2RouteMatchPathArgs:
     def __init__(__self__, *,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None,
-                 regex: Optional[pulumi.Input[_builtins.str]] = None):
+                 exact: pulumi.Input[Optional[_builtins.str]] = None,
+                 regex: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] exact: The exact path to match on.
-        :param pulumi.Input[_builtins.str] regex: The regex used to match the path.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
+        :param pulumi.Input[_builtins.str] regex: Regex used to match the path.
         """
         if exact is not None:
             pulumi.set(__self__, "exact", exact)
@@ -1486,47 +1479,43 @@ class GatewayRouteSpecHttp2RouteMatchPathArgs:
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The exact path to match on.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
     @_builtins.property
     @pulumi.getter
-    def regex(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def regex(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The regex used to match the path.
+        Regex used to match the path.
         """
         return pulumi.get(self, "regex")
 
     @regex.setter
-    def regex(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def regex(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "regex", value)
 
 
 class GatewayRouteSpecHttp2RouteMatchQueryParameterArgsDict(TypedDict):
     name: pulumi.Input[_builtins.str]
     """
-    Name for the query parameter that will be matched on.
+    Name to use for the gateway route. Must be between 1 and 255 characters in length.
     """
-    match: NotRequired[pulumi.Input['GatewayRouteSpecHttp2RouteMatchQueryParameterMatchArgsDict']]
-    """
-    The query parameter to match on.
-    """
+    match: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchQueryParameterMatchArgsDict']]]
 
 @pulumi.input_type
 class GatewayRouteSpecHttp2RouteMatchQueryParameterArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str],
-                 match: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteMatchQueryParameterMatchArgs']] = None):
+                 match: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchQueryParameterMatchArgs']] = None):
         """
-        :param pulumi.Input[_builtins.str] name: Name for the query parameter that will be matched on.
-        :param pulumi.Input['GatewayRouteSpecHttp2RouteMatchQueryParameterMatchArgs'] match: The query parameter to match on.
+        :param pulumi.Input[_builtins.str] name: Name to use for the gateway route. Must be between 1 and 255 characters in length.
         """
         pulumi.set(__self__, "name", name)
         if match is not None:
@@ -1536,7 +1525,7 @@ class GatewayRouteSpecHttp2RouteMatchQueryParameterArgs:
     @pulumi.getter
     def name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name for the query parameter that will be matched on.
+        Name to use for the gateway route. Must be between 1 and 255 characters in length.
         """
         return pulumi.get(self, "name")
 
@@ -1546,54 +1535,51 @@ class GatewayRouteSpecHttp2RouteMatchQueryParameterArgs:
 
     @_builtins.property
     @pulumi.getter
-    def match(self) -> Optional[pulumi.Input['GatewayRouteSpecHttp2RouteMatchQueryParameterMatchArgs']]:
-        """
-        The query parameter to match on.
-        """
+    def match(self) -> pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchQueryParameterMatchArgs']]:
         return pulumi.get(self, "match")
 
     @match.setter
-    def match(self, value: Optional[pulumi.Input['GatewayRouteSpecHttp2RouteMatchQueryParameterMatchArgs']]):
+    def match(self, value: pulumi.Input[Optional['GatewayRouteSpecHttp2RouteMatchQueryParameterMatchArgs']]):
         pulumi.set(self, "match", value)
 
 
 class GatewayRouteSpecHttp2RouteMatchQueryParameterMatchArgsDict(TypedDict):
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The exact query parameter to match on.
+    Exact query parameter to match on.
     """
 
 @pulumi.input_type
 class GatewayRouteSpecHttp2RouteMatchQueryParameterMatchArgs:
     def __init__(__self__, *,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None):
+                 exact: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] exact: The exact query parameter to match on.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
         """
         if exact is not None:
             pulumi.set(__self__, "exact", exact)
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The exact query parameter to match on.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
 
 class GatewayRouteSpecHttpRouteArgsDict(TypedDict):
     action: pulumi.Input['GatewayRouteSpecHttpRouteActionArgsDict']
     """
-    Action to take if a match is determined.
+    Action to take if a match is determined. See `spec.http_route.action` Block for details.
     """
     match: pulumi.Input['GatewayRouteSpecHttpRouteMatchArgsDict']
     """
-    Criteria for determining a request match.
+    Criteria for determining a request match. See `spec.http_route.match` Block for details.
     """
 
 @pulumi.input_type
@@ -1602,8 +1588,8 @@ class GatewayRouteSpecHttpRouteArgs:
                  action: pulumi.Input['GatewayRouteSpecHttpRouteActionArgs'],
                  match: pulumi.Input['GatewayRouteSpecHttpRouteMatchArgs']):
         """
-        :param pulumi.Input['GatewayRouteSpecHttpRouteActionArgs'] action: Action to take if a match is determined.
-        :param pulumi.Input['GatewayRouteSpecHttpRouteMatchArgs'] match: Criteria for determining a request match.
+        :param pulumi.Input['GatewayRouteSpecHttpRouteActionArgs'] action: Action to take if a match is determined. See `spec.http_route.action` Block for details.
+        :param pulumi.Input['GatewayRouteSpecHttpRouteMatchArgs'] match: Criteria for determining a request match. See `spec.http_route.match` Block for details.
         """
         pulumi.set(__self__, "action", action)
         pulumi.set(__self__, "match", match)
@@ -1612,7 +1598,7 @@ class GatewayRouteSpecHttpRouteArgs:
     @pulumi.getter
     def action(self) -> pulumi.Input['GatewayRouteSpecHttpRouteActionArgs']:
         """
-        Action to take if a match is determined.
+        Action to take if a match is determined. See `spec.http_route.action` Block for details.
         """
         return pulumi.get(self, "action")
 
@@ -1624,7 +1610,7 @@ class GatewayRouteSpecHttpRouteArgs:
     @pulumi.getter
     def match(self) -> pulumi.Input['GatewayRouteSpecHttpRouteMatchArgs']:
         """
-        Criteria for determining a request match.
+        Criteria for determining a request match. See `spec.http_route.match` Block for details.
         """
         return pulumi.get(self, "match")
 
@@ -1636,21 +1622,21 @@ class GatewayRouteSpecHttpRouteArgs:
 class GatewayRouteSpecHttpRouteActionArgsDict(TypedDict):
     target: pulumi.Input['GatewayRouteSpecHttpRouteActionTargetArgsDict']
     """
-    Target that traffic is routed to when a request matches the gateway route.
+    Target that traffic is routed to when a request matches the gateway route. See `spec.http2_route.action.target` Block for details.
     """
-    rewrite: NotRequired[pulumi.Input['GatewayRouteSpecHttpRouteActionRewriteArgsDict']]
+    rewrite: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttpRouteActionRewriteArgsDict']]]
     """
-    Gateway route action to rewrite.
+    Gateway route action to rewrite. See `spec.http2_route.action.rewrite` Block for details.
     """
 
 @pulumi.input_type
 class GatewayRouteSpecHttpRouteActionArgs:
     def __init__(__self__, *,
                  target: pulumi.Input['GatewayRouteSpecHttpRouteActionTargetArgs'],
-                 rewrite: Optional[pulumi.Input['GatewayRouteSpecHttpRouteActionRewriteArgs']] = None):
+                 rewrite: pulumi.Input[Optional['GatewayRouteSpecHttpRouteActionRewriteArgs']] = None):
         """
-        :param pulumi.Input['GatewayRouteSpecHttpRouteActionTargetArgs'] target: Target that traffic is routed to when a request matches the gateway route.
-        :param pulumi.Input['GatewayRouteSpecHttpRouteActionRewriteArgs'] rewrite: Gateway route action to rewrite.
+        :param pulumi.Input['GatewayRouteSpecHttpRouteActionTargetArgs'] target: Target that traffic is routed to when a request matches the gateway route. See `spec.http2_route.action.target` Block for details.
+        :param pulumi.Input['GatewayRouteSpecHttpRouteActionRewriteArgs'] rewrite: Gateway route action to rewrite. See `spec.http2_route.action.rewrite` Block for details.
         """
         pulumi.set(__self__, "target", target)
         if rewrite is not None:
@@ -1660,7 +1646,7 @@ class GatewayRouteSpecHttpRouteActionArgs:
     @pulumi.getter
     def target(self) -> pulumi.Input['GatewayRouteSpecHttpRouteActionTargetArgs']:
         """
-        Target that traffic is routed to when a request matches the gateway route.
+        Target that traffic is routed to when a request matches the gateway route. See `spec.http2_route.action.target` Block for details.
         """
         return pulumi.get(self, "target")
 
@@ -1670,41 +1656,41 @@ class GatewayRouteSpecHttpRouteActionArgs:
 
     @_builtins.property
     @pulumi.getter
-    def rewrite(self) -> Optional[pulumi.Input['GatewayRouteSpecHttpRouteActionRewriteArgs']]:
+    def rewrite(self) -> pulumi.Input[Optional['GatewayRouteSpecHttpRouteActionRewriteArgs']]:
         """
-        Gateway route action to rewrite.
+        Gateway route action to rewrite. See `spec.http2_route.action.rewrite` Block for details.
         """
         return pulumi.get(self, "rewrite")
 
     @rewrite.setter
-    def rewrite(self, value: Optional[pulumi.Input['GatewayRouteSpecHttpRouteActionRewriteArgs']]):
+    def rewrite(self, value: pulumi.Input[Optional['GatewayRouteSpecHttpRouteActionRewriteArgs']]):
         pulumi.set(self, "rewrite", value)
 
 
 class GatewayRouteSpecHttpRouteActionRewriteArgsDict(TypedDict):
-    hostname: NotRequired[pulumi.Input['GatewayRouteSpecHttpRouteActionRewriteHostnameArgsDict']]
+    hostname: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttpRouteActionRewriteHostnameArgsDict']]]
     """
-    Host name to rewrite.
+    Host name to match on. See `spec.http2_route.match.hostname` Block for details.
     """
-    path: NotRequired[pulumi.Input['GatewayRouteSpecHttpRouteActionRewritePathArgsDict']]
+    path: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttpRouteActionRewritePathArgsDict']]]
     """
-    Exact path to rewrite.
+    Client request path to match on. See `spec.http2_route.match.path` Block for details.
     """
-    prefix: NotRequired[pulumi.Input['GatewayRouteSpecHttpRouteActionRewritePrefixArgsDict']]
+    prefix: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttpRouteActionRewritePrefixArgsDict']]]
     """
-    Specified beginning characters to rewrite.
+    Header value sent by the client must begin with the specified characters.
     """
 
 @pulumi.input_type
 class GatewayRouteSpecHttpRouteActionRewriteArgs:
     def __init__(__self__, *,
-                 hostname: Optional[pulumi.Input['GatewayRouteSpecHttpRouteActionRewriteHostnameArgs']] = None,
-                 path: Optional[pulumi.Input['GatewayRouteSpecHttpRouteActionRewritePathArgs']] = None,
-                 prefix: Optional[pulumi.Input['GatewayRouteSpecHttpRouteActionRewritePrefixArgs']] = None):
+                 hostname: pulumi.Input[Optional['GatewayRouteSpecHttpRouteActionRewriteHostnameArgs']] = None,
+                 path: pulumi.Input[Optional['GatewayRouteSpecHttpRouteActionRewritePathArgs']] = None,
+                 prefix: pulumi.Input[Optional['GatewayRouteSpecHttpRouteActionRewritePrefixArgs']] = None):
         """
-        :param pulumi.Input['GatewayRouteSpecHttpRouteActionRewriteHostnameArgs'] hostname: Host name to rewrite.
-        :param pulumi.Input['GatewayRouteSpecHttpRouteActionRewritePathArgs'] path: Exact path to rewrite.
-        :param pulumi.Input['GatewayRouteSpecHttpRouteActionRewritePrefixArgs'] prefix: Specified beginning characters to rewrite.
+        :param pulumi.Input['GatewayRouteSpecHttpRouteActionRewriteHostnameArgs'] hostname: Host name to match on. See `spec.http2_route.match.hostname` Block for details.
+        :param pulumi.Input['GatewayRouteSpecHttpRouteActionRewritePathArgs'] path: Client request path to match on. See `spec.http2_route.match.path` Block for details.
+        :param pulumi.Input['GatewayRouteSpecHttpRouteActionRewritePrefixArgs'] prefix: Header value sent by the client must begin with the specified characters.
         """
         if hostname is not None:
             pulumi.set(__self__, "hostname", hostname)
@@ -1715,38 +1701,38 @@ class GatewayRouteSpecHttpRouteActionRewriteArgs:
 
     @_builtins.property
     @pulumi.getter
-    def hostname(self) -> Optional[pulumi.Input['GatewayRouteSpecHttpRouteActionRewriteHostnameArgs']]:
+    def hostname(self) -> pulumi.Input[Optional['GatewayRouteSpecHttpRouteActionRewriteHostnameArgs']]:
         """
-        Host name to rewrite.
+        Host name to match on. See `spec.http2_route.match.hostname` Block for details.
         """
         return pulumi.get(self, "hostname")
 
     @hostname.setter
-    def hostname(self, value: Optional[pulumi.Input['GatewayRouteSpecHttpRouteActionRewriteHostnameArgs']]):
+    def hostname(self, value: pulumi.Input[Optional['GatewayRouteSpecHttpRouteActionRewriteHostnameArgs']]):
         pulumi.set(self, "hostname", value)
 
     @_builtins.property
     @pulumi.getter
-    def path(self) -> Optional[pulumi.Input['GatewayRouteSpecHttpRouteActionRewritePathArgs']]:
+    def path(self) -> pulumi.Input[Optional['GatewayRouteSpecHttpRouteActionRewritePathArgs']]:
         """
-        Exact path to rewrite.
+        Client request path to match on. See `spec.http2_route.match.path` Block for details.
         """
         return pulumi.get(self, "path")
 
     @path.setter
-    def path(self, value: Optional[pulumi.Input['GatewayRouteSpecHttpRouteActionRewritePathArgs']]):
+    def path(self, value: pulumi.Input[Optional['GatewayRouteSpecHttpRouteActionRewritePathArgs']]):
         pulumi.set(self, "path", value)
 
     @_builtins.property
     @pulumi.getter
-    def prefix(self) -> Optional[pulumi.Input['GatewayRouteSpecHttpRouteActionRewritePrefixArgs']]:
+    def prefix(self) -> pulumi.Input[Optional['GatewayRouteSpecHttpRouteActionRewritePrefixArgs']]:
         """
-        Specified beginning characters to rewrite.
+        Header value sent by the client must begin with the specified characters.
         """
         return pulumi.get(self, "prefix")
 
     @prefix.setter
-    def prefix(self, value: Optional[pulumi.Input['GatewayRouteSpecHttpRouteActionRewritePrefixArgs']]):
+    def prefix(self, value: pulumi.Input[Optional['GatewayRouteSpecHttpRouteActionRewritePrefixArgs']]):
         pulumi.set(self, "prefix", value)
 
 
@@ -1781,7 +1767,7 @@ class GatewayRouteSpecHttpRouteActionRewriteHostnameArgs:
 class GatewayRouteSpecHttpRouteActionRewritePathArgsDict(TypedDict):
     exact: pulumi.Input[_builtins.str]
     """
-    The exact path to match on.
+    Exact query parameter to match on.
     """
 
 @pulumi.input_type
@@ -1789,7 +1775,7 @@ class GatewayRouteSpecHttpRouteActionRewritePathArgs:
     def __init__(__self__, *,
                  exact: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] exact: The exact path to match on.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
         """
         pulumi.set(__self__, "exact", exact)
 
@@ -1797,7 +1783,7 @@ class GatewayRouteSpecHttpRouteActionRewritePathArgs:
     @pulumi.getter
     def exact(self) -> pulumi.Input[_builtins.str]:
         """
-        The exact path to match on.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
@@ -1807,11 +1793,11 @@ class GatewayRouteSpecHttpRouteActionRewritePathArgs:
 
 
 class GatewayRouteSpecHttpRouteActionRewritePrefixArgsDict(TypedDict):
-    default_prefix: NotRequired[pulumi.Input[_builtins.str]]
+    default_prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Default prefix used to replace the incoming route prefix when rewritten. Valid values: `ENABLED`, `DISABLED`.
     """
-    value: NotRequired[pulumi.Input[_builtins.str]]
+    value: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Value used to replace the incoming route prefix when rewritten.
     """
@@ -1819,8 +1805,8 @@ class GatewayRouteSpecHttpRouteActionRewritePrefixArgsDict(TypedDict):
 @pulumi.input_type
 class GatewayRouteSpecHttpRouteActionRewritePrefixArgs:
     def __init__(__self__, *,
-                 default_prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 value: Optional[pulumi.Input[_builtins.str]] = None):
+                 default_prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 value: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] default_prefix: Default prefix used to replace the incoming route prefix when rewritten. Valid values: `ENABLED`, `DISABLED`.
         :param pulumi.Input[_builtins.str] value: Value used to replace the incoming route prefix when rewritten.
@@ -1832,47 +1818,47 @@ class GatewayRouteSpecHttpRouteActionRewritePrefixArgs:
 
     @_builtins.property
     @pulumi.getter(name="defaultPrefix")
-    def default_prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def default_prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Default prefix used to replace the incoming route prefix when rewritten. Valid values: `ENABLED`, `DISABLED`.
         """
         return pulumi.get(self, "default_prefix")
 
     @default_prefix.setter
-    def default_prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def default_prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "default_prefix", value)
 
     @_builtins.property
     @pulumi.getter
-    def value(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def value(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Value used to replace the incoming route prefix when rewritten.
         """
         return pulumi.get(self, "value")
 
     @value.setter
-    def value(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def value(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "value", value)
 
 
 class GatewayRouteSpecHttpRouteActionTargetArgsDict(TypedDict):
     virtual_service: pulumi.Input['GatewayRouteSpecHttpRouteActionTargetVirtualServiceArgsDict']
     """
-    Virtual service gateway route target.
+    Virtual service gateway route target. See `spec.http2_route.action.target.virtual_service` Block for details.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The port number that corresponds to the target for Virtual Service provider port. This is required when the provider (router or node) of the Virtual Service has multiple listeners.
+    Port number to match from the request.
     """
 
 @pulumi.input_type
 class GatewayRouteSpecHttpRouteActionTargetArgs:
     def __init__(__self__, *,
                  virtual_service: pulumi.Input['GatewayRouteSpecHttpRouteActionTargetVirtualServiceArgs'],
-                 port: Optional[pulumi.Input[_builtins.int]] = None):
+                 port: pulumi.Input[Optional[_builtins.int]] = None):
         """
-        :param pulumi.Input['GatewayRouteSpecHttpRouteActionTargetVirtualServiceArgs'] virtual_service: Virtual service gateway route target.
-        :param pulumi.Input[_builtins.int] port: The port number that corresponds to the target for Virtual Service provider port. This is required when the provider (router or node) of the Virtual Service has multiple listeners.
+        :param pulumi.Input['GatewayRouteSpecHttpRouteActionTargetVirtualServiceArgs'] virtual_service: Virtual service gateway route target. See `spec.http2_route.action.target.virtual_service` Block for details.
+        :param pulumi.Input[_builtins.int] port: Port number to match from the request.
         """
         pulumi.set(__self__, "virtual_service", virtual_service)
         if port is not None:
@@ -1882,7 +1868,7 @@ class GatewayRouteSpecHttpRouteActionTargetArgs:
     @pulumi.getter(name="virtualService")
     def virtual_service(self) -> pulumi.Input['GatewayRouteSpecHttpRouteActionTargetVirtualServiceArgs']:
         """
-        Virtual service gateway route target.
+        Virtual service gateway route target. See `spec.http2_route.action.target.virtual_service` Block for details.
         """
         return pulumi.get(self, "virtual_service")
 
@@ -1892,14 +1878,14 @@ class GatewayRouteSpecHttpRouteActionTargetArgs:
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The port number that corresponds to the target for Virtual Service provider port. This is required when the provider (router or node) of the Virtual Service has multiple listeners.
+        Port number to match from the request.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
 
@@ -1932,47 +1918,47 @@ class GatewayRouteSpecHttpRouteActionTargetVirtualServiceArgs:
 
 
 class GatewayRouteSpecHttpRouteMatchArgsDict(TypedDict):
-    headers: NotRequired[pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderArgsDict']]]]
+    headers: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderArgsDict']]]]]
     """
-    Client request headers to match on.
+    Client request headers to match on. See `spec.http2_route.match.header` Block for details.
     """
-    hostname: NotRequired[pulumi.Input['GatewayRouteSpecHttpRouteMatchHostnameArgsDict']]
+    hostname: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchHostnameArgsDict']]]
     """
-    Host name to match on.
+    Host name to match on. See `spec.http2_route.match.hostname` Block for details.
     """
-    path: NotRequired[pulumi.Input['GatewayRouteSpecHttpRouteMatchPathArgsDict']]
+    path: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchPathArgsDict']]]
     """
-    Client request path to match on.
+    Client request path to match on. See `spec.http2_route.match.path` Block for details.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The port number to match from the request.
+    Port number to match from the request.
     """
-    prefix: NotRequired[pulumi.Input[_builtins.str]]
+    prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Path to match requests with. This parameter must always start with `/`, which by itself matches all requests to the virtual service name.
+    Header value sent by the client must begin with the specified characters.
     """
-    query_parameters: NotRequired[pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchQueryParameterArgsDict']]]]
+    query_parameters: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchQueryParameterArgsDict']]]]]
     """
-    Client request query parameters to match on.
+    Client request query parameters to match on. See `spec.http2_route.match.query_parameter` Block for details.
     """
 
 @pulumi.input_type
 class GatewayRouteSpecHttpRouteMatchArgs:
     def __init__(__self__, *,
-                 headers: Optional[pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderArgs']]]] = None,
-                 hostname: Optional[pulumi.Input['GatewayRouteSpecHttpRouteMatchHostnameArgs']] = None,
-                 path: Optional[pulumi.Input['GatewayRouteSpecHttpRouteMatchPathArgs']] = None,
-                 port: Optional[pulumi.Input[_builtins.int]] = None,
-                 prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 query_parameters: Optional[pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchQueryParameterArgs']]]] = None):
+                 headers: pulumi.Input[Optional[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderArgs']]]] = None,
+                 hostname: pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchHostnameArgs']] = None,
+                 path: pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchPathArgs']] = None,
+                 port: pulumi.Input[Optional[_builtins.int]] = None,
+                 prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 query_parameters: pulumi.Input[Optional[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchQueryParameterArgs']]]] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderArgs']]] headers: Client request headers to match on.
-        :param pulumi.Input['GatewayRouteSpecHttpRouteMatchHostnameArgs'] hostname: Host name to match on.
-        :param pulumi.Input['GatewayRouteSpecHttpRouteMatchPathArgs'] path: Client request path to match on.
-        :param pulumi.Input[_builtins.int] port: The port number to match from the request.
-        :param pulumi.Input[_builtins.str] prefix: Path to match requests with. This parameter must always start with `/`, which by itself matches all requests to the virtual service name.
-        :param pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchQueryParameterArgs']]] query_parameters: Client request query parameters to match on.
+        :param pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderArgs']]] headers: Client request headers to match on. See `spec.http2_route.match.header` Block for details.
+        :param pulumi.Input['GatewayRouteSpecHttpRouteMatchHostnameArgs'] hostname: Host name to match on. See `spec.http2_route.match.hostname` Block for details.
+        :param pulumi.Input['GatewayRouteSpecHttpRouteMatchPathArgs'] path: Client request path to match on. See `spec.http2_route.match.path` Block for details.
+        :param pulumi.Input[_builtins.int] port: Port number to match from the request.
+        :param pulumi.Input[_builtins.str] prefix: Header value sent by the client must begin with the specified characters.
+        :param pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchQueryParameterArgs']]] query_parameters: Client request query parameters to match on. See `spec.http2_route.match.query_parameter` Block for details.
         """
         if headers is not None:
             pulumi.set(__self__, "headers", headers)
@@ -1989,101 +1975,97 @@ class GatewayRouteSpecHttpRouteMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def headers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderArgs']]]]:
+    def headers(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderArgs']]]]:
         """
-        Client request headers to match on.
+        Client request headers to match on. See `spec.http2_route.match.header` Block for details.
         """
         return pulumi.get(self, "headers")
 
     @headers.setter
-    def headers(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderArgs']]]]):
+    def headers(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderArgs']]]]):
         pulumi.set(self, "headers", value)
 
     @_builtins.property
     @pulumi.getter
-    def hostname(self) -> Optional[pulumi.Input['GatewayRouteSpecHttpRouteMatchHostnameArgs']]:
+    def hostname(self) -> pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchHostnameArgs']]:
         """
-        Host name to match on.
+        Host name to match on. See `spec.http2_route.match.hostname` Block for details.
         """
         return pulumi.get(self, "hostname")
 
     @hostname.setter
-    def hostname(self, value: Optional[pulumi.Input['GatewayRouteSpecHttpRouteMatchHostnameArgs']]):
+    def hostname(self, value: pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchHostnameArgs']]):
         pulumi.set(self, "hostname", value)
 
     @_builtins.property
     @pulumi.getter
-    def path(self) -> Optional[pulumi.Input['GatewayRouteSpecHttpRouteMatchPathArgs']]:
+    def path(self) -> pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchPathArgs']]:
         """
-        Client request path to match on.
+        Client request path to match on. See `spec.http2_route.match.path` Block for details.
         """
         return pulumi.get(self, "path")
 
     @path.setter
-    def path(self, value: Optional[pulumi.Input['GatewayRouteSpecHttpRouteMatchPathArgs']]):
+    def path(self, value: pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchPathArgs']]):
         pulumi.set(self, "path", value)
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The port number to match from the request.
+        Port number to match from the request.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
     @_builtins.property
     @pulumi.getter
-    def prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Path to match requests with. This parameter must always start with `/`, which by itself matches all requests to the virtual service name.
+        Header value sent by the client must begin with the specified characters.
         """
         return pulumi.get(self, "prefix")
 
     @prefix.setter
-    def prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "prefix", value)
 
     @_builtins.property
     @pulumi.getter(name="queryParameters")
-    def query_parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchQueryParameterArgs']]]]:
+    def query_parameters(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchQueryParameterArgs']]]]:
         """
-        Client request query parameters to match on.
+        Client request query parameters to match on. See `spec.http2_route.match.query_parameter` Block for details.
         """
         return pulumi.get(self, "query_parameters")
 
     @query_parameters.setter
-    def query_parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchQueryParameterArgs']]]]):
+    def query_parameters(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['GatewayRouteSpecHttpRouteMatchQueryParameterArgs']]]]):
         pulumi.set(self, "query_parameters", value)
 
 
 class GatewayRouteSpecHttpRouteMatchHeaderArgsDict(TypedDict):
     name: pulumi.Input[_builtins.str]
     """
-    Name for the HTTP header in the client request that will be matched on.
+    Name to use for the gateway route. Must be between 1 and 255 characters in length.
     """
-    invert: NotRequired[pulumi.Input[_builtins.bool]]
+    invert: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     If `true`, the match is on the opposite of the `match` method and value. Default is `false`.
     """
-    match: NotRequired[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderMatchArgsDict']]
-    """
-    Method and value to match the header value sent with a request. Specify one match method.
-    """
+    match: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchHeaderMatchArgsDict']]]
 
 @pulumi.input_type
 class GatewayRouteSpecHttpRouteMatchHeaderArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str],
-                 invert: Optional[pulumi.Input[_builtins.bool]] = None,
-                 match: Optional[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderMatchArgs']] = None):
+                 invert: pulumi.Input[Optional[_builtins.bool]] = None,
+                 match: pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchHeaderMatchArgs']] = None):
         """
-        :param pulumi.Input[_builtins.str] name: Name for the HTTP header in the client request that will be matched on.
+        :param pulumi.Input[_builtins.str] name: Name to use for the gateway route. Must be between 1 and 255 characters in length.
         :param pulumi.Input[_builtins.bool] invert: If `true`, the match is on the opposite of the `match` method and value. Default is `false`.
-        :param pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderMatchArgs'] match: Method and value to match the header value sent with a request. Specify one match method.
         """
         pulumi.set(__self__, "name", name)
         if invert is not None:
@@ -2095,7 +2077,7 @@ class GatewayRouteSpecHttpRouteMatchHeaderArgs:
     @pulumi.getter
     def name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name for the HTTP header in the client request that will be matched on.
+        Name to use for the gateway route. Must be between 1 and 255 characters in length.
         """
         return pulumi.get(self, "name")
 
@@ -2105,65 +2087,62 @@ class GatewayRouteSpecHttpRouteMatchHeaderArgs:
 
     @_builtins.property
     @pulumi.getter
-    def invert(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def invert(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         If `true`, the match is on the opposite of the `match` method and value. Default is `false`.
         """
         return pulumi.get(self, "invert")
 
     @invert.setter
-    def invert(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def invert(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "invert", value)
 
     @_builtins.property
     @pulumi.getter
-    def match(self) -> Optional[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderMatchArgs']]:
-        """
-        Method and value to match the header value sent with a request. Specify one match method.
-        """
+    def match(self) -> pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchHeaderMatchArgs']]:
         return pulumi.get(self, "match")
 
     @match.setter
-    def match(self, value: Optional[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderMatchArgs']]):
+    def match(self, value: pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchHeaderMatchArgs']]):
         pulumi.set(self, "match", value)
 
 
 class GatewayRouteSpecHttpRouteMatchHeaderMatchArgsDict(TypedDict):
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Header value sent by the client must match the specified value exactly.
+    Exact query parameter to match on.
     """
-    prefix: NotRequired[pulumi.Input[_builtins.str]]
+    prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Header value sent by the client must begin with the specified characters.
     """
-    range: NotRequired[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderMatchRangeArgsDict']]
+    range: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchHeaderMatchRangeArgsDict']]]
     """
-    Object that specifies the range of numbers that the header value sent by the client must be included in.
+    Object that specifies the range of numbers that the header value sent by the client must be included in. See `spec.http2_route.match.header.match.range` Block for details.
     """
-    regex: NotRequired[pulumi.Input[_builtins.str]]
+    regex: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Header value sent by the client must include the specified characters.
+    Regex used to match the path.
     """
-    suffix: NotRequired[pulumi.Input[_builtins.str]]
+    suffix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Header value sent by the client must end with the specified characters.
+    Specified ending characters of the host name to match on.
     """
 
 @pulumi.input_type
 class GatewayRouteSpecHttpRouteMatchHeaderMatchArgs:
     def __init__(__self__, *,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None,
-                 prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 range: Optional[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderMatchRangeArgs']] = None,
-                 regex: Optional[pulumi.Input[_builtins.str]] = None,
-                 suffix: Optional[pulumi.Input[_builtins.str]] = None):
+                 exact: pulumi.Input[Optional[_builtins.str]] = None,
+                 prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 range: pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchHeaderMatchRangeArgs']] = None,
+                 regex: pulumi.Input[Optional[_builtins.str]] = None,
+                 suffix: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] exact: Header value sent by the client must match the specified value exactly.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
         :param pulumi.Input[_builtins.str] prefix: Header value sent by the client must begin with the specified characters.
-        :param pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderMatchRangeArgs'] range: Object that specifies the range of numbers that the header value sent by the client must be included in.
-        :param pulumi.Input[_builtins.str] regex: Header value sent by the client must include the specified characters.
-        :param pulumi.Input[_builtins.str] suffix: Header value sent by the client must end with the specified characters.
+        :param pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderMatchRangeArgs'] range: Object that specifies the range of numbers that the header value sent by the client must be included in. See `spec.http2_route.match.header.match.range` Block for details.
+        :param pulumi.Input[_builtins.str] regex: Regex used to match the path.
+        :param pulumi.Input[_builtins.str] suffix: Specified ending characters of the host name to match on.
         """
         if exact is not None:
             pulumi.set(__self__, "exact", exact)
@@ -2178,62 +2157,62 @@ class GatewayRouteSpecHttpRouteMatchHeaderMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Header value sent by the client must match the specified value exactly.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
     @_builtins.property
     @pulumi.getter
-    def prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Header value sent by the client must begin with the specified characters.
         """
         return pulumi.get(self, "prefix")
 
     @prefix.setter
-    def prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "prefix", value)
 
     @_builtins.property
     @pulumi.getter
-    def range(self) -> Optional[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderMatchRangeArgs']]:
+    def range(self) -> pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchHeaderMatchRangeArgs']]:
         """
-        Object that specifies the range of numbers that the header value sent by the client must be included in.
+        Object that specifies the range of numbers that the header value sent by the client must be included in. See `spec.http2_route.match.header.match.range` Block for details.
         """
         return pulumi.get(self, "range")
 
     @range.setter
-    def range(self, value: Optional[pulumi.Input['GatewayRouteSpecHttpRouteMatchHeaderMatchRangeArgs']]):
+    def range(self, value: pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchHeaderMatchRangeArgs']]):
         pulumi.set(self, "range", value)
 
     @_builtins.property
     @pulumi.getter
-    def regex(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def regex(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Header value sent by the client must include the specified characters.
+        Regex used to match the path.
         """
         return pulumi.get(self, "regex")
 
     @regex.setter
-    def regex(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def regex(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "regex", value)
 
     @_builtins.property
     @pulumi.getter
-    def suffix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def suffix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Header value sent by the client must end with the specified characters.
+        Specified ending characters of the host name to match on.
         """
         return pulumi.get(self, "suffix")
 
     @suffix.setter
-    def suffix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def suffix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "suffix", value)
 
 
@@ -2285,11 +2264,11 @@ class GatewayRouteSpecHttpRouteMatchHeaderMatchRangeArgs:
 
 
 class GatewayRouteSpecHttpRouteMatchHostnameArgsDict(TypedDict):
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Exact host name to match on.
+    Exact query parameter to match on.
     """
-    suffix: NotRequired[pulumi.Input[_builtins.str]]
+    suffix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Specified ending characters of the host name to match on.
     """
@@ -2297,10 +2276,10 @@ class GatewayRouteSpecHttpRouteMatchHostnameArgsDict(TypedDict):
 @pulumi.input_type
 class GatewayRouteSpecHttpRouteMatchHostnameArgs:
     def __init__(__self__, *,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None,
-                 suffix: Optional[pulumi.Input[_builtins.str]] = None):
+                 exact: pulumi.Input[Optional[_builtins.str]] = None,
+                 suffix: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] exact: Exact host name to match on.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
         :param pulumi.Input[_builtins.str] suffix: Specified ending characters of the host name to match on.
         """
         if exact is not None:
@@ -2310,47 +2289,47 @@ class GatewayRouteSpecHttpRouteMatchHostnameArgs:
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Exact host name to match on.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
     @_builtins.property
     @pulumi.getter
-    def suffix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def suffix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Specified ending characters of the host name to match on.
         """
         return pulumi.get(self, "suffix")
 
     @suffix.setter
-    def suffix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def suffix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "suffix", value)
 
 
 class GatewayRouteSpecHttpRouteMatchPathArgsDict(TypedDict):
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The exact path to match on.
+    Exact query parameter to match on.
     """
-    regex: NotRequired[pulumi.Input[_builtins.str]]
+    regex: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The regex used to match the path.
+    Regex used to match the path.
     """
 
 @pulumi.input_type
 class GatewayRouteSpecHttpRouteMatchPathArgs:
     def __init__(__self__, *,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None,
-                 regex: Optional[pulumi.Input[_builtins.str]] = None):
+                 exact: pulumi.Input[Optional[_builtins.str]] = None,
+                 regex: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] exact: The exact path to match on.
-        :param pulumi.Input[_builtins.str] regex: The regex used to match the path.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
+        :param pulumi.Input[_builtins.str] regex: Regex used to match the path.
         """
         if exact is not None:
             pulumi.set(__self__, "exact", exact)
@@ -2359,47 +2338,43 @@ class GatewayRouteSpecHttpRouteMatchPathArgs:
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The exact path to match on.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
     @_builtins.property
     @pulumi.getter
-    def regex(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def regex(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The regex used to match the path.
+        Regex used to match the path.
         """
         return pulumi.get(self, "regex")
 
     @regex.setter
-    def regex(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def regex(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "regex", value)
 
 
 class GatewayRouteSpecHttpRouteMatchQueryParameterArgsDict(TypedDict):
     name: pulumi.Input[_builtins.str]
     """
-    Name for the query parameter that will be matched on.
+    Name to use for the gateway route. Must be between 1 and 255 characters in length.
     """
-    match: NotRequired[pulumi.Input['GatewayRouteSpecHttpRouteMatchQueryParameterMatchArgsDict']]
-    """
-    The query parameter to match on.
-    """
+    match: NotRequired[pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchQueryParameterMatchArgsDict']]]
 
 @pulumi.input_type
 class GatewayRouteSpecHttpRouteMatchQueryParameterArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str],
-                 match: Optional[pulumi.Input['GatewayRouteSpecHttpRouteMatchQueryParameterMatchArgs']] = None):
+                 match: pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchQueryParameterMatchArgs']] = None):
         """
-        :param pulumi.Input[_builtins.str] name: Name for the query parameter that will be matched on.
-        :param pulumi.Input['GatewayRouteSpecHttpRouteMatchQueryParameterMatchArgs'] match: The query parameter to match on.
+        :param pulumi.Input[_builtins.str] name: Name to use for the gateway route. Must be between 1 and 255 characters in length.
         """
         pulumi.set(__self__, "name", name)
         if match is not None:
@@ -2409,7 +2384,7 @@ class GatewayRouteSpecHttpRouteMatchQueryParameterArgs:
     @pulumi.getter
     def name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name for the query parameter that will be matched on.
+        Name to use for the gateway route. Must be between 1 and 255 characters in length.
         """
         return pulumi.get(self, "name")
 
@@ -2419,64 +2394,61 @@ class GatewayRouteSpecHttpRouteMatchQueryParameterArgs:
 
     @_builtins.property
     @pulumi.getter
-    def match(self) -> Optional[pulumi.Input['GatewayRouteSpecHttpRouteMatchQueryParameterMatchArgs']]:
-        """
-        The query parameter to match on.
-        """
+    def match(self) -> pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchQueryParameterMatchArgs']]:
         return pulumi.get(self, "match")
 
     @match.setter
-    def match(self, value: Optional[pulumi.Input['GatewayRouteSpecHttpRouteMatchQueryParameterMatchArgs']]):
+    def match(self, value: pulumi.Input[Optional['GatewayRouteSpecHttpRouteMatchQueryParameterMatchArgs']]):
         pulumi.set(self, "match", value)
 
 
 class GatewayRouteSpecHttpRouteMatchQueryParameterMatchArgsDict(TypedDict):
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The exact query parameter to match on.
+    Exact query parameter to match on.
     """
 
 @pulumi.input_type
 class GatewayRouteSpecHttpRouteMatchQueryParameterMatchArgs:
     def __init__(__self__, *,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None):
+                 exact: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] exact: The exact query parameter to match on.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
         """
         if exact is not None:
             pulumi.set(__self__, "exact", exact)
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The exact query parameter to match on.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
 
 class MeshSpecArgsDict(TypedDict):
-    egress_filter: NotRequired[pulumi.Input['MeshSpecEgressFilterArgsDict']]
+    egress_filter: NotRequired[pulumi.Input[Optional['MeshSpecEgressFilterArgsDict']]]
     """
-    Egress filter rules for the service mesh.
+    Egress filter rules for the service mesh. See `egress_filter` Block for details.
     """
-    service_discovery: NotRequired[pulumi.Input['MeshSpecServiceDiscoveryArgsDict']]
+    service_discovery: NotRequired[pulumi.Input[Optional['MeshSpecServiceDiscoveryArgsDict']]]
     """
-    The service discovery information for the service mesh.
+    Service discovery information for the service mesh. See `service_discovery` Block for details.
     """
 
 @pulumi.input_type
 class MeshSpecArgs:
     def __init__(__self__, *,
-                 egress_filter: Optional[pulumi.Input['MeshSpecEgressFilterArgs']] = None,
-                 service_discovery: Optional[pulumi.Input['MeshSpecServiceDiscoveryArgs']] = None):
+                 egress_filter: pulumi.Input[Optional['MeshSpecEgressFilterArgs']] = None,
+                 service_discovery: pulumi.Input[Optional['MeshSpecServiceDiscoveryArgs']] = None):
         """
-        :param pulumi.Input['MeshSpecEgressFilterArgs'] egress_filter: Egress filter rules for the service mesh.
-        :param pulumi.Input['MeshSpecServiceDiscoveryArgs'] service_discovery: The service discovery information for the service mesh.
+        :param pulumi.Input['MeshSpecEgressFilterArgs'] egress_filter: Egress filter rules for the service mesh. See `egress_filter` Block for details.
+        :param pulumi.Input['MeshSpecServiceDiscoveryArgs'] service_discovery: Service discovery information for the service mesh. See `service_discovery` Block for details.
         """
         if egress_filter is not None:
             pulumi.set(__self__, "egress_filter", egress_filter)
@@ -2485,31 +2457,31 @@ class MeshSpecArgs:
 
     @_builtins.property
     @pulumi.getter(name="egressFilter")
-    def egress_filter(self) -> Optional[pulumi.Input['MeshSpecEgressFilterArgs']]:
+    def egress_filter(self) -> pulumi.Input[Optional['MeshSpecEgressFilterArgs']]:
         """
-        Egress filter rules for the service mesh.
+        Egress filter rules for the service mesh. See `egress_filter` Block for details.
         """
         return pulumi.get(self, "egress_filter")
 
     @egress_filter.setter
-    def egress_filter(self, value: Optional[pulumi.Input['MeshSpecEgressFilterArgs']]):
+    def egress_filter(self, value: pulumi.Input[Optional['MeshSpecEgressFilterArgs']]):
         pulumi.set(self, "egress_filter", value)
 
     @_builtins.property
     @pulumi.getter(name="serviceDiscovery")
-    def service_discovery(self) -> Optional[pulumi.Input['MeshSpecServiceDiscoveryArgs']]:
+    def service_discovery(self) -> pulumi.Input[Optional['MeshSpecServiceDiscoveryArgs']]:
         """
-        The service discovery information for the service mesh.
+        Service discovery information for the service mesh. See `service_discovery` Block for details.
         """
         return pulumi.get(self, "service_discovery")
 
     @service_discovery.setter
-    def service_discovery(self, value: Optional[pulumi.Input['MeshSpecServiceDiscoveryArgs']]):
+    def service_discovery(self, value: pulumi.Input[Optional['MeshSpecServiceDiscoveryArgs']]):
         pulumi.set(self, "service_discovery", value)
 
 
 class MeshSpecEgressFilterArgsDict(TypedDict):
-    type: NotRequired[pulumi.Input[_builtins.str]]
+    type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Egress filter type. By default, the type is `DROP_ALL`. Valid values are `ALLOW_ALL` and `DROP_ALL`.
     """
@@ -2517,7 +2489,7 @@ class MeshSpecEgressFilterArgsDict(TypedDict):
 @pulumi.input_type
 class MeshSpecEgressFilterArgs:
     def __init__(__self__, *,
-                 type: Optional[pulumi.Input[_builtins.str]] = None):
+                 type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] type: Egress filter type. By default, the type is `DROP_ALL`. Valid values are `ALLOW_ALL` and `DROP_ALL`.
         """
@@ -2526,84 +2498,82 @@ class MeshSpecEgressFilterArgs:
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Egress filter type. By default, the type is `DROP_ALL`. Valid values are `ALLOW_ALL` and `DROP_ALL`.
         """
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
 
 class MeshSpecServiceDiscoveryArgsDict(TypedDict):
-    ip_preference: NotRequired[pulumi.Input[_builtins.str]]
+    ip_preference: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The IP version to use to control traffic within the mesh. Valid values are `IPv6_PREFERRED`, `IPv4_PREFERRED`, `IPv4_ONLY`, and `IPv6_ONLY`.
+    IP version to use to control traffic within the mesh. Valid values are `IPv6_PREFERRED`, `IPv4_PREFERRED`, `IPv4_ONLY`, and `IPv6_ONLY`.
     """
 
 @pulumi.input_type
 class MeshSpecServiceDiscoveryArgs:
     def __init__(__self__, *,
-                 ip_preference: Optional[pulumi.Input[_builtins.str]] = None):
+                 ip_preference: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] ip_preference: The IP version to use to control traffic within the mesh. Valid values are `IPv6_PREFERRED`, `IPv4_PREFERRED`, `IPv4_ONLY`, and `IPv6_ONLY`.
+        :param pulumi.Input[_builtins.str] ip_preference: IP version to use to control traffic within the mesh. Valid values are `IPv6_PREFERRED`, `IPv4_PREFERRED`, `IPv4_ONLY`, and `IPv6_ONLY`.
         """
         if ip_preference is not None:
             pulumi.set(__self__, "ip_preference", ip_preference)
 
     @_builtins.property
     @pulumi.getter(name="ipPreference")
-    def ip_preference(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def ip_preference(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The IP version to use to control traffic within the mesh. Valid values are `IPv6_PREFERRED`, `IPv4_PREFERRED`, `IPv4_ONLY`, and `IPv6_ONLY`.
+        IP version to use to control traffic within the mesh. Valid values are `IPv6_PREFERRED`, `IPv4_PREFERRED`, `IPv4_ONLY`, and `IPv6_ONLY`.
         """
         return pulumi.get(self, "ip_preference")
 
     @ip_preference.setter
-    def ip_preference(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def ip_preference(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "ip_preference", value)
 
 
 class RouteSpecArgsDict(TypedDict):
-    grpc_route: NotRequired[pulumi.Input['RouteSpecGrpcRouteArgsDict']]
+    grpc_route: NotRequired[pulumi.Input[Optional['RouteSpecGrpcRouteArgsDict']]]
     """
-    GRPC routing information for the route.
+    GRPC routing information for the route. See `spec.grpc_route` Block for details.
     """
-    http2_route: NotRequired[pulumi.Input['RouteSpecHttp2RouteArgsDict']]
+    http2_route: NotRequired[pulumi.Input[Optional['RouteSpecHttp2RouteArgsDict']]]
     """
-    HTTP/2 routing information for the route.
+    HTTP/2 routing information for the route. See `spec.http2_route` Block for details.
     """
-    http_route: NotRequired[pulumi.Input['RouteSpecHttpRouteArgsDict']]
+    http_route: NotRequired[pulumi.Input[Optional['RouteSpecHttpRouteArgsDict']]]
     """
-    HTTP routing information for the route.
+    HTTP routing information for the route. See `spec.http_route` Block for details.
     """
-    priority: NotRequired[pulumi.Input[_builtins.int]]
+    priority: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    Priority for the route, between `0` and `1000`.
-    Routes are matched based on the specified value, where `0` is the highest priority.
+    Priority for the route, between `0` and `1000`. Routes are matched based on the specified value, where `0` is the highest priority.
     """
-    tcp_route: NotRequired[pulumi.Input['RouteSpecTcpRouteArgsDict']]
+    tcp_route: NotRequired[pulumi.Input[Optional['RouteSpecTcpRouteArgsDict']]]
     """
-    TCP routing information for the route.
+    TCP routing information for the route. See `spec.tcp_route` Block for details.
     """
 
 @pulumi.input_type
 class RouteSpecArgs:
     def __init__(__self__, *,
-                 grpc_route: Optional[pulumi.Input['RouteSpecGrpcRouteArgs']] = None,
-                 http2_route: Optional[pulumi.Input['RouteSpecHttp2RouteArgs']] = None,
-                 http_route: Optional[pulumi.Input['RouteSpecHttpRouteArgs']] = None,
-                 priority: Optional[pulumi.Input[_builtins.int]] = None,
-                 tcp_route: Optional[pulumi.Input['RouteSpecTcpRouteArgs']] = None):
+                 grpc_route: pulumi.Input[Optional['RouteSpecGrpcRouteArgs']] = None,
+                 http2_route: pulumi.Input[Optional['RouteSpecHttp2RouteArgs']] = None,
+                 http_route: pulumi.Input[Optional['RouteSpecHttpRouteArgs']] = None,
+                 priority: pulumi.Input[Optional[_builtins.int]] = None,
+                 tcp_route: pulumi.Input[Optional['RouteSpecTcpRouteArgs']] = None):
         """
-        :param pulumi.Input['RouteSpecGrpcRouteArgs'] grpc_route: GRPC routing information for the route.
-        :param pulumi.Input['RouteSpecHttp2RouteArgs'] http2_route: HTTP/2 routing information for the route.
-        :param pulumi.Input['RouteSpecHttpRouteArgs'] http_route: HTTP routing information for the route.
-        :param pulumi.Input[_builtins.int] priority: Priority for the route, between `0` and `1000`.
-               Routes are matched based on the specified value, where `0` is the highest priority.
-        :param pulumi.Input['RouteSpecTcpRouteArgs'] tcp_route: TCP routing information for the route.
+        :param pulumi.Input['RouteSpecGrpcRouteArgs'] grpc_route: GRPC routing information for the route. See `spec.grpc_route` Block for details.
+        :param pulumi.Input['RouteSpecHttp2RouteArgs'] http2_route: HTTP/2 routing information for the route. See `spec.http2_route` Block for details.
+        :param pulumi.Input['RouteSpecHttpRouteArgs'] http_route: HTTP routing information for the route. See `spec.http_route` Block for details.
+        :param pulumi.Input[_builtins.int] priority: Priority for the route, between `0` and `1000`. Routes are matched based on the specified value, where `0` is the highest priority.
+        :param pulumi.Input['RouteSpecTcpRouteArgs'] tcp_route: TCP routing information for the route. See `spec.tcp_route` Block for details.
         """
         if grpc_route is not None:
             pulumi.set(__self__, "grpc_route", grpc_route)
@@ -2618,96 +2588,95 @@ class RouteSpecArgs:
 
     @_builtins.property
     @pulumi.getter(name="grpcRoute")
-    def grpc_route(self) -> Optional[pulumi.Input['RouteSpecGrpcRouteArgs']]:
+    def grpc_route(self) -> pulumi.Input[Optional['RouteSpecGrpcRouteArgs']]:
         """
-        GRPC routing information for the route.
+        GRPC routing information for the route. See `spec.grpc_route` Block for details.
         """
         return pulumi.get(self, "grpc_route")
 
     @grpc_route.setter
-    def grpc_route(self, value: Optional[pulumi.Input['RouteSpecGrpcRouteArgs']]):
+    def grpc_route(self, value: pulumi.Input[Optional['RouteSpecGrpcRouteArgs']]):
         pulumi.set(self, "grpc_route", value)
 
     @_builtins.property
     @pulumi.getter(name="http2Route")
-    def http2_route(self) -> Optional[pulumi.Input['RouteSpecHttp2RouteArgs']]:
+    def http2_route(self) -> pulumi.Input[Optional['RouteSpecHttp2RouteArgs']]:
         """
-        HTTP/2 routing information for the route.
+        HTTP/2 routing information for the route. See `spec.http2_route` Block for details.
         """
         return pulumi.get(self, "http2_route")
 
     @http2_route.setter
-    def http2_route(self, value: Optional[pulumi.Input['RouteSpecHttp2RouteArgs']]):
+    def http2_route(self, value: pulumi.Input[Optional['RouteSpecHttp2RouteArgs']]):
         pulumi.set(self, "http2_route", value)
 
     @_builtins.property
     @pulumi.getter(name="httpRoute")
-    def http_route(self) -> Optional[pulumi.Input['RouteSpecHttpRouteArgs']]:
+    def http_route(self) -> pulumi.Input[Optional['RouteSpecHttpRouteArgs']]:
         """
-        HTTP routing information for the route.
+        HTTP routing information for the route. See `spec.http_route` Block for details.
         """
         return pulumi.get(self, "http_route")
 
     @http_route.setter
-    def http_route(self, value: Optional[pulumi.Input['RouteSpecHttpRouteArgs']]):
+    def http_route(self, value: pulumi.Input[Optional['RouteSpecHttpRouteArgs']]):
         pulumi.set(self, "http_route", value)
 
     @_builtins.property
     @pulumi.getter
-    def priority(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def priority(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        Priority for the route, between `0` and `1000`.
-        Routes are matched based on the specified value, where `0` is the highest priority.
+        Priority for the route, between `0` and `1000`. Routes are matched based on the specified value, where `0` is the highest priority.
         """
         return pulumi.get(self, "priority")
 
     @priority.setter
-    def priority(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def priority(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "priority", value)
 
     @_builtins.property
     @pulumi.getter(name="tcpRoute")
-    def tcp_route(self) -> Optional[pulumi.Input['RouteSpecTcpRouteArgs']]:
+    def tcp_route(self) -> pulumi.Input[Optional['RouteSpecTcpRouteArgs']]:
         """
-        TCP routing information for the route.
+        TCP routing information for the route. See `spec.tcp_route` Block for details.
         """
         return pulumi.get(self, "tcp_route")
 
     @tcp_route.setter
-    def tcp_route(self, value: Optional[pulumi.Input['RouteSpecTcpRouteArgs']]):
+    def tcp_route(self, value: pulumi.Input[Optional['RouteSpecTcpRouteArgs']]):
         pulumi.set(self, "tcp_route", value)
 
 
 class RouteSpecGrpcRouteArgsDict(TypedDict):
     action: pulumi.Input['RouteSpecGrpcRouteActionArgsDict']
     """
-    Action to take if a match is determined.
+    Action to take if a match is determined. See `spec.tcp_route.action` Block for details.
     """
-    match: NotRequired[pulumi.Input['RouteSpecGrpcRouteMatchArgsDict']]
+    match: NotRequired[pulumi.Input[Optional['RouteSpecGrpcRouteMatchArgsDict']]]
     """
-    Criteria for determining an gRPC request match.
+    Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
     """
-    retry_policy: NotRequired[pulumi.Input['RouteSpecGrpcRouteRetryPolicyArgsDict']]
+    retry_policy: NotRequired[pulumi.Input[Optional['RouteSpecGrpcRouteRetryPolicyArgsDict']]]
     """
-    Retry policy.
+    Retry policy. See `spec.http_route.retry_policy` Block for details.
     """
-    timeout: NotRequired[pulumi.Input['RouteSpecGrpcRouteTimeoutArgsDict']]
+    timeout: NotRequired[pulumi.Input[Optional['RouteSpecGrpcRouteTimeoutArgsDict']]]
     """
-    Types of timeouts.
+    Types of timeouts. See `spec.tcp_route.timeout` Block for details.
     """
 
 @pulumi.input_type
 class RouteSpecGrpcRouteArgs:
     def __init__(__self__, *,
                  action: pulumi.Input['RouteSpecGrpcRouteActionArgs'],
-                 match: Optional[pulumi.Input['RouteSpecGrpcRouteMatchArgs']] = None,
-                 retry_policy: Optional[pulumi.Input['RouteSpecGrpcRouteRetryPolicyArgs']] = None,
-                 timeout: Optional[pulumi.Input['RouteSpecGrpcRouteTimeoutArgs']] = None):
+                 match: pulumi.Input[Optional['RouteSpecGrpcRouteMatchArgs']] = None,
+                 retry_policy: pulumi.Input[Optional['RouteSpecGrpcRouteRetryPolicyArgs']] = None,
+                 timeout: pulumi.Input[Optional['RouteSpecGrpcRouteTimeoutArgs']] = None):
         """
-        :param pulumi.Input['RouteSpecGrpcRouteActionArgs'] action: Action to take if a match is determined.
-        :param pulumi.Input['RouteSpecGrpcRouteMatchArgs'] match: Criteria for determining an gRPC request match.
-        :param pulumi.Input['RouteSpecGrpcRouteRetryPolicyArgs'] retry_policy: Retry policy.
-        :param pulumi.Input['RouteSpecGrpcRouteTimeoutArgs'] timeout: Types of timeouts.
+        :param pulumi.Input['RouteSpecGrpcRouteActionArgs'] action: Action to take if a match is determined. See `spec.tcp_route.action` Block for details.
+        :param pulumi.Input['RouteSpecGrpcRouteMatchArgs'] match: Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
+        :param pulumi.Input['RouteSpecGrpcRouteRetryPolicyArgs'] retry_policy: Retry policy. See `spec.http_route.retry_policy` Block for details.
+        :param pulumi.Input['RouteSpecGrpcRouteTimeoutArgs'] timeout: Types of timeouts. See `spec.tcp_route.timeout` Block for details.
         """
         pulumi.set(__self__, "action", action)
         if match is not None:
@@ -2721,7 +2690,7 @@ class RouteSpecGrpcRouteArgs:
     @pulumi.getter
     def action(self) -> pulumi.Input['RouteSpecGrpcRouteActionArgs']:
         """
-        Action to take if a match is determined.
+        Action to take if a match is determined. See `spec.tcp_route.action` Block for details.
         """
         return pulumi.get(self, "action")
 
@@ -2731,46 +2700,45 @@ class RouteSpecGrpcRouteArgs:
 
     @_builtins.property
     @pulumi.getter
-    def match(self) -> Optional[pulumi.Input['RouteSpecGrpcRouteMatchArgs']]:
+    def match(self) -> pulumi.Input[Optional['RouteSpecGrpcRouteMatchArgs']]:
         """
-        Criteria for determining an gRPC request match.
+        Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
         """
         return pulumi.get(self, "match")
 
     @match.setter
-    def match(self, value: Optional[pulumi.Input['RouteSpecGrpcRouteMatchArgs']]):
+    def match(self, value: pulumi.Input[Optional['RouteSpecGrpcRouteMatchArgs']]):
         pulumi.set(self, "match", value)
 
     @_builtins.property
     @pulumi.getter(name="retryPolicy")
-    def retry_policy(self) -> Optional[pulumi.Input['RouteSpecGrpcRouteRetryPolicyArgs']]:
+    def retry_policy(self) -> pulumi.Input[Optional['RouteSpecGrpcRouteRetryPolicyArgs']]:
         """
-        Retry policy.
+        Retry policy. See `spec.http_route.retry_policy` Block for details.
         """
         return pulumi.get(self, "retry_policy")
 
     @retry_policy.setter
-    def retry_policy(self, value: Optional[pulumi.Input['RouteSpecGrpcRouteRetryPolicyArgs']]):
+    def retry_policy(self, value: pulumi.Input[Optional['RouteSpecGrpcRouteRetryPolicyArgs']]):
         pulumi.set(self, "retry_policy", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeout(self) -> Optional[pulumi.Input['RouteSpecGrpcRouteTimeoutArgs']]:
+    def timeout(self) -> pulumi.Input[Optional['RouteSpecGrpcRouteTimeoutArgs']]:
         """
-        Types of timeouts.
+        Types of timeouts. See `spec.tcp_route.timeout` Block for details.
         """
         return pulumi.get(self, "timeout")
 
     @timeout.setter
-    def timeout(self, value: Optional[pulumi.Input['RouteSpecGrpcRouteTimeoutArgs']]):
+    def timeout(self, value: pulumi.Input[Optional['RouteSpecGrpcRouteTimeoutArgs']]):
         pulumi.set(self, "timeout", value)
 
 
 class RouteSpecGrpcRouteActionArgsDict(TypedDict):
     weighted_targets: pulumi.Input[Sequence[pulumi.Input['RouteSpecGrpcRouteActionWeightedTargetArgsDict']]]
     """
-    Targets that traffic is routed to when a request matches the route.
-    You can specify one or more targets and their relative weights with which to distribute traffic.
+    Targets that traffic is routed to when a request matches the route. You can specify one or more targets and their relative weights with which to distribute traffic. See `spec.tcp_route.action.weighted_target` Block for details.
     """
 
 @pulumi.input_type
@@ -2778,8 +2746,7 @@ class RouteSpecGrpcRouteActionArgs:
     def __init__(__self__, *,
                  weighted_targets: pulumi.Input[Sequence[pulumi.Input['RouteSpecGrpcRouteActionWeightedTargetArgs']]]):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecGrpcRouteActionWeightedTargetArgs']]] weighted_targets: Targets that traffic is routed to when a request matches the route.
-               You can specify one or more targets and their relative weights with which to distribute traffic.
+        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecGrpcRouteActionWeightedTargetArgs']]] weighted_targets: Targets that traffic is routed to when a request matches the route. You can specify one or more targets and their relative weights with which to distribute traffic. See `spec.tcp_route.action.weighted_target` Block for details.
         """
         pulumi.set(__self__, "weighted_targets", weighted_targets)
 
@@ -2787,8 +2754,7 @@ class RouteSpecGrpcRouteActionArgs:
     @pulumi.getter(name="weightedTargets")
     def weighted_targets(self) -> pulumi.Input[Sequence[pulumi.Input['RouteSpecGrpcRouteActionWeightedTargetArgs']]]:
         """
-        Targets that traffic is routed to when a request matches the route.
-        You can specify one or more targets and their relative weights with which to distribute traffic.
+        Targets that traffic is routed to when a request matches the route. You can specify one or more targets and their relative weights with which to distribute traffic. See `spec.tcp_route.action.weighted_target` Block for details.
         """
         return pulumi.get(self, "weighted_targets")
 
@@ -2806,9 +2772,9 @@ class RouteSpecGrpcRouteActionWeightedTargetArgsDict(TypedDict):
     """
     Relative weight of the weighted target. An integer between 0 and 100.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The targeted port of the weighted object.
+    Port number to match from the request.
     """
 
 @pulumi.input_type
@@ -2816,11 +2782,11 @@ class RouteSpecGrpcRouteActionWeightedTargetArgs:
     def __init__(__self__, *,
                  virtual_node: pulumi.Input[_builtins.str],
                  weight: pulumi.Input[_builtins.int],
-                 port: Optional[pulumi.Input[_builtins.int]] = None):
+                 port: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.str] virtual_node: Virtual node to associate with the weighted target. Must be between 1 and 255 characters in length.
         :param pulumi.Input[_builtins.int] weight: Relative weight of the weighted target. An integer between 0 and 100.
-        :param pulumi.Input[_builtins.int] port: The targeted port of the weighted object.
+        :param pulumi.Input[_builtins.int] port: Port number to match from the request.
         """
         pulumi.set(__self__, "virtual_node", virtual_node)
         pulumi.set(__self__, "weight", weight)
@@ -2853,32 +2819,35 @@ class RouteSpecGrpcRouteActionWeightedTargetArgs:
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The targeted port of the weighted object.
+        Port number to match from the request.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
 
 class RouteSpecGrpcRouteMatchArgsDict(TypedDict):
-    metadatas: NotRequired[pulumi.Input[Sequence[pulumi.Input['RouteSpecGrpcRouteMatchMetadataArgsDict']]]]
+    metadatas: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecGrpcRouteMatchMetadataArgsDict']]]]]
     """
-    Data to match from the gRPC request.
+    Data to match from the gRPC request. See `spec.grpc_route.match.metadata` Block for details.
     """
-    method_name: NotRequired[pulumi.Input[_builtins.str]]
+    method_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Method name to match from the request. If you specify a name, you must also specify a `service_name`.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The port number to match from the request.
+    Port number to match from the request.
     """
-    prefix: NotRequired[pulumi.Input[_builtins.str]]
-    service_name: NotRequired[pulumi.Input[_builtins.str]]
+    prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Header value sent by the client must begin with the specified characters.
+    """
+    service_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Fully qualified domain name for the service to match from the request.
     """
@@ -2886,15 +2855,16 @@ class RouteSpecGrpcRouteMatchArgsDict(TypedDict):
 @pulumi.input_type
 class RouteSpecGrpcRouteMatchArgs:
     def __init__(__self__, *,
-                 metadatas: Optional[pulumi.Input[Sequence[pulumi.Input['RouteSpecGrpcRouteMatchMetadataArgs']]]] = None,
-                 method_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 port: Optional[pulumi.Input[_builtins.int]] = None,
-                 prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 service_name: Optional[pulumi.Input[_builtins.str]] = None):
+                 metadatas: pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecGrpcRouteMatchMetadataArgs']]]] = None,
+                 method_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 port: pulumi.Input[Optional[_builtins.int]] = None,
+                 prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 service_name: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecGrpcRouteMatchMetadataArgs']]] metadatas: Data to match from the gRPC request.
+        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecGrpcRouteMatchMetadataArgs']]] metadatas: Data to match from the gRPC request. See `spec.grpc_route.match.metadata` Block for details.
         :param pulumi.Input[_builtins.str] method_name: Method name to match from the request. If you specify a name, you must also specify a `service_name`.
-        :param pulumi.Input[_builtins.int] port: The port number to match from the request.
+        :param pulumi.Input[_builtins.int] port: Port number to match from the request.
+        :param pulumi.Input[_builtins.str] prefix: Header value sent by the client must begin with the specified characters.
         :param pulumi.Input[_builtins.str] service_name: Fully qualified domain name for the service to match from the request.
         """
         if metadatas is not None:
@@ -2910,86 +2880,89 @@ class RouteSpecGrpcRouteMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def metadatas(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['RouteSpecGrpcRouteMatchMetadataArgs']]]]:
+    def metadatas(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecGrpcRouteMatchMetadataArgs']]]]:
         """
-        Data to match from the gRPC request.
+        Data to match from the gRPC request. See `spec.grpc_route.match.metadata` Block for details.
         """
         return pulumi.get(self, "metadatas")
 
     @metadatas.setter
-    def metadatas(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['RouteSpecGrpcRouteMatchMetadataArgs']]]]):
+    def metadatas(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecGrpcRouteMatchMetadataArgs']]]]):
         pulumi.set(self, "metadatas", value)
 
     @_builtins.property
     @pulumi.getter(name="methodName")
-    def method_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def method_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Method name to match from the request. If you specify a name, you must also specify a `service_name`.
         """
         return pulumi.get(self, "method_name")
 
     @method_name.setter
-    def method_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def method_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "method_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The port number to match from the request.
+        Port number to match from the request.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
     @_builtins.property
     @pulumi.getter
-    def prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Header value sent by the client must begin with the specified characters.
+        """
         return pulumi.get(self, "prefix")
 
     @prefix.setter
-    def prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "prefix", value)
 
     @_builtins.property
     @pulumi.getter(name="serviceName")
-    def service_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def service_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Fully qualified domain name for the service to match from the request.
         """
         return pulumi.get(self, "service_name")
 
     @service_name.setter
-    def service_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def service_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "service_name", value)
 
 
 class RouteSpecGrpcRouteMatchMetadataArgsDict(TypedDict):
     name: pulumi.Input[_builtins.str]
     """
-    Name of the route. Must be between 1 and 50 characters in length.
+    Name to use for the route. Must be between 1 and 255 characters in length.
     """
-    invert: NotRequired[pulumi.Input[_builtins.bool]]
+    invert: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
-    If `true`, the match is on the opposite of the `match` criteria. Default is `false`.
+    Whether to match on the opposite of the `match` method and value. Default is `false`.
     """
-    match: NotRequired[pulumi.Input['RouteSpecGrpcRouteMatchMetadataMatchArgsDict']]
+    match: NotRequired[pulumi.Input[Optional['RouteSpecGrpcRouteMatchMetadataMatchArgsDict']]]
     """
-    Data to match from the request.
+    Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
     """
 
 @pulumi.input_type
 class RouteSpecGrpcRouteMatchMetadataArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str],
-                 invert: Optional[pulumi.Input[_builtins.bool]] = None,
-                 match: Optional[pulumi.Input['RouteSpecGrpcRouteMatchMetadataMatchArgs']] = None):
+                 invert: pulumi.Input[Optional[_builtins.bool]] = None,
+                 match: pulumi.Input[Optional['RouteSpecGrpcRouteMatchMetadataMatchArgs']] = None):
         """
-        :param pulumi.Input[_builtins.str] name: Name of the route. Must be between 1 and 50 characters in length.
-        :param pulumi.Input[_builtins.bool] invert: If `true`, the match is on the opposite of the `match` criteria. Default is `false`.
-        :param pulumi.Input['RouteSpecGrpcRouteMatchMetadataMatchArgs'] match: Data to match from the request.
+        :param pulumi.Input[_builtins.str] name: Name to use for the route. Must be between 1 and 255 characters in length.
+        :param pulumi.Input[_builtins.bool] invert: Whether to match on the opposite of the `match` method and value. Default is `false`.
+        :param pulumi.Input['RouteSpecGrpcRouteMatchMetadataMatchArgs'] match: Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
         """
         pulumi.set(__self__, "name", name)
         if invert is not None:
@@ -3001,7 +2974,7 @@ class RouteSpecGrpcRouteMatchMetadataArgs:
     @pulumi.getter
     def name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name of the route. Must be between 1 and 50 characters in length.
+        Name to use for the route. Must be between 1 and 255 characters in length.
         """
         return pulumi.get(self, "name")
 
@@ -3011,65 +2984,65 @@ class RouteSpecGrpcRouteMatchMetadataArgs:
 
     @_builtins.property
     @pulumi.getter
-    def invert(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def invert(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        If `true`, the match is on the opposite of the `match` criteria. Default is `false`.
+        Whether to match on the opposite of the `match` method and value. Default is `false`.
         """
         return pulumi.get(self, "invert")
 
     @invert.setter
-    def invert(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def invert(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "invert", value)
 
     @_builtins.property
     @pulumi.getter
-    def match(self) -> Optional[pulumi.Input['RouteSpecGrpcRouteMatchMetadataMatchArgs']]:
+    def match(self) -> pulumi.Input[Optional['RouteSpecGrpcRouteMatchMetadataMatchArgs']]:
         """
-        Data to match from the request.
+        Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
         """
         return pulumi.get(self, "match")
 
     @match.setter
-    def match(self, value: Optional[pulumi.Input['RouteSpecGrpcRouteMatchMetadataMatchArgs']]):
+    def match(self, value: pulumi.Input[Optional['RouteSpecGrpcRouteMatchMetadataMatchArgs']]):
         pulumi.set(self, "match", value)
 
 
 class RouteSpecGrpcRouteMatchMetadataMatchArgsDict(TypedDict):
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Value sent by the client must match the specified value exactly. Must be between 1 and 255 characters in length.
+    Exact query parameter to match on.
     """
-    prefix: NotRequired[pulumi.Input[_builtins.str]]
+    prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Value sent by the client must begin with the specified characters. Must be between 1 and 255 characters in length.
+    Header value sent by the client must begin with the specified characters.
     """
-    range: NotRequired[pulumi.Input['RouteSpecGrpcRouteMatchMetadataMatchRangeArgsDict']]
+    range: NotRequired[pulumi.Input[Optional['RouteSpecGrpcRouteMatchMetadataMatchRangeArgsDict']]]
     """
-    Object that specifies the range of numbers that the value sent by the client must be included in.
+    Object that specifies the range of numbers that the header value sent by the client must be included in. See `spec.http_route.match.header.match.range` Block for details.
     """
-    regex: NotRequired[pulumi.Input[_builtins.str]]
+    regex: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Value sent by the client must include the specified characters. Must be between 1 and 255 characters in length.
+    Regex used to match the path.
     """
-    suffix: NotRequired[pulumi.Input[_builtins.str]]
+    suffix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Value sent by the client must end with the specified characters. Must be between 1 and 255 characters in length.
+    Header value sent by the client must end with the specified characters.
     """
 
 @pulumi.input_type
 class RouteSpecGrpcRouteMatchMetadataMatchArgs:
     def __init__(__self__, *,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None,
-                 prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 range: Optional[pulumi.Input['RouteSpecGrpcRouteMatchMetadataMatchRangeArgs']] = None,
-                 regex: Optional[pulumi.Input[_builtins.str]] = None,
-                 suffix: Optional[pulumi.Input[_builtins.str]] = None):
+                 exact: pulumi.Input[Optional[_builtins.str]] = None,
+                 prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 range: pulumi.Input[Optional['RouteSpecGrpcRouteMatchMetadataMatchRangeArgs']] = None,
+                 regex: pulumi.Input[Optional[_builtins.str]] = None,
+                 suffix: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] exact: Value sent by the client must match the specified value exactly. Must be between 1 and 255 characters in length.
-        :param pulumi.Input[_builtins.str] prefix: Value sent by the client must begin with the specified characters. Must be between 1 and 255 characters in length.
-        :param pulumi.Input['RouteSpecGrpcRouteMatchMetadataMatchRangeArgs'] range: Object that specifies the range of numbers that the value sent by the client must be included in.
-        :param pulumi.Input[_builtins.str] regex: Value sent by the client must include the specified characters. Must be between 1 and 255 characters in length.
-        :param pulumi.Input[_builtins.str] suffix: Value sent by the client must end with the specified characters. Must be between 1 and 255 characters in length.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
+        :param pulumi.Input[_builtins.str] prefix: Header value sent by the client must begin with the specified characters.
+        :param pulumi.Input['RouteSpecGrpcRouteMatchMetadataMatchRangeArgs'] range: Object that specifies the range of numbers that the header value sent by the client must be included in. See `spec.http_route.match.header.match.range` Block for details.
+        :param pulumi.Input[_builtins.str] regex: Regex used to match the path.
+        :param pulumi.Input[_builtins.str] suffix: Header value sent by the client must end with the specified characters.
         """
         if exact is not None:
             pulumi.set(__self__, "exact", exact)
@@ -3084,62 +3057,62 @@ class RouteSpecGrpcRouteMatchMetadataMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Value sent by the client must match the specified value exactly. Must be between 1 and 255 characters in length.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
     @_builtins.property
     @pulumi.getter
-    def prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Value sent by the client must begin with the specified characters. Must be between 1 and 255 characters in length.
+        Header value sent by the client must begin with the specified characters.
         """
         return pulumi.get(self, "prefix")
 
     @prefix.setter
-    def prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "prefix", value)
 
     @_builtins.property
     @pulumi.getter
-    def range(self) -> Optional[pulumi.Input['RouteSpecGrpcRouteMatchMetadataMatchRangeArgs']]:
+    def range(self) -> pulumi.Input[Optional['RouteSpecGrpcRouteMatchMetadataMatchRangeArgs']]:
         """
-        Object that specifies the range of numbers that the value sent by the client must be included in.
+        Object that specifies the range of numbers that the header value sent by the client must be included in. See `spec.http_route.match.header.match.range` Block for details.
         """
         return pulumi.get(self, "range")
 
     @range.setter
-    def range(self, value: Optional[pulumi.Input['RouteSpecGrpcRouteMatchMetadataMatchRangeArgs']]):
+    def range(self, value: pulumi.Input[Optional['RouteSpecGrpcRouteMatchMetadataMatchRangeArgs']]):
         pulumi.set(self, "range", value)
 
     @_builtins.property
     @pulumi.getter
-    def regex(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def regex(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Value sent by the client must include the specified characters. Must be between 1 and 255 characters in length.
+        Regex used to match the path.
         """
         return pulumi.get(self, "regex")
 
     @regex.setter
-    def regex(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def regex(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "regex", value)
 
     @_builtins.property
     @pulumi.getter
-    def suffix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def suffix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Value sent by the client must end with the specified characters. Must be between 1 and 255 characters in length.
+        Header value sent by the client must end with the specified characters.
         """
         return pulumi.get(self, "suffix")
 
     @suffix.setter
-    def suffix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def suffix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "suffix", value)
 
 
@@ -3197,21 +3170,19 @@ class RouteSpecGrpcRouteRetryPolicyArgsDict(TypedDict):
     """
     per_retry_timeout: pulumi.Input['RouteSpecGrpcRouteRetryPolicyPerRetryTimeoutArgsDict']
     """
-    Per-retry timeout.
+    Per-retry timeout. See `spec.http_route.retry_policy.per_retry_timeout` Block for details.
     """
-    grpc_retry_events: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    grpc_retry_events: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    List of gRPC retry events.
-    Valid values: `cancelled`, `deadline-exceeded`, `internal`, `resource-exhausted`, `unavailable`.
+    List of gRPC retry events. Valid values: `cancelled`, `deadline-exceeded`, `internal`, `resource-exhausted`, `unavailable`.
     """
-    http_retry_events: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    http_retry_events: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    List of HTTP retry events.
-    Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
+    List of HTTP retry events. Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
     """
-    tcp_retry_events: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    tcp_retry_events: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    List of TCP retry events. The only valid value is `connection-error`.
+    List of TCP retry events. The only valid value is `connection-error`. You must specify at least one value for `http_retry_events`, or at least one value for `tcp_retry_events`.
     """
 
 @pulumi.input_type
@@ -3219,17 +3190,15 @@ class RouteSpecGrpcRouteRetryPolicyArgs:
     def __init__(__self__, *,
                  max_retries: pulumi.Input[_builtins.int],
                  per_retry_timeout: pulumi.Input['RouteSpecGrpcRouteRetryPolicyPerRetryTimeoutArgs'],
-                 grpc_retry_events: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 http_retry_events: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 tcp_retry_events: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 grpc_retry_events: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 http_retry_events: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 tcp_retry_events: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         :param pulumi.Input[_builtins.int] max_retries: Maximum number of retries.
-        :param pulumi.Input['RouteSpecGrpcRouteRetryPolicyPerRetryTimeoutArgs'] per_retry_timeout: Per-retry timeout.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] grpc_retry_events: List of gRPC retry events.
-               Valid values: `cancelled`, `deadline-exceeded`, `internal`, `resource-exhausted`, `unavailable`.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] http_retry_events: List of HTTP retry events.
-               Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] tcp_retry_events: List of TCP retry events. The only valid value is `connection-error`.
+        :param pulumi.Input['RouteSpecGrpcRouteRetryPolicyPerRetryTimeoutArgs'] per_retry_timeout: Per-retry timeout. See `spec.http_route.retry_policy.per_retry_timeout` Block for details.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] grpc_retry_events: List of gRPC retry events. Valid values: `cancelled`, `deadline-exceeded`, `internal`, `resource-exhausted`, `unavailable`.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] http_retry_events: List of HTTP retry events. Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] tcp_retry_events: List of TCP retry events. The only valid value is `connection-error`. You must specify at least one value for `http_retry_events`, or at least one value for `tcp_retry_events`.
         """
         pulumi.set(__self__, "max_retries", max_retries)
         pulumi.set(__self__, "per_retry_timeout", per_retry_timeout)
@@ -3256,7 +3225,7 @@ class RouteSpecGrpcRouteRetryPolicyArgs:
     @pulumi.getter(name="perRetryTimeout")
     def per_retry_timeout(self) -> pulumi.Input['RouteSpecGrpcRouteRetryPolicyPerRetryTimeoutArgs']:
         """
-        Per-retry timeout.
+        Per-retry timeout. See `spec.http_route.retry_policy.per_retry_timeout` Block for details.
         """
         return pulumi.get(self, "per_retry_timeout")
 
@@ -3266,51 +3235,49 @@ class RouteSpecGrpcRouteRetryPolicyArgs:
 
     @_builtins.property
     @pulumi.getter(name="grpcRetryEvents")
-    def grpc_retry_events(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def grpc_retry_events(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        List of gRPC retry events.
-        Valid values: `cancelled`, `deadline-exceeded`, `internal`, `resource-exhausted`, `unavailable`.
+        List of gRPC retry events. Valid values: `cancelled`, `deadline-exceeded`, `internal`, `resource-exhausted`, `unavailable`.
         """
         return pulumi.get(self, "grpc_retry_events")
 
     @grpc_retry_events.setter
-    def grpc_retry_events(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def grpc_retry_events(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "grpc_retry_events", value)
 
     @_builtins.property
     @pulumi.getter(name="httpRetryEvents")
-    def http_retry_events(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def http_retry_events(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        List of HTTP retry events.
-        Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
+        List of HTTP retry events. Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
         """
         return pulumi.get(self, "http_retry_events")
 
     @http_retry_events.setter
-    def http_retry_events(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def http_retry_events(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "http_retry_events", value)
 
     @_builtins.property
     @pulumi.getter(name="tcpRetryEvents")
-    def tcp_retry_events(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def tcp_retry_events(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        List of TCP retry events. The only valid value is `connection-error`.
+        List of TCP retry events. The only valid value is `connection-error`. You must specify at least one value for `http_retry_events`, or at least one value for `tcp_retry_events`.
         """
         return pulumi.get(self, "tcp_retry_events")
 
     @tcp_retry_events.setter
-    def tcp_retry_events(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def tcp_retry_events(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tcp_retry_events", value)
 
 
 class RouteSpecGrpcRouteRetryPolicyPerRetryTimeoutArgsDict(TypedDict):
     unit: pulumi.Input[_builtins.str]
     """
-    Retry unit. Valid values: `ms`, `s`.
+    Unit of time. Valid values: `ms`, `s`.
     """
     value: pulumi.Input[_builtins.int]
     """
-    Retry value.
+    Number of time units. Minimum value of `0`.
     """
 
 @pulumi.input_type
@@ -3319,8 +3286,8 @@ class RouteSpecGrpcRouteRetryPolicyPerRetryTimeoutArgs:
                  unit: pulumi.Input[_builtins.str],
                  value: pulumi.Input[_builtins.int]):
         """
-        :param pulumi.Input[_builtins.str] unit: Retry unit. Valid values: `ms`, `s`.
-        :param pulumi.Input[_builtins.int] value: Retry value.
+        :param pulumi.Input[_builtins.str] unit: Unit of time. Valid values: `ms`, `s`.
+        :param pulumi.Input[_builtins.int] value: Number of time units. Minimum value of `0`.
         """
         pulumi.set(__self__, "unit", unit)
         pulumi.set(__self__, "value", value)
@@ -3329,7 +3296,7 @@ class RouteSpecGrpcRouteRetryPolicyPerRetryTimeoutArgs:
     @pulumi.getter
     def unit(self) -> pulumi.Input[_builtins.str]:
         """
-        Retry unit. Valid values: `ms`, `s`.
+        Unit of time. Valid values: `ms`, `s`.
         """
         return pulumi.get(self, "unit")
 
@@ -3341,7 +3308,7 @@ class RouteSpecGrpcRouteRetryPolicyPerRetryTimeoutArgs:
     @pulumi.getter
     def value(self) -> pulumi.Input[_builtins.int]:
         """
-        Retry value.
+        Number of time units. Minimum value of `0`.
         """
         return pulumi.get(self, "value")
 
@@ -3351,23 +3318,23 @@ class RouteSpecGrpcRouteRetryPolicyPerRetryTimeoutArgs:
 
 
 class RouteSpecGrpcRouteTimeoutArgsDict(TypedDict):
-    idle: NotRequired[pulumi.Input['RouteSpecGrpcRouteTimeoutIdleArgsDict']]
+    idle: NotRequired[pulumi.Input[Optional['RouteSpecGrpcRouteTimeoutIdleArgsDict']]]
     """
-    Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+    Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.tcp_route.timeout.idle` Block for details.
     """
-    per_request: NotRequired[pulumi.Input['RouteSpecGrpcRouteTimeoutPerRequestArgsDict']]
+    per_request: NotRequired[pulumi.Input[Optional['RouteSpecGrpcRouteTimeoutPerRequestArgsDict']]]
     """
-    Per request timeout.
+    Per request timeout. See `spec.http_route.timeout.per_request` Block for details.
     """
 
 @pulumi.input_type
 class RouteSpecGrpcRouteTimeoutArgs:
     def __init__(__self__, *,
-                 idle: Optional[pulumi.Input['RouteSpecGrpcRouteTimeoutIdleArgs']] = None,
-                 per_request: Optional[pulumi.Input['RouteSpecGrpcRouteTimeoutPerRequestArgs']] = None):
+                 idle: pulumi.Input[Optional['RouteSpecGrpcRouteTimeoutIdleArgs']] = None,
+                 per_request: pulumi.Input[Optional['RouteSpecGrpcRouteTimeoutPerRequestArgs']] = None):
         """
-        :param pulumi.Input['RouteSpecGrpcRouteTimeoutIdleArgs'] idle: Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
-        :param pulumi.Input['RouteSpecGrpcRouteTimeoutPerRequestArgs'] per_request: Per request timeout.
+        :param pulumi.Input['RouteSpecGrpcRouteTimeoutIdleArgs'] idle: Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.tcp_route.timeout.idle` Block for details.
+        :param pulumi.Input['RouteSpecGrpcRouteTimeoutPerRequestArgs'] per_request: Per request timeout. See `spec.http_route.timeout.per_request` Block for details.
         """
         if idle is not None:
             pulumi.set(__self__, "idle", idle)
@@ -3376,26 +3343,26 @@ class RouteSpecGrpcRouteTimeoutArgs:
 
     @_builtins.property
     @pulumi.getter
-    def idle(self) -> Optional[pulumi.Input['RouteSpecGrpcRouteTimeoutIdleArgs']]:
+    def idle(self) -> pulumi.Input[Optional['RouteSpecGrpcRouteTimeoutIdleArgs']]:
         """
-        Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+        Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.tcp_route.timeout.idle` Block for details.
         """
         return pulumi.get(self, "idle")
 
     @idle.setter
-    def idle(self, value: Optional[pulumi.Input['RouteSpecGrpcRouteTimeoutIdleArgs']]):
+    def idle(self, value: pulumi.Input[Optional['RouteSpecGrpcRouteTimeoutIdleArgs']]):
         pulumi.set(self, "idle", value)
 
     @_builtins.property
     @pulumi.getter(name="perRequest")
-    def per_request(self) -> Optional[pulumi.Input['RouteSpecGrpcRouteTimeoutPerRequestArgs']]:
+    def per_request(self) -> pulumi.Input[Optional['RouteSpecGrpcRouteTimeoutPerRequestArgs']]:
         """
-        Per request timeout.
+        Per request timeout. See `spec.http_route.timeout.per_request` Block for details.
         """
         return pulumi.get(self, "per_request")
 
     @per_request.setter
-    def per_request(self, value: Optional[pulumi.Input['RouteSpecGrpcRouteTimeoutPerRequestArgs']]):
+    def per_request(self, value: pulumi.Input[Optional['RouteSpecGrpcRouteTimeoutPerRequestArgs']]):
         pulumi.set(self, "per_request", value)
 
 
@@ -3496,19 +3463,19 @@ class RouteSpecGrpcRouteTimeoutPerRequestArgs:
 class RouteSpecHttp2RouteArgsDict(TypedDict):
     action: pulumi.Input['RouteSpecHttp2RouteActionArgsDict']
     """
-    Action to take if a match is determined.
+    Action to take if a match is determined. See `spec.tcp_route.action` Block for details.
     """
     match: pulumi.Input['RouteSpecHttp2RouteMatchArgsDict']
     """
-    Criteria for determining an HTTP request match.
+    Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
     """
-    retry_policy: NotRequired[pulumi.Input['RouteSpecHttp2RouteRetryPolicyArgsDict']]
+    retry_policy: NotRequired[pulumi.Input[Optional['RouteSpecHttp2RouteRetryPolicyArgsDict']]]
     """
-    Retry policy.
+    Retry policy. See `spec.http_route.retry_policy` Block for details.
     """
-    timeout: NotRequired[pulumi.Input['RouteSpecHttp2RouteTimeoutArgsDict']]
+    timeout: NotRequired[pulumi.Input[Optional['RouteSpecHttp2RouteTimeoutArgsDict']]]
     """
-    Types of timeouts.
+    Types of timeouts. See `spec.tcp_route.timeout` Block for details.
     """
 
 @pulumi.input_type
@@ -3516,13 +3483,13 @@ class RouteSpecHttp2RouteArgs:
     def __init__(__self__, *,
                  action: pulumi.Input['RouteSpecHttp2RouteActionArgs'],
                  match: pulumi.Input['RouteSpecHttp2RouteMatchArgs'],
-                 retry_policy: Optional[pulumi.Input['RouteSpecHttp2RouteRetryPolicyArgs']] = None,
-                 timeout: Optional[pulumi.Input['RouteSpecHttp2RouteTimeoutArgs']] = None):
+                 retry_policy: pulumi.Input[Optional['RouteSpecHttp2RouteRetryPolicyArgs']] = None,
+                 timeout: pulumi.Input[Optional['RouteSpecHttp2RouteTimeoutArgs']] = None):
         """
-        :param pulumi.Input['RouteSpecHttp2RouteActionArgs'] action: Action to take if a match is determined.
-        :param pulumi.Input['RouteSpecHttp2RouteMatchArgs'] match: Criteria for determining an HTTP request match.
-        :param pulumi.Input['RouteSpecHttp2RouteRetryPolicyArgs'] retry_policy: Retry policy.
-        :param pulumi.Input['RouteSpecHttp2RouteTimeoutArgs'] timeout: Types of timeouts.
+        :param pulumi.Input['RouteSpecHttp2RouteActionArgs'] action: Action to take if a match is determined. See `spec.tcp_route.action` Block for details.
+        :param pulumi.Input['RouteSpecHttp2RouteMatchArgs'] match: Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
+        :param pulumi.Input['RouteSpecHttp2RouteRetryPolicyArgs'] retry_policy: Retry policy. See `spec.http_route.retry_policy` Block for details.
+        :param pulumi.Input['RouteSpecHttp2RouteTimeoutArgs'] timeout: Types of timeouts. See `spec.tcp_route.timeout` Block for details.
         """
         pulumi.set(__self__, "action", action)
         pulumi.set(__self__, "match", match)
@@ -3535,7 +3502,7 @@ class RouteSpecHttp2RouteArgs:
     @pulumi.getter
     def action(self) -> pulumi.Input['RouteSpecHttp2RouteActionArgs']:
         """
-        Action to take if a match is determined.
+        Action to take if a match is determined. See `spec.tcp_route.action` Block for details.
         """
         return pulumi.get(self, "action")
 
@@ -3547,7 +3514,7 @@ class RouteSpecHttp2RouteArgs:
     @pulumi.getter
     def match(self) -> pulumi.Input['RouteSpecHttp2RouteMatchArgs']:
         """
-        Criteria for determining an HTTP request match.
+        Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
         """
         return pulumi.get(self, "match")
 
@@ -3557,34 +3524,33 @@ class RouteSpecHttp2RouteArgs:
 
     @_builtins.property
     @pulumi.getter(name="retryPolicy")
-    def retry_policy(self) -> Optional[pulumi.Input['RouteSpecHttp2RouteRetryPolicyArgs']]:
+    def retry_policy(self) -> pulumi.Input[Optional['RouteSpecHttp2RouteRetryPolicyArgs']]:
         """
-        Retry policy.
+        Retry policy. See `spec.http_route.retry_policy` Block for details.
         """
         return pulumi.get(self, "retry_policy")
 
     @retry_policy.setter
-    def retry_policy(self, value: Optional[pulumi.Input['RouteSpecHttp2RouteRetryPolicyArgs']]):
+    def retry_policy(self, value: pulumi.Input[Optional['RouteSpecHttp2RouteRetryPolicyArgs']]):
         pulumi.set(self, "retry_policy", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeout(self) -> Optional[pulumi.Input['RouteSpecHttp2RouteTimeoutArgs']]:
+    def timeout(self) -> pulumi.Input[Optional['RouteSpecHttp2RouteTimeoutArgs']]:
         """
-        Types of timeouts.
+        Types of timeouts. See `spec.tcp_route.timeout` Block for details.
         """
         return pulumi.get(self, "timeout")
 
     @timeout.setter
-    def timeout(self, value: Optional[pulumi.Input['RouteSpecHttp2RouteTimeoutArgs']]):
+    def timeout(self, value: pulumi.Input[Optional['RouteSpecHttp2RouteTimeoutArgs']]):
         pulumi.set(self, "timeout", value)
 
 
 class RouteSpecHttp2RouteActionArgsDict(TypedDict):
     weighted_targets: pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteActionWeightedTargetArgsDict']]]
     """
-    Targets that traffic is routed to when a request matches the route.
-    You can specify one or more targets and their relative weights with which to distribute traffic.
+    Targets that traffic is routed to when a request matches the route. You can specify one or more targets and their relative weights with which to distribute traffic. See `spec.tcp_route.action.weighted_target` Block for details.
     """
 
 @pulumi.input_type
@@ -3592,8 +3558,7 @@ class RouteSpecHttp2RouteActionArgs:
     def __init__(__self__, *,
                  weighted_targets: pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteActionWeightedTargetArgs']]]):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteActionWeightedTargetArgs']]] weighted_targets: Targets that traffic is routed to when a request matches the route.
-               You can specify one or more targets and their relative weights with which to distribute traffic.
+        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteActionWeightedTargetArgs']]] weighted_targets: Targets that traffic is routed to when a request matches the route. You can specify one or more targets and their relative weights with which to distribute traffic. See `spec.tcp_route.action.weighted_target` Block for details.
         """
         pulumi.set(__self__, "weighted_targets", weighted_targets)
 
@@ -3601,8 +3566,7 @@ class RouteSpecHttp2RouteActionArgs:
     @pulumi.getter(name="weightedTargets")
     def weighted_targets(self) -> pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteActionWeightedTargetArgs']]]:
         """
-        Targets that traffic is routed to when a request matches the route.
-        You can specify one or more targets and their relative weights with which to distribute traffic.
+        Targets that traffic is routed to when a request matches the route. You can specify one or more targets and their relative weights with which to distribute traffic. See `spec.tcp_route.action.weighted_target` Block for details.
         """
         return pulumi.get(self, "weighted_targets")
 
@@ -3620,9 +3584,9 @@ class RouteSpecHttp2RouteActionWeightedTargetArgsDict(TypedDict):
     """
     Relative weight of the weighted target. An integer between 0 and 100.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The targeted port of the weighted object.
+    Port number to match from the request.
     """
 
 @pulumi.input_type
@@ -3630,11 +3594,11 @@ class RouteSpecHttp2RouteActionWeightedTargetArgs:
     def __init__(__self__, *,
                  virtual_node: pulumi.Input[_builtins.str],
                  weight: pulumi.Input[_builtins.int],
-                 port: Optional[pulumi.Input[_builtins.int]] = None):
+                 port: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.str] virtual_node: Virtual node to associate with the weighted target. Must be between 1 and 255 characters in length.
         :param pulumi.Input[_builtins.int] weight: Relative weight of the weighted target. An integer between 0 and 100.
-        :param pulumi.Input[_builtins.int] port: The targeted port of the weighted object.
+        :param pulumi.Input[_builtins.int] port: Port number to match from the request.
         """
         pulumi.set(__self__, "virtual_node", virtual_node)
         pulumi.set(__self__, "weight", weight)
@@ -3667,44 +3631,43 @@ class RouteSpecHttp2RouteActionWeightedTargetArgs:
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The targeted port of the weighted object.
+        Port number to match from the request.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
 
 class RouteSpecHttp2RouteMatchArgsDict(TypedDict):
-    headers: NotRequired[pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchHeaderArgsDict']]]]
+    headers: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchHeaderArgsDict']]]]]
     """
-    Client request headers to match on.
+    Client request headers to match on. See `spec.http_route.match.header` Block for details.
     """
-    method: NotRequired[pulumi.Input[_builtins.str]]
+    method: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Client request header method to match on. Valid values: `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `CONNECT`, `OPTIONS`, `TRACE`, `PATCH`.
     """
-    path: NotRequired[pulumi.Input['RouteSpecHttp2RouteMatchPathArgsDict']]
+    path: NotRequired[pulumi.Input[Optional['RouteSpecHttp2RouteMatchPathArgsDict']]]
     """
-    Client request path to match on.
+    Client request path to match on. See `spec.http_route.match.path` Block for details.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The port number to match from the request.
+    Port number to match from the request.
     """
-    prefix: NotRequired[pulumi.Input[_builtins.str]]
+    prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Path with which to match requests.
-    This parameter must always start with /, which by itself matches all requests to the virtual router service name.
+    Header value sent by the client must begin with the specified characters.
     """
-    query_parameters: NotRequired[pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchQueryParameterArgsDict']]]]
+    query_parameters: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchQueryParameterArgsDict']]]]]
     """
-    Client request query parameters to match on.
+    Client request query parameters to match on. See `spec.http_route.match.query_parameter` Block for details.
     """
-    scheme: NotRequired[pulumi.Input[_builtins.str]]
+    scheme: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Client request header scheme to match on. Valid values: `http`, `https`.
     """
@@ -3712,21 +3675,20 @@ class RouteSpecHttp2RouteMatchArgsDict(TypedDict):
 @pulumi.input_type
 class RouteSpecHttp2RouteMatchArgs:
     def __init__(__self__, *,
-                 headers: Optional[pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchHeaderArgs']]]] = None,
-                 method: Optional[pulumi.Input[_builtins.str]] = None,
-                 path: Optional[pulumi.Input['RouteSpecHttp2RouteMatchPathArgs']] = None,
-                 port: Optional[pulumi.Input[_builtins.int]] = None,
-                 prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 query_parameters: Optional[pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchQueryParameterArgs']]]] = None,
-                 scheme: Optional[pulumi.Input[_builtins.str]] = None):
+                 headers: pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchHeaderArgs']]]] = None,
+                 method: pulumi.Input[Optional[_builtins.str]] = None,
+                 path: pulumi.Input[Optional['RouteSpecHttp2RouteMatchPathArgs']] = None,
+                 port: pulumi.Input[Optional[_builtins.int]] = None,
+                 prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 query_parameters: pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchQueryParameterArgs']]]] = None,
+                 scheme: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchHeaderArgs']]] headers: Client request headers to match on.
+        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchHeaderArgs']]] headers: Client request headers to match on. See `spec.http_route.match.header` Block for details.
         :param pulumi.Input[_builtins.str] method: Client request header method to match on. Valid values: `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `CONNECT`, `OPTIONS`, `TRACE`, `PATCH`.
-        :param pulumi.Input['RouteSpecHttp2RouteMatchPathArgs'] path: Client request path to match on.
-        :param pulumi.Input[_builtins.int] port: The port number to match from the request.
-        :param pulumi.Input[_builtins.str] prefix: Path with which to match requests.
-               This parameter must always start with /, which by itself matches all requests to the virtual router service name.
-        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchQueryParameterArgs']]] query_parameters: Client request query parameters to match on.
+        :param pulumi.Input['RouteSpecHttp2RouteMatchPathArgs'] path: Client request path to match on. See `spec.http_route.match.path` Block for details.
+        :param pulumi.Input[_builtins.int] port: Port number to match from the request.
+        :param pulumi.Input[_builtins.str] prefix: Header value sent by the client must begin with the specified characters.
+        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchQueryParameterArgs']]] query_parameters: Client request query parameters to match on. See `spec.http_route.match.query_parameter` Block for details.
         :param pulumi.Input[_builtins.str] scheme: Client request header scheme to match on. Valid values: `http`, `https`.
         """
         if headers is not None:
@@ -3746,114 +3708,113 @@ class RouteSpecHttp2RouteMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def headers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchHeaderArgs']]]]:
+    def headers(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchHeaderArgs']]]]:
         """
-        Client request headers to match on.
+        Client request headers to match on. See `spec.http_route.match.header` Block for details.
         """
         return pulumi.get(self, "headers")
 
     @headers.setter
-    def headers(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchHeaderArgs']]]]):
+    def headers(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchHeaderArgs']]]]):
         pulumi.set(self, "headers", value)
 
     @_builtins.property
     @pulumi.getter
-    def method(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def method(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Client request header method to match on. Valid values: `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `CONNECT`, `OPTIONS`, `TRACE`, `PATCH`.
         """
         return pulumi.get(self, "method")
 
     @method.setter
-    def method(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def method(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "method", value)
 
     @_builtins.property
     @pulumi.getter
-    def path(self) -> Optional[pulumi.Input['RouteSpecHttp2RouteMatchPathArgs']]:
+    def path(self) -> pulumi.Input[Optional['RouteSpecHttp2RouteMatchPathArgs']]:
         """
-        Client request path to match on.
+        Client request path to match on. See `spec.http_route.match.path` Block for details.
         """
         return pulumi.get(self, "path")
 
     @path.setter
-    def path(self, value: Optional[pulumi.Input['RouteSpecHttp2RouteMatchPathArgs']]):
+    def path(self, value: pulumi.Input[Optional['RouteSpecHttp2RouteMatchPathArgs']]):
         pulumi.set(self, "path", value)
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The port number to match from the request.
+        Port number to match from the request.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
     @_builtins.property
     @pulumi.getter
-    def prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Path with which to match requests.
-        This parameter must always start with /, which by itself matches all requests to the virtual router service name.
+        Header value sent by the client must begin with the specified characters.
         """
         return pulumi.get(self, "prefix")
 
     @prefix.setter
-    def prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "prefix", value)
 
     @_builtins.property
     @pulumi.getter(name="queryParameters")
-    def query_parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchQueryParameterArgs']]]]:
+    def query_parameters(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchQueryParameterArgs']]]]:
         """
-        Client request query parameters to match on.
+        Client request query parameters to match on. See `spec.http_route.match.query_parameter` Block for details.
         """
         return pulumi.get(self, "query_parameters")
 
     @query_parameters.setter
-    def query_parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchQueryParameterArgs']]]]):
+    def query_parameters(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecHttp2RouteMatchQueryParameterArgs']]]]):
         pulumi.set(self, "query_parameters", value)
 
     @_builtins.property
     @pulumi.getter
-    def scheme(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def scheme(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Client request header scheme to match on. Valid values: `http`, `https`.
         """
         return pulumi.get(self, "scheme")
 
     @scheme.setter
-    def scheme(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def scheme(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "scheme", value)
 
 
 class RouteSpecHttp2RouteMatchHeaderArgsDict(TypedDict):
     name: pulumi.Input[_builtins.str]
     """
-    Name for the HTTP header in the client request that will be matched on.
+    Name to use for the route. Must be between 1 and 255 characters in length.
     """
-    invert: NotRequired[pulumi.Input[_builtins.bool]]
+    invert: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
-    If `true`, the match is on the opposite of the `match` method and value. Default is `false`.
+    Whether to match on the opposite of the `match` method and value. Default is `false`.
     """
-    match: NotRequired[pulumi.Input['RouteSpecHttp2RouteMatchHeaderMatchArgsDict']]
+    match: NotRequired[pulumi.Input[Optional['RouteSpecHttp2RouteMatchHeaderMatchArgsDict']]]
     """
-    Method and value to match the header value sent with a request. Specify one match method.
+    Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
     """
 
 @pulumi.input_type
 class RouteSpecHttp2RouteMatchHeaderArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str],
-                 invert: Optional[pulumi.Input[_builtins.bool]] = None,
-                 match: Optional[pulumi.Input['RouteSpecHttp2RouteMatchHeaderMatchArgs']] = None):
+                 invert: pulumi.Input[Optional[_builtins.bool]] = None,
+                 match: pulumi.Input[Optional['RouteSpecHttp2RouteMatchHeaderMatchArgs']] = None):
         """
-        :param pulumi.Input[_builtins.str] name: Name for the HTTP header in the client request that will be matched on.
-        :param pulumi.Input[_builtins.bool] invert: If `true`, the match is on the opposite of the `match` method and value. Default is `false`.
-        :param pulumi.Input['RouteSpecHttp2RouteMatchHeaderMatchArgs'] match: Method and value to match the header value sent with a request. Specify one match method.
+        :param pulumi.Input[_builtins.str] name: Name to use for the route. Must be between 1 and 255 characters in length.
+        :param pulumi.Input[_builtins.bool] invert: Whether to match on the opposite of the `match` method and value. Default is `false`.
+        :param pulumi.Input['RouteSpecHttp2RouteMatchHeaderMatchArgs'] match: Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
         """
         pulumi.set(__self__, "name", name)
         if invert is not None:
@@ -3865,7 +3826,7 @@ class RouteSpecHttp2RouteMatchHeaderArgs:
     @pulumi.getter
     def name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name for the HTTP header in the client request that will be matched on.
+        Name to use for the route. Must be between 1 and 255 characters in length.
         """
         return pulumi.get(self, "name")
 
@@ -3875,47 +3836,47 @@ class RouteSpecHttp2RouteMatchHeaderArgs:
 
     @_builtins.property
     @pulumi.getter
-    def invert(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def invert(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        If `true`, the match is on the opposite of the `match` method and value. Default is `false`.
+        Whether to match on the opposite of the `match` method and value. Default is `false`.
         """
         return pulumi.get(self, "invert")
 
     @invert.setter
-    def invert(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def invert(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "invert", value)
 
     @_builtins.property
     @pulumi.getter
-    def match(self) -> Optional[pulumi.Input['RouteSpecHttp2RouteMatchHeaderMatchArgs']]:
+    def match(self) -> pulumi.Input[Optional['RouteSpecHttp2RouteMatchHeaderMatchArgs']]:
         """
-        Method and value to match the header value sent with a request. Specify one match method.
+        Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
         """
         return pulumi.get(self, "match")
 
     @match.setter
-    def match(self, value: Optional[pulumi.Input['RouteSpecHttp2RouteMatchHeaderMatchArgs']]):
+    def match(self, value: pulumi.Input[Optional['RouteSpecHttp2RouteMatchHeaderMatchArgs']]):
         pulumi.set(self, "match", value)
 
 
 class RouteSpecHttp2RouteMatchHeaderMatchArgsDict(TypedDict):
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Header value sent by the client must match the specified value exactly.
+    Exact query parameter to match on.
     """
-    prefix: NotRequired[pulumi.Input[_builtins.str]]
+    prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Header value sent by the client must begin with the specified characters.
     """
-    range: NotRequired[pulumi.Input['RouteSpecHttp2RouteMatchHeaderMatchRangeArgsDict']]
+    range: NotRequired[pulumi.Input[Optional['RouteSpecHttp2RouteMatchHeaderMatchRangeArgsDict']]]
     """
-    Object that specifies the range of numbers that the header value sent by the client must be included in.
+    Object that specifies the range of numbers that the header value sent by the client must be included in. See `spec.http_route.match.header.match.range` Block for details.
     """
-    regex: NotRequired[pulumi.Input[_builtins.str]]
+    regex: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Header value sent by the client must include the specified characters.
+    Regex used to match the path.
     """
-    suffix: NotRequired[pulumi.Input[_builtins.str]]
+    suffix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Header value sent by the client must end with the specified characters.
     """
@@ -3923,16 +3884,16 @@ class RouteSpecHttp2RouteMatchHeaderMatchArgsDict(TypedDict):
 @pulumi.input_type
 class RouteSpecHttp2RouteMatchHeaderMatchArgs:
     def __init__(__self__, *,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None,
-                 prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 range: Optional[pulumi.Input['RouteSpecHttp2RouteMatchHeaderMatchRangeArgs']] = None,
-                 regex: Optional[pulumi.Input[_builtins.str]] = None,
-                 suffix: Optional[pulumi.Input[_builtins.str]] = None):
+                 exact: pulumi.Input[Optional[_builtins.str]] = None,
+                 prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 range: pulumi.Input[Optional['RouteSpecHttp2RouteMatchHeaderMatchRangeArgs']] = None,
+                 regex: pulumi.Input[Optional[_builtins.str]] = None,
+                 suffix: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] exact: Header value sent by the client must match the specified value exactly.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
         :param pulumi.Input[_builtins.str] prefix: Header value sent by the client must begin with the specified characters.
-        :param pulumi.Input['RouteSpecHttp2RouteMatchHeaderMatchRangeArgs'] range: Object that specifies the range of numbers that the header value sent by the client must be included in.
-        :param pulumi.Input[_builtins.str] regex: Header value sent by the client must include the specified characters.
+        :param pulumi.Input['RouteSpecHttp2RouteMatchHeaderMatchRangeArgs'] range: Object that specifies the range of numbers that the header value sent by the client must be included in. See `spec.http_route.match.header.match.range` Block for details.
+        :param pulumi.Input[_builtins.str] regex: Regex used to match the path.
         :param pulumi.Input[_builtins.str] suffix: Header value sent by the client must end with the specified characters.
         """
         if exact is not None:
@@ -3948,62 +3909,62 @@ class RouteSpecHttp2RouteMatchHeaderMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Header value sent by the client must match the specified value exactly.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
     @_builtins.property
     @pulumi.getter
-    def prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Header value sent by the client must begin with the specified characters.
         """
         return pulumi.get(self, "prefix")
 
     @prefix.setter
-    def prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "prefix", value)
 
     @_builtins.property
     @pulumi.getter
-    def range(self) -> Optional[pulumi.Input['RouteSpecHttp2RouteMatchHeaderMatchRangeArgs']]:
+    def range(self) -> pulumi.Input[Optional['RouteSpecHttp2RouteMatchHeaderMatchRangeArgs']]:
         """
-        Object that specifies the range of numbers that the header value sent by the client must be included in.
+        Object that specifies the range of numbers that the header value sent by the client must be included in. See `spec.http_route.match.header.match.range` Block for details.
         """
         return pulumi.get(self, "range")
 
     @range.setter
-    def range(self, value: Optional[pulumi.Input['RouteSpecHttp2RouteMatchHeaderMatchRangeArgs']]):
+    def range(self, value: pulumi.Input[Optional['RouteSpecHttp2RouteMatchHeaderMatchRangeArgs']]):
         pulumi.set(self, "range", value)
 
     @_builtins.property
     @pulumi.getter
-    def regex(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def regex(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Header value sent by the client must include the specified characters.
+        Regex used to match the path.
         """
         return pulumi.get(self, "regex")
 
     @regex.setter
-    def regex(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def regex(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "regex", value)
 
     @_builtins.property
     @pulumi.getter
-    def suffix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def suffix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Header value sent by the client must end with the specified characters.
         """
         return pulumi.get(self, "suffix")
 
     @suffix.setter
-    def suffix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def suffix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "suffix", value)
 
 
@@ -4055,23 +4016,23 @@ class RouteSpecHttp2RouteMatchHeaderMatchRangeArgs:
 
 
 class RouteSpecHttp2RouteMatchPathArgsDict(TypedDict):
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The exact path to match on.
+    Exact query parameter to match on.
     """
-    regex: NotRequired[pulumi.Input[_builtins.str]]
+    regex: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The regex used to match the path.
+    Regex used to match the path.
     """
 
 @pulumi.input_type
 class RouteSpecHttp2RouteMatchPathArgs:
     def __init__(__self__, *,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None,
-                 regex: Optional[pulumi.Input[_builtins.str]] = None):
+                 exact: pulumi.Input[Optional[_builtins.str]] = None,
+                 regex: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] exact: The exact path to match on.
-        :param pulumi.Input[_builtins.str] regex: The regex used to match the path.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
+        :param pulumi.Input[_builtins.str] regex: Regex used to match the path.
         """
         if exact is not None:
             pulumi.set(__self__, "exact", exact)
@@ -4080,47 +4041,47 @@ class RouteSpecHttp2RouteMatchPathArgs:
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The exact path to match on.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
     @_builtins.property
     @pulumi.getter
-    def regex(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def regex(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The regex used to match the path.
+        Regex used to match the path.
         """
         return pulumi.get(self, "regex")
 
     @regex.setter
-    def regex(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def regex(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "regex", value)
 
 
 class RouteSpecHttp2RouteMatchQueryParameterArgsDict(TypedDict):
     name: pulumi.Input[_builtins.str]
     """
-    Name for the query parameter that will be matched on.
+    Name to use for the route. Must be between 1 and 255 characters in length.
     """
-    match: NotRequired[pulumi.Input['RouteSpecHttp2RouteMatchQueryParameterMatchArgsDict']]
+    match: NotRequired[pulumi.Input[Optional['RouteSpecHttp2RouteMatchQueryParameterMatchArgsDict']]]
     """
-    The query parameter to match on.
+    Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
     """
 
 @pulumi.input_type
 class RouteSpecHttp2RouteMatchQueryParameterArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str],
-                 match: Optional[pulumi.Input['RouteSpecHttp2RouteMatchQueryParameterMatchArgs']] = None):
+                 match: pulumi.Input[Optional['RouteSpecHttp2RouteMatchQueryParameterMatchArgs']] = None):
         """
-        :param pulumi.Input[_builtins.str] name: Name for the query parameter that will be matched on.
-        :param pulumi.Input['RouteSpecHttp2RouteMatchQueryParameterMatchArgs'] match: The query parameter to match on.
+        :param pulumi.Input[_builtins.str] name: Name to use for the route. Must be between 1 and 255 characters in length.
+        :param pulumi.Input['RouteSpecHttp2RouteMatchQueryParameterMatchArgs'] match: Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
         """
         pulumi.set(__self__, "name", name)
         if match is not None:
@@ -4130,7 +4091,7 @@ class RouteSpecHttp2RouteMatchQueryParameterArgs:
     @pulumi.getter
     def name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name for the query parameter that will be matched on.
+        Name to use for the route. Must be between 1 and 255 characters in length.
         """
         return pulumi.get(self, "name")
 
@@ -4140,43 +4101,43 @@ class RouteSpecHttp2RouteMatchQueryParameterArgs:
 
     @_builtins.property
     @pulumi.getter
-    def match(self) -> Optional[pulumi.Input['RouteSpecHttp2RouteMatchQueryParameterMatchArgs']]:
+    def match(self) -> pulumi.Input[Optional['RouteSpecHttp2RouteMatchQueryParameterMatchArgs']]:
         """
-        The query parameter to match on.
+        Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
         """
         return pulumi.get(self, "match")
 
     @match.setter
-    def match(self, value: Optional[pulumi.Input['RouteSpecHttp2RouteMatchQueryParameterMatchArgs']]):
+    def match(self, value: pulumi.Input[Optional['RouteSpecHttp2RouteMatchQueryParameterMatchArgs']]):
         pulumi.set(self, "match", value)
 
 
 class RouteSpecHttp2RouteMatchQueryParameterMatchArgsDict(TypedDict):
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The exact query parameter to match on.
+    Exact query parameter to match on.
     """
 
 @pulumi.input_type
 class RouteSpecHttp2RouteMatchQueryParameterMatchArgs:
     def __init__(__self__, *,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None):
+                 exact: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] exact: The exact query parameter to match on.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
         """
         if exact is not None:
             pulumi.set(__self__, "exact", exact)
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The exact query parameter to match on.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
 
@@ -4187,18 +4148,15 @@ class RouteSpecHttp2RouteRetryPolicyArgsDict(TypedDict):
     """
     per_retry_timeout: pulumi.Input['RouteSpecHttp2RouteRetryPolicyPerRetryTimeoutArgsDict']
     """
-    Per-retry timeout.
+    Per-retry timeout. See `spec.http_route.retry_policy.per_retry_timeout` Block for details.
     """
-    http_retry_events: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    http_retry_events: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    List of HTTP retry events.
-    Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
+    List of HTTP retry events. Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
     """
-    tcp_retry_events: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    tcp_retry_events: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    List of TCP retry events. The only valid value is `connection-error`.
-
-    You must specify at least one value for `http_retry_events`, or at least one value for `tcp_retry_events`.
+    List of TCP retry events. The only valid value is `connection-error`. You must specify at least one value for `http_retry_events`, or at least one value for `tcp_retry_events`.
     """
 
 @pulumi.input_type
@@ -4206,16 +4164,13 @@ class RouteSpecHttp2RouteRetryPolicyArgs:
     def __init__(__self__, *,
                  max_retries: pulumi.Input[_builtins.int],
                  per_retry_timeout: pulumi.Input['RouteSpecHttp2RouteRetryPolicyPerRetryTimeoutArgs'],
-                 http_retry_events: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 tcp_retry_events: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 http_retry_events: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 tcp_retry_events: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         :param pulumi.Input[_builtins.int] max_retries: Maximum number of retries.
-        :param pulumi.Input['RouteSpecHttp2RouteRetryPolicyPerRetryTimeoutArgs'] per_retry_timeout: Per-retry timeout.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] http_retry_events: List of HTTP retry events.
-               Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] tcp_retry_events: List of TCP retry events. The only valid value is `connection-error`.
-               
-               You must specify at least one value for `http_retry_events`, or at least one value for `tcp_retry_events`.
+        :param pulumi.Input['RouteSpecHttp2RouteRetryPolicyPerRetryTimeoutArgs'] per_retry_timeout: Per-retry timeout. See `spec.http_route.retry_policy.per_retry_timeout` Block for details.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] http_retry_events: List of HTTP retry events. Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] tcp_retry_events: List of TCP retry events. The only valid value is `connection-error`. You must specify at least one value for `http_retry_events`, or at least one value for `tcp_retry_events`.
         """
         pulumi.set(__self__, "max_retries", max_retries)
         pulumi.set(__self__, "per_retry_timeout", per_retry_timeout)
@@ -4240,7 +4195,7 @@ class RouteSpecHttp2RouteRetryPolicyArgs:
     @pulumi.getter(name="perRetryTimeout")
     def per_retry_timeout(self) -> pulumi.Input['RouteSpecHttp2RouteRetryPolicyPerRetryTimeoutArgs']:
         """
-        Per-retry timeout.
+        Per-retry timeout. See `spec.http_route.retry_policy.per_retry_timeout` Block for details.
         """
         return pulumi.get(self, "per_retry_timeout")
 
@@ -4250,40 +4205,37 @@ class RouteSpecHttp2RouteRetryPolicyArgs:
 
     @_builtins.property
     @pulumi.getter(name="httpRetryEvents")
-    def http_retry_events(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def http_retry_events(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        List of HTTP retry events.
-        Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
+        List of HTTP retry events. Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
         """
         return pulumi.get(self, "http_retry_events")
 
     @http_retry_events.setter
-    def http_retry_events(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def http_retry_events(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "http_retry_events", value)
 
     @_builtins.property
     @pulumi.getter(name="tcpRetryEvents")
-    def tcp_retry_events(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def tcp_retry_events(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        List of TCP retry events. The only valid value is `connection-error`.
-
-        You must specify at least one value for `http_retry_events`, or at least one value for `tcp_retry_events`.
+        List of TCP retry events. The only valid value is `connection-error`. You must specify at least one value for `http_retry_events`, or at least one value for `tcp_retry_events`.
         """
         return pulumi.get(self, "tcp_retry_events")
 
     @tcp_retry_events.setter
-    def tcp_retry_events(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def tcp_retry_events(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tcp_retry_events", value)
 
 
 class RouteSpecHttp2RouteRetryPolicyPerRetryTimeoutArgsDict(TypedDict):
     unit: pulumi.Input[_builtins.str]
     """
-    Retry unit. Valid values: `ms`, `s`.
+    Unit of time. Valid values: `ms`, `s`.
     """
     value: pulumi.Input[_builtins.int]
     """
-    Retry value.
+    Number of time units. Minimum value of `0`.
     """
 
 @pulumi.input_type
@@ -4292,8 +4244,8 @@ class RouteSpecHttp2RouteRetryPolicyPerRetryTimeoutArgs:
                  unit: pulumi.Input[_builtins.str],
                  value: pulumi.Input[_builtins.int]):
         """
-        :param pulumi.Input[_builtins.str] unit: Retry unit. Valid values: `ms`, `s`.
-        :param pulumi.Input[_builtins.int] value: Retry value.
+        :param pulumi.Input[_builtins.str] unit: Unit of time. Valid values: `ms`, `s`.
+        :param pulumi.Input[_builtins.int] value: Number of time units. Minimum value of `0`.
         """
         pulumi.set(__self__, "unit", unit)
         pulumi.set(__self__, "value", value)
@@ -4302,7 +4254,7 @@ class RouteSpecHttp2RouteRetryPolicyPerRetryTimeoutArgs:
     @pulumi.getter
     def unit(self) -> pulumi.Input[_builtins.str]:
         """
-        Retry unit. Valid values: `ms`, `s`.
+        Unit of time. Valid values: `ms`, `s`.
         """
         return pulumi.get(self, "unit")
 
@@ -4314,7 +4266,7 @@ class RouteSpecHttp2RouteRetryPolicyPerRetryTimeoutArgs:
     @pulumi.getter
     def value(self) -> pulumi.Input[_builtins.int]:
         """
-        Retry value.
+        Number of time units. Minimum value of `0`.
         """
         return pulumi.get(self, "value")
 
@@ -4324,23 +4276,23 @@ class RouteSpecHttp2RouteRetryPolicyPerRetryTimeoutArgs:
 
 
 class RouteSpecHttp2RouteTimeoutArgsDict(TypedDict):
-    idle: NotRequired[pulumi.Input['RouteSpecHttp2RouteTimeoutIdleArgsDict']]
+    idle: NotRequired[pulumi.Input[Optional['RouteSpecHttp2RouteTimeoutIdleArgsDict']]]
     """
-    Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+    Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.tcp_route.timeout.idle` Block for details.
     """
-    per_request: NotRequired[pulumi.Input['RouteSpecHttp2RouteTimeoutPerRequestArgsDict']]
+    per_request: NotRequired[pulumi.Input[Optional['RouteSpecHttp2RouteTimeoutPerRequestArgsDict']]]
     """
-    Per request timeout.
+    Per request timeout. See `spec.http_route.timeout.per_request` Block for details.
     """
 
 @pulumi.input_type
 class RouteSpecHttp2RouteTimeoutArgs:
     def __init__(__self__, *,
-                 idle: Optional[pulumi.Input['RouteSpecHttp2RouteTimeoutIdleArgs']] = None,
-                 per_request: Optional[pulumi.Input['RouteSpecHttp2RouteTimeoutPerRequestArgs']] = None):
+                 idle: pulumi.Input[Optional['RouteSpecHttp2RouteTimeoutIdleArgs']] = None,
+                 per_request: pulumi.Input[Optional['RouteSpecHttp2RouteTimeoutPerRequestArgs']] = None):
         """
-        :param pulumi.Input['RouteSpecHttp2RouteTimeoutIdleArgs'] idle: Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
-        :param pulumi.Input['RouteSpecHttp2RouteTimeoutPerRequestArgs'] per_request: Per request timeout.
+        :param pulumi.Input['RouteSpecHttp2RouteTimeoutIdleArgs'] idle: Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.tcp_route.timeout.idle` Block for details.
+        :param pulumi.Input['RouteSpecHttp2RouteTimeoutPerRequestArgs'] per_request: Per request timeout. See `spec.http_route.timeout.per_request` Block for details.
         """
         if idle is not None:
             pulumi.set(__self__, "idle", idle)
@@ -4349,26 +4301,26 @@ class RouteSpecHttp2RouteTimeoutArgs:
 
     @_builtins.property
     @pulumi.getter
-    def idle(self) -> Optional[pulumi.Input['RouteSpecHttp2RouteTimeoutIdleArgs']]:
+    def idle(self) -> pulumi.Input[Optional['RouteSpecHttp2RouteTimeoutIdleArgs']]:
         """
-        Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+        Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.tcp_route.timeout.idle` Block for details.
         """
         return pulumi.get(self, "idle")
 
     @idle.setter
-    def idle(self, value: Optional[pulumi.Input['RouteSpecHttp2RouteTimeoutIdleArgs']]):
+    def idle(self, value: pulumi.Input[Optional['RouteSpecHttp2RouteTimeoutIdleArgs']]):
         pulumi.set(self, "idle", value)
 
     @_builtins.property
     @pulumi.getter(name="perRequest")
-    def per_request(self) -> Optional[pulumi.Input['RouteSpecHttp2RouteTimeoutPerRequestArgs']]:
+    def per_request(self) -> pulumi.Input[Optional['RouteSpecHttp2RouteTimeoutPerRequestArgs']]:
         """
-        Per request timeout.
+        Per request timeout. See `spec.http_route.timeout.per_request` Block for details.
         """
         return pulumi.get(self, "per_request")
 
     @per_request.setter
-    def per_request(self, value: Optional[pulumi.Input['RouteSpecHttp2RouteTimeoutPerRequestArgs']]):
+    def per_request(self, value: pulumi.Input[Optional['RouteSpecHttp2RouteTimeoutPerRequestArgs']]):
         pulumi.set(self, "per_request", value)
 
 
@@ -4469,19 +4421,19 @@ class RouteSpecHttp2RouteTimeoutPerRequestArgs:
 class RouteSpecHttpRouteArgsDict(TypedDict):
     action: pulumi.Input['RouteSpecHttpRouteActionArgsDict']
     """
-    Action to take if a match is determined.
+    Action to take if a match is determined. See `spec.tcp_route.action` Block for details.
     """
     match: pulumi.Input['RouteSpecHttpRouteMatchArgsDict']
     """
-    Criteria for determining an HTTP request match.
+    Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
     """
-    retry_policy: NotRequired[pulumi.Input['RouteSpecHttpRouteRetryPolicyArgsDict']]
+    retry_policy: NotRequired[pulumi.Input[Optional['RouteSpecHttpRouteRetryPolicyArgsDict']]]
     """
-    Retry policy.
+    Retry policy. See `spec.http_route.retry_policy` Block for details.
     """
-    timeout: NotRequired[pulumi.Input['RouteSpecHttpRouteTimeoutArgsDict']]
+    timeout: NotRequired[pulumi.Input[Optional['RouteSpecHttpRouteTimeoutArgsDict']]]
     """
-    Types of timeouts.
+    Types of timeouts. See `spec.tcp_route.timeout` Block for details.
     """
 
 @pulumi.input_type
@@ -4489,13 +4441,13 @@ class RouteSpecHttpRouteArgs:
     def __init__(__self__, *,
                  action: pulumi.Input['RouteSpecHttpRouteActionArgs'],
                  match: pulumi.Input['RouteSpecHttpRouteMatchArgs'],
-                 retry_policy: Optional[pulumi.Input['RouteSpecHttpRouteRetryPolicyArgs']] = None,
-                 timeout: Optional[pulumi.Input['RouteSpecHttpRouteTimeoutArgs']] = None):
+                 retry_policy: pulumi.Input[Optional['RouteSpecHttpRouteRetryPolicyArgs']] = None,
+                 timeout: pulumi.Input[Optional['RouteSpecHttpRouteTimeoutArgs']] = None):
         """
-        :param pulumi.Input['RouteSpecHttpRouteActionArgs'] action: Action to take if a match is determined.
-        :param pulumi.Input['RouteSpecHttpRouteMatchArgs'] match: Criteria for determining an HTTP request match.
-        :param pulumi.Input['RouteSpecHttpRouteRetryPolicyArgs'] retry_policy: Retry policy.
-        :param pulumi.Input['RouteSpecHttpRouteTimeoutArgs'] timeout: Types of timeouts.
+        :param pulumi.Input['RouteSpecHttpRouteActionArgs'] action: Action to take if a match is determined. See `spec.tcp_route.action` Block for details.
+        :param pulumi.Input['RouteSpecHttpRouteMatchArgs'] match: Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
+        :param pulumi.Input['RouteSpecHttpRouteRetryPolicyArgs'] retry_policy: Retry policy. See `spec.http_route.retry_policy` Block for details.
+        :param pulumi.Input['RouteSpecHttpRouteTimeoutArgs'] timeout: Types of timeouts. See `spec.tcp_route.timeout` Block for details.
         """
         pulumi.set(__self__, "action", action)
         pulumi.set(__self__, "match", match)
@@ -4508,7 +4460,7 @@ class RouteSpecHttpRouteArgs:
     @pulumi.getter
     def action(self) -> pulumi.Input['RouteSpecHttpRouteActionArgs']:
         """
-        Action to take if a match is determined.
+        Action to take if a match is determined. See `spec.tcp_route.action` Block for details.
         """
         return pulumi.get(self, "action")
 
@@ -4520,7 +4472,7 @@ class RouteSpecHttpRouteArgs:
     @pulumi.getter
     def match(self) -> pulumi.Input['RouteSpecHttpRouteMatchArgs']:
         """
-        Criteria for determining an HTTP request match.
+        Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
         """
         return pulumi.get(self, "match")
 
@@ -4530,34 +4482,33 @@ class RouteSpecHttpRouteArgs:
 
     @_builtins.property
     @pulumi.getter(name="retryPolicy")
-    def retry_policy(self) -> Optional[pulumi.Input['RouteSpecHttpRouteRetryPolicyArgs']]:
+    def retry_policy(self) -> pulumi.Input[Optional['RouteSpecHttpRouteRetryPolicyArgs']]:
         """
-        Retry policy.
+        Retry policy. See `spec.http_route.retry_policy` Block for details.
         """
         return pulumi.get(self, "retry_policy")
 
     @retry_policy.setter
-    def retry_policy(self, value: Optional[pulumi.Input['RouteSpecHttpRouteRetryPolicyArgs']]):
+    def retry_policy(self, value: pulumi.Input[Optional['RouteSpecHttpRouteRetryPolicyArgs']]):
         pulumi.set(self, "retry_policy", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeout(self) -> Optional[pulumi.Input['RouteSpecHttpRouteTimeoutArgs']]:
+    def timeout(self) -> pulumi.Input[Optional['RouteSpecHttpRouteTimeoutArgs']]:
         """
-        Types of timeouts.
+        Types of timeouts. See `spec.tcp_route.timeout` Block for details.
         """
         return pulumi.get(self, "timeout")
 
     @timeout.setter
-    def timeout(self, value: Optional[pulumi.Input['RouteSpecHttpRouteTimeoutArgs']]):
+    def timeout(self, value: pulumi.Input[Optional['RouteSpecHttpRouteTimeoutArgs']]):
         pulumi.set(self, "timeout", value)
 
 
 class RouteSpecHttpRouteActionArgsDict(TypedDict):
     weighted_targets: pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteActionWeightedTargetArgsDict']]]
     """
-    Targets that traffic is routed to when a request matches the route.
-    You can specify one or more targets and their relative weights with which to distribute traffic.
+    Targets that traffic is routed to when a request matches the route. You can specify one or more targets and their relative weights with which to distribute traffic. See `spec.tcp_route.action.weighted_target` Block for details.
     """
 
 @pulumi.input_type
@@ -4565,8 +4516,7 @@ class RouteSpecHttpRouteActionArgs:
     def __init__(__self__, *,
                  weighted_targets: pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteActionWeightedTargetArgs']]]):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteActionWeightedTargetArgs']]] weighted_targets: Targets that traffic is routed to when a request matches the route.
-               You can specify one or more targets and their relative weights with which to distribute traffic.
+        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteActionWeightedTargetArgs']]] weighted_targets: Targets that traffic is routed to when a request matches the route. You can specify one or more targets and their relative weights with which to distribute traffic. See `spec.tcp_route.action.weighted_target` Block for details.
         """
         pulumi.set(__self__, "weighted_targets", weighted_targets)
 
@@ -4574,8 +4524,7 @@ class RouteSpecHttpRouteActionArgs:
     @pulumi.getter(name="weightedTargets")
     def weighted_targets(self) -> pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteActionWeightedTargetArgs']]]:
         """
-        Targets that traffic is routed to when a request matches the route.
-        You can specify one or more targets and their relative weights with which to distribute traffic.
+        Targets that traffic is routed to when a request matches the route. You can specify one or more targets and their relative weights with which to distribute traffic. See `spec.tcp_route.action.weighted_target` Block for details.
         """
         return pulumi.get(self, "weighted_targets")
 
@@ -4593,9 +4542,9 @@ class RouteSpecHttpRouteActionWeightedTargetArgsDict(TypedDict):
     """
     Relative weight of the weighted target. An integer between 0 and 100.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The targeted port of the weighted object.
+    Port number to match from the request.
     """
 
 @pulumi.input_type
@@ -4603,11 +4552,11 @@ class RouteSpecHttpRouteActionWeightedTargetArgs:
     def __init__(__self__, *,
                  virtual_node: pulumi.Input[_builtins.str],
                  weight: pulumi.Input[_builtins.int],
-                 port: Optional[pulumi.Input[_builtins.int]] = None):
+                 port: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.str] virtual_node: Virtual node to associate with the weighted target. Must be between 1 and 255 characters in length.
         :param pulumi.Input[_builtins.int] weight: Relative weight of the weighted target. An integer between 0 and 100.
-        :param pulumi.Input[_builtins.int] port: The targeted port of the weighted object.
+        :param pulumi.Input[_builtins.int] port: Port number to match from the request.
         """
         pulumi.set(__self__, "virtual_node", virtual_node)
         pulumi.set(__self__, "weight", weight)
@@ -4640,44 +4589,43 @@ class RouteSpecHttpRouteActionWeightedTargetArgs:
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The targeted port of the weighted object.
+        Port number to match from the request.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
 
 class RouteSpecHttpRouteMatchArgsDict(TypedDict):
-    headers: NotRequired[pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteMatchHeaderArgsDict']]]]
+    headers: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecHttpRouteMatchHeaderArgsDict']]]]]
     """
-    Client request headers to match on.
+    Client request headers to match on. See `spec.http_route.match.header` Block for details.
     """
-    method: NotRequired[pulumi.Input[_builtins.str]]
+    method: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Client request header method to match on. Valid values: `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `CONNECT`, `OPTIONS`, `TRACE`, `PATCH`.
     """
-    path: NotRequired[pulumi.Input['RouteSpecHttpRouteMatchPathArgsDict']]
+    path: NotRequired[pulumi.Input[Optional['RouteSpecHttpRouteMatchPathArgsDict']]]
     """
-    Client request path to match on.
+    Client request path to match on. See `spec.http_route.match.path` Block for details.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The port number to match from the request.
+    Port number to match from the request.
     """
-    prefix: NotRequired[pulumi.Input[_builtins.str]]
+    prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Path with which to match requests.
-    This parameter must always start with /, which by itself matches all requests to the virtual router service name.
+    Header value sent by the client must begin with the specified characters.
     """
-    query_parameters: NotRequired[pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteMatchQueryParameterArgsDict']]]]
+    query_parameters: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecHttpRouteMatchQueryParameterArgsDict']]]]]
     """
-    Client request query parameters to match on.
+    Client request query parameters to match on. See `spec.http_route.match.query_parameter` Block for details.
     """
-    scheme: NotRequired[pulumi.Input[_builtins.str]]
+    scheme: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Client request header scheme to match on. Valid values: `http`, `https`.
     """
@@ -4685,21 +4633,20 @@ class RouteSpecHttpRouteMatchArgsDict(TypedDict):
 @pulumi.input_type
 class RouteSpecHttpRouteMatchArgs:
     def __init__(__self__, *,
-                 headers: Optional[pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteMatchHeaderArgs']]]] = None,
-                 method: Optional[pulumi.Input[_builtins.str]] = None,
-                 path: Optional[pulumi.Input['RouteSpecHttpRouteMatchPathArgs']] = None,
-                 port: Optional[pulumi.Input[_builtins.int]] = None,
-                 prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 query_parameters: Optional[pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteMatchQueryParameterArgs']]]] = None,
-                 scheme: Optional[pulumi.Input[_builtins.str]] = None):
+                 headers: pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecHttpRouteMatchHeaderArgs']]]] = None,
+                 method: pulumi.Input[Optional[_builtins.str]] = None,
+                 path: pulumi.Input[Optional['RouteSpecHttpRouteMatchPathArgs']] = None,
+                 port: pulumi.Input[Optional[_builtins.int]] = None,
+                 prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 query_parameters: pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecHttpRouteMatchQueryParameterArgs']]]] = None,
+                 scheme: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteMatchHeaderArgs']]] headers: Client request headers to match on.
+        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteMatchHeaderArgs']]] headers: Client request headers to match on. See `spec.http_route.match.header` Block for details.
         :param pulumi.Input[_builtins.str] method: Client request header method to match on. Valid values: `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `CONNECT`, `OPTIONS`, `TRACE`, `PATCH`.
-        :param pulumi.Input['RouteSpecHttpRouteMatchPathArgs'] path: Client request path to match on.
-        :param pulumi.Input[_builtins.int] port: The port number to match from the request.
-        :param pulumi.Input[_builtins.str] prefix: Path with which to match requests.
-               This parameter must always start with /, which by itself matches all requests to the virtual router service name.
-        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteMatchQueryParameterArgs']]] query_parameters: Client request query parameters to match on.
+        :param pulumi.Input['RouteSpecHttpRouteMatchPathArgs'] path: Client request path to match on. See `spec.http_route.match.path` Block for details.
+        :param pulumi.Input[_builtins.int] port: Port number to match from the request.
+        :param pulumi.Input[_builtins.str] prefix: Header value sent by the client must begin with the specified characters.
+        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteMatchQueryParameterArgs']]] query_parameters: Client request query parameters to match on. See `spec.http_route.match.query_parameter` Block for details.
         :param pulumi.Input[_builtins.str] scheme: Client request header scheme to match on. Valid values: `http`, `https`.
         """
         if headers is not None:
@@ -4719,114 +4666,113 @@ class RouteSpecHttpRouteMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def headers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteMatchHeaderArgs']]]]:
+    def headers(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecHttpRouteMatchHeaderArgs']]]]:
         """
-        Client request headers to match on.
+        Client request headers to match on. See `spec.http_route.match.header` Block for details.
         """
         return pulumi.get(self, "headers")
 
     @headers.setter
-    def headers(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteMatchHeaderArgs']]]]):
+    def headers(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecHttpRouteMatchHeaderArgs']]]]):
         pulumi.set(self, "headers", value)
 
     @_builtins.property
     @pulumi.getter
-    def method(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def method(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Client request header method to match on. Valid values: `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `CONNECT`, `OPTIONS`, `TRACE`, `PATCH`.
         """
         return pulumi.get(self, "method")
 
     @method.setter
-    def method(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def method(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "method", value)
 
     @_builtins.property
     @pulumi.getter
-    def path(self) -> Optional[pulumi.Input['RouteSpecHttpRouteMatchPathArgs']]:
+    def path(self) -> pulumi.Input[Optional['RouteSpecHttpRouteMatchPathArgs']]:
         """
-        Client request path to match on.
+        Client request path to match on. See `spec.http_route.match.path` Block for details.
         """
         return pulumi.get(self, "path")
 
     @path.setter
-    def path(self, value: Optional[pulumi.Input['RouteSpecHttpRouteMatchPathArgs']]):
+    def path(self, value: pulumi.Input[Optional['RouteSpecHttpRouteMatchPathArgs']]):
         pulumi.set(self, "path", value)
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The port number to match from the request.
+        Port number to match from the request.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
     @_builtins.property
     @pulumi.getter
-    def prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Path with which to match requests.
-        This parameter must always start with /, which by itself matches all requests to the virtual router service name.
+        Header value sent by the client must begin with the specified characters.
         """
         return pulumi.get(self, "prefix")
 
     @prefix.setter
-    def prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "prefix", value)
 
     @_builtins.property
     @pulumi.getter(name="queryParameters")
-    def query_parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteMatchQueryParameterArgs']]]]:
+    def query_parameters(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecHttpRouteMatchQueryParameterArgs']]]]:
         """
-        Client request query parameters to match on.
+        Client request query parameters to match on. See `spec.http_route.match.query_parameter` Block for details.
         """
         return pulumi.get(self, "query_parameters")
 
     @query_parameters.setter
-    def query_parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['RouteSpecHttpRouteMatchQueryParameterArgs']]]]):
+    def query_parameters(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['RouteSpecHttpRouteMatchQueryParameterArgs']]]]):
         pulumi.set(self, "query_parameters", value)
 
     @_builtins.property
     @pulumi.getter
-    def scheme(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def scheme(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Client request header scheme to match on. Valid values: `http`, `https`.
         """
         return pulumi.get(self, "scheme")
 
     @scheme.setter
-    def scheme(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def scheme(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "scheme", value)
 
 
 class RouteSpecHttpRouteMatchHeaderArgsDict(TypedDict):
     name: pulumi.Input[_builtins.str]
     """
-    Name for the HTTP header in the client request that will be matched on.
+    Name to use for the route. Must be between 1 and 255 characters in length.
     """
-    invert: NotRequired[pulumi.Input[_builtins.bool]]
+    invert: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
-    If `true`, the match is on the opposite of the `match` method and value. Default is `false`.
+    Whether to match on the opposite of the `match` method and value. Default is `false`.
     """
-    match: NotRequired[pulumi.Input['RouteSpecHttpRouteMatchHeaderMatchArgsDict']]
+    match: NotRequired[pulumi.Input[Optional['RouteSpecHttpRouteMatchHeaderMatchArgsDict']]]
     """
-    Method and value to match the header value sent with a request. Specify one match method.
+    Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
     """
 
 @pulumi.input_type
 class RouteSpecHttpRouteMatchHeaderArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str],
-                 invert: Optional[pulumi.Input[_builtins.bool]] = None,
-                 match: Optional[pulumi.Input['RouteSpecHttpRouteMatchHeaderMatchArgs']] = None):
+                 invert: pulumi.Input[Optional[_builtins.bool]] = None,
+                 match: pulumi.Input[Optional['RouteSpecHttpRouteMatchHeaderMatchArgs']] = None):
         """
-        :param pulumi.Input[_builtins.str] name: Name for the HTTP header in the client request that will be matched on.
-        :param pulumi.Input[_builtins.bool] invert: If `true`, the match is on the opposite of the `match` method and value. Default is `false`.
-        :param pulumi.Input['RouteSpecHttpRouteMatchHeaderMatchArgs'] match: Method and value to match the header value sent with a request. Specify one match method.
+        :param pulumi.Input[_builtins.str] name: Name to use for the route. Must be between 1 and 255 characters in length.
+        :param pulumi.Input[_builtins.bool] invert: Whether to match on the opposite of the `match` method and value. Default is `false`.
+        :param pulumi.Input['RouteSpecHttpRouteMatchHeaderMatchArgs'] match: Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
         """
         pulumi.set(__self__, "name", name)
         if invert is not None:
@@ -4838,7 +4784,7 @@ class RouteSpecHttpRouteMatchHeaderArgs:
     @pulumi.getter
     def name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name for the HTTP header in the client request that will be matched on.
+        Name to use for the route. Must be between 1 and 255 characters in length.
         """
         return pulumi.get(self, "name")
 
@@ -4848,47 +4794,47 @@ class RouteSpecHttpRouteMatchHeaderArgs:
 
     @_builtins.property
     @pulumi.getter
-    def invert(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def invert(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        If `true`, the match is on the opposite of the `match` method and value. Default is `false`.
+        Whether to match on the opposite of the `match` method and value. Default is `false`.
         """
         return pulumi.get(self, "invert")
 
     @invert.setter
-    def invert(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def invert(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "invert", value)
 
     @_builtins.property
     @pulumi.getter
-    def match(self) -> Optional[pulumi.Input['RouteSpecHttpRouteMatchHeaderMatchArgs']]:
+    def match(self) -> pulumi.Input[Optional['RouteSpecHttpRouteMatchHeaderMatchArgs']]:
         """
-        Method and value to match the header value sent with a request. Specify one match method.
+        Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
         """
         return pulumi.get(self, "match")
 
     @match.setter
-    def match(self, value: Optional[pulumi.Input['RouteSpecHttpRouteMatchHeaderMatchArgs']]):
+    def match(self, value: pulumi.Input[Optional['RouteSpecHttpRouteMatchHeaderMatchArgs']]):
         pulumi.set(self, "match", value)
 
 
 class RouteSpecHttpRouteMatchHeaderMatchArgsDict(TypedDict):
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Header value sent by the client must match the specified value exactly.
+    Exact query parameter to match on.
     """
-    prefix: NotRequired[pulumi.Input[_builtins.str]]
+    prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Header value sent by the client must begin with the specified characters.
     """
-    range: NotRequired[pulumi.Input['RouteSpecHttpRouteMatchHeaderMatchRangeArgsDict']]
+    range: NotRequired[pulumi.Input[Optional['RouteSpecHttpRouteMatchHeaderMatchRangeArgsDict']]]
     """
-    Object that specifies the range of numbers that the header value sent by the client must be included in.
+    Object that specifies the range of numbers that the header value sent by the client must be included in. See `spec.http_route.match.header.match.range` Block for details.
     """
-    regex: NotRequired[pulumi.Input[_builtins.str]]
+    regex: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Header value sent by the client must include the specified characters.
+    Regex used to match the path.
     """
-    suffix: NotRequired[pulumi.Input[_builtins.str]]
+    suffix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Header value sent by the client must end with the specified characters.
     """
@@ -4896,16 +4842,16 @@ class RouteSpecHttpRouteMatchHeaderMatchArgsDict(TypedDict):
 @pulumi.input_type
 class RouteSpecHttpRouteMatchHeaderMatchArgs:
     def __init__(__self__, *,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None,
-                 prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 range: Optional[pulumi.Input['RouteSpecHttpRouteMatchHeaderMatchRangeArgs']] = None,
-                 regex: Optional[pulumi.Input[_builtins.str]] = None,
-                 suffix: Optional[pulumi.Input[_builtins.str]] = None):
+                 exact: pulumi.Input[Optional[_builtins.str]] = None,
+                 prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 range: pulumi.Input[Optional['RouteSpecHttpRouteMatchHeaderMatchRangeArgs']] = None,
+                 regex: pulumi.Input[Optional[_builtins.str]] = None,
+                 suffix: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] exact: Header value sent by the client must match the specified value exactly.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
         :param pulumi.Input[_builtins.str] prefix: Header value sent by the client must begin with the specified characters.
-        :param pulumi.Input['RouteSpecHttpRouteMatchHeaderMatchRangeArgs'] range: Object that specifies the range of numbers that the header value sent by the client must be included in.
-        :param pulumi.Input[_builtins.str] regex: Header value sent by the client must include the specified characters.
+        :param pulumi.Input['RouteSpecHttpRouteMatchHeaderMatchRangeArgs'] range: Object that specifies the range of numbers that the header value sent by the client must be included in. See `spec.http_route.match.header.match.range` Block for details.
+        :param pulumi.Input[_builtins.str] regex: Regex used to match the path.
         :param pulumi.Input[_builtins.str] suffix: Header value sent by the client must end with the specified characters.
         """
         if exact is not None:
@@ -4921,62 +4867,62 @@ class RouteSpecHttpRouteMatchHeaderMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Header value sent by the client must match the specified value exactly.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
     @_builtins.property
     @pulumi.getter
-    def prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Header value sent by the client must begin with the specified characters.
         """
         return pulumi.get(self, "prefix")
 
     @prefix.setter
-    def prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "prefix", value)
 
     @_builtins.property
     @pulumi.getter
-    def range(self) -> Optional[pulumi.Input['RouteSpecHttpRouteMatchHeaderMatchRangeArgs']]:
+    def range(self) -> pulumi.Input[Optional['RouteSpecHttpRouteMatchHeaderMatchRangeArgs']]:
         """
-        Object that specifies the range of numbers that the header value sent by the client must be included in.
+        Object that specifies the range of numbers that the header value sent by the client must be included in. See `spec.http_route.match.header.match.range` Block for details.
         """
         return pulumi.get(self, "range")
 
     @range.setter
-    def range(self, value: Optional[pulumi.Input['RouteSpecHttpRouteMatchHeaderMatchRangeArgs']]):
+    def range(self, value: pulumi.Input[Optional['RouteSpecHttpRouteMatchHeaderMatchRangeArgs']]):
         pulumi.set(self, "range", value)
 
     @_builtins.property
     @pulumi.getter
-    def regex(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def regex(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Header value sent by the client must include the specified characters.
+        Regex used to match the path.
         """
         return pulumi.get(self, "regex")
 
     @regex.setter
-    def regex(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def regex(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "regex", value)
 
     @_builtins.property
     @pulumi.getter
-    def suffix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def suffix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Header value sent by the client must end with the specified characters.
         """
         return pulumi.get(self, "suffix")
 
     @suffix.setter
-    def suffix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def suffix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "suffix", value)
 
 
@@ -5028,23 +4974,23 @@ class RouteSpecHttpRouteMatchHeaderMatchRangeArgs:
 
 
 class RouteSpecHttpRouteMatchPathArgsDict(TypedDict):
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The exact path to match on.
+    Exact query parameter to match on.
     """
-    regex: NotRequired[pulumi.Input[_builtins.str]]
+    regex: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The regex used to match the path.
+    Regex used to match the path.
     """
 
 @pulumi.input_type
 class RouteSpecHttpRouteMatchPathArgs:
     def __init__(__self__, *,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None,
-                 regex: Optional[pulumi.Input[_builtins.str]] = None):
+                 exact: pulumi.Input[Optional[_builtins.str]] = None,
+                 regex: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] exact: The exact path to match on.
-        :param pulumi.Input[_builtins.str] regex: The regex used to match the path.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
+        :param pulumi.Input[_builtins.str] regex: Regex used to match the path.
         """
         if exact is not None:
             pulumi.set(__self__, "exact", exact)
@@ -5053,47 +4999,47 @@ class RouteSpecHttpRouteMatchPathArgs:
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The exact path to match on.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
     @_builtins.property
     @pulumi.getter
-    def regex(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def regex(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The regex used to match the path.
+        Regex used to match the path.
         """
         return pulumi.get(self, "regex")
 
     @regex.setter
-    def regex(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def regex(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "regex", value)
 
 
 class RouteSpecHttpRouteMatchQueryParameterArgsDict(TypedDict):
     name: pulumi.Input[_builtins.str]
     """
-    Name for the query parameter that will be matched on.
+    Name to use for the route. Must be between 1 and 255 characters in length.
     """
-    match: NotRequired[pulumi.Input['RouteSpecHttpRouteMatchQueryParameterMatchArgsDict']]
+    match: NotRequired[pulumi.Input[Optional['RouteSpecHttpRouteMatchQueryParameterMatchArgsDict']]]
     """
-    The query parameter to match on.
+    Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
     """
 
 @pulumi.input_type
 class RouteSpecHttpRouteMatchQueryParameterArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str],
-                 match: Optional[pulumi.Input['RouteSpecHttpRouteMatchQueryParameterMatchArgs']] = None):
+                 match: pulumi.Input[Optional['RouteSpecHttpRouteMatchQueryParameterMatchArgs']] = None):
         """
-        :param pulumi.Input[_builtins.str] name: Name for the query parameter that will be matched on.
-        :param pulumi.Input['RouteSpecHttpRouteMatchQueryParameterMatchArgs'] match: The query parameter to match on.
+        :param pulumi.Input[_builtins.str] name: Name to use for the route. Must be between 1 and 255 characters in length.
+        :param pulumi.Input['RouteSpecHttpRouteMatchQueryParameterMatchArgs'] match: Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
         """
         pulumi.set(__self__, "name", name)
         if match is not None:
@@ -5103,7 +5049,7 @@ class RouteSpecHttpRouteMatchQueryParameterArgs:
     @pulumi.getter
     def name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name for the query parameter that will be matched on.
+        Name to use for the route. Must be between 1 and 255 characters in length.
         """
         return pulumi.get(self, "name")
 
@@ -5113,43 +5059,43 @@ class RouteSpecHttpRouteMatchQueryParameterArgs:
 
     @_builtins.property
     @pulumi.getter
-    def match(self) -> Optional[pulumi.Input['RouteSpecHttpRouteMatchQueryParameterMatchArgs']]:
+    def match(self) -> pulumi.Input[Optional['RouteSpecHttpRouteMatchQueryParameterMatchArgs']]:
         """
-        The query parameter to match on.
+        Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
         """
         return pulumi.get(self, "match")
 
     @match.setter
-    def match(self, value: Optional[pulumi.Input['RouteSpecHttpRouteMatchQueryParameterMatchArgs']]):
+    def match(self, value: pulumi.Input[Optional['RouteSpecHttpRouteMatchQueryParameterMatchArgs']]):
         pulumi.set(self, "match", value)
 
 
 class RouteSpecHttpRouteMatchQueryParameterMatchArgsDict(TypedDict):
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The exact query parameter to match on.
+    Exact query parameter to match on.
     """
 
 @pulumi.input_type
 class RouteSpecHttpRouteMatchQueryParameterMatchArgs:
     def __init__(__self__, *,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None):
+                 exact: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] exact: The exact query parameter to match on.
+        :param pulumi.Input[_builtins.str] exact: Exact query parameter to match on.
         """
         if exact is not None:
             pulumi.set(__self__, "exact", exact)
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The exact query parameter to match on.
+        Exact query parameter to match on.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
 
@@ -5160,18 +5106,15 @@ class RouteSpecHttpRouteRetryPolicyArgsDict(TypedDict):
     """
     per_retry_timeout: pulumi.Input['RouteSpecHttpRouteRetryPolicyPerRetryTimeoutArgsDict']
     """
-    Per-retry timeout.
+    Per-retry timeout. See `spec.http_route.retry_policy.per_retry_timeout` Block for details.
     """
-    http_retry_events: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    http_retry_events: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    List of HTTP retry events.
-    Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
+    List of HTTP retry events. Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
     """
-    tcp_retry_events: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    tcp_retry_events: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    List of TCP retry events. The only valid value is `connection-error`.
-
-    You must specify at least one value for `http_retry_events`, or at least one value for `tcp_retry_events`.
+    List of TCP retry events. The only valid value is `connection-error`. You must specify at least one value for `http_retry_events`, or at least one value for `tcp_retry_events`.
     """
 
 @pulumi.input_type
@@ -5179,16 +5122,13 @@ class RouteSpecHttpRouteRetryPolicyArgs:
     def __init__(__self__, *,
                  max_retries: pulumi.Input[_builtins.int],
                  per_retry_timeout: pulumi.Input['RouteSpecHttpRouteRetryPolicyPerRetryTimeoutArgs'],
-                 http_retry_events: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 tcp_retry_events: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 http_retry_events: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 tcp_retry_events: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         :param pulumi.Input[_builtins.int] max_retries: Maximum number of retries.
-        :param pulumi.Input['RouteSpecHttpRouteRetryPolicyPerRetryTimeoutArgs'] per_retry_timeout: Per-retry timeout.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] http_retry_events: List of HTTP retry events.
-               Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] tcp_retry_events: List of TCP retry events. The only valid value is `connection-error`.
-               
-               You must specify at least one value for `http_retry_events`, or at least one value for `tcp_retry_events`.
+        :param pulumi.Input['RouteSpecHttpRouteRetryPolicyPerRetryTimeoutArgs'] per_retry_timeout: Per-retry timeout. See `spec.http_route.retry_policy.per_retry_timeout` Block for details.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] http_retry_events: List of HTTP retry events. Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] tcp_retry_events: List of TCP retry events. The only valid value is `connection-error`. You must specify at least one value for `http_retry_events`, or at least one value for `tcp_retry_events`.
         """
         pulumi.set(__self__, "max_retries", max_retries)
         pulumi.set(__self__, "per_retry_timeout", per_retry_timeout)
@@ -5213,7 +5153,7 @@ class RouteSpecHttpRouteRetryPolicyArgs:
     @pulumi.getter(name="perRetryTimeout")
     def per_retry_timeout(self) -> pulumi.Input['RouteSpecHttpRouteRetryPolicyPerRetryTimeoutArgs']:
         """
-        Per-retry timeout.
+        Per-retry timeout. See `spec.http_route.retry_policy.per_retry_timeout` Block for details.
         """
         return pulumi.get(self, "per_retry_timeout")
 
@@ -5223,40 +5163,37 @@ class RouteSpecHttpRouteRetryPolicyArgs:
 
     @_builtins.property
     @pulumi.getter(name="httpRetryEvents")
-    def http_retry_events(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def http_retry_events(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        List of HTTP retry events.
-        Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
+        List of HTTP retry events. Valid values: `client-error` (HTTP status code 409), `gateway-error` (HTTP status codes 502, 503, and 504), `server-error` (HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511), `stream-error` (retry on refused stream).
         """
         return pulumi.get(self, "http_retry_events")
 
     @http_retry_events.setter
-    def http_retry_events(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def http_retry_events(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "http_retry_events", value)
 
     @_builtins.property
     @pulumi.getter(name="tcpRetryEvents")
-    def tcp_retry_events(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def tcp_retry_events(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        List of TCP retry events. The only valid value is `connection-error`.
-
-        You must specify at least one value for `http_retry_events`, or at least one value for `tcp_retry_events`.
+        List of TCP retry events. The only valid value is `connection-error`. You must specify at least one value for `http_retry_events`, or at least one value for `tcp_retry_events`.
         """
         return pulumi.get(self, "tcp_retry_events")
 
     @tcp_retry_events.setter
-    def tcp_retry_events(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def tcp_retry_events(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tcp_retry_events", value)
 
 
 class RouteSpecHttpRouteRetryPolicyPerRetryTimeoutArgsDict(TypedDict):
     unit: pulumi.Input[_builtins.str]
     """
-    Retry unit. Valid values: `ms`, `s`.
+    Unit of time. Valid values: `ms`, `s`.
     """
     value: pulumi.Input[_builtins.int]
     """
-    Retry value.
+    Number of time units. Minimum value of `0`.
     """
 
 @pulumi.input_type
@@ -5265,8 +5202,8 @@ class RouteSpecHttpRouteRetryPolicyPerRetryTimeoutArgs:
                  unit: pulumi.Input[_builtins.str],
                  value: pulumi.Input[_builtins.int]):
         """
-        :param pulumi.Input[_builtins.str] unit: Retry unit. Valid values: `ms`, `s`.
-        :param pulumi.Input[_builtins.int] value: Retry value.
+        :param pulumi.Input[_builtins.str] unit: Unit of time. Valid values: `ms`, `s`.
+        :param pulumi.Input[_builtins.int] value: Number of time units. Minimum value of `0`.
         """
         pulumi.set(__self__, "unit", unit)
         pulumi.set(__self__, "value", value)
@@ -5275,7 +5212,7 @@ class RouteSpecHttpRouteRetryPolicyPerRetryTimeoutArgs:
     @pulumi.getter
     def unit(self) -> pulumi.Input[_builtins.str]:
         """
-        Retry unit. Valid values: `ms`, `s`.
+        Unit of time. Valid values: `ms`, `s`.
         """
         return pulumi.get(self, "unit")
 
@@ -5287,7 +5224,7 @@ class RouteSpecHttpRouteRetryPolicyPerRetryTimeoutArgs:
     @pulumi.getter
     def value(self) -> pulumi.Input[_builtins.int]:
         """
-        Retry value.
+        Number of time units. Minimum value of `0`.
         """
         return pulumi.get(self, "value")
 
@@ -5297,23 +5234,23 @@ class RouteSpecHttpRouteRetryPolicyPerRetryTimeoutArgs:
 
 
 class RouteSpecHttpRouteTimeoutArgsDict(TypedDict):
-    idle: NotRequired[pulumi.Input['RouteSpecHttpRouteTimeoutIdleArgsDict']]
+    idle: NotRequired[pulumi.Input[Optional['RouteSpecHttpRouteTimeoutIdleArgsDict']]]
     """
-    Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+    Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.tcp_route.timeout.idle` Block for details.
     """
-    per_request: NotRequired[pulumi.Input['RouteSpecHttpRouteTimeoutPerRequestArgsDict']]
+    per_request: NotRequired[pulumi.Input[Optional['RouteSpecHttpRouteTimeoutPerRequestArgsDict']]]
     """
-    Per request timeout.
+    Per request timeout. See `spec.http_route.timeout.per_request` Block for details.
     """
 
 @pulumi.input_type
 class RouteSpecHttpRouteTimeoutArgs:
     def __init__(__self__, *,
-                 idle: Optional[pulumi.Input['RouteSpecHttpRouteTimeoutIdleArgs']] = None,
-                 per_request: Optional[pulumi.Input['RouteSpecHttpRouteTimeoutPerRequestArgs']] = None):
+                 idle: pulumi.Input[Optional['RouteSpecHttpRouteTimeoutIdleArgs']] = None,
+                 per_request: pulumi.Input[Optional['RouteSpecHttpRouteTimeoutPerRequestArgs']] = None):
         """
-        :param pulumi.Input['RouteSpecHttpRouteTimeoutIdleArgs'] idle: Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
-        :param pulumi.Input['RouteSpecHttpRouteTimeoutPerRequestArgs'] per_request: Per request timeout.
+        :param pulumi.Input['RouteSpecHttpRouteTimeoutIdleArgs'] idle: Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.tcp_route.timeout.idle` Block for details.
+        :param pulumi.Input['RouteSpecHttpRouteTimeoutPerRequestArgs'] per_request: Per request timeout. See `spec.http_route.timeout.per_request` Block for details.
         """
         if idle is not None:
             pulumi.set(__self__, "idle", idle)
@@ -5322,26 +5259,26 @@ class RouteSpecHttpRouteTimeoutArgs:
 
     @_builtins.property
     @pulumi.getter
-    def idle(self) -> Optional[pulumi.Input['RouteSpecHttpRouteTimeoutIdleArgs']]:
+    def idle(self) -> pulumi.Input[Optional['RouteSpecHttpRouteTimeoutIdleArgs']]:
         """
-        Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+        Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.tcp_route.timeout.idle` Block for details.
         """
         return pulumi.get(self, "idle")
 
     @idle.setter
-    def idle(self, value: Optional[pulumi.Input['RouteSpecHttpRouteTimeoutIdleArgs']]):
+    def idle(self, value: pulumi.Input[Optional['RouteSpecHttpRouteTimeoutIdleArgs']]):
         pulumi.set(self, "idle", value)
 
     @_builtins.property
     @pulumi.getter(name="perRequest")
-    def per_request(self) -> Optional[pulumi.Input['RouteSpecHttpRouteTimeoutPerRequestArgs']]:
+    def per_request(self) -> pulumi.Input[Optional['RouteSpecHttpRouteTimeoutPerRequestArgs']]:
         """
-        Per request timeout.
+        Per request timeout. See `spec.http_route.timeout.per_request` Block for details.
         """
         return pulumi.get(self, "per_request")
 
     @per_request.setter
-    def per_request(self, value: Optional[pulumi.Input['RouteSpecHttpRouteTimeoutPerRequestArgs']]):
+    def per_request(self, value: pulumi.Input[Optional['RouteSpecHttpRouteTimeoutPerRequestArgs']]):
         pulumi.set(self, "per_request", value)
 
 
@@ -5442,23 +5379,27 @@ class RouteSpecHttpRouteTimeoutPerRequestArgs:
 class RouteSpecTcpRouteArgsDict(TypedDict):
     action: pulumi.Input['RouteSpecTcpRouteActionArgsDict']
     """
-    Action to take if a match is determined.
+    Action to take if a match is determined. See `spec.tcp_route.action` Block for details.
     """
-    match: NotRequired[pulumi.Input['RouteSpecTcpRouteMatchArgsDict']]
-    timeout: NotRequired[pulumi.Input['RouteSpecTcpRouteTimeoutArgsDict']]
+    match: NotRequired[pulumi.Input[Optional['RouteSpecTcpRouteMatchArgsDict']]]
     """
-    Types of timeouts.
+    Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
+    """
+    timeout: NotRequired[pulumi.Input[Optional['RouteSpecTcpRouteTimeoutArgsDict']]]
+    """
+    Types of timeouts. See `spec.tcp_route.timeout` Block for details.
     """
 
 @pulumi.input_type
 class RouteSpecTcpRouteArgs:
     def __init__(__self__, *,
                  action: pulumi.Input['RouteSpecTcpRouteActionArgs'],
-                 match: Optional[pulumi.Input['RouteSpecTcpRouteMatchArgs']] = None,
-                 timeout: Optional[pulumi.Input['RouteSpecTcpRouteTimeoutArgs']] = None):
+                 match: pulumi.Input[Optional['RouteSpecTcpRouteMatchArgs']] = None,
+                 timeout: pulumi.Input[Optional['RouteSpecTcpRouteTimeoutArgs']] = None):
         """
-        :param pulumi.Input['RouteSpecTcpRouteActionArgs'] action: Action to take if a match is determined.
-        :param pulumi.Input['RouteSpecTcpRouteTimeoutArgs'] timeout: Types of timeouts.
+        :param pulumi.Input['RouteSpecTcpRouteActionArgs'] action: Action to take if a match is determined. See `spec.tcp_route.action` Block for details.
+        :param pulumi.Input['RouteSpecTcpRouteMatchArgs'] match: Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
+        :param pulumi.Input['RouteSpecTcpRouteTimeoutArgs'] timeout: Types of timeouts. See `spec.tcp_route.timeout` Block for details.
         """
         pulumi.set(__self__, "action", action)
         if match is not None:
@@ -5470,7 +5411,7 @@ class RouteSpecTcpRouteArgs:
     @pulumi.getter
     def action(self) -> pulumi.Input['RouteSpecTcpRouteActionArgs']:
         """
-        Action to take if a match is determined.
+        Action to take if a match is determined. See `spec.tcp_route.action` Block for details.
         """
         return pulumi.get(self, "action")
 
@@ -5480,31 +5421,33 @@ class RouteSpecTcpRouteArgs:
 
     @_builtins.property
     @pulumi.getter
-    def match(self) -> Optional[pulumi.Input['RouteSpecTcpRouteMatchArgs']]:
+    def match(self) -> pulumi.Input[Optional['RouteSpecTcpRouteMatchArgs']]:
+        """
+        Criteria for determining a TCP request match. See `spec.tcp_route.match` Block for details.
+        """
         return pulumi.get(self, "match")
 
     @match.setter
-    def match(self, value: Optional[pulumi.Input['RouteSpecTcpRouteMatchArgs']]):
+    def match(self, value: pulumi.Input[Optional['RouteSpecTcpRouteMatchArgs']]):
         pulumi.set(self, "match", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeout(self) -> Optional[pulumi.Input['RouteSpecTcpRouteTimeoutArgs']]:
+    def timeout(self) -> pulumi.Input[Optional['RouteSpecTcpRouteTimeoutArgs']]:
         """
-        Types of timeouts.
+        Types of timeouts. See `spec.tcp_route.timeout` Block for details.
         """
         return pulumi.get(self, "timeout")
 
     @timeout.setter
-    def timeout(self, value: Optional[pulumi.Input['RouteSpecTcpRouteTimeoutArgs']]):
+    def timeout(self, value: pulumi.Input[Optional['RouteSpecTcpRouteTimeoutArgs']]):
         pulumi.set(self, "timeout", value)
 
 
 class RouteSpecTcpRouteActionArgsDict(TypedDict):
     weighted_targets: pulumi.Input[Sequence[pulumi.Input['RouteSpecTcpRouteActionWeightedTargetArgsDict']]]
     """
-    Targets that traffic is routed to when a request matches the route.
-    You can specify one or more targets and their relative weights with which to distribute traffic.
+    Targets that traffic is routed to when a request matches the route. You can specify one or more targets and their relative weights with which to distribute traffic. See `spec.tcp_route.action.weighted_target` Block for details.
     """
 
 @pulumi.input_type
@@ -5512,8 +5455,7 @@ class RouteSpecTcpRouteActionArgs:
     def __init__(__self__, *,
                  weighted_targets: pulumi.Input[Sequence[pulumi.Input['RouteSpecTcpRouteActionWeightedTargetArgs']]]):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecTcpRouteActionWeightedTargetArgs']]] weighted_targets: Targets that traffic is routed to when a request matches the route.
-               You can specify one or more targets and their relative weights with which to distribute traffic.
+        :param pulumi.Input[Sequence[pulumi.Input['RouteSpecTcpRouteActionWeightedTargetArgs']]] weighted_targets: Targets that traffic is routed to when a request matches the route. You can specify one or more targets and their relative weights with which to distribute traffic. See `spec.tcp_route.action.weighted_target` Block for details.
         """
         pulumi.set(__self__, "weighted_targets", weighted_targets)
 
@@ -5521,8 +5463,7 @@ class RouteSpecTcpRouteActionArgs:
     @pulumi.getter(name="weightedTargets")
     def weighted_targets(self) -> pulumi.Input[Sequence[pulumi.Input['RouteSpecTcpRouteActionWeightedTargetArgs']]]:
         """
-        Targets that traffic is routed to when a request matches the route.
-        You can specify one or more targets and their relative weights with which to distribute traffic.
+        Targets that traffic is routed to when a request matches the route. You can specify one or more targets and their relative weights with which to distribute traffic. See `spec.tcp_route.action.weighted_target` Block for details.
         """
         return pulumi.get(self, "weighted_targets")
 
@@ -5540,9 +5481,9 @@ class RouteSpecTcpRouteActionWeightedTargetArgsDict(TypedDict):
     """
     Relative weight of the weighted target. An integer between 0 and 100.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The targeted port of the weighted object.
+    Port number to match from the request.
     """
 
 @pulumi.input_type
@@ -5550,11 +5491,11 @@ class RouteSpecTcpRouteActionWeightedTargetArgs:
     def __init__(__self__, *,
                  virtual_node: pulumi.Input[_builtins.str],
                  weight: pulumi.Input[_builtins.int],
-                 port: Optional[pulumi.Input[_builtins.int]] = None):
+                 port: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.str] virtual_node: Virtual node to associate with the weighted target. Must be between 1 and 255 characters in length.
         :param pulumi.Input[_builtins.int] weight: Relative weight of the weighted target. An integer between 0 and 100.
-        :param pulumi.Input[_builtins.int] port: The targeted port of the weighted object.
+        :param pulumi.Input[_builtins.int] port: Port number to match from the request.
         """
         pulumi.set(__self__, "virtual_node", virtual_node)
         pulumi.set(__self__, "weight", weight)
@@ -5587,63 +5528,72 @@ class RouteSpecTcpRouteActionWeightedTargetArgs:
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The targeted port of the weighted object.
+        Port number to match from the request.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
 
 class RouteSpecTcpRouteMatchArgsDict(TypedDict):
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Port number to match from the request.
+    """
 
 @pulumi.input_type
 class RouteSpecTcpRouteMatchArgs:
     def __init__(__self__, *,
-                 port: Optional[pulumi.Input[_builtins.int]] = None):
+                 port: pulumi.Input[Optional[_builtins.int]] = None):
+        """
+        :param pulumi.Input[_builtins.int] port: Port number to match from the request.
+        """
         if port is not None:
             pulumi.set(__self__, "port", port)
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Port number to match from the request.
+        """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
 
 class RouteSpecTcpRouteTimeoutArgsDict(TypedDict):
-    idle: NotRequired[pulumi.Input['RouteSpecTcpRouteTimeoutIdleArgsDict']]
+    idle: NotRequired[pulumi.Input[Optional['RouteSpecTcpRouteTimeoutIdleArgsDict']]]
     """
-    Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+    Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.tcp_route.timeout.idle` Block for details.
     """
 
 @pulumi.input_type
 class RouteSpecTcpRouteTimeoutArgs:
     def __init__(__self__, *,
-                 idle: Optional[pulumi.Input['RouteSpecTcpRouteTimeoutIdleArgs']] = None):
+                 idle: pulumi.Input[Optional['RouteSpecTcpRouteTimeoutIdleArgs']] = None):
         """
-        :param pulumi.Input['RouteSpecTcpRouteTimeoutIdleArgs'] idle: Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+        :param pulumi.Input['RouteSpecTcpRouteTimeoutIdleArgs'] idle: Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.tcp_route.timeout.idle` Block for details.
         """
         if idle is not None:
             pulumi.set(__self__, "idle", idle)
 
     @_builtins.property
     @pulumi.getter
-    def idle(self) -> Optional[pulumi.Input['RouteSpecTcpRouteTimeoutIdleArgs']]:
+    def idle(self) -> pulumi.Input[Optional['RouteSpecTcpRouteTimeoutIdleArgs']]:
         """
-        Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+        Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.tcp_route.timeout.idle` Block for details.
         """
         return pulumi.get(self, "idle")
 
     @idle.setter
-    def idle(self, value: Optional[pulumi.Input['RouteSpecTcpRouteTimeoutIdleArgs']]):
+    def idle(self, value: pulumi.Input[Optional['RouteSpecTcpRouteTimeoutIdleArgs']]):
         pulumi.set(self, "idle", value)
 
 
@@ -5697,27 +5647,27 @@ class RouteSpecTcpRouteTimeoutIdleArgs:
 class VirtualGatewaySpecArgsDict(TypedDict):
     listeners: pulumi.Input[Sequence[pulumi.Input['VirtualGatewaySpecListenerArgsDict']]]
     """
-    Listeners that the mesh endpoint is expected to receive inbound traffic from. You can specify one listener.
+    Listeners that the mesh endpoint is expected to receive inbound traffic from. You can specify one listener. See `listener` Block for details.
     """
-    backend_defaults: NotRequired[pulumi.Input['VirtualGatewaySpecBackendDefaultsArgsDict']]
+    backend_defaults: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsArgsDict']]]
     """
-    Defaults for backends.
+    Defaults for backends. See `backend_defaults` Block for details.
     """
-    logging: NotRequired[pulumi.Input['VirtualGatewaySpecLoggingArgsDict']]
+    logging: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecLoggingArgsDict']]]
     """
-    Inbound and outbound access logging information for the virtual gateway.
+    Inbound and outbound access logging information for the virtual gateway. See `logging` Block for details.
     """
 
 @pulumi.input_type
 class VirtualGatewaySpecArgs:
     def __init__(__self__, *,
                  listeners: pulumi.Input[Sequence[pulumi.Input['VirtualGatewaySpecListenerArgs']]],
-                 backend_defaults: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsArgs']] = None,
-                 logging: Optional[pulumi.Input['VirtualGatewaySpecLoggingArgs']] = None):
+                 backend_defaults: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsArgs']] = None,
+                 logging: pulumi.Input[Optional['VirtualGatewaySpecLoggingArgs']] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['VirtualGatewaySpecListenerArgs']]] listeners: Listeners that the mesh endpoint is expected to receive inbound traffic from. You can specify one listener.
-        :param pulumi.Input['VirtualGatewaySpecBackendDefaultsArgs'] backend_defaults: Defaults for backends.
-        :param pulumi.Input['VirtualGatewaySpecLoggingArgs'] logging: Inbound and outbound access logging information for the virtual gateway.
+        :param pulumi.Input[Sequence[pulumi.Input['VirtualGatewaySpecListenerArgs']]] listeners: Listeners that the mesh endpoint is expected to receive inbound traffic from. You can specify one listener. See `listener` Block for details.
+        :param pulumi.Input['VirtualGatewaySpecBackendDefaultsArgs'] backend_defaults: Defaults for backends. See `backend_defaults` Block for details.
+        :param pulumi.Input['VirtualGatewaySpecLoggingArgs'] logging: Inbound and outbound access logging information for the virtual gateway. See `logging` Block for details.
         """
         pulumi.set(__self__, "listeners", listeners)
         if backend_defaults is not None:
@@ -5729,7 +5679,7 @@ class VirtualGatewaySpecArgs:
     @pulumi.getter
     def listeners(self) -> pulumi.Input[Sequence[pulumi.Input['VirtualGatewaySpecListenerArgs']]]:
         """
-        Listeners that the mesh endpoint is expected to receive inbound traffic from. You can specify one listener.
+        Listeners that the mesh endpoint is expected to receive inbound traffic from. You can specify one listener. See `listener` Block for details.
         """
         return pulumi.get(self, "listeners")
 
@@ -5739,101 +5689,101 @@ class VirtualGatewaySpecArgs:
 
     @_builtins.property
     @pulumi.getter(name="backendDefaults")
-    def backend_defaults(self) -> Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsArgs']]:
+    def backend_defaults(self) -> pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsArgs']]:
         """
-        Defaults for backends.
+        Defaults for backends. See `backend_defaults` Block for details.
         """
         return pulumi.get(self, "backend_defaults")
 
     @backend_defaults.setter
-    def backend_defaults(self, value: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsArgs']]):
+    def backend_defaults(self, value: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsArgs']]):
         pulumi.set(self, "backend_defaults", value)
 
     @_builtins.property
     @pulumi.getter
-    def logging(self) -> Optional[pulumi.Input['VirtualGatewaySpecLoggingArgs']]:
+    def logging(self) -> pulumi.Input[Optional['VirtualGatewaySpecLoggingArgs']]:
         """
-        Inbound and outbound access logging information for the virtual gateway.
+        Inbound and outbound access logging information for the virtual gateway. See `logging` Block for details.
         """
         return pulumi.get(self, "logging")
 
     @logging.setter
-    def logging(self, value: Optional[pulumi.Input['VirtualGatewaySpecLoggingArgs']]):
+    def logging(self, value: pulumi.Input[Optional['VirtualGatewaySpecLoggingArgs']]):
         pulumi.set(self, "logging", value)
 
 
 class VirtualGatewaySpecBackendDefaultsArgsDict(TypedDict):
-    client_policy: NotRequired[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyArgsDict']]
+    client_policy: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyArgsDict']]]
     """
-    Default client policy for virtual gateway backends.
+    Default client policy for virtual gateway backends. See `client_policy` Block for details.
     """
 
 @pulumi.input_type
 class VirtualGatewaySpecBackendDefaultsArgs:
     def __init__(__self__, *,
-                 client_policy: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyArgs']] = None):
+                 client_policy: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyArgs']] = None):
         """
-        :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyArgs'] client_policy: Default client policy for virtual gateway backends.
+        :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyArgs'] client_policy: Default client policy for virtual gateway backends. See `client_policy` Block for details.
         """
         if client_policy is not None:
             pulumi.set(__self__, "client_policy", client_policy)
 
     @_builtins.property
     @pulumi.getter(name="clientPolicy")
-    def client_policy(self) -> Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyArgs']]:
+    def client_policy(self) -> pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyArgs']]:
         """
-        Default client policy for virtual gateway backends.
+        Default client policy for virtual gateway backends. See `client_policy` Block for details.
         """
         return pulumi.get(self, "client_policy")
 
     @client_policy.setter
-    def client_policy(self, value: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyArgs']]):
+    def client_policy(self, value: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyArgs']]):
         pulumi.set(self, "client_policy", value)
 
 
 class VirtualGatewaySpecBackendDefaultsClientPolicyArgsDict(TypedDict):
-    tls: NotRequired[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsArgsDict']]
+    tls: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsArgsDict']]]
     """
-    Transport Layer Security (TLS) client policy.
+    TLS client policy. See `spec.backend_defaults.client_policy.tls` Block for details.
     """
 
 @pulumi.input_type
 class VirtualGatewaySpecBackendDefaultsClientPolicyArgs:
     def __init__(__self__, *,
-                 tls: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsArgs']] = None):
+                 tls: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsArgs']] = None):
         """
-        :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsArgs'] tls: Transport Layer Security (TLS) client policy.
+        :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsArgs'] tls: TLS client policy. See `spec.backend_defaults.client_policy.tls` Block for details.
         """
         if tls is not None:
             pulumi.set(__self__, "tls", tls)
 
     @_builtins.property
     @pulumi.getter
-    def tls(self) -> Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsArgs']]:
+    def tls(self) -> pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsArgs']]:
         """
-        Transport Layer Security (TLS) client policy.
+        TLS client policy. See `spec.backend_defaults.client_policy.tls` Block for details.
         """
         return pulumi.get(self, "tls")
 
     @tls.setter
-    def tls(self, value: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsArgs']]):
+    def tls(self, value: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsArgs']]):
         pulumi.set(self, "tls", value)
 
 
 class VirtualGatewaySpecBackendDefaultsClientPolicyTlsArgsDict(TypedDict):
     validation: pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationArgsDict']
     """
-    Listener's Transport Layer Security (TLS) validation context.
+    Listener's TLS validation context.
     """
-    certificate: NotRequired[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateArgsDict']]
+    certificate: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateArgsDict']]]
     """
     Listener's TLS certificate.
     """
-    enforce: NotRequired[pulumi.Input[_builtins.bool]]
+    enforce: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether the policy is enforced. Default is `true`.
     """
-    ports: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]
+    ports: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]]
     """
     One or more ports that the policy is enforced for.
     """
@@ -5842,11 +5792,11 @@ class VirtualGatewaySpecBackendDefaultsClientPolicyTlsArgsDict(TypedDict):
 class VirtualGatewaySpecBackendDefaultsClientPolicyTlsArgs:
     def __init__(__self__, *,
                  validation: pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationArgs'],
-                 certificate: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateArgs']] = None,
-                 enforce: Optional[pulumi.Input[_builtins.bool]] = None,
-                 ports: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]] = None):
+                 certificate: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateArgs']] = None,
+                 enforce: pulumi.Input[Optional[_builtins.bool]] = None,
+                 ports: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]] = None):
         """
-        :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationArgs'] validation: Listener's Transport Layer Security (TLS) validation context.
+        :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationArgs'] validation: Listener's TLS validation context.
         :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateArgs'] certificate: Listener's TLS certificate.
         :param pulumi.Input[_builtins.bool] enforce: Whether the policy is enforced. Default is `true`.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.int]]] ports: One or more ports that the policy is enforced for.
@@ -5863,7 +5813,7 @@ class VirtualGatewaySpecBackendDefaultsClientPolicyTlsArgs:
     @pulumi.getter
     def validation(self) -> pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationArgs']:
         """
-        Listener's Transport Layer Security (TLS) validation context.
+        Listener's TLS validation context.
         """
         return pulumi.get(self, "validation")
 
@@ -5873,59 +5823,55 @@ class VirtualGatewaySpecBackendDefaultsClientPolicyTlsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def certificate(self) -> Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateArgs']]:
+    def certificate(self) -> pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateArgs']]:
         """
         Listener's TLS certificate.
         """
         return pulumi.get(self, "certificate")
 
     @certificate.setter
-    def certificate(self, value: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateArgs']]):
+    def certificate(self, value: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateArgs']]):
         pulumi.set(self, "certificate", value)
 
     @_builtins.property
     @pulumi.getter
-    def enforce(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enforce(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the policy is enforced. Default is `true`.
         """
         return pulumi.get(self, "enforce")
 
     @enforce.setter
-    def enforce(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enforce(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enforce", value)
 
     @_builtins.property
     @pulumi.getter
-    def ports(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]:
+    def ports(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]:
         """
         One or more ports that the policy is enforced for.
         """
         return pulumi.get(self, "ports")
 
     @ports.setter
-    def ports(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]):
+    def ports(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]):
         pulumi.set(self, "ports", value)
 
 
 class VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateArgsDict(TypedDict):
-    file: NotRequired[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateFileArgsDict']]
+    file: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateFileArgsDict']]]
+    sds: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateSdsArgsDict']]]
     """
-    Local file certificate.
-    """
-    sds: NotRequired[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateSdsArgsDict']]
-    """
-    A [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+    TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
     """
 
 @pulumi.input_type
 class VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateArgs:
     def __init__(__self__, *,
-                 file: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateFileArgs']] = None,
-                 sds: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateSdsArgs']] = None):
+                 file: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateFileArgs']] = None,
+                 sds: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateSdsArgs']] = None):
         """
-        :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateFileArgs'] file: Local file certificate.
-        :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateSdsArgs'] sds: A [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+        :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateSdsArgs'] sds: TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
         """
         if file is not None:
             pulumi.set(__self__, "file", file)
@@ -5934,26 +5880,23 @@ class VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateArgs:
 
     @_builtins.property
     @pulumi.getter
-    def file(self) -> Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateFileArgs']]:
-        """
-        Local file certificate.
-        """
+    def file(self) -> pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateFileArgs']]:
         return pulumi.get(self, "file")
 
     @file.setter
-    def file(self, value: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateFileArgs']]):
+    def file(self, value: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateFileArgs']]):
         pulumi.set(self, "file", value)
 
     @_builtins.property
     @pulumi.getter
-    def sds(self) -> Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateSdsArgs']]:
+    def sds(self) -> pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateSdsArgs']]:
         """
-        A [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+        TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
         """
         return pulumi.get(self, "sds")
 
     @sds.setter
-    def sds(self, value: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateSdsArgs']]):
+    def sds(self, value: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateSdsArgs']]):
         pulumi.set(self, "sds", value)
 
 
@@ -6007,7 +5950,7 @@ class VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateFileArgs:
 class VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateSdsArgsDict(TypedDict):
     secret_name: pulumi.Input[_builtins.str]
     """
-    Name of the secret for a virtual gateway's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+    Name of the secret for a virtual gateway's TLS Secret Discovery Service validation context trust.
     """
 
 @pulumi.input_type
@@ -6015,7 +5958,7 @@ class VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateSdsArgs:
     def __init__(__self__, *,
                  secret_name: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual gateway's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual gateway's TLS Secret Discovery Service validation context trust.
         """
         pulumi.set(__self__, "secret_name", secret_name)
 
@@ -6023,7 +5966,7 @@ class VirtualGatewaySpecBackendDefaultsClientPolicyTlsCertificateSdsArgs:
     @pulumi.getter(name="secretName")
     def secret_name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name of the secret for a virtual gateway's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        Name of the secret for a virtual gateway's TLS Secret Discovery Service validation context trust.
         """
         return pulumi.get(self, "secret_name")
 
@@ -6037,19 +5980,19 @@ class VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationArgsDict(TypedDi
     """
     TLS validation context trust.
     """
-    subject_alternative_names: NotRequired[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgsDict']]
+    subject_alternative_names: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgsDict']]]
     """
-    SANs for a virtual gateway's listener's Transport Layer Security (TLS) validation context.
+    SANs for a virtual gateway's listener's TLS validation context.
     """
 
 @pulumi.input_type
 class VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationArgs:
     def __init__(__self__, *,
                  trust: pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustArgs'],
-                 subject_alternative_names: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgs']] = None):
+                 subject_alternative_names: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgs']] = None):
         """
         :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustArgs'] trust: TLS validation context trust.
-        :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgs'] subject_alternative_names: SANs for a virtual gateway's listener's Transport Layer Security (TLS) validation context.
+        :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgs'] subject_alternative_names: SANs for a virtual gateway's listener's TLS validation context.
         """
         pulumi.set(__self__, "trust", trust)
         if subject_alternative_names is not None:
@@ -6069,14 +6012,14 @@ class VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationArgs:
 
     @_builtins.property
     @pulumi.getter(name="subjectAlternativeNames")
-    def subject_alternative_names(self) -> Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgs']]:
+    def subject_alternative_names(self) -> pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgs']]:
         """
-        SANs for a virtual gateway's listener's Transport Layer Security (TLS) validation context.
+        SANs for a virtual gateway's listener's TLS validation context.
         """
         return pulumi.get(self, "subject_alternative_names")
 
     @subject_alternative_names.setter
-    def subject_alternative_names(self, value: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgs']]):
+    def subject_alternative_names(self, value: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgs']]):
         pulumi.set(self, "subject_alternative_names", value)
 
 
@@ -6137,15 +6080,12 @@ class VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationSubjectAlternati
 
 
 class VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustArgsDict(TypedDict):
-    acm: NotRequired[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgsDict']]
+    acm: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgsDict']]]
     """
-    TLS validation context trust for an AWS Certificate Manager (ACM) certificate.
+    AWS Certificate Manager (ACM) certificate.
     """
-    file: NotRequired[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustFileArgsDict']]
-    """
-    TLS validation context trust for a local file certificate.
-    """
-    sds: NotRequired[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgsDict']]
+    file: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustFileArgsDict']]]
+    sds: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgsDict']]]
     """
     TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
     """
@@ -6153,12 +6093,11 @@ class VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustArgsDict(Ty
 @pulumi.input_type
 class VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustArgs:
     def __init__(__self__, *,
-                 acm: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgs']] = None,
-                 file: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs']] = None,
-                 sds: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs']] = None):
+                 acm: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgs']] = None,
+                 file: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs']] = None,
+                 sds: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs']] = None):
         """
-        :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgs'] acm: TLS validation context trust for an AWS Certificate Manager (ACM) certificate.
-        :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs'] file: TLS validation context trust for a local file certificate.
+        :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgs'] acm: AWS Certificate Manager (ACM) certificate.
         :param pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs'] sds: TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
         """
         if acm is not None:
@@ -6170,38 +6109,35 @@ class VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustArgs:
 
     @_builtins.property
     @pulumi.getter
-    def acm(self) -> Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgs']]:
+    def acm(self) -> pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgs']]:
         """
-        TLS validation context trust for an AWS Certificate Manager (ACM) certificate.
+        AWS Certificate Manager (ACM) certificate.
         """
         return pulumi.get(self, "acm")
 
     @acm.setter
-    def acm(self, value: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgs']]):
+    def acm(self, value: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgs']]):
         pulumi.set(self, "acm", value)
 
     @_builtins.property
     @pulumi.getter
-    def file(self) -> Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs']]:
-        """
-        TLS validation context trust for a local file certificate.
-        """
+    def file(self) -> pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs']]:
         return pulumi.get(self, "file")
 
     @file.setter
-    def file(self, value: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs']]):
+    def file(self, value: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs']]):
         pulumi.set(self, "file", value)
 
     @_builtins.property
     @pulumi.getter
-    def sds(self) -> Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs']]:
+    def sds(self) -> pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs']]:
         """
         TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
         """
         return pulumi.get(self, "sds")
 
     @sds.setter
-    def sds(self, value: Optional[pulumi.Input['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs']]):
+    def sds(self, value: pulumi.Input[Optional['VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs']]):
         pulumi.set(self, "sds", value)
 
 
@@ -6264,7 +6200,7 @@ class VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs:
 class VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgsDict(TypedDict):
     secret_name: pulumi.Input[_builtins.str]
     """
-    Name of the secret for a virtual gateway's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+    Name of the secret for a virtual gateway's TLS Secret Discovery Service validation context trust.
     """
 
 @pulumi.input_type
@@ -6272,7 +6208,7 @@ class VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs:
     def __init__(__self__, *,
                  secret_name: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual gateway's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual gateway's TLS Secret Discovery Service validation context trust.
         """
         pulumi.set(__self__, "secret_name", secret_name)
 
@@ -6280,7 +6216,7 @@ class VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs:
     @pulumi.getter(name="secretName")
     def secret_name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name of the secret for a virtual gateway's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        Name of the secret for a virtual gateway's TLS Secret Discovery Service validation context trust.
         """
         return pulumi.get(self, "secret_name")
 
@@ -6292,33 +6228,33 @@ class VirtualGatewaySpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs:
 class VirtualGatewaySpecListenerArgsDict(TypedDict):
     port_mapping: pulumi.Input['VirtualGatewaySpecListenerPortMappingArgsDict']
     """
-    Port mapping information for the listener.
+    Port mapping information for the listener. See `port_mapping` Block for details.
     """
-    connection_pool: NotRequired[pulumi.Input['VirtualGatewaySpecListenerConnectionPoolArgsDict']]
+    connection_pool: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecListenerConnectionPoolArgsDict']]]
     """
-    Connection pool information for the listener.
+    Connection pool information for the listener. See `connection_pool` Block for details.
     """
-    health_check: NotRequired[pulumi.Input['VirtualGatewaySpecListenerHealthCheckArgsDict']]
+    health_check: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecListenerHealthCheckArgsDict']]]
     """
-    Health check information for the listener.
+    Health check information for the listener. See `health_check` Block for details.
     """
-    tls: NotRequired[pulumi.Input['VirtualGatewaySpecListenerTlsArgsDict']]
+    tls: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecListenerTlsArgsDict']]]
     """
-    Transport Layer Security (TLS) properties for the listener
+    TLS properties for the listener. See `spec.listener.tls` Block for details.
     """
 
 @pulumi.input_type
 class VirtualGatewaySpecListenerArgs:
     def __init__(__self__, *,
                  port_mapping: pulumi.Input['VirtualGatewaySpecListenerPortMappingArgs'],
-                 connection_pool: Optional[pulumi.Input['VirtualGatewaySpecListenerConnectionPoolArgs']] = None,
-                 health_check: Optional[pulumi.Input['VirtualGatewaySpecListenerHealthCheckArgs']] = None,
-                 tls: Optional[pulumi.Input['VirtualGatewaySpecListenerTlsArgs']] = None):
+                 connection_pool: pulumi.Input[Optional['VirtualGatewaySpecListenerConnectionPoolArgs']] = None,
+                 health_check: pulumi.Input[Optional['VirtualGatewaySpecListenerHealthCheckArgs']] = None,
+                 tls: pulumi.Input[Optional['VirtualGatewaySpecListenerTlsArgs']] = None):
         """
-        :param pulumi.Input['VirtualGatewaySpecListenerPortMappingArgs'] port_mapping: Port mapping information for the listener.
-        :param pulumi.Input['VirtualGatewaySpecListenerConnectionPoolArgs'] connection_pool: Connection pool information for the listener.
-        :param pulumi.Input['VirtualGatewaySpecListenerHealthCheckArgs'] health_check: Health check information for the listener.
-        :param pulumi.Input['VirtualGatewaySpecListenerTlsArgs'] tls: Transport Layer Security (TLS) properties for the listener
+        :param pulumi.Input['VirtualGatewaySpecListenerPortMappingArgs'] port_mapping: Port mapping information for the listener. See `port_mapping` Block for details.
+        :param pulumi.Input['VirtualGatewaySpecListenerConnectionPoolArgs'] connection_pool: Connection pool information for the listener. See `connection_pool` Block for details.
+        :param pulumi.Input['VirtualGatewaySpecListenerHealthCheckArgs'] health_check: Health check information for the listener. See `health_check` Block for details.
+        :param pulumi.Input['VirtualGatewaySpecListenerTlsArgs'] tls: TLS properties for the listener. See `spec.listener.tls` Block for details.
         """
         pulumi.set(__self__, "port_mapping", port_mapping)
         if connection_pool is not None:
@@ -6332,7 +6268,7 @@ class VirtualGatewaySpecListenerArgs:
     @pulumi.getter(name="portMapping")
     def port_mapping(self) -> pulumi.Input['VirtualGatewaySpecListenerPortMappingArgs']:
         """
-        Port mapping information for the listener.
+        Port mapping information for the listener. See `port_mapping` Block for details.
         """
         return pulumi.get(self, "port_mapping")
 
@@ -6342,65 +6278,65 @@ class VirtualGatewaySpecListenerArgs:
 
     @_builtins.property
     @pulumi.getter(name="connectionPool")
-    def connection_pool(self) -> Optional[pulumi.Input['VirtualGatewaySpecListenerConnectionPoolArgs']]:
+    def connection_pool(self) -> pulumi.Input[Optional['VirtualGatewaySpecListenerConnectionPoolArgs']]:
         """
-        Connection pool information for the listener.
+        Connection pool information for the listener. See `connection_pool` Block for details.
         """
         return pulumi.get(self, "connection_pool")
 
     @connection_pool.setter
-    def connection_pool(self, value: Optional[pulumi.Input['VirtualGatewaySpecListenerConnectionPoolArgs']]):
+    def connection_pool(self, value: pulumi.Input[Optional['VirtualGatewaySpecListenerConnectionPoolArgs']]):
         pulumi.set(self, "connection_pool", value)
 
     @_builtins.property
     @pulumi.getter(name="healthCheck")
-    def health_check(self) -> Optional[pulumi.Input['VirtualGatewaySpecListenerHealthCheckArgs']]:
+    def health_check(self) -> pulumi.Input[Optional['VirtualGatewaySpecListenerHealthCheckArgs']]:
         """
-        Health check information for the listener.
+        Health check information for the listener. See `health_check` Block for details.
         """
         return pulumi.get(self, "health_check")
 
     @health_check.setter
-    def health_check(self, value: Optional[pulumi.Input['VirtualGatewaySpecListenerHealthCheckArgs']]):
+    def health_check(self, value: pulumi.Input[Optional['VirtualGatewaySpecListenerHealthCheckArgs']]):
         pulumi.set(self, "health_check", value)
 
     @_builtins.property
     @pulumi.getter
-    def tls(self) -> Optional[pulumi.Input['VirtualGatewaySpecListenerTlsArgs']]:
+    def tls(self) -> pulumi.Input[Optional['VirtualGatewaySpecListenerTlsArgs']]:
         """
-        Transport Layer Security (TLS) properties for the listener
+        TLS properties for the listener. See `spec.listener.tls` Block for details.
         """
         return pulumi.get(self, "tls")
 
     @tls.setter
-    def tls(self, value: Optional[pulumi.Input['VirtualGatewaySpecListenerTlsArgs']]):
+    def tls(self, value: pulumi.Input[Optional['VirtualGatewaySpecListenerTlsArgs']]):
         pulumi.set(self, "tls", value)
 
 
 class VirtualGatewaySpecListenerConnectionPoolArgsDict(TypedDict):
-    grpc: NotRequired[pulumi.Input['VirtualGatewaySpecListenerConnectionPoolGrpcArgsDict']]
+    grpc: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecListenerConnectionPoolGrpcArgsDict']]]
     """
-    Connection pool information for gRPC listeners.
+    Connection pool information for gRPC listeners. See `grpc` Block for details.
     """
-    http: NotRequired[pulumi.Input['VirtualGatewaySpecListenerConnectionPoolHttpArgsDict']]
+    http: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecListenerConnectionPoolHttpArgsDict']]]
     """
-    Connection pool information for HTTP listeners.
+    Connection pool information for HTTP listeners. See `http` Block for details.
     """
-    http2: NotRequired[pulumi.Input['VirtualGatewaySpecListenerConnectionPoolHttp2ArgsDict']]
+    http2: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecListenerConnectionPoolHttp2ArgsDict']]]
     """
-    Connection pool information for HTTP2 listeners.
+    Connection pool information for HTTP2 listeners. See `http2` Block for details.
     """
 
 @pulumi.input_type
 class VirtualGatewaySpecListenerConnectionPoolArgs:
     def __init__(__self__, *,
-                 grpc: Optional[pulumi.Input['VirtualGatewaySpecListenerConnectionPoolGrpcArgs']] = None,
-                 http: Optional[pulumi.Input['VirtualGatewaySpecListenerConnectionPoolHttpArgs']] = None,
-                 http2: Optional[pulumi.Input['VirtualGatewaySpecListenerConnectionPoolHttp2Args']] = None):
+                 grpc: pulumi.Input[Optional['VirtualGatewaySpecListenerConnectionPoolGrpcArgs']] = None,
+                 http: pulumi.Input[Optional['VirtualGatewaySpecListenerConnectionPoolHttpArgs']] = None,
+                 http2: pulumi.Input[Optional['VirtualGatewaySpecListenerConnectionPoolHttp2Args']] = None):
         """
-        :param pulumi.Input['VirtualGatewaySpecListenerConnectionPoolGrpcArgs'] grpc: Connection pool information for gRPC listeners.
-        :param pulumi.Input['VirtualGatewaySpecListenerConnectionPoolHttpArgs'] http: Connection pool information for HTTP listeners.
-        :param pulumi.Input['VirtualGatewaySpecListenerConnectionPoolHttp2Args'] http2: Connection pool information for HTTP2 listeners.
+        :param pulumi.Input['VirtualGatewaySpecListenerConnectionPoolGrpcArgs'] grpc: Connection pool information for gRPC listeners. See `grpc` Block for details.
+        :param pulumi.Input['VirtualGatewaySpecListenerConnectionPoolHttpArgs'] http: Connection pool information for HTTP listeners. See `http` Block for details.
+        :param pulumi.Input['VirtualGatewaySpecListenerConnectionPoolHttp2Args'] http2: Connection pool information for HTTP2 listeners. See `http2` Block for details.
         """
         if grpc is not None:
             pulumi.set(__self__, "grpc", grpc)
@@ -6411,38 +6347,38 @@ class VirtualGatewaySpecListenerConnectionPoolArgs:
 
     @_builtins.property
     @pulumi.getter
-    def grpc(self) -> Optional[pulumi.Input['VirtualGatewaySpecListenerConnectionPoolGrpcArgs']]:
+    def grpc(self) -> pulumi.Input[Optional['VirtualGatewaySpecListenerConnectionPoolGrpcArgs']]:
         """
-        Connection pool information for gRPC listeners.
+        Connection pool information for gRPC listeners. See `grpc` Block for details.
         """
         return pulumi.get(self, "grpc")
 
     @grpc.setter
-    def grpc(self, value: Optional[pulumi.Input['VirtualGatewaySpecListenerConnectionPoolGrpcArgs']]):
+    def grpc(self, value: pulumi.Input[Optional['VirtualGatewaySpecListenerConnectionPoolGrpcArgs']]):
         pulumi.set(self, "grpc", value)
 
     @_builtins.property
     @pulumi.getter
-    def http(self) -> Optional[pulumi.Input['VirtualGatewaySpecListenerConnectionPoolHttpArgs']]:
+    def http(self) -> pulumi.Input[Optional['VirtualGatewaySpecListenerConnectionPoolHttpArgs']]:
         """
-        Connection pool information for HTTP listeners.
+        Connection pool information for HTTP listeners. See `http` Block for details.
         """
         return pulumi.get(self, "http")
 
     @http.setter
-    def http(self, value: Optional[pulumi.Input['VirtualGatewaySpecListenerConnectionPoolHttpArgs']]):
+    def http(self, value: pulumi.Input[Optional['VirtualGatewaySpecListenerConnectionPoolHttpArgs']]):
         pulumi.set(self, "http", value)
 
     @_builtins.property
     @pulumi.getter
-    def http2(self) -> Optional[pulumi.Input['VirtualGatewaySpecListenerConnectionPoolHttp2Args']]:
+    def http2(self) -> pulumi.Input[Optional['VirtualGatewaySpecListenerConnectionPoolHttp2Args']]:
         """
-        Connection pool information for HTTP2 listeners.
+        Connection pool information for HTTP2 listeners. See `http2` Block for details.
         """
         return pulumi.get(self, "http2")
 
     @http2.setter
-    def http2(self, value: Optional[pulumi.Input['VirtualGatewaySpecListenerConnectionPoolHttp2Args']]):
+    def http2(self, value: pulumi.Input[Optional['VirtualGatewaySpecListenerConnectionPoolHttp2Args']]):
         pulumi.set(self, "http2", value)
 
 
@@ -6507,7 +6443,7 @@ class VirtualGatewaySpecListenerConnectionPoolHttpArgsDict(TypedDict):
     """
     Maximum number of outbound TCP connections Envoy can establish concurrently with all hosts in upstream cluster. Minimum value of `1`.
     """
-    max_pending_requests: NotRequired[pulumi.Input[_builtins.int]]
+    max_pending_requests: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Number of overflowing requests after `max_connections` Envoy will queue to upstream cluster. Minimum value of `1`.
     """
@@ -6516,7 +6452,7 @@ class VirtualGatewaySpecListenerConnectionPoolHttpArgsDict(TypedDict):
 class VirtualGatewaySpecListenerConnectionPoolHttpArgs:
     def __init__(__self__, *,
                  max_connections: pulumi.Input[_builtins.int],
-                 max_pending_requests: Optional[pulumi.Input[_builtins.int]] = None):
+                 max_pending_requests: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.int] max_connections: Maximum number of outbound TCP connections Envoy can establish concurrently with all hosts in upstream cluster. Minimum value of `1`.
         :param pulumi.Input[_builtins.int] max_pending_requests: Number of overflowing requests after `max_connections` Envoy will queue to upstream cluster. Minimum value of `1`.
@@ -6539,14 +6475,14 @@ class VirtualGatewaySpecListenerConnectionPoolHttpArgs:
 
     @_builtins.property
     @pulumi.getter(name="maxPendingRequests")
-    def max_pending_requests(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max_pending_requests(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Number of overflowing requests after `max_connections` Envoy will queue to upstream cluster. Minimum value of `1`.
         """
         return pulumi.get(self, "max_pending_requests")
 
     @max_pending_requests.setter
-    def max_pending_requests(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max_pending_requests(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max_pending_requests", value)
 
 
@@ -6571,11 +6507,11 @@ class VirtualGatewaySpecListenerHealthCheckArgsDict(TypedDict):
     """
     Number of consecutive failed health checks that must occur before declaring a virtual gateway unhealthy.
     """
-    path: NotRequired[pulumi.Input[_builtins.str]]
+    path: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Destination path for the health check request. This is only required if the specified protocol is `http` or `http2`.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Destination port for the health check request. This port must match the port defined in the `port_mapping` for the listener.
     """
@@ -6588,8 +6524,8 @@ class VirtualGatewaySpecListenerHealthCheckArgs:
                  protocol: pulumi.Input[_builtins.str],
                  timeout_millis: pulumi.Input[_builtins.int],
                  unhealthy_threshold: pulumi.Input[_builtins.int],
-                 path: Optional[pulumi.Input[_builtins.str]] = None,
-                 port: Optional[pulumi.Input[_builtins.int]] = None):
+                 path: pulumi.Input[Optional[_builtins.str]] = None,
+                 port: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.int] healthy_threshold: Number of consecutive successful health checks that must occur before declaring listener healthy.
         :param pulumi.Input[_builtins.int] interval_millis: Time period in milliseconds between each health check execution.
@@ -6671,26 +6607,26 @@ class VirtualGatewaySpecListenerHealthCheckArgs:
 
     @_builtins.property
     @pulumi.getter
-    def path(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def path(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Destination path for the health check request. This is only required if the specified protocol is `http` or `http2`.
         """
         return pulumi.get(self, "path")
 
     @path.setter
-    def path(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def path(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "path", value)
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Destination port for the health check request. This port must match the port defined in the `port_mapping` for the listener.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
 
@@ -6750,9 +6686,9 @@ class VirtualGatewaySpecListenerTlsArgsDict(TypedDict):
     """
     Listener's TLS mode. Valid values: `DISABLED`, `PERMISSIVE`, `STRICT`.
     """
-    validation: NotRequired[pulumi.Input['VirtualGatewaySpecListenerTlsValidationArgsDict']]
+    validation: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecListenerTlsValidationArgsDict']]]
     """
-    Listener's Transport Layer Security (TLS) validation context.
+    Listener's TLS validation context.
     """
 
 @pulumi.input_type
@@ -6760,11 +6696,11 @@ class VirtualGatewaySpecListenerTlsArgs:
     def __init__(__self__, *,
                  certificate: pulumi.Input['VirtualGatewaySpecListenerTlsCertificateArgs'],
                  mode: pulumi.Input[_builtins.str],
-                 validation: Optional[pulumi.Input['VirtualGatewaySpecListenerTlsValidationArgs']] = None):
+                 validation: pulumi.Input[Optional['VirtualGatewaySpecListenerTlsValidationArgs']] = None):
         """
         :param pulumi.Input['VirtualGatewaySpecListenerTlsCertificateArgs'] certificate: Listener's TLS certificate.
         :param pulumi.Input[_builtins.str] mode: Listener's TLS mode. Valid values: `DISABLED`, `PERMISSIVE`, `STRICT`.
-        :param pulumi.Input['VirtualGatewaySpecListenerTlsValidationArgs'] validation: Listener's Transport Layer Security (TLS) validation context.
+        :param pulumi.Input['VirtualGatewaySpecListenerTlsValidationArgs'] validation: Listener's TLS validation context.
         """
         pulumi.set(__self__, "certificate", certificate)
         pulumi.set(__self__, "mode", mode)
@@ -6797,41 +6733,37 @@ class VirtualGatewaySpecListenerTlsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def validation(self) -> Optional[pulumi.Input['VirtualGatewaySpecListenerTlsValidationArgs']]:
+    def validation(self) -> pulumi.Input[Optional['VirtualGatewaySpecListenerTlsValidationArgs']]:
         """
-        Listener's Transport Layer Security (TLS) validation context.
+        Listener's TLS validation context.
         """
         return pulumi.get(self, "validation")
 
     @validation.setter
-    def validation(self, value: Optional[pulumi.Input['VirtualGatewaySpecListenerTlsValidationArgs']]):
+    def validation(self, value: pulumi.Input[Optional['VirtualGatewaySpecListenerTlsValidationArgs']]):
         pulumi.set(self, "validation", value)
 
 
 class VirtualGatewaySpecListenerTlsCertificateArgsDict(TypedDict):
-    acm: NotRequired[pulumi.Input['VirtualGatewaySpecListenerTlsCertificateAcmArgsDict']]
+    acm: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecListenerTlsCertificateAcmArgsDict']]]
     """
-    An AWS Certificate Manager (ACM) certificate.
+    AWS Certificate Manager (ACM) certificate.
     """
-    file: NotRequired[pulumi.Input['VirtualGatewaySpecListenerTlsCertificateFileArgsDict']]
+    file: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecListenerTlsCertificateFileArgsDict']]]
+    sds: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecListenerTlsCertificateSdsArgsDict']]]
     """
-    Local file certificate.
-    """
-    sds: NotRequired[pulumi.Input['VirtualGatewaySpecListenerTlsCertificateSdsArgsDict']]
-    """
-    A [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+    TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
     """
 
 @pulumi.input_type
 class VirtualGatewaySpecListenerTlsCertificateArgs:
     def __init__(__self__, *,
-                 acm: Optional[pulumi.Input['VirtualGatewaySpecListenerTlsCertificateAcmArgs']] = None,
-                 file: Optional[pulumi.Input['VirtualGatewaySpecListenerTlsCertificateFileArgs']] = None,
-                 sds: Optional[pulumi.Input['VirtualGatewaySpecListenerTlsCertificateSdsArgs']] = None):
+                 acm: pulumi.Input[Optional['VirtualGatewaySpecListenerTlsCertificateAcmArgs']] = None,
+                 file: pulumi.Input[Optional['VirtualGatewaySpecListenerTlsCertificateFileArgs']] = None,
+                 sds: pulumi.Input[Optional['VirtualGatewaySpecListenerTlsCertificateSdsArgs']] = None):
         """
-        :param pulumi.Input['VirtualGatewaySpecListenerTlsCertificateAcmArgs'] acm: An AWS Certificate Manager (ACM) certificate.
-        :param pulumi.Input['VirtualGatewaySpecListenerTlsCertificateFileArgs'] file: Local file certificate.
-        :param pulumi.Input['VirtualGatewaySpecListenerTlsCertificateSdsArgs'] sds: A [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+        :param pulumi.Input['VirtualGatewaySpecListenerTlsCertificateAcmArgs'] acm: AWS Certificate Manager (ACM) certificate.
+        :param pulumi.Input['VirtualGatewaySpecListenerTlsCertificateSdsArgs'] sds: TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
         """
         if acm is not None:
             pulumi.set(__self__, "acm", acm)
@@ -6842,38 +6774,35 @@ class VirtualGatewaySpecListenerTlsCertificateArgs:
 
     @_builtins.property
     @pulumi.getter
-    def acm(self) -> Optional[pulumi.Input['VirtualGatewaySpecListenerTlsCertificateAcmArgs']]:
+    def acm(self) -> pulumi.Input[Optional['VirtualGatewaySpecListenerTlsCertificateAcmArgs']]:
         """
-        An AWS Certificate Manager (ACM) certificate.
+        AWS Certificate Manager (ACM) certificate.
         """
         return pulumi.get(self, "acm")
 
     @acm.setter
-    def acm(self, value: Optional[pulumi.Input['VirtualGatewaySpecListenerTlsCertificateAcmArgs']]):
+    def acm(self, value: pulumi.Input[Optional['VirtualGatewaySpecListenerTlsCertificateAcmArgs']]):
         pulumi.set(self, "acm", value)
 
     @_builtins.property
     @pulumi.getter
-    def file(self) -> Optional[pulumi.Input['VirtualGatewaySpecListenerTlsCertificateFileArgs']]:
-        """
-        Local file certificate.
-        """
+    def file(self) -> pulumi.Input[Optional['VirtualGatewaySpecListenerTlsCertificateFileArgs']]:
         return pulumi.get(self, "file")
 
     @file.setter
-    def file(self, value: Optional[pulumi.Input['VirtualGatewaySpecListenerTlsCertificateFileArgs']]):
+    def file(self, value: pulumi.Input[Optional['VirtualGatewaySpecListenerTlsCertificateFileArgs']]):
         pulumi.set(self, "file", value)
 
     @_builtins.property
     @pulumi.getter
-    def sds(self) -> Optional[pulumi.Input['VirtualGatewaySpecListenerTlsCertificateSdsArgs']]:
+    def sds(self) -> pulumi.Input[Optional['VirtualGatewaySpecListenerTlsCertificateSdsArgs']]:
         """
-        A [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+        TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
         """
         return pulumi.get(self, "sds")
 
     @sds.setter
-    def sds(self, value: Optional[pulumi.Input['VirtualGatewaySpecListenerTlsCertificateSdsArgs']]):
+    def sds(self, value: pulumi.Input[Optional['VirtualGatewaySpecListenerTlsCertificateSdsArgs']]):
         pulumi.set(self, "sds", value)
 
 
@@ -6955,7 +6884,7 @@ class VirtualGatewaySpecListenerTlsCertificateFileArgs:
 class VirtualGatewaySpecListenerTlsCertificateSdsArgsDict(TypedDict):
     secret_name: pulumi.Input[_builtins.str]
     """
-    Name of the secret for a virtual gateway's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+    Name of the secret for a virtual gateway's TLS Secret Discovery Service validation context trust.
     """
 
 @pulumi.input_type
@@ -6963,7 +6892,7 @@ class VirtualGatewaySpecListenerTlsCertificateSdsArgs:
     def __init__(__self__, *,
                  secret_name: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual gateway's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual gateway's TLS Secret Discovery Service validation context trust.
         """
         pulumi.set(__self__, "secret_name", secret_name)
 
@@ -6971,7 +6900,7 @@ class VirtualGatewaySpecListenerTlsCertificateSdsArgs:
     @pulumi.getter(name="secretName")
     def secret_name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name of the secret for a virtual gateway's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        Name of the secret for a virtual gateway's TLS Secret Discovery Service validation context trust.
         """
         return pulumi.get(self, "secret_name")
 
@@ -6985,19 +6914,19 @@ class VirtualGatewaySpecListenerTlsValidationArgsDict(TypedDict):
     """
     TLS validation context trust.
     """
-    subject_alternative_names: NotRequired[pulumi.Input['VirtualGatewaySpecListenerTlsValidationSubjectAlternativeNamesArgsDict']]
+    subject_alternative_names: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecListenerTlsValidationSubjectAlternativeNamesArgsDict']]]
     """
-    SANs for a virtual gateway's listener's Transport Layer Security (TLS) validation context.
+    SANs for a virtual gateway's listener's TLS validation context.
     """
 
 @pulumi.input_type
 class VirtualGatewaySpecListenerTlsValidationArgs:
     def __init__(__self__, *,
                  trust: pulumi.Input['VirtualGatewaySpecListenerTlsValidationTrustArgs'],
-                 subject_alternative_names: Optional[pulumi.Input['VirtualGatewaySpecListenerTlsValidationSubjectAlternativeNamesArgs']] = None):
+                 subject_alternative_names: pulumi.Input[Optional['VirtualGatewaySpecListenerTlsValidationSubjectAlternativeNamesArgs']] = None):
         """
         :param pulumi.Input['VirtualGatewaySpecListenerTlsValidationTrustArgs'] trust: TLS validation context trust.
-        :param pulumi.Input['VirtualGatewaySpecListenerTlsValidationSubjectAlternativeNamesArgs'] subject_alternative_names: SANs for a virtual gateway's listener's Transport Layer Security (TLS) validation context.
+        :param pulumi.Input['VirtualGatewaySpecListenerTlsValidationSubjectAlternativeNamesArgs'] subject_alternative_names: SANs for a virtual gateway's listener's TLS validation context.
         """
         pulumi.set(__self__, "trust", trust)
         if subject_alternative_names is not None:
@@ -7017,14 +6946,14 @@ class VirtualGatewaySpecListenerTlsValidationArgs:
 
     @_builtins.property
     @pulumi.getter(name="subjectAlternativeNames")
-    def subject_alternative_names(self) -> Optional[pulumi.Input['VirtualGatewaySpecListenerTlsValidationSubjectAlternativeNamesArgs']]:
+    def subject_alternative_names(self) -> pulumi.Input[Optional['VirtualGatewaySpecListenerTlsValidationSubjectAlternativeNamesArgs']]:
         """
-        SANs for a virtual gateway's listener's Transport Layer Security (TLS) validation context.
+        SANs for a virtual gateway's listener's TLS validation context.
         """
         return pulumi.get(self, "subject_alternative_names")
 
     @subject_alternative_names.setter
-    def subject_alternative_names(self, value: Optional[pulumi.Input['VirtualGatewaySpecListenerTlsValidationSubjectAlternativeNamesArgs']]):
+    def subject_alternative_names(self, value: pulumi.Input[Optional['VirtualGatewaySpecListenerTlsValidationSubjectAlternativeNamesArgs']]):
         pulumi.set(self, "subject_alternative_names", value)
 
 
@@ -7085,11 +7014,8 @@ class VirtualGatewaySpecListenerTlsValidationSubjectAlternativeNamesMatchArgs:
 
 
 class VirtualGatewaySpecListenerTlsValidationTrustArgsDict(TypedDict):
-    file: NotRequired[pulumi.Input['VirtualGatewaySpecListenerTlsValidationTrustFileArgsDict']]
-    """
-    TLS validation context trust for a local file certificate.
-    """
-    sds: NotRequired[pulumi.Input['VirtualGatewaySpecListenerTlsValidationTrustSdsArgsDict']]
+    file: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecListenerTlsValidationTrustFileArgsDict']]]
+    sds: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecListenerTlsValidationTrustSdsArgsDict']]]
     """
     TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
     """
@@ -7097,10 +7023,9 @@ class VirtualGatewaySpecListenerTlsValidationTrustArgsDict(TypedDict):
 @pulumi.input_type
 class VirtualGatewaySpecListenerTlsValidationTrustArgs:
     def __init__(__self__, *,
-                 file: Optional[pulumi.Input['VirtualGatewaySpecListenerTlsValidationTrustFileArgs']] = None,
-                 sds: Optional[pulumi.Input['VirtualGatewaySpecListenerTlsValidationTrustSdsArgs']] = None):
+                 file: pulumi.Input[Optional['VirtualGatewaySpecListenerTlsValidationTrustFileArgs']] = None,
+                 sds: pulumi.Input[Optional['VirtualGatewaySpecListenerTlsValidationTrustSdsArgs']] = None):
         """
-        :param pulumi.Input['VirtualGatewaySpecListenerTlsValidationTrustFileArgs'] file: TLS validation context trust for a local file certificate.
         :param pulumi.Input['VirtualGatewaySpecListenerTlsValidationTrustSdsArgs'] sds: TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
         """
         if file is not None:
@@ -7110,26 +7035,23 @@ class VirtualGatewaySpecListenerTlsValidationTrustArgs:
 
     @_builtins.property
     @pulumi.getter
-    def file(self) -> Optional[pulumi.Input['VirtualGatewaySpecListenerTlsValidationTrustFileArgs']]:
-        """
-        TLS validation context trust for a local file certificate.
-        """
+    def file(self) -> pulumi.Input[Optional['VirtualGatewaySpecListenerTlsValidationTrustFileArgs']]:
         return pulumi.get(self, "file")
 
     @file.setter
-    def file(self, value: Optional[pulumi.Input['VirtualGatewaySpecListenerTlsValidationTrustFileArgs']]):
+    def file(self, value: pulumi.Input[Optional['VirtualGatewaySpecListenerTlsValidationTrustFileArgs']]):
         pulumi.set(self, "file", value)
 
     @_builtins.property
     @pulumi.getter
-    def sds(self) -> Optional[pulumi.Input['VirtualGatewaySpecListenerTlsValidationTrustSdsArgs']]:
+    def sds(self) -> pulumi.Input[Optional['VirtualGatewaySpecListenerTlsValidationTrustSdsArgs']]:
         """
         TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
         """
         return pulumi.get(self, "sds")
 
     @sds.setter
-    def sds(self, value: Optional[pulumi.Input['VirtualGatewaySpecListenerTlsValidationTrustSdsArgs']]):
+    def sds(self, value: pulumi.Input[Optional['VirtualGatewaySpecListenerTlsValidationTrustSdsArgs']]):
         pulumi.set(self, "sds", value)
 
 
@@ -7164,7 +7086,7 @@ class VirtualGatewaySpecListenerTlsValidationTrustFileArgs:
 class VirtualGatewaySpecListenerTlsValidationTrustSdsArgsDict(TypedDict):
     secret_name: pulumi.Input[_builtins.str]
     """
-    Name of the secret for a virtual gateway's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+    Name of the secret for a virtual gateway's TLS Secret Discovery Service validation context trust.
     """
 
 @pulumi.input_type
@@ -7172,7 +7094,7 @@ class VirtualGatewaySpecListenerTlsValidationTrustSdsArgs:
     def __init__(__self__, *,
                  secret_name: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual gateway's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual gateway's TLS Secret Discovery Service validation context trust.
         """
         pulumi.set(__self__, "secret_name", secret_name)
 
@@ -7180,7 +7102,7 @@ class VirtualGatewaySpecListenerTlsValidationTrustSdsArgs:
     @pulumi.getter(name="secretName")
     def secret_name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name of the secret for a virtual gateway's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        Name of the secret for a virtual gateway's TLS Secret Discovery Service validation context trust.
         """
         return pulumi.get(self, "secret_name")
 
@@ -7190,81 +7112,77 @@ class VirtualGatewaySpecListenerTlsValidationTrustSdsArgs:
 
 
 class VirtualGatewaySpecLoggingArgsDict(TypedDict):
-    access_log: NotRequired[pulumi.Input['VirtualGatewaySpecLoggingAccessLogArgsDict']]
+    access_log: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecLoggingAccessLogArgsDict']]]
     """
-    Access log configuration for a virtual gateway.
+    Access log configuration for a virtual gateway. See `access_log` Block for details.
     """
 
 @pulumi.input_type
 class VirtualGatewaySpecLoggingArgs:
     def __init__(__self__, *,
-                 access_log: Optional[pulumi.Input['VirtualGatewaySpecLoggingAccessLogArgs']] = None):
+                 access_log: pulumi.Input[Optional['VirtualGatewaySpecLoggingAccessLogArgs']] = None):
         """
-        :param pulumi.Input['VirtualGatewaySpecLoggingAccessLogArgs'] access_log: Access log configuration for a virtual gateway.
+        :param pulumi.Input['VirtualGatewaySpecLoggingAccessLogArgs'] access_log: Access log configuration for a virtual gateway. See `access_log` Block for details.
         """
         if access_log is not None:
             pulumi.set(__self__, "access_log", access_log)
 
     @_builtins.property
     @pulumi.getter(name="accessLog")
-    def access_log(self) -> Optional[pulumi.Input['VirtualGatewaySpecLoggingAccessLogArgs']]:
+    def access_log(self) -> pulumi.Input[Optional['VirtualGatewaySpecLoggingAccessLogArgs']]:
         """
-        Access log configuration for a virtual gateway.
+        Access log configuration for a virtual gateway. See `access_log` Block for details.
         """
         return pulumi.get(self, "access_log")
 
     @access_log.setter
-    def access_log(self, value: Optional[pulumi.Input['VirtualGatewaySpecLoggingAccessLogArgs']]):
+    def access_log(self, value: pulumi.Input[Optional['VirtualGatewaySpecLoggingAccessLogArgs']]):
         pulumi.set(self, "access_log", value)
 
 
 class VirtualGatewaySpecLoggingAccessLogArgsDict(TypedDict):
-    file: NotRequired[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileArgsDict']]
+    file: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecLoggingAccessLogFileArgsDict']]]
     """
-    File object to send virtual gateway access logs to.
+    File object to send virtual gateway access logs to. See `spec.logging.access_log.file` Block for details.
     """
 
 @pulumi.input_type
 class VirtualGatewaySpecLoggingAccessLogArgs:
     def __init__(__self__, *,
-                 file: Optional[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileArgs']] = None):
+                 file: pulumi.Input[Optional['VirtualGatewaySpecLoggingAccessLogFileArgs']] = None):
         """
-        :param pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileArgs'] file: File object to send virtual gateway access logs to.
+        :param pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileArgs'] file: File object to send virtual gateway access logs to. See `spec.logging.access_log.file` Block for details.
         """
         if file is not None:
             pulumi.set(__self__, "file", file)
 
     @_builtins.property
     @pulumi.getter
-    def file(self) -> Optional[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileArgs']]:
+    def file(self) -> pulumi.Input[Optional['VirtualGatewaySpecLoggingAccessLogFileArgs']]:
         """
-        File object to send virtual gateway access logs to.
+        File object to send virtual gateway access logs to. See `spec.logging.access_log.file` Block for details.
         """
         return pulumi.get(self, "file")
 
     @file.setter
-    def file(self, value: Optional[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileArgs']]):
+    def file(self, value: pulumi.Input[Optional['VirtualGatewaySpecLoggingAccessLogFileArgs']]):
         pulumi.set(self, "file", value)
 
 
 class VirtualGatewaySpecLoggingAccessLogFileArgsDict(TypedDict):
     path: pulumi.Input[_builtins.str]
+    format: NotRequired[pulumi.Input[Optional['VirtualGatewaySpecLoggingAccessLogFileFormatArgsDict']]]
     """
-    File path to write access logs to. You can use `/dev/stdout` to send access logs to standard out. Must be between 1 and 255 characters in length.
-    """
-    format: NotRequired[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileFormatArgsDict']]
-    """
-    The specified format for the logs.
+    Specified format for the logs. See `format` Block for details.
     """
 
 @pulumi.input_type
 class VirtualGatewaySpecLoggingAccessLogFileArgs:
     def __init__(__self__, *,
                  path: pulumi.Input[_builtins.str],
-                 format: Optional[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileFormatArgs']] = None):
+                 format: pulumi.Input[Optional['VirtualGatewaySpecLoggingAccessLogFileFormatArgs']] = None):
         """
-        :param pulumi.Input[_builtins.str] path: File path to write access logs to. You can use `/dev/stdout` to send access logs to standard out. Must be between 1 and 255 characters in length.
-        :param pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileFormatArgs'] format: The specified format for the logs.
+        :param pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileFormatArgs'] format: Specified format for the logs. See `format` Block for details.
         """
         pulumi.set(__self__, "path", path)
         if format is not None:
@@ -7273,9 +7191,6 @@ class VirtualGatewaySpecLoggingAccessLogFileArgs:
     @_builtins.property
     @pulumi.getter
     def path(self) -> pulumi.Input[_builtins.str]:
-        """
-        File path to write access logs to. You can use `/dev/stdout` to send access logs to standard out. Must be between 1 and 255 characters in length.
-        """
         return pulumi.get(self, "path")
 
     @path.setter
@@ -7284,35 +7199,35 @@ class VirtualGatewaySpecLoggingAccessLogFileArgs:
 
     @_builtins.property
     @pulumi.getter
-    def format(self) -> Optional[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileFormatArgs']]:
+    def format(self) -> pulumi.Input[Optional['VirtualGatewaySpecLoggingAccessLogFileFormatArgs']]:
         """
-        The specified format for the logs.
+        Specified format for the logs. See `format` Block for details.
         """
         return pulumi.get(self, "format")
 
     @format.setter
-    def format(self, value: Optional[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileFormatArgs']]):
+    def format(self, value: pulumi.Input[Optional['VirtualGatewaySpecLoggingAccessLogFileFormatArgs']]):
         pulumi.set(self, "format", value)
 
 
 class VirtualGatewaySpecLoggingAccessLogFileFormatArgsDict(TypedDict):
-    jsons: NotRequired[pulumi.Input[Sequence[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileFormatJsonArgsDict']]]]
+    jsons: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileFormatJsonArgsDict']]]]]
     """
-    The logging format for JSON.
+    Logging format for JSON. See `json` Block for details.
     """
-    text: NotRequired[pulumi.Input[_builtins.str]]
+    text: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The logging format for text. Must be between 1 and 1000 characters in length.
+    Logging format for text. Must be between 1 and 1000 characters in length.
     """
 
 @pulumi.input_type
 class VirtualGatewaySpecLoggingAccessLogFileFormatArgs:
     def __init__(__self__, *,
-                 jsons: Optional[pulumi.Input[Sequence[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileFormatJsonArgs']]]] = None,
-                 text: Optional[pulumi.Input[_builtins.str]] = None):
+                 jsons: pulumi.Input[Optional[Sequence[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileFormatJsonArgs']]]] = None,
+                 text: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileFormatJsonArgs']]] jsons: The logging format for JSON.
-        :param pulumi.Input[_builtins.str] text: The logging format for text. Must be between 1 and 1000 characters in length.
+        :param pulumi.Input[Sequence[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileFormatJsonArgs']]] jsons: Logging format for JSON. See `json` Block for details.
+        :param pulumi.Input[_builtins.str] text: Logging format for text. Must be between 1 and 1000 characters in length.
         """
         if jsons is not None:
             pulumi.set(__self__, "jsons", jsons)
@@ -7321,37 +7236,37 @@ class VirtualGatewaySpecLoggingAccessLogFileFormatArgs:
 
     @_builtins.property
     @pulumi.getter
-    def jsons(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileFormatJsonArgs']]]]:
+    def jsons(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileFormatJsonArgs']]]]:
         """
-        The logging format for JSON.
+        Logging format for JSON. See `json` Block for details.
         """
         return pulumi.get(self, "jsons")
 
     @jsons.setter
-    def jsons(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileFormatJsonArgs']]]]):
+    def jsons(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['VirtualGatewaySpecLoggingAccessLogFileFormatJsonArgs']]]]):
         pulumi.set(self, "jsons", value)
 
     @_builtins.property
     @pulumi.getter
-    def text(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def text(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The logging format for text. Must be between 1 and 1000 characters in length.
+        Logging format for text. Must be between 1 and 1000 characters in length.
         """
         return pulumi.get(self, "text")
 
     @text.setter
-    def text(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def text(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "text", value)
 
 
 class VirtualGatewaySpecLoggingAccessLogFileFormatJsonArgsDict(TypedDict):
     key: pulumi.Input[_builtins.str]
     """
-    The specified key for the JSON. Must be between 1 and 100 characters in length.
+    Specified key for the JSON. Must be between 1 and 100 characters in length.
     """
     value: pulumi.Input[_builtins.str]
     """
-    The specified value for the JSON. Must be between 1 and 100 characters in length.
+    Specified value for the JSON. Must be between 1 and 100 characters in length.
     """
 
 @pulumi.input_type
@@ -7360,8 +7275,8 @@ class VirtualGatewaySpecLoggingAccessLogFileFormatJsonArgs:
                  key: pulumi.Input[_builtins.str],
                  value: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] key: The specified key for the JSON. Must be between 1 and 100 characters in length.
-        :param pulumi.Input[_builtins.str] value: The specified value for the JSON. Must be between 1 and 100 characters in length.
+        :param pulumi.Input[_builtins.str] key: Specified key for the JSON. Must be between 1 and 100 characters in length.
+        :param pulumi.Input[_builtins.str] value: Specified value for the JSON. Must be between 1 and 100 characters in length.
         """
         pulumi.set(__self__, "key", key)
         pulumi.set(__self__, "value", value)
@@ -7370,7 +7285,7 @@ class VirtualGatewaySpecLoggingAccessLogFileFormatJsonArgs:
     @pulumi.getter
     def key(self) -> pulumi.Input[_builtins.str]:
         """
-        The specified key for the JSON. Must be between 1 and 100 characters in length.
+        Specified key for the JSON. Must be between 1 and 100 characters in length.
         """
         return pulumi.get(self, "key")
 
@@ -7382,7 +7297,7 @@ class VirtualGatewaySpecLoggingAccessLogFileFormatJsonArgs:
     @pulumi.getter
     def value(self) -> pulumi.Input[_builtins.str]:
         """
-        The specified value for the JSON. Must be between 1 and 100 characters in length.
+        Specified value for the JSON. Must be between 1 and 100 characters in length.
         """
         return pulumi.get(self, "value")
 
@@ -7392,41 +7307,41 @@ class VirtualGatewaySpecLoggingAccessLogFileFormatJsonArgs:
 
 
 class VirtualNodeSpecArgsDict(TypedDict):
-    backend_defaults: NotRequired[pulumi.Input['VirtualNodeSpecBackendDefaultsArgsDict']]
+    backend_defaults: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsArgsDict']]]
     """
-    Defaults for backends.
+    Defaults for backends. See `spec.backend_defaults` Block for details.
     """
-    backends: NotRequired[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecBackendArgsDict']]]]
+    backends: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecBackendArgsDict']]]]]
     """
-    Backends to which the virtual node is expected to send outbound traffic.
+    Backends to which the virtual node is expected to send outbound traffic. See `spec.backend` Block for details.
     """
-    listeners: NotRequired[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerArgsDict']]]]
+    listeners: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecListenerArgsDict']]]]]
     """
-    Listeners from which the virtual node is expected to receive inbound traffic.
+    Listeners from which the virtual node is expected to receive inbound traffic. See `spec.listener` Block for details.
     """
-    logging: NotRequired[pulumi.Input['VirtualNodeSpecLoggingArgsDict']]
+    logging: NotRequired[pulumi.Input[Optional['VirtualNodeSpecLoggingArgsDict']]]
     """
-    Inbound and outbound access logging information for the virtual node.
+    Inbound and outbound access logging information for the virtual node. See `spec.logging` Block for details.
     """
-    service_discovery: NotRequired[pulumi.Input['VirtualNodeSpecServiceDiscoveryArgsDict']]
+    service_discovery: NotRequired[pulumi.Input[Optional['VirtualNodeSpecServiceDiscoveryArgsDict']]]
     """
-    Service discovery information for the virtual node.
+    Service discovery information for the virtual node. See `spec.service_discovery` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecArgs:
     def __init__(__self__, *,
-                 backend_defaults: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsArgs']] = None,
-                 backends: Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecBackendArgs']]]] = None,
-                 listeners: Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerArgs']]]] = None,
-                 logging: Optional[pulumi.Input['VirtualNodeSpecLoggingArgs']] = None,
-                 service_discovery: Optional[pulumi.Input['VirtualNodeSpecServiceDiscoveryArgs']] = None):
+                 backend_defaults: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsArgs']] = None,
+                 backends: pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecBackendArgs']]]] = None,
+                 listeners: pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecListenerArgs']]]] = None,
+                 logging: pulumi.Input[Optional['VirtualNodeSpecLoggingArgs']] = None,
+                 service_discovery: pulumi.Input[Optional['VirtualNodeSpecServiceDiscoveryArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecBackendDefaultsArgs'] backend_defaults: Defaults for backends.
-        :param pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecBackendArgs']]] backends: Backends to which the virtual node is expected to send outbound traffic.
-        :param pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerArgs']]] listeners: Listeners from which the virtual node is expected to receive inbound traffic.
-        :param pulumi.Input['VirtualNodeSpecLoggingArgs'] logging: Inbound and outbound access logging information for the virtual node.
-        :param pulumi.Input['VirtualNodeSpecServiceDiscoveryArgs'] service_discovery: Service discovery information for the virtual node.
+        :param pulumi.Input['VirtualNodeSpecBackendDefaultsArgs'] backend_defaults: Defaults for backends. See `spec.backend_defaults` Block for details.
+        :param pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecBackendArgs']]] backends: Backends to which the virtual node is expected to send outbound traffic. See `spec.backend` Block for details.
+        :param pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerArgs']]] listeners: Listeners from which the virtual node is expected to receive inbound traffic. See `spec.listener` Block for details.
+        :param pulumi.Input['VirtualNodeSpecLoggingArgs'] logging: Inbound and outbound access logging information for the virtual node. See `spec.logging` Block for details.
+        :param pulumi.Input['VirtualNodeSpecServiceDiscoveryArgs'] service_discovery: Service discovery information for the virtual node. See `spec.service_discovery` Block for details.
         """
         if backend_defaults is not None:
             pulumi.set(__self__, "backend_defaults", backend_defaults)
@@ -7441,69 +7356,69 @@ class VirtualNodeSpecArgs:
 
     @_builtins.property
     @pulumi.getter(name="backendDefaults")
-    def backend_defaults(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsArgs']]:
+    def backend_defaults(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsArgs']]:
         """
-        Defaults for backends.
+        Defaults for backends. See `spec.backend_defaults` Block for details.
         """
         return pulumi.get(self, "backend_defaults")
 
     @backend_defaults.setter
-    def backend_defaults(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsArgs']]):
+    def backend_defaults(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsArgs']]):
         pulumi.set(self, "backend_defaults", value)
 
     @_builtins.property
     @pulumi.getter
-    def backends(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecBackendArgs']]]]:
+    def backends(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecBackendArgs']]]]:
         """
-        Backends to which the virtual node is expected to send outbound traffic.
+        Backends to which the virtual node is expected to send outbound traffic. See `spec.backend` Block for details.
         """
         return pulumi.get(self, "backends")
 
     @backends.setter
-    def backends(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecBackendArgs']]]]):
+    def backends(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecBackendArgs']]]]):
         pulumi.set(self, "backends", value)
 
     @_builtins.property
     @pulumi.getter
-    def listeners(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerArgs']]]]:
+    def listeners(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecListenerArgs']]]]:
         """
-        Listeners from which the virtual node is expected to receive inbound traffic.
+        Listeners from which the virtual node is expected to receive inbound traffic. See `spec.listener` Block for details.
         """
         return pulumi.get(self, "listeners")
 
     @listeners.setter
-    def listeners(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerArgs']]]]):
+    def listeners(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecListenerArgs']]]]):
         pulumi.set(self, "listeners", value)
 
     @_builtins.property
     @pulumi.getter
-    def logging(self) -> Optional[pulumi.Input['VirtualNodeSpecLoggingArgs']]:
+    def logging(self) -> pulumi.Input[Optional['VirtualNodeSpecLoggingArgs']]:
         """
-        Inbound and outbound access logging information for the virtual node.
+        Inbound and outbound access logging information for the virtual node. See `spec.logging` Block for details.
         """
         return pulumi.get(self, "logging")
 
     @logging.setter
-    def logging(self, value: Optional[pulumi.Input['VirtualNodeSpecLoggingArgs']]):
+    def logging(self, value: pulumi.Input[Optional['VirtualNodeSpecLoggingArgs']]):
         pulumi.set(self, "logging", value)
 
     @_builtins.property
     @pulumi.getter(name="serviceDiscovery")
-    def service_discovery(self) -> Optional[pulumi.Input['VirtualNodeSpecServiceDiscoveryArgs']]:
+    def service_discovery(self) -> pulumi.Input[Optional['VirtualNodeSpecServiceDiscoveryArgs']]:
         """
-        Service discovery information for the virtual node.
+        Service discovery information for the virtual node. See `spec.service_discovery` Block for details.
         """
         return pulumi.get(self, "service_discovery")
 
     @service_discovery.setter
-    def service_discovery(self, value: Optional[pulumi.Input['VirtualNodeSpecServiceDiscoveryArgs']]):
+    def service_discovery(self, value: pulumi.Input[Optional['VirtualNodeSpecServiceDiscoveryArgs']]):
         pulumi.set(self, "service_discovery", value)
 
 
 class VirtualNodeSpecBackendArgsDict(TypedDict):
     virtual_service: pulumi.Input['VirtualNodeSpecBackendVirtualServiceArgsDict']
     """
-    Virtual service to use as a backend for a virtual node.
+    Virtual service to use as a backend for a virtual node. See `spec.backend.virtual_service` Block for details.
     """
 
 @pulumi.input_type
@@ -7511,7 +7426,7 @@ class VirtualNodeSpecBackendArgs:
     def __init__(__self__, *,
                  virtual_service: pulumi.Input['VirtualNodeSpecBackendVirtualServiceArgs']):
         """
-        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceArgs'] virtual_service: Virtual service to use as a backend for a virtual node.
+        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceArgs'] virtual_service: Virtual service to use as a backend for a virtual node. See `spec.backend.virtual_service` Block for details.
         """
         pulumi.set(__self__, "virtual_service", virtual_service)
 
@@ -7519,7 +7434,7 @@ class VirtualNodeSpecBackendArgs:
     @pulumi.getter(name="virtualService")
     def virtual_service(self) -> pulumi.Input['VirtualNodeSpecBackendVirtualServiceArgs']:
         """
-        Virtual service to use as a backend for a virtual node.
+        Virtual service to use as a backend for a virtual node. See `spec.backend.virtual_service` Block for details.
         """
         return pulumi.get(self, "virtual_service")
 
@@ -7529,77 +7444,77 @@ class VirtualNodeSpecBackendArgs:
 
 
 class VirtualNodeSpecBackendDefaultsArgsDict(TypedDict):
-    client_policy: NotRequired[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyArgsDict']]
+    client_policy: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyArgsDict']]]
     """
-    Default client policy for virtual service backends. See above for details.
+    Default client policy for virtual service backends. See `spec.backend_defaults.client_policy` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecBackendDefaultsArgs:
     def __init__(__self__, *,
-                 client_policy: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyArgs']] = None):
+                 client_policy: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyArgs'] client_policy: Default client policy for virtual service backends. See above for details.
+        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyArgs'] client_policy: Default client policy for virtual service backends. See `spec.backend_defaults.client_policy` Block for details.
         """
         if client_policy is not None:
             pulumi.set(__self__, "client_policy", client_policy)
 
     @_builtins.property
     @pulumi.getter(name="clientPolicy")
-    def client_policy(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyArgs']]:
+    def client_policy(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyArgs']]:
         """
-        Default client policy for virtual service backends. See above for details.
+        Default client policy for virtual service backends. See `spec.backend_defaults.client_policy` Block for details.
         """
         return pulumi.get(self, "client_policy")
 
     @client_policy.setter
-    def client_policy(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyArgs']]):
+    def client_policy(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyArgs']]):
         pulumi.set(self, "client_policy", value)
 
 
 class VirtualNodeSpecBackendDefaultsClientPolicyArgsDict(TypedDict):
-    tls: NotRequired[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsArgsDict']]
+    tls: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsArgsDict']]]
     """
-    Transport Layer Security (TLS) client policy.
+    TLS properties for the listener. See `spec.listener.tls` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecBackendDefaultsClientPolicyArgs:
     def __init__(__self__, *,
-                 tls: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsArgs']] = None):
+                 tls: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsArgs'] tls: Transport Layer Security (TLS) client policy.
+        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsArgs'] tls: TLS properties for the listener. See `spec.listener.tls` Block for details.
         """
         if tls is not None:
             pulumi.set(__self__, "tls", tls)
 
     @_builtins.property
     @pulumi.getter
-    def tls(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsArgs']]:
+    def tls(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsArgs']]:
         """
-        Transport Layer Security (TLS) client policy.
+        TLS properties for the listener. See `spec.listener.tls` Block for details.
         """
         return pulumi.get(self, "tls")
 
     @tls.setter
-    def tls(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsArgs']]):
+    def tls(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsArgs']]):
         pulumi.set(self, "tls", value)
 
 
 class VirtualNodeSpecBackendDefaultsClientPolicyTlsArgsDict(TypedDict):
     validation: pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationArgsDict']
     """
-    Listener's Transport Layer Security (TLS) validation context.
+    Listener's TLS validation context. See `spec.listener.tls.validation` Block for details.
     """
-    certificate: NotRequired[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateArgsDict']]
+    certificate: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateArgsDict']]]
     """
-    Listener's TLS certificate.
+    Listener's TLS certificate. See `spec.listener.tls.certificate` Block for details.
     """
-    enforce: NotRequired[pulumi.Input[_builtins.bool]]
+    enforce: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether the policy is enforced. Default is `true`.
     """
-    ports: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]
+    ports: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]]
     """
     One or more ports that the policy is enforced for.
     """
@@ -7608,12 +7523,12 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsArgsDict(TypedDict):
 class VirtualNodeSpecBackendDefaultsClientPolicyTlsArgs:
     def __init__(__self__, *,
                  validation: pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationArgs'],
-                 certificate: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateArgs']] = None,
-                 enforce: Optional[pulumi.Input[_builtins.bool]] = None,
-                 ports: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]] = None):
+                 certificate: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateArgs']] = None,
+                 enforce: pulumi.Input[Optional[_builtins.bool]] = None,
+                 ports: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationArgs'] validation: Listener's Transport Layer Security (TLS) validation context.
-        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateArgs'] certificate: Listener's TLS certificate.
+        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationArgs'] validation: Listener's TLS validation context. See `spec.listener.tls.validation` Block for details.
+        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateArgs'] certificate: Listener's TLS certificate. See `spec.listener.tls.certificate` Block for details.
         :param pulumi.Input[_builtins.bool] enforce: Whether the policy is enforced. Default is `true`.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.int]]] ports: One or more ports that the policy is enforced for.
         """
@@ -7629,7 +7544,7 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsArgs:
     @pulumi.getter
     def validation(self) -> pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationArgs']:
         """
-        Listener's Transport Layer Security (TLS) validation context.
+        Listener's TLS validation context. See `spec.listener.tls.validation` Block for details.
         """
         return pulumi.get(self, "validation")
 
@@ -7639,59 +7554,59 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def certificate(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateArgs']]:
+    def certificate(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateArgs']]:
         """
-        Listener's TLS certificate.
+        Listener's TLS certificate. See `spec.listener.tls.certificate` Block for details.
         """
         return pulumi.get(self, "certificate")
 
     @certificate.setter
-    def certificate(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateArgs']]):
+    def certificate(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateArgs']]):
         pulumi.set(self, "certificate", value)
 
     @_builtins.property
     @pulumi.getter
-    def enforce(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enforce(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the policy is enforced. Default is `true`.
         """
         return pulumi.get(self, "enforce")
 
     @enforce.setter
-    def enforce(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enforce(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enforce", value)
 
     @_builtins.property
     @pulumi.getter
-    def ports(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]:
+    def ports(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]:
         """
         One or more ports that the policy is enforced for.
         """
         return pulumi.get(self, "ports")
 
     @ports.setter
-    def ports(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]):
+    def ports(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]):
         pulumi.set(self, "ports", value)
 
 
 class VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateArgsDict(TypedDict):
-    file: NotRequired[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateFileArgsDict']]
+    file: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateFileArgsDict']]]
     """
-    Local file certificate.
+    File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
     """
-    sds: NotRequired[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateSdsArgsDict']]
+    sds: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateSdsArgsDict']]]
     """
-    A [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+    TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateArgs:
     def __init__(__self__, *,
-                 file: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateFileArgs']] = None,
-                 sds: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateSdsArgs']] = None):
+                 file: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateFileArgs']] = None,
+                 sds: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateSdsArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateFileArgs'] file: Local file certificate.
-        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateSdsArgs'] sds: A [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateFileArgs'] file: File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
+        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateSdsArgs'] sds: TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
         """
         if file is not None:
             pulumi.set(__self__, "file", file)
@@ -7700,26 +7615,26 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateArgs:
 
     @_builtins.property
     @pulumi.getter
-    def file(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateFileArgs']]:
+    def file(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateFileArgs']]:
         """
-        Local file certificate.
+        File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
         """
         return pulumi.get(self, "file")
 
     @file.setter
-    def file(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateFileArgs']]):
+    def file(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateFileArgs']]):
         pulumi.set(self, "file", value)
 
     @_builtins.property
     @pulumi.getter
-    def sds(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateSdsArgs']]:
+    def sds(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateSdsArgs']]:
         """
-        A [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+        TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
         """
         return pulumi.get(self, "sds")
 
     @sds.setter
-    def sds(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateSdsArgs']]):
+    def sds(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateSdsArgs']]):
         pulumi.set(self, "sds", value)
 
 
@@ -7773,7 +7688,7 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateFileArgs:
 class VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateSdsArgsDict(TypedDict):
     secret_name: pulumi.Input[_builtins.str]
     """
-    Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+    Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
     """
 
 @pulumi.input_type
@@ -7781,7 +7696,7 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateSdsArgs:
     def __init__(__self__, *,
                  secret_name: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
         """
         pulumi.set(__self__, "secret_name", secret_name)
 
@@ -7789,7 +7704,7 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateSdsArgs:
     @pulumi.getter(name="secretName")
     def secret_name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
         """
         return pulumi.get(self, "secret_name")
 
@@ -7801,21 +7716,21 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsCertificateSdsArgs:
 class VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationArgsDict(TypedDict):
     trust: pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustArgsDict']
     """
-    TLS validation context trust.
+    TLS validation context trust. See `spec.listener.tls.validation.trust` Block for details.
     """
-    subject_alternative_names: NotRequired[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgsDict']]
+    subject_alternative_names: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgsDict']]]
     """
-    SANs for a TLS validation context.
+    SANs for a TLS validation context. See `spec.listener.tls.validation.subject_alternative_names` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationArgs:
     def __init__(__self__, *,
                  trust: pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustArgs'],
-                 subject_alternative_names: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgs']] = None):
+                 subject_alternative_names: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustArgs'] trust: TLS validation context trust.
-        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgs'] subject_alternative_names: SANs for a TLS validation context.
+        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustArgs'] trust: TLS validation context trust. See `spec.listener.tls.validation.trust` Block for details.
+        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgs'] subject_alternative_names: SANs for a TLS validation context. See `spec.listener.tls.validation.subject_alternative_names` Block for details.
         """
         pulumi.set(__self__, "trust", trust)
         if subject_alternative_names is not None:
@@ -7825,7 +7740,7 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationArgs:
     @pulumi.getter
     def trust(self) -> pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustArgs']:
         """
-        TLS validation context trust.
+        TLS validation context trust. See `spec.listener.tls.validation.trust` Block for details.
         """
         return pulumi.get(self, "trust")
 
@@ -7835,21 +7750,21 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationArgs:
 
     @_builtins.property
     @pulumi.getter(name="subjectAlternativeNames")
-    def subject_alternative_names(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgs']]:
+    def subject_alternative_names(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgs']]:
         """
-        SANs for a TLS validation context.
+        SANs for a TLS validation context. See `spec.listener.tls.validation.subject_alternative_names` Block for details.
         """
         return pulumi.get(self, "subject_alternative_names")
 
     @subject_alternative_names.setter
-    def subject_alternative_names(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgs']]):
+    def subject_alternative_names(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgs']]):
         pulumi.set(self, "subject_alternative_names", value)
 
 
 class VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesArgsDict(TypedDict):
     match: pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesMatchArgsDict']
     """
-    Criteria for determining a SAN's match.
+    Criteria for determining a SAN's match. See `spec.listener.tls.validation.subject_alternative_names.match` Block for details.
     """
 
 @pulumi.input_type
@@ -7857,7 +7772,7 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeN
     def __init__(__self__, *,
                  match: pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesMatchArgs']):
         """
-        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesMatchArgs'] match: Criteria for determining a SAN's match.
+        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesMatchArgs'] match: Criteria for determining a SAN's match. See `spec.listener.tls.validation.subject_alternative_names.match` Block for details.
         """
         pulumi.set(__self__, "match", match)
 
@@ -7865,7 +7780,7 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeN
     @pulumi.getter
     def match(self) -> pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeNamesMatchArgs']:
         """
-        Criteria for determining a SAN's match.
+        Criteria for determining a SAN's match. See `spec.listener.tls.validation.subject_alternative_names.match` Block for details.
         """
         return pulumi.get(self, "match")
 
@@ -7903,29 +7818,29 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationSubjectAlternativeN
 
 
 class VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustArgsDict(TypedDict):
-    acm: NotRequired[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgsDict']]
+    acm: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgsDict']]]
     """
-    TLS validation context trust for an AWS Certificate Manager (ACM) certificate.
+    AWS Certificate Manager (ACM) certificate. See `spec.listener.tls.certificate.acm` Block for details.
     """
-    file: NotRequired[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustFileArgsDict']]
+    file: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustFileArgsDict']]]
     """
-    TLS validation context trust for a local file certificate.
+    File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
     """
-    sds: NotRequired[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgsDict']]
+    sds: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgsDict']]]
     """
-    TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+    TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustArgs:
     def __init__(__self__, *,
-                 acm: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgs']] = None,
-                 file: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs']] = None,
-                 sds: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs']] = None):
+                 acm: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgs']] = None,
+                 file: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs']] = None,
+                 sds: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgs'] acm: TLS validation context trust for an AWS Certificate Manager (ACM) certificate.
-        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs'] file: TLS validation context trust for a local file certificate.
-        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs'] sds: TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgs'] acm: AWS Certificate Manager (ACM) certificate. See `spec.listener.tls.certificate.acm` Block for details.
+        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs'] file: File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
+        :param pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs'] sds: TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
         """
         if acm is not None:
             pulumi.set(__self__, "acm", acm)
@@ -7936,38 +7851,38 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustArgs:
 
     @_builtins.property
     @pulumi.getter
-    def acm(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgs']]:
+    def acm(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgs']]:
         """
-        TLS validation context trust for an AWS Certificate Manager (ACM) certificate.
+        AWS Certificate Manager (ACM) certificate. See `spec.listener.tls.certificate.acm` Block for details.
         """
         return pulumi.get(self, "acm")
 
     @acm.setter
-    def acm(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgs']]):
+    def acm(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustAcmArgs']]):
         pulumi.set(self, "acm", value)
 
     @_builtins.property
     @pulumi.getter
-    def file(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs']]:
+    def file(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs']]:
         """
-        TLS validation context trust for a local file certificate.
+        File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
         """
         return pulumi.get(self, "file")
 
     @file.setter
-    def file(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs']]):
+    def file(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs']]):
         pulumi.set(self, "file", value)
 
     @_builtins.property
     @pulumi.getter
-    def sds(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs']]:
+    def sds(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs']]:
         """
-        TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+        TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
         """
         return pulumi.get(self, "sds")
 
     @sds.setter
-    def sds(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs']]):
+    def sds(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs']]):
         pulumi.set(self, "sds", value)
 
 
@@ -8030,7 +7945,7 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustFileArgs:
 class VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgsDict(TypedDict):
     secret_name: pulumi.Input[_builtins.str]
     """
-    Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+    Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
     """
 
 @pulumi.input_type
@@ -8038,7 +7953,7 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs:
     def __init__(__self__, *,
                  secret_name: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
         """
         pulumi.set(__self__, "secret_name", secret_name)
 
@@ -8046,7 +7961,7 @@ class VirtualNodeSpecBackendDefaultsClientPolicyTlsValidationTrustSdsArgs:
     @pulumi.getter(name="secretName")
     def secret_name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
         """
         return pulumi.get(self, "secret_name")
 
@@ -8060,19 +7975,19 @@ class VirtualNodeSpecBackendVirtualServiceArgsDict(TypedDict):
     """
     Name of the virtual service that is acting as a virtual node backend. Must be between 1 and 255 characters in length.
     """
-    client_policy: NotRequired[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyArgsDict']]
+    client_policy: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyArgsDict']]]
     """
-    Client policy for the backend.
+    Default client policy for virtual service backends. See `spec.backend_defaults.client_policy` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecBackendVirtualServiceArgs:
     def __init__(__self__, *,
                  virtual_service_name: pulumi.Input[_builtins.str],
-                 client_policy: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyArgs']] = None):
+                 client_policy: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyArgs']] = None):
         """
         :param pulumi.Input[_builtins.str] virtual_service_name: Name of the virtual service that is acting as a virtual node backend. Must be between 1 and 255 characters in length.
-        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyArgs'] client_policy: Client policy for the backend.
+        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyArgs'] client_policy: Default client policy for virtual service backends. See `spec.backend_defaults.client_policy` Block for details.
         """
         pulumi.set(__self__, "virtual_service_name", virtual_service_name)
         if client_policy is not None:
@@ -8092,60 +8007,60 @@ class VirtualNodeSpecBackendVirtualServiceArgs:
 
     @_builtins.property
     @pulumi.getter(name="clientPolicy")
-    def client_policy(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyArgs']]:
+    def client_policy(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyArgs']]:
         """
-        Client policy for the backend.
+        Default client policy for virtual service backends. See `spec.backend_defaults.client_policy` Block for details.
         """
         return pulumi.get(self, "client_policy")
 
     @client_policy.setter
-    def client_policy(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyArgs']]):
+    def client_policy(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyArgs']]):
         pulumi.set(self, "client_policy", value)
 
 
 class VirtualNodeSpecBackendVirtualServiceClientPolicyArgsDict(TypedDict):
-    tls: NotRequired[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsArgsDict']]
+    tls: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsArgsDict']]]
     """
-    Transport Layer Security (TLS) client policy.
+    TLS properties for the listener. See `spec.listener.tls` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecBackendVirtualServiceClientPolicyArgs:
     def __init__(__self__, *,
-                 tls: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsArgs']] = None):
+                 tls: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsArgs'] tls: Transport Layer Security (TLS) client policy.
+        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsArgs'] tls: TLS properties for the listener. See `spec.listener.tls` Block for details.
         """
         if tls is not None:
             pulumi.set(__self__, "tls", tls)
 
     @_builtins.property
     @pulumi.getter
-    def tls(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsArgs']]:
+    def tls(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsArgs']]:
         """
-        Transport Layer Security (TLS) client policy.
+        TLS properties for the listener. See `spec.listener.tls` Block for details.
         """
         return pulumi.get(self, "tls")
 
     @tls.setter
-    def tls(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsArgs']]):
+    def tls(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsArgs']]):
         pulumi.set(self, "tls", value)
 
 
 class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsArgsDict(TypedDict):
     validation: pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationArgsDict']
     """
-    Listener's Transport Layer Security (TLS) validation context.
+    Listener's TLS validation context. See `spec.listener.tls.validation` Block for details.
     """
-    certificate: NotRequired[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateArgsDict']]
+    certificate: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateArgsDict']]]
     """
-    Listener's TLS certificate.
+    Listener's TLS certificate. See `spec.listener.tls.certificate` Block for details.
     """
-    enforce: NotRequired[pulumi.Input[_builtins.bool]]
+    enforce: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether the policy is enforced. Default is `true`.
     """
-    ports: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]
+    ports: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]]
     """
     One or more ports that the policy is enforced for.
     """
@@ -8154,12 +8069,12 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsArgsDict(TypedDict):
 class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsArgs:
     def __init__(__self__, *,
                  validation: pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationArgs'],
-                 certificate: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateArgs']] = None,
-                 enforce: Optional[pulumi.Input[_builtins.bool]] = None,
-                 ports: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]] = None):
+                 certificate: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateArgs']] = None,
+                 enforce: pulumi.Input[Optional[_builtins.bool]] = None,
+                 ports: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationArgs'] validation: Listener's Transport Layer Security (TLS) validation context.
-        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateArgs'] certificate: Listener's TLS certificate.
+        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationArgs'] validation: Listener's TLS validation context. See `spec.listener.tls.validation` Block for details.
+        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateArgs'] certificate: Listener's TLS certificate. See `spec.listener.tls.certificate` Block for details.
         :param pulumi.Input[_builtins.bool] enforce: Whether the policy is enforced. Default is `true`.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.int]]] ports: One or more ports that the policy is enforced for.
         """
@@ -8175,7 +8090,7 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsArgs:
     @pulumi.getter
     def validation(self) -> pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationArgs']:
         """
-        Listener's Transport Layer Security (TLS) validation context.
+        Listener's TLS validation context. See `spec.listener.tls.validation` Block for details.
         """
         return pulumi.get(self, "validation")
 
@@ -8185,59 +8100,59 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def certificate(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateArgs']]:
+    def certificate(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateArgs']]:
         """
-        Listener's TLS certificate.
+        Listener's TLS certificate. See `spec.listener.tls.certificate` Block for details.
         """
         return pulumi.get(self, "certificate")
 
     @certificate.setter
-    def certificate(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateArgs']]):
+    def certificate(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateArgs']]):
         pulumi.set(self, "certificate", value)
 
     @_builtins.property
     @pulumi.getter
-    def enforce(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enforce(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the policy is enforced. Default is `true`.
         """
         return pulumi.get(self, "enforce")
 
     @enforce.setter
-    def enforce(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enforce(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enforce", value)
 
     @_builtins.property
     @pulumi.getter
-    def ports(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]:
+    def ports(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]:
         """
         One or more ports that the policy is enforced for.
         """
         return pulumi.get(self, "ports")
 
     @ports.setter
-    def ports(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.int]]]]):
+    def ports(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]):
         pulumi.set(self, "ports", value)
 
 
 class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateArgsDict(TypedDict):
-    file: NotRequired[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateFileArgsDict']]
+    file: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateFileArgsDict']]]
     """
-    Local file certificate.
+    File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
     """
-    sds: NotRequired[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateSdsArgsDict']]
+    sds: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateSdsArgsDict']]]
     """
-    A [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+    TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateArgs:
     def __init__(__self__, *,
-                 file: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateFileArgs']] = None,
-                 sds: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateSdsArgs']] = None):
+                 file: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateFileArgs']] = None,
+                 sds: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateSdsArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateFileArgs'] file: Local file certificate.
-        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateSdsArgs'] sds: A [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateFileArgs'] file: File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
+        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateSdsArgs'] sds: TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
         """
         if file is not None:
             pulumi.set(__self__, "file", file)
@@ -8246,26 +8161,26 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateArgs:
 
     @_builtins.property
     @pulumi.getter
-    def file(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateFileArgs']]:
+    def file(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateFileArgs']]:
         """
-        Local file certificate.
+        File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
         """
         return pulumi.get(self, "file")
 
     @file.setter
-    def file(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateFileArgs']]):
+    def file(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateFileArgs']]):
         pulumi.set(self, "file", value)
 
     @_builtins.property
     @pulumi.getter
-    def sds(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateSdsArgs']]:
+    def sds(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateSdsArgs']]:
         """
-        A [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+        TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
         """
         return pulumi.get(self, "sds")
 
     @sds.setter
-    def sds(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateSdsArgs']]):
+    def sds(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateSdsArgs']]):
         pulumi.set(self, "sds", value)
 
 
@@ -8319,7 +8234,7 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateFileArgs:
 class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateSdsArgsDict(TypedDict):
     secret_name: pulumi.Input[_builtins.str]
     """
-    Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+    Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
     """
 
 @pulumi.input_type
@@ -8327,7 +8242,7 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateSdsArgs:
     def __init__(__self__, *,
                  secret_name: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
         """
         pulumi.set(__self__, "secret_name", secret_name)
 
@@ -8335,7 +8250,7 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateSdsArgs:
     @pulumi.getter(name="secretName")
     def secret_name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
         """
         return pulumi.get(self, "secret_name")
 
@@ -8347,21 +8262,21 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsCertificateSdsArgs:
 class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationArgsDict(TypedDict):
     trust: pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustArgsDict']
     """
-    TLS validation context trust.
+    TLS validation context trust. See `spec.listener.tls.validation.trust` Block for details.
     """
-    subject_alternative_names: NotRequired[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAlternativeNamesArgsDict']]
+    subject_alternative_names: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAlternativeNamesArgsDict']]]
     """
-    SANs for a TLS validation context.
+    SANs for a TLS validation context. See `spec.listener.tls.validation.subject_alternative_names` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationArgs:
     def __init__(__self__, *,
                  trust: pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustArgs'],
-                 subject_alternative_names: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAlternativeNamesArgs']] = None):
+                 subject_alternative_names: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAlternativeNamesArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustArgs'] trust: TLS validation context trust.
-        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAlternativeNamesArgs'] subject_alternative_names: SANs for a TLS validation context.
+        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustArgs'] trust: TLS validation context trust. See `spec.listener.tls.validation.trust` Block for details.
+        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAlternativeNamesArgs'] subject_alternative_names: SANs for a TLS validation context. See `spec.listener.tls.validation.subject_alternative_names` Block for details.
         """
         pulumi.set(__self__, "trust", trust)
         if subject_alternative_names is not None:
@@ -8371,7 +8286,7 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationArgs:
     @pulumi.getter
     def trust(self) -> pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustArgs']:
         """
-        TLS validation context trust.
+        TLS validation context trust. See `spec.listener.tls.validation.trust` Block for details.
         """
         return pulumi.get(self, "trust")
 
@@ -8381,21 +8296,21 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationArgs:
 
     @_builtins.property
     @pulumi.getter(name="subjectAlternativeNames")
-    def subject_alternative_names(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAlternativeNamesArgs']]:
+    def subject_alternative_names(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAlternativeNamesArgs']]:
         """
-        SANs for a TLS validation context.
+        SANs for a TLS validation context. See `spec.listener.tls.validation.subject_alternative_names` Block for details.
         """
         return pulumi.get(self, "subject_alternative_names")
 
     @subject_alternative_names.setter
-    def subject_alternative_names(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAlternativeNamesArgs']]):
+    def subject_alternative_names(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAlternativeNamesArgs']]):
         pulumi.set(self, "subject_alternative_names", value)
 
 
 class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAlternativeNamesArgsDict(TypedDict):
     match: pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAlternativeNamesMatchArgsDict']
     """
-    Criteria for determining a SAN's match.
+    Criteria for determining a SAN's match. See `spec.listener.tls.validation.subject_alternative_names.match` Block for details.
     """
 
 @pulumi.input_type
@@ -8403,7 +8318,7 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAltern
     def __init__(__self__, *,
                  match: pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAlternativeNamesMatchArgs']):
         """
-        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAlternativeNamesMatchArgs'] match: Criteria for determining a SAN's match.
+        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAlternativeNamesMatchArgs'] match: Criteria for determining a SAN's match. See `spec.listener.tls.validation.subject_alternative_names.match` Block for details.
         """
         pulumi.set(__self__, "match", match)
 
@@ -8411,7 +8326,7 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAltern
     @pulumi.getter
     def match(self) -> pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAlternativeNamesMatchArgs']:
         """
-        Criteria for determining a SAN's match.
+        Criteria for determining a SAN's match. See `spec.listener.tls.validation.subject_alternative_names.match` Block for details.
         """
         return pulumi.get(self, "match")
 
@@ -8449,29 +8364,29 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationSubjectAltern
 
 
 class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustArgsDict(TypedDict):
-    acm: NotRequired[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustAcmArgsDict']]
+    acm: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustAcmArgsDict']]]
     """
-    TLS validation context trust for an AWS Certificate Manager (ACM) certificate.
+    AWS Certificate Manager (ACM) certificate. See `spec.listener.tls.certificate.acm` Block for details.
     """
-    file: NotRequired[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustFileArgsDict']]
+    file: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustFileArgsDict']]]
     """
-    TLS validation context trust for a local file certificate.
+    File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
     """
-    sds: NotRequired[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustSdsArgsDict']]
+    sds: NotRequired[pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustSdsArgsDict']]]
     """
-    TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+    TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustArgs:
     def __init__(__self__, *,
-                 acm: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustAcmArgs']] = None,
-                 file: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustFileArgs']] = None,
-                 sds: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustSdsArgs']] = None):
+                 acm: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustAcmArgs']] = None,
+                 file: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustFileArgs']] = None,
+                 sds: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustSdsArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustAcmArgs'] acm: TLS validation context trust for an AWS Certificate Manager (ACM) certificate.
-        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustFileArgs'] file: TLS validation context trust for a local file certificate.
-        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustSdsArgs'] sds: TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustAcmArgs'] acm: AWS Certificate Manager (ACM) certificate. See `spec.listener.tls.certificate.acm` Block for details.
+        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustFileArgs'] file: File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
+        :param pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustSdsArgs'] sds: TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
         """
         if acm is not None:
             pulumi.set(__self__, "acm", acm)
@@ -8482,38 +8397,38 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustArgs:
 
     @_builtins.property
     @pulumi.getter
-    def acm(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustAcmArgs']]:
+    def acm(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustAcmArgs']]:
         """
-        TLS validation context trust for an AWS Certificate Manager (ACM) certificate.
+        AWS Certificate Manager (ACM) certificate. See `spec.listener.tls.certificate.acm` Block for details.
         """
         return pulumi.get(self, "acm")
 
     @acm.setter
-    def acm(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustAcmArgs']]):
+    def acm(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustAcmArgs']]):
         pulumi.set(self, "acm", value)
 
     @_builtins.property
     @pulumi.getter
-    def file(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustFileArgs']]:
+    def file(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustFileArgs']]:
         """
-        TLS validation context trust for a local file certificate.
+        File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
         """
         return pulumi.get(self, "file")
 
     @file.setter
-    def file(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustFileArgs']]):
+    def file(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustFileArgs']]):
         pulumi.set(self, "file", value)
 
     @_builtins.property
     @pulumi.getter
-    def sds(self) -> Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustSdsArgs']]:
+    def sds(self) -> pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustSdsArgs']]:
         """
-        TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+        TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
         """
         return pulumi.get(self, "sds")
 
     @sds.setter
-    def sds(self, value: Optional[pulumi.Input['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustSdsArgs']]):
+    def sds(self, value: pulumi.Input[Optional['VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustSdsArgs']]):
         pulumi.set(self, "sds", value)
 
 
@@ -8576,7 +8491,7 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustFileArgs
 class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustSdsArgsDict(TypedDict):
     secret_name: pulumi.Input[_builtins.str]
     """
-    Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+    Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
     """
 
 @pulumi.input_type
@@ -8584,7 +8499,7 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustSdsArgs:
     def __init__(__self__, *,
                  secret_name: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
         """
         pulumi.set(__self__, "secret_name", secret_name)
 
@@ -8592,7 +8507,7 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustSdsArgs:
     @pulumi.getter(name="secretName")
     def secret_name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
         """
         return pulumi.get(self, "secret_name")
 
@@ -8604,45 +8519,45 @@ class VirtualNodeSpecBackendVirtualServiceClientPolicyTlsValidationTrustSdsArgs:
 class VirtualNodeSpecListenerArgsDict(TypedDict):
     port_mapping: pulumi.Input['VirtualNodeSpecListenerPortMappingArgsDict']
     """
-    Port mapping information for the listener.
+    Port mapping information for the listener. See `spec.listener.port_mapping` Block for details.
     """
-    connection_pool: NotRequired[pulumi.Input['VirtualNodeSpecListenerConnectionPoolArgsDict']]
+    connection_pool: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerConnectionPoolArgsDict']]]
     """
-    Connection pool information for the listener.
+    Connection pool information for the listener. See `spec.listener.connection_pool` Block for details.
     """
-    health_check: NotRequired[pulumi.Input['VirtualNodeSpecListenerHealthCheckArgsDict']]
+    health_check: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerHealthCheckArgsDict']]]
     """
-    Health check information for the listener.
+    Health check information for the listener. See `spec.listener.health_check` Block for details.
     """
-    outlier_detection: NotRequired[pulumi.Input['VirtualNodeSpecListenerOutlierDetectionArgsDict']]
+    outlier_detection: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerOutlierDetectionArgsDict']]]
     """
-    Outlier detection information for the listener.
+    Outlier detection information for the listener. See `spec.listener.outlier_detection` Block for details.
     """
-    timeout: NotRequired[pulumi.Input['VirtualNodeSpecListenerTimeoutArgsDict']]
+    timeout: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutArgsDict']]]
     """
-    Timeouts for different protocols.
+    Timeouts for different protocols. See `spec.listener.timeout` Block for details.
     """
-    tls: NotRequired[pulumi.Input['VirtualNodeSpecListenerTlsArgsDict']]
+    tls: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTlsArgsDict']]]
     """
-    Transport Layer Security (TLS) properties for the listener
+    TLS properties for the listener. See `spec.listener.tls` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecListenerArgs:
     def __init__(__self__, *,
                  port_mapping: pulumi.Input['VirtualNodeSpecListenerPortMappingArgs'],
-                 connection_pool: Optional[pulumi.Input['VirtualNodeSpecListenerConnectionPoolArgs']] = None,
-                 health_check: Optional[pulumi.Input['VirtualNodeSpecListenerHealthCheckArgs']] = None,
-                 outlier_detection: Optional[pulumi.Input['VirtualNodeSpecListenerOutlierDetectionArgs']] = None,
-                 timeout: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutArgs']] = None,
-                 tls: Optional[pulumi.Input['VirtualNodeSpecListenerTlsArgs']] = None):
+                 connection_pool: pulumi.Input[Optional['VirtualNodeSpecListenerConnectionPoolArgs']] = None,
+                 health_check: pulumi.Input[Optional['VirtualNodeSpecListenerHealthCheckArgs']] = None,
+                 outlier_detection: pulumi.Input[Optional['VirtualNodeSpecListenerOutlierDetectionArgs']] = None,
+                 timeout: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutArgs']] = None,
+                 tls: pulumi.Input[Optional['VirtualNodeSpecListenerTlsArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecListenerPortMappingArgs'] port_mapping: Port mapping information for the listener.
-        :param pulumi.Input['VirtualNodeSpecListenerConnectionPoolArgs'] connection_pool: Connection pool information for the listener.
-        :param pulumi.Input['VirtualNodeSpecListenerHealthCheckArgs'] health_check: Health check information for the listener.
-        :param pulumi.Input['VirtualNodeSpecListenerOutlierDetectionArgs'] outlier_detection: Outlier detection information for the listener.
-        :param pulumi.Input['VirtualNodeSpecListenerTimeoutArgs'] timeout: Timeouts for different protocols.
-        :param pulumi.Input['VirtualNodeSpecListenerTlsArgs'] tls: Transport Layer Security (TLS) properties for the listener
+        :param pulumi.Input['VirtualNodeSpecListenerPortMappingArgs'] port_mapping: Port mapping information for the listener. See `spec.listener.port_mapping` Block for details.
+        :param pulumi.Input['VirtualNodeSpecListenerConnectionPoolArgs'] connection_pool: Connection pool information for the listener. See `spec.listener.connection_pool` Block for details.
+        :param pulumi.Input['VirtualNodeSpecListenerHealthCheckArgs'] health_check: Health check information for the listener. See `spec.listener.health_check` Block for details.
+        :param pulumi.Input['VirtualNodeSpecListenerOutlierDetectionArgs'] outlier_detection: Outlier detection information for the listener. See `spec.listener.outlier_detection` Block for details.
+        :param pulumi.Input['VirtualNodeSpecListenerTimeoutArgs'] timeout: Timeouts for different protocols. See `spec.listener.timeout` Block for details.
+        :param pulumi.Input['VirtualNodeSpecListenerTlsArgs'] tls: TLS properties for the listener. See `spec.listener.tls` Block for details.
         """
         pulumi.set(__self__, "port_mapping", port_mapping)
         if connection_pool is not None:
@@ -8660,7 +8575,7 @@ class VirtualNodeSpecListenerArgs:
     @pulumi.getter(name="portMapping")
     def port_mapping(self) -> pulumi.Input['VirtualNodeSpecListenerPortMappingArgs']:
         """
-        Port mapping information for the listener.
+        Port mapping information for the listener. See `spec.listener.port_mapping` Block for details.
         """
         return pulumi.get(self, "port_mapping")
 
@@ -8670,95 +8585,95 @@ class VirtualNodeSpecListenerArgs:
 
     @_builtins.property
     @pulumi.getter(name="connectionPool")
-    def connection_pool(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerConnectionPoolArgs']]:
+    def connection_pool(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerConnectionPoolArgs']]:
         """
-        Connection pool information for the listener.
+        Connection pool information for the listener. See `spec.listener.connection_pool` Block for details.
         """
         return pulumi.get(self, "connection_pool")
 
     @connection_pool.setter
-    def connection_pool(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerConnectionPoolArgs']]):
+    def connection_pool(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerConnectionPoolArgs']]):
         pulumi.set(self, "connection_pool", value)
 
     @_builtins.property
     @pulumi.getter(name="healthCheck")
-    def health_check(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerHealthCheckArgs']]:
+    def health_check(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerHealthCheckArgs']]:
         """
-        Health check information for the listener.
+        Health check information for the listener. See `spec.listener.health_check` Block for details.
         """
         return pulumi.get(self, "health_check")
 
     @health_check.setter
-    def health_check(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerHealthCheckArgs']]):
+    def health_check(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerHealthCheckArgs']]):
         pulumi.set(self, "health_check", value)
 
     @_builtins.property
     @pulumi.getter(name="outlierDetection")
-    def outlier_detection(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerOutlierDetectionArgs']]:
+    def outlier_detection(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerOutlierDetectionArgs']]:
         """
-        Outlier detection information for the listener.
+        Outlier detection information for the listener. See `spec.listener.outlier_detection` Block for details.
         """
         return pulumi.get(self, "outlier_detection")
 
     @outlier_detection.setter
-    def outlier_detection(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerOutlierDetectionArgs']]):
+    def outlier_detection(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerOutlierDetectionArgs']]):
         pulumi.set(self, "outlier_detection", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeout(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutArgs']]:
+    def timeout(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutArgs']]:
         """
-        Timeouts for different protocols.
+        Timeouts for different protocols. See `spec.listener.timeout` Block for details.
         """
         return pulumi.get(self, "timeout")
 
     @timeout.setter
-    def timeout(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutArgs']]):
+    def timeout(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutArgs']]):
         pulumi.set(self, "timeout", value)
 
     @_builtins.property
     @pulumi.getter
-    def tls(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTlsArgs']]:
+    def tls(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTlsArgs']]:
         """
-        Transport Layer Security (TLS) properties for the listener
+        TLS properties for the listener. See `spec.listener.tls` Block for details.
         """
         return pulumi.get(self, "tls")
 
     @tls.setter
-    def tls(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTlsArgs']]):
+    def tls(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTlsArgs']]):
         pulumi.set(self, "tls", value)
 
 
 class VirtualNodeSpecListenerConnectionPoolArgsDict(TypedDict):
-    grpc: NotRequired[pulumi.Input['VirtualNodeSpecListenerConnectionPoolGrpcArgsDict']]
+    grpc: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerConnectionPoolGrpcArgsDict']]]
     """
-    Connection pool information for gRPC listeners.
+    Timeouts for gRPC listeners. See `spec.listener.timeout.grpc` Block for details.
     """
-    http2s: NotRequired[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttp2ArgsDict']]]]
+    http2s: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttp2ArgsDict']]]]]
     """
-    Connection pool information for HTTP2 listeners.
+    Timeouts for HTTP2 listeners. See `spec.listener.timeout.http2` Block for details.
     """
-    https: NotRequired[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttpArgsDict']]]]
+    https: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttpArgsDict']]]]]
     """
-    Connection pool information for HTTP listeners.
+    Timeouts for HTTP listeners. See `spec.listener.timeout.http` Block for details.
     """
-    tcps: NotRequired[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolTcpArgsDict']]]]
+    tcps: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolTcpArgsDict']]]]]
     """
-    Connection pool information for TCP listeners.
+    Timeouts for TCP listeners. See `spec.listener.timeout.tcp` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecListenerConnectionPoolArgs:
     def __init__(__self__, *,
-                 grpc: Optional[pulumi.Input['VirtualNodeSpecListenerConnectionPoolGrpcArgs']] = None,
-                 http2s: Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttp2Args']]]] = None,
-                 https: Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttpArgs']]]] = None,
-                 tcps: Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolTcpArgs']]]] = None):
+                 grpc: pulumi.Input[Optional['VirtualNodeSpecListenerConnectionPoolGrpcArgs']] = None,
+                 http2s: pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttp2Args']]]] = None,
+                 https: pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttpArgs']]]] = None,
+                 tcps: pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolTcpArgs']]]] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecListenerConnectionPoolGrpcArgs'] grpc: Connection pool information for gRPC listeners.
-        :param pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttp2Args']]] http2s: Connection pool information for HTTP2 listeners.
-        :param pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttpArgs']]] https: Connection pool information for HTTP listeners.
-        :param pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolTcpArgs']]] tcps: Connection pool information for TCP listeners.
+        :param pulumi.Input['VirtualNodeSpecListenerConnectionPoolGrpcArgs'] grpc: Timeouts for gRPC listeners. See `spec.listener.timeout.grpc` Block for details.
+        :param pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttp2Args']]] http2s: Timeouts for HTTP2 listeners. See `spec.listener.timeout.http2` Block for details.
+        :param pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttpArgs']]] https: Timeouts for HTTP listeners. See `spec.listener.timeout.http` Block for details.
+        :param pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolTcpArgs']]] tcps: Timeouts for TCP listeners. See `spec.listener.timeout.tcp` Block for details.
         """
         if grpc is not None:
             pulumi.set(__self__, "grpc", grpc)
@@ -8771,50 +8686,50 @@ class VirtualNodeSpecListenerConnectionPoolArgs:
 
     @_builtins.property
     @pulumi.getter
-    def grpc(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerConnectionPoolGrpcArgs']]:
+    def grpc(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerConnectionPoolGrpcArgs']]:
         """
-        Connection pool information for gRPC listeners.
+        Timeouts for gRPC listeners. See `spec.listener.timeout.grpc` Block for details.
         """
         return pulumi.get(self, "grpc")
 
     @grpc.setter
-    def grpc(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerConnectionPoolGrpcArgs']]):
+    def grpc(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerConnectionPoolGrpcArgs']]):
         pulumi.set(self, "grpc", value)
 
     @_builtins.property
     @pulumi.getter
-    def http2s(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttp2Args']]]]:
+    def http2s(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttp2Args']]]]:
         """
-        Connection pool information for HTTP2 listeners.
+        Timeouts for HTTP2 listeners. See `spec.listener.timeout.http2` Block for details.
         """
         return pulumi.get(self, "http2s")
 
     @http2s.setter
-    def http2s(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttp2Args']]]]):
+    def http2s(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttp2Args']]]]):
         pulumi.set(self, "http2s", value)
 
     @_builtins.property
     @pulumi.getter
-    def https(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttpArgs']]]]:
+    def https(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttpArgs']]]]:
         """
-        Connection pool information for HTTP listeners.
+        Timeouts for HTTP listeners. See `spec.listener.timeout.http` Block for details.
         """
         return pulumi.get(self, "https")
 
     @https.setter
-    def https(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttpArgs']]]]):
+    def https(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolHttpArgs']]]]):
         pulumi.set(self, "https", value)
 
     @_builtins.property
     @pulumi.getter
-    def tcps(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolTcpArgs']]]]:
+    def tcps(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolTcpArgs']]]]:
         """
-        Connection pool information for TCP listeners.
+        Timeouts for TCP listeners. See `spec.listener.timeout.tcp` Block for details.
         """
         return pulumi.get(self, "tcps")
 
     @tcps.setter
-    def tcps(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolTcpArgs']]]]):
+    def tcps(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecListenerConnectionPoolTcpArgs']]]]):
         pulumi.set(self, "tcps", value)
 
 
@@ -8879,7 +8794,7 @@ class VirtualNodeSpecListenerConnectionPoolHttpArgsDict(TypedDict):
     """
     Maximum number of outbound TCP connections Envoy can establish concurrently with all hosts in upstream cluster. Minimum value of `1`.
     """
-    max_pending_requests: NotRequired[pulumi.Input[_builtins.int]]
+    max_pending_requests: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Number of overflowing requests after `max_connections` Envoy will queue to upstream cluster. Minimum value of `1`.
     """
@@ -8888,7 +8803,7 @@ class VirtualNodeSpecListenerConnectionPoolHttpArgsDict(TypedDict):
 class VirtualNodeSpecListenerConnectionPoolHttpArgs:
     def __init__(__self__, *,
                  max_connections: pulumi.Input[_builtins.int],
-                 max_pending_requests: Optional[pulumi.Input[_builtins.int]] = None):
+                 max_pending_requests: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.int] max_connections: Maximum number of outbound TCP connections Envoy can establish concurrently with all hosts in upstream cluster. Minimum value of `1`.
         :param pulumi.Input[_builtins.int] max_pending_requests: Number of overflowing requests after `max_connections` Envoy will queue to upstream cluster. Minimum value of `1`.
@@ -8911,14 +8826,14 @@ class VirtualNodeSpecListenerConnectionPoolHttpArgs:
 
     @_builtins.property
     @pulumi.getter(name="maxPendingRequests")
-    def max_pending_requests(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max_pending_requests(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Number of overflowing requests after `max_connections` Envoy will queue to upstream cluster. Minimum value of `1`.
         """
         return pulumi.get(self, "max_pending_requests")
 
     @max_pending_requests.setter
-    def max_pending_requests(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max_pending_requests(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max_pending_requests", value)
 
 
@@ -8961,7 +8876,7 @@ class VirtualNodeSpecListenerHealthCheckArgsDict(TypedDict):
     """
     protocol: pulumi.Input[_builtins.str]
     """
-    Protocol for the health check request. Valid values are `http`, `http2`, `tcp` and `grpc`.
+    Protocol used for the port mapping. Valid values are `http`, `http2`, `tcp` and `grpc`.
     """
     timeout_millis: pulumi.Input[_builtins.int]
     """
@@ -8971,13 +8886,13 @@ class VirtualNodeSpecListenerHealthCheckArgsDict(TypedDict):
     """
     Number of consecutive failed health checks that must occur before declaring a virtual node unhealthy.
     """
-    path: NotRequired[pulumi.Input[_builtins.str]]
+    path: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Destination path for the health check request. This is only required if the specified protocol is `http` or `http2`.
+    File path to write access logs to. You can use `/dev/stdout` to send access logs to standard out. Must be between 1 and 255 characters in length.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    Destination port for the health check request. This port must match the port defined in the `port_mapping` for the listener.
+    Port used for the port mapping.
     """
 
 @pulumi.input_type
@@ -8988,16 +8903,16 @@ class VirtualNodeSpecListenerHealthCheckArgs:
                  protocol: pulumi.Input[_builtins.str],
                  timeout_millis: pulumi.Input[_builtins.int],
                  unhealthy_threshold: pulumi.Input[_builtins.int],
-                 path: Optional[pulumi.Input[_builtins.str]] = None,
-                 port: Optional[pulumi.Input[_builtins.int]] = None):
+                 path: pulumi.Input[Optional[_builtins.str]] = None,
+                 port: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.int] healthy_threshold: Number of consecutive successful health checks that must occur before declaring listener healthy.
         :param pulumi.Input[_builtins.int] interval_millis: Time period in milliseconds between each health check execution.
-        :param pulumi.Input[_builtins.str] protocol: Protocol for the health check request. Valid values are `http`, `http2`, `tcp` and `grpc`.
+        :param pulumi.Input[_builtins.str] protocol: Protocol used for the port mapping. Valid values are `http`, `http2`, `tcp` and `grpc`.
         :param pulumi.Input[_builtins.int] timeout_millis: Amount of time to wait when receiving a response from the health check, in milliseconds.
         :param pulumi.Input[_builtins.int] unhealthy_threshold: Number of consecutive failed health checks that must occur before declaring a virtual node unhealthy.
-        :param pulumi.Input[_builtins.str] path: Destination path for the health check request. This is only required if the specified protocol is `http` or `http2`.
-        :param pulumi.Input[_builtins.int] port: Destination port for the health check request. This port must match the port defined in the `port_mapping` for the listener.
+        :param pulumi.Input[_builtins.str] path: File path to write access logs to. You can use `/dev/stdout` to send access logs to standard out. Must be between 1 and 255 characters in length.
+        :param pulumi.Input[_builtins.int] port: Port used for the port mapping.
         """
         pulumi.set(__self__, "healthy_threshold", healthy_threshold)
         pulumi.set(__self__, "interval_millis", interval_millis)
@@ -9037,7 +8952,7 @@ class VirtualNodeSpecListenerHealthCheckArgs:
     @pulumi.getter
     def protocol(self) -> pulumi.Input[_builtins.str]:
         """
-        Protocol for the health check request. Valid values are `http`, `http2`, `tcp` and `grpc`.
+        Protocol used for the port mapping. Valid values are `http`, `http2`, `tcp` and `grpc`.
         """
         return pulumi.get(self, "protocol")
 
@@ -9071,42 +8986,41 @@ class VirtualNodeSpecListenerHealthCheckArgs:
 
     @_builtins.property
     @pulumi.getter
-    def path(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def path(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Destination path for the health check request. This is only required if the specified protocol is `http` or `http2`.
+        File path to write access logs to. You can use `/dev/stdout` to send access logs to standard out. Must be between 1 and 255 characters in length.
         """
         return pulumi.get(self, "path")
 
     @path.setter
-    def path(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def path(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "path", value)
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        Destination port for the health check request. This port must match the port defined in the `port_mapping` for the listener.
+        Port used for the port mapping.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
 
 class VirtualNodeSpecListenerOutlierDetectionArgsDict(TypedDict):
     base_ejection_duration: pulumi.Input['VirtualNodeSpecListenerOutlierDetectionBaseEjectionDurationArgsDict']
     """
-    Base amount of time for which a host is ejected.
+    Base amount of time for which a host is ejected. See `spec.listener.outlier_detection.base_ejection_duration` Block for details.
     """
     interval: pulumi.Input['VirtualNodeSpecListenerOutlierDetectionIntervalArgsDict']
     """
-    Time interval between ejection sweep analysis.
+    Time interval between ejection sweep analysis. See `spec.listener.outlier_detection.interval` Block for details.
     """
     max_ejection_percent: pulumi.Input[_builtins.int]
     """
-    Maximum percentage of hosts in load balancing pool for upstream service that can be ejected. Will eject at least one host regardless of the value.
-    Minimum value of `0`. Maximum value of `100`.
+    Maximum percentage of hosts in load balancing pool for upstream service that can be ejected. Will eject at least one host regardless of the value. Minimum value of `0`. Maximum value of `100`.
     """
     max_server_errors: pulumi.Input[_builtins.int]
     """
@@ -9121,10 +9035,9 @@ class VirtualNodeSpecListenerOutlierDetectionArgs:
                  max_ejection_percent: pulumi.Input[_builtins.int],
                  max_server_errors: pulumi.Input[_builtins.int]):
         """
-        :param pulumi.Input['VirtualNodeSpecListenerOutlierDetectionBaseEjectionDurationArgs'] base_ejection_duration: Base amount of time for which a host is ejected.
-        :param pulumi.Input['VirtualNodeSpecListenerOutlierDetectionIntervalArgs'] interval: Time interval between ejection sweep analysis.
-        :param pulumi.Input[_builtins.int] max_ejection_percent: Maximum percentage of hosts in load balancing pool for upstream service that can be ejected. Will eject at least one host regardless of the value.
-               Minimum value of `0`. Maximum value of `100`.
+        :param pulumi.Input['VirtualNodeSpecListenerOutlierDetectionBaseEjectionDurationArgs'] base_ejection_duration: Base amount of time for which a host is ejected. See `spec.listener.outlier_detection.base_ejection_duration` Block for details.
+        :param pulumi.Input['VirtualNodeSpecListenerOutlierDetectionIntervalArgs'] interval: Time interval between ejection sweep analysis. See `spec.listener.outlier_detection.interval` Block for details.
+        :param pulumi.Input[_builtins.int] max_ejection_percent: Maximum percentage of hosts in load balancing pool for upstream service that can be ejected. Will eject at least one host regardless of the value. Minimum value of `0`. Maximum value of `100`.
         :param pulumi.Input[_builtins.int] max_server_errors: Number of consecutive `5xx` errors required for ejection. Minimum value of `1`.
         """
         pulumi.set(__self__, "base_ejection_duration", base_ejection_duration)
@@ -9136,7 +9049,7 @@ class VirtualNodeSpecListenerOutlierDetectionArgs:
     @pulumi.getter(name="baseEjectionDuration")
     def base_ejection_duration(self) -> pulumi.Input['VirtualNodeSpecListenerOutlierDetectionBaseEjectionDurationArgs']:
         """
-        Base amount of time for which a host is ejected.
+        Base amount of time for which a host is ejected. See `spec.listener.outlier_detection.base_ejection_duration` Block for details.
         """
         return pulumi.get(self, "base_ejection_duration")
 
@@ -9148,7 +9061,7 @@ class VirtualNodeSpecListenerOutlierDetectionArgs:
     @pulumi.getter
     def interval(self) -> pulumi.Input['VirtualNodeSpecListenerOutlierDetectionIntervalArgs']:
         """
-        Time interval between ejection sweep analysis.
+        Time interval between ejection sweep analysis. See `spec.listener.outlier_detection.interval` Block for details.
         """
         return pulumi.get(self, "interval")
 
@@ -9160,8 +9073,7 @@ class VirtualNodeSpecListenerOutlierDetectionArgs:
     @pulumi.getter(name="maxEjectionPercent")
     def max_ejection_percent(self) -> pulumi.Input[_builtins.int]:
         """
-        Maximum percentage of hosts in load balancing pool for upstream service that can be ejected. Will eject at least one host regardless of the value.
-        Minimum value of `0`. Maximum value of `100`.
+        Maximum percentage of hosts in load balancing pool for upstream service that can be ejected. Will eject at least one host regardless of the value. Minimum value of `0`. Maximum value of `100`.
         """
         return pulumi.get(self, "max_ejection_percent")
 
@@ -9189,7 +9101,7 @@ class VirtualNodeSpecListenerOutlierDetectionBaseEjectionDurationArgsDict(TypedD
     """
     value: pulumi.Input[_builtins.int]
     """
-    Number of time units. Minimum value of `0`.
+    Value for the JSON. Must be between 1 and 100 characters in length.
     """
 
 @pulumi.input_type
@@ -9199,7 +9111,7 @@ class VirtualNodeSpecListenerOutlierDetectionBaseEjectionDurationArgs:
                  value: pulumi.Input[_builtins.int]):
         """
         :param pulumi.Input[_builtins.str] unit: Unit of time. Valid values: `ms`, `s`.
-        :param pulumi.Input[_builtins.int] value: Number of time units. Minimum value of `0`.
+        :param pulumi.Input[_builtins.int] value: Value for the JSON. Must be between 1 and 100 characters in length.
         """
         pulumi.set(__self__, "unit", unit)
         pulumi.set(__self__, "value", value)
@@ -9220,7 +9132,7 @@ class VirtualNodeSpecListenerOutlierDetectionBaseEjectionDurationArgs:
     @pulumi.getter
     def value(self) -> pulumi.Input[_builtins.int]:
         """
-        Number of time units. Minimum value of `0`.
+        Value for the JSON. Must be between 1 and 100 characters in length.
         """
         return pulumi.get(self, "value")
 
@@ -9236,7 +9148,7 @@ class VirtualNodeSpecListenerOutlierDetectionIntervalArgsDict(TypedDict):
     """
     value: pulumi.Input[_builtins.int]
     """
-    Number of time units. Minimum value of `0`.
+    Value for the JSON. Must be between 1 and 100 characters in length.
     """
 
 @pulumi.input_type
@@ -9246,7 +9158,7 @@ class VirtualNodeSpecListenerOutlierDetectionIntervalArgs:
                  value: pulumi.Input[_builtins.int]):
         """
         :param pulumi.Input[_builtins.str] unit: Unit of time. Valid values: `ms`, `s`.
-        :param pulumi.Input[_builtins.int] value: Number of time units. Minimum value of `0`.
+        :param pulumi.Input[_builtins.int] value: Value for the JSON. Must be between 1 and 100 characters in length.
         """
         pulumi.set(__self__, "unit", unit)
         pulumi.set(__self__, "value", value)
@@ -9267,7 +9179,7 @@ class VirtualNodeSpecListenerOutlierDetectionIntervalArgs:
     @pulumi.getter
     def value(self) -> pulumi.Input[_builtins.int]:
         """
-        Number of time units. Minimum value of `0`.
+        Value for the JSON. Must be between 1 and 100 characters in length.
         """
         return pulumi.get(self, "value")
 
@@ -9324,35 +9236,35 @@ class VirtualNodeSpecListenerPortMappingArgs:
 
 
 class VirtualNodeSpecListenerTimeoutArgsDict(TypedDict):
-    grpc: NotRequired[pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcArgsDict']]
+    grpc: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutGrpcArgsDict']]]
     """
-    Timeouts for gRPC listeners.
+    Timeouts for gRPC listeners. See `spec.listener.timeout.grpc` Block for details.
     """
-    http: NotRequired[pulumi.Input['VirtualNodeSpecListenerTimeoutHttpArgsDict']]
+    http: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttpArgsDict']]]
     """
-    Timeouts for HTTP listeners.
+    Timeouts for HTTP listeners. See `spec.listener.timeout.http` Block for details.
     """
-    http2: NotRequired[pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2ArgsDict']]
+    http2: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttp2ArgsDict']]]
     """
-    Timeouts for HTTP2 listeners.
+    Timeouts for HTTP2 listeners. See `spec.listener.timeout.http2` Block for details.
     """
-    tcp: NotRequired[pulumi.Input['VirtualNodeSpecListenerTimeoutTcpArgsDict']]
+    tcp: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutTcpArgsDict']]]
     """
-    Timeouts for TCP listeners.
+    Timeouts for TCP listeners. See `spec.listener.timeout.tcp` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecListenerTimeoutArgs:
     def __init__(__self__, *,
-                 grpc: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcArgs']] = None,
-                 http: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttpArgs']] = None,
-                 http2: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2Args']] = None,
-                 tcp: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutTcpArgs']] = None):
+                 grpc: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutGrpcArgs']] = None,
+                 http: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttpArgs']] = None,
+                 http2: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttp2Args']] = None,
+                 tcp: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutTcpArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcArgs'] grpc: Timeouts for gRPC listeners.
-        :param pulumi.Input['VirtualNodeSpecListenerTimeoutHttpArgs'] http: Timeouts for HTTP listeners.
-        :param pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2Args'] http2: Timeouts for HTTP2 listeners.
-        :param pulumi.Input['VirtualNodeSpecListenerTimeoutTcpArgs'] tcp: Timeouts for TCP listeners.
+        :param pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcArgs'] grpc: Timeouts for gRPC listeners. See `spec.listener.timeout.grpc` Block for details.
+        :param pulumi.Input['VirtualNodeSpecListenerTimeoutHttpArgs'] http: Timeouts for HTTP listeners. See `spec.listener.timeout.http` Block for details.
+        :param pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2Args'] http2: Timeouts for HTTP2 listeners. See `spec.listener.timeout.http2` Block for details.
+        :param pulumi.Input['VirtualNodeSpecListenerTimeoutTcpArgs'] tcp: Timeouts for TCP listeners. See `spec.listener.timeout.tcp` Block for details.
         """
         if grpc is not None:
             pulumi.set(__self__, "grpc", grpc)
@@ -9365,71 +9277,71 @@ class VirtualNodeSpecListenerTimeoutArgs:
 
     @_builtins.property
     @pulumi.getter
-    def grpc(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcArgs']]:
+    def grpc(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutGrpcArgs']]:
         """
-        Timeouts for gRPC listeners.
+        Timeouts for gRPC listeners. See `spec.listener.timeout.grpc` Block for details.
         """
         return pulumi.get(self, "grpc")
 
     @grpc.setter
-    def grpc(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcArgs']]):
+    def grpc(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutGrpcArgs']]):
         pulumi.set(self, "grpc", value)
 
     @_builtins.property
     @pulumi.getter
-    def http(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttpArgs']]:
+    def http(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttpArgs']]:
         """
-        Timeouts for HTTP listeners.
+        Timeouts for HTTP listeners. See `spec.listener.timeout.http` Block for details.
         """
         return pulumi.get(self, "http")
 
     @http.setter
-    def http(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttpArgs']]):
+    def http(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttpArgs']]):
         pulumi.set(self, "http", value)
 
     @_builtins.property
     @pulumi.getter
-    def http2(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2Args']]:
+    def http2(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttp2Args']]:
         """
-        Timeouts for HTTP2 listeners.
+        Timeouts for HTTP2 listeners. See `spec.listener.timeout.http2` Block for details.
         """
         return pulumi.get(self, "http2")
 
     @http2.setter
-    def http2(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2Args']]):
+    def http2(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttp2Args']]):
         pulumi.set(self, "http2", value)
 
     @_builtins.property
     @pulumi.getter
-    def tcp(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutTcpArgs']]:
+    def tcp(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutTcpArgs']]:
         """
-        Timeouts for TCP listeners.
+        Timeouts for TCP listeners. See `spec.listener.timeout.tcp` Block for details.
         """
         return pulumi.get(self, "tcp")
 
     @tcp.setter
-    def tcp(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutTcpArgs']]):
+    def tcp(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutTcpArgs']]):
         pulumi.set(self, "tcp", value)
 
 
 class VirtualNodeSpecListenerTimeoutGrpcArgsDict(TypedDict):
-    idle: NotRequired[pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcIdleArgsDict']]
+    idle: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutGrpcIdleArgsDict']]]
     """
-    Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+    Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.listener.timeout.tcp.idle` Block for details.
     """
-    per_request: NotRequired[pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcPerRequestArgsDict']]
+    per_request: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutGrpcPerRequestArgsDict']]]
     """
-    Per request timeout.
+    Per request timeout. See `spec.listener.timeout.http2.per_request` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecListenerTimeoutGrpcArgs:
     def __init__(__self__, *,
-                 idle: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcIdleArgs']] = None,
-                 per_request: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcPerRequestArgs']] = None):
+                 idle: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutGrpcIdleArgs']] = None,
+                 per_request: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutGrpcPerRequestArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcIdleArgs'] idle: Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
-        :param pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcPerRequestArgs'] per_request: Per request timeout.
+        :param pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcIdleArgs'] idle: Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.listener.timeout.tcp.idle` Block for details.
+        :param pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcPerRequestArgs'] per_request: Per request timeout. See `spec.listener.timeout.http2.per_request` Block for details.
         """
         if idle is not None:
             pulumi.set(__self__, "idle", idle)
@@ -9438,26 +9350,26 @@ class VirtualNodeSpecListenerTimeoutGrpcArgs:
 
     @_builtins.property
     @pulumi.getter
-    def idle(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcIdleArgs']]:
+    def idle(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutGrpcIdleArgs']]:
         """
-        Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+        Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.listener.timeout.tcp.idle` Block for details.
         """
         return pulumi.get(self, "idle")
 
     @idle.setter
-    def idle(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcIdleArgs']]):
+    def idle(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutGrpcIdleArgs']]):
         pulumi.set(self, "idle", value)
 
     @_builtins.property
     @pulumi.getter(name="perRequest")
-    def per_request(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcPerRequestArgs']]:
+    def per_request(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutGrpcPerRequestArgs']]:
         """
-        Per request timeout.
+        Per request timeout. See `spec.listener.timeout.http2.per_request` Block for details.
         """
         return pulumi.get(self, "per_request")
 
     @per_request.setter
-    def per_request(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutGrpcPerRequestArgs']]):
+    def per_request(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutGrpcPerRequestArgs']]):
         pulumi.set(self, "per_request", value)
 
 
@@ -9468,7 +9380,7 @@ class VirtualNodeSpecListenerTimeoutGrpcIdleArgsDict(TypedDict):
     """
     value: pulumi.Input[_builtins.int]
     """
-    Number of time units. Minimum value of `0`.
+    Value for the JSON. Must be between 1 and 100 characters in length.
     """
 
 @pulumi.input_type
@@ -9478,7 +9390,7 @@ class VirtualNodeSpecListenerTimeoutGrpcIdleArgs:
                  value: pulumi.Input[_builtins.int]):
         """
         :param pulumi.Input[_builtins.str] unit: Unit of time. Valid values: `ms`, `s`.
-        :param pulumi.Input[_builtins.int] value: Number of time units. Minimum value of `0`.
+        :param pulumi.Input[_builtins.int] value: Value for the JSON. Must be between 1 and 100 characters in length.
         """
         pulumi.set(__self__, "unit", unit)
         pulumi.set(__self__, "value", value)
@@ -9499,7 +9411,7 @@ class VirtualNodeSpecListenerTimeoutGrpcIdleArgs:
     @pulumi.getter
     def value(self) -> pulumi.Input[_builtins.int]:
         """
-        Number of time units. Minimum value of `0`.
+        Value for the JSON. Must be between 1 and 100 characters in length.
         """
         return pulumi.get(self, "value")
 
@@ -9515,7 +9427,7 @@ class VirtualNodeSpecListenerTimeoutGrpcPerRequestArgsDict(TypedDict):
     """
     value: pulumi.Input[_builtins.int]
     """
-    Number of time units. Minimum value of `0`.
+    Value for the JSON. Must be between 1 and 100 characters in length.
     """
 
 @pulumi.input_type
@@ -9525,7 +9437,7 @@ class VirtualNodeSpecListenerTimeoutGrpcPerRequestArgs:
                  value: pulumi.Input[_builtins.int]):
         """
         :param pulumi.Input[_builtins.str] unit: Unit of time. Valid values: `ms`, `s`.
-        :param pulumi.Input[_builtins.int] value: Number of time units. Minimum value of `0`.
+        :param pulumi.Input[_builtins.int] value: Value for the JSON. Must be between 1 and 100 characters in length.
         """
         pulumi.set(__self__, "unit", unit)
         pulumi.set(__self__, "value", value)
@@ -9546,7 +9458,7 @@ class VirtualNodeSpecListenerTimeoutGrpcPerRequestArgs:
     @pulumi.getter
     def value(self) -> pulumi.Input[_builtins.int]:
         """
-        Number of time units. Minimum value of `0`.
+        Value for the JSON. Must be between 1 and 100 characters in length.
         """
         return pulumi.get(self, "value")
 
@@ -9556,23 +9468,23 @@ class VirtualNodeSpecListenerTimeoutGrpcPerRequestArgs:
 
 
 class VirtualNodeSpecListenerTimeoutHttp2ArgsDict(TypedDict):
-    idle: NotRequired[pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2IdleArgsDict']]
+    idle: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttp2IdleArgsDict']]]
     """
-    Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+    Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.listener.timeout.tcp.idle` Block for details.
     """
-    per_request: NotRequired[pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2PerRequestArgsDict']]
+    per_request: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttp2PerRequestArgsDict']]]
     """
-    Per request timeout.
+    Per request timeout. See `spec.listener.timeout.http2.per_request` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecListenerTimeoutHttp2Args:
     def __init__(__self__, *,
-                 idle: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2IdleArgs']] = None,
-                 per_request: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2PerRequestArgs']] = None):
+                 idle: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttp2IdleArgs']] = None,
+                 per_request: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttp2PerRequestArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2IdleArgs'] idle: Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
-        :param pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2PerRequestArgs'] per_request: Per request timeout.
+        :param pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2IdleArgs'] idle: Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.listener.timeout.tcp.idle` Block for details.
+        :param pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2PerRequestArgs'] per_request: Per request timeout. See `spec.listener.timeout.http2.per_request` Block for details.
         """
         if idle is not None:
             pulumi.set(__self__, "idle", idle)
@@ -9581,26 +9493,26 @@ class VirtualNodeSpecListenerTimeoutHttp2Args:
 
     @_builtins.property
     @pulumi.getter
-    def idle(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2IdleArgs']]:
+    def idle(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttp2IdleArgs']]:
         """
-        Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+        Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.listener.timeout.tcp.idle` Block for details.
         """
         return pulumi.get(self, "idle")
 
     @idle.setter
-    def idle(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2IdleArgs']]):
+    def idle(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttp2IdleArgs']]):
         pulumi.set(self, "idle", value)
 
     @_builtins.property
     @pulumi.getter(name="perRequest")
-    def per_request(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2PerRequestArgs']]:
+    def per_request(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttp2PerRequestArgs']]:
         """
-        Per request timeout.
+        Per request timeout. See `spec.listener.timeout.http2.per_request` Block for details.
         """
         return pulumi.get(self, "per_request")
 
     @per_request.setter
-    def per_request(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttp2PerRequestArgs']]):
+    def per_request(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttp2PerRequestArgs']]):
         pulumi.set(self, "per_request", value)
 
 
@@ -9611,7 +9523,7 @@ class VirtualNodeSpecListenerTimeoutHttp2IdleArgsDict(TypedDict):
     """
     value: pulumi.Input[_builtins.int]
     """
-    Number of time units. Minimum value of `0`.
+    Value for the JSON. Must be between 1 and 100 characters in length.
     """
 
 @pulumi.input_type
@@ -9621,7 +9533,7 @@ class VirtualNodeSpecListenerTimeoutHttp2IdleArgs:
                  value: pulumi.Input[_builtins.int]):
         """
         :param pulumi.Input[_builtins.str] unit: Unit of time. Valid values: `ms`, `s`.
-        :param pulumi.Input[_builtins.int] value: Number of time units. Minimum value of `0`.
+        :param pulumi.Input[_builtins.int] value: Value for the JSON. Must be between 1 and 100 characters in length.
         """
         pulumi.set(__self__, "unit", unit)
         pulumi.set(__self__, "value", value)
@@ -9642,7 +9554,7 @@ class VirtualNodeSpecListenerTimeoutHttp2IdleArgs:
     @pulumi.getter
     def value(self) -> pulumi.Input[_builtins.int]:
         """
-        Number of time units. Minimum value of `0`.
+        Value for the JSON. Must be between 1 and 100 characters in length.
         """
         return pulumi.get(self, "value")
 
@@ -9658,7 +9570,7 @@ class VirtualNodeSpecListenerTimeoutHttp2PerRequestArgsDict(TypedDict):
     """
     value: pulumi.Input[_builtins.int]
     """
-    Number of time units. Minimum value of `0`.
+    Value for the JSON. Must be between 1 and 100 characters in length.
     """
 
 @pulumi.input_type
@@ -9668,7 +9580,7 @@ class VirtualNodeSpecListenerTimeoutHttp2PerRequestArgs:
                  value: pulumi.Input[_builtins.int]):
         """
         :param pulumi.Input[_builtins.str] unit: Unit of time. Valid values: `ms`, `s`.
-        :param pulumi.Input[_builtins.int] value: Number of time units. Minimum value of `0`.
+        :param pulumi.Input[_builtins.int] value: Value for the JSON. Must be between 1 and 100 characters in length.
         """
         pulumi.set(__self__, "unit", unit)
         pulumi.set(__self__, "value", value)
@@ -9689,7 +9601,7 @@ class VirtualNodeSpecListenerTimeoutHttp2PerRequestArgs:
     @pulumi.getter
     def value(self) -> pulumi.Input[_builtins.int]:
         """
-        Number of time units. Minimum value of `0`.
+        Value for the JSON. Must be between 1 and 100 characters in length.
         """
         return pulumi.get(self, "value")
 
@@ -9699,23 +9611,23 @@ class VirtualNodeSpecListenerTimeoutHttp2PerRequestArgs:
 
 
 class VirtualNodeSpecListenerTimeoutHttpArgsDict(TypedDict):
-    idle: NotRequired[pulumi.Input['VirtualNodeSpecListenerTimeoutHttpIdleArgsDict']]
+    idle: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttpIdleArgsDict']]]
     """
-    Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+    Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.listener.timeout.tcp.idle` Block for details.
     """
-    per_request: NotRequired[pulumi.Input['VirtualNodeSpecListenerTimeoutHttpPerRequestArgsDict']]
+    per_request: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttpPerRequestArgsDict']]]
     """
-    Per request timeout.
+    Per request timeout. See `spec.listener.timeout.http2.per_request` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecListenerTimeoutHttpArgs:
     def __init__(__self__, *,
-                 idle: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttpIdleArgs']] = None,
-                 per_request: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttpPerRequestArgs']] = None):
+                 idle: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttpIdleArgs']] = None,
+                 per_request: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttpPerRequestArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecListenerTimeoutHttpIdleArgs'] idle: Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
-        :param pulumi.Input['VirtualNodeSpecListenerTimeoutHttpPerRequestArgs'] per_request: Per request timeout.
+        :param pulumi.Input['VirtualNodeSpecListenerTimeoutHttpIdleArgs'] idle: Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.listener.timeout.tcp.idle` Block for details.
+        :param pulumi.Input['VirtualNodeSpecListenerTimeoutHttpPerRequestArgs'] per_request: Per request timeout. See `spec.listener.timeout.http2.per_request` Block for details.
         """
         if idle is not None:
             pulumi.set(__self__, "idle", idle)
@@ -9724,26 +9636,26 @@ class VirtualNodeSpecListenerTimeoutHttpArgs:
 
     @_builtins.property
     @pulumi.getter
-    def idle(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttpIdleArgs']]:
+    def idle(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttpIdleArgs']]:
         """
-        Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+        Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.listener.timeout.tcp.idle` Block for details.
         """
         return pulumi.get(self, "idle")
 
     @idle.setter
-    def idle(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttpIdleArgs']]):
+    def idle(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttpIdleArgs']]):
         pulumi.set(self, "idle", value)
 
     @_builtins.property
     @pulumi.getter(name="perRequest")
-    def per_request(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttpPerRequestArgs']]:
+    def per_request(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttpPerRequestArgs']]:
         """
-        Per request timeout.
+        Per request timeout. See `spec.listener.timeout.http2.per_request` Block for details.
         """
         return pulumi.get(self, "per_request")
 
     @per_request.setter
-    def per_request(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutHttpPerRequestArgs']]):
+    def per_request(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutHttpPerRequestArgs']]):
         pulumi.set(self, "per_request", value)
 
 
@@ -9754,7 +9666,7 @@ class VirtualNodeSpecListenerTimeoutHttpIdleArgsDict(TypedDict):
     """
     value: pulumi.Input[_builtins.int]
     """
-    Number of time units. Minimum value of `0`.
+    Value for the JSON. Must be between 1 and 100 characters in length.
     """
 
 @pulumi.input_type
@@ -9764,7 +9676,7 @@ class VirtualNodeSpecListenerTimeoutHttpIdleArgs:
                  value: pulumi.Input[_builtins.int]):
         """
         :param pulumi.Input[_builtins.str] unit: Unit of time. Valid values: `ms`, `s`.
-        :param pulumi.Input[_builtins.int] value: Number of time units. Minimum value of `0`.
+        :param pulumi.Input[_builtins.int] value: Value for the JSON. Must be between 1 and 100 characters in length.
         """
         pulumi.set(__self__, "unit", unit)
         pulumi.set(__self__, "value", value)
@@ -9785,7 +9697,7 @@ class VirtualNodeSpecListenerTimeoutHttpIdleArgs:
     @pulumi.getter
     def value(self) -> pulumi.Input[_builtins.int]:
         """
-        Number of time units. Minimum value of `0`.
+        Value for the JSON. Must be between 1 and 100 characters in length.
         """
         return pulumi.get(self, "value")
 
@@ -9801,7 +9713,7 @@ class VirtualNodeSpecListenerTimeoutHttpPerRequestArgsDict(TypedDict):
     """
     value: pulumi.Input[_builtins.int]
     """
-    Number of time units. Minimum value of `0`.
+    Value for the JSON. Must be between 1 and 100 characters in length.
     """
 
 @pulumi.input_type
@@ -9811,7 +9723,7 @@ class VirtualNodeSpecListenerTimeoutHttpPerRequestArgs:
                  value: pulumi.Input[_builtins.int]):
         """
         :param pulumi.Input[_builtins.str] unit: Unit of time. Valid values: `ms`, `s`.
-        :param pulumi.Input[_builtins.int] value: Number of time units. Minimum value of `0`.
+        :param pulumi.Input[_builtins.int] value: Value for the JSON. Must be between 1 and 100 characters in length.
         """
         pulumi.set(__self__, "unit", unit)
         pulumi.set(__self__, "value", value)
@@ -9832,7 +9744,7 @@ class VirtualNodeSpecListenerTimeoutHttpPerRequestArgs:
     @pulumi.getter
     def value(self) -> pulumi.Input[_builtins.int]:
         """
-        Number of time units. Minimum value of `0`.
+        Value for the JSON. Must be between 1 and 100 characters in length.
         """
         return pulumi.get(self, "value")
 
@@ -9842,31 +9754,31 @@ class VirtualNodeSpecListenerTimeoutHttpPerRequestArgs:
 
 
 class VirtualNodeSpecListenerTimeoutTcpArgsDict(TypedDict):
-    idle: NotRequired[pulumi.Input['VirtualNodeSpecListenerTimeoutTcpIdleArgsDict']]
+    idle: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutTcpIdleArgsDict']]]
     """
-    Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+    Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.listener.timeout.tcp.idle` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecListenerTimeoutTcpArgs:
     def __init__(__self__, *,
-                 idle: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutTcpIdleArgs']] = None):
+                 idle: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutTcpIdleArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecListenerTimeoutTcpIdleArgs'] idle: Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+        :param pulumi.Input['VirtualNodeSpecListenerTimeoutTcpIdleArgs'] idle: Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.listener.timeout.tcp.idle` Block for details.
         """
         if idle is not None:
             pulumi.set(__self__, "idle", idle)
 
     @_builtins.property
     @pulumi.getter
-    def idle(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutTcpIdleArgs']]:
+    def idle(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutTcpIdleArgs']]:
         """
-        Idle timeout. An idle timeout bounds the amount of time that a connection may be idle.
+        Idle timeout. An idle timeout bounds the amount of time that a connection may be idle. See `spec.listener.timeout.tcp.idle` Block for details.
         """
         return pulumi.get(self, "idle")
 
     @idle.setter
-    def idle(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTimeoutTcpIdleArgs']]):
+    def idle(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTimeoutTcpIdleArgs']]):
         pulumi.set(self, "idle", value)
 
 
@@ -9877,7 +9789,7 @@ class VirtualNodeSpecListenerTimeoutTcpIdleArgsDict(TypedDict):
     """
     value: pulumi.Input[_builtins.int]
     """
-    Number of time units. Minimum value of `0`.
+    Value for the JSON. Must be between 1 and 100 characters in length.
     """
 
 @pulumi.input_type
@@ -9887,7 +9799,7 @@ class VirtualNodeSpecListenerTimeoutTcpIdleArgs:
                  value: pulumi.Input[_builtins.int]):
         """
         :param pulumi.Input[_builtins.str] unit: Unit of time. Valid values: `ms`, `s`.
-        :param pulumi.Input[_builtins.int] value: Number of time units. Minimum value of `0`.
+        :param pulumi.Input[_builtins.int] value: Value for the JSON. Must be between 1 and 100 characters in length.
         """
         pulumi.set(__self__, "unit", unit)
         pulumi.set(__self__, "value", value)
@@ -9908,7 +9820,7 @@ class VirtualNodeSpecListenerTimeoutTcpIdleArgs:
     @pulumi.getter
     def value(self) -> pulumi.Input[_builtins.int]:
         """
-        Number of time units. Minimum value of `0`.
+        Value for the JSON. Must be between 1 and 100 characters in length.
         """
         return pulumi.get(self, "value")
 
@@ -9920,15 +9832,15 @@ class VirtualNodeSpecListenerTimeoutTcpIdleArgs:
 class VirtualNodeSpecListenerTlsArgsDict(TypedDict):
     certificate: pulumi.Input['VirtualNodeSpecListenerTlsCertificateArgsDict']
     """
-    Listener's TLS certificate.
+    Listener's TLS certificate. See `spec.listener.tls.certificate` Block for details.
     """
     mode: pulumi.Input[_builtins.str]
     """
     Listener's TLS mode. Valid values: `DISABLED`, `PERMISSIVE`, `STRICT`.
     """
-    validation: NotRequired[pulumi.Input['VirtualNodeSpecListenerTlsValidationArgsDict']]
+    validation: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTlsValidationArgsDict']]]
     """
-    Listener's Transport Layer Security (TLS) validation context.
+    Listener's TLS validation context. See `spec.listener.tls.validation` Block for details.
     """
 
 @pulumi.input_type
@@ -9936,11 +9848,11 @@ class VirtualNodeSpecListenerTlsArgs:
     def __init__(__self__, *,
                  certificate: pulumi.Input['VirtualNodeSpecListenerTlsCertificateArgs'],
                  mode: pulumi.Input[_builtins.str],
-                 validation: Optional[pulumi.Input['VirtualNodeSpecListenerTlsValidationArgs']] = None):
+                 validation: pulumi.Input[Optional['VirtualNodeSpecListenerTlsValidationArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecListenerTlsCertificateArgs'] certificate: Listener's TLS certificate.
+        :param pulumi.Input['VirtualNodeSpecListenerTlsCertificateArgs'] certificate: Listener's TLS certificate. See `spec.listener.tls.certificate` Block for details.
         :param pulumi.Input[_builtins.str] mode: Listener's TLS mode. Valid values: `DISABLED`, `PERMISSIVE`, `STRICT`.
-        :param pulumi.Input['VirtualNodeSpecListenerTlsValidationArgs'] validation: Listener's Transport Layer Security (TLS) validation context.
+        :param pulumi.Input['VirtualNodeSpecListenerTlsValidationArgs'] validation: Listener's TLS validation context. See `spec.listener.tls.validation` Block for details.
         """
         pulumi.set(__self__, "certificate", certificate)
         pulumi.set(__self__, "mode", mode)
@@ -9951,7 +9863,7 @@ class VirtualNodeSpecListenerTlsArgs:
     @pulumi.getter
     def certificate(self) -> pulumi.Input['VirtualNodeSpecListenerTlsCertificateArgs']:
         """
-        Listener's TLS certificate.
+        Listener's TLS certificate. See `spec.listener.tls.certificate` Block for details.
         """
         return pulumi.get(self, "certificate")
 
@@ -9973,41 +9885,41 @@ class VirtualNodeSpecListenerTlsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def validation(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTlsValidationArgs']]:
+    def validation(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTlsValidationArgs']]:
         """
-        Listener's Transport Layer Security (TLS) validation context.
+        Listener's TLS validation context. See `spec.listener.tls.validation` Block for details.
         """
         return pulumi.get(self, "validation")
 
     @validation.setter
-    def validation(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTlsValidationArgs']]):
+    def validation(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTlsValidationArgs']]):
         pulumi.set(self, "validation", value)
 
 
 class VirtualNodeSpecListenerTlsCertificateArgsDict(TypedDict):
-    acm: NotRequired[pulumi.Input['VirtualNodeSpecListenerTlsCertificateAcmArgsDict']]
+    acm: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTlsCertificateAcmArgsDict']]]
     """
-    An AWS Certificate Manager (ACM) certificate.
+    AWS Certificate Manager (ACM) certificate. See `spec.listener.tls.certificate.acm` Block for details.
     """
-    file: NotRequired[pulumi.Input['VirtualNodeSpecListenerTlsCertificateFileArgsDict']]
+    file: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTlsCertificateFileArgsDict']]]
     """
-    Local file certificate.
+    File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
     """
-    sds: NotRequired[pulumi.Input['VirtualNodeSpecListenerTlsCertificateSdsArgsDict']]
+    sds: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTlsCertificateSdsArgsDict']]]
     """
-    A [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+    TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecListenerTlsCertificateArgs:
     def __init__(__self__, *,
-                 acm: Optional[pulumi.Input['VirtualNodeSpecListenerTlsCertificateAcmArgs']] = None,
-                 file: Optional[pulumi.Input['VirtualNodeSpecListenerTlsCertificateFileArgs']] = None,
-                 sds: Optional[pulumi.Input['VirtualNodeSpecListenerTlsCertificateSdsArgs']] = None):
+                 acm: pulumi.Input[Optional['VirtualNodeSpecListenerTlsCertificateAcmArgs']] = None,
+                 file: pulumi.Input[Optional['VirtualNodeSpecListenerTlsCertificateFileArgs']] = None,
+                 sds: pulumi.Input[Optional['VirtualNodeSpecListenerTlsCertificateSdsArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecListenerTlsCertificateAcmArgs'] acm: An AWS Certificate Manager (ACM) certificate.
-        :param pulumi.Input['VirtualNodeSpecListenerTlsCertificateFileArgs'] file: Local file certificate.
-        :param pulumi.Input['VirtualNodeSpecListenerTlsCertificateSdsArgs'] sds: A [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+        :param pulumi.Input['VirtualNodeSpecListenerTlsCertificateAcmArgs'] acm: AWS Certificate Manager (ACM) certificate. See `spec.listener.tls.certificate.acm` Block for details.
+        :param pulumi.Input['VirtualNodeSpecListenerTlsCertificateFileArgs'] file: File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
+        :param pulumi.Input['VirtualNodeSpecListenerTlsCertificateSdsArgs'] sds: TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
         """
         if acm is not None:
             pulumi.set(__self__, "acm", acm)
@@ -10018,38 +9930,38 @@ class VirtualNodeSpecListenerTlsCertificateArgs:
 
     @_builtins.property
     @pulumi.getter
-    def acm(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTlsCertificateAcmArgs']]:
+    def acm(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTlsCertificateAcmArgs']]:
         """
-        An AWS Certificate Manager (ACM) certificate.
+        AWS Certificate Manager (ACM) certificate. See `spec.listener.tls.certificate.acm` Block for details.
         """
         return pulumi.get(self, "acm")
 
     @acm.setter
-    def acm(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTlsCertificateAcmArgs']]):
+    def acm(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTlsCertificateAcmArgs']]):
         pulumi.set(self, "acm", value)
 
     @_builtins.property
     @pulumi.getter
-    def file(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTlsCertificateFileArgs']]:
+    def file(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTlsCertificateFileArgs']]:
         """
-        Local file certificate.
+        File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
         """
         return pulumi.get(self, "file")
 
     @file.setter
-    def file(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTlsCertificateFileArgs']]):
+    def file(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTlsCertificateFileArgs']]):
         pulumi.set(self, "file", value)
 
     @_builtins.property
     @pulumi.getter
-    def sds(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTlsCertificateSdsArgs']]:
+    def sds(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTlsCertificateSdsArgs']]:
         """
-        A [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+        TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
         """
         return pulumi.get(self, "sds")
 
     @sds.setter
-    def sds(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTlsCertificateSdsArgs']]):
+    def sds(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTlsCertificateSdsArgs']]):
         pulumi.set(self, "sds", value)
 
 
@@ -10131,7 +10043,7 @@ class VirtualNodeSpecListenerTlsCertificateFileArgs:
 class VirtualNodeSpecListenerTlsCertificateSdsArgsDict(TypedDict):
     secret_name: pulumi.Input[_builtins.str]
     """
-    Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+    Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
     """
 
 @pulumi.input_type
@@ -10139,7 +10051,7 @@ class VirtualNodeSpecListenerTlsCertificateSdsArgs:
     def __init__(__self__, *,
                  secret_name: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
         """
         pulumi.set(__self__, "secret_name", secret_name)
 
@@ -10147,7 +10059,7 @@ class VirtualNodeSpecListenerTlsCertificateSdsArgs:
     @pulumi.getter(name="secretName")
     def secret_name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
         """
         return pulumi.get(self, "secret_name")
 
@@ -10159,21 +10071,21 @@ class VirtualNodeSpecListenerTlsCertificateSdsArgs:
 class VirtualNodeSpecListenerTlsValidationArgsDict(TypedDict):
     trust: pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustArgsDict']
     """
-    TLS validation context trust.
+    TLS validation context trust. See `spec.listener.tls.validation.trust` Block for details.
     """
-    subject_alternative_names: NotRequired[pulumi.Input['VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesArgsDict']]
+    subject_alternative_names: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesArgsDict']]]
     """
-    SANs for a TLS validation context.
+    SANs for a TLS validation context. See `spec.listener.tls.validation.subject_alternative_names` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecListenerTlsValidationArgs:
     def __init__(__self__, *,
                  trust: pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustArgs'],
-                 subject_alternative_names: Optional[pulumi.Input['VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesArgs']] = None):
+                 subject_alternative_names: pulumi.Input[Optional['VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustArgs'] trust: TLS validation context trust.
-        :param pulumi.Input['VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesArgs'] subject_alternative_names: SANs for a TLS validation context.
+        :param pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustArgs'] trust: TLS validation context trust. See `spec.listener.tls.validation.trust` Block for details.
+        :param pulumi.Input['VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesArgs'] subject_alternative_names: SANs for a TLS validation context. See `spec.listener.tls.validation.subject_alternative_names` Block for details.
         """
         pulumi.set(__self__, "trust", trust)
         if subject_alternative_names is not None:
@@ -10183,7 +10095,7 @@ class VirtualNodeSpecListenerTlsValidationArgs:
     @pulumi.getter
     def trust(self) -> pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustArgs']:
         """
-        TLS validation context trust.
+        TLS validation context trust. See `spec.listener.tls.validation.trust` Block for details.
         """
         return pulumi.get(self, "trust")
 
@@ -10193,21 +10105,21 @@ class VirtualNodeSpecListenerTlsValidationArgs:
 
     @_builtins.property
     @pulumi.getter(name="subjectAlternativeNames")
-    def subject_alternative_names(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesArgs']]:
+    def subject_alternative_names(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesArgs']]:
         """
-        SANs for a TLS validation context.
+        SANs for a TLS validation context. See `spec.listener.tls.validation.subject_alternative_names` Block for details.
         """
         return pulumi.get(self, "subject_alternative_names")
 
     @subject_alternative_names.setter
-    def subject_alternative_names(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesArgs']]):
+    def subject_alternative_names(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesArgs']]):
         pulumi.set(self, "subject_alternative_names", value)
 
 
 class VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesArgsDict(TypedDict):
     match: pulumi.Input['VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesMatchArgsDict']
     """
-    Criteria for determining a SAN's match.
+    Criteria for determining a SAN's match. See `spec.listener.tls.validation.subject_alternative_names.match` Block for details.
     """
 
 @pulumi.input_type
@@ -10215,7 +10127,7 @@ class VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesArgs:
     def __init__(__self__, *,
                  match: pulumi.Input['VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesMatchArgs']):
         """
-        :param pulumi.Input['VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesMatchArgs'] match: Criteria for determining a SAN's match.
+        :param pulumi.Input['VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesMatchArgs'] match: Criteria for determining a SAN's match. See `spec.listener.tls.validation.subject_alternative_names.match` Block for details.
         """
         pulumi.set(__self__, "match", match)
 
@@ -10223,7 +10135,7 @@ class VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesArgs:
     @pulumi.getter
     def match(self) -> pulumi.Input['VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesMatchArgs']:
         """
-        Criteria for determining a SAN's match.
+        Criteria for determining a SAN's match. See `spec.listener.tls.validation.subject_alternative_names.match` Block for details.
         """
         return pulumi.get(self, "match")
 
@@ -10261,23 +10173,23 @@ class VirtualNodeSpecListenerTlsValidationSubjectAlternativeNamesMatchArgs:
 
 
 class VirtualNodeSpecListenerTlsValidationTrustArgsDict(TypedDict):
-    file: NotRequired[pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustFileArgsDict']]
+    file: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTlsValidationTrustFileArgsDict']]]
     """
-    TLS validation context trust for a local file certificate.
+    File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
     """
-    sds: NotRequired[pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustSdsArgsDict']]
+    sds: NotRequired[pulumi.Input[Optional['VirtualNodeSpecListenerTlsValidationTrustSdsArgsDict']]]
     """
-    TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+    TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecListenerTlsValidationTrustArgs:
     def __init__(__self__, *,
-                 file: Optional[pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustFileArgs']] = None,
-                 sds: Optional[pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustSdsArgs']] = None):
+                 file: pulumi.Input[Optional['VirtualNodeSpecListenerTlsValidationTrustFileArgs']] = None,
+                 sds: pulumi.Input[Optional['VirtualNodeSpecListenerTlsValidationTrustSdsArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustFileArgs'] file: TLS validation context trust for a local file certificate.
-        :param pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustSdsArgs'] sds: TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+        :param pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustFileArgs'] file: File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
+        :param pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustSdsArgs'] sds: TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
         """
         if file is not None:
             pulumi.set(__self__, "file", file)
@@ -10286,26 +10198,26 @@ class VirtualNodeSpecListenerTlsValidationTrustArgs:
 
     @_builtins.property
     @pulumi.getter
-    def file(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustFileArgs']]:
+    def file(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTlsValidationTrustFileArgs']]:
         """
-        TLS validation context trust for a local file certificate.
+        File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
         """
         return pulumi.get(self, "file")
 
     @file.setter
-    def file(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustFileArgs']]):
+    def file(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTlsValidationTrustFileArgs']]):
         pulumi.set(self, "file", value)
 
     @_builtins.property
     @pulumi.getter
-    def sds(self) -> Optional[pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustSdsArgs']]:
+    def sds(self) -> pulumi.Input[Optional['VirtualNodeSpecListenerTlsValidationTrustSdsArgs']]:
         """
-        TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate.
+        TLS validation context trust for a [Secret Discovery Service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#secret-discovery-service-sds) certificate. See `spec.listener.tls.validation.trust.sds` Block for details.
         """
         return pulumi.get(self, "sds")
 
     @sds.setter
-    def sds(self, value: Optional[pulumi.Input['VirtualNodeSpecListenerTlsValidationTrustSdsArgs']]):
+    def sds(self, value: pulumi.Input[Optional['VirtualNodeSpecListenerTlsValidationTrustSdsArgs']]):
         pulumi.set(self, "sds", value)
 
 
@@ -10340,7 +10252,7 @@ class VirtualNodeSpecListenerTlsValidationTrustFileArgs:
 class VirtualNodeSpecListenerTlsValidationTrustSdsArgsDict(TypedDict):
     secret_name: pulumi.Input[_builtins.str]
     """
-    Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+    Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
     """
 
 @pulumi.input_type
@@ -10348,7 +10260,7 @@ class VirtualNodeSpecListenerTlsValidationTrustSdsArgs:
     def __init__(__self__, *,
                  secret_name: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        :param pulumi.Input[_builtins.str] secret_name: Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
         """
         pulumi.set(__self__, "secret_name", secret_name)
 
@@ -10356,7 +10268,7 @@ class VirtualNodeSpecListenerTlsValidationTrustSdsArgs:
     @pulumi.getter(name="secretName")
     def secret_name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name of the secret for a virtual node's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
+        Name of the secret for a virtual node's TLS Secret Discovery Service validation context trust.
         """
         return pulumi.get(self, "secret_name")
 
@@ -10366,60 +10278,60 @@ class VirtualNodeSpecListenerTlsValidationTrustSdsArgs:
 
 
 class VirtualNodeSpecLoggingArgsDict(TypedDict):
-    access_log: NotRequired[pulumi.Input['VirtualNodeSpecLoggingAccessLogArgsDict']]
+    access_log: NotRequired[pulumi.Input[Optional['VirtualNodeSpecLoggingAccessLogArgsDict']]]
     """
-    Access log configuration for a virtual node.
+    Access log configuration for a virtual node. See `spec.logging.access_log` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecLoggingArgs:
     def __init__(__self__, *,
-                 access_log: Optional[pulumi.Input['VirtualNodeSpecLoggingAccessLogArgs']] = None):
+                 access_log: pulumi.Input[Optional['VirtualNodeSpecLoggingAccessLogArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecLoggingAccessLogArgs'] access_log: Access log configuration for a virtual node.
+        :param pulumi.Input['VirtualNodeSpecLoggingAccessLogArgs'] access_log: Access log configuration for a virtual node. See `spec.logging.access_log` Block for details.
         """
         if access_log is not None:
             pulumi.set(__self__, "access_log", access_log)
 
     @_builtins.property
     @pulumi.getter(name="accessLog")
-    def access_log(self) -> Optional[pulumi.Input['VirtualNodeSpecLoggingAccessLogArgs']]:
+    def access_log(self) -> pulumi.Input[Optional['VirtualNodeSpecLoggingAccessLogArgs']]:
         """
-        Access log configuration for a virtual node.
+        Access log configuration for a virtual node. See `spec.logging.access_log` Block for details.
         """
         return pulumi.get(self, "access_log")
 
     @access_log.setter
-    def access_log(self, value: Optional[pulumi.Input['VirtualNodeSpecLoggingAccessLogArgs']]):
+    def access_log(self, value: pulumi.Input[Optional['VirtualNodeSpecLoggingAccessLogArgs']]):
         pulumi.set(self, "access_log", value)
 
 
 class VirtualNodeSpecLoggingAccessLogArgsDict(TypedDict):
-    file: NotRequired[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileArgsDict']]
+    file: NotRequired[pulumi.Input[Optional['VirtualNodeSpecLoggingAccessLogFileArgsDict']]]
     """
-    File object to send virtual node access logs to.
+    File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecLoggingAccessLogArgs:
     def __init__(__self__, *,
-                 file: Optional[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileArgs']] = None):
+                 file: pulumi.Input[Optional['VirtualNodeSpecLoggingAccessLogFileArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecLoggingAccessLogFileArgs'] file: File object to send virtual node access logs to.
+        :param pulumi.Input['VirtualNodeSpecLoggingAccessLogFileArgs'] file: File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
         """
         if file is not None:
             pulumi.set(__self__, "file", file)
 
     @_builtins.property
     @pulumi.getter
-    def file(self) -> Optional[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileArgs']]:
+    def file(self) -> pulumi.Input[Optional['VirtualNodeSpecLoggingAccessLogFileArgs']]:
         """
-        File object to send virtual node access logs to.
+        File object to send virtual node access logs to. See `spec.logging.access_log.file` Block for details.
         """
         return pulumi.get(self, "file")
 
     @file.setter
-    def file(self, value: Optional[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileArgs']]):
+    def file(self, value: pulumi.Input[Optional['VirtualNodeSpecLoggingAccessLogFileArgs']]):
         pulumi.set(self, "file", value)
 
 
@@ -10428,19 +10340,19 @@ class VirtualNodeSpecLoggingAccessLogFileArgsDict(TypedDict):
     """
     File path to write access logs to. You can use `/dev/stdout` to send access logs to standard out. Must be between 1 and 255 characters in length.
     """
-    format: NotRequired[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileFormatArgsDict']]
+    format: NotRequired[pulumi.Input[Optional['VirtualNodeSpecLoggingAccessLogFileFormatArgsDict']]]
     """
-    The specified format for the logs.
+    Format for the logs. See `spec.logging.access_log.file.format` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecLoggingAccessLogFileArgs:
     def __init__(__self__, *,
                  path: pulumi.Input[_builtins.str],
-                 format: Optional[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileFormatArgs']] = None):
+                 format: pulumi.Input[Optional['VirtualNodeSpecLoggingAccessLogFileFormatArgs']] = None):
         """
         :param pulumi.Input[_builtins.str] path: File path to write access logs to. You can use `/dev/stdout` to send access logs to standard out. Must be between 1 and 255 characters in length.
-        :param pulumi.Input['VirtualNodeSpecLoggingAccessLogFileFormatArgs'] format: The specified format for the logs.
+        :param pulumi.Input['VirtualNodeSpecLoggingAccessLogFileFormatArgs'] format: Format for the logs. See `spec.logging.access_log.file.format` Block for details.
         """
         pulumi.set(__self__, "path", path)
         if format is not None:
@@ -10460,35 +10372,35 @@ class VirtualNodeSpecLoggingAccessLogFileArgs:
 
     @_builtins.property
     @pulumi.getter
-    def format(self) -> Optional[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileFormatArgs']]:
+    def format(self) -> pulumi.Input[Optional['VirtualNodeSpecLoggingAccessLogFileFormatArgs']]:
         """
-        The specified format for the logs.
+        Format for the logs. See `spec.logging.access_log.file.format` Block for details.
         """
         return pulumi.get(self, "format")
 
     @format.setter
-    def format(self, value: Optional[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileFormatArgs']]):
+    def format(self, value: pulumi.Input[Optional['VirtualNodeSpecLoggingAccessLogFileFormatArgs']]):
         pulumi.set(self, "format", value)
 
 
 class VirtualNodeSpecLoggingAccessLogFileFormatArgsDict(TypedDict):
-    jsons: NotRequired[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileFormatJsonArgsDict']]]]
+    jsons: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileFormatJsonArgsDict']]]]]
     """
-    The logging format for JSON.
+    Logging format for JSON. See `spec.logging.access_log.file.format.json` Block for details.
     """
-    text: NotRequired[pulumi.Input[_builtins.str]]
+    text: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The logging format for text. Must be between 1 and 1000 characters in length.
+    Logging format for text. Must be between 1 and 1000 characters in length.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecLoggingAccessLogFileFormatArgs:
     def __init__(__self__, *,
-                 jsons: Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileFormatJsonArgs']]]] = None,
-                 text: Optional[pulumi.Input[_builtins.str]] = None):
+                 jsons: pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileFormatJsonArgs']]]] = None,
+                 text: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileFormatJsonArgs']]] jsons: The logging format for JSON.
-        :param pulumi.Input[_builtins.str] text: The logging format for text. Must be between 1 and 1000 characters in length.
+        :param pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileFormatJsonArgs']]] jsons: Logging format for JSON. See `spec.logging.access_log.file.format.json` Block for details.
+        :param pulumi.Input[_builtins.str] text: Logging format for text. Must be between 1 and 1000 characters in length.
         """
         if jsons is not None:
             pulumi.set(__self__, "jsons", jsons)
@@ -10497,37 +10409,37 @@ class VirtualNodeSpecLoggingAccessLogFileFormatArgs:
 
     @_builtins.property
     @pulumi.getter
-    def jsons(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileFormatJsonArgs']]]]:
+    def jsons(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileFormatJsonArgs']]]]:
         """
-        The logging format for JSON.
+        Logging format for JSON. See `spec.logging.access_log.file.format.json` Block for details.
         """
         return pulumi.get(self, "jsons")
 
     @jsons.setter
-    def jsons(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileFormatJsonArgs']]]]):
+    def jsons(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['VirtualNodeSpecLoggingAccessLogFileFormatJsonArgs']]]]):
         pulumi.set(self, "jsons", value)
 
     @_builtins.property
     @pulumi.getter
-    def text(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def text(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The logging format for text. Must be between 1 and 1000 characters in length.
+        Logging format for text. Must be between 1 and 1000 characters in length.
         """
         return pulumi.get(self, "text")
 
     @text.setter
-    def text(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def text(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "text", value)
 
 
 class VirtualNodeSpecLoggingAccessLogFileFormatJsonArgsDict(TypedDict):
     key: pulumi.Input[_builtins.str]
     """
-    The specified key for the JSON. Must be between 1 and 100 characters in length.
+    Key for the JSON. Must be between 1 and 100 characters in length.
     """
     value: pulumi.Input[_builtins.str]
     """
-    The specified value for the JSON. Must be between 1 and 100 characters in length.
+    Value for the JSON. Must be between 1 and 100 characters in length.
     """
 
 @pulumi.input_type
@@ -10536,8 +10448,8 @@ class VirtualNodeSpecLoggingAccessLogFileFormatJsonArgs:
                  key: pulumi.Input[_builtins.str],
                  value: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] key: The specified key for the JSON. Must be between 1 and 100 characters in length.
-        :param pulumi.Input[_builtins.str] value: The specified value for the JSON. Must be between 1 and 100 characters in length.
+        :param pulumi.Input[_builtins.str] key: Key for the JSON. Must be between 1 and 100 characters in length.
+        :param pulumi.Input[_builtins.str] value: Value for the JSON. Must be between 1 and 100 characters in length.
         """
         pulumi.set(__self__, "key", key)
         pulumi.set(__self__, "value", value)
@@ -10546,7 +10458,7 @@ class VirtualNodeSpecLoggingAccessLogFileFormatJsonArgs:
     @pulumi.getter
     def key(self) -> pulumi.Input[_builtins.str]:
         """
-        The specified key for the JSON. Must be between 1 and 100 characters in length.
+        Key for the JSON. Must be between 1 and 100 characters in length.
         """
         return pulumi.get(self, "key")
 
@@ -10558,7 +10470,7 @@ class VirtualNodeSpecLoggingAccessLogFileFormatJsonArgs:
     @pulumi.getter
     def value(self) -> pulumi.Input[_builtins.str]:
         """
-        The specified value for the JSON. Must be between 1 and 100 characters in length.
+        Value for the JSON. Must be between 1 and 100 characters in length.
         """
         return pulumi.get(self, "value")
 
@@ -10568,23 +10480,23 @@ class VirtualNodeSpecLoggingAccessLogFileFormatJsonArgs:
 
 
 class VirtualNodeSpecServiceDiscoveryArgsDict(TypedDict):
-    aws_cloud_map: NotRequired[pulumi.Input['VirtualNodeSpecServiceDiscoveryAwsCloudMapArgsDict']]
+    aws_cloud_map: NotRequired[pulumi.Input[Optional['VirtualNodeSpecServiceDiscoveryAwsCloudMapArgsDict']]]
     """
-    Any AWS Cloud Map information for the virtual node.
+    Any AWS Cloud Map information for the virtual node. See `spec.service_discovery.aws_cloud_map` Block for details.
     """
-    dns: NotRequired[pulumi.Input['VirtualNodeSpecServiceDiscoveryDnsArgsDict']]
+    dns: NotRequired[pulumi.Input[Optional['VirtualNodeSpecServiceDiscoveryDnsArgsDict']]]
     """
-    DNS service name for the virtual node.
+    DNS service name for the virtual node. See `spec.service_discovery.dns` Block for details.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecServiceDiscoveryArgs:
     def __init__(__self__, *,
-                 aws_cloud_map: Optional[pulumi.Input['VirtualNodeSpecServiceDiscoveryAwsCloudMapArgs']] = None,
-                 dns: Optional[pulumi.Input['VirtualNodeSpecServiceDiscoveryDnsArgs']] = None):
+                 aws_cloud_map: pulumi.Input[Optional['VirtualNodeSpecServiceDiscoveryAwsCloudMapArgs']] = None,
+                 dns: pulumi.Input[Optional['VirtualNodeSpecServiceDiscoveryDnsArgs']] = None):
         """
-        :param pulumi.Input['VirtualNodeSpecServiceDiscoveryAwsCloudMapArgs'] aws_cloud_map: Any AWS Cloud Map information for the virtual node.
-        :param pulumi.Input['VirtualNodeSpecServiceDiscoveryDnsArgs'] dns: DNS service name for the virtual node.
+        :param pulumi.Input['VirtualNodeSpecServiceDiscoveryAwsCloudMapArgs'] aws_cloud_map: Any AWS Cloud Map information for the virtual node. See `spec.service_discovery.aws_cloud_map` Block for details.
+        :param pulumi.Input['VirtualNodeSpecServiceDiscoveryDnsArgs'] dns: DNS service name for the virtual node. See `spec.service_discovery.dns` Block for details.
         """
         if aws_cloud_map is not None:
             pulumi.set(__self__, "aws_cloud_map", aws_cloud_map)
@@ -10593,40 +10505,39 @@ class VirtualNodeSpecServiceDiscoveryArgs:
 
     @_builtins.property
     @pulumi.getter(name="awsCloudMap")
-    def aws_cloud_map(self) -> Optional[pulumi.Input['VirtualNodeSpecServiceDiscoveryAwsCloudMapArgs']]:
+    def aws_cloud_map(self) -> pulumi.Input[Optional['VirtualNodeSpecServiceDiscoveryAwsCloudMapArgs']]:
         """
-        Any AWS Cloud Map information for the virtual node.
+        Any AWS Cloud Map information for the virtual node. See `spec.service_discovery.aws_cloud_map` Block for details.
         """
         return pulumi.get(self, "aws_cloud_map")
 
     @aws_cloud_map.setter
-    def aws_cloud_map(self, value: Optional[pulumi.Input['VirtualNodeSpecServiceDiscoveryAwsCloudMapArgs']]):
+    def aws_cloud_map(self, value: pulumi.Input[Optional['VirtualNodeSpecServiceDiscoveryAwsCloudMapArgs']]):
         pulumi.set(self, "aws_cloud_map", value)
 
     @_builtins.property
     @pulumi.getter
-    def dns(self) -> Optional[pulumi.Input['VirtualNodeSpecServiceDiscoveryDnsArgs']]:
+    def dns(self) -> pulumi.Input[Optional['VirtualNodeSpecServiceDiscoveryDnsArgs']]:
         """
-        DNS service name for the virtual node.
+        DNS service name for the virtual node. See `spec.service_discovery.dns` Block for details.
         """
         return pulumi.get(self, "dns")
 
     @dns.setter
-    def dns(self, value: Optional[pulumi.Input['VirtualNodeSpecServiceDiscoveryDnsArgs']]):
+    def dns(self, value: pulumi.Input[Optional['VirtualNodeSpecServiceDiscoveryDnsArgs']]):
         pulumi.set(self, "dns", value)
 
 
 class VirtualNodeSpecServiceDiscoveryAwsCloudMapArgsDict(TypedDict):
     namespace_name: pulumi.Input[_builtins.str]
     """
-    Name of the AWS Cloud Map namespace to use.
-    Use the `servicediscovery.HttpNamespace` resource to configure a Cloud Map namespace. Must be between 1 and 1024 characters in length.
+    Name of the AWS Cloud Map namespace to use. Use the `servicediscovery.HttpNamespace` resource to configure a Cloud Map namespace. Must be between 1 and 1024 characters in length.
     """
     service_name: pulumi.Input[_builtins.str]
     """
     Name of the AWS Cloud Map service to use. Use the `servicediscovery.Service` resource to configure a Cloud Map service. Must be between 1 and 1024 characters in length.
     """
-    attributes: NotRequired[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]
+    attributes: NotRequired[pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]]
     """
     String map that contains attributes with values that you can use to filter instances by any custom attribute that you specified when you registered the instance. Only instances that match all of the specified key/value pairs will be returned.
     """
@@ -10636,10 +10547,9 @@ class VirtualNodeSpecServiceDiscoveryAwsCloudMapArgs:
     def __init__(__self__, *,
                  namespace_name: pulumi.Input[_builtins.str],
                  service_name: pulumi.Input[_builtins.str],
-                 attributes: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 attributes: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
-        :param pulumi.Input[_builtins.str] namespace_name: Name of the AWS Cloud Map namespace to use.
-               Use the `servicediscovery.HttpNamespace` resource to configure a Cloud Map namespace. Must be between 1 and 1024 characters in length.
+        :param pulumi.Input[_builtins.str] namespace_name: Name of the AWS Cloud Map namespace to use. Use the `servicediscovery.HttpNamespace` resource to configure a Cloud Map namespace. Must be between 1 and 1024 characters in length.
         :param pulumi.Input[_builtins.str] service_name: Name of the AWS Cloud Map service to use. Use the `servicediscovery.Service` resource to configure a Cloud Map service. Must be between 1 and 1024 characters in length.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] attributes: String map that contains attributes with values that you can use to filter instances by any custom attribute that you specified when you registered the instance. Only instances that match all of the specified key/value pairs will be returned.
         """
@@ -10652,8 +10562,7 @@ class VirtualNodeSpecServiceDiscoveryAwsCloudMapArgs:
     @pulumi.getter(name="namespaceName")
     def namespace_name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name of the AWS Cloud Map namespace to use.
-        Use the `servicediscovery.HttpNamespace` resource to configure a Cloud Map namespace. Must be between 1 and 1024 characters in length.
+        Name of the AWS Cloud Map namespace to use. Use the `servicediscovery.HttpNamespace` resource to configure a Cloud Map namespace. Must be between 1 and 1024 characters in length.
         """
         return pulumi.get(self, "namespace_name")
 
@@ -10675,14 +10584,14 @@ class VirtualNodeSpecServiceDiscoveryAwsCloudMapArgs:
 
     @_builtins.property
     @pulumi.getter
-    def attributes(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def attributes(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         String map that contains attributes with values that you can use to filter instances by any custom attribute that you specified when you registered the instance. Only instances that match all of the specified key/value pairs will be returned.
         """
         return pulumi.get(self, "attributes")
 
     @attributes.setter
-    def attributes(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def attributes(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "attributes", value)
 
 
@@ -10691,25 +10600,25 @@ class VirtualNodeSpecServiceDiscoveryDnsArgsDict(TypedDict):
     """
     DNS host name for your virtual node.
     """
-    ip_preference: NotRequired[pulumi.Input[_builtins.str]]
+    ip_preference: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The preferred IP version that this virtual node uses. Valid values: `IPv6_PREFERRED`, `IPv4_PREFERRED`, `IPv4_ONLY`, `IPv6_ONLY`.
+    Preferred IP version that this virtual node uses. Valid values: `IPv6_PREFERRED`, `IPv4_PREFERRED`, `IPv4_ONLY`, `IPv6_ONLY`.
     """
-    response_type: NotRequired[pulumi.Input[_builtins.str]]
+    response_type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The DNS response type for the virtual node. Valid values: `LOADBALANCER`, `ENDPOINTS`.
+    DNS response type for the virtual node. Valid values: `LOADBALANCER`, `ENDPOINTS`.
     """
 
 @pulumi.input_type
 class VirtualNodeSpecServiceDiscoveryDnsArgs:
     def __init__(__self__, *,
                  hostname: pulumi.Input[_builtins.str],
-                 ip_preference: Optional[pulumi.Input[_builtins.str]] = None,
-                 response_type: Optional[pulumi.Input[_builtins.str]] = None):
+                 ip_preference: pulumi.Input[Optional[_builtins.str]] = None,
+                 response_type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] hostname: DNS host name for your virtual node.
-        :param pulumi.Input[_builtins.str] ip_preference: The preferred IP version that this virtual node uses. Valid values: `IPv6_PREFERRED`, `IPv4_PREFERRED`, `IPv4_ONLY`, `IPv6_ONLY`.
-        :param pulumi.Input[_builtins.str] response_type: The DNS response type for the virtual node. Valid values: `LOADBALANCER`, `ENDPOINTS`.
+        :param pulumi.Input[_builtins.str] ip_preference: Preferred IP version that this virtual node uses. Valid values: `IPv6_PREFERRED`, `IPv4_PREFERRED`, `IPv4_ONLY`, `IPv6_ONLY`.
+        :param pulumi.Input[_builtins.str] response_type: DNS response type for the virtual node. Valid values: `LOADBALANCER`, `ENDPOINTS`.
         """
         pulumi.set(__self__, "hostname", hostname)
         if ip_preference is not None:
@@ -10731,65 +10640,62 @@ class VirtualNodeSpecServiceDiscoveryDnsArgs:
 
     @_builtins.property
     @pulumi.getter(name="ipPreference")
-    def ip_preference(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def ip_preference(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The preferred IP version that this virtual node uses. Valid values: `IPv6_PREFERRED`, `IPv4_PREFERRED`, `IPv4_ONLY`, `IPv6_ONLY`.
+        Preferred IP version that this virtual node uses. Valid values: `IPv6_PREFERRED`, `IPv4_PREFERRED`, `IPv4_ONLY`, `IPv6_ONLY`.
         """
         return pulumi.get(self, "ip_preference")
 
     @ip_preference.setter
-    def ip_preference(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def ip_preference(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "ip_preference", value)
 
     @_builtins.property
     @pulumi.getter(name="responseType")
-    def response_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def response_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The DNS response type for the virtual node. Valid values: `LOADBALANCER`, `ENDPOINTS`.
+        DNS response type for the virtual node. Valid values: `LOADBALANCER`, `ENDPOINTS`.
         """
         return pulumi.get(self, "response_type")
 
     @response_type.setter
-    def response_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def response_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "response_type", value)
 
 
 class VirtualRouterSpecArgsDict(TypedDict):
-    listeners: NotRequired[pulumi.Input[Sequence[pulumi.Input['VirtualRouterSpecListenerArgsDict']]]]
+    listeners: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['VirtualRouterSpecListenerArgsDict']]]]]
     """
-    Listeners that the virtual router is expected to receive inbound traffic from.
-    Currently only one listener is supported per virtual router.
+    Listeners that the virtual router is expected to receive inbound traffic from. Currently only one listener is supported per virtual router. See `listener` Block for details.
     """
 
 @pulumi.input_type
 class VirtualRouterSpecArgs:
     def __init__(__self__, *,
-                 listeners: Optional[pulumi.Input[Sequence[pulumi.Input['VirtualRouterSpecListenerArgs']]]] = None):
+                 listeners: pulumi.Input[Optional[Sequence[pulumi.Input['VirtualRouterSpecListenerArgs']]]] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['VirtualRouterSpecListenerArgs']]] listeners: Listeners that the virtual router is expected to receive inbound traffic from.
-               Currently only one listener is supported per virtual router.
+        :param pulumi.Input[Sequence[pulumi.Input['VirtualRouterSpecListenerArgs']]] listeners: Listeners that the virtual router is expected to receive inbound traffic from. Currently only one listener is supported per virtual router. See `listener` Block for details.
         """
         if listeners is not None:
             pulumi.set(__self__, "listeners", listeners)
 
     @_builtins.property
     @pulumi.getter
-    def listeners(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['VirtualRouterSpecListenerArgs']]]]:
+    def listeners(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['VirtualRouterSpecListenerArgs']]]]:
         """
-        Listeners that the virtual router is expected to receive inbound traffic from.
-        Currently only one listener is supported per virtual router.
+        Listeners that the virtual router is expected to receive inbound traffic from. Currently only one listener is supported per virtual router. See `listener` Block for details.
         """
         return pulumi.get(self, "listeners")
 
     @listeners.setter
-    def listeners(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['VirtualRouterSpecListenerArgs']]]]):
+    def listeners(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['VirtualRouterSpecListenerArgs']]]]):
         pulumi.set(self, "listeners", value)
 
 
 class VirtualRouterSpecListenerArgsDict(TypedDict):
     port_mapping: pulumi.Input['VirtualRouterSpecListenerPortMappingArgsDict']
     """
-    Port mapping information for the listener.
+    Port mapping information for the listener. See `port_mapping` Block for details.
     """
 
 @pulumi.input_type
@@ -10797,7 +10703,7 @@ class VirtualRouterSpecListenerArgs:
     def __init__(__self__, *,
                  port_mapping: pulumi.Input['VirtualRouterSpecListenerPortMappingArgs']):
         """
-        :param pulumi.Input['VirtualRouterSpecListenerPortMappingArgs'] port_mapping: Port mapping information for the listener.
+        :param pulumi.Input['VirtualRouterSpecListenerPortMappingArgs'] port_mapping: Port mapping information for the listener. See `port_mapping` Block for details.
         """
         pulumi.set(__self__, "port_mapping", port_mapping)
 
@@ -10805,7 +10711,7 @@ class VirtualRouterSpecListenerArgs:
     @pulumi.getter(name="portMapping")
     def port_mapping(self) -> pulumi.Input['VirtualRouterSpecListenerPortMappingArgs']:
         """
-        Port mapping information for the listener.
+        Port mapping information for the listener. See `port_mapping` Block for details.
         """
         return pulumi.get(self, "port_mapping")
 
@@ -10862,52 +10768,52 @@ class VirtualRouterSpecListenerPortMappingArgs:
 
 
 class VirtualServiceSpecArgsDict(TypedDict):
-    provider: NotRequired[pulumi.Input['VirtualServiceSpecProviderArgsDict']]
+    provider: NotRequired[pulumi.Input[Optional['VirtualServiceSpecProviderArgsDict']]]
     """
-    App Mesh object that is acting as the provider for a virtual service. You can specify a single virtual node or virtual router.
+    App Mesh object that is acting as the provider for a virtual service. You can specify a single virtual node or virtual router. See `provider` Block for details.
     """
 
 @pulumi.input_type
 class VirtualServiceSpecArgs:
     def __init__(__self__, *,
-                 provider: Optional[pulumi.Input['VirtualServiceSpecProviderArgs']] = None):
+                 provider: pulumi.Input[Optional['VirtualServiceSpecProviderArgs']] = None):
         """
-        :param pulumi.Input['VirtualServiceSpecProviderArgs'] provider: App Mesh object that is acting as the provider for a virtual service. You can specify a single virtual node or virtual router.
+        :param pulumi.Input['VirtualServiceSpecProviderArgs'] provider: App Mesh object that is acting as the provider for a virtual service. You can specify a single virtual node or virtual router. See `provider` Block for details.
         """
         if provider is not None:
             pulumi.set(__self__, "provider", provider)
 
     @_builtins.property
     @pulumi.getter
-    def provider(self) -> Optional[pulumi.Input['VirtualServiceSpecProviderArgs']]:
+    def provider(self) -> pulumi.Input[Optional['VirtualServiceSpecProviderArgs']]:
         """
-        App Mesh object that is acting as the provider for a virtual service. You can specify a single virtual node or virtual router.
+        App Mesh object that is acting as the provider for a virtual service. You can specify a single virtual node or virtual router. See `provider` Block for details.
         """
         return pulumi.get(self, "provider")
 
     @provider.setter
-    def provider(self, value: Optional[pulumi.Input['VirtualServiceSpecProviderArgs']]):
+    def provider(self, value: pulumi.Input[Optional['VirtualServiceSpecProviderArgs']]):
         pulumi.set(self, "provider", value)
 
 
 class VirtualServiceSpecProviderArgsDict(TypedDict):
-    virtual_node: NotRequired[pulumi.Input['VirtualServiceSpecProviderVirtualNodeArgsDict']]
+    virtual_node: NotRequired[pulumi.Input[Optional['VirtualServiceSpecProviderVirtualNodeArgsDict']]]
     """
-    Virtual node associated with a virtual service.
+    Virtual node associated with a virtual service. See `virtual_node` Block for details.
     """
-    virtual_router: NotRequired[pulumi.Input['VirtualServiceSpecProviderVirtualRouterArgsDict']]
+    virtual_router: NotRequired[pulumi.Input[Optional['VirtualServiceSpecProviderVirtualRouterArgsDict']]]
     """
-    Virtual router associated with a virtual service.
+    Virtual router associated with a virtual service. See `virtual_router` Block for details.
     """
 
 @pulumi.input_type
 class VirtualServiceSpecProviderArgs:
     def __init__(__self__, *,
-                 virtual_node: Optional[pulumi.Input['VirtualServiceSpecProviderVirtualNodeArgs']] = None,
-                 virtual_router: Optional[pulumi.Input['VirtualServiceSpecProviderVirtualRouterArgs']] = None):
+                 virtual_node: pulumi.Input[Optional['VirtualServiceSpecProviderVirtualNodeArgs']] = None,
+                 virtual_router: pulumi.Input[Optional['VirtualServiceSpecProviderVirtualRouterArgs']] = None):
         """
-        :param pulumi.Input['VirtualServiceSpecProviderVirtualNodeArgs'] virtual_node: Virtual node associated with a virtual service.
-        :param pulumi.Input['VirtualServiceSpecProviderVirtualRouterArgs'] virtual_router: Virtual router associated with a virtual service.
+        :param pulumi.Input['VirtualServiceSpecProviderVirtualNodeArgs'] virtual_node: Virtual node associated with a virtual service. See `virtual_node` Block for details.
+        :param pulumi.Input['VirtualServiceSpecProviderVirtualRouterArgs'] virtual_router: Virtual router associated with a virtual service. See `virtual_router` Block for details.
         """
         if virtual_node is not None:
             pulumi.set(__self__, "virtual_node", virtual_node)
@@ -10916,26 +10822,26 @@ class VirtualServiceSpecProviderArgs:
 
     @_builtins.property
     @pulumi.getter(name="virtualNode")
-    def virtual_node(self) -> Optional[pulumi.Input['VirtualServiceSpecProviderVirtualNodeArgs']]:
+    def virtual_node(self) -> pulumi.Input[Optional['VirtualServiceSpecProviderVirtualNodeArgs']]:
         """
-        Virtual node associated with a virtual service.
+        Virtual node associated with a virtual service. See `virtual_node` Block for details.
         """
         return pulumi.get(self, "virtual_node")
 
     @virtual_node.setter
-    def virtual_node(self, value: Optional[pulumi.Input['VirtualServiceSpecProviderVirtualNodeArgs']]):
+    def virtual_node(self, value: pulumi.Input[Optional['VirtualServiceSpecProviderVirtualNodeArgs']]):
         pulumi.set(self, "virtual_node", value)
 
     @_builtins.property
     @pulumi.getter(name="virtualRouter")
-    def virtual_router(self) -> Optional[pulumi.Input['VirtualServiceSpecProviderVirtualRouterArgs']]:
+    def virtual_router(self) -> pulumi.Input[Optional['VirtualServiceSpecProviderVirtualRouterArgs']]:
         """
-        Virtual router associated with a virtual service.
+        Virtual router associated with a virtual service. See `virtual_router` Block for details.
         """
         return pulumi.get(self, "virtual_router")
 
     @virtual_router.setter
-    def virtual_router(self, value: Optional[pulumi.Input['VirtualServiceSpecProviderVirtualRouterArgs']]):
+    def virtual_router(self, value: pulumi.Input[Optional['VirtualServiceSpecProviderVirtualRouterArgs']]):
         pulumi.set(self, "virtual_router", value)
 
 

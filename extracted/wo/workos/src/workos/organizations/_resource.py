@@ -2,38 +2,42 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .._client import AsyncWorkOSClient, WorkOSClient
 
-from .._types import RequestOptions, enum_value, NOT_GIVEN, NotGiven
+from workos.common.models.invite_it_contact_intents import InviteItContactIntents
+from workos.common.models.pagination_order import PaginationOrder
+
+from .._pagination import AsyncPage, SyncPage
+from .._types import NOT_GIVEN, NotGiven, RequestOptions, enum_value
 from .models import (
     AuditLogConfiguration,
+    ItContact,
+    ItContactList,
     Organization,
     OrganizationAuthorizedConnectApplicationListData,
     OrganizationDomainData,
 )
-from workos.common.models.pagination_order import PaginationOrder
-from .._pagination import AsyncPage, SyncPage
 
 
 class Organizations:
     """Organizations API resources."""
 
-    def __init__(self, client: "WorkOSClient") -> None:
+    def __init__(self, client: WorkOSClient) -> None:
         self._client = client
 
     def list_organizations(
         self,
         *,
-        limit: Optional[int] = None,
-        before: Optional[str] = None,
-        after: Optional[str] = None,
-        order: Optional[Union[PaginationOrder, str]] = "desc",
-        domains: Optional[List[str]] = None,
-        search: Optional[str] = None,
-        request_options: Optional[RequestOptions] = None,
+        limit: int | None = None,
+        before: str | None = None,
+        after: str | None = None,
+        order: PaginationOrder | str | None = "desc",
+        domains: list[str] | None = None,
+        search: str | None = None,
+        request_options: RequestOptions | None = None,
     ) -> SyncPage[Organization]:
         """List Organizations
 
@@ -83,12 +87,12 @@ class Organizations:
         self,
         *,
         name: str,
-        allow_profiles_outside_organization: Optional[bool] = None,
-        domains: Optional[List[str]] = None,
-        domain_data: Optional[List[OrganizationDomainData]] = None,
-        metadata: Union[Dict[str, str], None, NotGiven] = NOT_GIVEN,
-        external_id: Union[str, None, NotGiven] = NOT_GIVEN,
-        request_options: Optional[RequestOptions] = None,
+        allow_profiles_outside_organization: bool | None = None,
+        domains: list[str] | None = None,
+        domain_data: list[OrganizationDomainData] | None = None,
+        metadata: dict[str, str] | None | NotGiven = NOT_GIVEN,
+        external_id: str | None | NotGiven = NOT_GIVEN,
+        request_options: RequestOptions | None = None,
     ) -> Organization:
         """Create an Organization
 
@@ -97,7 +101,7 @@ class Organizations:
         Args:
             name: The name of the organization.
             allow_profiles_outside_organization: Whether the organization allows profiles from outside the organization to sign in.
-            domains: The domains associated with the organization. Deprecated in favor of `domain_data`.
+            domains: (deprecated) The domains associated with the organization. Deprecated in favor of `domain_data`.
             domain_data: The domains associated with the organization, including verification state.
             metadata: Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization.
             external_id: An external identifier for the Organization.
@@ -114,7 +118,7 @@ class Organizations:
             RateLimitExceededError: If rate limited (429).
             ServerError: If the server returns a 5xx error.
         """
-        body: Dict[str, Any] = {
+        body: dict[str, Any] = {
             k: v
             for k, v in {
                 "name": name,
@@ -142,7 +146,7 @@ class Organizations:
         self,
         external_id: str,
         *,
-        request_options: Optional[RequestOptions] = None,
+        request_options: RequestOptions | None = None,
     ) -> Organization:
         """Get an Organization by External ID
 
@@ -172,7 +176,7 @@ class Organizations:
         self,
         id: str,
         *,
-        request_options: Optional[RequestOptions] = None,
+        request_options: RequestOptions | None = None,
     ) -> Organization:
         """Get an Organization
 
@@ -202,14 +206,14 @@ class Organizations:
         self,
         id: str,
         *,
-        name: Optional[str] = None,
-        allow_profiles_outside_organization: Optional[bool] = None,
-        domains: Optional[List[str]] = None,
-        domain_data: Optional[List[OrganizationDomainData]] = None,
-        stripe_customer_id: Optional[str] = None,
-        metadata: Union[Dict[str, str], None, NotGiven] = NOT_GIVEN,
-        external_id: Union[str, None, NotGiven] = NOT_GIVEN,
-        request_options: Optional[RequestOptions] = None,
+        name: str | None = None,
+        allow_profiles_outside_organization: bool | None = None,
+        domains: list[str] | None = None,
+        domain_data: list[OrganizationDomainData] | None = None,
+        stripe_customer_id: str | None = None,
+        metadata: dict[str, str] | None | NotGiven = NOT_GIVEN,
+        external_id: str | None | NotGiven = NOT_GIVEN,
+        request_options: RequestOptions | None = None,
     ) -> Organization:
         """Update an Organization
 
@@ -239,7 +243,7 @@ class Organizations:
             RateLimitExceededError: If rate limited (429).
             ServerError: If the server returns a 5xx error.
         """
-        body: Dict[str, Any] = {
+        body: dict[str, Any] = {
             k: v
             for k, v in {
                 "name": name,
@@ -268,7 +272,7 @@ class Organizations:
         self,
         id: str,
         *,
-        request_options: Optional[RequestOptions] = None,
+        request_options: RequestOptions | None = None,
     ) -> None:
         """Delete an Organization
 
@@ -294,7 +298,7 @@ class Organizations:
         self,
         id: str,
         *,
-        request_options: Optional[RequestOptions] = None,
+        request_options: RequestOptions | None = None,
     ) -> AuditLogConfiguration:
         """Get Audit Log Configuration
 
@@ -324,11 +328,11 @@ class Organizations:
         self,
         organization_id: str,
         *,
-        limit: Optional[int] = None,
-        before: Optional[str] = None,
-        after: Optional[str] = None,
-        order: Optional[Union[PaginationOrder, str]] = "desc",
-        request_options: Optional[RequestOptions] = None,
+        limit: int | None = None,
+        before: str | None = None,
+        after: str | None = None,
+        order: PaginationOrder | str | None = "desc",
+        request_options: RequestOptions | None = None,
     ) -> SyncPage[OrganizationAuthorizedConnectApplicationListData]:
         """List authorized applications
 
@@ -370,23 +374,205 @@ class Organizations:
             request_options=request_options,
         )
 
+    def list_it_contacts(
+        self,
+        organization_id: str,
+        *,
+        request_options: RequestOptions | None = None,
+    ) -> ItContactList:
+        """List IT contacts
+
+        Get the IT contacts for an organization.
+
+        Args:
+            organization_id: The ID of the organization.
+            request_options: Per-request options. Supports extra_headers, timeout, max_retries, and base_url override.
+
+        Returns:
+            ItContactList
+
+        Raises:
+            AuthorizationError: If the request is forbidden (403).
+            NotFoundError: If the resource is not found (404).
+            AuthenticationError: If the API key is invalid (401).
+            RateLimitExceededError: If rate limited (429).
+            ServerError: If the server returns a 5xx error.
+        """
+        return self._client.request(
+            method="get",
+            path=("organizations", str(organization_id), "it_contacts"),
+            model=ItContactList,
+            request_options=request_options,
+        )
+
+    def create_it_contact(
+        self,
+        organization_id: str,
+        *,
+        email: str,
+        request_options: RequestOptions | None = None,
+    ) -> ItContact:
+        """Create an IT contact
+
+        Add an IT contact to an organization. No Admin Portal invitation is sent, though the contact is notified if the organization has a connection certificate nearing expiry.
+
+        Args:
+            organization_id: The ID of the organization.
+            email: The email address of the IT contact.
+            request_options: Per-request options. Supports extra_headers, timeout, max_retries, and base_url override.
+
+        Returns:
+            ItContact
+
+        Raises:
+            AuthorizationError: If the request is forbidden (403).
+            NotFoundError: If the resource is not found (404).
+            ConflictError: If a conflict occurs (409).
+            UnprocessableEntityError: If the request data is unprocessable (422).
+            AuthenticationError: If the API key is invalid (401).
+            RateLimitExceededError: If rate limited (429).
+            ServerError: If the server returns a 5xx error.
+        """
+        body: dict[str, Any] = {
+            "email": email,
+        }
+        return self._client.request(
+            method="post",
+            path=("organizations", str(organization_id), "it_contacts"),
+            body=body,
+            model=ItContact,
+            request_options=request_options,
+        )
+
+    def delete_it_contact(
+        self,
+        organization_id: str,
+        contact_id: str,
+        *,
+        request_options: RequestOptions | None = None,
+    ) -> None:
+        """Delete an IT contact
+
+        Remove an IT contact from an organization and revoke the contact's active setup links.
+
+        Args:
+            organization_id: The ID of the organization.
+            contact_id: The ID of the IT contact.
+            request_options: Per-request options. Supports extra_headers, timeout, max_retries, and base_url override.
+
+        Raises:
+            AuthorizationError: If the request is forbidden (403).
+            NotFoundError: If the resource is not found (404).
+            AuthenticationError: If the API key is invalid (401).
+            RateLimitExceededError: If rate limited (429).
+            ServerError: If the server returns a 5xx error.
+        """
+        self._client.request(
+            method="delete",
+            path=(
+                "organizations",
+                str(organization_id),
+                "it_contacts",
+                str(contact_id),
+            ),
+            request_options=request_options,
+        )
+
+    def invite_it_contact(
+        self,
+        organization_id: str,
+        contact_id: str,
+        *,
+        intents: list[InviteItContactIntents | str],
+        request_options: RequestOptions | None = None,
+    ) -> None:
+        """Invite an IT contact
+
+        Create an Admin Portal setup link and email it to the IT contact. An organization can have at most one active invitation.
+
+        Args:
+            organization_id: The ID of the organization.
+            contact_id: The ID of the IT contact.
+            intents: The Admin Portal features that the IT contact can configure.
+            request_options: Per-request options. Supports extra_headers, timeout, max_retries, and base_url override.
+
+        Raises:
+            AuthorizationError: If the request is forbidden (403).
+            NotFoundError: If the resource is not found (404).
+            ConflictError: If a conflict occurs (409).
+            UnprocessableEntityError: If the request data is unprocessable (422).
+            AuthenticationError: If the API key is invalid (401).
+            RateLimitExceededError: If rate limited (429).
+            ServerError: If the server returns a 5xx error.
+        """
+        body: dict[str, Any] = {
+            "intents": intents,
+        }
+        self._client.request(
+            method="post",
+            path=(
+                "organizations",
+                str(organization_id),
+                "it_contacts",
+                str(contact_id),
+                "invite",
+            ),
+            body=body,
+            request_options=request_options,
+        )
+
+    def revoke_it_contact(
+        self,
+        organization_id: str,
+        contact_id: str,
+        *,
+        request_options: RequestOptions | None = None,
+    ) -> None:
+        """Revoke an IT contact's invitation
+
+        Revoke the organization's active Admin Portal invitation.
+
+        Args:
+            organization_id: The ID of the organization.
+            contact_id: The ID of the IT contact.
+            request_options: Per-request options. Supports extra_headers, timeout, max_retries, and base_url override.
+
+        Raises:
+            AuthorizationError: If the request is forbidden (403).
+            NotFoundError: If the resource is not found (404).
+            AuthenticationError: If the API key is invalid (401).
+            RateLimitExceededError: If rate limited (429).
+            ServerError: If the server returns a 5xx error.
+        """
+        self._client.request(
+            method="post",
+            path=(
+                "organizations",
+                str(organization_id),
+                "it_contacts",
+                str(contact_id),
+                "revoke",
+            ),
+            request_options=request_options,
+        )
+
 
 class AsyncOrganizations:
     """Organizations API resources (async)."""
 
-    def __init__(self, client: "AsyncWorkOSClient") -> None:
+    def __init__(self, client: AsyncWorkOSClient) -> None:
         self._client = client
 
     async def list_organizations(
         self,
         *,
-        limit: Optional[int] = None,
-        before: Optional[str] = None,
-        after: Optional[str] = None,
-        order: Optional[Union[PaginationOrder, str]] = "desc",
-        domains: Optional[List[str]] = None,
-        search: Optional[str] = None,
-        request_options: Optional[RequestOptions] = None,
+        limit: int | None = None,
+        before: str | None = None,
+        after: str | None = None,
+        order: PaginationOrder | str | None = "desc",
+        domains: list[str] | None = None,
+        search: str | None = None,
+        request_options: RequestOptions | None = None,
     ) -> AsyncPage[Organization]:
         """List Organizations
 
@@ -436,12 +622,12 @@ class AsyncOrganizations:
         self,
         *,
         name: str,
-        allow_profiles_outside_organization: Optional[bool] = None,
-        domains: Optional[List[str]] = None,
-        domain_data: Optional[List[OrganizationDomainData]] = None,
-        metadata: Union[Dict[str, str], None, NotGiven] = NOT_GIVEN,
-        external_id: Union[str, None, NotGiven] = NOT_GIVEN,
-        request_options: Optional[RequestOptions] = None,
+        allow_profiles_outside_organization: bool | None = None,
+        domains: list[str] | None = None,
+        domain_data: list[OrganizationDomainData] | None = None,
+        metadata: dict[str, str] | None | NotGiven = NOT_GIVEN,
+        external_id: str | None | NotGiven = NOT_GIVEN,
+        request_options: RequestOptions | None = None,
     ) -> Organization:
         """Create an Organization
 
@@ -450,7 +636,7 @@ class AsyncOrganizations:
         Args:
             name: The name of the organization.
             allow_profiles_outside_organization: Whether the organization allows profiles from outside the organization to sign in.
-            domains: The domains associated with the organization. Deprecated in favor of `domain_data`.
+            domains: (deprecated) The domains associated with the organization. Deprecated in favor of `domain_data`.
             domain_data: The domains associated with the organization, including verification state.
             metadata: Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization.
             external_id: An external identifier for the Organization.
@@ -467,7 +653,7 @@ class AsyncOrganizations:
             RateLimitExceededError: If rate limited (429).
             ServerError: If the server returns a 5xx error.
         """
-        body: Dict[str, Any] = {
+        body: dict[str, Any] = {
             k: v
             for k, v in {
                 "name": name,
@@ -495,7 +681,7 @@ class AsyncOrganizations:
         self,
         external_id: str,
         *,
-        request_options: Optional[RequestOptions] = None,
+        request_options: RequestOptions | None = None,
     ) -> Organization:
         """Get an Organization by External ID
 
@@ -525,7 +711,7 @@ class AsyncOrganizations:
         self,
         id: str,
         *,
-        request_options: Optional[RequestOptions] = None,
+        request_options: RequestOptions | None = None,
     ) -> Organization:
         """Get an Organization
 
@@ -555,14 +741,14 @@ class AsyncOrganizations:
         self,
         id: str,
         *,
-        name: Optional[str] = None,
-        allow_profiles_outside_organization: Optional[bool] = None,
-        domains: Optional[List[str]] = None,
-        domain_data: Optional[List[OrganizationDomainData]] = None,
-        stripe_customer_id: Optional[str] = None,
-        metadata: Union[Dict[str, str], None, NotGiven] = NOT_GIVEN,
-        external_id: Union[str, None, NotGiven] = NOT_GIVEN,
-        request_options: Optional[RequestOptions] = None,
+        name: str | None = None,
+        allow_profiles_outside_organization: bool | None = None,
+        domains: list[str] | None = None,
+        domain_data: list[OrganizationDomainData] | None = None,
+        stripe_customer_id: str | None = None,
+        metadata: dict[str, str] | None | NotGiven = NOT_GIVEN,
+        external_id: str | None | NotGiven = NOT_GIVEN,
+        request_options: RequestOptions | None = None,
     ) -> Organization:
         """Update an Organization
 
@@ -592,7 +778,7 @@ class AsyncOrganizations:
             RateLimitExceededError: If rate limited (429).
             ServerError: If the server returns a 5xx error.
         """
-        body: Dict[str, Any] = {
+        body: dict[str, Any] = {
             k: v
             for k, v in {
                 "name": name,
@@ -621,7 +807,7 @@ class AsyncOrganizations:
         self,
         id: str,
         *,
-        request_options: Optional[RequestOptions] = None,
+        request_options: RequestOptions | None = None,
     ) -> None:
         """Delete an Organization
 
@@ -647,7 +833,7 @@ class AsyncOrganizations:
         self,
         id: str,
         *,
-        request_options: Optional[RequestOptions] = None,
+        request_options: RequestOptions | None = None,
     ) -> AuditLogConfiguration:
         """Get Audit Log Configuration
 
@@ -677,11 +863,11 @@ class AsyncOrganizations:
         self,
         organization_id: str,
         *,
-        limit: Optional[int] = None,
-        before: Optional[str] = None,
-        after: Optional[str] = None,
-        order: Optional[Union[PaginationOrder, str]] = "desc",
-        request_options: Optional[RequestOptions] = None,
+        limit: int | None = None,
+        before: str | None = None,
+        after: str | None = None,
+        order: PaginationOrder | str | None = "desc",
+        request_options: RequestOptions | None = None,
     ) -> AsyncPage[OrganizationAuthorizedConnectApplicationListData]:
         """List authorized applications
 
@@ -720,5 +906,187 @@ class AsyncOrganizations:
             path=("organizations", str(organization_id), "authorized_applications"),
             model=OrganizationAuthorizedConnectApplicationListData,
             params=params,
+            request_options=request_options,
+        )
+
+    async def list_it_contacts(
+        self,
+        organization_id: str,
+        *,
+        request_options: RequestOptions | None = None,
+    ) -> ItContactList:
+        """List IT contacts
+
+        Get the IT contacts for an organization.
+
+        Args:
+            organization_id: The ID of the organization.
+            request_options: Per-request options. Supports extra_headers, timeout, max_retries, and base_url override.
+
+        Returns:
+            ItContactList
+
+        Raises:
+            AuthorizationError: If the request is forbidden (403).
+            NotFoundError: If the resource is not found (404).
+            AuthenticationError: If the API key is invalid (401).
+            RateLimitExceededError: If rate limited (429).
+            ServerError: If the server returns a 5xx error.
+        """
+        return await self._client.request(
+            method="get",
+            path=("organizations", str(organization_id), "it_contacts"),
+            model=ItContactList,
+            request_options=request_options,
+        )
+
+    async def create_it_contact(
+        self,
+        organization_id: str,
+        *,
+        email: str,
+        request_options: RequestOptions | None = None,
+    ) -> ItContact:
+        """Create an IT contact
+
+        Add an IT contact to an organization. No Admin Portal invitation is sent, though the contact is notified if the organization has a connection certificate nearing expiry.
+
+        Args:
+            organization_id: The ID of the organization.
+            email: The email address of the IT contact.
+            request_options: Per-request options. Supports extra_headers, timeout, max_retries, and base_url override.
+
+        Returns:
+            ItContact
+
+        Raises:
+            AuthorizationError: If the request is forbidden (403).
+            NotFoundError: If the resource is not found (404).
+            ConflictError: If a conflict occurs (409).
+            UnprocessableEntityError: If the request data is unprocessable (422).
+            AuthenticationError: If the API key is invalid (401).
+            RateLimitExceededError: If rate limited (429).
+            ServerError: If the server returns a 5xx error.
+        """
+        body: dict[str, Any] = {
+            "email": email,
+        }
+        return await self._client.request(
+            method="post",
+            path=("organizations", str(organization_id), "it_contacts"),
+            body=body,
+            model=ItContact,
+            request_options=request_options,
+        )
+
+    async def delete_it_contact(
+        self,
+        organization_id: str,
+        contact_id: str,
+        *,
+        request_options: RequestOptions | None = None,
+    ) -> None:
+        """Delete an IT contact
+
+        Remove an IT contact from an organization and revoke the contact's active setup links.
+
+        Args:
+            organization_id: The ID of the organization.
+            contact_id: The ID of the IT contact.
+            request_options: Per-request options. Supports extra_headers, timeout, max_retries, and base_url override.
+
+        Raises:
+            AuthorizationError: If the request is forbidden (403).
+            NotFoundError: If the resource is not found (404).
+            AuthenticationError: If the API key is invalid (401).
+            RateLimitExceededError: If rate limited (429).
+            ServerError: If the server returns a 5xx error.
+        """
+        await self._client.request(
+            method="delete",
+            path=(
+                "organizations",
+                str(organization_id),
+                "it_contacts",
+                str(contact_id),
+            ),
+            request_options=request_options,
+        )
+
+    async def invite_it_contact(
+        self,
+        organization_id: str,
+        contact_id: str,
+        *,
+        intents: list[InviteItContactIntents | str],
+        request_options: RequestOptions | None = None,
+    ) -> None:
+        """Invite an IT contact
+
+        Create an Admin Portal setup link and email it to the IT contact. An organization can have at most one active invitation.
+
+        Args:
+            organization_id: The ID of the organization.
+            contact_id: The ID of the IT contact.
+            intents: The Admin Portal features that the IT contact can configure.
+            request_options: Per-request options. Supports extra_headers, timeout, max_retries, and base_url override.
+
+        Raises:
+            AuthorizationError: If the request is forbidden (403).
+            NotFoundError: If the resource is not found (404).
+            ConflictError: If a conflict occurs (409).
+            UnprocessableEntityError: If the request data is unprocessable (422).
+            AuthenticationError: If the API key is invalid (401).
+            RateLimitExceededError: If rate limited (429).
+            ServerError: If the server returns a 5xx error.
+        """
+        body: dict[str, Any] = {
+            "intents": intents,
+        }
+        await self._client.request(
+            method="post",
+            path=(
+                "organizations",
+                str(organization_id),
+                "it_contacts",
+                str(contact_id),
+                "invite",
+            ),
+            body=body,
+            request_options=request_options,
+        )
+
+    async def revoke_it_contact(
+        self,
+        organization_id: str,
+        contact_id: str,
+        *,
+        request_options: RequestOptions | None = None,
+    ) -> None:
+        """Revoke an IT contact's invitation
+
+        Revoke the organization's active Admin Portal invitation.
+
+        Args:
+            organization_id: The ID of the organization.
+            contact_id: The ID of the IT contact.
+            request_options: Per-request options. Supports extra_headers, timeout, max_retries, and base_url override.
+
+        Raises:
+            AuthorizationError: If the request is forbidden (403).
+            NotFoundError: If the resource is not found (404).
+            AuthenticationError: If the API key is invalid (401).
+            RateLimitExceededError: If rate limited (429).
+            ServerError: If the server returns a 5xx error.
+        """
+        await self._client.request(
+            method="post",
+            path=(
+                "organizations",
+                str(organization_id),
+                "it_contacts",
+                str(contact_id),
+                "revoke",
+            ),
             request_options=request_options,
         )

@@ -23,14 +23,15 @@ class StorageLensConfigurationArgs:
     def __init__(__self__, *,
                  config_id: pulumi.Input[_builtins.str],
                  storage_lens_configuration: pulumi.Input['StorageLensConfigurationStorageLensConfigurationArgs'],
-                 account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a StorageLensConfiguration resource.
-        :param pulumi.Input[_builtins.str] config_id: The ID of the S3 Storage Lens configuration.
-        :param pulumi.Input['StorageLensConfigurationStorageLensConfigurationArgs'] storage_lens_configuration: The S3 Storage Lens configuration. See Storage Lens Configuration below for more details.
-        :param pulumi.Input[_builtins.str] account_id: The AWS account ID for the S3 Storage Lens configuration. Defaults to automatically determined account ID of the AWS provider.
+
+        :param pulumi.Input[_builtins.str] config_id: ID of the S3 Storage Lens configuration.
+        :param pulumi.Input['StorageLensConfigurationStorageLensConfigurationArgs'] storage_lens_configuration: S3 Storage Lens configuration. See `storage_lens_configuration` below for more details.
+        :param pulumi.Input[_builtins.str] account_id: AWS account ID for the S3 Storage Lens configuration. Defaults to automatically determined account ID of the AWS provider.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
@@ -47,7 +48,7 @@ class StorageLensConfigurationArgs:
     @pulumi.getter(name="configId")
     def config_id(self) -> pulumi.Input[_builtins.str]:
         """
-        The ID of the S3 Storage Lens configuration.
+        ID of the S3 Storage Lens configuration.
         """
         return pulumi.get(self, "config_id")
 
@@ -59,7 +60,7 @@ class StorageLensConfigurationArgs:
     @pulumi.getter(name="storageLensConfiguration")
     def storage_lens_configuration(self) -> pulumi.Input['StorageLensConfigurationStorageLensConfigurationArgs']:
         """
-        The S3 Storage Lens configuration. See Storage Lens Configuration below for more details.
+        S3 Storage Lens configuration. See `storage_lens_configuration` below for more details.
         """
         return pulumi.get(self, "storage_lens_configuration")
 
@@ -69,60 +70,61 @@ class StorageLensConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="accountId")
-    def account_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def account_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The AWS account ID for the S3 Storage Lens configuration. Defaults to automatically determined account ID of the AWS provider.
+        AWS account ID for the S3 Storage Lens configuration. Defaults to automatically determined account ID of the AWS provider.
         """
         return pulumi.get(self, "account_id")
 
     @account_id.setter
-    def account_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def account_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "account_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _StorageLensConfigurationState:
     def __init__(__self__, *,
-                 account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 config_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 storage_lens_configuration: Optional[pulumi.Input['StorageLensConfigurationStorageLensConfigurationArgs']] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 config_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 storage_lens_configuration: pulumi.Input[Optional['StorageLensConfigurationStorageLensConfigurationArgs']] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         Input properties used for looking up and filtering StorageLensConfiguration resources.
-        :param pulumi.Input[_builtins.str] account_id: The AWS account ID for the S3 Storage Lens configuration. Defaults to automatically determined account ID of the AWS provider.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name (ARN) of the S3 Storage Lens configuration.
-        :param pulumi.Input[_builtins.str] config_id: The ID of the S3 Storage Lens configuration.
+
+        :param pulumi.Input[_builtins.str] account_id: AWS account ID for the S3 Storage Lens configuration. Defaults to automatically determined account ID of the AWS provider.
+        :param pulumi.Input[_builtins.str] arn: ARN of the S3 Storage Lens configuration.
+        :param pulumi.Input[_builtins.str] config_id: ID of the S3 Storage Lens configuration.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input['StorageLensConfigurationStorageLensConfigurationArgs'] storage_lens_configuration: The S3 Storage Lens configuration. See Storage Lens Configuration below for more details.
+        :param pulumi.Input['StorageLensConfigurationStorageLensConfigurationArgs'] storage_lens_configuration: S3 Storage Lens configuration. See `storage_lens_configuration` below for more details.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         if account_id is not None:
             pulumi.set(__self__, "account_id", account_id)
@@ -141,86 +143,86 @@ class _StorageLensConfigurationState:
 
     @_builtins.property
     @pulumi.getter(name="accountId")
-    def account_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def account_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The AWS account ID for the S3 Storage Lens configuration. Defaults to automatically determined account ID of the AWS provider.
+        AWS account ID for the S3 Storage Lens configuration. Defaults to automatically determined account ID of the AWS provider.
         """
         return pulumi.get(self, "account_id")
 
     @account_id.setter
-    def account_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def account_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "account_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Amazon Resource Name (ARN) of the S3 Storage Lens configuration.
+        ARN of the S3 Storage Lens configuration.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="configId")
-    def config_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def config_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The ID of the S3 Storage Lens configuration.
+        ID of the S3 Storage Lens configuration.
         """
         return pulumi.get(self, "config_id")
 
     @config_id.setter
-    def config_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def config_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "config_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="storageLensConfiguration")
-    def storage_lens_configuration(self) -> Optional[pulumi.Input['StorageLensConfigurationStorageLensConfigurationArgs']]:
+    def storage_lens_configuration(self) -> pulumi.Input[Optional['StorageLensConfigurationStorageLensConfigurationArgs']]:
         """
-        The S3 Storage Lens configuration. See Storage Lens Configuration below for more details.
+        S3 Storage Lens configuration. See `storage_lens_configuration` below for more details.
         """
         return pulumi.get(self, "storage_lens_configuration")
 
     @storage_lens_configuration.setter
-    def storage_lens_configuration(self, value: Optional[pulumi.Input['StorageLensConfigurationStorageLensConfigurationArgs']]):
+    def storage_lens_configuration(self, value: pulumi.Input[Optional['StorageLensConfigurationStorageLensConfigurationArgs']]):
         pulumi.set(self, "storage_lens_configuration", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
 
@@ -230,11 +232,11 @@ class StorageLensConfiguration(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 config_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 storage_lens_configuration: Optional[pulumi.Input[Union['StorageLensConfigurationStorageLensConfigurationArgs', 'StorageLensConfigurationStorageLensConfigurationArgsDict']]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 config_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 storage_lens_configuration: pulumi.Input[Optional[Union['StorageLensConfigurationStorageLensConfigurationArgs', 'StorageLensConfigurationStorageLensConfigurationArgsDict']]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Provides a resource to manage an S3 Storage Lens configuration.
@@ -247,9 +249,7 @@ class StorageLensConfiguration(pulumi.CustomResource):
 
         current = aws.get_caller_identity()
         example = aws.s3control.StorageLensConfiguration("example",
-            config_id="example-1",
             storage_lens_configuration={
-                "enabled": True,
                 "account_level": {
                     "activity_metrics": {
                         "enabled": True,
@@ -265,13 +265,13 @@ class StorageLensConfiguration(pulumi.CustomResource):
                         "enabled": True,
                     },
                     "s3_bucket_destination": {
+                        "encryption": {
+                            "sse_s3s": [{}],
+                        },
                         "account_id": current.account_id,
                         "arn": target["arn"],
                         "format": "CSV",
                         "output_schema_version": "V_1",
-                        "encryption": {
-                            "sse_s3s": [{}],
-                        },
                     },
                 },
                 "exclude": {
@@ -281,7 +281,9 @@ class StorageLensConfiguration(pulumi.CustomResource):
                     ],
                     "regions": ["us-east-2"],
                 },
-            })
+                "enabled": True,
+            },
+            config_id="example-1")
         ```
 
         ## Import
@@ -292,12 +294,13 @@ class StorageLensConfiguration(pulumi.CustomResource):
         $ pulumi import aws:s3control/storageLensConfiguration:StorageLensConfiguration example 123456789012:example-1
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] account_id: The AWS account ID for the S3 Storage Lens configuration. Defaults to automatically determined account ID of the AWS provider.
-        :param pulumi.Input[_builtins.str] config_id: The ID of the S3 Storage Lens configuration.
+        :param pulumi.Input[_builtins.str] account_id: AWS account ID for the S3 Storage Lens configuration. Defaults to automatically determined account ID of the AWS provider.
+        :param pulumi.Input[_builtins.str] config_id: ID of the S3 Storage Lens configuration.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Union['StorageLensConfigurationStorageLensConfigurationArgs', 'StorageLensConfigurationStorageLensConfigurationArgsDict']] storage_lens_configuration: The S3 Storage Lens configuration. See Storage Lens Configuration below for more details.
+        :param pulumi.Input[Union['StorageLensConfigurationStorageLensConfigurationArgs', 'StorageLensConfigurationStorageLensConfigurationArgsDict']] storage_lens_configuration: S3 Storage Lens configuration. See `storage_lens_configuration` below for more details.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         ...
@@ -317,9 +320,7 @@ class StorageLensConfiguration(pulumi.CustomResource):
 
         current = aws.get_caller_identity()
         example = aws.s3control.StorageLensConfiguration("example",
-            config_id="example-1",
             storage_lens_configuration={
-                "enabled": True,
                 "account_level": {
                     "activity_metrics": {
                         "enabled": True,
@@ -335,13 +336,13 @@ class StorageLensConfiguration(pulumi.CustomResource):
                         "enabled": True,
                     },
                     "s3_bucket_destination": {
+                        "encryption": {
+                            "sse_s3s": [{}],
+                        },
                         "account_id": current.account_id,
                         "arn": target["arn"],
                         "format": "CSV",
                         "output_schema_version": "V_1",
-                        "encryption": {
-                            "sse_s3s": [{}],
-                        },
                     },
                 },
                 "exclude": {
@@ -351,7 +352,9 @@ class StorageLensConfiguration(pulumi.CustomResource):
                     ],
                     "regions": ["us-east-2"],
                 },
-            })
+                "enabled": True,
+            },
+            config_id="example-1")
         ```
 
         ## Import
@@ -361,6 +364,7 @@ class StorageLensConfiguration(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:s3control/storageLensConfiguration:StorageLensConfiguration example 123456789012:example-1
         ```
+
 
         :param str resource_name: The name of the resource.
         :param StorageLensConfigurationArgs args: The arguments to use to populate this resource's properties.
@@ -377,11 +381,11 @@ class StorageLensConfiguration(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 config_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 storage_lens_configuration: Optional[pulumi.Input[Union['StorageLensConfigurationStorageLensConfigurationArgs', 'StorageLensConfigurationStorageLensConfigurationArgsDict']]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 config_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 storage_lens_configuration: pulumi.Input[Optional[Union['StorageLensConfigurationStorageLensConfigurationArgs', 'StorageLensConfigurationStorageLensConfigurationArgsDict']]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -412,13 +416,13 @@ class StorageLensConfiguration(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            account_id: Optional[pulumi.Input[_builtins.str]] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            config_id: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            storage_lens_configuration: Optional[pulumi.Input[Union['StorageLensConfigurationStorageLensConfigurationArgs', 'StorageLensConfigurationStorageLensConfigurationArgsDict']]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'StorageLensConfiguration':
+            account_id: pulumi.Input[Optional[_builtins.str]] = None,
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            config_id: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            storage_lens_configuration: pulumi.Input[Optional[Union['StorageLensConfigurationStorageLensConfigurationArgs', 'StorageLensConfigurationStorageLensConfigurationArgsDict']]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'StorageLensConfiguration':
         """
         Get an existing StorageLensConfiguration resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -426,13 +430,13 @@ class StorageLensConfiguration(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] account_id: The AWS account ID for the S3 Storage Lens configuration. Defaults to automatically determined account ID of the AWS provider.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name (ARN) of the S3 Storage Lens configuration.
-        :param pulumi.Input[_builtins.str] config_id: The ID of the S3 Storage Lens configuration.
+        :param pulumi.Input[_builtins.str] account_id: AWS account ID for the S3 Storage Lens configuration. Defaults to automatically determined account ID of the AWS provider.
+        :param pulumi.Input[_builtins.str] arn: ARN of the S3 Storage Lens configuration.
+        :param pulumi.Input[_builtins.str] config_id: ID of the S3 Storage Lens configuration.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Union['StorageLensConfigurationStorageLensConfigurationArgs', 'StorageLensConfigurationStorageLensConfigurationArgsDict']] storage_lens_configuration: The S3 Storage Lens configuration. See Storage Lens Configuration below for more details.
+        :param pulumi.Input[Union['StorageLensConfigurationStorageLensConfigurationArgs', 'StorageLensConfigurationStorageLensConfigurationArgsDict']] storage_lens_configuration: S3 Storage Lens configuration. See `storage_lens_configuration` below for more details.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -451,7 +455,7 @@ class StorageLensConfiguration(pulumi.CustomResource):
     @pulumi.getter(name="accountId")
     def account_id(self) -> pulumi.Output[_builtins.str]:
         """
-        The AWS account ID for the S3 Storage Lens configuration. Defaults to automatically determined account ID of the AWS provider.
+        AWS account ID for the S3 Storage Lens configuration. Defaults to automatically determined account ID of the AWS provider.
         """
         return pulumi.get(self, "account_id")
 
@@ -459,7 +463,7 @@ class StorageLensConfiguration(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the S3 Storage Lens configuration.
+        ARN of the S3 Storage Lens configuration.
         """
         return pulumi.get(self, "arn")
 
@@ -467,7 +471,7 @@ class StorageLensConfiguration(pulumi.CustomResource):
     @pulumi.getter(name="configId")
     def config_id(self) -> pulumi.Output[_builtins.str]:
         """
-        The ID of the S3 Storage Lens configuration.
+        ID of the S3 Storage Lens configuration.
         """
         return pulumi.get(self, "config_id")
 
@@ -483,7 +487,7 @@ class StorageLensConfiguration(pulumi.CustomResource):
     @pulumi.getter(name="storageLensConfiguration")
     def storage_lens_configuration(self) -> pulumi.Output['outputs.StorageLensConfigurationStorageLensConfiguration']:
         """
-        The S3 Storage Lens configuration. See Storage Lens Configuration below for more details.
+        S3 Storage Lens configuration. See `storage_lens_configuration` below for more details.
         """
         return pulumi.get(self, "storage_lens_configuration")
 
@@ -499,7 +503,7 @@ class StorageLensConfiguration(pulumi.CustomResource):
     @pulumi.getter(name="tagsAll")
     def tags_all(self) -> pulumi.Output[Mapping[str, _builtins.str]]:
         """
-        A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 

@@ -22,18 +22,19 @@ __all__ = ['CustomKeyStoreArgs', 'CustomKeyStore']
 class CustomKeyStoreArgs:
     def __init__(__self__, *,
                  custom_key_store_name: pulumi.Input[_builtins.str],
-                 cloud_hsm_cluster_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 custom_key_store_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 key_store_password: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 trust_anchor_certificate: Optional[pulumi.Input[_builtins.str]] = None,
-                 xks_proxy_authentication_credential: Optional[pulumi.Input['CustomKeyStoreXksProxyAuthenticationCredentialArgs']] = None,
-                 xks_proxy_connectivity: Optional[pulumi.Input[_builtins.str]] = None,
-                 xks_proxy_uri_endpoint: Optional[pulumi.Input[_builtins.str]] = None,
-                 xks_proxy_uri_path: Optional[pulumi.Input[_builtins.str]] = None,
-                 xks_proxy_vpc_endpoint_service_name: Optional[pulumi.Input[_builtins.str]] = None):
+                 cloud_hsm_cluster_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 custom_key_store_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 key_store_password: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 trust_anchor_certificate: pulumi.Input[Optional[_builtins.str]] = None,
+                 xks_proxy_authentication_credential: pulumi.Input[Optional['CustomKeyStoreXksProxyAuthenticationCredentialArgs']] = None,
+                 xks_proxy_connectivity: pulumi.Input[Optional[_builtins.str]] = None,
+                 xks_proxy_uri_endpoint: pulumi.Input[Optional[_builtins.str]] = None,
+                 xks_proxy_uri_path: pulumi.Input[Optional[_builtins.str]] = None,
+                 xks_proxy_vpc_endpoint_service_name: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a CustomKeyStore resource.
+
         :param pulumi.Input[_builtins.str] custom_key_store_name: Unique name for Custom Key Store.
                
                The following arguments are optional:
@@ -78,117 +79,118 @@ class CustomKeyStoreArgs:
 
     @_builtins.property
     @pulumi.getter(name="cloudHsmClusterId")
-    def cloud_hsm_cluster_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def cloud_hsm_cluster_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "cloud_hsm_cluster_id")
 
     @cloud_hsm_cluster_id.setter
-    def cloud_hsm_cluster_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def cloud_hsm_cluster_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "cloud_hsm_cluster_id", value)
 
     @_builtins.property
     @pulumi.getter(name="customKeyStoreType")
-    def custom_key_store_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def custom_key_store_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Specifies the type of key store to create. Valid values are `AWS_CLOUDHSM` and `EXTERNAL_KEY_STORE`. If omitted, AWS will default the value to `AWS_CLOUDHSM`.
         """
         return pulumi.get(self, "custom_key_store_type")
 
     @custom_key_store_type.setter
-    def custom_key_store_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def custom_key_store_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "custom_key_store_type", value)
 
     @_builtins.property
     @pulumi.getter(name="keyStorePassword")
-    def key_store_password(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def key_store_password(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "key_store_password")
 
     @key_store_password.setter
-    def key_store_password(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def key_store_password(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "key_store_password", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="trustAnchorCertificate")
-    def trust_anchor_certificate(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def trust_anchor_certificate(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "trust_anchor_certificate")
 
     @trust_anchor_certificate.setter
-    def trust_anchor_certificate(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def trust_anchor_certificate(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "trust_anchor_certificate", value)
 
     @_builtins.property
     @pulumi.getter(name="xksProxyAuthenticationCredential")
-    def xks_proxy_authentication_credential(self) -> Optional[pulumi.Input['CustomKeyStoreXksProxyAuthenticationCredentialArgs']]:
+    def xks_proxy_authentication_credential(self) -> pulumi.Input[Optional['CustomKeyStoreXksProxyAuthenticationCredentialArgs']]:
         return pulumi.get(self, "xks_proxy_authentication_credential")
 
     @xks_proxy_authentication_credential.setter
-    def xks_proxy_authentication_credential(self, value: Optional[pulumi.Input['CustomKeyStoreXksProxyAuthenticationCredentialArgs']]):
+    def xks_proxy_authentication_credential(self, value: pulumi.Input[Optional['CustomKeyStoreXksProxyAuthenticationCredentialArgs']]):
         pulumi.set(self, "xks_proxy_authentication_credential", value)
 
     @_builtins.property
     @pulumi.getter(name="xksProxyConnectivity")
-    def xks_proxy_connectivity(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def xks_proxy_connectivity(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "xks_proxy_connectivity")
 
     @xks_proxy_connectivity.setter
-    def xks_proxy_connectivity(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def xks_proxy_connectivity(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "xks_proxy_connectivity", value)
 
     @_builtins.property
     @pulumi.getter(name="xksProxyUriEndpoint")
-    def xks_proxy_uri_endpoint(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def xks_proxy_uri_endpoint(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "xks_proxy_uri_endpoint")
 
     @xks_proxy_uri_endpoint.setter
-    def xks_proxy_uri_endpoint(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def xks_proxy_uri_endpoint(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "xks_proxy_uri_endpoint", value)
 
     @_builtins.property
     @pulumi.getter(name="xksProxyUriPath")
-    def xks_proxy_uri_path(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def xks_proxy_uri_path(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "xks_proxy_uri_path")
 
     @xks_proxy_uri_path.setter
-    def xks_proxy_uri_path(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def xks_proxy_uri_path(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "xks_proxy_uri_path", value)
 
     @_builtins.property
     @pulumi.getter(name="xksProxyVpcEndpointServiceName")
-    def xks_proxy_vpc_endpoint_service_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def xks_proxy_vpc_endpoint_service_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "xks_proxy_vpc_endpoint_service_name")
 
     @xks_proxy_vpc_endpoint_service_name.setter
-    def xks_proxy_vpc_endpoint_service_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def xks_proxy_vpc_endpoint_service_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "xks_proxy_vpc_endpoint_service_name", value)
 
 
 @pulumi.input_type
 class _CustomKeyStoreState:
     def __init__(__self__, *,
-                 cloud_hsm_cluster_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 custom_key_store_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 custom_key_store_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 key_store_password: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 trust_anchor_certificate: Optional[pulumi.Input[_builtins.str]] = None,
-                 xks_proxy_authentication_credential: Optional[pulumi.Input['CustomKeyStoreXksProxyAuthenticationCredentialArgs']] = None,
-                 xks_proxy_connectivity: Optional[pulumi.Input[_builtins.str]] = None,
-                 xks_proxy_uri_endpoint: Optional[pulumi.Input[_builtins.str]] = None,
-                 xks_proxy_uri_path: Optional[pulumi.Input[_builtins.str]] = None,
-                 xks_proxy_vpc_endpoint_service_name: Optional[pulumi.Input[_builtins.str]] = None):
+                 cloud_hsm_cluster_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 custom_key_store_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 custom_key_store_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 key_store_password: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 trust_anchor_certificate: pulumi.Input[Optional[_builtins.str]] = None,
+                 xks_proxy_authentication_credential: pulumi.Input[Optional['CustomKeyStoreXksProxyAuthenticationCredentialArgs']] = None,
+                 xks_proxy_connectivity: pulumi.Input[Optional[_builtins.str]] = None,
+                 xks_proxy_uri_endpoint: pulumi.Input[Optional[_builtins.str]] = None,
+                 xks_proxy_uri_path: pulumi.Input[Optional[_builtins.str]] = None,
+                 xks_proxy_vpc_endpoint_service_name: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering CustomKeyStore resources.
+
         :param pulumi.Input[_builtins.str] custom_key_store_name: Unique name for Custom Key Store.
                
                The following arguments are optional:
@@ -220,16 +222,16 @@ class _CustomKeyStoreState:
 
     @_builtins.property
     @pulumi.getter(name="cloudHsmClusterId")
-    def cloud_hsm_cluster_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def cloud_hsm_cluster_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "cloud_hsm_cluster_id")
 
     @cloud_hsm_cluster_id.setter
-    def cloud_hsm_cluster_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def cloud_hsm_cluster_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "cloud_hsm_cluster_id", value)
 
     @_builtins.property
     @pulumi.getter(name="customKeyStoreName")
-    def custom_key_store_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def custom_key_store_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique name for Custom Key Store.
 
@@ -238,94 +240,94 @@ class _CustomKeyStoreState:
         return pulumi.get(self, "custom_key_store_name")
 
     @custom_key_store_name.setter
-    def custom_key_store_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def custom_key_store_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "custom_key_store_name", value)
 
     @_builtins.property
     @pulumi.getter(name="customKeyStoreType")
-    def custom_key_store_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def custom_key_store_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Specifies the type of key store to create. Valid values are `AWS_CLOUDHSM` and `EXTERNAL_KEY_STORE`. If omitted, AWS will default the value to `AWS_CLOUDHSM`.
         """
         return pulumi.get(self, "custom_key_store_type")
 
     @custom_key_store_type.setter
-    def custom_key_store_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def custom_key_store_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "custom_key_store_type", value)
 
     @_builtins.property
     @pulumi.getter(name="keyStorePassword")
-    def key_store_password(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def key_store_password(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "key_store_password")
 
     @key_store_password.setter
-    def key_store_password(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def key_store_password(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "key_store_password", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="trustAnchorCertificate")
-    def trust_anchor_certificate(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def trust_anchor_certificate(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "trust_anchor_certificate")
 
     @trust_anchor_certificate.setter
-    def trust_anchor_certificate(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def trust_anchor_certificate(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "trust_anchor_certificate", value)
 
     @_builtins.property
     @pulumi.getter(name="xksProxyAuthenticationCredential")
-    def xks_proxy_authentication_credential(self) -> Optional[pulumi.Input['CustomKeyStoreXksProxyAuthenticationCredentialArgs']]:
+    def xks_proxy_authentication_credential(self) -> pulumi.Input[Optional['CustomKeyStoreXksProxyAuthenticationCredentialArgs']]:
         return pulumi.get(self, "xks_proxy_authentication_credential")
 
     @xks_proxy_authentication_credential.setter
-    def xks_proxy_authentication_credential(self, value: Optional[pulumi.Input['CustomKeyStoreXksProxyAuthenticationCredentialArgs']]):
+    def xks_proxy_authentication_credential(self, value: pulumi.Input[Optional['CustomKeyStoreXksProxyAuthenticationCredentialArgs']]):
         pulumi.set(self, "xks_proxy_authentication_credential", value)
 
     @_builtins.property
     @pulumi.getter(name="xksProxyConnectivity")
-    def xks_proxy_connectivity(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def xks_proxy_connectivity(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "xks_proxy_connectivity")
 
     @xks_proxy_connectivity.setter
-    def xks_proxy_connectivity(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def xks_proxy_connectivity(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "xks_proxy_connectivity", value)
 
     @_builtins.property
     @pulumi.getter(name="xksProxyUriEndpoint")
-    def xks_proxy_uri_endpoint(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def xks_proxy_uri_endpoint(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "xks_proxy_uri_endpoint")
 
     @xks_proxy_uri_endpoint.setter
-    def xks_proxy_uri_endpoint(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def xks_proxy_uri_endpoint(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "xks_proxy_uri_endpoint", value)
 
     @_builtins.property
     @pulumi.getter(name="xksProxyUriPath")
-    def xks_proxy_uri_path(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def xks_proxy_uri_path(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "xks_proxy_uri_path")
 
     @xks_proxy_uri_path.setter
-    def xks_proxy_uri_path(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def xks_proxy_uri_path(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "xks_proxy_uri_path", value)
 
     @_builtins.property
     @pulumi.getter(name="xksProxyVpcEndpointServiceName")
-    def xks_proxy_vpc_endpoint_service_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def xks_proxy_vpc_endpoint_service_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "xks_proxy_vpc_endpoint_service_name")
 
     @xks_proxy_vpc_endpoint_service_name.setter
-    def xks_proxy_vpc_endpoint_service_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def xks_proxy_vpc_endpoint_service_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "xks_proxy_vpc_endpoint_service_name", value)
 
 
@@ -335,17 +337,17 @@ class CustomKeyStore(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 cloud_hsm_cluster_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 custom_key_store_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 custom_key_store_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 key_store_password: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 trust_anchor_certificate: Optional[pulumi.Input[_builtins.str]] = None,
-                 xks_proxy_authentication_credential: Optional[pulumi.Input[Union['CustomKeyStoreXksProxyAuthenticationCredentialArgs', 'CustomKeyStoreXksProxyAuthenticationCredentialArgsDict']]] = None,
-                 xks_proxy_connectivity: Optional[pulumi.Input[_builtins.str]] = None,
-                 xks_proxy_uri_endpoint: Optional[pulumi.Input[_builtins.str]] = None,
-                 xks_proxy_uri_path: Optional[pulumi.Input[_builtins.str]] = None,
-                 xks_proxy_vpc_endpoint_service_name: Optional[pulumi.Input[_builtins.str]] = None,
+                 cloud_hsm_cluster_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 custom_key_store_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 custom_key_store_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 key_store_password: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 trust_anchor_certificate: pulumi.Input[Optional[_builtins.str]] = None,
+                 xks_proxy_authentication_credential: pulumi.Input[Optional[Union['CustomKeyStoreXksProxyAuthenticationCredentialArgs', 'CustomKeyStoreXksProxyAuthenticationCredentialArgsDict']]] = None,
+                 xks_proxy_connectivity: pulumi.Input[Optional[_builtins.str]] = None,
+                 xks_proxy_uri_endpoint: pulumi.Input[Optional[_builtins.str]] = None,
+                 xks_proxy_uri_path: pulumi.Input[Optional[_builtins.str]] = None,
+                 xks_proxy_vpc_endpoint_service_name: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing an AWS KMS (Key Management) Custom Key Store.
@@ -373,12 +375,12 @@ class CustomKeyStore(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.kms.CustomKeyStore("example",
-            custom_key_store_name="example-vpc-xks",
-            custom_key_store_type="EXTERNAL_KEY_STORE",
             xks_proxy_authentication_credential={
                 "access_key_id": ephemeral_access_key_id,
                 "raw_secret_access_key": ephemeral_secret_access_key,
             },
+            custom_key_store_name="example-vpc-xks",
+            custom_key_store_type="EXTERNAL_KEY_STORE",
             xks_proxy_connectivity="VPC_ENDPOINT_SERVICE",
             xks_proxy_uri_endpoint="https://myproxy-private.xks.example.com",
             xks_proxy_uri_path="/kms/xks/v1",
@@ -392,12 +394,12 @@ class CustomKeyStore(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.kms.CustomKeyStore("example",
-            custom_key_store_name="example-public-xks",
-            custom_key_store_type="EXTERNAL_KEY_STORE",
             xks_proxy_authentication_credential={
                 "access_key_id": ephemeral_access_key_id,
                 "raw_secret_access_key": ephemeral_secret_access_key,
             },
+            custom_key_store_name="example-public-xks",
+            custom_key_store_type="EXTERNAL_KEY_STORE",
             xks_proxy_connectivity="PUBLIC_ENDPOINT",
             xks_proxy_uri_endpoint="https://myproxy.xks.example.com",
             xks_proxy_uri_path="/kms/xks/v1")
@@ -410,6 +412,7 @@ class CustomKeyStore(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:kms/customKeyStore:CustomKeyStore example cks-5ebd4ef395a96288e
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -451,12 +454,12 @@ class CustomKeyStore(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.kms.CustomKeyStore("example",
-            custom_key_store_name="example-vpc-xks",
-            custom_key_store_type="EXTERNAL_KEY_STORE",
             xks_proxy_authentication_credential={
                 "access_key_id": ephemeral_access_key_id,
                 "raw_secret_access_key": ephemeral_secret_access_key,
             },
+            custom_key_store_name="example-vpc-xks",
+            custom_key_store_type="EXTERNAL_KEY_STORE",
             xks_proxy_connectivity="VPC_ENDPOINT_SERVICE",
             xks_proxy_uri_endpoint="https://myproxy-private.xks.example.com",
             xks_proxy_uri_path="/kms/xks/v1",
@@ -470,12 +473,12 @@ class CustomKeyStore(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.kms.CustomKeyStore("example",
-            custom_key_store_name="example-public-xks",
-            custom_key_store_type="EXTERNAL_KEY_STORE",
             xks_proxy_authentication_credential={
                 "access_key_id": ephemeral_access_key_id,
                 "raw_secret_access_key": ephemeral_secret_access_key,
             },
+            custom_key_store_name="example-public-xks",
+            custom_key_store_type="EXTERNAL_KEY_STORE",
             xks_proxy_connectivity="PUBLIC_ENDPOINT",
             xks_proxy_uri_endpoint="https://myproxy.xks.example.com",
             xks_proxy_uri_path="/kms/xks/v1")
@@ -488,6 +491,7 @@ class CustomKeyStore(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:kms/customKeyStore:CustomKeyStore example cks-5ebd4ef395a96288e
         ```
+
 
         :param str resource_name: The name of the resource.
         :param CustomKeyStoreArgs args: The arguments to use to populate this resource's properties.
@@ -504,17 +508,17 @@ class CustomKeyStore(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 cloud_hsm_cluster_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 custom_key_store_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 custom_key_store_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 key_store_password: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 trust_anchor_certificate: Optional[pulumi.Input[_builtins.str]] = None,
-                 xks_proxy_authentication_credential: Optional[pulumi.Input[Union['CustomKeyStoreXksProxyAuthenticationCredentialArgs', 'CustomKeyStoreXksProxyAuthenticationCredentialArgsDict']]] = None,
-                 xks_proxy_connectivity: Optional[pulumi.Input[_builtins.str]] = None,
-                 xks_proxy_uri_endpoint: Optional[pulumi.Input[_builtins.str]] = None,
-                 xks_proxy_uri_path: Optional[pulumi.Input[_builtins.str]] = None,
-                 xks_proxy_vpc_endpoint_service_name: Optional[pulumi.Input[_builtins.str]] = None,
+                 cloud_hsm_cluster_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 custom_key_store_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 custom_key_store_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 key_store_password: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 trust_anchor_certificate: pulumi.Input[Optional[_builtins.str]] = None,
+                 xks_proxy_authentication_credential: pulumi.Input[Optional[Union['CustomKeyStoreXksProxyAuthenticationCredentialArgs', 'CustomKeyStoreXksProxyAuthenticationCredentialArgsDict']]] = None,
+                 xks_proxy_connectivity: pulumi.Input[Optional[_builtins.str]] = None,
+                 xks_proxy_uri_endpoint: pulumi.Input[Optional[_builtins.str]] = None,
+                 xks_proxy_uri_path: pulumi.Input[Optional[_builtins.str]] = None,
+                 xks_proxy_vpc_endpoint_service_name: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -547,17 +551,17 @@ class CustomKeyStore(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            cloud_hsm_cluster_id: Optional[pulumi.Input[_builtins.str]] = None,
-            custom_key_store_name: Optional[pulumi.Input[_builtins.str]] = None,
-            custom_key_store_type: Optional[pulumi.Input[_builtins.str]] = None,
-            key_store_password: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            trust_anchor_certificate: Optional[pulumi.Input[_builtins.str]] = None,
-            xks_proxy_authentication_credential: Optional[pulumi.Input[Union['CustomKeyStoreXksProxyAuthenticationCredentialArgs', 'CustomKeyStoreXksProxyAuthenticationCredentialArgsDict']]] = None,
-            xks_proxy_connectivity: Optional[pulumi.Input[_builtins.str]] = None,
-            xks_proxy_uri_endpoint: Optional[pulumi.Input[_builtins.str]] = None,
-            xks_proxy_uri_path: Optional[pulumi.Input[_builtins.str]] = None,
-            xks_proxy_vpc_endpoint_service_name: Optional[pulumi.Input[_builtins.str]] = None) -> 'CustomKeyStore':
+            cloud_hsm_cluster_id: pulumi.Input[Optional[_builtins.str]] = None,
+            custom_key_store_name: pulumi.Input[Optional[_builtins.str]] = None,
+            custom_key_store_type: pulumi.Input[Optional[_builtins.str]] = None,
+            key_store_password: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            trust_anchor_certificate: pulumi.Input[Optional[_builtins.str]] = None,
+            xks_proxy_authentication_credential: pulumi.Input[Optional[Union['CustomKeyStoreXksProxyAuthenticationCredentialArgs', 'CustomKeyStoreXksProxyAuthenticationCredentialArgsDict']]] = None,
+            xks_proxy_connectivity: pulumi.Input[Optional[_builtins.str]] = None,
+            xks_proxy_uri_endpoint: pulumi.Input[Optional[_builtins.str]] = None,
+            xks_proxy_uri_path: pulumi.Input[Optional[_builtins.str]] = None,
+            xks_proxy_vpc_endpoint_service_name: pulumi.Input[Optional[_builtins.str]] = None) -> 'CustomKeyStore':
         """
         Get an existing CustomKeyStore resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

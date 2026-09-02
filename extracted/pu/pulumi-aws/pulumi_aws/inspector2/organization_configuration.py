@@ -22,9 +22,10 @@ __all__ = ['OrganizationConfigurationArgs', 'OrganizationConfiguration']
 class OrganizationConfigurationArgs:
     def __init__(__self__, *,
                  auto_enable: pulumi.Input['OrganizationConfigurationAutoEnableArgs'],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a OrganizationConfiguration resource.
+
         :param pulumi.Input['OrganizationConfigurationAutoEnableArgs'] auto_enable: Configuration block for auto enabling. See below.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
@@ -46,25 +47,26 @@ class OrganizationConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _OrganizationConfigurationState:
     def __init__(__self__, *,
-                 auto_enable: Optional[pulumi.Input['OrganizationConfigurationAutoEnableArgs']] = None,
-                 max_account_limit_reached: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 auto_enable: pulumi.Input[Optional['OrganizationConfigurationAutoEnableArgs']] = None,
+                 max_account_limit_reached: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering OrganizationConfiguration resources.
+
         :param pulumi.Input['OrganizationConfigurationAutoEnableArgs'] auto_enable: Configuration block for auto enabling. See below.
         :param pulumi.Input[_builtins.bool] max_account_limit_reached: Whether your configuration reached the max account limit.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -78,38 +80,38 @@ class _OrganizationConfigurationState:
 
     @_builtins.property
     @pulumi.getter(name="autoEnable")
-    def auto_enable(self) -> Optional[pulumi.Input['OrganizationConfigurationAutoEnableArgs']]:
+    def auto_enable(self) -> pulumi.Input[Optional['OrganizationConfigurationAutoEnableArgs']]:
         """
         Configuration block for auto enabling. See below.
         """
         return pulumi.get(self, "auto_enable")
 
     @auto_enable.setter
-    def auto_enable(self, value: Optional[pulumi.Input['OrganizationConfigurationAutoEnableArgs']]):
+    def auto_enable(self, value: pulumi.Input[Optional['OrganizationConfigurationAutoEnableArgs']]):
         pulumi.set(self, "auto_enable", value)
 
     @_builtins.property
     @pulumi.getter(name="maxAccountLimitReached")
-    def max_account_limit_reached(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def max_account_limit_reached(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether your configuration reached the max account limit.
         """
         return pulumi.get(self, "max_account_limit_reached")
 
     @max_account_limit_reached.setter
-    def max_account_limit_reached(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def max_account_limit_reached(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "max_account_limit_reached", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -119,8 +121,8 @@ class OrganizationConfiguration(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 auto_enable: Optional[pulumi.Input[Union['OrganizationConfigurationAutoEnableArgs', 'OrganizationConfigurationAutoEnableArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 auto_enable: pulumi.Input[Optional[Union['OrganizationConfigurationAutoEnableArgs', 'OrganizationConfigurationAutoEnableArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing an Amazon Inspector Organization Configuration.
@@ -145,6 +147,7 @@ class OrganizationConfiguration(pulumi.CustomResource):
             "lambda_code": True,
         })
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -181,6 +184,7 @@ class OrganizationConfiguration(pulumi.CustomResource):
         })
         ```
 
+
         :param str resource_name: The name of the resource.
         :param OrganizationConfigurationArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -196,8 +200,8 @@ class OrganizationConfiguration(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 auto_enable: Optional[pulumi.Input[Union['OrganizationConfigurationAutoEnableArgs', 'OrganizationConfigurationAutoEnableArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 auto_enable: pulumi.Input[Optional[Union['OrganizationConfigurationAutoEnableArgs', 'OrganizationConfigurationAutoEnableArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -222,9 +226,9 @@ class OrganizationConfiguration(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            auto_enable: Optional[pulumi.Input[Union['OrganizationConfigurationAutoEnableArgs', 'OrganizationConfigurationAutoEnableArgsDict']]] = None,
-            max_account_limit_reached: Optional[pulumi.Input[_builtins.bool]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'OrganizationConfiguration':
+            auto_enable: pulumi.Input[Optional[Union['OrganizationConfigurationAutoEnableArgs', 'OrganizationConfigurationAutoEnableArgsDict']]] = None,
+            max_account_limit_reached: pulumi.Input[Optional[_builtins.bool]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'OrganizationConfiguration':
         """
         Get an existing OrganizationConfiguration resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

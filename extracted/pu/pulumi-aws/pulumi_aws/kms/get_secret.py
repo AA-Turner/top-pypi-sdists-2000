@@ -73,7 +73,7 @@ def get_secret(region: Optional[_builtins.str] = None,
                secrets: Optional[Sequence[Union['GetSecretSecretArgs', 'GetSecretSecretArgsDict']]] = None,
                opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetSecretResult:
     """
-    !> **WARNING:** This data source's functionality was removed in version 2.0.0 of the AWS Provider. You can migrate existing configurations to the `kms_get_secrets` data source following instructions available in the Version 2 Upgrade Guide. This data source will be removed in a future version.
+    > **WARNING:** This data source's functionality was removed in version 2.0.0 of the AWS Provider. You can migrate existing configurations to the `kms_get_secrets` data source following instructions available in the Version 2 Upgrade Guide. This data source will be removed in a future version.
     """
     __args__ = dict()
     __args__['region'] = region
@@ -85,11 +85,11 @@ def get_secret(region: Optional[_builtins.str] = None,
         id=pulumi.get(__ret__, 'id'),
         region=pulumi.get(__ret__, 'region'),
         secrets=pulumi.get(__ret__, 'secrets'))
-def get_secret_output(region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                      secrets: Optional[pulumi.Input[Sequence[Union['GetSecretSecretArgs', 'GetSecretSecretArgsDict']]]] = None,
+def get_secret_output(region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                      secrets: pulumi.Input[Optional[Sequence[Union['GetSecretSecretArgs', 'GetSecretSecretArgsDict']]]] = None,
                       opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetSecretResult]:
     """
-    !> **WARNING:** This data source's functionality was removed in version 2.0.0 of the AWS Provider. You can migrate existing configurations to the `kms_get_secrets` data source following instructions available in the Version 2 Upgrade Guide. This data source will be removed in a future version.
+    > **WARNING:** This data source's functionality was removed in version 2.0.0 of the AWS Provider. You can migrate existing configurations to the `kms_get_secrets` data source following instructions available in the Version 2 Upgrade Guide. This data source will be removed in a future version.
     """
     __args__ = dict()
     __args__['region'] = region

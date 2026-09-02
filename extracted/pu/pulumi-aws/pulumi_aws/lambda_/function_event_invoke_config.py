@@ -22,13 +22,14 @@ __all__ = ['FunctionEventInvokeConfigArgs', 'FunctionEventInvokeConfig']
 class FunctionEventInvokeConfigArgs:
     def __init__(__self__, *,
                  function_name: pulumi.Input[_builtins.str],
-                 destination_config: Optional[pulumi.Input['FunctionEventInvokeConfigDestinationConfigArgs']] = None,
-                 maximum_event_age_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 maximum_retry_attempts: Optional[pulumi.Input[_builtins.int]] = None,
-                 qualifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 destination_config: pulumi.Input[Optional['FunctionEventInvokeConfigDestinationConfigArgs']] = None,
+                 maximum_event_age_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 maximum_retry_attempts: pulumi.Input[Optional[_builtins.int]] = None,
+                 qualifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a FunctionEventInvokeConfig resource.
+
         :param pulumi.Input[_builtins.str] function_name: Name or ARN of the Lambda Function, omitting any version or alias qualifier.
                
                The following arguments are optional:
@@ -66,76 +67,77 @@ class FunctionEventInvokeConfigArgs:
 
     @_builtins.property
     @pulumi.getter(name="destinationConfig")
-    def destination_config(self) -> Optional[pulumi.Input['FunctionEventInvokeConfigDestinationConfigArgs']]:
+    def destination_config(self) -> pulumi.Input[Optional['FunctionEventInvokeConfigDestinationConfigArgs']]:
         """
         Configuration block with destination configuration. See below.
         """
         return pulumi.get(self, "destination_config")
 
     @destination_config.setter
-    def destination_config(self, value: Optional[pulumi.Input['FunctionEventInvokeConfigDestinationConfigArgs']]):
+    def destination_config(self, value: pulumi.Input[Optional['FunctionEventInvokeConfigDestinationConfigArgs']]):
         pulumi.set(self, "destination_config", value)
 
     @_builtins.property
     @pulumi.getter(name="maximumEventAgeInSeconds")
-    def maximum_event_age_in_seconds(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def maximum_event_age_in_seconds(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Maximum age of a request that Lambda sends to a function for processing in seconds. Valid values between 60 and 21600.
         """
         return pulumi.get(self, "maximum_event_age_in_seconds")
 
     @maximum_event_age_in_seconds.setter
-    def maximum_event_age_in_seconds(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def maximum_event_age_in_seconds(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "maximum_event_age_in_seconds", value)
 
     @_builtins.property
     @pulumi.getter(name="maximumRetryAttempts")
-    def maximum_retry_attempts(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def maximum_retry_attempts(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Maximum number of times to retry when the function returns an error. Valid values between 0 and 2. Defaults to 2.
         """
         return pulumi.get(self, "maximum_retry_attempts")
 
     @maximum_retry_attempts.setter
-    def maximum_retry_attempts(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def maximum_retry_attempts(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "maximum_retry_attempts", value)
 
     @_builtins.property
     @pulumi.getter
-    def qualifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def qualifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Lambda Function published version, `$LATEST`, or Lambda Alias name.
         """
         return pulumi.get(self, "qualifier")
 
     @qualifier.setter
-    def qualifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def qualifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "qualifier", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _FunctionEventInvokeConfigState:
     def __init__(__self__, *,
-                 destination_config: Optional[pulumi.Input['FunctionEventInvokeConfigDestinationConfigArgs']] = None,
-                 function_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 maximum_event_age_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 maximum_retry_attempts: Optional[pulumi.Input[_builtins.int]] = None,
-                 qualifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 destination_config: pulumi.Input[Optional['FunctionEventInvokeConfigDestinationConfigArgs']] = None,
+                 function_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 maximum_event_age_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 maximum_retry_attempts: pulumi.Input[Optional[_builtins.int]] = None,
+                 qualifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering FunctionEventInvokeConfig resources.
+
         :param pulumi.Input['FunctionEventInvokeConfigDestinationConfigArgs'] destination_config: Configuration block with destination configuration. See below.
         :param pulumi.Input[_builtins.str] function_name: Name or ARN of the Lambda Function, omitting any version or alias qualifier.
                
@@ -160,19 +162,19 @@ class _FunctionEventInvokeConfigState:
 
     @_builtins.property
     @pulumi.getter(name="destinationConfig")
-    def destination_config(self) -> Optional[pulumi.Input['FunctionEventInvokeConfigDestinationConfigArgs']]:
+    def destination_config(self) -> pulumi.Input[Optional['FunctionEventInvokeConfigDestinationConfigArgs']]:
         """
         Configuration block with destination configuration. See below.
         """
         return pulumi.get(self, "destination_config")
 
     @destination_config.setter
-    def destination_config(self, value: Optional[pulumi.Input['FunctionEventInvokeConfigDestinationConfigArgs']]):
+    def destination_config(self, value: pulumi.Input[Optional['FunctionEventInvokeConfigDestinationConfigArgs']]):
         pulumi.set(self, "destination_config", value)
 
     @_builtins.property
     @pulumi.getter(name="functionName")
-    def function_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def function_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name or ARN of the Lambda Function, omitting any version or alias qualifier.
 
@@ -181,55 +183,55 @@ class _FunctionEventInvokeConfigState:
         return pulumi.get(self, "function_name")
 
     @function_name.setter
-    def function_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def function_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "function_name", value)
 
     @_builtins.property
     @pulumi.getter(name="maximumEventAgeInSeconds")
-    def maximum_event_age_in_seconds(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def maximum_event_age_in_seconds(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Maximum age of a request that Lambda sends to a function for processing in seconds. Valid values between 60 and 21600.
         """
         return pulumi.get(self, "maximum_event_age_in_seconds")
 
     @maximum_event_age_in_seconds.setter
-    def maximum_event_age_in_seconds(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def maximum_event_age_in_seconds(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "maximum_event_age_in_seconds", value)
 
     @_builtins.property
     @pulumi.getter(name="maximumRetryAttempts")
-    def maximum_retry_attempts(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def maximum_retry_attempts(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Maximum number of times to retry when the function returns an error. Valid values between 0 and 2. Defaults to 2.
         """
         return pulumi.get(self, "maximum_retry_attempts")
 
     @maximum_retry_attempts.setter
-    def maximum_retry_attempts(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def maximum_retry_attempts(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "maximum_retry_attempts", value)
 
     @_builtins.property
     @pulumi.getter
-    def qualifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def qualifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Lambda Function published version, `$LATEST`, or Lambda Alias name.
         """
         return pulumi.get(self, "qualifier")
 
     @qualifier.setter
-    def qualifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def qualifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "qualifier", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -239,12 +241,12 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 destination_config: Optional[pulumi.Input[Union['FunctionEventInvokeConfigDestinationConfigArgs', 'FunctionEventInvokeConfigDestinationConfigArgsDict']]] = None,
-                 function_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 maximum_event_age_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 maximum_retry_attempts: Optional[pulumi.Input[_builtins.int]] = None,
-                 qualifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 destination_config: pulumi.Input[Optional[Union['FunctionEventInvokeConfigDestinationConfigArgs', 'FunctionEventInvokeConfigDestinationConfigArgsDict']]] = None,
+                 function_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 maximum_event_age_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 maximum_retry_attempts: pulumi.Input[Optional[_builtins.int]] = None,
+                 qualifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Manages an AWS Lambda Function Event Invoke Config. Use this resource to configure error handling and destinations for asynchronous Lambda function invocations.
@@ -277,9 +279,6 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
             })
         # Complete event invoke configuration
         example = aws.lambda_.FunctionEventInvokeConfig("example",
-            function_name=example_aws_lambda_function["functionName"],
-            maximum_event_age_in_seconds=300,
-            maximum_retry_attempts=1,
             destination_config={
                 "on_failure": {
                     "destination": dlq.arn,
@@ -287,7 +286,10 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
                 "on_success": {
                     "destination": success.arn,
                 },
-            })
+            },
+            function_name=example_aws_lambda_function["functionName"],
+            maximum_event_age_in_seconds=300,
+            maximum_retry_attempts=1)
         ```
 
         ### Error Handling Only
@@ -314,15 +316,15 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
             function_name=example_aws_lambda_function["functionName"],
             function_version=example_aws_lambda_function["version"])
         example_function_event_invoke_config = aws.lambda_.FunctionEventInvokeConfig("example",
-            function_name=example_aws_lambda_function["functionName"],
-            qualifier=example.name,
-            maximum_event_age_in_seconds=1800,
-            maximum_retry_attempts=2,
             destination_config={
                 "on_failure": {
                     "destination": production_dlq["arn"],
                 },
-            })
+            },
+            function_name=example_aws_lambda_function["functionName"],
+            qualifier=example.name,
+            maximum_event_age_in_seconds=1800,
+            maximum_retry_attempts=2)
         ```
 
         ### Configuration for Published Version
@@ -332,10 +334,6 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lambda_.FunctionEventInvokeConfig("example",
-            function_name=example_aws_lambda_function["functionName"],
-            qualifier=example_aws_lambda_function["version"],
-            maximum_event_age_in_seconds=21600,
-            maximum_retry_attempts=2,
             destination_config={
                 "on_failure": {
                     "destination": version_dlq["arn"],
@@ -343,7 +341,11 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
                 "on_success": {
                     "destination": version_success["arn"],
                 },
-            })
+            },
+            function_name=example_aws_lambda_function["functionName"],
+            qualifier=example_aws_lambda_function["version"],
+            maximum_event_age_in_seconds=21600,
+            maximum_retry_attempts=2)
         ```
 
         ### Configuration for Latest Version
@@ -353,15 +355,15 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lambda_.FunctionEventInvokeConfig("example",
-            function_name=example_aws_lambda_function["functionName"],
-            qualifier="$LATEST",
-            maximum_event_age_in_seconds=120,
-            maximum_retry_attempts=0,
             destination_config={
                 "on_failure": {
                     "destination": dev_dlq["arn"],
                 },
-            })
+            },
+            function_name=example_aws_lambda_function["functionName"],
+            qualifier="$LATEST",
+            maximum_event_age_in_seconds=120,
+            maximum_retry_attempts=0)
         ```
 
         ### Multiple Destination Types
@@ -375,7 +377,6 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
         # EventBridge custom bus for failed events
         lambda_failures = aws.cloudwatch.EventBus("lambda_failures", name="lambda-failure-events")
         example = aws.lambda_.FunctionEventInvokeConfig("example",
-            function_name=example_aws_lambda_function["functionName"],
             destination_config={
                 "on_failure": {
                     "destination": lambda_failures.arn,
@@ -383,7 +384,8 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
                 "on_success": {
                     "destination": lambda_success_archive.arn,
                 },
-            })
+            },
+            function_name=example_aws_lambda_function["functionName"])
         ```
 
         ## Import
@@ -419,6 +421,7 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:lambda/functionEventInvokeConfig:FunctionEventInvokeConfig example example:production
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -468,9 +471,6 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
             })
         # Complete event invoke configuration
         example = aws.lambda_.FunctionEventInvokeConfig("example",
-            function_name=example_aws_lambda_function["functionName"],
-            maximum_event_age_in_seconds=300,
-            maximum_retry_attempts=1,
             destination_config={
                 "on_failure": {
                     "destination": dlq.arn,
@@ -478,7 +478,10 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
                 "on_success": {
                     "destination": success.arn,
                 },
-            })
+            },
+            function_name=example_aws_lambda_function["functionName"],
+            maximum_event_age_in_seconds=300,
+            maximum_retry_attempts=1)
         ```
 
         ### Error Handling Only
@@ -505,15 +508,15 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
             function_name=example_aws_lambda_function["functionName"],
             function_version=example_aws_lambda_function["version"])
         example_function_event_invoke_config = aws.lambda_.FunctionEventInvokeConfig("example",
-            function_name=example_aws_lambda_function["functionName"],
-            qualifier=example.name,
-            maximum_event_age_in_seconds=1800,
-            maximum_retry_attempts=2,
             destination_config={
                 "on_failure": {
                     "destination": production_dlq["arn"],
                 },
-            })
+            },
+            function_name=example_aws_lambda_function["functionName"],
+            qualifier=example.name,
+            maximum_event_age_in_seconds=1800,
+            maximum_retry_attempts=2)
         ```
 
         ### Configuration for Published Version
@@ -523,10 +526,6 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lambda_.FunctionEventInvokeConfig("example",
-            function_name=example_aws_lambda_function["functionName"],
-            qualifier=example_aws_lambda_function["version"],
-            maximum_event_age_in_seconds=21600,
-            maximum_retry_attempts=2,
             destination_config={
                 "on_failure": {
                     "destination": version_dlq["arn"],
@@ -534,7 +533,11 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
                 "on_success": {
                     "destination": version_success["arn"],
                 },
-            })
+            },
+            function_name=example_aws_lambda_function["functionName"],
+            qualifier=example_aws_lambda_function["version"],
+            maximum_event_age_in_seconds=21600,
+            maximum_retry_attempts=2)
         ```
 
         ### Configuration for Latest Version
@@ -544,15 +547,15 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lambda_.FunctionEventInvokeConfig("example",
-            function_name=example_aws_lambda_function["functionName"],
-            qualifier="$LATEST",
-            maximum_event_age_in_seconds=120,
-            maximum_retry_attempts=0,
             destination_config={
                 "on_failure": {
                     "destination": dev_dlq["arn"],
                 },
-            })
+            },
+            function_name=example_aws_lambda_function["functionName"],
+            qualifier="$LATEST",
+            maximum_event_age_in_seconds=120,
+            maximum_retry_attempts=0)
         ```
 
         ### Multiple Destination Types
@@ -566,7 +569,6 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
         # EventBridge custom bus for failed events
         lambda_failures = aws.cloudwatch.EventBus("lambda_failures", name="lambda-failure-events")
         example = aws.lambda_.FunctionEventInvokeConfig("example",
-            function_name=example_aws_lambda_function["functionName"],
             destination_config={
                 "on_failure": {
                     "destination": lambda_failures.arn,
@@ -574,7 +576,8 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
                 "on_success": {
                     "destination": lambda_success_archive.arn,
                 },
-            })
+            },
+            function_name=example_aws_lambda_function["functionName"])
         ```
 
         ## Import
@@ -611,6 +614,7 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
         $ pulumi import aws:lambda/functionEventInvokeConfig:FunctionEventInvokeConfig example example:production
         ```
 
+
         :param str resource_name: The name of the resource.
         :param FunctionEventInvokeConfigArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -626,12 +630,12 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 destination_config: Optional[pulumi.Input[Union['FunctionEventInvokeConfigDestinationConfigArgs', 'FunctionEventInvokeConfigDestinationConfigArgsDict']]] = None,
-                 function_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 maximum_event_age_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 maximum_retry_attempts: Optional[pulumi.Input[_builtins.int]] = None,
-                 qualifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 destination_config: pulumi.Input[Optional[Union['FunctionEventInvokeConfigDestinationConfigArgs', 'FunctionEventInvokeConfigDestinationConfigArgsDict']]] = None,
+                 function_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 maximum_event_age_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 maximum_retry_attempts: pulumi.Input[Optional[_builtins.int]] = None,
+                 qualifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -659,12 +663,12 @@ class FunctionEventInvokeConfig(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            destination_config: Optional[pulumi.Input[Union['FunctionEventInvokeConfigDestinationConfigArgs', 'FunctionEventInvokeConfigDestinationConfigArgsDict']]] = None,
-            function_name: Optional[pulumi.Input[_builtins.str]] = None,
-            maximum_event_age_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-            maximum_retry_attempts: Optional[pulumi.Input[_builtins.int]] = None,
-            qualifier: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'FunctionEventInvokeConfig':
+            destination_config: pulumi.Input[Optional[Union['FunctionEventInvokeConfigDestinationConfigArgs', 'FunctionEventInvokeConfigDestinationConfigArgsDict']]] = None,
+            function_name: pulumi.Input[Optional[_builtins.str]] = None,
+            maximum_event_age_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+            maximum_retry_attempts: pulumi.Input[Optional[_builtins.int]] = None,
+            qualifier: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'FunctionEventInvokeConfig':
         """
         Get an existing FunctionEventInvokeConfig resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

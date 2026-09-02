@@ -22,9 +22,10 @@ class PhoneNumberContactFlowAssociationArgs:
                  contact_flow_id: pulumi.Input[_builtins.str],
                  instance_id: pulumi.Input[_builtins.str],
                  phone_number_id: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a PhoneNumberContactFlowAssociation resource.
+
         :param pulumi.Input[_builtins.str] contact_flow_id: Contact flow ID.
         :param pulumi.Input[_builtins.str] instance_id: Amazon Connect instance ID.
         :param pulumi.Input[_builtins.str] phone_number_id: Phone number ID.
@@ -74,26 +75,27 @@ class PhoneNumberContactFlowAssociationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _PhoneNumberContactFlowAssociationState:
     def __init__(__self__, *,
-                 contact_flow_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 instance_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 phone_number_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 contact_flow_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 instance_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 phone_number_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering PhoneNumberContactFlowAssociation resources.
+
         :param pulumi.Input[_builtins.str] contact_flow_id: Contact flow ID.
         :param pulumi.Input[_builtins.str] instance_id: Amazon Connect instance ID.
         :param pulumi.Input[_builtins.str] phone_number_id: Phone number ID.
@@ -110,50 +112,50 @@ class _PhoneNumberContactFlowAssociationState:
 
     @_builtins.property
     @pulumi.getter(name="contactFlowId")
-    def contact_flow_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def contact_flow_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Contact flow ID.
         """
         return pulumi.get(self, "contact_flow_id")
 
     @contact_flow_id.setter
-    def contact_flow_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def contact_flow_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "contact_flow_id", value)
 
     @_builtins.property
     @pulumi.getter(name="instanceId")
-    def instance_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def instance_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Amazon Connect instance ID.
         """
         return pulumi.get(self, "instance_id")
 
     @instance_id.setter
-    def instance_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def instance_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "instance_id", value)
 
     @_builtins.property
     @pulumi.getter(name="phoneNumberId")
-    def phone_number_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def phone_number_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Phone number ID.
         """
         return pulumi.get(self, "phone_number_id")
 
     @phone_number_id.setter
-    def phone_number_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def phone_number_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "phone_number_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -163,10 +165,10 @@ class PhoneNumberContactFlowAssociation(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 contact_flow_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 instance_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 phone_number_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 contact_flow_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 instance_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 phone_number_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Associates a flow with a phone number claimed to an Amazon Connect instance.
@@ -190,6 +192,7 @@ class PhoneNumberContactFlowAssociation(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:connect/phoneNumberContactFlowAssociation:PhoneNumberContactFlowAssociation example 36727a4c-4683-4e49-880c-3347c61110a4,fa6c1691-e2eb-4487-bdb9-1aaed6268ebd,c4acdc79-395e-4280-a294-9062f56b07bb
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -227,6 +230,7 @@ class PhoneNumberContactFlowAssociation(pulumi.CustomResource):
         $ pulumi import aws:connect/phoneNumberContactFlowAssociation:PhoneNumberContactFlowAssociation example 36727a4c-4683-4e49-880c-3347c61110a4,fa6c1691-e2eb-4487-bdb9-1aaed6268ebd,c4acdc79-395e-4280-a294-9062f56b07bb
         ```
 
+
         :param str resource_name: The name of the resource.
         :param PhoneNumberContactFlowAssociationArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -242,10 +246,10 @@ class PhoneNumberContactFlowAssociation(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 contact_flow_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 instance_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 phone_number_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 contact_flow_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 instance_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 phone_number_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -275,10 +279,10 @@ class PhoneNumberContactFlowAssociation(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            contact_flow_id: Optional[pulumi.Input[_builtins.str]] = None,
-            instance_id: Optional[pulumi.Input[_builtins.str]] = None,
-            phone_number_id: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'PhoneNumberContactFlowAssociation':
+            contact_flow_id: pulumi.Input[Optional[_builtins.str]] = None,
+            instance_id: pulumi.Input[Optional[_builtins.str]] = None,
+            phone_number_id: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'PhoneNumberContactFlowAssociation':
         """
         Get an existing PhoneNumberContactFlowAssociation resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

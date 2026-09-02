@@ -21,14 +21,15 @@ class MemberArgs:
     def __init__(__self__, *,
                  account_id: pulumi.Input[_builtins.str],
                  email: pulumi.Input[_builtins.str],
-                 invitation_disable_email_notification: Optional[pulumi.Input[_builtins.bool]] = None,
-                 invitation_message: Optional[pulumi.Input[_builtins.str]] = None,
-                 invite: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 invitation_disable_email_notification: pulumi.Input[Optional[_builtins.bool]] = None,
+                 invitation_message: pulumi.Input[Optional[_builtins.str]] = None,
+                 invite: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a Member resource.
+
         :param pulumi.Input[_builtins.str] account_id: The AWS account ID for the account.
         :param pulumi.Input[_builtins.str] email: The email address for the account.
         :param pulumi.Input[_builtins.bool] invitation_disable_email_notification: Specifies whether to send an email notification to the root user of each account that the invitation will be sent to. This notification is in addition to an alert that the root user receives in AWS Personal Health Dashboard. To send an email notification to the root user of each account, set this value to `true`.
@@ -79,100 +80,101 @@ class MemberArgs:
 
     @_builtins.property
     @pulumi.getter(name="invitationDisableEmailNotification")
-    def invitation_disable_email_notification(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def invitation_disable_email_notification(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Specifies whether to send an email notification to the root user of each account that the invitation will be sent to. This notification is in addition to an alert that the root user receives in AWS Personal Health Dashboard. To send an email notification to the root user of each account, set this value to `true`.
         """
         return pulumi.get(self, "invitation_disable_email_notification")
 
     @invitation_disable_email_notification.setter
-    def invitation_disable_email_notification(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def invitation_disable_email_notification(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "invitation_disable_email_notification", value)
 
     @_builtins.property
     @pulumi.getter(name="invitationMessage")
-    def invitation_message(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def invitation_message(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A custom message to include in the invitation. Amazon Macie adds this message to the standard content that it sends for an invitation.
         """
         return pulumi.get(self, "invitation_message")
 
     @invitation_message.setter
-    def invitation_message(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def invitation_message(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "invitation_message", value)
 
     @_builtins.property
     @pulumi.getter
-    def invite(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def invite(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Send an invitation to a member
         """
         return pulumi.get(self, "invite")
 
     @invite.setter
-    def invite(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def invite(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "invite", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Specifies the status for the account. To enable Amazon Macie and start all Macie activities for the account, set this value to `ENABLED`. Valid values are `ENABLED` or `PAUSED`.
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _MemberState:
     def __init__(__self__, *,
-                 account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 administrator_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 email: Optional[pulumi.Input[_builtins.str]] = None,
-                 invitation_disable_email_notification: Optional[pulumi.Input[_builtins.bool]] = None,
-                 invitation_message: Optional[pulumi.Input[_builtins.str]] = None,
-                 invite: Optional[pulumi.Input[_builtins.bool]] = None,
-                 invited_at: Optional[pulumi.Input[_builtins.str]] = None,
-                 master_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 relationship_status: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 updated_at: Optional[pulumi.Input[_builtins.str]] = None):
+                 account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 administrator_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 email: pulumi.Input[Optional[_builtins.str]] = None,
+                 invitation_disable_email_notification: pulumi.Input[Optional[_builtins.bool]] = None,
+                 invitation_message: pulumi.Input[Optional[_builtins.str]] = None,
+                 invite: pulumi.Input[Optional[_builtins.bool]] = None,
+                 invited_at: pulumi.Input[Optional[_builtins.str]] = None,
+                 master_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 relationship_status: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 updated_at: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering Member resources.
+
         :param pulumi.Input[_builtins.str] account_id: The AWS account ID for the account.
         :param pulumi.Input[_builtins.str] administrator_account_id: The AWS account ID for the administrator account.
-        :param pulumi.Input[_builtins.str] arn: The Amazon Resource Name (ARN) of the account.
+        :param pulumi.Input[_builtins.str] arn: ARN of the account.
         :param pulumi.Input[_builtins.str] email: The email address for the account.
         :param pulumi.Input[_builtins.bool] invitation_disable_email_notification: Specifies whether to send an email notification to the root user of each account that the invitation will be sent to. This notification is in addition to an alert that the root user receives in AWS Personal Health Dashboard. To send an email notification to the root user of each account, set this value to `true`.
         :param pulumi.Input[_builtins.str] invitation_message: A custom message to include in the invitation. Amazon Macie adds this message to the standard content that it sends for an invitation.
@@ -218,179 +220,179 @@ class _MemberState:
 
     @_builtins.property
     @pulumi.getter(name="accountId")
-    def account_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def account_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The AWS account ID for the account.
         """
         return pulumi.get(self, "account_id")
 
     @account_id.setter
-    def account_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def account_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "account_id", value)
 
     @_builtins.property
     @pulumi.getter(name="administratorAccountId")
-    def administrator_account_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def administrator_account_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The AWS account ID for the administrator account.
         """
         return pulumi.get(self, "administrator_account_id")
 
     @administrator_account_id.setter
-    def administrator_account_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def administrator_account_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "administrator_account_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the account.
+        ARN of the account.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def email(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def email(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The email address for the account.
         """
         return pulumi.get(self, "email")
 
     @email.setter
-    def email(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def email(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "email", value)
 
     @_builtins.property
     @pulumi.getter(name="invitationDisableEmailNotification")
-    def invitation_disable_email_notification(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def invitation_disable_email_notification(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Specifies whether to send an email notification to the root user of each account that the invitation will be sent to. This notification is in addition to an alert that the root user receives in AWS Personal Health Dashboard. To send an email notification to the root user of each account, set this value to `true`.
         """
         return pulumi.get(self, "invitation_disable_email_notification")
 
     @invitation_disable_email_notification.setter
-    def invitation_disable_email_notification(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def invitation_disable_email_notification(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "invitation_disable_email_notification", value)
 
     @_builtins.property
     @pulumi.getter(name="invitationMessage")
-    def invitation_message(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def invitation_message(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A custom message to include in the invitation. Amazon Macie adds this message to the standard content that it sends for an invitation.
         """
         return pulumi.get(self, "invitation_message")
 
     @invitation_message.setter
-    def invitation_message(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def invitation_message(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "invitation_message", value)
 
     @_builtins.property
     @pulumi.getter
-    def invite(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def invite(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Send an invitation to a member
         """
         return pulumi.get(self, "invite")
 
     @invite.setter
-    def invite(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def invite(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "invite", value)
 
     @_builtins.property
     @pulumi.getter(name="invitedAt")
-    def invited_at(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def invited_at(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The date and time, in UTC and extended RFC 3339 format, when an Amazon Macie membership invitation was last sent to the account. This value is null if a Macie invitation hasn't been sent to the account.
         """
         return pulumi.get(self, "invited_at")
 
     @invited_at.setter
-    def invited_at(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def invited_at(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "invited_at", value)
 
     @_builtins.property
     @pulumi.getter(name="masterAccountId")
-    def master_account_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def master_account_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "master_account_id")
 
     @master_account_id.setter
-    def master_account_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def master_account_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "master_account_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="relationshipStatus")
-    def relationship_status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def relationship_status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The current status of the relationship between the account and the administrator account.
         """
         return pulumi.get(self, "relationship_status")
 
     @relationship_status.setter
-    def relationship_status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def relationship_status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "relationship_status", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Specifies the status for the account. To enable Amazon Macie and start all Macie activities for the account, set this value to `ENABLED`. Valid values are `ENABLED` or `PAUSED`.
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter(name="updatedAt")
-    def updated_at(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def updated_at(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The date and time, in UTC and extended RFC 3339 format, of the most recent change to the status of the relationship between the account and the administrator account.
         """
         return pulumi.get(self, "updated_at")
 
     @updated_at.setter
-    def updated_at(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def updated_at(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "updated_at", value)
 
 
@@ -400,14 +402,14 @@ class Member(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 email: Optional[pulumi.Input[_builtins.str]] = None,
-                 invitation_disable_email_notification: Optional[pulumi.Input[_builtins.bool]] = None,
-                 invitation_message: Optional[pulumi.Input[_builtins.str]] = None,
-                 invite: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 email: pulumi.Input[Optional[_builtins.str]] = None,
+                 invitation_disable_email_notification: pulumi.Input[Optional[_builtins.bool]] = None,
+                 invitation_message: pulumi.Input[Optional[_builtins.str]] = None,
+                 invite: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Provides a resource to manage an [Amazon Macie Member](https://docs.aws.amazon.com/macie/latest/APIReference/members-id.html).
@@ -435,6 +437,7 @@ class Member(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:macie2/member:Member example 123456789012
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -480,6 +483,7 @@ class Member(pulumi.CustomResource):
         $ pulumi import aws:macie2/member:Member example 123456789012
         ```
 
+
         :param str resource_name: The name of the resource.
         :param MemberArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -495,14 +499,14 @@ class Member(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 email: Optional[pulumi.Input[_builtins.str]] = None,
-                 invitation_disable_email_notification: Optional[pulumi.Input[_builtins.bool]] = None,
-                 invitation_message: Optional[pulumi.Input[_builtins.str]] = None,
-                 invite: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 email: pulumi.Input[Optional[_builtins.str]] = None,
+                 invitation_disable_email_notification: pulumi.Input[Optional[_builtins.bool]] = None,
+                 invitation_message: pulumi.Input[Optional[_builtins.str]] = None,
+                 invite: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -541,21 +545,21 @@ class Member(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            account_id: Optional[pulumi.Input[_builtins.str]] = None,
-            administrator_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            email: Optional[pulumi.Input[_builtins.str]] = None,
-            invitation_disable_email_notification: Optional[pulumi.Input[_builtins.bool]] = None,
-            invitation_message: Optional[pulumi.Input[_builtins.str]] = None,
-            invite: Optional[pulumi.Input[_builtins.bool]] = None,
-            invited_at: Optional[pulumi.Input[_builtins.str]] = None,
-            master_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            relationship_status: Optional[pulumi.Input[_builtins.str]] = None,
-            status: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            updated_at: Optional[pulumi.Input[_builtins.str]] = None) -> 'Member':
+            account_id: pulumi.Input[Optional[_builtins.str]] = None,
+            administrator_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            email: pulumi.Input[Optional[_builtins.str]] = None,
+            invitation_disable_email_notification: pulumi.Input[Optional[_builtins.bool]] = None,
+            invitation_message: pulumi.Input[Optional[_builtins.str]] = None,
+            invite: pulumi.Input[Optional[_builtins.bool]] = None,
+            invited_at: pulumi.Input[Optional[_builtins.str]] = None,
+            master_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            relationship_status: pulumi.Input[Optional[_builtins.str]] = None,
+            status: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            updated_at: pulumi.Input[Optional[_builtins.str]] = None) -> 'Member':
         """
         Get an existing Member resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -565,7 +569,7 @@ class Member(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.str] account_id: The AWS account ID for the account.
         :param pulumi.Input[_builtins.str] administrator_account_id: The AWS account ID for the administrator account.
-        :param pulumi.Input[_builtins.str] arn: The Amazon Resource Name (ARN) of the account.
+        :param pulumi.Input[_builtins.str] arn: ARN of the account.
         :param pulumi.Input[_builtins.str] email: The email address for the account.
         :param pulumi.Input[_builtins.bool] invitation_disable_email_notification: Specifies whether to send an email notification to the root user of each account that the invitation will be sent to. This notification is in addition to an alert that the root user receives in AWS Personal Health Dashboard. To send an email notification to the root user of each account, set this value to `true`.
         :param pulumi.Input[_builtins.str] invitation_message: A custom message to include in the invitation. Amazon Macie adds this message to the standard content that it sends for an invitation.
@@ -619,7 +623,7 @@ class Member(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the account.
+        ARN of the account.
         """
         return pulumi.get(self, "arn")
 

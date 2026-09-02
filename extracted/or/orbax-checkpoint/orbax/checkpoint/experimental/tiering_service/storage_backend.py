@@ -77,10 +77,10 @@ def locate_closest_backend(
     # When no region specified, match the zone prefix with the region.
     if region is None:
       for backend in backends:
-        if backend.region is not None and zone.startswith(backend.region):
+        if backend.region is not None and zone.startswith(str(backend.region)):
           return backend
         if backend.multi_regions is not None and zone.startswith(
-            tuple(backend.multi_regions)
+            tuple(str(r) for r in backend.multi_regions)
         ):
           return backend
 
@@ -97,20 +97,31 @@ def locate_closest_backend(
 def get_storage_path(
     backend: db_schema.StorageBackend,
     relative_path: str,
+    tier_path_uuid: str | None = None,
 ) -> str:
   """Builds the absolute storage path for the given backend and relative path.
 
   Combines the backend's prefix with the relative path, ensuring proper
-  formatting.
+  formatting. If a tier_path_uuid is provided, append it to ensure uniqueness.
 
   Args:
     backend: The StorageBackend target.
     relative_path: The relative path of the asset.
+    tier_path_uuid: Optional unique identifier for the tier path.
 
   Returns:
     The absolute storage path.
   """
-  return f"{backend.prefix.rstrip('/')}/{relative_path.lstrip('/')}"
+  prefix = backend.prefix.rstrip("/")
+  if relative_path == prefix or relative_path.startswith(prefix + "/"):
+    base_path = relative_path
+  else:
+    base_path = f"{prefix}/{relative_path.lstrip('/')}"
+
+  if tier_path_uuid is not None:
+    if not base_path.endswith(f"/{tier_path_uuid}"):
+      return f"{base_path.rstrip('/')}/{tier_path_uuid}"
+  return base_path
 
 
 def get_backend_name(backend: db_schema.StorageBackend) -> str:

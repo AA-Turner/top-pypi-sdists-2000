@@ -16,12 +16,17 @@ from .. import _utilities
 from . import outputs
 
 __all__ = [
+    'AlarmMuteRuleMuteTargets',
+    'AlarmMuteRuleRule',
+    'AlarmMuteRuleRuleSchedule',
     'CompositeAlarmActionsSuppressor',
     'EventBusDeadLetterConfig',
     'EventBusLogConfig',
     'EventConnectionAuthParameters',
     'EventConnectionAuthParametersApiKey',
     'EventConnectionAuthParametersBasic',
+    'EventConnectionAuthParametersConnectivityParameters',
+    'EventConnectionAuthParametersConnectivityParametersResourceParameters',
     'EventConnectionAuthParametersInvocationHttpParameters',
     'EventConnectionAuthParametersInvocationHttpParametersBody',
     'EventConnectionAuthParametersInvocationHttpParametersHeader',
@@ -64,6 +69,8 @@ __all__ = [
     'LogDeliveryDestinationDeliveryDestinationConfiguration',
     'LogDeliveryS3DeliveryConfiguration',
     'LogMetricFilterMetricTransformation',
+    'LogS3TableIntegrationSourceDataSource',
+    'LogS3TableIntegrationSourceTimeouts',
     'LogTransformerTransformerConfig',
     'LogTransformerTransformerConfigAddKeys',
     'LogTransformerTransformerConfigAddKeysEntry',
@@ -95,12 +102,15 @@ __all__ = [
     'LogTransformerTransformerConfigTypeConverter',
     'LogTransformerTransformerConfigTypeConverterEntry',
     'LogTransformerTransformerConfigUpperCaseString',
+    'MetricAlarmEvaluationCriteria',
+    'MetricAlarmEvaluationCriteriaPromqlCriteria',
     'MetricAlarmMetricQuery',
     'MetricAlarmMetricQueryMetric',
     'MetricStreamExcludeFilter',
     'MetricStreamIncludeFilter',
     'MetricStreamStatisticsConfiguration',
     'MetricStreamStatisticsConfigurationIncludeMetric',
+    'OtelEnrichmentTimeouts',
     'GetContributorManagedInsightRulesManagedRuleResult',
     'GetContributorManagedInsightRulesManagedRuleRuleStateResult',
     'GetEventBusDeadLetterConfigResult',
@@ -118,6 +128,101 @@ __all__ = [
     'GetLogDataProtectionPolicyDocumentStatementOperationDeidentifyResult',
     'GetLogDataProtectionPolicyDocumentStatementOperationDeidentifyMaskConfigResult',
 ]
+
+@pulumi.output_type
+class AlarmMuteRuleMuteTargets(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "alarmNames":
+            suggest = "alarm_names"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in AlarmMuteRuleMuteTargets. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        AlarmMuteRuleMuteTargets.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        AlarmMuteRuleMuteTargets.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 alarm_names: Sequence[_builtins.str]):
+        """
+        :param Sequence[_builtins.str] alarm_names: List of alarm names to mute.
+        """
+        pulumi.set(__self__, "alarm_names", alarm_names)
+
+    @_builtins.property
+    @pulumi.getter(name="alarmNames")
+    def alarm_names(self) -> Sequence[_builtins.str]:
+        """
+        List of alarm names to mute.
+        """
+        return pulumi.get(self, "alarm_names")
+
+
+@pulumi.output_type
+class AlarmMuteRuleRule(dict):
+    def __init__(__self__, *,
+                 schedule: Optional['outputs.AlarmMuteRuleRuleSchedule'] = None):
+        """
+        :param 'AlarmMuteRuleRuleScheduleArgs' schedule: Schedule for the mute rule. See `schedule` block below for details.
+        """
+        if schedule is not None:
+            pulumi.set(__self__, "schedule", schedule)
+
+    @_builtins.property
+    @pulumi.getter
+    def schedule(self) -> Optional['outputs.AlarmMuteRuleRuleSchedule']:
+        """
+        Schedule for the mute rule. See `schedule` block below for details.
+        """
+        return pulumi.get(self, "schedule")
+
+
+@pulumi.output_type
+class AlarmMuteRuleRuleSchedule(dict):
+    def __init__(__self__, *,
+                 duration: _builtins.str,
+                 expression: _builtins.str,
+                 timezone: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str duration: Duration of the mute period in [ISO 8601 duration format](https://en.wikipedia.org/wiki/ISO_8601#Durations) (e.g., `PT4H` for 4 hours).
+        :param _builtins.str expression: Schedule expression. Supports `cron()` and `at()` formats. For example, `cron(0 2 * * *)` for daily at 2:00 AM or `at(2026-01-01T00:00)` for a one-time mute. See [Defining alarm mute rules](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-mute-rules.html#defining-alarm-mute-rules) for details.
+        :param _builtins.str timezone: Timezone for the schedule expression (e.g., `Asia/Tokyo`). Defaults to UTC.
+        """
+        pulumi.set(__self__, "duration", duration)
+        pulumi.set(__self__, "expression", expression)
+        if timezone is not None:
+            pulumi.set(__self__, "timezone", timezone)
+
+    @_builtins.property
+    @pulumi.getter
+    def duration(self) -> _builtins.str:
+        """
+        Duration of the mute period in [ISO 8601 duration format](https://en.wikipedia.org/wiki/ISO_8601#Durations) (e.g., `PT4H` for 4 hours).
+        """
+        return pulumi.get(self, "duration")
+
+    @_builtins.property
+    @pulumi.getter
+    def expression(self) -> _builtins.str:
+        """
+        Schedule expression. Supports `cron()` and `at()` formats. For example, `cron(0 2 * * *)` for daily at 2:00 AM or `at(2026-01-01T00:00)` for a one-time mute. See [Defining alarm mute rules](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-mute-rules.html#defining-alarm-mute-rules) for details.
+        """
+        return pulumi.get(self, "expression")
+
+    @_builtins.property
+    @pulumi.getter
+    def timezone(self) -> Optional[_builtins.str]:
+        """
+        Timezone for the schedule expression (e.g., `Asia/Tokyo`). Defaults to UTC.
+        """
+        return pulumi.get(self, "timezone")
+
 
 @pulumi.output_type
 class CompositeAlarmActionsSuppressor(dict):
@@ -145,7 +250,7 @@ class CompositeAlarmActionsSuppressor(dict):
                  extension_period: _builtins.int,
                  wait_period: _builtins.int):
         """
-        :param _builtins.str alarm: Can be an AlarmName or an Amazon Resource Name (ARN) from an existing alarm.
+        :param _builtins.str alarm: Can be an AlarmName or an ARN from an existing alarm.
         :param _builtins.int extension_period: The maximum time in seconds that the composite alarm waits after suppressor alarm goes out of the `ALARM` state. After this time, the composite alarm performs its actions.
         :param _builtins.int wait_period: The maximum time in seconds that the composite alarm waits for the suppressor alarm to go into the `ALARM` state. After this time, the composite alarm performs its actions.
         """
@@ -157,7 +262,7 @@ class CompositeAlarmActionsSuppressor(dict):
     @pulumi.getter
     def alarm(self) -> _builtins.str:
         """
-        Can be an AlarmName or an Amazon Resource Name (ARN) from an existing alarm.
+        Can be an AlarmName or an ARN from an existing alarm.
         """
         return pulumi.get(self, "alarm")
 
@@ -252,6 +357,8 @@ class EventConnectionAuthParameters(dict):
         suggest = None
         if key == "apiKey":
             suggest = "api_key"
+        elif key == "connectivityParameters":
+            suggest = "connectivity_parameters"
         elif key == "invocationHttpParameters":
             suggest = "invocation_http_parameters"
 
@@ -269,11 +376,13 @@ class EventConnectionAuthParameters(dict):
     def __init__(__self__, *,
                  api_key: Optional['outputs.EventConnectionAuthParametersApiKey'] = None,
                  basic: Optional['outputs.EventConnectionAuthParametersBasic'] = None,
+                 connectivity_parameters: Optional['outputs.EventConnectionAuthParametersConnectivityParameters'] = None,
                  invocation_http_parameters: Optional['outputs.EventConnectionAuthParametersInvocationHttpParameters'] = None,
                  oauth: Optional['outputs.EventConnectionAuthParametersOauth'] = None):
         """
         :param 'EventConnectionAuthParametersApiKeyArgs' api_key: Parameters used for API_KEY authorization. An API key to include in the header for each authentication request. A maximum of 1 are allowed. Conflicts with `basic` and `oauth`. Documented below.
         :param 'EventConnectionAuthParametersBasicArgs' basic: Parameters used for BASIC authorization. A maximum of 1 are allowed. Conflicts with `api_key` and `oauth`. Documented below.
+        :param 'EventConnectionAuthParametersConnectivityParametersArgs' connectivity_parameters: Parameters used for `oauth` with private API. Documented below.
         :param 'EventConnectionAuthParametersInvocationHttpParametersArgs' invocation_http_parameters: Invocation Http Parameters are additional credentials used to sign each Invocation of the ApiDestination created from this Connection. If the ApiDestination Rule Target has additional HttpParameters, the values will be merged together, with the Connection Invocation Http Parameters taking precedence. Secret values are stored and managed by AWS Secrets Manager. A maximum of 1 are allowed. Documented below.
         :param 'EventConnectionAuthParametersOauthArgs' oauth: Parameters used for OAUTH_CLIENT_CREDENTIALS authorization. A maximum of 1 are allowed. Conflicts with `basic` and `api_key`. Documented below.
         """
@@ -281,6 +390,8 @@ class EventConnectionAuthParameters(dict):
             pulumi.set(__self__, "api_key", api_key)
         if basic is not None:
             pulumi.set(__self__, "basic", basic)
+        if connectivity_parameters is not None:
+            pulumi.set(__self__, "connectivity_parameters", connectivity_parameters)
         if invocation_http_parameters is not None:
             pulumi.set(__self__, "invocation_http_parameters", invocation_http_parameters)
         if oauth is not None:
@@ -301,6 +412,14 @@ class EventConnectionAuthParameters(dict):
         Parameters used for BASIC authorization. A maximum of 1 are allowed. Conflicts with `api_key` and `oauth`. Documented below.
         """
         return pulumi.get(self, "basic")
+
+    @_builtins.property
+    @pulumi.getter(name="connectivityParameters")
+    def connectivity_parameters(self) -> Optional['outputs.EventConnectionAuthParametersConnectivityParameters']:
+        """
+        Parameters used for `oauth` with private API. Documented below.
+        """
+        return pulumi.get(self, "connectivity_parameters")
 
     @_builtins.property
     @pulumi.getter(name="invocationHttpParameters")
@@ -375,6 +494,86 @@ class EventConnectionAuthParametersBasic(dict):
         A username for the authorization.
         """
         return pulumi.get(self, "username")
+
+
+@pulumi.output_type
+class EventConnectionAuthParametersConnectivityParameters(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "resourceParameters":
+            suggest = "resource_parameters"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in EventConnectionAuthParametersConnectivityParameters. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        EventConnectionAuthParametersConnectivityParameters.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        EventConnectionAuthParametersConnectivityParameters.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 resource_parameters: 'outputs.EventConnectionAuthParametersConnectivityParametersResourceParameters'):
+        """
+        :param 'EventConnectionAuthParametersConnectivityParametersResourceParametersArgs' resource_parameters: The parameters for EventBridge to use when invoking the authentication endpoint. Documented below.
+        """
+        pulumi.set(__self__, "resource_parameters", resource_parameters)
+
+    @_builtins.property
+    @pulumi.getter(name="resourceParameters")
+    def resource_parameters(self) -> 'outputs.EventConnectionAuthParametersConnectivityParametersResourceParameters':
+        """
+        The parameters for EventBridge to use when invoking the authentication endpoint. Documented below.
+        """
+        return pulumi.get(self, "resource_parameters")
+
+
+@pulumi.output_type
+class EventConnectionAuthParametersConnectivityParametersResourceParameters(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "resourceConfigurationArn":
+            suggest = "resource_configuration_arn"
+        elif key == "resourceAssociationArn":
+            suggest = "resource_association_arn"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in EventConnectionAuthParametersConnectivityParametersResourceParameters. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        EventConnectionAuthParametersConnectivityParametersResourceParameters.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        EventConnectionAuthParametersConnectivityParametersResourceParameters.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 resource_configuration_arn: _builtins.str,
+                 resource_association_arn: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str resource_configuration_arn: ARN of the Amazon VPC Lattice resource configuration for the resource endpoint.
+        """
+        pulumi.set(__self__, "resource_configuration_arn", resource_configuration_arn)
+        if resource_association_arn is not None:
+            pulumi.set(__self__, "resource_association_arn", resource_association_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="resourceConfigurationArn")
+    def resource_configuration_arn(self) -> _builtins.str:
+        """
+        ARN of the Amazon VPC Lattice resource configuration for the resource endpoint.
+        """
+        return pulumi.get(self, "resource_configuration_arn")
+
+    @_builtins.property
+    @pulumi.getter(name="resourceAssociationArn")
+    def resource_association_arn(self) -> Optional[_builtins.str]:
+        return pulumi.get(self, "resource_association_arn")
 
 
 @pulumi.output_type
@@ -2530,6 +2729,54 @@ class LogMetricFilterMetricTransformation(dict):
 
 
 @pulumi.output_type
+class LogS3TableIntegrationSourceDataSource(dict):
+    def __init__(__self__, *,
+                 name: _builtins.str,
+                 type: _builtins.str):
+        """
+        :param _builtins.str name: Name of the data source. Use `"*"` to match all sources.
+        :param _builtins.str type: Type of the data source. Use `"*"` to match all types.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "type", type)
+
+    @_builtins.property
+    @pulumi.getter
+    def name(self) -> _builtins.str:
+        """
+        Name of the data source. Use `"*"` to match all sources.
+        """
+        return pulumi.get(self, "name")
+
+    @_builtins.property
+    @pulumi.getter
+    def type(self) -> _builtins.str:
+        """
+        Type of the data source. Use `"*"` to match all types.
+        """
+        return pulumi.get(self, "type")
+
+
+@pulumi.output_type
+class LogS3TableIntegrationSourceTimeouts(dict):
+    def __init__(__self__, *,
+                 delete: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        if delete is not None:
+            pulumi.set(__self__, "delete", delete)
+
+    @_builtins.property
+    @pulumi.getter
+    def delete(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        return pulumi.get(self, "delete")
+
+
+@pulumi.output_type
 class LogTransformerTransformerConfig(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -4096,6 +4343,102 @@ class LogTransformerTransformerConfigUpperCaseString(dict):
 
 
 @pulumi.output_type
+class MetricAlarmEvaluationCriteria(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "promqlCriteria":
+            suggest = "promql_criteria"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in MetricAlarmEvaluationCriteria. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        MetricAlarmEvaluationCriteria.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        MetricAlarmEvaluationCriteria.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 promql_criteria: 'outputs.MetricAlarmEvaluationCriteriaPromqlCriteria'):
+        """
+        :param 'MetricAlarmEvaluationCriteriaPromqlCriteriaArgs' promql_criteria: The PromQL criteria for the alarm evaluation.
+        """
+        pulumi.set(__self__, "promql_criteria", promql_criteria)
+
+    @_builtins.property
+    @pulumi.getter(name="promqlCriteria")
+    def promql_criteria(self) -> 'outputs.MetricAlarmEvaluationCriteriaPromqlCriteria':
+        """
+        The PromQL criteria for the alarm evaluation.
+        """
+        return pulumi.get(self, "promql_criteria")
+
+
+@pulumi.output_type
+class MetricAlarmEvaluationCriteriaPromqlCriteria(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "pendingPeriod":
+            suggest = "pending_period"
+        elif key == "recoveryPeriod":
+            suggest = "recovery_period"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in MetricAlarmEvaluationCriteriaPromqlCriteria. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        MetricAlarmEvaluationCriteriaPromqlCriteria.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        MetricAlarmEvaluationCriteriaPromqlCriteria.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 query: _builtins.str,
+                 pending_period: Optional[_builtins.int] = None,
+                 recovery_period: Optional[_builtins.int] = None):
+        """
+        :param _builtins.str query: The PromQL query that the alarm evaluates. The query must return a result of vector type. Each entry in the vector result represents an alarm contributor.
+        :param _builtins.int pending_period: The duration, in seconds, that a contributor must be continuously breaching before it transitions to the ALARM state. Valid range: 0-86400.
+        :param _builtins.int recovery_period: The duration, in seconds, that a contributor must continuously not be breaching before it transitions back to the OK state. Valid range: 0-86400.
+        """
+        pulumi.set(__self__, "query", query)
+        if pending_period is not None:
+            pulumi.set(__self__, "pending_period", pending_period)
+        if recovery_period is not None:
+            pulumi.set(__self__, "recovery_period", recovery_period)
+
+    @_builtins.property
+    @pulumi.getter
+    def query(self) -> _builtins.str:
+        """
+        The PromQL query that the alarm evaluates. The query must return a result of vector type. Each entry in the vector result represents an alarm contributor.
+        """
+        return pulumi.get(self, "query")
+
+    @_builtins.property
+    @pulumi.getter(name="pendingPeriod")
+    def pending_period(self) -> Optional[_builtins.int]:
+        """
+        The duration, in seconds, that a contributor must be continuously breaching before it transitions to the ALARM state. Valid range: 0-86400.
+        """
+        return pulumi.get(self, "pending_period")
+
+    @_builtins.property
+    @pulumi.getter(name="recoveryPeriod")
+    def recovery_period(self) -> Optional[_builtins.int]:
+        """
+        The duration, in seconds, that a contributor must continuously not be breaching before it transitions back to the OK state. Valid range: 0-86400.
+        """
+        return pulumi.get(self, "recovery_period")
+
+
+@pulumi.output_type
 class MetricAlarmMetricQuery(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -4501,6 +4844,37 @@ class MetricStreamStatisticsConfigurationIncludeMetric(dict):
     @pulumi.getter
     def namespace(self) -> _builtins.str:
         return pulumi.get(self, "namespace")
+
+
+@pulumi.output_type
+class OtelEnrichmentTimeouts(dict):
+    def __init__(__self__, *,
+                 create: Optional[_builtins.str] = None,
+                 delete: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        :param _builtins.str delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        if create is not None:
+            pulumi.set(__self__, "create", create)
+        if delete is not None:
+            pulumi.set(__self__, "delete", delete)
+
+    @_builtins.property
+    @pulumi.getter
+    def create(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "create")
+
+    @_builtins.property
+    @pulumi.getter
+    def delete(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        return pulumi.get(self, "delete")
 
 
 @pulumi.output_type

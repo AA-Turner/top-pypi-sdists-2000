@@ -195,7 +195,7 @@ class GetTaskExecutionResult:
     @pulumi.getter(name="taskArns")
     def task_arns(self) -> Sequence[_builtins.str]:
         """
-        A list of the provisioned task ARNs.
+        List of the provisioned task ARNs.
         """
         return pulumi.get(self, "task_arns")
 
@@ -267,37 +267,37 @@ def get_task_execution(capacity_provider_strategies: Optional[Sequence[Union['Ge
     import pulumi
     import pulumi_aws as aws
 
-    example = aws.ecs.get_task_execution(cluster=example_aws_ecs_cluster["id"],
-        task_definition=example_aws_ecs_task_definition["arn"],
-        desired_count=1,
-        launch_type="FARGATE",
-        network_configuration={
+    example = aws.ecs.get_task_execution(network_configuration={
             "subnets": [__item["id"] for __item in example_aws_subnet],
             "security_groups": [example_aws_security_group["id"]],
             "assign_public_ip": False,
-        })
+        },
+        cluster=example_aws_ecs_cluster["id"],
+        task_definition=example_aws_ecs_task_definition["arn"],
+        desired_count=1,
+        launch_type="FARGATE")
     ```
 
 
     :param Sequence[Union['GetTaskExecutionCapacityProviderStrategyArgs', 'GetTaskExecutionCapacityProviderStrategyArgsDict']] capacity_provider_strategies: Set of capacity provider strategies to use for the cluster. See below.
-    :param _builtins.str client_token: An identifier that you provide to ensure the idempotency of the request. It must be unique and is case sensitive. Up to 64 characters are allowed. The valid characters are characters in the range of 33-126, inclusive. For more information, see [Ensuring idempotency](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/ECS_Idempotency.html).
-    :param _builtins.str cluster: Short name or full Amazon Resource Name (ARN) of the cluster to run the task on.
+    :param _builtins.str client_token: Identifier that you provide to ensure the idempotency of the request. It must be unique and is case sensitive. Up to 64 characters are allowed. The valid characters are characters in the range of 33-126, inclusive. For more information, see [Ensuring idempotency](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/ECS_Idempotency.html).
+    :param _builtins.str cluster: Short name or full ARN of the cluster to run the task on.
     :param _builtins.int desired_count: Number of instantiations of the specified task to place on your cluster. You can specify up to 10 tasks for each call.
-    :param _builtins.bool enable_ecs_managed_tags: Specifies whether to enable Amazon ECS managed tags for the tasks within the service.
-    :param _builtins.bool enable_execute_command: Specifies whether to enable Amazon ECS Exec for the tasks within the service.
+    :param _builtins.bool enable_ecs_managed_tags: Whether to enable Amazon ECS managed tags for the tasks within the service.
+    :param _builtins.bool enable_execute_command: Whether to enable Amazon ECS Exec for the tasks within the service.
     :param _builtins.str group: Name of the task group to associate with the task. The default value is the family name of the task definition.
     :param _builtins.str launch_type: Launch type on which to run your service. Valid values are `EC2`, `FARGATE`, and `EXTERNAL`.
     :param Union['GetTaskExecutionNetworkConfigurationArgs', 'GetTaskExecutionNetworkConfigurationArgsDict'] network_configuration: Network configuration for the service. This parameter is required for task definitions that use the `awsvpc` network mode to receive their own Elastic Network Interface, and it is not supported for other network modes. See below.
-    :param Union['GetTaskExecutionOverridesArgs', 'GetTaskExecutionOverridesArgsDict'] overrides: A list of container overrides that specify the name of a container in the specified task definition and the overrides it should receive.
-    :param Sequence[Union['GetTaskExecutionPlacementConstraintArgs', 'GetTaskExecutionPlacementConstraintArgsDict']] placement_constraints: An array of placement constraint objects to use for the task. You can specify up to 10 constraints for each task. See below.
-    :param Sequence[Union['GetTaskExecutionPlacementStrategyArgs', 'GetTaskExecutionPlacementStrategyArgsDict']] placement_strategies: The placement strategy objects to use for the task. You can specify a maximum of 5 strategy rules for each task. See below.
-    :param _builtins.str platform_version: The platform version the task uses. A platform version is only specified for tasks hosted on Fargate. If one isn't specified, the `LATEST` platform version is used.
-    :param _builtins.str propagate_tags: Specifies whether to propagate the tags from the task definition to the task. If no value is specified, the tags aren't propagated. An error will be received if you specify the `SERVICE` option when running a task. Valid values are `TASK_DEFINITION` or `NONE`.
-    :param _builtins.str reference_id: The reference ID to use for the task.
+    :param Union['GetTaskExecutionOverridesArgs', 'GetTaskExecutionOverridesArgsDict'] overrides: List of container overrides that specify the name of a container in the specified task definition and the overrides it should receive.
+    :param Sequence[Union['GetTaskExecutionPlacementConstraintArgs', 'GetTaskExecutionPlacementConstraintArgsDict']] placement_constraints: Array of placement constraint objects to use for the task. You can specify up to 10 constraints for each task. See below.
+    :param Sequence[Union['GetTaskExecutionPlacementStrategyArgs', 'GetTaskExecutionPlacementStrategyArgsDict']] placement_strategies: Placement strategy objects to use for the task. You can specify a maximum of 5 strategy rules for each task. See below.
+    :param _builtins.str platform_version: Platform version the task uses. A platform version is only specified for tasks hosted on Fargate. If one isn't specified, the `LATEST` platform version is used.
+    :param _builtins.str propagate_tags: Whether to propagate the tags from the task definition to the task. If no value is specified, the tags aren't propagated. An error will be received if you specify the `SERVICE` option when running a task. Valid values are `TASK_DEFINITION` or `NONE`.
+    :param _builtins.str reference_id: Reference ID to use for the task.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param _builtins.str started_by: An optional tag specified when a task is started.
+    :param _builtins.str started_by: Optional tag specified when a task is started.
     :param Mapping[str, _builtins.str] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-    :param _builtins.str task_definition: The `family` and `revision` (`family:revision`) or full ARN of the task definition to run. If a revision isn't specified, the latest `ACTIVE` revision is used.
+    :param _builtins.str task_definition: Family and revision (`family:revision`) or full ARN of the task definition to run. If a revision isn't specified, the latest `ACTIVE` revision is used.
            
            The following arguments are optional:
     """
@@ -346,25 +346,25 @@ def get_task_execution(capacity_provider_strategies: Optional[Sequence[Union['Ge
         tags=pulumi.get(__ret__, 'tags'),
         task_arns=pulumi.get(__ret__, 'task_arns'),
         task_definition=pulumi.get(__ret__, 'task_definition'))
-def get_task_execution_output(capacity_provider_strategies: Optional[pulumi.Input[Optional[Sequence[Union['GetTaskExecutionCapacityProviderStrategyArgs', 'GetTaskExecutionCapacityProviderStrategyArgsDict']]]]] = None,
-                              client_token: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              cluster: Optional[pulumi.Input[_builtins.str]] = None,
-                              desired_count: Optional[pulumi.Input[Optional[_builtins.int]]] = None,
-                              enable_ecs_managed_tags: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                              enable_execute_command: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                              group: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              launch_type: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              network_configuration: Optional[pulumi.Input[Optional[Union['GetTaskExecutionNetworkConfigurationArgs', 'GetTaskExecutionNetworkConfigurationArgsDict']]]] = None,
-                              overrides: Optional[pulumi.Input[Optional[Union['GetTaskExecutionOverridesArgs', 'GetTaskExecutionOverridesArgsDict']]]] = None,
-                              placement_constraints: Optional[pulumi.Input[Optional[Sequence[Union['GetTaskExecutionPlacementConstraintArgs', 'GetTaskExecutionPlacementConstraintArgsDict']]]]] = None,
-                              placement_strategies: Optional[pulumi.Input[Optional[Sequence[Union['GetTaskExecutionPlacementStrategyArgs', 'GetTaskExecutionPlacementStrategyArgsDict']]]]] = None,
-                              platform_version: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              propagate_tags: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              reference_id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              started_by: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
-                              task_definition: Optional[pulumi.Input[_builtins.str]] = None,
+def get_task_execution_output(capacity_provider_strategies: pulumi.Input[Optional[Optional[Sequence[Union['GetTaskExecutionCapacityProviderStrategyArgs', 'GetTaskExecutionCapacityProviderStrategyArgsDict']]]]] = None,
+                              client_token: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              cluster: pulumi.Input[Optional[_builtins.str]] = None,
+                              desired_count: pulumi.Input[Optional[Optional[_builtins.int]]] = None,
+                              enable_ecs_managed_tags: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                              enable_execute_command: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                              group: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              launch_type: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              network_configuration: pulumi.Input[Optional[Optional[Union['GetTaskExecutionNetworkConfigurationArgs', 'GetTaskExecutionNetworkConfigurationArgsDict']]]] = None,
+                              overrides: pulumi.Input[Optional[Optional[Union['GetTaskExecutionOverridesArgs', 'GetTaskExecutionOverridesArgsDict']]]] = None,
+                              placement_constraints: pulumi.Input[Optional[Optional[Sequence[Union['GetTaskExecutionPlacementConstraintArgs', 'GetTaskExecutionPlacementConstraintArgsDict']]]]] = None,
+                              placement_strategies: pulumi.Input[Optional[Optional[Sequence[Union['GetTaskExecutionPlacementStrategyArgs', 'GetTaskExecutionPlacementStrategyArgsDict']]]]] = None,
+                              platform_version: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              propagate_tags: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              reference_id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              started_by: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
+                              task_definition: pulumi.Input[Optional[_builtins.str]] = None,
                               opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetTaskExecutionResult]:
     """
     Data source for managing an AWS ECS (Elastic Container) Task Execution. This data source calls the [RunTask](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_RunTask.html) API, allowing execution of one-time tasks that don't fit a standard resource lifecycle. See the feature request issue for additional context.
@@ -379,37 +379,37 @@ def get_task_execution_output(capacity_provider_strategies: Optional[pulumi.Inpu
     import pulumi
     import pulumi_aws as aws
 
-    example = aws.ecs.get_task_execution(cluster=example_aws_ecs_cluster["id"],
-        task_definition=example_aws_ecs_task_definition["arn"],
-        desired_count=1,
-        launch_type="FARGATE",
-        network_configuration={
+    example = aws.ecs.get_task_execution(network_configuration={
             "subnets": [__item["id"] for __item in example_aws_subnet],
             "security_groups": [example_aws_security_group["id"]],
             "assign_public_ip": False,
-        })
+        },
+        cluster=example_aws_ecs_cluster["id"],
+        task_definition=example_aws_ecs_task_definition["arn"],
+        desired_count=1,
+        launch_type="FARGATE")
     ```
 
 
     :param Sequence[Union['GetTaskExecutionCapacityProviderStrategyArgs', 'GetTaskExecutionCapacityProviderStrategyArgsDict']] capacity_provider_strategies: Set of capacity provider strategies to use for the cluster. See below.
-    :param _builtins.str client_token: An identifier that you provide to ensure the idempotency of the request. It must be unique and is case sensitive. Up to 64 characters are allowed. The valid characters are characters in the range of 33-126, inclusive. For more information, see [Ensuring idempotency](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/ECS_Idempotency.html).
-    :param _builtins.str cluster: Short name or full Amazon Resource Name (ARN) of the cluster to run the task on.
+    :param _builtins.str client_token: Identifier that you provide to ensure the idempotency of the request. It must be unique and is case sensitive. Up to 64 characters are allowed. The valid characters are characters in the range of 33-126, inclusive. For more information, see [Ensuring idempotency](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/ECS_Idempotency.html).
+    :param _builtins.str cluster: Short name or full ARN of the cluster to run the task on.
     :param _builtins.int desired_count: Number of instantiations of the specified task to place on your cluster. You can specify up to 10 tasks for each call.
-    :param _builtins.bool enable_ecs_managed_tags: Specifies whether to enable Amazon ECS managed tags for the tasks within the service.
-    :param _builtins.bool enable_execute_command: Specifies whether to enable Amazon ECS Exec for the tasks within the service.
+    :param _builtins.bool enable_ecs_managed_tags: Whether to enable Amazon ECS managed tags for the tasks within the service.
+    :param _builtins.bool enable_execute_command: Whether to enable Amazon ECS Exec for the tasks within the service.
     :param _builtins.str group: Name of the task group to associate with the task. The default value is the family name of the task definition.
     :param _builtins.str launch_type: Launch type on which to run your service. Valid values are `EC2`, `FARGATE`, and `EXTERNAL`.
     :param Union['GetTaskExecutionNetworkConfigurationArgs', 'GetTaskExecutionNetworkConfigurationArgsDict'] network_configuration: Network configuration for the service. This parameter is required for task definitions that use the `awsvpc` network mode to receive their own Elastic Network Interface, and it is not supported for other network modes. See below.
-    :param Union['GetTaskExecutionOverridesArgs', 'GetTaskExecutionOverridesArgsDict'] overrides: A list of container overrides that specify the name of a container in the specified task definition and the overrides it should receive.
-    :param Sequence[Union['GetTaskExecutionPlacementConstraintArgs', 'GetTaskExecutionPlacementConstraintArgsDict']] placement_constraints: An array of placement constraint objects to use for the task. You can specify up to 10 constraints for each task. See below.
-    :param Sequence[Union['GetTaskExecutionPlacementStrategyArgs', 'GetTaskExecutionPlacementStrategyArgsDict']] placement_strategies: The placement strategy objects to use for the task. You can specify a maximum of 5 strategy rules for each task. See below.
-    :param _builtins.str platform_version: The platform version the task uses. A platform version is only specified for tasks hosted on Fargate. If one isn't specified, the `LATEST` platform version is used.
-    :param _builtins.str propagate_tags: Specifies whether to propagate the tags from the task definition to the task. If no value is specified, the tags aren't propagated. An error will be received if you specify the `SERVICE` option when running a task. Valid values are `TASK_DEFINITION` or `NONE`.
-    :param _builtins.str reference_id: The reference ID to use for the task.
+    :param Union['GetTaskExecutionOverridesArgs', 'GetTaskExecutionOverridesArgsDict'] overrides: List of container overrides that specify the name of a container in the specified task definition and the overrides it should receive.
+    :param Sequence[Union['GetTaskExecutionPlacementConstraintArgs', 'GetTaskExecutionPlacementConstraintArgsDict']] placement_constraints: Array of placement constraint objects to use for the task. You can specify up to 10 constraints for each task. See below.
+    :param Sequence[Union['GetTaskExecutionPlacementStrategyArgs', 'GetTaskExecutionPlacementStrategyArgsDict']] placement_strategies: Placement strategy objects to use for the task. You can specify a maximum of 5 strategy rules for each task. See below.
+    :param _builtins.str platform_version: Platform version the task uses. A platform version is only specified for tasks hosted on Fargate. If one isn't specified, the `LATEST` platform version is used.
+    :param _builtins.str propagate_tags: Whether to propagate the tags from the task definition to the task. If no value is specified, the tags aren't propagated. An error will be received if you specify the `SERVICE` option when running a task. Valid values are `TASK_DEFINITION` or `NONE`.
+    :param _builtins.str reference_id: Reference ID to use for the task.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param _builtins.str started_by: An optional tag specified when a task is started.
+    :param _builtins.str started_by: Optional tag specified when a task is started.
     :param Mapping[str, _builtins.str] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-    :param _builtins.str task_definition: The `family` and `revision` (`family:revision`) or full ARN of the task definition to run. If a revision isn't specified, the latest `ACTIVE` revision is used.
+    :param _builtins.str task_definition: Family and revision (`family:revision`) or full ARN of the task definition to run. If a revision isn't specified, the latest `ACTIVE` revision is used.
            
            The following arguments are optional:
     """

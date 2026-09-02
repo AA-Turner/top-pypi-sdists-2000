@@ -93,10 +93,10 @@ def get_bot_association(instance_id: Optional[_builtins.str] = None,
     import pulumi
     import pulumi_aws as aws
 
-    example = aws.connect.get_bot_association(instance_id="aaaaaaaa-bbbb-cccc-dddd-111111111111",
-        lex_bot={
+    example = aws.connect.get_bot_association(lex_bot={
             "name": "Test",
-        })
+        },
+        instance_id="aaaaaaaa-bbbb-cccc-dddd-111111111111")
     ```
 
 
@@ -116,9 +116,9 @@ def get_bot_association(instance_id: Optional[_builtins.str] = None,
         instance_id=pulumi.get(__ret__, 'instance_id'),
         lex_bot=pulumi.get(__ret__, 'lex_bot'),
         region=pulumi.get(__ret__, 'region'))
-def get_bot_association_output(instance_id: Optional[pulumi.Input[_builtins.str]] = None,
-                               lex_bot: Optional[pulumi.Input[Union['GetBotAssociationLexBotArgs', 'GetBotAssociationLexBotArgsDict']]] = None,
-                               region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_bot_association_output(instance_id: pulumi.Input[Optional[_builtins.str]] = None,
+                               lex_bot: pulumi.Input[Optional[Union['GetBotAssociationLexBotArgs', 'GetBotAssociationLexBotArgsDict']]] = None,
+                               region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetBotAssociationResult]:
     """
     Provides details about a specific Lex (V1) Bot associated with an Amazon Connect instance.
@@ -131,10 +131,10 @@ def get_bot_association_output(instance_id: Optional[pulumi.Input[_builtins.str]
     import pulumi
     import pulumi_aws as aws
 
-    example = aws.connect.get_bot_association(instance_id="aaaaaaaa-bbbb-cccc-dddd-111111111111",
-        lex_bot={
+    example = aws.connect.get_bot_association(lex_bot={
             "name": "Test",
-        })
+        },
+        instance_id="aaaaaaaa-bbbb-cccc-dddd-111111111111")
     ```
 
 

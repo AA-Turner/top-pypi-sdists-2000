@@ -19,10 +19,11 @@ __all__ = ['PreferencesArgs', 'Preferences']
 @pulumi.input_type
 class PreferencesArgs:
     def __init__(__self__, *,
-                 member_account_discount_visibility: Optional[pulumi.Input[_builtins.str]] = None,
-                 savings_estimation_mode: Optional[pulumi.Input[_builtins.str]] = None):
+                 member_account_discount_visibility: pulumi.Input[Optional[_builtins.str]] = None,
+                 savings_estimation_mode: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a Preferences resource.
+
         :param pulumi.Input[_builtins.str] member_account_discount_visibility: Customize whether the member accounts can see the "After Discounts" savings estimates. Valid values are `All` and `None`. Default value is `All`.
         :param pulumi.Input[_builtins.str] savings_estimation_mode: Customize how estimated monthly savings are calculated. Valid values are `BeforeDiscounts` and `AfterDiscounts`. Default value is `BeforeDiscounts`.
         """
@@ -33,36 +34,37 @@ class PreferencesArgs:
 
     @_builtins.property
     @pulumi.getter(name="memberAccountDiscountVisibility")
-    def member_account_discount_visibility(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def member_account_discount_visibility(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Customize whether the member accounts can see the "After Discounts" savings estimates. Valid values are `All` and `None`. Default value is `All`.
         """
         return pulumi.get(self, "member_account_discount_visibility")
 
     @member_account_discount_visibility.setter
-    def member_account_discount_visibility(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def member_account_discount_visibility(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "member_account_discount_visibility", value)
 
     @_builtins.property
     @pulumi.getter(name="savingsEstimationMode")
-    def savings_estimation_mode(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def savings_estimation_mode(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Customize how estimated monthly savings are calculated. Valid values are `BeforeDiscounts` and `AfterDiscounts`. Default value is `BeforeDiscounts`.
         """
         return pulumi.get(self, "savings_estimation_mode")
 
     @savings_estimation_mode.setter
-    def savings_estimation_mode(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def savings_estimation_mode(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "savings_estimation_mode", value)
 
 
 @pulumi.input_type
 class _PreferencesState:
     def __init__(__self__, *,
-                 member_account_discount_visibility: Optional[pulumi.Input[_builtins.str]] = None,
-                 savings_estimation_mode: Optional[pulumi.Input[_builtins.str]] = None):
+                 member_account_discount_visibility: pulumi.Input[Optional[_builtins.str]] = None,
+                 savings_estimation_mode: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering Preferences resources.
+
         :param pulumi.Input[_builtins.str] member_account_discount_visibility: Customize whether the member accounts can see the "After Discounts" savings estimates. Valid values are `All` and `None`. Default value is `All`.
         :param pulumi.Input[_builtins.str] savings_estimation_mode: Customize how estimated monthly savings are calculated. Valid values are `BeforeDiscounts` and `AfterDiscounts`. Default value is `BeforeDiscounts`.
         """
@@ -73,26 +75,26 @@ class _PreferencesState:
 
     @_builtins.property
     @pulumi.getter(name="memberAccountDiscountVisibility")
-    def member_account_discount_visibility(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def member_account_discount_visibility(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Customize whether the member accounts can see the "After Discounts" savings estimates. Valid values are `All` and `None`. Default value is `All`.
         """
         return pulumi.get(self, "member_account_discount_visibility")
 
     @member_account_discount_visibility.setter
-    def member_account_discount_visibility(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def member_account_discount_visibility(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "member_account_discount_visibility", value)
 
     @_builtins.property
     @pulumi.getter(name="savingsEstimationMode")
-    def savings_estimation_mode(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def savings_estimation_mode(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Customize how estimated monthly savings are calculated. Valid values are `BeforeDiscounts` and `AfterDiscounts`. Default value is `BeforeDiscounts`.
         """
         return pulumi.get(self, "savings_estimation_mode")
 
     @savings_estimation_mode.setter
-    def savings_estimation_mode(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def savings_estimation_mode(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "savings_estimation_mode", value)
 
 
@@ -102,8 +104,8 @@ class Preferences(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 member_account_discount_visibility: Optional[pulumi.Input[_builtins.str]] = None,
-                 savings_estimation_mode: Optional[pulumi.Input[_builtins.str]] = None,
+                 member_account_discount_visibility: pulumi.Input[Optional[_builtins.str]] = None,
+                 savings_estimation_mode: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing AWS Cost Optimization Hub Preferences.
@@ -137,6 +139,7 @@ class Preferences(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:costoptimizationhub/preferences:Preferences example 111222333444
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -182,6 +185,7 @@ class Preferences(pulumi.CustomResource):
         $ pulumi import aws:costoptimizationhub/preferences:Preferences example 111222333444
         ```
 
+
         :param str resource_name: The name of the resource.
         :param PreferencesArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -197,8 +201,8 @@ class Preferences(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 member_account_discount_visibility: Optional[pulumi.Input[_builtins.str]] = None,
-                 savings_estimation_mode: Optional[pulumi.Input[_builtins.str]] = None,
+                 member_account_discount_visibility: pulumi.Input[Optional[_builtins.str]] = None,
+                 savings_estimation_mode: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -220,8 +224,8 @@ class Preferences(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            member_account_discount_visibility: Optional[pulumi.Input[_builtins.str]] = None,
-            savings_estimation_mode: Optional[pulumi.Input[_builtins.str]] = None) -> 'Preferences':
+            member_account_discount_visibility: pulumi.Input[Optional[_builtins.str]] = None,
+            savings_estimation_mode: pulumi.Input[Optional[_builtins.str]] = None) -> 'Preferences':
         """
         Get an existing Preferences resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

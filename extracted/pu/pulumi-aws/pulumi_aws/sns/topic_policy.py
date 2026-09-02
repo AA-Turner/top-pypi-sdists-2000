@@ -24,9 +24,10 @@ class TopicPolicyArgs:
     def __init__(__self__, *,
                  arn: pulumi.Input[_builtins.str],
                  policy: pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a TopicPolicy resource.
+
         :param pulumi.Input[_builtins.str] arn: The ARN of the SNS topic
         :param pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']] policy: The fully-formed AWS policy as JSON.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -62,26 +63,27 @@ class TopicPolicyArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _TopicPolicyState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 owner: Optional[pulumi.Input[_builtins.str]] = None,
-                 policy: Optional[pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 owner: pulumi.Input[Optional[_builtins.str]] = None,
+                 policy: pulumi.Input[Optional[Union[_builtins.str, 'PolicyDocumentArgs']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering TopicPolicy resources.
+
         :param pulumi.Input[_builtins.str] arn: The ARN of the SNS topic
         :param pulumi.Input[_builtins.str] owner: The AWS Account ID of the SNS topic owner
         :param pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']] policy: The fully-formed AWS policy as JSON.
@@ -98,50 +100,50 @@ class _TopicPolicyState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of the SNS topic
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def owner(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def owner(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The AWS Account ID of the SNS topic owner
         """
         return pulumi.get(self, "owner")
 
     @owner.setter
-    def owner(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def owner(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "owner", value)
 
     @_builtins.property
     @pulumi.getter
-    def policy(self) -> Optional[pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']]]:
+    def policy(self) -> pulumi.Input[Optional[Union[_builtins.str, 'PolicyDocumentArgs']]]:
         """
         The fully-formed AWS policy as JSON.
         """
         return pulumi.get(self, "policy")
 
     @policy.setter
-    def policy(self, value: Optional[pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']]]):
+    def policy(self, value: pulumi.Input[Optional[Union[_builtins.str, 'PolicyDocumentArgs']]]):
         pulumi.set(self, "policy", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -151,9 +153,9 @@ class TopicPolicy(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 policy: Optional[pulumi.Input[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 policy: pulumi.Input[Optional[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides an SNS topic policy resource
@@ -167,8 +169,16 @@ class TopicPolicy(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.sns.Topic("test", name="my-topic-with-policy")
-        sns_topic_policy = test.arn.apply(lambda arn: aws.iam.get_policy_document_output(policy_id="__default_policy_ID",
-            statements=[{
+        sns_topic_policy = aws.iam.get_policy_document_output(statements=[{
+                "conditions": [{
+                    "test": "StringEquals",
+                    "variable": "AWS:SourceOwner",
+                    "values": [account_id],
+                }],
+                "principals": [{
+                    "type": "AWS",
+                    "identifiers": ["*"],
+                }],
                 "actions": [
                     "SNS:Subscribe",
                     "SNS:SetTopicAttributes",
@@ -180,19 +190,11 @@ class TopicPolicy(pulumi.CustomResource):
                     "SNS:DeleteTopic",
                     "SNS:AddPermission",
                 ],
-                "conditions": [{
-                    "test": "StringEquals",
-                    "variable": "AWS:SourceOwner",
-                    "values": [account_id],
-                }],
                 "effect": "Allow",
-                "principals": [{
-                    "type": "AWS",
-                    "identifiers": ["*"],
-                }],
-                "resources": [arn],
+                "resources": [test.arn],
                 "sid": "__default_statement_ID",
-            }]))
+            }],
+            policy_id="__default_policy_ID")
         default = aws.sns.TopicPolicy("default",
             arn=test.arn,
             policy=sns_topic_policy.json)
@@ -204,13 +206,14 @@ class TopicPolicy(pulumi.CustomResource):
 
         #### Required
 
-        - `arn` (String) Amazon Resource Name (ARN) of the SNS topic.
+        - `arn` (String) ARN of the SNS topic.
 
         Using `pulumi import`, import SNS Topic Policy using the topic ARN. For example:
 
         ```sh
         $ pulumi import aws:sns/topicPolicy:TopicPolicy user_updates arn:aws:sns:us-west-2:123456789012:my-topic
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -236,8 +239,16 @@ class TopicPolicy(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.sns.Topic("test", name="my-topic-with-policy")
-        sns_topic_policy = test.arn.apply(lambda arn: aws.iam.get_policy_document_output(policy_id="__default_policy_ID",
-            statements=[{
+        sns_topic_policy = aws.iam.get_policy_document_output(statements=[{
+                "conditions": [{
+                    "test": "StringEquals",
+                    "variable": "AWS:SourceOwner",
+                    "values": [account_id],
+                }],
+                "principals": [{
+                    "type": "AWS",
+                    "identifiers": ["*"],
+                }],
                 "actions": [
                     "SNS:Subscribe",
                     "SNS:SetTopicAttributes",
@@ -249,19 +260,11 @@ class TopicPolicy(pulumi.CustomResource):
                     "SNS:DeleteTopic",
                     "SNS:AddPermission",
                 ],
-                "conditions": [{
-                    "test": "StringEquals",
-                    "variable": "AWS:SourceOwner",
-                    "values": [account_id],
-                }],
                 "effect": "Allow",
-                "principals": [{
-                    "type": "AWS",
-                    "identifiers": ["*"],
-                }],
-                "resources": [arn],
+                "resources": [test.arn],
                 "sid": "__default_statement_ID",
-            }]))
+            }],
+            policy_id="__default_policy_ID")
         default = aws.sns.TopicPolicy("default",
             arn=test.arn,
             policy=sns_topic_policy.json)
@@ -273,13 +276,14 @@ class TopicPolicy(pulumi.CustomResource):
 
         #### Required
 
-        - `arn` (String) Amazon Resource Name (ARN) of the SNS topic.
+        - `arn` (String) ARN of the SNS topic.
 
         Using `pulumi import`, import SNS Topic Policy using the topic ARN. For example:
 
         ```sh
         $ pulumi import aws:sns/topicPolicy:TopicPolicy user_updates arn:aws:sns:us-west-2:123456789012:my-topic
         ```
+
 
         :param str resource_name: The name of the resource.
         :param TopicPolicyArgs args: The arguments to use to populate this resource's properties.
@@ -296,9 +300,9 @@ class TopicPolicy(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 policy: Optional[pulumi.Input[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 policy: pulumi.Input[Optional[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -326,10 +330,10 @@ class TopicPolicy(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            owner: Optional[pulumi.Input[_builtins.str]] = None,
-            policy: Optional[pulumi.Input[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'TopicPolicy':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            owner: pulumi.Input[Optional[_builtins.str]] = None,
+            policy: pulumi.Input[Optional[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'TopicPolicy':
         """
         Get an existing TopicPolicy resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

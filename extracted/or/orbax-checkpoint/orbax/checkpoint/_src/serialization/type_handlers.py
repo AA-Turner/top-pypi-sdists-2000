@@ -23,6 +23,7 @@ from typing import Any, Dict, Optional, Sequence, TypeAlias, Union
 from absl import logging
 import jax
 import numpy as np
+from orbax.checkpoint._src import asyncio_utils
 from orbax.checkpoint._src.futures import future
 from orbax.checkpoint._src.metadata import value as value_metadata
 from orbax.checkpoint._src.multihost import multihost
@@ -89,7 +90,7 @@ class NumpyHandler(types.TypeHandler):
       use_ocdbt = info.is_ocdbt_checkpoint
       array_read_spec = ts_utils.build_array_read_spec(
           info,
-          use_ocdbt=use_ocdbt,
+          use_ocdbt=use_ocdbt,  # pyrefly: ignore[bad-argument-type]
           metadata_key=self._metadata_key,
           raise_array_data_missing_error=info.raise_array_data_missing_error,
       )
@@ -121,7 +122,7 @@ class NumpyHandler(types.TypeHandler):
   ):
     """Serializes numpy arrays in a background thread."""
     write_coros = []
-    for value, info, arg in zip(values, infos, args):
+    for value, info, arg in zip(values, infos, args):  # pyrefly: ignore[bad-argument-type]
       await info.await_path_creation()
       array_write_spec = ts_utils.build_array_write_spec(
           info=info,
@@ -129,9 +130,9 @@ class NumpyHandler(types.TypeHandler):
           global_shape=value.shape,
           local_shape=value.shape,
           dtype=value.dtype,
-          use_ocdbt=info.is_ocdbt_checkpoint,
+          use_ocdbt=info.is_ocdbt_checkpoint,  # pyrefly: ignore[bad-argument-type]
           process_index=ocdbt_utils.get_process_index_for_subdir(
-              use_ocdbt=info.is_ocdbt_checkpoint,
+              use_ocdbt=info.is_ocdbt_checkpoint,  # pyrefly: ignore[bad-argument-type]
               override_ocdbt_process_id=self._override_ocdbt_process_id,
           ),
           metadata_key=self._metadata_key,
@@ -143,8 +144,13 @@ class NumpyHandler(types.TypeHandler):
         logging.vlog(1, 'args = %s', arg)
       if multihost.process_index() == 0:
         ts_context = info.ts_context
-        write_coros.append(self._open_and_write(value, tspec, ts_context))
-    await asyncio.gather(*write_coros)
+        write_coros.append(self._open_and_write(value, tspec, ts_context))  # pyrefly: ignore[bad-argument-type]
+    gather_future = asyncio.gather(*write_coros)
+    await asyncio_utils.cancellable(
+        gather_future,
+        message='[process=%s] Numpy handler gather was cancelled.',
+        process_index=multihost.process_index(),
+    )
 
   async def serialize(
       self,
@@ -179,13 +185,13 @@ class NumpyHandler(types.TypeHandler):
       await info.await_path_creation()
       if not info.is_ocdbt_checkpoint:
         await ts_utils.assert_parameter_files_exist(
-            info.parent_dir / info.name, self._metadata_key, info.use_zarr3
+            info.parent_dir / info.name, self._metadata_key, info.use_zarr3  # pyrefly: ignore[bad-argument-type]
         )
       # Use OCDBT flag from the existing checkpoint.
       use_ocdbt = info.is_ocdbt_checkpoint
       array_read_spec = ts_utils.build_array_read_spec(
           info,
-          use_ocdbt=use_ocdbt,
+          use_ocdbt=use_ocdbt,  # pyrefly: ignore[bad-argument-type]
           metadata_key=self._metadata_key,
           raise_array_data_missing_error=info.raise_array_data_missing_error,
           target_dtype=arg.dtype,
@@ -228,17 +234,17 @@ class ScalarHandler(NumpyHandler):
         for m in metadatas
     ]
 
-  async def serialize(
+  async def serialize(  # pyrefly: ignore[bad-override]
       self,
       values: Sequence[Scalar],  # pytype: disable=signature-mismatch
       infos: Sequence[types.ParamInfo],
       args: Optional[Sequence[types.SaveArgs]] = None,
   ) -> Sequence[future.Future]:
     """See superclass documentation."""
-    values = [np.asarray(v) for v in values]
-    return await super().serialize(values, infos, args)
+    values = [np.asarray(v) for v in values]  # pyrefly: ignore[bad-assignment]
+    return await super().serialize(values, infos, args)  # pyrefly: ignore[bad-argument-type]
 
-  async def deserialize(
+  async def deserialize(  # pyrefly: ignore[bad-override]
       self,
       infos: Sequence[types.ParamInfo],
       args: Optional[Sequence[RestoreArgs]] = None,
@@ -323,8 +329,20 @@ class StringHandler(types.TypeHandler):
             context=self._ts_context,
         )
         write_coros.append(t.with_transaction(txn).write(value))  # pytype: disable=attribute-error
-    await asyncio.gather(*write_coros)
-    await txn.commit_async()
+
+    gather_future = asyncio.gather(*write_coros)
+    await asyncio_utils.cancellable(
+        gather_future,
+        message='[process=%s] String handler gather was cancelled.',
+        process_index=multihost.process_index(),
+    )
+
+    commit_future = txn.commit_async()
+    await asyncio_utils.cancellable(
+        commit_future,
+        message='[process=%s] String handler commit was cancelled.',
+        process_index=multihost.process_index(),
+    )
 
   async def serialize(
       self,

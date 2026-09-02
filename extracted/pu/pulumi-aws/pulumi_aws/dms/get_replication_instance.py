@@ -129,7 +129,7 @@ class GetReplicationInstanceResult:
     @pulumi.getter(name="kmsKeyArn")
     def kms_key_arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) for the KMS key used to encrypt the connection parameters.
+        ARN for the KMS key used to encrypt the connection parameters.
         """
         return pulumi.get(self, "kms_key_arn")
 
@@ -174,7 +174,7 @@ class GetReplicationInstanceResult:
     @pulumi.getter(name="replicationInstanceArn")
     def replication_instance_arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) of the replication instance.
+        ARN of the replication instance.
         """
         return pulumi.get(self, "replication_instance_arn")
 
@@ -303,9 +303,9 @@ def get_replication_instance(region: Optional[_builtins.str] = None,
         replication_subnet_group_id=pulumi.get(__ret__, 'replication_subnet_group_id'),
         tags=pulumi.get(__ret__, 'tags'),
         vpc_security_group_ids=pulumi.get(__ret__, 'vpc_security_group_ids'))
-def get_replication_instance_output(region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                    replication_instance_id: Optional[pulumi.Input[_builtins.str]] = None,
-                                    tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_replication_instance_output(region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                    replication_instance_id: pulumi.Input[Optional[_builtins.str]] = None,
+                                    tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                                     opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetReplicationInstanceResult]:
     """
     Data source for managing an AWS DMS (Database Migration) Replication Instance.

@@ -21,9 +21,10 @@ class ApplicationAssignmentConfigurationArgs:
     def __init__(__self__, *,
                  application_arn: pulumi.Input[_builtins.str],
                  assignment_required: pulumi.Input[_builtins.bool],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a ApplicationAssignmentConfiguration resource.
+
         :param pulumi.Input[_builtins.str] application_arn: ARN of the application.
         :param pulumi.Input[_builtins.bool] assignment_required: Indicates whether users must have an explicit assignment to access the application. If `false`, all users have access to the application.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -59,25 +60,26 @@ class ApplicationAssignmentConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _ApplicationAssignmentConfigurationState:
     def __init__(__self__, *,
-                 application_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 assignment_required: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 application_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 assignment_required: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering ApplicationAssignmentConfiguration resources.
+
         :param pulumi.Input[_builtins.str] application_arn: ARN of the application.
         :param pulumi.Input[_builtins.bool] assignment_required: Indicates whether users must have an explicit assignment to access the application. If `false`, all users have access to the application.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -91,38 +93,38 @@ class _ApplicationAssignmentConfigurationState:
 
     @_builtins.property
     @pulumi.getter(name="applicationArn")
-    def application_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def application_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the application.
         """
         return pulumi.get(self, "application_arn")
 
     @application_arn.setter
-    def application_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def application_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "application_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="assignmentRequired")
-    def assignment_required(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def assignment_required(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Indicates whether users must have an explicit assignment to access the application. If `false`, all users have access to the application.
         """
         return pulumi.get(self, "assignment_required")
 
     @assignment_required.setter
-    def assignment_required(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def assignment_required(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "assignment_required", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -132,9 +134,9 @@ class ApplicationAssignmentConfiguration(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 application_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 assignment_required: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 application_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 assignment_required: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing an AWS SSO Admin Application Assignment Configuration.
@@ -163,13 +165,18 @@ class ApplicationAssignmentConfiguration(pulumi.CustomResource):
 
         #### Required
 
-        - `arn` (String) Amazon Resource Name (ARN) of the SSO application.
+        - `application_arn` (String) ARN of the SSO application.
+
+        #### Optional
+
+        - `region` (String) Region where this resource is managed.
 
         Using `pulumi import`, import SSO Admin Application Assignment Configuration using the `id`. For example:
 
         ```sh
         $ pulumi import aws:ssoadmin/applicationAssignmentConfiguration:ApplicationAssignmentConfiguration example arn:aws:sso::123456789012:application/id-12345678
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -210,13 +217,18 @@ class ApplicationAssignmentConfiguration(pulumi.CustomResource):
 
         #### Required
 
-        - `arn` (String) Amazon Resource Name (ARN) of the SSO application.
+        - `application_arn` (String) ARN of the SSO application.
+
+        #### Optional
+
+        - `region` (String) Region where this resource is managed.
 
         Using `pulumi import`, import SSO Admin Application Assignment Configuration using the `id`. For example:
 
         ```sh
         $ pulumi import aws:ssoadmin/applicationAssignmentConfiguration:ApplicationAssignmentConfiguration example arn:aws:sso::123456789012:application/id-12345678
         ```
+
 
         :param str resource_name: The name of the resource.
         :param ApplicationAssignmentConfigurationArgs args: The arguments to use to populate this resource's properties.
@@ -233,9 +245,9 @@ class ApplicationAssignmentConfiguration(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 application_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 assignment_required: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 application_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 assignment_required: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -262,9 +274,9 @@ class ApplicationAssignmentConfiguration(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            application_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            assignment_required: Optional[pulumi.Input[_builtins.bool]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'ApplicationAssignmentConfiguration':
+            application_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            assignment_required: pulumi.Input[Optional[_builtins.bool]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'ApplicationAssignmentConfiguration':
         """
         Get an existing ApplicationAssignmentConfiguration resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

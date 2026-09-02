@@ -22,12 +22,13 @@ __all__ = ['LfTagExpressionArgs', 'LfTagExpression']
 class LfTagExpressionArgs:
     def __init__(__self__, *,
                  expressions: pulumi.Input[Sequence[pulumi.Input['LfTagExpressionExpressionArgs']]],
-                 catalog_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 catalog_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a LfTagExpression resource.
+
         :param pulumi.Input[Sequence[pulumi.Input['LfTagExpressionExpressionArgs']]] expressions: A list of LF-Tag conditions (key-value pairs). See expression for more details.
                
                The following arguments are optional:
@@ -62,63 +63,64 @@ class LfTagExpressionArgs:
 
     @_builtins.property
     @pulumi.getter(name="catalogId")
-    def catalog_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def catalog_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ID of the Data Catalog. Defaults to the account ID if not specified.
         """
         return pulumi.get(self, "catalog_id")
 
     @catalog_id.setter
-    def catalog_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def catalog_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "catalog_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the LF-Tag Expression.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the LF-Tag Expression.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _LfTagExpressionState:
     def __init__(__self__, *,
-                 catalog_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 expressions: Optional[pulumi.Input[Sequence[pulumi.Input['LfTagExpressionExpressionArgs']]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 catalog_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 expressions: pulumi.Input[Optional[Sequence[pulumi.Input['LfTagExpressionExpressionArgs']]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering LfTagExpression resources.
+
         :param pulumi.Input[_builtins.str] catalog_id: ID of the Data Catalog. Defaults to the account ID if not specified.
         :param pulumi.Input[_builtins.str] description: Description of the LF-Tag Expression.
         :param pulumi.Input[Sequence[pulumi.Input['LfTagExpressionExpressionArgs']]] expressions: A list of LF-Tag conditions (key-value pairs). See expression for more details.
@@ -140,31 +142,31 @@ class _LfTagExpressionState:
 
     @_builtins.property
     @pulumi.getter(name="catalogId")
-    def catalog_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def catalog_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ID of the Data Catalog. Defaults to the account ID if not specified.
         """
         return pulumi.get(self, "catalog_id")
 
     @catalog_id.setter
-    def catalog_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def catalog_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "catalog_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the LF-Tag Expression.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def expressions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['LfTagExpressionExpressionArgs']]]]:
+    def expressions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['LfTagExpressionExpressionArgs']]]]:
         """
         A list of LF-Tag conditions (key-value pairs). See expression for more details.
 
@@ -173,31 +175,31 @@ class _LfTagExpressionState:
         return pulumi.get(self, "expressions")
 
     @expressions.setter
-    def expressions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['LfTagExpressionExpressionArgs']]]]):
+    def expressions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['LfTagExpressionExpressionArgs']]]]):
         pulumi.set(self, "expressions", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the LF-Tag Expression.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -207,11 +209,11 @@ class LfTagExpression(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 catalog_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 expressions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['LfTagExpressionExpressionArgs', 'LfTagExpressionExpressionArgsDict']]]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 catalog_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 expressions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['LfTagExpressionExpressionArgs', 'LfTagExpressionExpressionArgsDict']]]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing an AWS Lake Formation LF Tag Expression.
@@ -228,11 +230,11 @@ class LfTagExpression(pulumi.CustomResource):
             key="example",
             values=["value"])
         example_lf_tag_expression = aws.lakeformation.LfTagExpression("example",
-            name="example",
             expressions=[{
                 "tag_key": example.key,
                 "tag_values": example.values,
-            }])
+            }],
+            name="example")
         ```
 
         ## Import
@@ -242,6 +244,7 @@ class LfTagExpression(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:lakeformation/lfTagExpression:LfTagExpression example example-tag-expression,123456789012
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -274,11 +277,11 @@ class LfTagExpression(pulumi.CustomResource):
             key="example",
             values=["value"])
         example_lf_tag_expression = aws.lakeformation.LfTagExpression("example",
-            name="example",
             expressions=[{
                 "tag_key": example.key,
                 "tag_values": example.values,
-            }])
+            }],
+            name="example")
         ```
 
         ## Import
@@ -288,6 +291,7 @@ class LfTagExpression(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:lakeformation/lfTagExpression:LfTagExpression example example-tag-expression,123456789012
         ```
+
 
         :param str resource_name: The name of the resource.
         :param LfTagExpressionArgs args: The arguments to use to populate this resource's properties.
@@ -304,11 +308,11 @@ class LfTagExpression(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 catalog_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 expressions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['LfTagExpressionExpressionArgs', 'LfTagExpressionExpressionArgsDict']]]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 catalog_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 expressions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['LfTagExpressionExpressionArgs', 'LfTagExpressionExpressionArgsDict']]]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -335,11 +339,11 @@ class LfTagExpression(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            catalog_id: Optional[pulumi.Input[_builtins.str]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            expressions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['LfTagExpressionExpressionArgs', 'LfTagExpressionExpressionArgsDict']]]]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'LfTagExpression':
+            catalog_id: pulumi.Input[Optional[_builtins.str]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            expressions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['LfTagExpressionExpressionArgs', 'LfTagExpressionExpressionArgsDict']]]]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'LfTagExpression':
         """
         Get an existing LfTagExpression resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

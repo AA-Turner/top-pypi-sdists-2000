@@ -126,7 +126,7 @@ class GetVirtualNodeResult:
     @pulumi.getter
     def specs(self) -> Sequence['outputs.GetVirtualNodeSpecResult']:
         """
-        Virtual node specification. See the `appmesh.VirtualNode` resource for details.
+        Virtual node specification. See `spec` Block for details.
         """
         return pulumi.get(self, "specs")
 
@@ -205,11 +205,11 @@ def get_virtual_node(mesh_name: Optional[_builtins.str] = None,
         resource_owner=pulumi.get(__ret__, 'resource_owner'),
         specs=pulumi.get(__ret__, 'specs'),
         tags=pulumi.get(__ret__, 'tags'))
-def get_virtual_node_output(mesh_name: Optional[pulumi.Input[_builtins.str]] = None,
-                            mesh_owner: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                            name: Optional[pulumi.Input[_builtins.str]] = None,
-                            region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                            tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_virtual_node_output(mesh_name: pulumi.Input[Optional[_builtins.str]] = None,
+                            mesh_owner: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                            name: pulumi.Input[Optional[_builtins.str]] = None,
+                            region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                            tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                             opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetVirtualNodeResult]:
     """
     Data source for managing an AWS App Mesh Virtual Node.

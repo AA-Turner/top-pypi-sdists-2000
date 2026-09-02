@@ -22,17 +22,20 @@ __all__ = ['AgentcoreCodeInterpreterArgs', 'AgentcoreCodeInterpreter']
 class AgentcoreCodeInterpreterArgs:
     def __init__(__self__, *,
                  network_configuration: pulumi.Input['AgentcoreCodeInterpreterNetworkConfigurationArgs'],
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 execution_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['AgentcoreCodeInterpreterTimeoutsArgs']] = None):
+                 certificates: pulumi.Input[Optional[Sequence[pulumi.Input['AgentcoreCodeInterpreterCertificateArgs']]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 execution_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['AgentcoreCodeInterpreterTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a AgentcoreCodeInterpreter resource.
+
         :param pulumi.Input['AgentcoreCodeInterpreterNetworkConfigurationArgs'] network_configuration: Network configuration for the code interpreter. See `network_configuration` below.
                
                The following arguments are optional:
+        :param pulumi.Input[Sequence[pulumi.Input['AgentcoreCodeInterpreterCertificateArgs']]] certificates: Certificates to install in the code interpreter. Between 1 and 200 blocks are supported. See `certificate` below.
         :param pulumi.Input[_builtins.str] description: Description of the code interpreter.
         :param pulumi.Input[_builtins.str] execution_role_arn: ARN of the IAM role that the code interpreter assumes for execution. Required when using `SANDBOX` network mode.
         :param pulumi.Input[_builtins.str] name: Name of the code interpreter.
@@ -40,6 +43,8 @@ class AgentcoreCodeInterpreterArgs:
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         pulumi.set(__self__, "network_configuration", network_configuration)
+        if certificates is not None:
+            pulumi.set(__self__, "certificates", certificates)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if execution_role_arn is not None:
@@ -69,89 +74,104 @@ class AgentcoreCodeInterpreterArgs:
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def certificates(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['AgentcoreCodeInterpreterCertificateArgs']]]]:
+        """
+        Certificates to install in the code interpreter. Between 1 and 200 blocks are supported. See `certificate` below.
+        """
+        return pulumi.get(self, "certificates")
+
+    @certificates.setter
+    def certificates(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['AgentcoreCodeInterpreterCertificateArgs']]]]):
+        pulumi.set(self, "certificates", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the code interpreter.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="executionRoleArn")
-    def execution_role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def execution_role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the IAM role that the code interpreter assumes for execution. Required when using `SANDBOX` network mode.
         """
         return pulumi.get(self, "execution_role_arn")
 
     @execution_role_arn.setter
-    def execution_role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def execution_role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "execution_role_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the code interpreter.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['AgentcoreCodeInterpreterTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['AgentcoreCodeInterpreterTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['AgentcoreCodeInterpreterTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['AgentcoreCodeInterpreterTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _AgentcoreCodeInterpreterState:
     def __init__(__self__, *,
-                 code_interpreter_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 code_interpreter_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 execution_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 network_configuration: Optional[pulumi.Input['AgentcoreCodeInterpreterNetworkConfigurationArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['AgentcoreCodeInterpreterTimeoutsArgs']] = None):
+                 certificates: pulumi.Input[Optional[Sequence[pulumi.Input['AgentcoreCodeInterpreterCertificateArgs']]]] = None,
+                 code_interpreter_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 code_interpreter_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 execution_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 network_configuration: pulumi.Input[Optional['AgentcoreCodeInterpreterNetworkConfigurationArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['AgentcoreCodeInterpreterTimeoutsArgs']] = None):
         """
         Input properties used for looking up and filtering AgentcoreCodeInterpreter resources.
+
+        :param pulumi.Input[Sequence[pulumi.Input['AgentcoreCodeInterpreterCertificateArgs']]] certificates: Certificates to install in the code interpreter. Between 1 and 200 blocks are supported. See `certificate` below.
         :param pulumi.Input[_builtins.str] code_interpreter_arn: ARN of the Code Interpreter.
         :param pulumi.Input[_builtins.str] code_interpreter_id: Unique identifier of the Code Interpreter.
         :param pulumi.Input[_builtins.str] description: Description of the code interpreter.
@@ -164,6 +184,8 @@ class _AgentcoreCodeInterpreterState:
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
+        if certificates is not None:
+            pulumi.set(__self__, "certificates", certificates)
         if code_interpreter_arn is not None:
             pulumi.set(__self__, "code_interpreter_arn", code_interpreter_arn)
         if code_interpreter_id is not None:
@@ -186,68 +208,80 @@ class _AgentcoreCodeInterpreterState:
             pulumi.set(__self__, "timeouts", timeouts)
 
     @_builtins.property
+    @pulumi.getter
+    def certificates(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['AgentcoreCodeInterpreterCertificateArgs']]]]:
+        """
+        Certificates to install in the code interpreter. Between 1 and 200 blocks are supported. See `certificate` below.
+        """
+        return pulumi.get(self, "certificates")
+
+    @certificates.setter
+    def certificates(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['AgentcoreCodeInterpreterCertificateArgs']]]]):
+        pulumi.set(self, "certificates", value)
+
+    @_builtins.property
     @pulumi.getter(name="codeInterpreterArn")
-    def code_interpreter_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def code_interpreter_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the Code Interpreter.
         """
         return pulumi.get(self, "code_interpreter_arn")
 
     @code_interpreter_arn.setter
-    def code_interpreter_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def code_interpreter_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "code_interpreter_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="codeInterpreterId")
-    def code_interpreter_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def code_interpreter_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique identifier of the Code Interpreter.
         """
         return pulumi.get(self, "code_interpreter_id")
 
     @code_interpreter_id.setter
-    def code_interpreter_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def code_interpreter_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "code_interpreter_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the code interpreter.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="executionRoleArn")
-    def execution_role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def execution_role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the IAM role that the code interpreter assumes for execution. Required when using `SANDBOX` network mode.
         """
         return pulumi.get(self, "execution_role_arn")
 
     @execution_role_arn.setter
-    def execution_role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def execution_role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "execution_role_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the code interpreter.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="networkConfiguration")
-    def network_configuration(self) -> Optional[pulumi.Input['AgentcoreCodeInterpreterNetworkConfigurationArgs']]:
+    def network_configuration(self) -> pulumi.Input[Optional['AgentcoreCodeInterpreterNetworkConfigurationArgs']]:
         """
         Network configuration for the code interpreter. See `network_configuration` below.
 
@@ -256,52 +290,52 @@ class _AgentcoreCodeInterpreterState:
         return pulumi.get(self, "network_configuration")
 
     @network_configuration.setter
-    def network_configuration(self, value: Optional[pulumi.Input['AgentcoreCodeInterpreterNetworkConfigurationArgs']]):
+    def network_configuration(self, value: pulumi.Input[Optional['AgentcoreCodeInterpreterNetworkConfigurationArgs']]):
         pulumi.set(self, "network_configuration", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['AgentcoreCodeInterpreterTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['AgentcoreCodeInterpreterTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['AgentcoreCodeInterpreterTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['AgentcoreCodeInterpreterTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
@@ -311,13 +345,14 @@ class AgentcoreCodeInterpreter(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 execution_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 network_configuration: Optional[pulumi.Input[Union['AgentcoreCodeInterpreterNetworkConfigurationArgs', 'AgentcoreCodeInterpreterNetworkConfigurationArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['AgentcoreCodeInterpreterTimeoutsArgs', 'AgentcoreCodeInterpreterTimeoutsArgsDict']]] = None,
+                 certificates: pulumi.Input[Optional[Sequence[pulumi.Input[Union['AgentcoreCodeInterpreterCertificateArgs', 'AgentcoreCodeInterpreterCertificateArgsDict']]]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 execution_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 network_configuration: pulumi.Input[Optional[Union['AgentcoreCodeInterpreterNetworkConfigurationArgs', 'AgentcoreCodeInterpreterNetworkConfigurationArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['AgentcoreCodeInterpreterTimeoutsArgs', 'AgentcoreCodeInterpreterTimeoutsArgsDict']]] = None,
                  __props__=None):
         """
         Manages an AWS Bedrock AgentCore Code Interpreter. Code Interpreter provides a secure environment for AI agents to execute Python code, enabling data analysis, calculations, and file processing capabilities.
@@ -331,11 +366,11 @@ class AgentcoreCodeInterpreter(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.bedrock.AgentcoreCodeInterpreter("example",
-            name="example-code-interpreter",
-            description="Code interpreter for data analysis",
             network_configuration={
                 "network_mode": "PUBLIC",
-            })
+            },
+            name="example-code-interpreter",
+            description="Code interpreter for data analysis")
         ```
 
         ### Code Interpreter with Execution Role
@@ -345,23 +380,23 @@ class AgentcoreCodeInterpreter(pulumi.CustomResource):
         import pulumi_aws as aws
 
         assume_role = aws.iam.get_policy_document(statements=[{
-            "effect": "Allow",
-            "actions": ["sts:AssumeRole"],
             "principals": [{
                 "type": "Service",
                 "identifiers": ["bedrock-agentcore.amazonaws.com"],
             }],
+            "effect": "Allow",
+            "actions": ["sts:AssumeRole"],
         }])
         example = aws.iam.Role("example",
             name="bedrock-agentcore-code-interpreter-role",
             assume_role_policy=assume_role.json)
         example_agentcore_code_interpreter = aws.bedrock.AgentcoreCodeInterpreter("example",
-            name="example-code-interpreter",
-            description="Code interpreter with custom execution role",
-            execution_role_arn=example.arn,
             network_configuration={
                 "network_mode": "SANDBOX",
-            })
+            },
+            name="example-code-interpreter",
+            description="Code interpreter with custom execution role",
+            execution_role_arn=example.arn)
         ```
 
         ## Import
@@ -372,8 +407,10 @@ class AgentcoreCodeInterpreter(pulumi.CustomResource):
         $ pulumi import aws:bedrock/agentcoreCodeInterpreter:AgentcoreCodeInterpreter example CODEINTERPRETER1234567890
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['AgentcoreCodeInterpreterCertificateArgs', 'AgentcoreCodeInterpreterCertificateArgsDict']]]] certificates: Certificates to install in the code interpreter. Between 1 and 200 blocks are supported. See `certificate` below.
         :param pulumi.Input[_builtins.str] description: Description of the code interpreter.
         :param pulumi.Input[_builtins.str] execution_role_arn: ARN of the IAM role that the code interpreter assumes for execution. Required when using `SANDBOX` network mode.
         :param pulumi.Input[_builtins.str] name: Name of the code interpreter.
@@ -401,11 +438,11 @@ class AgentcoreCodeInterpreter(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.bedrock.AgentcoreCodeInterpreter("example",
-            name="example-code-interpreter",
-            description="Code interpreter for data analysis",
             network_configuration={
                 "network_mode": "PUBLIC",
-            })
+            },
+            name="example-code-interpreter",
+            description="Code interpreter for data analysis")
         ```
 
         ### Code Interpreter with Execution Role
@@ -415,23 +452,23 @@ class AgentcoreCodeInterpreter(pulumi.CustomResource):
         import pulumi_aws as aws
 
         assume_role = aws.iam.get_policy_document(statements=[{
-            "effect": "Allow",
-            "actions": ["sts:AssumeRole"],
             "principals": [{
                 "type": "Service",
                 "identifiers": ["bedrock-agentcore.amazonaws.com"],
             }],
+            "effect": "Allow",
+            "actions": ["sts:AssumeRole"],
         }])
         example = aws.iam.Role("example",
             name="bedrock-agentcore-code-interpreter-role",
             assume_role_policy=assume_role.json)
         example_agentcore_code_interpreter = aws.bedrock.AgentcoreCodeInterpreter("example",
-            name="example-code-interpreter",
-            description="Code interpreter with custom execution role",
-            execution_role_arn=example.arn,
             network_configuration={
                 "network_mode": "SANDBOX",
-            })
+            },
+            name="example-code-interpreter",
+            description="Code interpreter with custom execution role",
+            execution_role_arn=example.arn)
         ```
 
         ## Import
@@ -441,6 +478,7 @@ class AgentcoreCodeInterpreter(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:bedrock/agentcoreCodeInterpreter:AgentcoreCodeInterpreter example CODEINTERPRETER1234567890
         ```
+
 
         :param str resource_name: The name of the resource.
         :param AgentcoreCodeInterpreterArgs args: The arguments to use to populate this resource's properties.
@@ -457,13 +495,14 @@ class AgentcoreCodeInterpreter(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 execution_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 network_configuration: Optional[pulumi.Input[Union['AgentcoreCodeInterpreterNetworkConfigurationArgs', 'AgentcoreCodeInterpreterNetworkConfigurationArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['AgentcoreCodeInterpreterTimeoutsArgs', 'AgentcoreCodeInterpreterTimeoutsArgsDict']]] = None,
+                 certificates: pulumi.Input[Optional[Sequence[pulumi.Input[Union['AgentcoreCodeInterpreterCertificateArgs', 'AgentcoreCodeInterpreterCertificateArgsDict']]]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 execution_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 network_configuration: pulumi.Input[Optional[Union['AgentcoreCodeInterpreterNetworkConfigurationArgs', 'AgentcoreCodeInterpreterNetworkConfigurationArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['AgentcoreCodeInterpreterTimeoutsArgs', 'AgentcoreCodeInterpreterTimeoutsArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -473,6 +512,7 @@ class AgentcoreCodeInterpreter(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = AgentcoreCodeInterpreterArgs.__new__(AgentcoreCodeInterpreterArgs)
 
+            __props__.__dict__["certificates"] = certificates
             __props__.__dict__["description"] = description
             __props__.__dict__["execution_role_arn"] = execution_role_arn
             __props__.__dict__["name"] = name
@@ -495,16 +535,17 @@ class AgentcoreCodeInterpreter(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            code_interpreter_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            code_interpreter_id: Optional[pulumi.Input[_builtins.str]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            execution_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            network_configuration: Optional[pulumi.Input[Union['AgentcoreCodeInterpreterNetworkConfigurationArgs', 'AgentcoreCodeInterpreterNetworkConfigurationArgsDict']]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            timeouts: Optional[pulumi.Input[Union['AgentcoreCodeInterpreterTimeoutsArgs', 'AgentcoreCodeInterpreterTimeoutsArgsDict']]] = None) -> 'AgentcoreCodeInterpreter':
+            certificates: pulumi.Input[Optional[Sequence[pulumi.Input[Union['AgentcoreCodeInterpreterCertificateArgs', 'AgentcoreCodeInterpreterCertificateArgsDict']]]]] = None,
+            code_interpreter_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            code_interpreter_id: pulumi.Input[Optional[_builtins.str]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            execution_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            network_configuration: pulumi.Input[Optional[Union['AgentcoreCodeInterpreterNetworkConfigurationArgs', 'AgentcoreCodeInterpreterNetworkConfigurationArgsDict']]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            timeouts: pulumi.Input[Optional[Union['AgentcoreCodeInterpreterTimeoutsArgs', 'AgentcoreCodeInterpreterTimeoutsArgsDict']]] = None) -> 'AgentcoreCodeInterpreter':
         """
         Get an existing AgentcoreCodeInterpreter resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -512,6 +553,7 @@ class AgentcoreCodeInterpreter(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['AgentcoreCodeInterpreterCertificateArgs', 'AgentcoreCodeInterpreterCertificateArgsDict']]]] certificates: Certificates to install in the code interpreter. Between 1 and 200 blocks are supported. See `certificate` below.
         :param pulumi.Input[_builtins.str] code_interpreter_arn: ARN of the Code Interpreter.
         :param pulumi.Input[_builtins.str] code_interpreter_id: Unique identifier of the Code Interpreter.
         :param pulumi.Input[_builtins.str] description: Description of the code interpreter.
@@ -528,6 +570,7 @@ class AgentcoreCodeInterpreter(pulumi.CustomResource):
 
         __props__ = _AgentcoreCodeInterpreterState.__new__(_AgentcoreCodeInterpreterState)
 
+        __props__.__dict__["certificates"] = certificates
         __props__.__dict__["code_interpreter_arn"] = code_interpreter_arn
         __props__.__dict__["code_interpreter_id"] = code_interpreter_id
         __props__.__dict__["description"] = description
@@ -539,6 +582,14 @@ class AgentcoreCodeInterpreter(pulumi.CustomResource):
         __props__.__dict__["tags_all"] = tags_all
         __props__.__dict__["timeouts"] = timeouts
         return AgentcoreCodeInterpreter(resource_name, opts=opts, __props__=__props__)
+
+    @_builtins.property
+    @pulumi.getter
+    def certificates(self) -> pulumi.Output[Optional[Sequence['outputs.AgentcoreCodeInterpreterCertificate']]]:
+        """
+        Certificates to install in the code interpreter. Between 1 and 200 blocks are supported. See `certificate` below.
+        """
+        return pulumi.get(self, "certificates")
 
     @_builtins.property
     @pulumi.getter(name="codeInterpreterArn")

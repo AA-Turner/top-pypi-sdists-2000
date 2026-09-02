@@ -20,11 +20,12 @@ __all__ = ['DomainVerificationArgs', 'DomainVerification']
 class DomainVerificationArgs:
     def __init__(__self__, *,
                  domain_name: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a DomainVerification resource.
-        :param pulumi.Input[_builtins.str] domain_name: The domain name to verify ownership for.
+
+        :param pulumi.Input[_builtins.str] domain_name: Domain name to verify ownership for.
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -40,7 +41,7 @@ class DomainVerificationArgs:
     @pulumi.getter(name="domainName")
     def domain_name(self) -> pulumi.Input[_builtins.str]:
         """
-        The domain name to verify ownership for.
+        Domain name to verify ownership for.
 
         The following arguments are optional:
         """
@@ -52,56 +53,57 @@ class DomainVerificationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value mapping of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _DomainVerificationState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 created_at: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 last_verified_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 txt_record_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 txt_record_value: Optional[pulumi.Input[_builtins.str]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 created_at: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 last_verified_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 txt_record_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 txt_record_value: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering DomainVerification resources.
-        :param pulumi.Input[_builtins.str] arn: The Amazon Resource Name (ARN) of the domain verification.
-        :param pulumi.Input[_builtins.str] created_at: The date and time that the domain verification was created, in ISO-8601 format.
-        :param pulumi.Input[_builtins.str] domain_name: The domain name to verify ownership for.
+
+        :param pulumi.Input[_builtins.str] arn: ARN of the domain verification.
+        :param pulumi.Input[_builtins.str] created_at: Date and time that the domain verification was created, in ISO-8601 format.
+        :param pulumi.Input[_builtins.str] domain_name: Domain name to verify ownership for.
                
                The following arguments are optional:
-        :param pulumi.Input[_builtins.str] last_verified_time: The date and time that the domain was last successfully verified, in ISO-8601 format.
+        :param pulumi.Input[_builtins.str] last_verified_time: Date and time that the domain was last successfully verified, in ISO-8601 format.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] status: The current status of the domain verification process. Valid values: `VERIFIED`, `PENDING`, `VERIFICATION_TIMED_OUT`.
+        :param pulumi.Input[_builtins.str] status: Current status of the domain verification process. Valid values: `VERIFIED`, `PENDING`, `VERIFICATION_TIMED_OUT`.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value mapping of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
-        :param pulumi.Input[_builtins.str] txt_record_name: The name of the TXT record that must be created for domain verification.
-        :param pulumi.Input[_builtins.str] txt_record_value: The value that must be added to the TXT record for domain verification.
+        :param pulumi.Input[_builtins.str] txt_record_name: Name of the TXT record that must be created for domain verification.
+        :param pulumi.Input[_builtins.str] txt_record_value: Value that must be added to the TXT record for domain verification.
         """
         if arn is not None:
             pulumi.set(__self__, "arn", arn)
@@ -126,124 +128,124 @@ class _DomainVerificationState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the domain verification.
+        ARN of the domain verification.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="createdAt")
-    def created_at(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def created_at(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The date and time that the domain verification was created, in ISO-8601 format.
+        Date and time that the domain verification was created, in ISO-8601 format.
         """
         return pulumi.get(self, "created_at")
 
     @created_at.setter
-    def created_at(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def created_at(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "created_at", value)
 
     @_builtins.property
     @pulumi.getter(name="domainName")
-    def domain_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def domain_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The domain name to verify ownership for.
+        Domain name to verify ownership for.
 
         The following arguments are optional:
         """
         return pulumi.get(self, "domain_name")
 
     @domain_name.setter
-    def domain_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def domain_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "domain_name", value)
 
     @_builtins.property
     @pulumi.getter(name="lastVerifiedTime")
-    def last_verified_time(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def last_verified_time(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The date and time that the domain was last successfully verified, in ISO-8601 format.
+        Date and time that the domain was last successfully verified, in ISO-8601 format.
         """
         return pulumi.get(self, "last_verified_time")
 
     @last_verified_time.setter
-    def last_verified_time(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def last_verified_time(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "last_verified_time", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The current status of the domain verification process. Valid values: `VERIFIED`, `PENDING`, `VERIFICATION_TIMED_OUT`.
+        Current status of the domain verification process. Valid values: `VERIFIED`, `PENDING`, `VERIFICATION_TIMED_OUT`.
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value mapping of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter(name="txtRecordName")
-    def txt_record_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def txt_record_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The name of the TXT record that must be created for domain verification.
+        Name of the TXT record that must be created for domain verification.
         """
         return pulumi.get(self, "txt_record_name")
 
     @txt_record_name.setter
-    def txt_record_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def txt_record_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "txt_record_name", value)
 
     @_builtins.property
     @pulumi.getter(name="txtRecordValue")
-    def txt_record_value(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def txt_record_value(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The value that must be added to the TXT record for domain verification.
+        Value that must be added to the TXT record for domain verification.
         """
         return pulumi.get(self, "txt_record_value")
 
     @txt_record_value.setter
-    def txt_record_value(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def txt_record_value(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "txt_record_value", value)
 
 
@@ -253,9 +255,9 @@ class DomainVerification(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Resource for managing an AWS VPC Lattice Domain Verification.
@@ -302,9 +304,10 @@ class DomainVerification(pulumi.CustomResource):
         $ pulumi import aws:vpclattice/domainVerification:DomainVerification example dv-0a1b2c3d4e5f
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] domain_name: The domain name to verify ownership for.
+        :param pulumi.Input[_builtins.str] domain_name: Domain name to verify ownership for.
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -361,6 +364,7 @@ class DomainVerification(pulumi.CustomResource):
         $ pulumi import aws:vpclattice/domainVerification:DomainVerification example dv-0a1b2c3d4e5f
         ```
 
+
         :param str resource_name: The name of the resource.
         :param DomainVerificationArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -376,9 +380,9 @@ class DomainVerification(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -410,16 +414,16 @@ class DomainVerification(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            created_at: Optional[pulumi.Input[_builtins.str]] = None,
-            domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-            last_verified_time: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            status: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            txt_record_name: Optional[pulumi.Input[_builtins.str]] = None,
-            txt_record_value: Optional[pulumi.Input[_builtins.str]] = None) -> 'DomainVerification':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            created_at: pulumi.Input[Optional[_builtins.str]] = None,
+            domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+            last_verified_time: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            status: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            txt_record_name: pulumi.Input[Optional[_builtins.str]] = None,
+            txt_record_value: pulumi.Input[Optional[_builtins.str]] = None) -> 'DomainVerification':
         """
         Get an existing DomainVerification resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -427,18 +431,18 @@ class DomainVerification(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] arn: The Amazon Resource Name (ARN) of the domain verification.
-        :param pulumi.Input[_builtins.str] created_at: The date and time that the domain verification was created, in ISO-8601 format.
-        :param pulumi.Input[_builtins.str] domain_name: The domain name to verify ownership for.
+        :param pulumi.Input[_builtins.str] arn: ARN of the domain verification.
+        :param pulumi.Input[_builtins.str] created_at: Date and time that the domain verification was created, in ISO-8601 format.
+        :param pulumi.Input[_builtins.str] domain_name: Domain name to verify ownership for.
                
                The following arguments are optional:
-        :param pulumi.Input[_builtins.str] last_verified_time: The date and time that the domain was last successfully verified, in ISO-8601 format.
+        :param pulumi.Input[_builtins.str] last_verified_time: Date and time that the domain was last successfully verified, in ISO-8601 format.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] status: The current status of the domain verification process. Valid values: `VERIFIED`, `PENDING`, `VERIFICATION_TIMED_OUT`.
+        :param pulumi.Input[_builtins.str] status: Current status of the domain verification process. Valid values: `VERIFIED`, `PENDING`, `VERIFICATION_TIMED_OUT`.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value mapping of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
-        :param pulumi.Input[_builtins.str] txt_record_name: The name of the TXT record that must be created for domain verification.
-        :param pulumi.Input[_builtins.str] txt_record_value: The value that must be added to the TXT record for domain verification.
+        :param pulumi.Input[_builtins.str] txt_record_name: Name of the TXT record that must be created for domain verification.
+        :param pulumi.Input[_builtins.str] txt_record_value: Value that must be added to the TXT record for domain verification.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -460,7 +464,7 @@ class DomainVerification(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the domain verification.
+        ARN of the domain verification.
         """
         return pulumi.get(self, "arn")
 
@@ -468,7 +472,7 @@ class DomainVerification(pulumi.CustomResource):
     @pulumi.getter(name="createdAt")
     def created_at(self) -> pulumi.Output[_builtins.str]:
         """
-        The date and time that the domain verification was created, in ISO-8601 format.
+        Date and time that the domain verification was created, in ISO-8601 format.
         """
         return pulumi.get(self, "created_at")
 
@@ -476,7 +480,7 @@ class DomainVerification(pulumi.CustomResource):
     @pulumi.getter(name="domainName")
     def domain_name(self) -> pulumi.Output[_builtins.str]:
         """
-        The domain name to verify ownership for.
+        Domain name to verify ownership for.
 
         The following arguments are optional:
         """
@@ -486,7 +490,7 @@ class DomainVerification(pulumi.CustomResource):
     @pulumi.getter(name="lastVerifiedTime")
     def last_verified_time(self) -> pulumi.Output[_builtins.str]:
         """
-        The date and time that the domain was last successfully verified, in ISO-8601 format.
+        Date and time that the domain was last successfully verified, in ISO-8601 format.
         """
         return pulumi.get(self, "last_verified_time")
 
@@ -502,7 +506,7 @@ class DomainVerification(pulumi.CustomResource):
     @pulumi.getter
     def status(self) -> pulumi.Output[_builtins.str]:
         """
-        The current status of the domain verification process. Valid values: `VERIFIED`, `PENDING`, `VERIFICATION_TIMED_OUT`.
+        Current status of the domain verification process. Valid values: `VERIFIED`, `PENDING`, `VERIFICATION_TIMED_OUT`.
         """
         return pulumi.get(self, "status")
 
@@ -526,7 +530,7 @@ class DomainVerification(pulumi.CustomResource):
     @pulumi.getter(name="txtRecordName")
     def txt_record_name(self) -> pulumi.Output[_builtins.str]:
         """
-        The name of the TXT record that must be created for domain verification.
+        Name of the TXT record that must be created for domain verification.
         """
         return pulumi.get(self, "txt_record_name")
 
@@ -534,7 +538,7 @@ class DomainVerification(pulumi.CustomResource):
     @pulumi.getter(name="txtRecordValue")
     def txt_record_value(self) -> pulumi.Output[_builtins.str]:
         """
-        The value that must be added to the TXT record for domain verification.
+        Value that must be added to the TXT record for domain verification.
         """
         return pulumi.get(self, "txt_record_value")
 

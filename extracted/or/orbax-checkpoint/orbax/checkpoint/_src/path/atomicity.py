@@ -197,7 +197,7 @@ class TemporaryPathBase(atomicity_types.TemporaryPath):
     if snapshot_type is not None:
       self._snapshot = snapshot_lib.create_instance(
           source=final_path,
-          snapshot=temporary_path,
+          snapshot=temporary_path,  # pyrefly: ignore[bad-argument-type]
           set_immutable=False,
           snapshot_type=snapshot_type,
       )
@@ -425,11 +425,6 @@ async def validate_atomic_rename_temporary_path(
         f'Expected {class_name} ({temporary_path}) to end with'
         f' "{TMP_DIR_SUFFIX}".'
     )
-  if await async_path.exists(temporary_path / COMMIT_SUCCESS_FILE):
-    raise ValidationError(
-        f'Expected {class_name} ({temporary_path}) not to'
-        f' contain the "{COMMIT_SUCCESS_FILE}" file.'
-    )
   await _shared_validate(class_name, temporary_path)
 
 
@@ -517,8 +512,8 @@ class AtomicRenameTemporaryPath(TemporaryPathBase):
       FileExistsError: if tmp directory already exists.
     """
     return await _create_tmp_directory(
-        async_path.mkdir,
-        self._tmp_path,
+        async_path.mkdir,  # pyrefly: ignore[bad-argument-type]
+        self._tmp_path,  # pyrefly: ignore[bad-argument-type]
         path_permission_mode=self._path_permission_mode,
         checkpoint_metadata_store=self._checkpoint_metadata_store,
         snapshot=self._snapshot,
@@ -539,17 +534,22 @@ class AtomicRenameTemporaryPath(TemporaryPathBase):
       )
       await asyncio.to_thread(
           self._checkpoint_metadata_store.update,
-          file_path=checkpoint_metadata.step_metadata_file_path(self._tmp_path),
+          file_path=checkpoint_metadata.step_metadata_file_path(self._tmp_path),  # pyrefly: ignore[bad-argument-type]
           commit_timestamp_nsecs=time.time_ns(),
       )
       await asyncio.to_thread(
           self._checkpoint_metadata_store.wait_until_finished
       )
 
+    commit_success_file = self.get() / COMMIT_SUCCESS_FILE
+    await async_path.write_text(
+        commit_success_file,
+        f'Checkpoint commit was successful to {self._final_path}',
+    )
     if self._snapshot is not None:
       await self._snapshot.replace_source()
     else:
-      await async_path.rename(self._tmp_path, self._final_path)
+      await async_path.rename(self._tmp_path, self._final_path)  # pyrefly: ignore[bad-argument-type]
 
   def __repr__(self) -> str:
     return (
@@ -647,8 +647,8 @@ class CommitFileTemporaryPath(TemporaryPathBase):
       FileExistsError: if tmp directory already exists.
     """
     return await _create_tmp_directory(
-        async_path.mkdir,
-        self._tmp_path,
+        async_path.mkdir,  # pyrefly: ignore[bad-argument-type]
+        self._tmp_path,  # pyrefly: ignore[bad-argument-type]
         path_permission_mode=self._path_permission_mode,
         checkpoint_metadata_store=self._checkpoint_metadata_store,
     )
@@ -668,13 +668,12 @@ class CommitFileTemporaryPath(TemporaryPathBase):
       )
       await asyncio.to_thread(
           self._checkpoint_metadata_store.update,
-          file_path=checkpoint_metadata.step_metadata_file_path(self._tmp_path),
+          file_path=checkpoint_metadata.step_metadata_file_path(self._tmp_path),  # pyrefly: ignore[bad-argument-type]
           commit_timestamp_nsecs=time.time_ns(),
       )
       await asyncio.to_thread(
           self._checkpoint_metadata_store.wait_until_finished
       )
-
     commit_success_file = self._final_path / COMMIT_SUCCESS_FILE
     await async_path.write_text(
         commit_success_file,
@@ -837,8 +836,6 @@ async def on_commit_callback(
     tmp_dir: A temporary checkpoint directory, where the checkpoint data is
       currently saved.
     checkpoint_start_time: The time at which checkpoint saving began. # BEGIN
-    tree_verity_options: Options to configure checkpoint signing and integrity
-      verification using
     set_immutable: Whether to mark all files as immutable. This is only
   """
   await tmp_dir.finalize(

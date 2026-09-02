@@ -30,7 +30,7 @@ from orbax.checkpoint.experimental.v1._src.context import options as options_lib
 
 # Each Thread will have its own copy of `Context` object.
 # Task and groups will have their own copy of `Context` object.
-_CONTEXT: contextvars.ContextVar[Context] = contextvars.ContextVar(
+_CONTEXT: contextvars.ContextVar[Context] = contextvars.ContextVar(  # pyrefly: ignore[bad-assignment]
     'orbax_context', default=None
 )
 
@@ -180,6 +180,10 @@ class Context(epy.ContextManager):
       :class:`~orbax.checkpoint.experimental.v1.options.DeletionOptions`.
     memory: Options for controlling memory limits during save / load. See
       :class:`~orbax.checkpoint.experimental.v1.options.MemoryOptions`.
+    safetensors: Options for controlling safetensors behavior. See
+      :class:`~orbax.checkpoint.experimental.v1.options.SafetensorsOptions`.
+    atomicity: Options for controlling atomicity behavior. See
+      :class:`~orbax.checkpoint.experimental.v1.options.AtomicityOptions`.
   """
 
   def __init__(
@@ -193,17 +197,27 @@ class Context(epy.ContextManager):
       file_options: options_lib.FileOptions | None = None,
       checkpointables_options: options_lib.CheckpointablesOptions | None = None,
       pathways_options: options_lib.PathwaysOptions | None = None,
-      checkpoint_layout: options_lib.CheckpointLayout | None = None,
+      checkpoint_layout: options_lib.CheckpointLayout | str | None = None,
       deletion_options: options_lib.DeletionOptions | None = None,
       memory_options: options_lib.MemoryOptions | None = None,
       safetensors_options: options_lib.SafetensorsOptions | None = None,
+      atomicity_options: options_lib.AtomicityOptions | None = None,
   ):
     if any(
-        opt is not None for opt in (
-            pytree_options, array_options, async_options,
-            multiprocessing_options, file_options, checkpointables_options,
-            pathways_options, checkpoint_layout, deletion_options,
-            memory_options, safetensors_options
+        opt is not None
+        for opt in (
+            pytree_options,
+            array_options,
+            async_options,
+            multiprocessing_options,
+            file_options,
+            checkpointables_options,
+            pathways_options,
+            checkpoint_layout,
+            deletion_options,
+            memory_options,
+            safetensors_options,
+            atomicity_options,
         )
     ):
       # TODO: b/513156122 - Passing option objects directly to Context.__init__
@@ -252,7 +266,9 @@ class Context(epy.ContextManager):
         options_lib.PathwaysOptions,
     )
     self._checkpoint_layout = _get_option(
-        checkpoint_layout,
+        options_lib.CheckpointLayout(checkpoint_layout)
+        if checkpoint_layout is not None
+        else None,
         context.checkpoint_layout if context is not None else None,
         lambda: options_lib.CheckpointLayout.ORBAX,
     )
@@ -270,6 +286,11 @@ class Context(epy.ContextManager):
         safetensors_options,
         context.safetensors_options if context is not None else None,
         options_lib.SafetensorsOptions,
+    )
+    self._atomicity_options = _get_option(
+        atomicity_options,
+        context.atomicity if context is not None else None,
+        options_lib.AtomicityOptions,
     )
 
   def _check_not_frozen(self) -> None:
@@ -320,13 +341,19 @@ class Context(epy.ContextManager):
     return self._safetensors_options
 
   @property
+  def atomicity(self) -> options_lib.AtomicityOptions:
+    return self._atomicity_options
+
+  @property
   def checkpoint_layout(self) -> options_lib.CheckpointLayout:
     return self._checkpoint_layout
 
   @checkpoint_layout.setter
-  def checkpoint_layout(self, value: options_lib.CheckpointLayout) -> None:
+  def checkpoint_layout(
+      self, value: options_lib.CheckpointLayout | str
+  ) -> None:
     self._check_not_frozen()
-    self._checkpoint_layout = value
+    self._checkpoint_layout = options_lib.CheckpointLayout(value)
 
   # TODO: b/513156122 - Migrate internal read sites to short-hand properties and
   # remove legacy aliases in the next refactor.
@@ -417,4 +444,3 @@ def _collect_ids(ctx: Context) -> frozenset[int]:
   for obj in vars(ctx).values():
     _traverse(obj)
   return frozenset(ids)
-

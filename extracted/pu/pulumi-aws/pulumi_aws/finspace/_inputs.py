@@ -60,7 +60,7 @@ class KxClusterAutoScalingConfigurationArgsDict(TypedDict):
     """
     max_node_count: pulumi.Input[_builtins.int]
     """
-    Highest number of nodes to scale. Cannot be greater than 5
+    Highest number of nodes to scale. Cannot be greater than 5.
     """
     metric_target: pulumi.Input[_builtins.float]
     """
@@ -90,7 +90,7 @@ class KxClusterAutoScalingConfigurationArgs:
                  scale_out_cooldown_seconds: pulumi.Input[_builtins.float]):
         """
         :param pulumi.Input[_builtins.str] auto_scaling_metric: Metric your cluster will track in order to scale in and out. For example, CPU_UTILIZATION_PERCENTAGE is the average CPU usage across all nodes in a cluster.
-        :param pulumi.Input[_builtins.int] max_node_count: Highest number of nodes to scale. Cannot be greater than 5
+        :param pulumi.Input[_builtins.int] max_node_count: Highest number of nodes to scale. Cannot be greater than 5.
         :param pulumi.Input[_builtins.float] metric_target: Desired value of chosen `auto_scaling_metric`. When metric drops below this value, cluster will scale in. When metric goes above this value, cluster will scale out. Can be set between 0 and 100 percent.
         :param pulumi.Input[_builtins.int] min_node_count: Lowest number of nodes to scale. Must be at least 1 and less than the `max_node_count`. If nodes in cluster belong to multiple availability zones, then `min_node_count` must be at least 3.
         :param pulumi.Input[_builtins.float] scale_in_cooldown_seconds: Duration in seconds that FinSpace will wait after a scale in event before initiating another scaling event.
@@ -119,7 +119,7 @@ class KxClusterAutoScalingConfigurationArgs:
     @pulumi.getter(name="maxNodeCount")
     def max_node_count(self) -> pulumi.Input[_builtins.int]:
         """
-        Highest number of nodes to scale. Cannot be greater than 5
+        Highest number of nodes to scale. Cannot be greater than 5.
         """
         return pulumi.get(self, "max_node_count")
 
@@ -178,14 +178,12 @@ class KxClusterAutoScalingConfigurationArgs:
 
 class KxClusterCacheStorageConfigurationArgsDict(TypedDict):
     size: pulumi.Input[_builtins.int]
+    """
+    Size of cache in Gigabytes.
+    """
     type: pulumi.Input[_builtins.str]
     """
-    Type of KDB database. The following types are available:
-    * HDB - Historical Database. The data is only accessible with read-only permissions from one of the FinSpace managed KX databases mounted to the cluster.
-    * RDB - Realtime Database. This type of database captures all the data from a ticker plant and stores it in memory until the end of day, after which it writes all of its data to a disk and reloads the HDB. This cluster type requires local storage for temporary storage of data during the savedown process. If you specify this field in your request, you must provide the `savedownStorageConfiguration` parameter.
-    * GATEWAY - A gateway cluster allows you to access data across processes in kdb systems. It allows you to create your own routing logic using the initialization scripts and custom code. This type of cluster does not require a  writable local storage.
-    * GP - A general purpose cluster allows you to quickly iterate on code during development by granting greater access to system commands and enabling a fast reload of custom code. This cluster type can optionally mount databases including cache and savedown storage. For this cluster type, the node count is fixed at 1. It does not support autoscaling and supports only `SINGLE` AZ mode.
-    * Tickerplant - A tickerplant cluster allows you to subscribe to feed handlers based on IAM permissions. It can publish to RDBs, other Tickerplants, and real-time subscribers (RTS). Tickerplants can persist messages to log, which is readable by any RDB environment. It supports only single-node that is only one kdb process.
+    Type of cache storage. Valid values are `CACHE_1000` (1000 MB/s disk access throughput), `CACHE_250` (250 MB/s disk access throughput), and `CACHE_12` (12 MB/s disk access throughput).
     """
 
 @pulumi.input_type
@@ -194,12 +192,8 @@ class KxClusterCacheStorageConfigurationArgs:
                  size: pulumi.Input[_builtins.int],
                  type: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] type: Type of KDB database. The following types are available:
-               * HDB - Historical Database. The data is only accessible with read-only permissions from one of the FinSpace managed KX databases mounted to the cluster.
-               * RDB - Realtime Database. This type of database captures all the data from a ticker plant and stores it in memory until the end of day, after which it writes all of its data to a disk and reloads the HDB. This cluster type requires local storage for temporary storage of data during the savedown process. If you specify this field in your request, you must provide the `savedownStorageConfiguration` parameter.
-               * GATEWAY - A gateway cluster allows you to access data across processes in kdb systems. It allows you to create your own routing logic using the initialization scripts and custom code. This type of cluster does not require a  writable local storage.
-               * GP - A general purpose cluster allows you to quickly iterate on code during development by granting greater access to system commands and enabling a fast reload of custom code. This cluster type can optionally mount databases including cache and savedown storage. For this cluster type, the node count is fixed at 1. It does not support autoscaling and supports only `SINGLE` AZ mode.
-               * Tickerplant - A tickerplant cluster allows you to subscribe to feed handlers based on IAM permissions. It can publish to RDBs, other Tickerplants, and real-time subscribers (RTS). Tickerplants can persist messages to log, which is readable by any RDB environment. It supports only single-node that is only one kdb process.
+        :param pulumi.Input[_builtins.int] size: Size of cache in Gigabytes.
+        :param pulumi.Input[_builtins.str] type: Type of cache storage. Valid values are `CACHE_1000` (1000 MB/s disk access throughput), `CACHE_250` (250 MB/s disk access throughput), and `CACHE_12` (12 MB/s disk access throughput).
         """
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "type", type)
@@ -207,6 +201,9 @@ class KxClusterCacheStorageConfigurationArgs:
     @_builtins.property
     @pulumi.getter
     def size(self) -> pulumi.Input[_builtins.int]:
+        """
+        Size of cache in Gigabytes.
+        """
         return pulumi.get(self, "size")
 
     @size.setter
@@ -217,12 +214,7 @@ class KxClusterCacheStorageConfigurationArgs:
     @pulumi.getter
     def type(self) -> pulumi.Input[_builtins.str]:
         """
-        Type of KDB database. The following types are available:
-        * HDB - Historical Database. The data is only accessible with read-only permissions from one of the FinSpace managed KX databases mounted to the cluster.
-        * RDB - Realtime Database. This type of database captures all the data from a ticker plant and stores it in memory until the end of day, after which it writes all of its data to a disk and reloads the HDB. This cluster type requires local storage for temporary storage of data during the savedown process. If you specify this field in your request, you must provide the `savedownStorageConfiguration` parameter.
-        * GATEWAY - A gateway cluster allows you to access data across processes in kdb systems. It allows you to create your own routing logic using the initialization scripts and custom code. This type of cluster does not require a  writable local storage.
-        * GP - A general purpose cluster allows you to quickly iterate on code during development by granting greater access to system commands and enabling a fast reload of custom code. This cluster type can optionally mount databases including cache and savedown storage. For this cluster type, the node count is fixed at 1. It does not support autoscaling and supports only `SINGLE` AZ mode.
-        * Tickerplant - A tickerplant cluster allows you to subscribe to feed handlers based on IAM permissions. It can publish to RDBs, other Tickerplants, and real-time subscribers (RTS). Tickerplants can persist messages to log, which is readable by any RDB environment. It supports only single-node that is only one kdb process.
+        Type of cache storage. Valid values are `CACHE_1000` (1000 MB/s disk access throughput), `CACHE_250` (250 MB/s disk access throughput), and `CACHE_12` (12 MB/s disk access throughput).
         """
         return pulumi.get(self, "type")
 
@@ -238,16 +230,7 @@ class KxClusterCapacityConfigurationArgsDict(TypedDict):
     """
     node_type: pulumi.Input[_builtins.str]
     """
-    Determines the hardware of the host computer used for your cluster instance. Each node type offers different memory and storage capabilities. Choose a node type based on the requirements of the application or software that you plan to run on your instance.
-
-    You can only specify one of the following values:
-    * kx.s.large - The node type with a configuration of 12 GiB memory and 2 vCPUs.
-    * kx.s.xlarge - The node type with a configuration of 27 GiB memory and 4 vCPUs.
-    * kx.s.2xlarge - The node type with a configuration of 54 GiB memory and 8 vCPUs.
-    * kx.s.4xlarge - The node type with a configuration of 108 GiB memory and 16 vCPUs.
-    * kx.s.8xlarge - The node type with a configuration of 216 GiB memory and 32 vCPUs.
-    * kx.s.16xlarge - The node type with a configuration of 432 GiB memory and 64 vCPUs.
-    * kx.s.32xlarge - The node type with a configuration of 864 GiB memory and 128 vCPUs.
+    Hardware of the host computer used for your cluster instance. Valid values are `kx.s.large`, `kx.s.xlarge`, `kx.s.2xlarge`, `kx.s.4xlarge`, `kx.s.8xlarge`, `kx.s.16xlarge`, and `kx.s.32xlarge`.
     """
 
 @pulumi.input_type
@@ -257,16 +240,7 @@ class KxClusterCapacityConfigurationArgs:
                  node_type: pulumi.Input[_builtins.str]):
         """
         :param pulumi.Input[_builtins.int] node_count: Number of instances running in a cluster. Must be at least 1 and at most 5.
-        :param pulumi.Input[_builtins.str] node_type: Determines the hardware of the host computer used for your cluster instance. Each node type offers different memory and storage capabilities. Choose a node type based on the requirements of the application or software that you plan to run on your instance.
-               
-               You can only specify one of the following values:
-               * kx.s.large - The node type with a configuration of 12 GiB memory and 2 vCPUs.
-               * kx.s.xlarge - The node type with a configuration of 27 GiB memory and 4 vCPUs.
-               * kx.s.2xlarge - The node type with a configuration of 54 GiB memory and 8 vCPUs.
-               * kx.s.4xlarge - The node type with a configuration of 108 GiB memory and 16 vCPUs.
-               * kx.s.8xlarge - The node type with a configuration of 216 GiB memory and 32 vCPUs.
-               * kx.s.16xlarge - The node type with a configuration of 432 GiB memory and 64 vCPUs.
-               * kx.s.32xlarge - The node type with a configuration of 864 GiB memory and 128 vCPUs.
+        :param pulumi.Input[_builtins.str] node_type: Hardware of the host computer used for your cluster instance. Valid values are `kx.s.large`, `kx.s.xlarge`, `kx.s.2xlarge`, `kx.s.4xlarge`, `kx.s.8xlarge`, `kx.s.16xlarge`, and `kx.s.32xlarge`.
         """
         pulumi.set(__self__, "node_count", node_count)
         pulumi.set(__self__, "node_type", node_type)
@@ -287,16 +261,7 @@ class KxClusterCapacityConfigurationArgs:
     @pulumi.getter(name="nodeType")
     def node_type(self) -> pulumi.Input[_builtins.str]:
         """
-        Determines the hardware of the host computer used for your cluster instance. Each node type offers different memory and storage capabilities. Choose a node type based on the requirements of the application or software that you plan to run on your instance.
-
-        You can only specify one of the following values:
-        * kx.s.large - The node type with a configuration of 12 GiB memory and 2 vCPUs.
-        * kx.s.xlarge - The node type with a configuration of 27 GiB memory and 4 vCPUs.
-        * kx.s.2xlarge - The node type with a configuration of 54 GiB memory and 8 vCPUs.
-        * kx.s.4xlarge - The node type with a configuration of 108 GiB memory and 16 vCPUs.
-        * kx.s.8xlarge - The node type with a configuration of 216 GiB memory and 32 vCPUs.
-        * kx.s.16xlarge - The node type with a configuration of 432 GiB memory and 64 vCPUs.
-        * kx.s.32xlarge - The node type with a configuration of 864 GiB memory and 128 vCPUs.
+        Hardware of the host computer used for your cluster instance. Valid values are `kx.s.large`, `kx.s.xlarge`, `kx.s.2xlarge`, `kx.s.4xlarge`, `kx.s.8xlarge`, `kx.s.16xlarge`, and `kx.s.32xlarge`.
         """
         return pulumi.get(self, "node_type")
 
@@ -314,7 +279,7 @@ class KxClusterCodeArgsDict(TypedDict):
     """
     Full S3 path (excluding bucket) to the .zip file that contains the code to be loaded onto the cluster when it’s started.
     """
-    s3_object_version: NotRequired[pulumi.Input[_builtins.str]]
+    s3_object_version: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Version of an S3 Object.
     """
@@ -324,7 +289,7 @@ class KxClusterCodeArgs:
     def __init__(__self__, *,
                  s3_bucket: pulumi.Input[_builtins.str],
                  s3_key: pulumi.Input[_builtins.str],
-                 s3_object_version: Optional[pulumi.Input[_builtins.str]] = None):
+                 s3_object_version: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] s3_bucket: Unique name for the S3 bucket.
         :param pulumi.Input[_builtins.str] s3_key: Full S3 path (excluding bucket) to the .zip file that contains the code to be loaded onto the cluster when it’s started.
@@ -361,14 +326,14 @@ class KxClusterCodeArgs:
 
     @_builtins.property
     @pulumi.getter(name="s3ObjectVersion")
-    def s3_object_version(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def s3_object_version(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Version of an S3 Object.
         """
         return pulumi.get(self, "s3_object_version")
 
     @s3_object_version.setter
-    def s3_object_version(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def s3_object_version(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "s3_object_version", value)
 
 
@@ -377,31 +342,31 @@ class KxClusterDatabaseArgsDict(TypedDict):
     """
     Name of the KX database.
     """
-    cache_configurations: NotRequired[pulumi.Input[Sequence[pulumi.Input['KxClusterDatabaseCacheConfigurationArgsDict']]]]
+    cache_configurations: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['KxClusterDatabaseCacheConfigurationArgsDict']]]]]
     """
-    Configuration details for the disk cache to increase performance reading from a KX database mounted to the cluster. See cache_configurations.
+    Configuration details for the disk cache to increase performance reading from a KX database mounted to the cluster. See `cache_configurations` Block.
     """
-    changeset_id: NotRequired[pulumi.Input[_builtins.str]]
+    changeset_id: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    A unique identifier of the changeset that is associated with the cluster.
+    Unique identifier of the changeset that is associated with the cluster.
     """
-    dataview_name: NotRequired[pulumi.Input[_builtins.str]]
+    dataview_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The name of the dataview to be used for caching historical data on disk. You cannot update to a different dataview name once a cluster is created. Use `lifecycle` `ignore_changes` for database to prevent any undesirable behaviors.
+    Name of the dataview to be used for caching historical data on disk. You cannot update to a different dataview name once a cluster is created. Use `lifecycle` `ignore_changes` for database to prevent any undesirable behaviors.
     """
 
 @pulumi.input_type
 class KxClusterDatabaseArgs:
     def __init__(__self__, *,
                  database_name: pulumi.Input[_builtins.str],
-                 cache_configurations: Optional[pulumi.Input[Sequence[pulumi.Input['KxClusterDatabaseCacheConfigurationArgs']]]] = None,
-                 changeset_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 dataview_name: Optional[pulumi.Input[_builtins.str]] = None):
+                 cache_configurations: pulumi.Input[Optional[Sequence[pulumi.Input['KxClusterDatabaseCacheConfigurationArgs']]]] = None,
+                 changeset_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 dataview_name: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] database_name: Name of the KX database.
-        :param pulumi.Input[Sequence[pulumi.Input['KxClusterDatabaseCacheConfigurationArgs']]] cache_configurations: Configuration details for the disk cache to increase performance reading from a KX database mounted to the cluster. See cache_configurations.
-        :param pulumi.Input[_builtins.str] changeset_id: A unique identifier of the changeset that is associated with the cluster.
-        :param pulumi.Input[_builtins.str] dataview_name: The name of the dataview to be used for caching historical data on disk. You cannot update to a different dataview name once a cluster is created. Use `lifecycle` `ignore_changes` for database to prevent any undesirable behaviors.
+        :param pulumi.Input[Sequence[pulumi.Input['KxClusterDatabaseCacheConfigurationArgs']]] cache_configurations: Configuration details for the disk cache to increase performance reading from a KX database mounted to the cluster. See `cache_configurations` Block.
+        :param pulumi.Input[_builtins.str] changeset_id: Unique identifier of the changeset that is associated with the cluster.
+        :param pulumi.Input[_builtins.str] dataview_name: Name of the dataview to be used for caching historical data on disk. You cannot update to a different dataview name once a cluster is created. Use `lifecycle` `ignore_changes` for database to prevent any undesirable behaviors.
         """
         pulumi.set(__self__, "database_name", database_name)
         if cache_configurations is not None:
@@ -425,38 +390,38 @@ class KxClusterDatabaseArgs:
 
     @_builtins.property
     @pulumi.getter(name="cacheConfigurations")
-    def cache_configurations(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['KxClusterDatabaseCacheConfigurationArgs']]]]:
+    def cache_configurations(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['KxClusterDatabaseCacheConfigurationArgs']]]]:
         """
-        Configuration details for the disk cache to increase performance reading from a KX database mounted to the cluster. See cache_configurations.
+        Configuration details for the disk cache to increase performance reading from a KX database mounted to the cluster. See `cache_configurations` Block.
         """
         return pulumi.get(self, "cache_configurations")
 
     @cache_configurations.setter
-    def cache_configurations(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['KxClusterDatabaseCacheConfigurationArgs']]]]):
+    def cache_configurations(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['KxClusterDatabaseCacheConfigurationArgs']]]]):
         pulumi.set(self, "cache_configurations", value)
 
     @_builtins.property
     @pulumi.getter(name="changesetId")
-    def changeset_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def changeset_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        A unique identifier of the changeset that is associated with the cluster.
+        Unique identifier of the changeset that is associated with the cluster.
         """
         return pulumi.get(self, "changeset_id")
 
     @changeset_id.setter
-    def changeset_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def changeset_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "changeset_id", value)
 
     @_builtins.property
     @pulumi.getter(name="dataviewName")
-    def dataview_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def dataview_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The name of the dataview to be used for caching historical data on disk. You cannot update to a different dataview name once a cluster is created. Use `lifecycle` `ignore_changes` for database to prevent any undesirable behaviors.
+        Name of the dataview to be used for caching historical data on disk. You cannot update to a different dataview name once a cluster is created. Use `lifecycle` `ignore_changes` for database to prevent any undesirable behaviors.
         """
         return pulumi.get(self, "dataview_name")
 
     @dataview_name.setter
-    def dataview_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def dataview_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "dataview_name", value)
 
 
@@ -465,7 +430,7 @@ class KxClusterDatabaseCacheConfigurationArgsDict(TypedDict):
     """
     Type of disk cache.
     """
-    db_paths: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    db_paths: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     Paths within the database to cache.
     """
@@ -474,7 +439,7 @@ class KxClusterDatabaseCacheConfigurationArgsDict(TypedDict):
 class KxClusterDatabaseCacheConfigurationArgs:
     def __init__(__self__, *,
                  cache_type: pulumi.Input[_builtins.str],
-                 db_paths: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 db_paths: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         :param pulumi.Input[_builtins.str] cache_type: Type of disk cache.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] db_paths: Paths within the database to cache.
@@ -497,43 +462,41 @@ class KxClusterDatabaseCacheConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="dbPaths")
-    def db_paths(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def db_paths(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         Paths within the database to cache.
         """
         return pulumi.get(self, "db_paths")
 
     @db_paths.setter
-    def db_paths(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def db_paths(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "db_paths", value)
 
 
 class KxClusterSavedownStorageConfigurationArgsDict(TypedDict):
-    size: NotRequired[pulumi.Input[_builtins.int]]
+    size: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Size of temporary storage in gigabytes. Must be between 10 and 16000.
     """
-    type: NotRequired[pulumi.Input[_builtins.str]]
+    type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Type of writeable storage space for temporarily storing your savedown data. The valid values are:
-    * SDS01 - This type represents 3000 IOPS and io2 ebs volume type.
+    Type of writeable storage space for temporarily storing your savedown data. Valid value is `SDS01`, which represents 3000 IOPS and io2 ebs volume type.
     """
-    volume_name: NotRequired[pulumi.Input[_builtins.str]]
+    volume_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The name of the kdb volume that you want to use as writeable save-down storage for clusters.
+    Name of the kdb volume that you want to use as writeable save-down storage for clusters.
     """
 
 @pulumi.input_type
 class KxClusterSavedownStorageConfigurationArgs:
     def __init__(__self__, *,
-                 size: Optional[pulumi.Input[_builtins.int]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None,
-                 volume_name: Optional[pulumi.Input[_builtins.str]] = None):
+                 size: pulumi.Input[Optional[_builtins.int]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None,
+                 volume_name: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.int] size: Size of temporary storage in gigabytes. Must be between 10 and 16000.
-        :param pulumi.Input[_builtins.str] type: Type of writeable storage space for temporarily storing your savedown data. The valid values are:
-               * SDS01 - This type represents 3000 IOPS and io2 ebs volume type.
-        :param pulumi.Input[_builtins.str] volume_name: The name of the kdb volume that you want to use as writeable save-down storage for clusters.
+        :param pulumi.Input[_builtins.str] type: Type of writeable storage space for temporarily storing your savedown data. Valid value is `SDS01`, which represents 3000 IOPS and io2 ebs volume type.
+        :param pulumi.Input[_builtins.str] volume_name: Name of the kdb volume that you want to use as writeable save-down storage for clusters.
         """
         if size is not None:
             pulumi.set(__self__, "size", size)
@@ -544,62 +507,61 @@ class KxClusterSavedownStorageConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def size(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def size(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Size of temporary storage in gigabytes. Must be between 10 and 16000.
         """
         return pulumi.get(self, "size")
 
     @size.setter
-    def size(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def size(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "size", value)
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Type of writeable storage space for temporarily storing your savedown data. The valid values are:
-        * SDS01 - This type represents 3000 IOPS and io2 ebs volume type.
+        Type of writeable storage space for temporarily storing your savedown data. Valid value is `SDS01`, which represents 3000 IOPS and io2 ebs volume type.
         """
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
     @_builtins.property
     @pulumi.getter(name="volumeName")
-    def volume_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def volume_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The name of the kdb volume that you want to use as writeable save-down storage for clusters.
+        Name of the kdb volume that you want to use as writeable save-down storage for clusters.
         """
         return pulumi.get(self, "volume_name")
 
     @volume_name.setter
-    def volume_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def volume_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "volume_name", value)
 
 
 class KxClusterScalingGroupConfigurationArgsDict(TypedDict):
     memory_reservation: pulumi.Input[_builtins.int]
     """
-    A reservation of the minimum amount of memory that should be available on the scaling group for a kdb cluster to be successfully placed in a scaling group.
+    Reservation of the minimum amount of memory that should be available on the scaling group for a kdb cluster to be successfully placed in a scaling group.
     """
     node_count: pulumi.Input[_builtins.int]
     """
-    The number of kdb cluster nodes.
+    Number of kdb cluster nodes.
     """
     scaling_group_name: pulumi.Input[_builtins.str]
     """
-    A unique identifier for the kdb scaling group.
+    Unique identifier for the kdb scaling group.
     """
-    cpu: NotRequired[pulumi.Input[_builtins.float]]
+    cpu: NotRequired[pulumi.Input[Optional[_builtins.float]]]
     """
-    The number of vCPUs that you want to reserve for each node of this kdb cluster on the scaling group host.
+    Number of vCPUs that you want to reserve for each node of this kdb cluster on the scaling group host.
     """
-    memory_limit: NotRequired[pulumi.Input[_builtins.int]]
+    memory_limit: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    An optional hard limit on the amount of memory a kdb cluster can use.
+    Hard limit on the amount of memory a kdb cluster can use.
     """
 
 @pulumi.input_type
@@ -608,14 +570,14 @@ class KxClusterScalingGroupConfigurationArgs:
                  memory_reservation: pulumi.Input[_builtins.int],
                  node_count: pulumi.Input[_builtins.int],
                  scaling_group_name: pulumi.Input[_builtins.str],
-                 cpu: Optional[pulumi.Input[_builtins.float]] = None,
-                 memory_limit: Optional[pulumi.Input[_builtins.int]] = None):
+                 cpu: pulumi.Input[Optional[_builtins.float]] = None,
+                 memory_limit: pulumi.Input[Optional[_builtins.int]] = None):
         """
-        :param pulumi.Input[_builtins.int] memory_reservation: A reservation of the minimum amount of memory that should be available on the scaling group for a kdb cluster to be successfully placed in a scaling group.
-        :param pulumi.Input[_builtins.int] node_count: The number of kdb cluster nodes.
-        :param pulumi.Input[_builtins.str] scaling_group_name: A unique identifier for the kdb scaling group.
-        :param pulumi.Input[_builtins.float] cpu: The number of vCPUs that you want to reserve for each node of this kdb cluster on the scaling group host.
-        :param pulumi.Input[_builtins.int] memory_limit: An optional hard limit on the amount of memory a kdb cluster can use.
+        :param pulumi.Input[_builtins.int] memory_reservation: Reservation of the minimum amount of memory that should be available on the scaling group for a kdb cluster to be successfully placed in a scaling group.
+        :param pulumi.Input[_builtins.int] node_count: Number of kdb cluster nodes.
+        :param pulumi.Input[_builtins.str] scaling_group_name: Unique identifier for the kdb scaling group.
+        :param pulumi.Input[_builtins.float] cpu: Number of vCPUs that you want to reserve for each node of this kdb cluster on the scaling group host.
+        :param pulumi.Input[_builtins.int] memory_limit: Hard limit on the amount of memory a kdb cluster can use.
         """
         pulumi.set(__self__, "memory_reservation", memory_reservation)
         pulumi.set(__self__, "node_count", node_count)
@@ -629,7 +591,7 @@ class KxClusterScalingGroupConfigurationArgs:
     @pulumi.getter(name="memoryReservation")
     def memory_reservation(self) -> pulumi.Input[_builtins.int]:
         """
-        A reservation of the minimum amount of memory that should be available on the scaling group for a kdb cluster to be successfully placed in a scaling group.
+        Reservation of the minimum amount of memory that should be available on the scaling group for a kdb cluster to be successfully placed in a scaling group.
         """
         return pulumi.get(self, "memory_reservation")
 
@@ -641,7 +603,7 @@ class KxClusterScalingGroupConfigurationArgs:
     @pulumi.getter(name="nodeCount")
     def node_count(self) -> pulumi.Input[_builtins.int]:
         """
-        The number of kdb cluster nodes.
+        Number of kdb cluster nodes.
         """
         return pulumi.get(self, "node_count")
 
@@ -653,7 +615,7 @@ class KxClusterScalingGroupConfigurationArgs:
     @pulumi.getter(name="scalingGroupName")
     def scaling_group_name(self) -> pulumi.Input[_builtins.str]:
         """
-        A unique identifier for the kdb scaling group.
+        Unique identifier for the kdb scaling group.
         """
         return pulumi.get(self, "scaling_group_name")
 
@@ -663,41 +625,50 @@ class KxClusterScalingGroupConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def cpu(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def cpu(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
-        The number of vCPUs that you want to reserve for each node of this kdb cluster on the scaling group host.
+        Number of vCPUs that you want to reserve for each node of this kdb cluster on the scaling group host.
         """
         return pulumi.get(self, "cpu")
 
     @cpu.setter
-    def cpu(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def cpu(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "cpu", value)
 
     @_builtins.property
     @pulumi.getter(name="memoryLimit")
-    def memory_limit(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def memory_limit(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        An optional hard limit on the amount of memory a kdb cluster can use.
+        Hard limit on the amount of memory a kdb cluster can use.
         """
         return pulumi.get(self, "memory_limit")
 
     @memory_limit.setter
-    def memory_limit(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def memory_limit(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "memory_limit", value)
 
 
 class KxClusterTickerplantLogConfigurationArgsDict(TypedDict):
     tickerplant_log_volumes: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
+    """
+    Names of the volumes for tickerplant logs.
+    """
 
 @pulumi.input_type
 class KxClusterTickerplantLogConfigurationArgs:
     def __init__(__self__, *,
                  tickerplant_log_volumes: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] tickerplant_log_volumes: Names of the volumes for tickerplant logs.
+        """
         pulumi.set(__self__, "tickerplant_log_volumes", tickerplant_log_volumes)
 
     @_builtins.property
     @pulumi.getter(name="tickerplantLogVolumes")
     def tickerplant_log_volumes(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
+        """
+        Names of the volumes for tickerplant logs.
+        """
         return pulumi.get(self, "tickerplant_log_volumes")
 
     @tickerplant_log_volumes.setter
@@ -713,12 +684,14 @@ class KxClusterVpcConfigurationArgsDict(TypedDict):
     security_group_ids: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
     """
     Unique identifier of the VPC security group applied to the VPC endpoint ENI for the cluster.
-    * `subnet_ids `- (Required) Identifier of the subnet that the Privatelink VPC endpoint uses to connect to the cluster.
     """
     subnet_ids: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
+    """
+    Identifier of the subnet that the Privatelink VPC endpoint uses to connect to the cluster.
+    """
     vpc_id: pulumi.Input[_builtins.str]
     """
-    Identifier of the VPC endpoint
+    Identifier of the VPC endpoint.
     """
 
 @pulumi.input_type
@@ -731,8 +704,8 @@ class KxClusterVpcConfigurationArgs:
         """
         :param pulumi.Input[_builtins.str] ip_address_type: IP address type for cluster network configuration parameters. The following type is available: IP_V4 - IP address version 4.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_group_ids: Unique identifier of the VPC security group applied to the VPC endpoint ENI for the cluster.
-               * `subnet_ids `- (Required) Identifier of the subnet that the Privatelink VPC endpoint uses to connect to the cluster.
-        :param pulumi.Input[_builtins.str] vpc_id: Identifier of the VPC endpoint
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnet_ids: Identifier of the subnet that the Privatelink VPC endpoint uses to connect to the cluster.
+        :param pulumi.Input[_builtins.str] vpc_id: Identifier of the VPC endpoint.
         """
         pulumi.set(__self__, "ip_address_type", ip_address_type)
         pulumi.set(__self__, "security_group_ids", security_group_ids)
@@ -756,7 +729,6 @@ class KxClusterVpcConfigurationArgs:
     def security_group_ids(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
         """
         Unique identifier of the VPC security group applied to the VPC endpoint ENI for the cluster.
-        * `subnet_ids `- (Required) Identifier of the subnet that the Privatelink VPC endpoint uses to connect to the cluster.
         """
         return pulumi.get(self, "security_group_ids")
 
@@ -767,6 +739,9 @@ class KxClusterVpcConfigurationArgs:
     @_builtins.property
     @pulumi.getter(name="subnetIds")
     def subnet_ids(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
+        """
+        Identifier of the subnet that the Privatelink VPC endpoint uses to connect to the cluster.
+        """
         return pulumi.get(self, "subnet_ids")
 
     @subnet_ids.setter
@@ -777,7 +752,7 @@ class KxClusterVpcConfigurationArgs:
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Input[_builtins.str]:
         """
-        Identifier of the VPC endpoint
+        Identifier of the VPC endpoint.
         """
         return pulumi.get(self, "vpc_id")
 
@@ -789,13 +764,13 @@ class KxClusterVpcConfigurationArgs:
 class KxDataviewSegmentConfigurationArgsDict(TypedDict):
     db_paths: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
     """
-    The database path of the data that you want to place on each selected volume. Each segment must have a unique database path for each volume.
+    Database path of the data that you want to place on each selected volume. Each segment must have a unique database path for each volume.
     """
     volume_name: pulumi.Input[_builtins.str]
     """
-    The name of the volume that you want to attach to a dataview. This volume must be in the same availability zone as the dataview that you are attaching to.
+    Name of the volume that you want to attach to a dataview. This volume must be in the same availability zone as the dataview that you are attaching to.
     """
-    on_demand: NotRequired[pulumi.Input[_builtins.bool]]
+    on_demand: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Enables on-demand caching on the selected database path when a particular file or a column of the database is accessed. When on demand caching is **True**, dataviews perform minimal loading of files on the filesystem as needed. When it is set to **False**, everything is cached. The default value is **False**.
     """
@@ -805,10 +780,10 @@ class KxDataviewSegmentConfigurationArgs:
     def __init__(__self__, *,
                  db_paths: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
                  volume_name: pulumi.Input[_builtins.str],
-                 on_demand: Optional[pulumi.Input[_builtins.bool]] = None):
+                 on_demand: pulumi.Input[Optional[_builtins.bool]] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] db_paths: The database path of the data that you want to place on each selected volume. Each segment must have a unique database path for each volume.
-        :param pulumi.Input[_builtins.str] volume_name: The name of the volume that you want to attach to a dataview. This volume must be in the same availability zone as the dataview that you are attaching to.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] db_paths: Database path of the data that you want to place on each selected volume. Each segment must have a unique database path for each volume.
+        :param pulumi.Input[_builtins.str] volume_name: Name of the volume that you want to attach to a dataview. This volume must be in the same availability zone as the dataview that you are attaching to.
         :param pulumi.Input[_builtins.bool] on_demand: Enables on-demand caching on the selected database path when a particular file or a column of the database is accessed. When on demand caching is **True**, dataviews perform minimal loading of files on the filesystem as needed. When it is set to **False**, everything is cached. The default value is **False**.
         """
         pulumi.set(__self__, "db_paths", db_paths)
@@ -820,7 +795,7 @@ class KxDataviewSegmentConfigurationArgs:
     @pulumi.getter(name="dbPaths")
     def db_paths(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
         """
-        The database path of the data that you want to place on each selected volume. Each segment must have a unique database path for each volume.
+        Database path of the data that you want to place on each selected volume. Each segment must have a unique database path for each volume.
         """
         return pulumi.get(self, "db_paths")
 
@@ -832,7 +807,7 @@ class KxDataviewSegmentConfigurationArgs:
     @pulumi.getter(name="volumeName")
     def volume_name(self) -> pulumi.Input[_builtins.str]:
         """
-        The name of the volume that you want to attach to a dataview. This volume must be in the same availability zone as the dataview that you are attaching to.
+        Name of the volume that you want to attach to a dataview. This volume must be in the same availability zone as the dataview that you are attaching to.
         """
         return pulumi.get(self, "volume_name")
 
@@ -842,14 +817,14 @@ class KxDataviewSegmentConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="onDemand")
-    def on_demand(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def on_demand(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Enables on-demand caching on the selected database path when a particular file or a column of the database is accessed. When on demand caching is **True**, dataviews perform minimal loading of files on the filesystem as needed. When it is set to **False**, everything is cached. The default value is **False**.
         """
         return pulumi.get(self, "on_demand")
 
     @on_demand.setter
-    def on_demand(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def on_demand(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "on_demand", value)
 
 
@@ -909,7 +884,7 @@ class KxEnvironmentTransitGatewayConfigurationArgsDict(TypedDict):
     """
     Identifier of the transit gateway created by the customer to connect outbound traffics from KX network to your internal network.
     """
-    attachment_network_acl_configurations: NotRequired[pulumi.Input[Sequence[pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationArgsDict']]]]
+    attachment_network_acl_configurations: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationArgsDict']]]]]
     """
     Rules that define how you manage outbound traffic from kdb network to your internal network. Defined below.
     """
@@ -919,7 +894,7 @@ class KxEnvironmentTransitGatewayConfigurationArgs:
     def __init__(__self__, *,
                  routable_cidr_space: pulumi.Input[_builtins.str],
                  transit_gateway_id: pulumi.Input[_builtins.str],
-                 attachment_network_acl_configurations: Optional[pulumi.Input[Sequence[pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationArgs']]]] = None):
+                 attachment_network_acl_configurations: pulumi.Input[Optional[Sequence[pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationArgs']]]] = None):
         """
         :param pulumi.Input[_builtins.str] routable_cidr_space: Routing CIDR on behalf of KX environment. It could be any “/26 range in the 100.64.0.0 CIDR space. After providing, it will be added to the customer’s transit gateway routing table so that the traffics could be routed to KX network.
         :param pulumi.Input[_builtins.str] transit_gateway_id: Identifier of the transit gateway created by the customer to connect outbound traffics from KX network to your internal network.
@@ -956,21 +931,21 @@ class KxEnvironmentTransitGatewayConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="attachmentNetworkAclConfigurations")
-    def attachment_network_acl_configurations(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationArgs']]]]:
+    def attachment_network_acl_configurations(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationArgs']]]]:
         """
         Rules that define how you manage outbound traffic from kdb network to your internal network. Defined below.
         """
         return pulumi.get(self, "attachment_network_acl_configurations")
 
     @attachment_network_acl_configurations.setter
-    def attachment_network_acl_configurations(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationArgs']]]]):
+    def attachment_network_acl_configurations(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationArgs']]]]):
         pulumi.set(self, "attachment_network_acl_configurations", value)
 
 
 class KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationArgsDict(TypedDict):
     cidr_block: pulumi.Input[_builtins.str]
     """
-    The IPv4 network range to allow or deny, in CIDR notation. The specified CIDR block is modified to its canonical form. For example, `100.68.0.18/18` will be converted to `100.68.0.0/18`.
+    IPv4 network range to allow or deny, in CIDR notation. The specified CIDR block is modified to its canonical form. For example, `100.68.0.18/18` will be converted to `100.68.0.0/18`.
     """
     protocol: pulumi.Input[_builtins.str]
     """
@@ -978,17 +953,17 @@ class KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationA
     """
     rule_action: pulumi.Input[_builtins.str]
     """
-    Indicates whether to `allow` or `deny` the traffic that matches the rule.
+    Whether to `allow` or `deny` the traffic that matches the rule.
     """
     rule_number: pulumi.Input[_builtins.int]
     """
     Rule number for the entry. All the network ACL entries are processed in ascending order by rule number.
     """
-    icmp_type_code: NotRequired[pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationIcmpTypeCodeArgsDict']]
+    icmp_type_code: NotRequired[pulumi.Input[Optional['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationIcmpTypeCodeArgsDict']]]
     """
-    Defines the ICMP protocol that consists of the ICMP type and code. Defined below.
+    ICMP protocol that consists of the ICMP type and code. Defined below.
     """
-    port_range: NotRequired[pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationPortRangeArgsDict']]
+    port_range: NotRequired[pulumi.Input[Optional['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationPortRangeArgsDict']]]
     """
     Range of ports the rule applies to. Defined below.
     """
@@ -1000,14 +975,14 @@ class KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationA
                  protocol: pulumi.Input[_builtins.str],
                  rule_action: pulumi.Input[_builtins.str],
                  rule_number: pulumi.Input[_builtins.int],
-                 icmp_type_code: Optional[pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationIcmpTypeCodeArgs']] = None,
-                 port_range: Optional[pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationPortRangeArgs']] = None):
+                 icmp_type_code: pulumi.Input[Optional['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationIcmpTypeCodeArgs']] = None,
+                 port_range: pulumi.Input[Optional['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationPortRangeArgs']] = None):
         """
-        :param pulumi.Input[_builtins.str] cidr_block: The IPv4 network range to allow or deny, in CIDR notation. The specified CIDR block is modified to its canonical form. For example, `100.68.0.18/18` will be converted to `100.68.0.0/18`.
+        :param pulumi.Input[_builtins.str] cidr_block: IPv4 network range to allow or deny, in CIDR notation. The specified CIDR block is modified to its canonical form. For example, `100.68.0.18/18` will be converted to `100.68.0.0/18`.
         :param pulumi.Input[_builtins.str] protocol: Protocol number. A value of `1` means all the protocols.
-        :param pulumi.Input[_builtins.str] rule_action: Indicates whether to `allow` or `deny` the traffic that matches the rule.
+        :param pulumi.Input[_builtins.str] rule_action: Whether to `allow` or `deny` the traffic that matches the rule.
         :param pulumi.Input[_builtins.int] rule_number: Rule number for the entry. All the network ACL entries are processed in ascending order by rule number.
-        :param pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationIcmpTypeCodeArgs'] icmp_type_code: Defines the ICMP protocol that consists of the ICMP type and code. Defined below.
+        :param pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationIcmpTypeCodeArgs'] icmp_type_code: ICMP protocol that consists of the ICMP type and code. Defined below.
         :param pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationPortRangeArgs'] port_range: Range of ports the rule applies to. Defined below.
         """
         pulumi.set(__self__, "cidr_block", cidr_block)
@@ -1023,7 +998,7 @@ class KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationA
     @pulumi.getter(name="cidrBlock")
     def cidr_block(self) -> pulumi.Input[_builtins.str]:
         """
-        The IPv4 network range to allow or deny, in CIDR notation. The specified CIDR block is modified to its canonical form. For example, `100.68.0.18/18` will be converted to `100.68.0.0/18`.
+        IPv4 network range to allow or deny, in CIDR notation. The specified CIDR block is modified to its canonical form. For example, `100.68.0.18/18` will be converted to `100.68.0.0/18`.
         """
         return pulumi.get(self, "cidr_block")
 
@@ -1047,7 +1022,7 @@ class KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationA
     @pulumi.getter(name="ruleAction")
     def rule_action(self) -> pulumi.Input[_builtins.str]:
         """
-        Indicates whether to `allow` or `deny` the traffic that matches the rule.
+        Whether to `allow` or `deny` the traffic that matches the rule.
         """
         return pulumi.get(self, "rule_action")
 
@@ -1069,26 +1044,26 @@ class KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationA
 
     @_builtins.property
     @pulumi.getter(name="icmpTypeCode")
-    def icmp_type_code(self) -> Optional[pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationIcmpTypeCodeArgs']]:
+    def icmp_type_code(self) -> pulumi.Input[Optional['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationIcmpTypeCodeArgs']]:
         """
-        Defines the ICMP protocol that consists of the ICMP type and code. Defined below.
+        ICMP protocol that consists of the ICMP type and code. Defined below.
         """
         return pulumi.get(self, "icmp_type_code")
 
     @icmp_type_code.setter
-    def icmp_type_code(self, value: Optional[pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationIcmpTypeCodeArgs']]):
+    def icmp_type_code(self, value: pulumi.Input[Optional['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationIcmpTypeCodeArgs']]):
         pulumi.set(self, "icmp_type_code", value)
 
     @_builtins.property
     @pulumi.getter(name="portRange")
-    def port_range(self) -> Optional[pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationPortRangeArgs']]:
+    def port_range(self) -> pulumi.Input[Optional['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationPortRangeArgs']]:
         """
         Range of ports the rule applies to. Defined below.
         """
         return pulumi.get(self, "port_range")
 
     @port_range.setter
-    def port_range(self, value: Optional[pulumi.Input['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationPortRangeArgs']]):
+    def port_range(self, value: pulumi.Input[Optional['KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationPortRangeArgs']]):
         pulumi.set(self, "port_range", value)
 
 
@@ -1188,8 +1163,17 @@ class KxEnvironmentTransitGatewayConfigurationAttachmentNetworkAclConfigurationP
 
 class KxVolumeAttachedClusterArgsDict(TypedDict):
     cluster_name: pulumi.Input[_builtins.str]
+    """
+    Name of the KX cluster.
+    """
     cluster_status: pulumi.Input[_builtins.str]
+    """
+    Status of the KX cluster.
+    """
     cluster_type: pulumi.Input[_builtins.str]
+    """
+    Type of the KX cluster.
+    """
 
 @pulumi.input_type
 class KxVolumeAttachedClusterArgs:
@@ -1197,6 +1181,11 @@ class KxVolumeAttachedClusterArgs:
                  cluster_name: pulumi.Input[_builtins.str],
                  cluster_status: pulumi.Input[_builtins.str],
                  cluster_type: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] cluster_name: Name of the KX cluster.
+        :param pulumi.Input[_builtins.str] cluster_status: Status of the KX cluster.
+        :param pulumi.Input[_builtins.str] cluster_type: Type of the KX cluster.
+        """
         pulumi.set(__self__, "cluster_name", cluster_name)
         pulumi.set(__self__, "cluster_status", cluster_status)
         pulumi.set(__self__, "cluster_type", cluster_type)
@@ -1204,6 +1193,9 @@ class KxVolumeAttachedClusterArgs:
     @_builtins.property
     @pulumi.getter(name="clusterName")
     def cluster_name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Name of the KX cluster.
+        """
         return pulumi.get(self, "cluster_name")
 
     @cluster_name.setter
@@ -1213,6 +1205,9 @@ class KxVolumeAttachedClusterArgs:
     @_builtins.property
     @pulumi.getter(name="clusterStatus")
     def cluster_status(self) -> pulumi.Input[_builtins.str]:
+        """
+        Status of the KX cluster.
+        """
         return pulumi.get(self, "cluster_status")
 
     @cluster_status.setter
@@ -1222,6 +1217,9 @@ class KxVolumeAttachedClusterArgs:
     @_builtins.property
     @pulumi.getter(name="clusterType")
     def cluster_type(self) -> pulumi.Input[_builtins.str]:
+        """
+        Type of the KX cluster.
+        """
         return pulumi.get(self, "cluster_type")
 
     @cluster_type.setter
@@ -1232,11 +1230,11 @@ class KxVolumeAttachedClusterArgs:
 class KxVolumeNas1ConfigurationArgsDict(TypedDict):
     size: pulumi.Input[_builtins.int]
     """
-    The size of the network attached storage.
+    Size of the network attached storage.
     """
     type: pulumi.Input[_builtins.str]
     """
-    The type of the network attached storage.
+    Type of the network attached storage.
     """
 
 @pulumi.input_type
@@ -1245,8 +1243,8 @@ class KxVolumeNas1ConfigurationArgs:
                  size: pulumi.Input[_builtins.int],
                  type: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.int] size: The size of the network attached storage.
-        :param pulumi.Input[_builtins.str] type: The type of the network attached storage.
+        :param pulumi.Input[_builtins.int] size: Size of the network attached storage.
+        :param pulumi.Input[_builtins.str] type: Type of the network attached storage.
         """
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "type", type)
@@ -1255,7 +1253,7 @@ class KxVolumeNas1ConfigurationArgs:
     @pulumi.getter
     def size(self) -> pulumi.Input[_builtins.int]:
         """
-        The size of the network attached storage.
+        Size of the network attached storage.
         """
         return pulumi.get(self, "size")
 
@@ -1267,7 +1265,7 @@ class KxVolumeNas1ConfigurationArgs:
     @pulumi.getter
     def type(self) -> pulumi.Input[_builtins.str]:
         """
-        The type of the network attached storage.
+        Type of the network attached storage.
         """
         return pulumi.get(self, "type")
 

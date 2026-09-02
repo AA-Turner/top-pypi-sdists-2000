@@ -19,7 +19,12 @@ from .event_stream import *
 from .gcm_channel import *
 from .sms_channel import *
 from .smsvoicev2_configuration_set import *
+from .smsvoicev2_event_destination import *
+from .smsvoicev2_keyword import *
 from .smsvoicev2_opt_out_list import *
 from .smsvoicev2_phone_number import *
+from .smsvoicev2_pool import *
+from .smsvoicev2_resource_policy import *
+from .smsvoicev2_sender_id import *
 from ._inputs import *
 from . import outputs

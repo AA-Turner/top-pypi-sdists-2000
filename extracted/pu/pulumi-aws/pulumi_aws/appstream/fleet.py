@@ -23,25 +23,26 @@ class FleetArgs:
     def __init__(__self__, *,
                  compute_capacity: pulumi.Input['FleetComputeCapacityArgs'],
                  instance_type: pulumi.Input[_builtins.str],
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 disconnect_timeout_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 display_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_join_info: Optional[pulumi.Input['FleetDomainJoinInfoArgs']] = None,
-                 enable_default_internet_access: Optional[pulumi.Input[_builtins.bool]] = None,
-                 fleet_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 iam_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 idle_disconnect_timeout_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 image_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 image_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 max_sessions_per_instance: Optional[pulumi.Input[_builtins.int]] = None,
-                 max_user_duration_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 stream_view: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 vpc_config: Optional[pulumi.Input['FleetVpcConfigArgs']] = None):
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 disconnect_timeout_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 display_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_join_info: pulumi.Input[Optional['FleetDomainJoinInfoArgs']] = None,
+                 enable_default_internet_access: pulumi.Input[Optional[_builtins.bool]] = None,
+                 fleet_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 iam_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 idle_disconnect_timeout_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 image_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 image_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 max_sessions_per_instance: pulumi.Input[Optional[_builtins.int]] = None,
+                 max_user_duration_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 stream_view: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 vpc_config: pulumi.Input[Optional['FleetVpcConfigArgs']] = None):
         """
         The set of arguments for constructing a Fleet resource.
+
         :param pulumi.Input['FleetComputeCapacityArgs'] compute_capacity: Configuration block for the desired capacity of the fleet. See below.
         :param pulumi.Input[_builtins.str] instance_type: Instance type to use when launching fleet instances.
         :param pulumi.Input[_builtins.str] description: Description to display.
@@ -51,10 +52,10 @@ class FleetArgs:
         :param pulumi.Input[_builtins.bool] enable_default_internet_access: Enables or disables default internet access for the fleet.
         :param pulumi.Input[_builtins.str] fleet_type: Fleet type. Valid values are: `ON_DEMAND`, `ALWAYS_ON`
         :param pulumi.Input[_builtins.str] iam_role_arn: ARN of the IAM role to apply to the fleet.
-        :param pulumi.Input[_builtins.int] idle_disconnect_timeout_in_seconds: Amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the `disconnect_timeout_in_seconds` time interval begins. Defaults to `0`. Valid value is between `60` and `3600 `seconds.
+        :param pulumi.Input[_builtins.int] idle_disconnect_timeout_in_seconds: Amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the `disconnect_timeout_in_seconds` time interval begins. Defaults to `0`. Valid value is between `60` and ` 3600  `seconds.
         :param pulumi.Input[_builtins.str] image_arn: ARN of the public, private, or shared image to use.
         :param pulumi.Input[_builtins.str] image_name: Name of the image used to create the fleet.
-        :param pulumi.Input[_builtins.int] max_sessions_per_instance: The maximum number of user sessions on an instance. This only applies to multi-session fleets.
+        :param pulumi.Input[_builtins.int] max_sessions_per_instance: Maximum number of user sessions on an instance. This only applies to multi-session fleets.
         :param pulumi.Input[_builtins.int] max_user_duration_in_seconds: Maximum amount of time that a streaming session can remain active, in seconds.
         :param pulumi.Input[_builtins.str] name: Unique name for the fleet.
                
@@ -127,151 +128,151 @@ class FleetArgs:
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description to display.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="disconnectTimeoutInSeconds")
-    def disconnect_timeout_in_seconds(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def disconnect_timeout_in_seconds(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Amount of time that a streaming session remains active after users disconnect.
         """
         return pulumi.get(self, "disconnect_timeout_in_seconds")
 
     @disconnect_timeout_in_seconds.setter
-    def disconnect_timeout_in_seconds(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def disconnect_timeout_in_seconds(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "disconnect_timeout_in_seconds", value)
 
     @_builtins.property
     @pulumi.getter(name="displayName")
-    def display_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def display_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Human-readable friendly name for the AppStream fleet.
         """
         return pulumi.get(self, "display_name")
 
     @display_name.setter
-    def display_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def display_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "display_name", value)
 
     @_builtins.property
     @pulumi.getter(name="domainJoinInfo")
-    def domain_join_info(self) -> Optional[pulumi.Input['FleetDomainJoinInfoArgs']]:
+    def domain_join_info(self) -> pulumi.Input[Optional['FleetDomainJoinInfoArgs']]:
         """
         Configuration block for the name of the directory and organizational unit (OU) to use to join the fleet to a Microsoft Active Directory domain. See below.
         """
         return pulumi.get(self, "domain_join_info")
 
     @domain_join_info.setter
-    def domain_join_info(self, value: Optional[pulumi.Input['FleetDomainJoinInfoArgs']]):
+    def domain_join_info(self, value: pulumi.Input[Optional['FleetDomainJoinInfoArgs']]):
         pulumi.set(self, "domain_join_info", value)
 
     @_builtins.property
     @pulumi.getter(name="enableDefaultInternetAccess")
-    def enable_default_internet_access(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enable_default_internet_access(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Enables or disables default internet access for the fleet.
         """
         return pulumi.get(self, "enable_default_internet_access")
 
     @enable_default_internet_access.setter
-    def enable_default_internet_access(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enable_default_internet_access(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enable_default_internet_access", value)
 
     @_builtins.property
     @pulumi.getter(name="fleetType")
-    def fleet_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def fleet_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Fleet type. Valid values are: `ON_DEMAND`, `ALWAYS_ON`
         """
         return pulumi.get(self, "fleet_type")
 
     @fleet_type.setter
-    def fleet_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def fleet_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "fleet_type", value)
 
     @_builtins.property
     @pulumi.getter(name="iamRoleArn")
-    def iam_role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def iam_role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the IAM role to apply to the fleet.
         """
         return pulumi.get(self, "iam_role_arn")
 
     @iam_role_arn.setter
-    def iam_role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def iam_role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "iam_role_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="idleDisconnectTimeoutInSeconds")
-    def idle_disconnect_timeout_in_seconds(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def idle_disconnect_timeout_in_seconds(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        Amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the `disconnect_timeout_in_seconds` time interval begins. Defaults to `0`. Valid value is between `60` and `3600 `seconds.
+        Amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the `disconnect_timeout_in_seconds` time interval begins. Defaults to `0`. Valid value is between `60` and ` 3600  `seconds.
         """
         return pulumi.get(self, "idle_disconnect_timeout_in_seconds")
 
     @idle_disconnect_timeout_in_seconds.setter
-    def idle_disconnect_timeout_in_seconds(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def idle_disconnect_timeout_in_seconds(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "idle_disconnect_timeout_in_seconds", value)
 
     @_builtins.property
     @pulumi.getter(name="imageArn")
-    def image_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def image_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the public, private, or shared image to use.
         """
         return pulumi.get(self, "image_arn")
 
     @image_arn.setter
-    def image_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def image_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "image_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="imageName")
-    def image_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def image_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the image used to create the fleet.
         """
         return pulumi.get(self, "image_name")
 
     @image_name.setter
-    def image_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def image_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "image_name", value)
 
     @_builtins.property
     @pulumi.getter(name="maxSessionsPerInstance")
-    def max_sessions_per_instance(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max_sessions_per_instance(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The maximum number of user sessions on an instance. This only applies to multi-session fleets.
+        Maximum number of user sessions on an instance. This only applies to multi-session fleets.
         """
         return pulumi.get(self, "max_sessions_per_instance")
 
     @max_sessions_per_instance.setter
-    def max_sessions_per_instance(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max_sessions_per_instance(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max_sessions_per_instance", value)
 
     @_builtins.property
     @pulumi.getter(name="maxUserDurationInSeconds")
-    def max_user_duration_in_seconds(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max_user_duration_in_seconds(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Maximum amount of time that a streaming session can remain active, in seconds.
         """
         return pulumi.get(self, "max_user_duration_in_seconds")
 
     @max_user_duration_in_seconds.setter
-    def max_user_duration_in_seconds(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max_user_duration_in_seconds(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max_user_duration_in_seconds", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique name for the fleet.
 
@@ -280,86 +281,87 @@ class FleetArgs:
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="streamView")
-    def stream_view(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def stream_view(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         AppStream 2.0 view that is displayed to your users when they stream from the fleet. When `APP` is specified, only the windows of applications opened by users display. When `DESKTOP` is specified, the standard desktop that is provided by the operating system displays. If not specified, defaults to `APP`.
         """
         return pulumi.get(self, "stream_view")
 
     @stream_view.setter
-    def stream_view(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def stream_view(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "stream_view", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags to attach to AppStream instances.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcConfig")
-    def vpc_config(self) -> Optional[pulumi.Input['FleetVpcConfigArgs']]:
+    def vpc_config(self) -> pulumi.Input[Optional['FleetVpcConfigArgs']]:
         """
         Configuration block for the VPC configuration for the image builder. See below.
         """
         return pulumi.get(self, "vpc_config")
 
     @vpc_config.setter
-    def vpc_config(self, value: Optional[pulumi.Input['FleetVpcConfigArgs']]):
+    def vpc_config(self, value: pulumi.Input[Optional['FleetVpcConfigArgs']]):
         pulumi.set(self, "vpc_config", value)
 
 
 @pulumi.input_type
 class _FleetState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 compute_capacity: Optional[pulumi.Input['FleetComputeCapacityArgs']] = None,
-                 created_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 disconnect_timeout_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 display_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_join_info: Optional[pulumi.Input['FleetDomainJoinInfoArgs']] = None,
-                 enable_default_internet_access: Optional[pulumi.Input[_builtins.bool]] = None,
-                 fleet_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 iam_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 idle_disconnect_timeout_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 image_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 image_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 instance_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 max_sessions_per_instance: Optional[pulumi.Input[_builtins.int]] = None,
-                 max_user_duration_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 state: Optional[pulumi.Input[_builtins.str]] = None,
-                 stream_view: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 vpc_config: Optional[pulumi.Input['FleetVpcConfigArgs']] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 compute_capacity: pulumi.Input[Optional['FleetComputeCapacityArgs']] = None,
+                 created_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 disconnect_timeout_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 display_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_join_info: pulumi.Input[Optional['FleetDomainJoinInfoArgs']] = None,
+                 enable_default_internet_access: pulumi.Input[Optional[_builtins.bool]] = None,
+                 fleet_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 iam_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 idle_disconnect_timeout_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 image_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 image_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 instance_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 max_sessions_per_instance: pulumi.Input[Optional[_builtins.int]] = None,
+                 max_user_duration_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 state: pulumi.Input[Optional[_builtins.str]] = None,
+                 stream_view: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 vpc_config: pulumi.Input[Optional['FleetVpcConfigArgs']] = None):
         """
         Input properties used for looking up and filtering Fleet resources.
+
         :param pulumi.Input[_builtins.str] arn: ARN of the appstream fleet.
         :param pulumi.Input['FleetComputeCapacityArgs'] compute_capacity: Configuration block for the desired capacity of the fleet. See below.
         :param pulumi.Input[_builtins.str] created_time: Date and time, in UTC and extended RFC 3339 format, when the fleet was created.
@@ -370,11 +372,11 @@ class _FleetState:
         :param pulumi.Input[_builtins.bool] enable_default_internet_access: Enables or disables default internet access for the fleet.
         :param pulumi.Input[_builtins.str] fleet_type: Fleet type. Valid values are: `ON_DEMAND`, `ALWAYS_ON`
         :param pulumi.Input[_builtins.str] iam_role_arn: ARN of the IAM role to apply to the fleet.
-        :param pulumi.Input[_builtins.int] idle_disconnect_timeout_in_seconds: Amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the `disconnect_timeout_in_seconds` time interval begins. Defaults to `0`. Valid value is between `60` and `3600 `seconds.
+        :param pulumi.Input[_builtins.int] idle_disconnect_timeout_in_seconds: Amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the `disconnect_timeout_in_seconds` time interval begins. Defaults to `0`. Valid value is between `60` and ` 3600  `seconds.
         :param pulumi.Input[_builtins.str] image_arn: ARN of the public, private, or shared image to use.
         :param pulumi.Input[_builtins.str] image_name: Name of the image used to create the fleet.
         :param pulumi.Input[_builtins.str] instance_type: Instance type to use when launching fleet instances.
-        :param pulumi.Input[_builtins.int] max_sessions_per_instance: The maximum number of user sessions on an instance. This only applies to multi-session fleets.
+        :param pulumi.Input[_builtins.int] max_sessions_per_instance: Maximum number of user sessions on an instance. This only applies to multi-session fleets.
         :param pulumi.Input[_builtins.int] max_user_duration_in_seconds: Maximum amount of time that a streaming session can remain active, in seconds.
         :param pulumi.Input[_builtins.str] name: Unique name for the fleet.
                
@@ -434,199 +436,199 @@ class _FleetState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the appstream fleet.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="computeCapacity")
-    def compute_capacity(self) -> Optional[pulumi.Input['FleetComputeCapacityArgs']]:
+    def compute_capacity(self) -> pulumi.Input[Optional['FleetComputeCapacityArgs']]:
         """
         Configuration block for the desired capacity of the fleet. See below.
         """
         return pulumi.get(self, "compute_capacity")
 
     @compute_capacity.setter
-    def compute_capacity(self, value: Optional[pulumi.Input['FleetComputeCapacityArgs']]):
+    def compute_capacity(self, value: pulumi.Input[Optional['FleetComputeCapacityArgs']]):
         pulumi.set(self, "compute_capacity", value)
 
     @_builtins.property
     @pulumi.getter(name="createdTime")
-    def created_time(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def created_time(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Date and time, in UTC and extended RFC 3339 format, when the fleet was created.
         """
         return pulumi.get(self, "created_time")
 
     @created_time.setter
-    def created_time(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def created_time(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "created_time", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description to display.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="disconnectTimeoutInSeconds")
-    def disconnect_timeout_in_seconds(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def disconnect_timeout_in_seconds(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Amount of time that a streaming session remains active after users disconnect.
         """
         return pulumi.get(self, "disconnect_timeout_in_seconds")
 
     @disconnect_timeout_in_seconds.setter
-    def disconnect_timeout_in_seconds(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def disconnect_timeout_in_seconds(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "disconnect_timeout_in_seconds", value)
 
     @_builtins.property
     @pulumi.getter(name="displayName")
-    def display_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def display_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Human-readable friendly name for the AppStream fleet.
         """
         return pulumi.get(self, "display_name")
 
     @display_name.setter
-    def display_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def display_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "display_name", value)
 
     @_builtins.property
     @pulumi.getter(name="domainJoinInfo")
-    def domain_join_info(self) -> Optional[pulumi.Input['FleetDomainJoinInfoArgs']]:
+    def domain_join_info(self) -> pulumi.Input[Optional['FleetDomainJoinInfoArgs']]:
         """
         Configuration block for the name of the directory and organizational unit (OU) to use to join the fleet to a Microsoft Active Directory domain. See below.
         """
         return pulumi.get(self, "domain_join_info")
 
     @domain_join_info.setter
-    def domain_join_info(self, value: Optional[pulumi.Input['FleetDomainJoinInfoArgs']]):
+    def domain_join_info(self, value: pulumi.Input[Optional['FleetDomainJoinInfoArgs']]):
         pulumi.set(self, "domain_join_info", value)
 
     @_builtins.property
     @pulumi.getter(name="enableDefaultInternetAccess")
-    def enable_default_internet_access(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enable_default_internet_access(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Enables or disables default internet access for the fleet.
         """
         return pulumi.get(self, "enable_default_internet_access")
 
     @enable_default_internet_access.setter
-    def enable_default_internet_access(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enable_default_internet_access(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enable_default_internet_access", value)
 
     @_builtins.property
     @pulumi.getter(name="fleetType")
-    def fleet_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def fleet_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Fleet type. Valid values are: `ON_DEMAND`, `ALWAYS_ON`
         """
         return pulumi.get(self, "fleet_type")
 
     @fleet_type.setter
-    def fleet_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def fleet_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "fleet_type", value)
 
     @_builtins.property
     @pulumi.getter(name="iamRoleArn")
-    def iam_role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def iam_role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the IAM role to apply to the fleet.
         """
         return pulumi.get(self, "iam_role_arn")
 
     @iam_role_arn.setter
-    def iam_role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def iam_role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "iam_role_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="idleDisconnectTimeoutInSeconds")
-    def idle_disconnect_timeout_in_seconds(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def idle_disconnect_timeout_in_seconds(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        Amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the `disconnect_timeout_in_seconds` time interval begins. Defaults to `0`. Valid value is between `60` and `3600 `seconds.
+        Amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the `disconnect_timeout_in_seconds` time interval begins. Defaults to `0`. Valid value is between `60` and ` 3600  `seconds.
         """
         return pulumi.get(self, "idle_disconnect_timeout_in_seconds")
 
     @idle_disconnect_timeout_in_seconds.setter
-    def idle_disconnect_timeout_in_seconds(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def idle_disconnect_timeout_in_seconds(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "idle_disconnect_timeout_in_seconds", value)
 
     @_builtins.property
     @pulumi.getter(name="imageArn")
-    def image_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def image_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the public, private, or shared image to use.
         """
         return pulumi.get(self, "image_arn")
 
     @image_arn.setter
-    def image_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def image_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "image_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="imageName")
-    def image_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def image_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the image used to create the fleet.
         """
         return pulumi.get(self, "image_name")
 
     @image_name.setter
-    def image_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def image_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "image_name", value)
 
     @_builtins.property
     @pulumi.getter(name="instanceType")
-    def instance_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def instance_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Instance type to use when launching fleet instances.
         """
         return pulumi.get(self, "instance_type")
 
     @instance_type.setter
-    def instance_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def instance_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "instance_type", value)
 
     @_builtins.property
     @pulumi.getter(name="maxSessionsPerInstance")
-    def max_sessions_per_instance(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max_sessions_per_instance(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The maximum number of user sessions on an instance. This only applies to multi-session fleets.
+        Maximum number of user sessions on an instance. This only applies to multi-session fleets.
         """
         return pulumi.get(self, "max_sessions_per_instance")
 
     @max_sessions_per_instance.setter
-    def max_sessions_per_instance(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max_sessions_per_instance(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max_sessions_per_instance", value)
 
     @_builtins.property
     @pulumi.getter(name="maxUserDurationInSeconds")
-    def max_user_duration_in_seconds(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max_user_duration_in_seconds(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Maximum amount of time that a streaming session can remain active, in seconds.
         """
         return pulumi.get(self, "max_user_duration_in_seconds")
 
     @max_user_duration_in_seconds.setter
-    def max_user_duration_in_seconds(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max_user_duration_in_seconds(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max_user_duration_in_seconds", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique name for the fleet.
 
@@ -635,76 +637,76 @@ class _FleetState:
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def state(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def state(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         State of the fleet. Can be `STARTING`, `RUNNING`, `STOPPING` or `STOPPED`
         """
         return pulumi.get(self, "state")
 
     @state.setter
-    def state(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def state(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "state", value)
 
     @_builtins.property
     @pulumi.getter(name="streamView")
-    def stream_view(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def stream_view(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         AppStream 2.0 view that is displayed to your users when they stream from the fleet. When `APP` is specified, only the windows of applications opened by users display. When `DESKTOP` is specified, the standard desktop that is provided by the operating system displays. If not specified, defaults to `APP`.
         """
         return pulumi.get(self, "stream_view")
 
     @stream_view.setter
-    def stream_view(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def stream_view(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "stream_view", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags to attach to AppStream instances.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcConfig")
-    def vpc_config(self) -> Optional[pulumi.Input['FleetVpcConfigArgs']]:
+    def vpc_config(self) -> pulumi.Input[Optional['FleetVpcConfigArgs']]:
         """
         Configuration block for the VPC configuration for the image builder. See below.
         """
         return pulumi.get(self, "vpc_config")
 
     @vpc_config.setter
-    def vpc_config(self, value: Optional[pulumi.Input['FleetVpcConfigArgs']]):
+    def vpc_config(self, value: pulumi.Input[Optional['FleetVpcConfigArgs']]):
         pulumi.set(self, "vpc_config", value)
 
 
@@ -714,25 +716,25 @@ class Fleet(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 compute_capacity: Optional[pulumi.Input[Union['FleetComputeCapacityArgs', 'FleetComputeCapacityArgsDict']]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 disconnect_timeout_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 display_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_join_info: Optional[pulumi.Input[Union['FleetDomainJoinInfoArgs', 'FleetDomainJoinInfoArgsDict']]] = None,
-                 enable_default_internet_access: Optional[pulumi.Input[_builtins.bool]] = None,
-                 fleet_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 iam_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 idle_disconnect_timeout_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 image_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 image_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 instance_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 max_sessions_per_instance: Optional[pulumi.Input[_builtins.int]] = None,
-                 max_user_duration_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 stream_view: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 vpc_config: Optional[pulumi.Input[Union['FleetVpcConfigArgs', 'FleetVpcConfigArgsDict']]] = None,
+                 compute_capacity: pulumi.Input[Optional[Union['FleetComputeCapacityArgs', 'FleetComputeCapacityArgsDict']]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 disconnect_timeout_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 display_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_join_info: pulumi.Input[Optional[Union['FleetDomainJoinInfoArgs', 'FleetDomainJoinInfoArgsDict']]] = None,
+                 enable_default_internet_access: pulumi.Input[Optional[_builtins.bool]] = None,
+                 fleet_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 iam_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 idle_disconnect_timeout_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 image_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 image_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 instance_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 max_sessions_per_instance: pulumi.Input[Optional[_builtins.int]] = None,
+                 max_user_duration_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 stream_view: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 vpc_config: pulumi.Input[Optional[Union['FleetVpcConfigArgs', 'FleetVpcConfigArgsDict']]] = None,
                  __props__=None):
         """
         Provides an AppStream fleet.
@@ -744,10 +746,13 @@ class Fleet(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test_fleet = aws.appstream.Fleet("test_fleet",
-            name="test-fleet",
             compute_capacity={
                 "desired_instances": 1,
             },
+            vpc_config={
+                "subnet_ids": ["subnet-06e9b13400c225127"],
+            },
+            name="test-fleet",
             description="test fleet",
             idle_disconnect_timeout_in_seconds=60,
             display_name="test-fleet",
@@ -756,9 +761,6 @@ class Fleet(pulumi.CustomResource):
             image_name="Amazon-AppStream2-Sample-Image-03-11-2023",
             instance_type="stream.standard.large",
             max_user_duration_in_seconds=600,
-            vpc_config={
-                "subnet_ids": ["subnet-06e9b13400c225127"],
-            },
             tags={
                 "TagName": "tag-value",
             })
@@ -772,6 +774,7 @@ class Fleet(pulumi.CustomResource):
         $ pulumi import aws:appstream/fleet:Fleet example fleetNameExample
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Union['FleetComputeCapacityArgs', 'FleetComputeCapacityArgsDict']] compute_capacity: Configuration block for the desired capacity of the fleet. See below.
@@ -782,11 +785,11 @@ class Fleet(pulumi.CustomResource):
         :param pulumi.Input[_builtins.bool] enable_default_internet_access: Enables or disables default internet access for the fleet.
         :param pulumi.Input[_builtins.str] fleet_type: Fleet type. Valid values are: `ON_DEMAND`, `ALWAYS_ON`
         :param pulumi.Input[_builtins.str] iam_role_arn: ARN of the IAM role to apply to the fleet.
-        :param pulumi.Input[_builtins.int] idle_disconnect_timeout_in_seconds: Amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the `disconnect_timeout_in_seconds` time interval begins. Defaults to `0`. Valid value is between `60` and `3600 `seconds.
+        :param pulumi.Input[_builtins.int] idle_disconnect_timeout_in_seconds: Amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the `disconnect_timeout_in_seconds` time interval begins. Defaults to `0`. Valid value is between `60` and ` 3600  `seconds.
         :param pulumi.Input[_builtins.str] image_arn: ARN of the public, private, or shared image to use.
         :param pulumi.Input[_builtins.str] image_name: Name of the image used to create the fleet.
         :param pulumi.Input[_builtins.str] instance_type: Instance type to use when launching fleet instances.
-        :param pulumi.Input[_builtins.int] max_sessions_per_instance: The maximum number of user sessions on an instance. This only applies to multi-session fleets.
+        :param pulumi.Input[_builtins.int] max_sessions_per_instance: Maximum number of user sessions on an instance. This only applies to multi-session fleets.
         :param pulumi.Input[_builtins.int] max_user_duration_in_seconds: Maximum amount of time that a streaming session can remain active, in seconds.
         :param pulumi.Input[_builtins.str] name: Unique name for the fleet.
                
@@ -812,10 +815,13 @@ class Fleet(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test_fleet = aws.appstream.Fleet("test_fleet",
-            name="test-fleet",
             compute_capacity={
                 "desired_instances": 1,
             },
+            vpc_config={
+                "subnet_ids": ["subnet-06e9b13400c225127"],
+            },
+            name="test-fleet",
             description="test fleet",
             idle_disconnect_timeout_in_seconds=60,
             display_name="test-fleet",
@@ -824,9 +830,6 @@ class Fleet(pulumi.CustomResource):
             image_name="Amazon-AppStream2-Sample-Image-03-11-2023",
             instance_type="stream.standard.large",
             max_user_duration_in_seconds=600,
-            vpc_config={
-                "subnet_ids": ["subnet-06e9b13400c225127"],
-            },
             tags={
                 "TagName": "tag-value",
             })
@@ -839,6 +842,7 @@ class Fleet(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:appstream/fleet:Fleet example fleetNameExample
         ```
+
 
         :param str resource_name: The name of the resource.
         :param FleetArgs args: The arguments to use to populate this resource's properties.
@@ -855,25 +859,25 @@ class Fleet(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 compute_capacity: Optional[pulumi.Input[Union['FleetComputeCapacityArgs', 'FleetComputeCapacityArgsDict']]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 disconnect_timeout_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 display_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_join_info: Optional[pulumi.Input[Union['FleetDomainJoinInfoArgs', 'FleetDomainJoinInfoArgsDict']]] = None,
-                 enable_default_internet_access: Optional[pulumi.Input[_builtins.bool]] = None,
-                 fleet_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 iam_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 idle_disconnect_timeout_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 image_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 image_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 instance_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 max_sessions_per_instance: Optional[pulumi.Input[_builtins.int]] = None,
-                 max_user_duration_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 stream_view: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 vpc_config: Optional[pulumi.Input[Union['FleetVpcConfigArgs', 'FleetVpcConfigArgsDict']]] = None,
+                 compute_capacity: pulumi.Input[Optional[Union['FleetComputeCapacityArgs', 'FleetComputeCapacityArgsDict']]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 disconnect_timeout_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 display_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_join_info: pulumi.Input[Optional[Union['FleetDomainJoinInfoArgs', 'FleetDomainJoinInfoArgsDict']]] = None,
+                 enable_default_internet_access: pulumi.Input[Optional[_builtins.bool]] = None,
+                 fleet_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 iam_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 idle_disconnect_timeout_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 image_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 image_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 instance_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 max_sessions_per_instance: pulumi.Input[Optional[_builtins.int]] = None,
+                 max_user_duration_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 stream_view: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 vpc_config: pulumi.Input[Optional[Union['FleetVpcConfigArgs', 'FleetVpcConfigArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -920,29 +924,29 @@ class Fleet(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            compute_capacity: Optional[pulumi.Input[Union['FleetComputeCapacityArgs', 'FleetComputeCapacityArgsDict']]] = None,
-            created_time: Optional[pulumi.Input[_builtins.str]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            disconnect_timeout_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-            display_name: Optional[pulumi.Input[_builtins.str]] = None,
-            domain_join_info: Optional[pulumi.Input[Union['FleetDomainJoinInfoArgs', 'FleetDomainJoinInfoArgsDict']]] = None,
-            enable_default_internet_access: Optional[pulumi.Input[_builtins.bool]] = None,
-            fleet_type: Optional[pulumi.Input[_builtins.str]] = None,
-            iam_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            idle_disconnect_timeout_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-            image_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            image_name: Optional[pulumi.Input[_builtins.str]] = None,
-            instance_type: Optional[pulumi.Input[_builtins.str]] = None,
-            max_sessions_per_instance: Optional[pulumi.Input[_builtins.int]] = None,
-            max_user_duration_in_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            state: Optional[pulumi.Input[_builtins.str]] = None,
-            stream_view: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            vpc_config: Optional[pulumi.Input[Union['FleetVpcConfigArgs', 'FleetVpcConfigArgsDict']]] = None) -> 'Fleet':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            compute_capacity: pulumi.Input[Optional[Union['FleetComputeCapacityArgs', 'FleetComputeCapacityArgsDict']]] = None,
+            created_time: pulumi.Input[Optional[_builtins.str]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            disconnect_timeout_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+            display_name: pulumi.Input[Optional[_builtins.str]] = None,
+            domain_join_info: pulumi.Input[Optional[Union['FleetDomainJoinInfoArgs', 'FleetDomainJoinInfoArgsDict']]] = None,
+            enable_default_internet_access: pulumi.Input[Optional[_builtins.bool]] = None,
+            fleet_type: pulumi.Input[Optional[_builtins.str]] = None,
+            iam_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            idle_disconnect_timeout_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+            image_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            image_name: pulumi.Input[Optional[_builtins.str]] = None,
+            instance_type: pulumi.Input[Optional[_builtins.str]] = None,
+            max_sessions_per_instance: pulumi.Input[Optional[_builtins.int]] = None,
+            max_user_duration_in_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            state: pulumi.Input[Optional[_builtins.str]] = None,
+            stream_view: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            vpc_config: pulumi.Input[Optional[Union['FleetVpcConfigArgs', 'FleetVpcConfigArgsDict']]] = None) -> 'Fleet':
         """
         Get an existing Fleet resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -960,11 +964,11 @@ class Fleet(pulumi.CustomResource):
         :param pulumi.Input[_builtins.bool] enable_default_internet_access: Enables or disables default internet access for the fleet.
         :param pulumi.Input[_builtins.str] fleet_type: Fleet type. Valid values are: `ON_DEMAND`, `ALWAYS_ON`
         :param pulumi.Input[_builtins.str] iam_role_arn: ARN of the IAM role to apply to the fleet.
-        :param pulumi.Input[_builtins.int] idle_disconnect_timeout_in_seconds: Amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the `disconnect_timeout_in_seconds` time interval begins. Defaults to `0`. Valid value is between `60` and `3600 `seconds.
+        :param pulumi.Input[_builtins.int] idle_disconnect_timeout_in_seconds: Amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the `disconnect_timeout_in_seconds` time interval begins. Defaults to `0`. Valid value is between `60` and ` 3600  `seconds.
         :param pulumi.Input[_builtins.str] image_arn: ARN of the public, private, or shared image to use.
         :param pulumi.Input[_builtins.str] image_name: Name of the image used to create the fleet.
         :param pulumi.Input[_builtins.str] instance_type: Instance type to use when launching fleet instances.
-        :param pulumi.Input[_builtins.int] max_sessions_per_instance: The maximum number of user sessions on an instance. This only applies to multi-session fleets.
+        :param pulumi.Input[_builtins.int] max_sessions_per_instance: Maximum number of user sessions on an instance. This only applies to multi-session fleets.
         :param pulumi.Input[_builtins.int] max_user_duration_in_seconds: Maximum amount of time that a streaming session can remain active, in seconds.
         :param pulumi.Input[_builtins.str] name: Unique name for the fleet.
                
@@ -1088,7 +1092,7 @@ class Fleet(pulumi.CustomResource):
     @pulumi.getter(name="idleDisconnectTimeoutInSeconds")
     def idle_disconnect_timeout_in_seconds(self) -> pulumi.Output[Optional[_builtins.int]]:
         """
-        Amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the `disconnect_timeout_in_seconds` time interval begins. Defaults to `0`. Valid value is between `60` and `3600 `seconds.
+        Amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the `disconnect_timeout_in_seconds` time interval begins. Defaults to `0`. Valid value is between `60` and ` 3600  `seconds.
         """
         return pulumi.get(self, "idle_disconnect_timeout_in_seconds")
 
@@ -1120,7 +1124,7 @@ class Fleet(pulumi.CustomResource):
     @pulumi.getter(name="maxSessionsPerInstance")
     def max_sessions_per_instance(self) -> pulumi.Output[Optional[_builtins.int]]:
         """
-        The maximum number of user sessions on an instance. This only applies to multi-session fleets.
+        Maximum number of user sessions on an instance. This only applies to multi-session fleets.
         """
         return pulumi.get(self, "max_sessions_per_instance")
 

@@ -14,30 +14,35 @@ class TeamMetric:
     """Team metric with timestamp
 
     Attributes:
+        timestamp (datetime.datetime): Timestamp of the metric entry
+        timestamp_unix (int): Timestamp of the metric entry in Unix time (seconds since epoch)
         concurrent_sandboxes (int): The number of concurrent sandboxes for the team
         sandbox_start_rate (float): Number of sandboxes started per second
-        timestamp (datetime.datetime): Timestamp of the metric entry
     """
 
+    timestamp: datetime.datetime
+    timestamp_unix: int
     concurrent_sandboxes: int
     sandbox_start_rate: float
-    timestamp: datetime.datetime
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        timestamp = self.timestamp.isoformat()
+
+        timestamp_unix = self.timestamp_unix
+
         concurrent_sandboxes = self.concurrent_sandboxes
 
         sandbox_start_rate = self.sandbox_start_rate
-
-        timestamp = self.timestamp.isoformat()
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
+                "timestamp": timestamp,
+                "timestampUnix": timestamp_unix,
                 "concurrentSandboxes": concurrent_sandboxes,
                 "sandboxStartRate": sandbox_start_rate,
-                "timestamp": timestamp,
             }
         )
 
@@ -46,16 +51,19 @@ class TeamMetric:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
+        timestamp = isoparse(d.pop("timestamp"))
+
+        timestamp_unix = d.pop("timestampUnix")
+
         concurrent_sandboxes = d.pop("concurrentSandboxes")
 
         sandbox_start_rate = d.pop("sandboxStartRate")
 
-        timestamp = isoparse(d.pop("timestamp"))
-
         team_metric = cls(
+            timestamp=timestamp,
+            timestamp_unix=timestamp_unix,
             concurrent_sandboxes=concurrent_sandboxes,
             sandbox_start_rate=sandbox_start_rate,
-            timestamp=timestamp,
         )
 
         team_metric.additional_properties = d

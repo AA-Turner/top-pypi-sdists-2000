@@ -23,9 +23,10 @@ class DrtAccessLogBucketAssociationArgs:
     def __init__(__self__, *,
                  log_bucket: pulumi.Input[_builtins.str],
                  role_arn_association_id: pulumi.Input[_builtins.str],
-                 timeouts: Optional[pulumi.Input['DrtAccessLogBucketAssociationTimeoutsArgs']] = None):
+                 timeouts: pulumi.Input[Optional['DrtAccessLogBucketAssociationTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a DrtAccessLogBucketAssociation resource.
+
         :param pulumi.Input[_builtins.str] log_bucket: The Amazon S3 bucket that contains the logs that you want to share.
         :param pulumi.Input[_builtins.str] role_arn_association_id: The ID of the Role Arn association used for allowing Shield DRT Access.
         """
@@ -60,22 +61,23 @@ class DrtAccessLogBucketAssociationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['DrtAccessLogBucketAssociationTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['DrtAccessLogBucketAssociationTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['DrtAccessLogBucketAssociationTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['DrtAccessLogBucketAssociationTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _DrtAccessLogBucketAssociationState:
     def __init__(__self__, *,
-                 log_bucket: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn_association_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['DrtAccessLogBucketAssociationTimeoutsArgs']] = None):
+                 log_bucket: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn_association_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['DrtAccessLogBucketAssociationTimeoutsArgs']] = None):
         """
         Input properties used for looking up and filtering DrtAccessLogBucketAssociation resources.
+
         :param pulumi.Input[_builtins.str] log_bucket: The Amazon S3 bucket that contains the logs that you want to share.
         :param pulumi.Input[_builtins.str] role_arn_association_id: The ID of the Role Arn association used for allowing Shield DRT Access.
         """
@@ -88,35 +90,35 @@ class _DrtAccessLogBucketAssociationState:
 
     @_builtins.property
     @pulumi.getter(name="logBucket")
-    def log_bucket(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def log_bucket(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The Amazon S3 bucket that contains the logs that you want to share.
         """
         return pulumi.get(self, "log_bucket")
 
     @log_bucket.setter
-    def log_bucket(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def log_bucket(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "log_bucket", value)
 
     @_builtins.property
     @pulumi.getter(name="roleArnAssociationId")
-    def role_arn_association_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def role_arn_association_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the Role Arn association used for allowing Shield DRT Access.
         """
         return pulumi.get(self, "role_arn_association_id")
 
     @role_arn_association_id.setter
-    def role_arn_association_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def role_arn_association_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "role_arn_association_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['DrtAccessLogBucketAssociationTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['DrtAccessLogBucketAssociationTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['DrtAccessLogBucketAssociationTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['DrtAccessLogBucketAssociationTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
@@ -126,9 +128,9 @@ class DrtAccessLogBucketAssociation(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 log_bucket: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn_association_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['DrtAccessLogBucketAssociationTimeoutsArgs', 'DrtAccessLogBucketAssociationTimeoutsArgsDict']]] = None,
+                 log_bucket: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn_association_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['DrtAccessLogBucketAssociationTimeoutsArgs', 'DrtAccessLogBucketAssociationTimeoutsArgsDict']]] = None,
                  __props__=None):
         """
         Resource for managing an AWS Shield DRT Access Log Bucket Association.
@@ -155,6 +157,7 @@ class DrtAccessLogBucketAssociation(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:shield/drtAccessLogBucketAssociation:DrtAccessLogBucketAssociation example example-bucket
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -193,6 +196,7 @@ class DrtAccessLogBucketAssociation(pulumi.CustomResource):
         $ pulumi import aws:shield/drtAccessLogBucketAssociation:DrtAccessLogBucketAssociation example example-bucket
         ```
 
+
         :param str resource_name: The name of the resource.
         :param DrtAccessLogBucketAssociationArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -208,9 +212,9 @@ class DrtAccessLogBucketAssociation(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 log_bucket: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn_association_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['DrtAccessLogBucketAssociationTimeoutsArgs', 'DrtAccessLogBucketAssociationTimeoutsArgsDict']]] = None,
+                 log_bucket: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn_association_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['DrtAccessLogBucketAssociationTimeoutsArgs', 'DrtAccessLogBucketAssociationTimeoutsArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -237,9 +241,9 @@ class DrtAccessLogBucketAssociation(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            log_bucket: Optional[pulumi.Input[_builtins.str]] = None,
-            role_arn_association_id: Optional[pulumi.Input[_builtins.str]] = None,
-            timeouts: Optional[pulumi.Input[Union['DrtAccessLogBucketAssociationTimeoutsArgs', 'DrtAccessLogBucketAssociationTimeoutsArgsDict']]] = None) -> 'DrtAccessLogBucketAssociation':
+            log_bucket: pulumi.Input[Optional[_builtins.str]] = None,
+            role_arn_association_id: pulumi.Input[Optional[_builtins.str]] = None,
+            timeouts: pulumi.Input[Optional[Union['DrtAccessLogBucketAssociationTimeoutsArgs', 'DrtAccessLogBucketAssociationTimeoutsArgsDict']]] = None) -> 'DrtAccessLogBucketAssociation':
         """
         Get an existing DrtAccessLogBucketAssociation resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

@@ -21,13 +21,14 @@ __all__ = ['AccountSettingsArgs', 'AccountSettings']
 @pulumi.input_type
 class AccountSettingsArgs:
     def __init__(__self__, *,
-                 aws_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 default_namespace: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 termination_protection_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 timeouts: Optional[pulumi.Input['AccountSettingsTimeoutsArgs']] = None):
+                 aws_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 default_namespace: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 termination_protection_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 timeouts: pulumi.Input[Optional['AccountSettingsTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a AccountSettings resource.
+
         :param pulumi.Input[_builtins.str] aws_account_id: AWS account ID. Defaults to automatically determined account ID of the Terraform AWS provider.
         :param pulumi.Input[_builtins.str] default_namespace: The default namespace for this Amazon Web Services account. Currently, the default is `default`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -46,72 +47,73 @@ class AccountSettingsArgs:
 
     @_builtins.property
     @pulumi.getter(name="awsAccountId")
-    def aws_account_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def aws_account_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         AWS account ID. Defaults to automatically determined account ID of the Terraform AWS provider.
         """
         return pulumi.get(self, "aws_account_id")
 
     @aws_account_id.setter
-    def aws_account_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def aws_account_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "aws_account_id", value)
 
     @_builtins.property
     @pulumi.getter(name="defaultNamespace")
-    def default_namespace(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def default_namespace(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The default namespace for this Amazon Web Services account. Currently, the default is `default`.
         """
         return pulumi.get(self, "default_namespace")
 
     @default_namespace.setter
-    def default_namespace(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def default_namespace(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "default_namespace", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="terminationProtectionEnabled")
-    def termination_protection_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def termination_protection_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         A boolean value that determines whether or not an Amazon QuickSight account can be deleted. If `true`, it does not allow the account to be deleted and results in an error message if a user tries to make a DeleteAccountSubscription request. If `false`, it will allow the account to be deleted.
         """
         return pulumi.get(self, "termination_protection_enabled")
 
     @termination_protection_enabled.setter
-    def termination_protection_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def termination_protection_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "termination_protection_enabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['AccountSettingsTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['AccountSettingsTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['AccountSettingsTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['AccountSettingsTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _AccountSettingsState:
     def __init__(__self__, *,
-                 aws_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 default_namespace: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 termination_protection_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 timeouts: Optional[pulumi.Input['AccountSettingsTimeoutsArgs']] = None):
+                 aws_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 default_namespace: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 termination_protection_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 timeouts: pulumi.Input[Optional['AccountSettingsTimeoutsArgs']] = None):
         """
         Input properties used for looking up and filtering AccountSettings resources.
+
         :param pulumi.Input[_builtins.str] aws_account_id: AWS account ID. Defaults to automatically determined account ID of the Terraform AWS provider.
         :param pulumi.Input[_builtins.str] default_namespace: The default namespace for this Amazon Web Services account. Currently, the default is `default`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -130,59 +132,59 @@ class _AccountSettingsState:
 
     @_builtins.property
     @pulumi.getter(name="awsAccountId")
-    def aws_account_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def aws_account_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         AWS account ID. Defaults to automatically determined account ID of the Terraform AWS provider.
         """
         return pulumi.get(self, "aws_account_id")
 
     @aws_account_id.setter
-    def aws_account_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def aws_account_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "aws_account_id", value)
 
     @_builtins.property
     @pulumi.getter(name="defaultNamespace")
-    def default_namespace(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def default_namespace(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The default namespace for this Amazon Web Services account. Currently, the default is `default`.
         """
         return pulumi.get(self, "default_namespace")
 
     @default_namespace.setter
-    def default_namespace(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def default_namespace(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "default_namespace", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="terminationProtectionEnabled")
-    def termination_protection_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def termination_protection_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         A boolean value that determines whether or not an Amazon QuickSight account can be deleted. If `true`, it does not allow the account to be deleted and results in an error message if a user tries to make a DeleteAccountSubscription request. If `false`, it will allow the account to be deleted.
         """
         return pulumi.get(self, "termination_protection_enabled")
 
     @termination_protection_enabled.setter
-    def termination_protection_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def termination_protection_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "termination_protection_enabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['AccountSettingsTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['AccountSettingsTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['AccountSettingsTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['AccountSettingsTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
@@ -192,11 +194,11 @@ class AccountSettings(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 aws_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 default_namespace: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 termination_protection_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 timeouts: Optional[pulumi.Input[Union['AccountSettingsTimeoutsArgs', 'AccountSettingsTimeoutsArgsDict']]] = None,
+                 aws_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 default_namespace: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 termination_protection_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 timeouts: pulumi.Input[Optional[Union['AccountSettingsTimeoutsArgs', 'AccountSettingsTimeoutsArgsDict']]] = None,
                  __props__=None):
         """
         Resource for managing an AWS QuickSight Account Settings.
@@ -225,6 +227,7 @@ class AccountSettings(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:quicksight/accountSettings:AccountSettings example "012345678901"
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -267,6 +270,7 @@ class AccountSettings(pulumi.CustomResource):
         $ pulumi import aws:quicksight/accountSettings:AccountSettings example "012345678901"
         ```
 
+
         :param str resource_name: The name of the resource.
         :param AccountSettingsArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -282,11 +286,11 @@ class AccountSettings(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 aws_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 default_namespace: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 termination_protection_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 timeouts: Optional[pulumi.Input[Union['AccountSettingsTimeoutsArgs', 'AccountSettingsTimeoutsArgsDict']]] = None,
+                 aws_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 default_namespace: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 termination_protection_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 timeouts: pulumi.Input[Optional[Union['AccountSettingsTimeoutsArgs', 'AccountSettingsTimeoutsArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -311,11 +315,11 @@ class AccountSettings(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            aws_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-            default_namespace: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            termination_protection_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-            timeouts: Optional[pulumi.Input[Union['AccountSettingsTimeoutsArgs', 'AccountSettingsTimeoutsArgsDict']]] = None) -> 'AccountSettings':
+            aws_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+            default_namespace: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            termination_protection_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+            timeouts: pulumi.Input[Optional[Union['AccountSettingsTimeoutsArgs', 'AccountSettingsTimeoutsArgsDict']]] = None) -> 'AccountSettings':
         """
         Get an existing AccountSettings resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

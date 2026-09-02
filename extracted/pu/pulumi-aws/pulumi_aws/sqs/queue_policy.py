@@ -24,9 +24,10 @@ class QueuePolicyArgs:
     def __init__(__self__, *,
                  policy: pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']],
                  queue_url: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a QueuePolicy resource.
+
         :param pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']] policy: JSON policy for the SQS queue. For more information about building AWS IAM policy documents with Terraform, see the AWS IAM Policy Document Guide. Ensure that `Version = "2012-10-17"` is set in the policy or AWS may hang in creating the queue.
         :param pulumi.Input[_builtins.str] queue_url: URL of the SQS Queue to which to attach the policy.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -62,25 +63,26 @@ class QueuePolicyArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _QueuePolicyState:
     def __init__(__self__, *,
-                 policy: Optional[pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']]] = None,
-                 queue_url: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 policy: pulumi.Input[Optional[Union[_builtins.str, 'PolicyDocumentArgs']]] = None,
+                 queue_url: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering QueuePolicy resources.
+
         :param pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']] policy: JSON policy for the SQS queue. For more information about building AWS IAM policy documents with Terraform, see the AWS IAM Policy Document Guide. Ensure that `Version = "2012-10-17"` is set in the policy or AWS may hang in creating the queue.
         :param pulumi.Input[_builtins.str] queue_url: URL of the SQS Queue to which to attach the policy.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -94,38 +96,38 @@ class _QueuePolicyState:
 
     @_builtins.property
     @pulumi.getter
-    def policy(self) -> Optional[pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']]]:
+    def policy(self) -> pulumi.Input[Optional[Union[_builtins.str, 'PolicyDocumentArgs']]]:
         """
         JSON policy for the SQS queue. For more information about building AWS IAM policy documents with Terraform, see the AWS IAM Policy Document Guide. Ensure that `Version = "2012-10-17"` is set in the policy or AWS may hang in creating the queue.
         """
         return pulumi.get(self, "policy")
 
     @policy.setter
-    def policy(self, value: Optional[pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']]]):
+    def policy(self, value: pulumi.Input[Optional[Union[_builtins.str, 'PolicyDocumentArgs']]]):
         pulumi.set(self, "policy", value)
 
     @_builtins.property
     @pulumi.getter(name="queueUrl")
-    def queue_url(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def queue_url(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         URL of the SQS Queue to which to attach the policy.
         """
         return pulumi.get(self, "queue_url")
 
     @queue_url.setter
-    def queue_url(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def queue_url(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "queue_url", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -135,14 +137,14 @@ class QueuePolicy(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 policy: Optional[pulumi.Input[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
-                 queue_url: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 policy: pulumi.Input[Optional[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
+                 queue_url: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Allows you to set a policy of an SQS Queue while referencing the ARN of the queue within the policy.
 
-        !> AWS will hang indefinitely when creating or updating an `sqs.Queue` with an associated policy if `Version = "2012-10-17"` is not explicitly set in the policy. See below for an example of how to avoid this issue.
+        > AWS will hang indefinitely when creating or updating an `sqs.Queue` with an associated policy if `Version = "2012-10-17"` is not explicitly set in the policy. See below for an example of how to avoid this issue.
 
         ## Example Usage
 
@@ -153,21 +155,21 @@ class QueuePolicy(pulumi.CustomResource):
         import pulumi_aws as aws
 
         q = aws.sqs.Queue("q", name="examplequeue")
-        test = q.arn.apply(lambda arn: aws.iam.get_policy_document_output(statements=[{
-            "sid": "First",
-            "effect": "Allow",
-            "principals": [{
-                "type": "*",
-                "identifiers": ["*"],
-            }],
-            "actions": ["sqs:SendMessage"],
-            "resources": [arn],
+        test = aws.iam.get_policy_document_output(statements=[{
             "conditions": [{
                 "test": "ArnEquals",
                 "variable": "aws:SourceArn",
                 "values": [example["arn"]],
             }],
-        }]))
+            "principals": [{
+                "type": "*",
+                "identifiers": ["*"],
+            }],
+            "sid": "First",
+            "effect": "Allow",
+            "actions": ["sqs:SendMessage"],
+            "resources": [q.arn],
+        }])
         test_queue_policy = aws.sqs.QueuePolicy("test",
             queue_url=q.id,
             policy=test.json)
@@ -207,11 +209,18 @@ class QueuePolicy(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `queue_url` (String) URL of the SQS Queue.
+
         Using `pulumi import`, import SQS Queue Policies using the queue URL. For example:
 
         ```sh
         $ pulumi import aws:sqs/queuePolicy:QueuePolicy test https://queue.amazonaws.com/123456789012/myqueue
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -228,7 +237,7 @@ class QueuePolicy(pulumi.CustomResource):
         """
         Allows you to set a policy of an SQS Queue while referencing the ARN of the queue within the policy.
 
-        !> AWS will hang indefinitely when creating or updating an `sqs.Queue` with an associated policy if `Version = "2012-10-17"` is not explicitly set in the policy. See below for an example of how to avoid this issue.
+        > AWS will hang indefinitely when creating or updating an `sqs.Queue` with an associated policy if `Version = "2012-10-17"` is not explicitly set in the policy. See below for an example of how to avoid this issue.
 
         ## Example Usage
 
@@ -239,21 +248,21 @@ class QueuePolicy(pulumi.CustomResource):
         import pulumi_aws as aws
 
         q = aws.sqs.Queue("q", name="examplequeue")
-        test = q.arn.apply(lambda arn: aws.iam.get_policy_document_output(statements=[{
-            "sid": "First",
-            "effect": "Allow",
-            "principals": [{
-                "type": "*",
-                "identifiers": ["*"],
-            }],
-            "actions": ["sqs:SendMessage"],
-            "resources": [arn],
+        test = aws.iam.get_policy_document_output(statements=[{
             "conditions": [{
                 "test": "ArnEquals",
                 "variable": "aws:SourceArn",
                 "values": [example["arn"]],
             }],
-        }]))
+            "principals": [{
+                "type": "*",
+                "identifiers": ["*"],
+            }],
+            "sid": "First",
+            "effect": "Allow",
+            "actions": ["sqs:SendMessage"],
+            "resources": [q.arn],
+        }])
         test_queue_policy = aws.sqs.QueuePolicy("test",
             queue_url=q.id,
             policy=test.json)
@@ -293,11 +302,18 @@ class QueuePolicy(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `queue_url` (String) URL of the SQS Queue.
+
         Using `pulumi import`, import SQS Queue Policies using the queue URL. For example:
 
         ```sh
         $ pulumi import aws:sqs/queuePolicy:QueuePolicy test https://queue.amazonaws.com/123456789012/myqueue
         ```
+
 
         :param str resource_name: The name of the resource.
         :param QueuePolicyArgs args: The arguments to use to populate this resource's properties.
@@ -314,9 +330,9 @@ class QueuePolicy(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 policy: Optional[pulumi.Input[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
-                 queue_url: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 policy: pulumi.Input[Optional[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
+                 queue_url: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -343,9 +359,9 @@ class QueuePolicy(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            policy: Optional[pulumi.Input[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
-            queue_url: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'QueuePolicy':
+            policy: pulumi.Input[Optional[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
+            queue_url: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'QueuePolicy':
         """
         Get an existing QueuePolicy resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

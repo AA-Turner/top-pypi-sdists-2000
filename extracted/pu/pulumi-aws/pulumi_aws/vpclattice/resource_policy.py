@@ -21,11 +21,12 @@ class ResourcePolicyArgs:
     def __init__(__self__, *,
                  policy: pulumi.Input[_builtins.str],
                  resource_arn: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a ResourcePolicy resource.
-        :param pulumi.Input[_builtins.str] policy: An IAM policy. The policy string in JSON must not contain newlines or blank lines.
-        :param pulumi.Input[_builtins.str] resource_arn: The ID or Amazon Resource Name (ARN) of the service network or service for which the policy is created.
+
+        :param pulumi.Input[_builtins.str] policy: IAM policy. The policy string in JSON must not contain newlines or blank lines.
+        :param pulumi.Input[_builtins.str] resource_arn: ID or ARN of the service network or service for which the policy is created.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         pulumi.set(__self__, "policy", policy)
@@ -37,7 +38,7 @@ class ResourcePolicyArgs:
     @pulumi.getter
     def policy(self) -> pulumi.Input[_builtins.str]:
         """
-        An IAM policy. The policy string in JSON must not contain newlines or blank lines.
+        IAM policy. The policy string in JSON must not contain newlines or blank lines.
         """
         return pulumi.get(self, "policy")
 
@@ -49,7 +50,7 @@ class ResourcePolicyArgs:
     @pulumi.getter(name="resourceArn")
     def resource_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The ID or Amazon Resource Name (ARN) of the service network or service for which the policy is created.
+        ID or ARN of the service network or service for which the policy is created.
         """
         return pulumi.get(self, "resource_arn")
 
@@ -59,28 +60,29 @@ class ResourcePolicyArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _ResourcePolicyState:
     def __init__(__self__, *,
-                 policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_arn: Optional[pulumi.Input[_builtins.str]] = None):
+                 policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_arn: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering ResourcePolicy resources.
-        :param pulumi.Input[_builtins.str] policy: An IAM policy. The policy string in JSON must not contain newlines or blank lines.
+
+        :param pulumi.Input[_builtins.str] policy: IAM policy. The policy string in JSON must not contain newlines or blank lines.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] resource_arn: The ID or Amazon Resource Name (ARN) of the service network or service for which the policy is created.
+        :param pulumi.Input[_builtins.str] resource_arn: ID or ARN of the service network or service for which the policy is created.
         """
         if policy is not None:
             pulumi.set(__self__, "policy", policy)
@@ -91,38 +93,38 @@ class _ResourcePolicyState:
 
     @_builtins.property
     @pulumi.getter
-    def policy(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def policy(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        An IAM policy. The policy string in JSON must not contain newlines or blank lines.
+        IAM policy. The policy string in JSON must not contain newlines or blank lines.
         """
         return pulumi.get(self, "policy")
 
     @policy.setter
-    def policy(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def policy(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "policy", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceArn")
-    def resource_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def resource_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The ID or Amazon Resource Name (ARN) of the service network or service for which the policy is created.
+        ID or ARN of the service network or service for which the policy is created.
         """
         return pulumi.get(self, "resource_arn")
 
     @resource_arn.setter
-    def resource_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def resource_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "resource_arn", value)
 
 
@@ -132,9 +134,9 @@ class ResourcePolicy(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing an AWS VPC Lattice Resource Policy.
@@ -179,11 +181,12 @@ class ResourcePolicy(pulumi.CustomResource):
         $ pulumi import aws:vpclattice/resourcePolicy:ResourcePolicy example rft-8012925589
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] policy: An IAM policy. The policy string in JSON must not contain newlines or blank lines.
+        :param pulumi.Input[_builtins.str] policy: IAM policy. The policy string in JSON must not contain newlines or blank lines.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] resource_arn: The ID or Amazon Resource Name (ARN) of the service network or service for which the policy is created.
+        :param pulumi.Input[_builtins.str] resource_arn: ID or ARN of the service network or service for which the policy is created.
         """
         ...
     @overload
@@ -234,6 +237,7 @@ class ResourcePolicy(pulumi.CustomResource):
         $ pulumi import aws:vpclattice/resourcePolicy:ResourcePolicy example rft-8012925589
         ```
 
+
         :param str resource_name: The name of the resource.
         :param ResourcePolicyArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -249,9 +253,9 @@ class ResourcePolicy(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -278,9 +282,9 @@ class ResourcePolicy(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            policy: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            resource_arn: Optional[pulumi.Input[_builtins.str]] = None) -> 'ResourcePolicy':
+            policy: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            resource_arn: pulumi.Input[Optional[_builtins.str]] = None) -> 'ResourcePolicy':
         """
         Get an existing ResourcePolicy resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -288,9 +292,9 @@ class ResourcePolicy(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] policy: An IAM policy. The policy string in JSON must not contain newlines or blank lines.
+        :param pulumi.Input[_builtins.str] policy: IAM policy. The policy string in JSON must not contain newlines or blank lines.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] resource_arn: The ID or Amazon Resource Name (ARN) of the service network or service for which the policy is created.
+        :param pulumi.Input[_builtins.str] resource_arn: ID or ARN of the service network or service for which the policy is created.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -305,7 +309,7 @@ class ResourcePolicy(pulumi.CustomResource):
     @pulumi.getter
     def policy(self) -> pulumi.Output[_builtins.str]:
         """
-        An IAM policy. The policy string in JSON must not contain newlines or blank lines.
+        IAM policy. The policy string in JSON must not contain newlines or blank lines.
         """
         return pulumi.get(self, "policy")
 
@@ -321,7 +325,7 @@ class ResourcePolicy(pulumi.CustomResource):
     @pulumi.getter(name="resourceArn")
     def resource_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The ID or Amazon Resource Name (ARN) of the service network or service for which the policy is created.
+        ID or ARN of the service network or service for which the policy is created.
         """
         return pulumi.get(self, "resource_arn")
 

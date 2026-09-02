@@ -23,10 +23,11 @@ class VoiceConnectorOriginationArgs:
     def __init__(__self__, *,
                  routes: pulumi.Input[Sequence[pulumi.Input['VoiceConnectorOriginationRouteArgs']]],
                  voice_connector_id: pulumi.Input[_builtins.str],
-                 disabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 disabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a VoiceConnectorOrigination resource.
+
         :param pulumi.Input[Sequence[pulumi.Input['VoiceConnectorOriginationRouteArgs']]] routes: Set of call distribution properties defined for your SIP hosts. See route below for more details. Minimum of 1. Maximum of 20.
         :param pulumi.Input[_builtins.str] voice_connector_id: The Amazon Chime Voice Connector ID.
         :param pulumi.Input[_builtins.bool] disabled: When origination settings are disabled, inbound calls are not enabled for your Amazon Chime Voice Connector.
@@ -65,38 +66,39 @@ class VoiceConnectorOriginationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def disabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def disabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         When origination settings are disabled, inbound calls are not enabled for your Amazon Chime Voice Connector.
         """
         return pulumi.get(self, "disabled")
 
     @disabled.setter
-    def disabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def disabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "disabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _VoiceConnectorOriginationState:
     def __init__(__self__, *,
-                 disabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 routes: Optional[pulumi.Input[Sequence[pulumi.Input['VoiceConnectorOriginationRouteArgs']]]] = None,
-                 voice_connector_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 disabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 routes: pulumi.Input[Optional[Sequence[pulumi.Input['VoiceConnectorOriginationRouteArgs']]]] = None,
+                 voice_connector_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering VoiceConnectorOrigination resources.
+
         :param pulumi.Input[_builtins.bool] disabled: When origination settings are disabled, inbound calls are not enabled for your Amazon Chime Voice Connector.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Sequence[pulumi.Input['VoiceConnectorOriginationRouteArgs']]] routes: Set of call distribution properties defined for your SIP hosts. See route below for more details. Minimum of 1. Maximum of 20.
@@ -113,50 +115,50 @@ class _VoiceConnectorOriginationState:
 
     @_builtins.property
     @pulumi.getter
-    def disabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def disabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         When origination settings are disabled, inbound calls are not enabled for your Amazon Chime Voice Connector.
         """
         return pulumi.get(self, "disabled")
 
     @disabled.setter
-    def disabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def disabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "disabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def routes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['VoiceConnectorOriginationRouteArgs']]]]:
+    def routes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['VoiceConnectorOriginationRouteArgs']]]]:
         """
         Set of call distribution properties defined for your SIP hosts. See route below for more details. Minimum of 1. Maximum of 20.
         """
         return pulumi.get(self, "routes")
 
     @routes.setter
-    def routes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['VoiceConnectorOriginationRouteArgs']]]]):
+    def routes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['VoiceConnectorOriginationRouteArgs']]]]):
         pulumi.set(self, "routes", value)
 
     @_builtins.property
     @pulumi.getter(name="voiceConnectorId")
-    def voice_connector_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def voice_connector_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The Amazon Chime Voice Connector ID.
         """
         return pulumi.get(self, "voice_connector_id")
 
     @voice_connector_id.setter
-    def voice_connector_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def voice_connector_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "voice_connector_id", value)
 
 
@@ -166,10 +168,10 @@ class VoiceConnectorOrigination(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 disabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 routes: Optional[pulumi.Input[Sequence[pulumi.Input[Union['VoiceConnectorOriginationRouteArgs', 'VoiceConnectorOriginationRouteArgsDict']]]]] = None,
-                 voice_connector_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 disabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 routes: pulumi.Input[Optional[Sequence[pulumi.Input[Union['VoiceConnectorOriginationRouteArgs', 'VoiceConnectorOriginationRouteArgsDict']]]]] = None,
+                 voice_connector_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Enable origination settings to control inbound calling to your SIP infrastructure.
@@ -184,8 +186,6 @@ class VoiceConnectorOrigination(pulumi.CustomResource):
             name="test",
             require_encryption=True)
         default_voice_connector_origination = aws.chime.VoiceConnectorOrigination("default",
-            disabled=False,
-            voice_connector_id=default.id,
             routes=[
                 {
                     "host": "127.0.0.1",
@@ -201,7 +201,9 @@ class VoiceConnectorOrigination(pulumi.CustomResource):
                     "priority": 2,
                     "weight": 10,
                 },
-            ])
+            ],
+            disabled=False,
+            voice_connector_id=default.id)
         ```
 
         ## Import
@@ -211,6 +213,7 @@ class VoiceConnectorOrigination(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:chime/voiceConnectorOrigination:VoiceConnectorOrigination default abcdef1ghij2klmno3pqr4
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -238,8 +241,6 @@ class VoiceConnectorOrigination(pulumi.CustomResource):
             name="test",
             require_encryption=True)
         default_voice_connector_origination = aws.chime.VoiceConnectorOrigination("default",
-            disabled=False,
-            voice_connector_id=default.id,
             routes=[
                 {
                     "host": "127.0.0.1",
@@ -255,7 +256,9 @@ class VoiceConnectorOrigination(pulumi.CustomResource):
                     "priority": 2,
                     "weight": 10,
                 },
-            ])
+            ],
+            disabled=False,
+            voice_connector_id=default.id)
         ```
 
         ## Import
@@ -265,6 +268,7 @@ class VoiceConnectorOrigination(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:chime/voiceConnectorOrigination:VoiceConnectorOrigination default abcdef1ghij2klmno3pqr4
         ```
+
 
         :param str resource_name: The name of the resource.
         :param VoiceConnectorOriginationArgs args: The arguments to use to populate this resource's properties.
@@ -281,10 +285,10 @@ class VoiceConnectorOrigination(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 disabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 routes: Optional[pulumi.Input[Sequence[pulumi.Input[Union['VoiceConnectorOriginationRouteArgs', 'VoiceConnectorOriginationRouteArgsDict']]]]] = None,
-                 voice_connector_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 disabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 routes: pulumi.Input[Optional[Sequence[pulumi.Input[Union['VoiceConnectorOriginationRouteArgs', 'VoiceConnectorOriginationRouteArgsDict']]]]] = None,
+                 voice_connector_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -314,10 +318,10 @@ class VoiceConnectorOrigination(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            disabled: Optional[pulumi.Input[_builtins.bool]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            routes: Optional[pulumi.Input[Sequence[pulumi.Input[Union['VoiceConnectorOriginationRouteArgs', 'VoiceConnectorOriginationRouteArgsDict']]]]] = None,
-            voice_connector_id: Optional[pulumi.Input[_builtins.str]] = None) -> 'VoiceConnectorOrigination':
+            disabled: pulumi.Input[Optional[_builtins.bool]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            routes: pulumi.Input[Optional[Sequence[pulumi.Input[Union['VoiceConnectorOriginationRouteArgs', 'VoiceConnectorOriginationRouteArgsDict']]]]] = None,
+            voice_connector_id: pulumi.Input[Optional[_builtins.str]] = None) -> 'VoiceConnectorOrigination':
         """
         Get an existing VoiceConnectorOrigination resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

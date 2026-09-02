@@ -1,5 +1,7 @@
 #define PY_SSIZE_T_CLEAN
 
+#include <assert.h>
+
 #include <Python.h>
 #include "lsqpack.h"
 #include "lsxpack_header.h"
@@ -27,6 +29,8 @@ struct header_block {
     size_t data_len;
     const unsigned char *data_ptr;
     struct lsxpack_header xhdr;
+    // This buffer is owned by the header_block and is reused internally by xhdr.
+    char *header_buffer;
     uint64_t stream_id;
     PyObject *headers;
 };
@@ -49,7 +53,7 @@ static void header_block_free(struct header_block *hblock)
     free(hblock->data);
     hblock->data = 0;
     hblock->data_ptr = 0;
-    free(hblock->xhdr.buf);
+    free(hblock->header_buffer);
     Py_DECREF(hblock->headers);
     free(hblock);
 }
@@ -66,15 +70,25 @@ static struct lsxpack_header *header_block_prepare_decode(void *opaque, struct l
     struct header_block *hblock = opaque;
     char *buf;
 
-    if (xhdr) {
-        buf = realloc(xhdr->buf, space);
+    // The behaviour of realloc(ptr, 0) is implementation specific,
+    // so if asked for a zero size we explicitly free the memory.
+    if (space) {
+        buf = realloc(hblock->header_buffer, space);
         if (!buf) return NULL;
+    } else {
+        free(hblock->header_buffer);
+        buf = 0;
+    }
+    hblock->header_buffer = buf;
+
+    if (xhdr) {
+        assert(&hblock->xhdr == xhdr);
+        assert(space > xhdr->val_len);
+
         xhdr->buf = buf;
         xhdr->val_len = space;
     } else {
         xhdr = &hblock->xhdr;
-        buf = malloc(space);
-        if (!buf) return NULL;
         lsxpack_header_prepare_decode(xhdr, buf, 0, space);
     }
     return xhdr;
@@ -421,13 +435,9 @@ Encoder_encode(EncoderObject *self, PyObject *args, PyObject *kwargs)
     if (!PyArg_ParseTupleAndKeywords(args, kwargs, "KO", kwlist, &stream_id, &list))
         return NULL;
 
+    // Validate all the input headers.
     if (!PyList_Check(list)) {
         PyErr_SetString(PyExc_ValueError, "headers must be a list");
-        return NULL;
-    }
-
-    if (lsqpack_enc_start_header(&self->enc, stream_id, seqno) != 0) {
-        PyErr_SetString(PyExc_RuntimeError, "lsqpack_enc_start_header failed");
         return NULL;
     }
 
@@ -445,10 +455,28 @@ Encoder_encode(EncoderObject *self, PyObject *args, PyObject *kwargs)
         }
         name_len = PyBytes_Size(name);
         value_len = PyBytes_Size(value);
+        if (name_len == 0) {
+            PyErr_SetString(PyExc_ValueError, "the header's name must not be empty");
+            return NULL;
+        }
         if (name_len + value_len > XHDR_BUF_SZ) {
             PyErr_SetString(PyExc_ValueError, "the header's name and value are too long");
             return NULL;
         }
+    }
+
+    // Start the encoding transaction.
+    if (lsqpack_enc_start_header(&self->enc, stream_id, seqno) != 0) {
+        PyErr_SetString(PyExc_RuntimeError, "lsqpack_enc_start_header failed");
+        return NULL;
+    }
+
+    for (Py_ssize_t i = 0; i < PyList_Size(list); ++i) {
+        tuple = PyList_GetItem(list, i);
+        name = PyTuple_GetItem(tuple, 0);
+        value = PyTuple_GetItem(tuple, 1);
+        name_len = PyBytes_Size(name);
+        value_len = PyBytes_Size(value);
 
         // Copy the header name and value into the xhdr buffer.
         memcpy(self->xhdr_buf, PyBytes_AsString(name), name_len);
@@ -463,6 +491,7 @@ Encoder_encode(EncoderObject *self, PyObject *args, PyObject *kwargs)
                                &xhdr,
                                0) != LQES_OK) {
             PyErr_SetString(PyExc_RuntimeError, "lsqpack_enc_encode failed");
+            lsqpack_enc_end_header(&self->enc, self->pfx_buf, PREFIX_MAX_SIZE, NULL);
             return NULL;
         }
         enc_off += enc_len;
@@ -471,7 +500,7 @@ Encoder_encode(EncoderObject *self, PyObject *args, PyObject *kwargs)
 
     pfx_len = lsqpack_enc_end_header(&self->enc, self->pfx_buf, PREFIX_MAX_SIZE, NULL);
     if (pfx_len <= 0) {
-        PyErr_SetString(PyExc_RuntimeError, "lsqpack_enc_start_header failed");
+        PyErr_SetString(PyExc_RuntimeError, "lsqpack_enc_end_header failed");
         return NULL;
     }
     pfx_off = PREFIX_MAX_SIZE - pfx_len;

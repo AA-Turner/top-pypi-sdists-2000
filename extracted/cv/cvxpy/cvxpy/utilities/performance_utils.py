@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 import functools
-from typing import Callable, TypeVar
+from collections.abc import Callable
+from typing import TypeVar
 
 from cvxpy.utilities import scopes
 
@@ -28,10 +29,13 @@ def lazyprop(func):
     @property
     @functools.wraps(func)
     def _lazyprop(self):
+        # Build cache key suffix based on active scopes
+        suffix = ''
         if scopes.dpp_scope_active():
-            attr_name = '_lazy_dpp_' + func.__name__
-        else:
-            attr_name = '_lazy_' + func.__name__
+            suffix += '_dpp'
+        if scopes.quad_form_dpp_scope_active():
+            suffix += '_qfdpp'
+        attr_name = '_lazy' + suffix + '_' + func.__name__
 
         try:
             return getattr(self, attr_name)
@@ -42,9 +46,15 @@ def lazyprop(func):
 
 
 def _cache_key(args, kwargs):
-    key = args + tuple(list(kwargs.items()))
+    # Fast path: avoid creating tuple from empty kwargs (common case)
+    if kwargs:
+        key = args + tuple(kwargs.items())
+    else:
+        key = args
     if scopes.dpp_scope_active():
         key = ('__dpp_scope_active__',) + key
+    if scopes.quad_form_dpp_scope_active():
+        key = ('__quad_form_dpp_scope_active__',) + key
     return key
 
 
@@ -59,14 +69,15 @@ def compute_once(func: Callable[[T], R]) -> Callable[[T], R]:
     This decorator should not be used when there are an unbounded or very
     large number of argument and keyword argument combinations.
      """
+    cache_name = func.__name__ + '__cache__'
 
     @functools.wraps(func)
     def _compute_once(self, *args, **kwargs) -> R:
-        cache_name = func.__name__ + '__cache__'
-        if not hasattr(self, cache_name):
-            # On first call, the cache is created and stored in self
-            setattr(self, cache_name, {})
-        cache = getattr(self, cache_name)
+        # Use __dict__ directly to avoid hasattr/getattr overhead
+        cache = self.__dict__.get(cache_name)
+        if cache is None:
+            cache = {}
+            self.__dict__[cache_name] = cache
         key = _cache_key(args, kwargs)
         if key in cache:
             return cache[key]

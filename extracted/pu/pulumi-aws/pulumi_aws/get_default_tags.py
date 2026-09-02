@@ -36,6 +36,7 @@ class GetDefaultTagsResult:
 
     @_builtins.property
     @pulumi.getter
+    @_utilities.deprecated("""This attribute will be removed in a future version of the provider.""")
     def id(self) -> _builtins.str:
         return pulumi.get(self, "id")
 
@@ -83,11 +84,11 @@ def get_default_tags(id: Optional[_builtins.str] = None,
     import pulumi_aws as aws
 
     example = aws.get_default_tags()
-    example_group = aws.autoscaling.Group("example", tags=[{"key": k, "value": v} for k, v in example.tags].apply(lambda entries: [{
-        "key": entry["key"],
-        "value": entry["value"],
-        "propagateAtLaunch": True,
-    } for entry in entries]))
+    example_group = aws.autoscaling.Group("example", tags=[{
+        "key": key,
+        "value": entry,
+        "propagate_at_launch": True,
+    } for key, entry in sorted(example.tags.items())])
     ```
     """
     __args__ = dict()
@@ -98,7 +99,7 @@ def get_default_tags(id: Optional[_builtins.str] = None,
     return AwaitableGetDefaultTagsResult(
         id=pulumi.get(__ret__, 'id'),
         tags=pulumi.get(__ret__, 'tags'))
-def get_default_tags_output(id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_default_tags_output(id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                             opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetDefaultTagsResult]:
     """
     Use this data source to get the default tags configured on the provider.
@@ -123,11 +124,11 @@ def get_default_tags_output(id: Optional[pulumi.Input[Optional[_builtins.str]]] 
     import pulumi_aws as aws
 
     example = aws.get_default_tags()
-    example_group = aws.autoscaling.Group("example", tags=[{"key": k, "value": v} for k, v in example.tags].apply(lambda entries: [{
-        "key": entry["key"],
-        "value": entry["value"],
-        "propagateAtLaunch": True,
-    } for entry in entries]))
+    example_group = aws.autoscaling.Group("example", tags=[{
+        "key": key,
+        "value": entry,
+        "propagate_at_launch": True,
+    } for key, entry in sorted(example.tags.items())])
     ```
     """
     __args__ = dict()

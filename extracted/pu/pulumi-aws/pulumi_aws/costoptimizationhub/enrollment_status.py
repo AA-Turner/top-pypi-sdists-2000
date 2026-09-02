@@ -19,9 +19,10 @@ __all__ = ['EnrollmentStatusArgs', 'EnrollmentStatus']
 @pulumi.input_type
 class EnrollmentStatusArgs:
     def __init__(__self__, *,
-                 include_member_accounts: Optional[pulumi.Input[_builtins.bool]] = None):
+                 include_member_accounts: pulumi.Input[Optional[_builtins.bool]] = None):
         """
         The set of arguments for constructing a EnrollmentStatus resource.
+
         :param pulumi.Input[_builtins.bool] include_member_accounts: Flag to enroll member accounts of the organization if the account is the management account. No drift detection is currently supported for this argument. Default value is `false`.
         """
         if include_member_accounts is not None:
@@ -29,24 +30,25 @@ class EnrollmentStatusArgs:
 
     @_builtins.property
     @pulumi.getter(name="includeMemberAccounts")
-    def include_member_accounts(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def include_member_accounts(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Flag to enroll member accounts of the organization if the account is the management account. No drift detection is currently supported for this argument. Default value is `false`.
         """
         return pulumi.get(self, "include_member_accounts")
 
     @include_member_accounts.setter
-    def include_member_accounts(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def include_member_accounts(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "include_member_accounts", value)
 
 
 @pulumi.input_type
 class _EnrollmentStatusState:
     def __init__(__self__, *,
-                 include_member_accounts: Optional[pulumi.Input[_builtins.bool]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None):
+                 include_member_accounts: pulumi.Input[Optional[_builtins.bool]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering EnrollmentStatus resources.
+
         :param pulumi.Input[_builtins.bool] include_member_accounts: Flag to enroll member accounts of the organization if the account is the management account. No drift detection is currently supported for this argument. Default value is `false`.
         :param pulumi.Input[_builtins.str] status: Status of enrollment. When the resource is present in Terraform, its status will always be `Active`.
         """
@@ -57,26 +59,26 @@ class _EnrollmentStatusState:
 
     @_builtins.property
     @pulumi.getter(name="includeMemberAccounts")
-    def include_member_accounts(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def include_member_accounts(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Flag to enroll member accounts of the organization if the account is the management account. No drift detection is currently supported for this argument. Default value is `false`.
         """
         return pulumi.get(self, "include_member_accounts")
 
     @include_member_accounts.setter
-    def include_member_accounts(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def include_member_accounts(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "include_member_accounts", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Status of enrollment. When the resource is present in Terraform, its status will always be `Active`.
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
 
@@ -86,7 +88,7 @@ class EnrollmentStatus(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 include_member_accounts: Optional[pulumi.Input[_builtins.bool]] = None,
+                 include_member_accounts: pulumi.Input[Optional[_builtins.bool]] = None,
                  __props__=None):
         """
         Resource for managing AWS Cost Optimization Hub Enrollment Status.
@@ -120,6 +122,7 @@ class EnrollmentStatus(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:costoptimizationhub/enrollmentStatus:EnrollmentStatus example 111222333444
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -164,6 +167,7 @@ class EnrollmentStatus(pulumi.CustomResource):
         $ pulumi import aws:costoptimizationhub/enrollmentStatus:EnrollmentStatus example 111222333444
         ```
 
+
         :param str resource_name: The name of the resource.
         :param EnrollmentStatusArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -179,7 +183,7 @@ class EnrollmentStatus(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 include_member_accounts: Optional[pulumi.Input[_builtins.bool]] = None,
+                 include_member_accounts: pulumi.Input[Optional[_builtins.bool]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -201,8 +205,8 @@ class EnrollmentStatus(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            include_member_accounts: Optional[pulumi.Input[_builtins.bool]] = None,
-            status: Optional[pulumi.Input[_builtins.str]] = None) -> 'EnrollmentStatus':
+            include_member_accounts: pulumi.Input[Optional[_builtins.bool]] = None,
+            status: pulumi.Input[Optional[_builtins.str]] = None) -> 'EnrollmentStatus':
         """
         Get an existing EnrollmentStatus resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

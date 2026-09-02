@@ -23,12 +23,13 @@ class EventPermissionArgs:
     def __init__(__self__, *,
                  principal: pulumi.Input[_builtins.str],
                  statement_id: pulumi.Input[_builtins.str],
-                 action: Optional[pulumi.Input[_builtins.str]] = None,
-                 condition: Optional[pulumi.Input['EventPermissionConditionArgs']] = None,
-                 event_bus_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 action: pulumi.Input[Optional[_builtins.str]] = None,
+                 condition: pulumi.Input[Optional['EventPermissionConditionArgs']] = None,
+                 event_bus_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a EventPermission resource.
+
         :param pulumi.Input[_builtins.str] principal: The 12-digit AWS account ID that you are permitting to put events to your default event bus. Specify `*` to permit any account to put events to your default event bus, optionally limited by `condition`.
         :param pulumi.Input[_builtins.str] statement_id: An identifier string for the external account that you are granting permissions to.
         :param pulumi.Input[_builtins.str] action: The action that you are enabling the other account to perform. Defaults to `events:PutEvents`.
@@ -74,31 +75,31 @@ class EventPermissionArgs:
 
     @_builtins.property
     @pulumi.getter
-    def action(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def action(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The action that you are enabling the other account to perform. Defaults to `events:PutEvents`.
         """
         return pulumi.get(self, "action")
 
     @action.setter
-    def action(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def action(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "action", value)
 
     @_builtins.property
     @pulumi.getter
-    def condition(self) -> Optional[pulumi.Input['EventPermissionConditionArgs']]:
+    def condition(self) -> pulumi.Input[Optional['EventPermissionConditionArgs']]:
         """
         Configuration block to limit the event bus permissions you are granting to only accounts that fulfill the condition. Specified below.
         """
         return pulumi.get(self, "condition")
 
     @condition.setter
-    def condition(self, value: Optional[pulumi.Input['EventPermissionConditionArgs']]):
+    def condition(self, value: pulumi.Input[Optional['EventPermissionConditionArgs']]):
         pulumi.set(self, "condition", value)
 
     @_builtins.property
     @pulumi.getter(name="eventBusName")
-    def event_bus_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def event_bus_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the event bus to set the permissions on.
         If you omit this, the permissions are set on the `default` event bus.
@@ -106,33 +107,34 @@ class EventPermissionArgs:
         return pulumi.get(self, "event_bus_name")
 
     @event_bus_name.setter
-    def event_bus_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def event_bus_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "event_bus_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _EventPermissionState:
     def __init__(__self__, *,
-                 action: Optional[pulumi.Input[_builtins.str]] = None,
-                 condition: Optional[pulumi.Input['EventPermissionConditionArgs']] = None,
-                 event_bus_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 principal: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 statement_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 action: pulumi.Input[Optional[_builtins.str]] = None,
+                 condition: pulumi.Input[Optional['EventPermissionConditionArgs']] = None,
+                 event_bus_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 principal: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 statement_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering EventPermission resources.
+
         :param pulumi.Input[_builtins.str] action: The action that you are enabling the other account to perform. Defaults to `events:PutEvents`.
         :param pulumi.Input['EventPermissionConditionArgs'] condition: Configuration block to limit the event bus permissions you are granting to only accounts that fulfill the condition. Specified below.
         :param pulumi.Input[_builtins.str] event_bus_name: The name of the event bus to set the permissions on.
@@ -156,31 +158,31 @@ class _EventPermissionState:
 
     @_builtins.property
     @pulumi.getter
-    def action(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def action(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The action that you are enabling the other account to perform. Defaults to `events:PutEvents`.
         """
         return pulumi.get(self, "action")
 
     @action.setter
-    def action(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def action(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "action", value)
 
     @_builtins.property
     @pulumi.getter
-    def condition(self) -> Optional[pulumi.Input['EventPermissionConditionArgs']]:
+    def condition(self) -> pulumi.Input[Optional['EventPermissionConditionArgs']]:
         """
         Configuration block to limit the event bus permissions you are granting to only accounts that fulfill the condition. Specified below.
         """
         return pulumi.get(self, "condition")
 
     @condition.setter
-    def condition(self, value: Optional[pulumi.Input['EventPermissionConditionArgs']]):
+    def condition(self, value: pulumi.Input[Optional['EventPermissionConditionArgs']]):
         pulumi.set(self, "condition", value)
 
     @_builtins.property
     @pulumi.getter(name="eventBusName")
-    def event_bus_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def event_bus_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the event bus to set the permissions on.
         If you omit this, the permissions are set on the `default` event bus.
@@ -188,43 +190,43 @@ class _EventPermissionState:
         return pulumi.get(self, "event_bus_name")
 
     @event_bus_name.setter
-    def event_bus_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def event_bus_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "event_bus_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def principal(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def principal(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The 12-digit AWS account ID that you are permitting to put events to your default event bus. Specify `*` to permit any account to put events to your default event bus, optionally limited by `condition`.
         """
         return pulumi.get(self, "principal")
 
     @principal.setter
-    def principal(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def principal(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "principal", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="statementId")
-    def statement_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def statement_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         An identifier string for the external account that you are granting permissions to.
         """
         return pulumi.get(self, "statement_id")
 
     @statement_id.setter
-    def statement_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def statement_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "statement_id", value)
 
 
@@ -234,12 +236,12 @@ class EventPermission(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 action: Optional[pulumi.Input[_builtins.str]] = None,
-                 condition: Optional[pulumi.Input[Union['EventPermissionConditionArgs', 'EventPermissionConditionArgsDict']]] = None,
-                 event_bus_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 principal: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 statement_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 action: pulumi.Input[Optional[_builtins.str]] = None,
+                 condition: pulumi.Input[Optional[Union['EventPermissionConditionArgs', 'EventPermissionConditionArgsDict']]] = None,
+                 event_bus_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 principal: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 statement_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides a resource to create an EventBridge permission to support cross-account events in the current account default event bus.
@@ -268,22 +270,34 @@ class EventPermission(pulumi.CustomResource):
         import pulumi_aws as aws
 
         organization_access = aws.cloudwatch.EventPermission("OrganizationAccess",
-            principal="*",
-            statement_id="OrganizationAccess",
             condition={
                 "key": "aws:PrincipalOrgID",
                 "type": "StringEquals",
                 "value": example["id"],
-            })
+            },
+            principal="*",
+            statement_id="OrganizationAccess")
         ```
 
         ## Import
 
-        Using `pulumi import`, import EventBridge permissions using the `event_bus_name/statement_id` (if you omit `event_bus_name`, the `default` event bus will be used). For example:
+        ### Identity Schema
+
+        #### Required
+
+        * `statement_id` (String) Statement ID of the EventBridge permission.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
+        Using `pulumi import`, import Permissions `event_bus_name` and `statement_id` separated by a forward slash (`/`) (if you omit `event_bus_name`, the `default` event bus will be used). For example:
 
         ```sh
-        $ pulumi import aws:cloudwatch/eventPermission:EventPermission DevAccountAccess example-event-bus/DevAccountAccess
+        $ pulumi import aws:cloudwatch/eventPermission:EventPermission example example-event-bus/DevAccountAccess
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -328,22 +342,34 @@ class EventPermission(pulumi.CustomResource):
         import pulumi_aws as aws
 
         organization_access = aws.cloudwatch.EventPermission("OrganizationAccess",
-            principal="*",
-            statement_id="OrganizationAccess",
             condition={
                 "key": "aws:PrincipalOrgID",
                 "type": "StringEquals",
                 "value": example["id"],
-            })
+            },
+            principal="*",
+            statement_id="OrganizationAccess")
         ```
 
         ## Import
 
-        Using `pulumi import`, import EventBridge permissions using the `event_bus_name/statement_id` (if you omit `event_bus_name`, the `default` event bus will be used). For example:
+        ### Identity Schema
+
+        #### Required
+
+        * `statement_id` (String) Statement ID of the EventBridge permission.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
+        Using `pulumi import`, import Permissions `event_bus_name` and `statement_id` separated by a forward slash (`/`) (if you omit `event_bus_name`, the `default` event bus will be used). For example:
 
         ```sh
-        $ pulumi import aws:cloudwatch/eventPermission:EventPermission DevAccountAccess example-event-bus/DevAccountAccess
+        $ pulumi import aws:cloudwatch/eventPermission:EventPermission example example-event-bus/DevAccountAccess
         ```
+
 
         :param str resource_name: The name of the resource.
         :param EventPermissionArgs args: The arguments to use to populate this resource's properties.
@@ -360,12 +386,12 @@ class EventPermission(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 action: Optional[pulumi.Input[_builtins.str]] = None,
-                 condition: Optional[pulumi.Input[Union['EventPermissionConditionArgs', 'EventPermissionConditionArgsDict']]] = None,
-                 event_bus_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 principal: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 statement_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 action: pulumi.Input[Optional[_builtins.str]] = None,
+                 condition: pulumi.Input[Optional[Union['EventPermissionConditionArgs', 'EventPermissionConditionArgsDict']]] = None,
+                 event_bus_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 principal: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 statement_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -395,12 +421,12 @@ class EventPermission(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            action: Optional[pulumi.Input[_builtins.str]] = None,
-            condition: Optional[pulumi.Input[Union['EventPermissionConditionArgs', 'EventPermissionConditionArgsDict']]] = None,
-            event_bus_name: Optional[pulumi.Input[_builtins.str]] = None,
-            principal: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            statement_id: Optional[pulumi.Input[_builtins.str]] = None) -> 'EventPermission':
+            action: pulumi.Input[Optional[_builtins.str]] = None,
+            condition: pulumi.Input[Optional[Union['EventPermissionConditionArgs', 'EventPermissionConditionArgsDict']]] = None,
+            event_bus_name: pulumi.Input[Optional[_builtins.str]] = None,
+            principal: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            statement_id: pulumi.Input[Optional[_builtins.str]] = None) -> 'EventPermission':
         """
         Get an existing EventPermission resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

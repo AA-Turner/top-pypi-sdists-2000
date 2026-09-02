@@ -187,7 +187,7 @@ def get_query_log_config(filters: Optional[Sequence[Union['GetQueryLogConfigFilt
 
     :param Sequence[Union['GetQueryLogConfigFilterArgs', 'GetQueryLogConfigFilterArgsDict']] filters: One or more name/value pairs to use as filters. There are
            several valid keys, for a full reference, check out
-           [Route53resolver Filter value in the AWS API reference][1].
+           [Route53resolver Filter value in the AWS API reference](https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_Filter.html).
     :param _builtins.str name: The name of the query logging configuration.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     :param _builtins.str resolver_query_log_config_id: ID of the Route53 Resolver Query Logging Configuration.
@@ -213,11 +213,11 @@ def get_query_log_config(filters: Optional[Sequence[Union['GetQueryLogConfigFilt
         resolver_query_log_config_id=pulumi.get(__ret__, 'resolver_query_log_config_id'),
         share_status=pulumi.get(__ret__, 'share_status'),
         tags=pulumi.get(__ret__, 'tags'))
-def get_query_log_config_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['GetQueryLogConfigFilterArgs', 'GetQueryLogConfigFilterArgsDict']]]]] = None,
-                                name: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                resolver_query_log_config_id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_query_log_config_output(filters: pulumi.Input[Optional[Optional[Sequence[Union['GetQueryLogConfigFilterArgs', 'GetQueryLogConfigFilterArgsDict']]]]] = None,
+                                name: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                resolver_query_log_config_id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                                 opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetQueryLogConfigResult]:
     """
     `route53.ResolverQueryLogConfig` provides details about a specific Route53 Resolver Query Logging Configuration.
@@ -250,7 +250,7 @@ def get_query_log_config_output(filters: Optional[pulumi.Input[Optional[Sequence
 
     :param Sequence[Union['GetQueryLogConfigFilterArgs', 'GetQueryLogConfigFilterArgsDict']] filters: One or more name/value pairs to use as filters. There are
            several valid keys, for a full reference, check out
-           [Route53resolver Filter value in the AWS API reference][1].
+           [Route53resolver Filter value in the AWS API reference](https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_Filter.html).
     :param _builtins.str name: The name of the query logging configuration.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     :param _builtins.str resolver_query_log_config_id: ID of the Route53 Resolver Query Logging Configuration.

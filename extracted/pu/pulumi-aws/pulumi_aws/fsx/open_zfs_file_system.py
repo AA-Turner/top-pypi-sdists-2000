@@ -24,55 +24,58 @@ class OpenZfsFileSystemArgs:
                  deployment_type: pulumi.Input[_builtins.str],
                  subnet_ids: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
                  throughput_capacity: pulumi.Input[_builtins.int],
-                 automatic_backup_retention_days: Optional[pulumi.Input[_builtins.int]] = None,
-                 backup_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 copy_tags_to_backups: Optional[pulumi.Input[_builtins.bool]] = None,
-                 copy_tags_to_volumes: Optional[pulumi.Input[_builtins.bool]] = None,
-                 daily_automatic_backup_start_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete_options: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 disk_iops_configuration: Optional[pulumi.Input['OpenZfsFileSystemDiskIopsConfigurationArgs']] = None,
-                 endpoint_ip_address_range: Optional[pulumi.Input[_builtins.str]] = None,
-                 final_backup_tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 preferred_subnet_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 read_cache_configuration: Optional[pulumi.Input['OpenZfsFileSystemReadCacheConfigurationArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 root_volume_configuration: Optional[pulumi.Input['OpenZfsFileSystemRootVolumeConfigurationArgs']] = None,
-                 route_table_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 skip_final_backup: Optional[pulumi.Input[_builtins.bool]] = None,
-                 storage_capacity: Optional[pulumi.Input[_builtins.int]] = None,
-                 storage_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 weekly_maintenance_start_time: Optional[pulumi.Input[_builtins.str]] = None):
+                 automatic_backup_retention_days: pulumi.Input[Optional[_builtins.int]] = None,
+                 backup_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 copy_tags_to_backups: pulumi.Input[Optional[_builtins.bool]] = None,
+                 copy_tags_to_volumes: pulumi.Input[Optional[_builtins.bool]] = None,
+                 daily_automatic_backup_start_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete_options: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 disk_iops_configuration: pulumi.Input[Optional['OpenZfsFileSystemDiskIopsConfigurationArgs']] = None,
+                 endpoint_ip_address_range: pulumi.Input[Optional[_builtins.str]] = None,
+                 final_backup_tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 network_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 preferred_subnet_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 read_cache_configuration: pulumi.Input[Optional['OpenZfsFileSystemReadCacheConfigurationArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 root_volume_configuration: pulumi.Input[Optional['OpenZfsFileSystemRootVolumeConfigurationArgs']] = None,
+                 route_table_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 skip_final_backup: pulumi.Input[Optional[_builtins.bool]] = None,
+                 storage_capacity: pulumi.Input[Optional[_builtins.int]] = None,
+                 storage_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 weekly_maintenance_start_time: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a OpenZfsFileSystem resource.
+
         :param pulumi.Input[_builtins.str] deployment_type: Filesystem deployment type. See the [AWS API documentation](https://docs.aws.amazon.com/fsx/latest/APIReference/API_CreateFileSystemOpenZFSConfiguration.html#FSx-Type-CreateFileSystemOpenZFSConfiguration-DeploymentType) for a list of valid values.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnet_ids: A list of IDs for the subnets that the file system will be accessible from.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnet_ids: List of IDs for the subnets that the file system will be accessible from.
         :param pulumi.Input[_builtins.int] throughput_capacity: Throughput (MB/s) of the file system. Valid values depend on `deployment_type`. Must be one of `64`, `128`, `256`, `512`, `1024`, `2048`, `3072`, `4096` for `SINGLE_AZ_1`. Must be one of `160`, `320`, `640`, `1280`, `2560`, `3840`, `5120`, `7680`, `10240` for `SINGLE_AZ_2`.
                
                The following arguments are optional:
-        :param pulumi.Input[_builtins.int] automatic_backup_retention_days: The number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days.
-        :param pulumi.Input[_builtins.str] backup_id: The ID of the source backup to create the filesystem from.
-        :param pulumi.Input[_builtins.bool] copy_tags_to_backups: A boolean flag indicating whether tags for the file system should be copied to backups. The default value is false.
-        :param pulumi.Input[_builtins.bool] copy_tags_to_volumes: A boolean flag indicating whether tags for the file system should be copied to snapshots. The default value is false.
-        :param pulumi.Input[_builtins.str] daily_automatic_backup_start_time: A recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. Requires `automatic_backup_retention_days` to be set.
+        :param pulumi.Input[_builtins.int] automatic_backup_retention_days: Number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days.
+        :param pulumi.Input[_builtins.str] backup_id: ID of the source backup to create the filesystem from.
+        :param pulumi.Input[_builtins.bool] copy_tags_to_backups: Whether tags for the file system should be copied to backups. Default value is false.
+        :param pulumi.Input[_builtins.bool] copy_tags_to_volumes: Whether tags for the file system should be copied to snapshots. Default value is false.
+        :param pulumi.Input[_builtins.str] daily_automatic_backup_start_time: Recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. Requires `automatic_backup_retention_days` to be set.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] delete_options: List of delete options, which at present supports only one value that specifies whether to delete all child volumes and snapshots when the file system is deleted. Valid values: `DELETE_CHILD_VOLUMES_AND_SNAPSHOTS`.
-        :param pulumi.Input['OpenZfsFileSystemDiskIopsConfigurationArgs'] disk_iops_configuration: The SSD IOPS configuration for the Amazon FSx for OpenZFS file system. See `disk_iops_configuration` Block for details.
+        :param pulumi.Input['OpenZfsFileSystemDiskIopsConfigurationArgs'] disk_iops_configuration: SSD IOPS configuration for the Amazon FSx for OpenZFS file system. See `disk_iops_configuration` Block for details.
         :param pulumi.Input[_builtins.str] endpoint_ip_address_range: (Multi-AZ only) Specifies the IP address range in which the endpoints to access your file system will be created.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] final_backup_tags: A map of tags to apply to the file system's final backup.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] final_backup_tags: Map of tags to apply to the file system's final backup.
         :param pulumi.Input[_builtins.str] kms_key_id: ARN for the KMS Key to encrypt the file system at rest, Defaults to an AWS managed KMS Key.
+        :param pulumi.Input[_builtins.str] network_type: Network type. Valid values are `IPV4` and `DUAL`. Default value is `IPV4`.
         :param pulumi.Input[_builtins.str] preferred_subnet_id: (Multi-AZ only) Required when `deployment_type` is set to `MULTI_AZ_1`. This specifies the subnet in which you want the preferred file server to be located.
         :param pulumi.Input['OpenZfsFileSystemReadCacheConfigurationArgs'] read_cache_configuration: Configuration block for optional provisioned SSD read cache on file systems that use the Intelligent-Tiering storage class. Required when `storage_type` is set to `INTELLIGENT_TIERING`. See `read_cache_configuration` Block for details.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input['OpenZfsFileSystemRootVolumeConfigurationArgs'] root_volume_configuration: The configuration for the root volume of the file system. All other volumes are children or the root volume. See `root_volume_configuration` Block for details.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] route_table_ids: (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all virtual private cloud (VPC) route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_group_ids: A list of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups will apply to all network interfaces.
+        :param pulumi.Input['OpenZfsFileSystemRootVolumeConfigurationArgs'] root_volume_configuration: Configuration for the root volume of the file system. All other volumes are children or the root volume. See `root_volume_configuration` Block for details.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] route_table_ids: (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all VPC route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_group_ids: List of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups will apply to all network interfaces.
         :param pulumi.Input[_builtins.bool] skip_final_backup: When enabled, will skip the default final backup taken when the file system is deleted. This configuration must be applied separately before attempting to delete the resource to have the desired behavior. Defaults to `false`.
-        :param pulumi.Input[_builtins.int] storage_capacity: The storage capacity (GiB) of the file system. Valid values between `64` and `524288`. Required when `storage_type` is set to `SSD`. Must not be set when `storage_type` is set to `INTELLIGENT_TIERING`.
-        :param pulumi.Input[_builtins.str] storage_type: The filesystem storage type. Valid values are `SSD` and `INTELLIGENT_TIERING`. `INTELLIGENT_TIERING` requires `deployment_type` to be `MULTI_AZ_1`.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the file system. .If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[_builtins.str] weekly_maintenance_start_time: The preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
+        :param pulumi.Input[_builtins.int] storage_capacity: Storage capacity (GiB) of the file system. Valid values between `64` and `524288`. Required when `storage_type` is set to `SSD`. Must not be set when `storage_type` is set to `INTELLIGENT_TIERING`.
+        :param pulumi.Input[_builtins.str] storage_type: Filesystem storage type. Valid values are `SSD` and `INTELLIGENT_TIERING`. `INTELLIGENT_TIERING` requires `deployment_type` to be `MULTI_AZ_1`.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the file system. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[_builtins.str] weekly_maintenance_start_time: Preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
         """
         pulumi.set(__self__, "deployment_type", deployment_type)
         pulumi.set(__self__, "subnet_ids", subnet_ids)
@@ -97,6 +100,8 @@ class OpenZfsFileSystemArgs:
             pulumi.set(__self__, "final_backup_tags", final_backup_tags)
         if kms_key_id is not None:
             pulumi.set(__self__, "kms_key_id", kms_key_id)
+        if network_type is not None:
+            pulumi.set(__self__, "network_type", network_type)
         if preferred_subnet_id is not None:
             pulumi.set(__self__, "preferred_subnet_id", preferred_subnet_id)
         if read_cache_configuration is not None:
@@ -136,7 +141,7 @@ class OpenZfsFileSystemArgs:
     @pulumi.getter(name="subnetIds")
     def subnet_ids(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
         """
-        A list of IDs for the subnets that the file system will be accessible from.
+        List of IDs for the subnets that the file system will be accessible from.
         """
         return pulumi.get(self, "subnet_ids")
 
@@ -160,328 +165,343 @@ class OpenZfsFileSystemArgs:
 
     @_builtins.property
     @pulumi.getter(name="automaticBackupRetentionDays")
-    def automatic_backup_retention_days(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def automatic_backup_retention_days(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days.
+        Number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days.
         """
         return pulumi.get(self, "automatic_backup_retention_days")
 
     @automatic_backup_retention_days.setter
-    def automatic_backup_retention_days(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def automatic_backup_retention_days(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "automatic_backup_retention_days", value)
 
     @_builtins.property
     @pulumi.getter(name="backupId")
-    def backup_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def backup_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The ID of the source backup to create the filesystem from.
+        ID of the source backup to create the filesystem from.
         """
         return pulumi.get(self, "backup_id")
 
     @backup_id.setter
-    def backup_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def backup_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "backup_id", value)
 
     @_builtins.property
     @pulumi.getter(name="copyTagsToBackups")
-    def copy_tags_to_backups(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def copy_tags_to_backups(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        A boolean flag indicating whether tags for the file system should be copied to backups. The default value is false.
+        Whether tags for the file system should be copied to backups. Default value is false.
         """
         return pulumi.get(self, "copy_tags_to_backups")
 
     @copy_tags_to_backups.setter
-    def copy_tags_to_backups(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def copy_tags_to_backups(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "copy_tags_to_backups", value)
 
     @_builtins.property
     @pulumi.getter(name="copyTagsToVolumes")
-    def copy_tags_to_volumes(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def copy_tags_to_volumes(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        A boolean flag indicating whether tags for the file system should be copied to snapshots. The default value is false.
+        Whether tags for the file system should be copied to snapshots. Default value is false.
         """
         return pulumi.get(self, "copy_tags_to_volumes")
 
     @copy_tags_to_volumes.setter
-    def copy_tags_to_volumes(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def copy_tags_to_volumes(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "copy_tags_to_volumes", value)
 
     @_builtins.property
     @pulumi.getter(name="dailyAutomaticBackupStartTime")
-    def daily_automatic_backup_start_time(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def daily_automatic_backup_start_time(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        A recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. Requires `automatic_backup_retention_days` to be set.
+        Recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. Requires `automatic_backup_retention_days` to be set.
         """
         return pulumi.get(self, "daily_automatic_backup_start_time")
 
     @daily_automatic_backup_start_time.setter
-    def daily_automatic_backup_start_time(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def daily_automatic_backup_start_time(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "daily_automatic_backup_start_time", value)
 
     @_builtins.property
     @pulumi.getter(name="deleteOptions")
-    def delete_options(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def delete_options(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of delete options, which at present supports only one value that specifies whether to delete all child volumes and snapshots when the file system is deleted. Valid values: `DELETE_CHILD_VOLUMES_AND_SNAPSHOTS`.
         """
         return pulumi.get(self, "delete_options")
 
     @delete_options.setter
-    def delete_options(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def delete_options(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "delete_options", value)
 
     @_builtins.property
     @pulumi.getter(name="diskIopsConfiguration")
-    def disk_iops_configuration(self) -> Optional[pulumi.Input['OpenZfsFileSystemDiskIopsConfigurationArgs']]:
+    def disk_iops_configuration(self) -> pulumi.Input[Optional['OpenZfsFileSystemDiskIopsConfigurationArgs']]:
         """
-        The SSD IOPS configuration for the Amazon FSx for OpenZFS file system. See `disk_iops_configuration` Block for details.
+        SSD IOPS configuration for the Amazon FSx for OpenZFS file system. See `disk_iops_configuration` Block for details.
         """
         return pulumi.get(self, "disk_iops_configuration")
 
     @disk_iops_configuration.setter
-    def disk_iops_configuration(self, value: Optional[pulumi.Input['OpenZfsFileSystemDiskIopsConfigurationArgs']]):
+    def disk_iops_configuration(self, value: pulumi.Input[Optional['OpenZfsFileSystemDiskIopsConfigurationArgs']]):
         pulumi.set(self, "disk_iops_configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="endpointIpAddressRange")
-    def endpoint_ip_address_range(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def endpoint_ip_address_range(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         (Multi-AZ only) Specifies the IP address range in which the endpoints to access your file system will be created.
         """
         return pulumi.get(self, "endpoint_ip_address_range")
 
     @endpoint_ip_address_range.setter
-    def endpoint_ip_address_range(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def endpoint_ip_address_range(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "endpoint_ip_address_range", value)
 
     @_builtins.property
     @pulumi.getter(name="finalBackupTags")
-    def final_backup_tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def final_backup_tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A map of tags to apply to the file system's final backup.
+        Map of tags to apply to the file system's final backup.
         """
         return pulumi.get(self, "final_backup_tags")
 
     @final_backup_tags.setter
-    def final_backup_tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def final_backup_tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "final_backup_tags", value)
 
     @_builtins.property
     @pulumi.getter(name="kmsKeyId")
-    def kms_key_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN for the KMS Key to encrypt the file system at rest, Defaults to an AWS managed KMS Key.
         """
         return pulumi.get(self, "kms_key_id")
 
     @kms_key_id.setter
-    def kms_key_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key_id", value)
 
     @_builtins.property
+    @pulumi.getter(name="networkType")
+    def network_type(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Network type. Valid values are `IPV4` and `DUAL`. Default value is `IPV4`.
+        """
+        return pulumi.get(self, "network_type")
+
+    @network_type.setter
+    def network_type(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "network_type", value)
+
+    @_builtins.property
     @pulumi.getter(name="preferredSubnetId")
-    def preferred_subnet_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def preferred_subnet_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         (Multi-AZ only) Required when `deployment_type` is set to `MULTI_AZ_1`. This specifies the subnet in which you want the preferred file server to be located.
         """
         return pulumi.get(self, "preferred_subnet_id")
 
     @preferred_subnet_id.setter
-    def preferred_subnet_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def preferred_subnet_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "preferred_subnet_id", value)
 
     @_builtins.property
     @pulumi.getter(name="readCacheConfiguration")
-    def read_cache_configuration(self) -> Optional[pulumi.Input['OpenZfsFileSystemReadCacheConfigurationArgs']]:
+    def read_cache_configuration(self) -> pulumi.Input[Optional['OpenZfsFileSystemReadCacheConfigurationArgs']]:
         """
         Configuration block for optional provisioned SSD read cache on file systems that use the Intelligent-Tiering storage class. Required when `storage_type` is set to `INTELLIGENT_TIERING`. See `read_cache_configuration` Block for details.
         """
         return pulumi.get(self, "read_cache_configuration")
 
     @read_cache_configuration.setter
-    def read_cache_configuration(self, value: Optional[pulumi.Input['OpenZfsFileSystemReadCacheConfigurationArgs']]):
+    def read_cache_configuration(self, value: pulumi.Input[Optional['OpenZfsFileSystemReadCacheConfigurationArgs']]):
         pulumi.set(self, "read_cache_configuration", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="rootVolumeConfiguration")
-    def root_volume_configuration(self) -> Optional[pulumi.Input['OpenZfsFileSystemRootVolumeConfigurationArgs']]:
+    def root_volume_configuration(self) -> pulumi.Input[Optional['OpenZfsFileSystemRootVolumeConfigurationArgs']]:
         """
-        The configuration for the root volume of the file system. All other volumes are children or the root volume. See `root_volume_configuration` Block for details.
+        Configuration for the root volume of the file system. All other volumes are children or the root volume. See `root_volume_configuration` Block for details.
         """
         return pulumi.get(self, "root_volume_configuration")
 
     @root_volume_configuration.setter
-    def root_volume_configuration(self, value: Optional[pulumi.Input['OpenZfsFileSystemRootVolumeConfigurationArgs']]):
+    def root_volume_configuration(self, value: pulumi.Input[Optional['OpenZfsFileSystemRootVolumeConfigurationArgs']]):
         pulumi.set(self, "root_volume_configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="routeTableIds")
-    def route_table_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def route_table_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all virtual private cloud (VPC) route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.
+        (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all VPC route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.
         """
         return pulumi.get(self, "route_table_ids")
 
     @route_table_ids.setter
-    def route_table_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def route_table_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "route_table_ids", value)
 
     @_builtins.property
     @pulumi.getter(name="securityGroupIds")
-    def security_group_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def security_group_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        A list of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups will apply to all network interfaces.
+        List of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups will apply to all network interfaces.
         """
         return pulumi.get(self, "security_group_ids")
 
     @security_group_ids.setter
-    def security_group_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def security_group_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "security_group_ids", value)
 
     @_builtins.property
     @pulumi.getter(name="skipFinalBackup")
-    def skip_final_backup(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def skip_final_backup(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         When enabled, will skip the default final backup taken when the file system is deleted. This configuration must be applied separately before attempting to delete the resource to have the desired behavior. Defaults to `false`.
         """
         return pulumi.get(self, "skip_final_backup")
 
     @skip_final_backup.setter
-    def skip_final_backup(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def skip_final_backup(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "skip_final_backup", value)
 
     @_builtins.property
     @pulumi.getter(name="storageCapacity")
-    def storage_capacity(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def storage_capacity(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The storage capacity (GiB) of the file system. Valid values between `64` and `524288`. Required when `storage_type` is set to `SSD`. Must not be set when `storage_type` is set to `INTELLIGENT_TIERING`.
+        Storage capacity (GiB) of the file system. Valid values between `64` and `524288`. Required when `storage_type` is set to `SSD`. Must not be set when `storage_type` is set to `INTELLIGENT_TIERING`.
         """
         return pulumi.get(self, "storage_capacity")
 
     @storage_capacity.setter
-    def storage_capacity(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def storage_capacity(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "storage_capacity", value)
 
     @_builtins.property
     @pulumi.getter(name="storageType")
-    def storage_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def storage_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The filesystem storage type. Valid values are `SSD` and `INTELLIGENT_TIERING`. `INTELLIGENT_TIERING` requires `deployment_type` to be `MULTI_AZ_1`.
+        Filesystem storage type. Valid values are `SSD` and `INTELLIGENT_TIERING`. `INTELLIGENT_TIERING` requires `deployment_type` to be `MULTI_AZ_1`.
         """
         return pulumi.get(self, "storage_type")
 
     @storage_type.setter
-    def storage_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def storage_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "storage_type", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A map of tags to assign to the file system. .If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        Map of tags to assign to the file system. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="weeklyMaintenanceStartTime")
-    def weekly_maintenance_start_time(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def weekly_maintenance_start_time(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
+        Preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
         """
         return pulumi.get(self, "weekly_maintenance_start_time")
 
     @weekly_maintenance_start_time.setter
-    def weekly_maintenance_start_time(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def weekly_maintenance_start_time(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "weekly_maintenance_start_time", value)
 
 
 @pulumi.input_type
 class _OpenZfsFileSystemState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 automatic_backup_retention_days: Optional[pulumi.Input[_builtins.int]] = None,
-                 backup_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 copy_tags_to_backups: Optional[pulumi.Input[_builtins.bool]] = None,
-                 copy_tags_to_volumes: Optional[pulumi.Input[_builtins.bool]] = None,
-                 daily_automatic_backup_start_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete_options: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 deployment_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 disk_iops_configuration: Optional[pulumi.Input['OpenZfsFileSystemDiskIopsConfigurationArgs']] = None,
-                 dns_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 endpoint_ip_address: Optional[pulumi.Input[_builtins.str]] = None,
-                 endpoint_ip_address_range: Optional[pulumi.Input[_builtins.str]] = None,
-                 final_backup_tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 network_interface_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 owner_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 preferred_subnet_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 read_cache_configuration: Optional[pulumi.Input['OpenZfsFileSystemReadCacheConfigurationArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 root_volume_configuration: Optional[pulumi.Input['OpenZfsFileSystemRootVolumeConfigurationArgs']] = None,
-                 root_volume_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 route_table_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 skip_final_backup: Optional[pulumi.Input[_builtins.bool]] = None,
-                 storage_capacity: Optional[pulumi.Input[_builtins.int]] = None,
-                 storage_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 subnet_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 throughput_capacity: Optional[pulumi.Input[_builtins.int]] = None,
-                 vpc_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 weekly_maintenance_start_time: Optional[pulumi.Input[_builtins.str]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 automatic_backup_retention_days: pulumi.Input[Optional[_builtins.int]] = None,
+                 backup_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 copy_tags_to_backups: pulumi.Input[Optional[_builtins.bool]] = None,
+                 copy_tags_to_volumes: pulumi.Input[Optional[_builtins.bool]] = None,
+                 daily_automatic_backup_start_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete_options: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 deployment_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 disk_iops_configuration: pulumi.Input[Optional['OpenZfsFileSystemDiskIopsConfigurationArgs']] = None,
+                 dns_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 endpoint_ip_address: pulumi.Input[Optional[_builtins.str]] = None,
+                 endpoint_ip_address_range: pulumi.Input[Optional[_builtins.str]] = None,
+                 final_backup_tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 network_interface_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 network_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 owner_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 preferred_subnet_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 read_cache_configuration: pulumi.Input[Optional['OpenZfsFileSystemReadCacheConfigurationArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 root_volume_configuration: pulumi.Input[Optional['OpenZfsFileSystemRootVolumeConfigurationArgs']] = None,
+                 root_volume_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 route_table_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 skip_final_backup: pulumi.Input[Optional[_builtins.bool]] = None,
+                 storage_capacity: pulumi.Input[Optional[_builtins.int]] = None,
+                 storage_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 subnet_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 throughput_capacity: pulumi.Input[Optional[_builtins.int]] = None,
+                 vpc_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 weekly_maintenance_start_time: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering OpenZfsFileSystem resources.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name of the file system.
-        :param pulumi.Input[_builtins.int] automatic_backup_retention_days: The number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days.
-        :param pulumi.Input[_builtins.str] backup_id: The ID of the source backup to create the filesystem from.
-        :param pulumi.Input[_builtins.bool] copy_tags_to_backups: A boolean flag indicating whether tags for the file system should be copied to backups. The default value is false.
-        :param pulumi.Input[_builtins.bool] copy_tags_to_volumes: A boolean flag indicating whether tags for the file system should be copied to snapshots. The default value is false.
-        :param pulumi.Input[_builtins.str] daily_automatic_backup_start_time: A recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. Requires `automatic_backup_retention_days` to be set.
+
+        :param pulumi.Input[_builtins.str] arn: ARN of the file system.
+        :param pulumi.Input[_builtins.int] automatic_backup_retention_days: Number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days.
+        :param pulumi.Input[_builtins.str] backup_id: ID of the source backup to create the filesystem from.
+        :param pulumi.Input[_builtins.bool] copy_tags_to_backups: Whether tags for the file system should be copied to backups. Default value is false.
+        :param pulumi.Input[_builtins.bool] copy_tags_to_volumes: Whether tags for the file system should be copied to snapshots. Default value is false.
+        :param pulumi.Input[_builtins.str] daily_automatic_backup_start_time: Recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. Requires `automatic_backup_retention_days` to be set.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] delete_options: List of delete options, which at present supports only one value that specifies whether to delete all child volumes and snapshots when the file system is deleted. Valid values: `DELETE_CHILD_VOLUMES_AND_SNAPSHOTS`.
         :param pulumi.Input[_builtins.str] deployment_type: Filesystem deployment type. See the [AWS API documentation](https://docs.aws.amazon.com/fsx/latest/APIReference/API_CreateFileSystemOpenZFSConfiguration.html#FSx-Type-CreateFileSystemOpenZFSConfiguration-DeploymentType) for a list of valid values.
-        :param pulumi.Input['OpenZfsFileSystemDiskIopsConfigurationArgs'] disk_iops_configuration: The SSD IOPS configuration for the Amazon FSx for OpenZFS file system. See `disk_iops_configuration` Block for details.
+        :param pulumi.Input['OpenZfsFileSystemDiskIopsConfigurationArgs'] disk_iops_configuration: SSD IOPS configuration for the Amazon FSx for OpenZFS file system. See `disk_iops_configuration` Block for details.
         :param pulumi.Input[_builtins.str] dns_name: DNS name for the file system, e.g., `fs-12345678.fsx.us-west-2.amazonaws.com`
         :param pulumi.Input[_builtins.str] endpoint_ip_address: IP address of the endpoint that is used to access data or to manage the file system.
         :param pulumi.Input[_builtins.str] endpoint_ip_address_range: (Multi-AZ only) Specifies the IP address range in which the endpoints to access your file system will be created.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] final_backup_tags: A map of tags to apply to the file system's final backup.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] final_backup_tags: Map of tags to apply to the file system's final backup.
         :param pulumi.Input[_builtins.str] kms_key_id: ARN for the KMS Key to encrypt the file system at rest, Defaults to an AWS managed KMS Key.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] network_interface_ids: Set of Elastic Network Interface identifiers from which the file system is accessible The first network interface returned is the primary network interface.
+        :param pulumi.Input[_builtins.str] network_type: Network type. Valid values are `IPV4` and `DUAL`. Default value is `IPV4`.
         :param pulumi.Input[_builtins.str] owner_id: AWS account identifier that created the file system.
         :param pulumi.Input[_builtins.str] preferred_subnet_id: (Multi-AZ only) Required when `deployment_type` is set to `MULTI_AZ_1`. This specifies the subnet in which you want the preferred file server to be located.
         :param pulumi.Input['OpenZfsFileSystemReadCacheConfigurationArgs'] read_cache_configuration: Configuration block for optional provisioned SSD read cache on file systems that use the Intelligent-Tiering storage class. Required when `storage_type` is set to `INTELLIGENT_TIERING`. See `read_cache_configuration` Block for details.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input['OpenZfsFileSystemRootVolumeConfigurationArgs'] root_volume_configuration: The configuration for the root volume of the file system. All other volumes are children or the root volume. See `root_volume_configuration` Block for details.
+        :param pulumi.Input['OpenZfsFileSystemRootVolumeConfigurationArgs'] root_volume_configuration: Configuration for the root volume of the file system. All other volumes are children or the root volume. See `root_volume_configuration` Block for details.
         :param pulumi.Input[_builtins.str] root_volume_id: Identifier of the root volume, e.g., `fsvol-12345678`
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] route_table_ids: (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all virtual private cloud (VPC) route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_group_ids: A list of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups will apply to all network interfaces.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] route_table_ids: (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all VPC route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_group_ids: List of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups will apply to all network interfaces.
         :param pulumi.Input[_builtins.bool] skip_final_backup: When enabled, will skip the default final backup taken when the file system is deleted. This configuration must be applied separately before attempting to delete the resource to have the desired behavior. Defaults to `false`.
-        :param pulumi.Input[_builtins.int] storage_capacity: The storage capacity (GiB) of the file system. Valid values between `64` and `524288`. Required when `storage_type` is set to `SSD`. Must not be set when `storage_type` is set to `INTELLIGENT_TIERING`.
-        :param pulumi.Input[_builtins.str] storage_type: The filesystem storage type. Valid values are `SSD` and `INTELLIGENT_TIERING`. `INTELLIGENT_TIERING` requires `deployment_type` to be `MULTI_AZ_1`.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnet_ids: A list of IDs for the subnets that the file system will be accessible from.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the file system. .If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        :param pulumi.Input[_builtins.int] storage_capacity: Storage capacity (GiB) of the file system. Valid values between `64` and `524288`. Required when `storage_type` is set to `SSD`. Must not be set when `storage_type` is set to `INTELLIGENT_TIERING`.
+        :param pulumi.Input[_builtins.str] storage_type: Filesystem storage type. Valid values are `SSD` and `INTELLIGENT_TIERING`. `INTELLIGENT_TIERING` requires `deployment_type` to be `MULTI_AZ_1`.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnet_ids: List of IDs for the subnets that the file system will be accessible from.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the file system. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         :param pulumi.Input[_builtins.int] throughput_capacity: Throughput (MB/s) of the file system. Valid values depend on `deployment_type`. Must be one of `64`, `128`, `256`, `512`, `1024`, `2048`, `3072`, `4096` for `SINGLE_AZ_1`. Must be one of `160`, `320`, `640`, `1280`, `2560`, `3840`, `5120`, `7680`, `10240` for `SINGLE_AZ_2`.
                
                The following arguments are optional:
-        :param pulumi.Input[_builtins.str] vpc_id: Identifier of the Virtual Private Cloud for the file system.
-        :param pulumi.Input[_builtins.str] weekly_maintenance_start_time: The preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
+        :param pulumi.Input[_builtins.str] vpc_id: Identifier of the VPC for the file system.
+        :param pulumi.Input[_builtins.str] weekly_maintenance_start_time: Preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
         """
         if arn is not None:
             pulumi.set(__self__, "arn", arn)
@@ -513,6 +533,8 @@ class _OpenZfsFileSystemState:
             pulumi.set(__self__, "kms_key_id", kms_key_id)
         if network_interface_ids is not None:
             pulumi.set(__self__, "network_interface_ids", network_interface_ids)
+        if network_type is not None:
+            pulumi.set(__self__, "network_type", network_type)
         if owner_id is not None:
             pulumi.set(__self__, "owner_id", owner_id)
         if preferred_subnet_id is not None:
@@ -550,355 +572,367 @@ class _OpenZfsFileSystemState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Amazon Resource Name of the file system.
+        ARN of the file system.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="automaticBackupRetentionDays")
-    def automatic_backup_retention_days(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def automatic_backup_retention_days(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days.
+        Number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days.
         """
         return pulumi.get(self, "automatic_backup_retention_days")
 
     @automatic_backup_retention_days.setter
-    def automatic_backup_retention_days(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def automatic_backup_retention_days(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "automatic_backup_retention_days", value)
 
     @_builtins.property
     @pulumi.getter(name="backupId")
-    def backup_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def backup_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The ID of the source backup to create the filesystem from.
+        ID of the source backup to create the filesystem from.
         """
         return pulumi.get(self, "backup_id")
 
     @backup_id.setter
-    def backup_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def backup_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "backup_id", value)
 
     @_builtins.property
     @pulumi.getter(name="copyTagsToBackups")
-    def copy_tags_to_backups(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def copy_tags_to_backups(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        A boolean flag indicating whether tags for the file system should be copied to backups. The default value is false.
+        Whether tags for the file system should be copied to backups. Default value is false.
         """
         return pulumi.get(self, "copy_tags_to_backups")
 
     @copy_tags_to_backups.setter
-    def copy_tags_to_backups(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def copy_tags_to_backups(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "copy_tags_to_backups", value)
 
     @_builtins.property
     @pulumi.getter(name="copyTagsToVolumes")
-    def copy_tags_to_volumes(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def copy_tags_to_volumes(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        A boolean flag indicating whether tags for the file system should be copied to snapshots. The default value is false.
+        Whether tags for the file system should be copied to snapshots. Default value is false.
         """
         return pulumi.get(self, "copy_tags_to_volumes")
 
     @copy_tags_to_volumes.setter
-    def copy_tags_to_volumes(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def copy_tags_to_volumes(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "copy_tags_to_volumes", value)
 
     @_builtins.property
     @pulumi.getter(name="dailyAutomaticBackupStartTime")
-    def daily_automatic_backup_start_time(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def daily_automatic_backup_start_time(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        A recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. Requires `automatic_backup_retention_days` to be set.
+        Recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. Requires `automatic_backup_retention_days` to be set.
         """
         return pulumi.get(self, "daily_automatic_backup_start_time")
 
     @daily_automatic_backup_start_time.setter
-    def daily_automatic_backup_start_time(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def daily_automatic_backup_start_time(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "daily_automatic_backup_start_time", value)
 
     @_builtins.property
     @pulumi.getter(name="deleteOptions")
-    def delete_options(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def delete_options(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of delete options, which at present supports only one value that specifies whether to delete all child volumes and snapshots when the file system is deleted. Valid values: `DELETE_CHILD_VOLUMES_AND_SNAPSHOTS`.
         """
         return pulumi.get(self, "delete_options")
 
     @delete_options.setter
-    def delete_options(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def delete_options(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "delete_options", value)
 
     @_builtins.property
     @pulumi.getter(name="deploymentType")
-    def deployment_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def deployment_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Filesystem deployment type. See the [AWS API documentation](https://docs.aws.amazon.com/fsx/latest/APIReference/API_CreateFileSystemOpenZFSConfiguration.html#FSx-Type-CreateFileSystemOpenZFSConfiguration-DeploymentType) for a list of valid values.
         """
         return pulumi.get(self, "deployment_type")
 
     @deployment_type.setter
-    def deployment_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def deployment_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "deployment_type", value)
 
     @_builtins.property
     @pulumi.getter(name="diskIopsConfiguration")
-    def disk_iops_configuration(self) -> Optional[pulumi.Input['OpenZfsFileSystemDiskIopsConfigurationArgs']]:
+    def disk_iops_configuration(self) -> pulumi.Input[Optional['OpenZfsFileSystemDiskIopsConfigurationArgs']]:
         """
-        The SSD IOPS configuration for the Amazon FSx for OpenZFS file system. See `disk_iops_configuration` Block for details.
+        SSD IOPS configuration for the Amazon FSx for OpenZFS file system. See `disk_iops_configuration` Block for details.
         """
         return pulumi.get(self, "disk_iops_configuration")
 
     @disk_iops_configuration.setter
-    def disk_iops_configuration(self, value: Optional[pulumi.Input['OpenZfsFileSystemDiskIopsConfigurationArgs']]):
+    def disk_iops_configuration(self, value: pulumi.Input[Optional['OpenZfsFileSystemDiskIopsConfigurationArgs']]):
         pulumi.set(self, "disk_iops_configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="dnsName")
-    def dns_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def dns_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         DNS name for the file system, e.g., `fs-12345678.fsx.us-west-2.amazonaws.com`
         """
         return pulumi.get(self, "dns_name")
 
     @dns_name.setter
-    def dns_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def dns_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "dns_name", value)
 
     @_builtins.property
     @pulumi.getter(name="endpointIpAddress")
-    def endpoint_ip_address(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def endpoint_ip_address(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         IP address of the endpoint that is used to access data or to manage the file system.
         """
         return pulumi.get(self, "endpoint_ip_address")
 
     @endpoint_ip_address.setter
-    def endpoint_ip_address(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def endpoint_ip_address(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "endpoint_ip_address", value)
 
     @_builtins.property
     @pulumi.getter(name="endpointIpAddressRange")
-    def endpoint_ip_address_range(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def endpoint_ip_address_range(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         (Multi-AZ only) Specifies the IP address range in which the endpoints to access your file system will be created.
         """
         return pulumi.get(self, "endpoint_ip_address_range")
 
     @endpoint_ip_address_range.setter
-    def endpoint_ip_address_range(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def endpoint_ip_address_range(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "endpoint_ip_address_range", value)
 
     @_builtins.property
     @pulumi.getter(name="finalBackupTags")
-    def final_backup_tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def final_backup_tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A map of tags to apply to the file system's final backup.
+        Map of tags to apply to the file system's final backup.
         """
         return pulumi.get(self, "final_backup_tags")
 
     @final_backup_tags.setter
-    def final_backup_tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def final_backup_tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "final_backup_tags", value)
 
     @_builtins.property
     @pulumi.getter(name="kmsKeyId")
-    def kms_key_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN for the KMS Key to encrypt the file system at rest, Defaults to an AWS managed KMS Key.
         """
         return pulumi.get(self, "kms_key_id")
 
     @kms_key_id.setter
-    def kms_key_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key_id", value)
 
     @_builtins.property
     @pulumi.getter(name="networkInterfaceIds")
-    def network_interface_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def network_interface_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         Set of Elastic Network Interface identifiers from which the file system is accessible The first network interface returned is the primary network interface.
         """
         return pulumi.get(self, "network_interface_ids")
 
     @network_interface_ids.setter
-    def network_interface_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def network_interface_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "network_interface_ids", value)
 
     @_builtins.property
+    @pulumi.getter(name="networkType")
+    def network_type(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Network type. Valid values are `IPV4` and `DUAL`. Default value is `IPV4`.
+        """
+        return pulumi.get(self, "network_type")
+
+    @network_type.setter
+    def network_type(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "network_type", value)
+
+    @_builtins.property
     @pulumi.getter(name="ownerId")
-    def owner_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def owner_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         AWS account identifier that created the file system.
         """
         return pulumi.get(self, "owner_id")
 
     @owner_id.setter
-    def owner_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def owner_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "owner_id", value)
 
     @_builtins.property
     @pulumi.getter(name="preferredSubnetId")
-    def preferred_subnet_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def preferred_subnet_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         (Multi-AZ only) Required when `deployment_type` is set to `MULTI_AZ_1`. This specifies the subnet in which you want the preferred file server to be located.
         """
         return pulumi.get(self, "preferred_subnet_id")
 
     @preferred_subnet_id.setter
-    def preferred_subnet_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def preferred_subnet_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "preferred_subnet_id", value)
 
     @_builtins.property
     @pulumi.getter(name="readCacheConfiguration")
-    def read_cache_configuration(self) -> Optional[pulumi.Input['OpenZfsFileSystemReadCacheConfigurationArgs']]:
+    def read_cache_configuration(self) -> pulumi.Input[Optional['OpenZfsFileSystemReadCacheConfigurationArgs']]:
         """
         Configuration block for optional provisioned SSD read cache on file systems that use the Intelligent-Tiering storage class. Required when `storage_type` is set to `INTELLIGENT_TIERING`. See `read_cache_configuration` Block for details.
         """
         return pulumi.get(self, "read_cache_configuration")
 
     @read_cache_configuration.setter
-    def read_cache_configuration(self, value: Optional[pulumi.Input['OpenZfsFileSystemReadCacheConfigurationArgs']]):
+    def read_cache_configuration(self, value: pulumi.Input[Optional['OpenZfsFileSystemReadCacheConfigurationArgs']]):
         pulumi.set(self, "read_cache_configuration", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="rootVolumeConfiguration")
-    def root_volume_configuration(self) -> Optional[pulumi.Input['OpenZfsFileSystemRootVolumeConfigurationArgs']]:
+    def root_volume_configuration(self) -> pulumi.Input[Optional['OpenZfsFileSystemRootVolumeConfigurationArgs']]:
         """
-        The configuration for the root volume of the file system. All other volumes are children or the root volume. See `root_volume_configuration` Block for details.
+        Configuration for the root volume of the file system. All other volumes are children or the root volume. See `root_volume_configuration` Block for details.
         """
         return pulumi.get(self, "root_volume_configuration")
 
     @root_volume_configuration.setter
-    def root_volume_configuration(self, value: Optional[pulumi.Input['OpenZfsFileSystemRootVolumeConfigurationArgs']]):
+    def root_volume_configuration(self, value: pulumi.Input[Optional['OpenZfsFileSystemRootVolumeConfigurationArgs']]):
         pulumi.set(self, "root_volume_configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="rootVolumeId")
-    def root_volume_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def root_volume_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Identifier of the root volume, e.g., `fsvol-12345678`
         """
         return pulumi.get(self, "root_volume_id")
 
     @root_volume_id.setter
-    def root_volume_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def root_volume_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "root_volume_id", value)
 
     @_builtins.property
     @pulumi.getter(name="routeTableIds")
-    def route_table_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def route_table_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all virtual private cloud (VPC) route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.
+        (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all VPC route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.
         """
         return pulumi.get(self, "route_table_ids")
 
     @route_table_ids.setter
-    def route_table_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def route_table_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "route_table_ids", value)
 
     @_builtins.property
     @pulumi.getter(name="securityGroupIds")
-    def security_group_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def security_group_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        A list of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups will apply to all network interfaces.
+        List of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups will apply to all network interfaces.
         """
         return pulumi.get(self, "security_group_ids")
 
     @security_group_ids.setter
-    def security_group_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def security_group_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "security_group_ids", value)
 
     @_builtins.property
     @pulumi.getter(name="skipFinalBackup")
-    def skip_final_backup(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def skip_final_backup(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         When enabled, will skip the default final backup taken when the file system is deleted. This configuration must be applied separately before attempting to delete the resource to have the desired behavior. Defaults to `false`.
         """
         return pulumi.get(self, "skip_final_backup")
 
     @skip_final_backup.setter
-    def skip_final_backup(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def skip_final_backup(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "skip_final_backup", value)
 
     @_builtins.property
     @pulumi.getter(name="storageCapacity")
-    def storage_capacity(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def storage_capacity(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The storage capacity (GiB) of the file system. Valid values between `64` and `524288`. Required when `storage_type` is set to `SSD`. Must not be set when `storage_type` is set to `INTELLIGENT_TIERING`.
+        Storage capacity (GiB) of the file system. Valid values between `64` and `524288`. Required when `storage_type` is set to `SSD`. Must not be set when `storage_type` is set to `INTELLIGENT_TIERING`.
         """
         return pulumi.get(self, "storage_capacity")
 
     @storage_capacity.setter
-    def storage_capacity(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def storage_capacity(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "storage_capacity", value)
 
     @_builtins.property
     @pulumi.getter(name="storageType")
-    def storage_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def storage_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The filesystem storage type. Valid values are `SSD` and `INTELLIGENT_TIERING`. `INTELLIGENT_TIERING` requires `deployment_type` to be `MULTI_AZ_1`.
+        Filesystem storage type. Valid values are `SSD` and `INTELLIGENT_TIERING`. `INTELLIGENT_TIERING` requires `deployment_type` to be `MULTI_AZ_1`.
         """
         return pulumi.get(self, "storage_type")
 
     @storage_type.setter
-    def storage_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def storage_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "storage_type", value)
 
     @_builtins.property
     @pulumi.getter(name="subnetIds")
-    def subnet_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def subnet_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        A list of IDs for the subnets that the file system will be accessible from.
+        List of IDs for the subnets that the file system will be accessible from.
         """
         return pulumi.get(self, "subnet_ids")
 
     @subnet_ids.setter
-    def subnet_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def subnet_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "subnet_ids", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A map of tags to assign to the file system. .If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        Map of tags to assign to the file system. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter(name="throughputCapacity")
-    def throughput_capacity(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def throughput_capacity(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Throughput (MB/s) of the file system. Valid values depend on `deployment_type`. Must be one of `64`, `128`, `256`, `512`, `1024`, `2048`, `3072`, `4096` for `SINGLE_AZ_1`. Must be one of `160`, `320`, `640`, `1280`, `2560`, `3840`, `5120`, `7680`, `10240` for `SINGLE_AZ_2`.
 
@@ -907,31 +941,31 @@ class _OpenZfsFileSystemState:
         return pulumi.get(self, "throughput_capacity")
 
     @throughput_capacity.setter
-    def throughput_capacity(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def throughput_capacity(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "throughput_capacity", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcId")
-    def vpc_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def vpc_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Identifier of the Virtual Private Cloud for the file system.
+        Identifier of the VPC for the file system.
         """
         return pulumi.get(self, "vpc_id")
 
     @vpc_id.setter
-    def vpc_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def vpc_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "vpc_id", value)
 
     @_builtins.property
     @pulumi.getter(name="weeklyMaintenanceStartTime")
-    def weekly_maintenance_start_time(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def weekly_maintenance_start_time(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
+        Preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
         """
         return pulumi.get(self, "weekly_maintenance_start_time")
 
     @weekly_maintenance_start_time.setter
-    def weekly_maintenance_start_time(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def weekly_maintenance_start_time(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "weekly_maintenance_start_time", value)
 
 
@@ -941,30 +975,31 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 automatic_backup_retention_days: Optional[pulumi.Input[_builtins.int]] = None,
-                 backup_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 copy_tags_to_backups: Optional[pulumi.Input[_builtins.bool]] = None,
-                 copy_tags_to_volumes: Optional[pulumi.Input[_builtins.bool]] = None,
-                 daily_automatic_backup_start_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete_options: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 deployment_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 disk_iops_configuration: Optional[pulumi.Input[Union['OpenZfsFileSystemDiskIopsConfigurationArgs', 'OpenZfsFileSystemDiskIopsConfigurationArgsDict']]] = None,
-                 endpoint_ip_address_range: Optional[pulumi.Input[_builtins.str]] = None,
-                 final_backup_tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 preferred_subnet_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 read_cache_configuration: Optional[pulumi.Input[Union['OpenZfsFileSystemReadCacheConfigurationArgs', 'OpenZfsFileSystemReadCacheConfigurationArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 root_volume_configuration: Optional[pulumi.Input[Union['OpenZfsFileSystemRootVolumeConfigurationArgs', 'OpenZfsFileSystemRootVolumeConfigurationArgsDict']]] = None,
-                 route_table_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 skip_final_backup: Optional[pulumi.Input[_builtins.bool]] = None,
-                 storage_capacity: Optional[pulumi.Input[_builtins.int]] = None,
-                 storage_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 subnet_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 throughput_capacity: Optional[pulumi.Input[_builtins.int]] = None,
-                 weekly_maintenance_start_time: Optional[pulumi.Input[_builtins.str]] = None,
+                 automatic_backup_retention_days: pulumi.Input[Optional[_builtins.int]] = None,
+                 backup_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 copy_tags_to_backups: pulumi.Input[Optional[_builtins.bool]] = None,
+                 copy_tags_to_volumes: pulumi.Input[Optional[_builtins.bool]] = None,
+                 daily_automatic_backup_start_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete_options: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 deployment_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 disk_iops_configuration: pulumi.Input[Optional[Union['OpenZfsFileSystemDiskIopsConfigurationArgs', 'OpenZfsFileSystemDiskIopsConfigurationArgsDict']]] = None,
+                 endpoint_ip_address_range: pulumi.Input[Optional[_builtins.str]] = None,
+                 final_backup_tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 network_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 preferred_subnet_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 read_cache_configuration: pulumi.Input[Optional[Union['OpenZfsFileSystemReadCacheConfigurationArgs', 'OpenZfsFileSystemReadCacheConfigurationArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 root_volume_configuration: pulumi.Input[Optional[Union['OpenZfsFileSystemRootVolumeConfigurationArgs', 'OpenZfsFileSystemRootVolumeConfigurationArgsDict']]] = None,
+                 route_table_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 skip_final_backup: pulumi.Input[Optional[_builtins.bool]] = None,
+                 storage_capacity: pulumi.Input[Optional[_builtins.int]] = None,
+                 storage_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 subnet_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 throughput_capacity: pulumi.Input[Optional[_builtins.int]] = None,
+                 weekly_maintenance_start_time: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Manages an Amazon FSx for OpenZFS file system.
@@ -997,37 +1032,40 @@ class OpenZfsFileSystem(pulumi.CustomResource):
         import pulumi
         import pulumi_aws as aws
 
-        example = aws.fsx.OpenZfsFileSystem("example", security_group_ids=[example_aws_security_group["id"]])
+        example = aws.fsx.OpenZfsFileSystem("example", security_group_ids=[example_aws_security_group["id"]],
+        opts = pulumi.ResourceOptions(ignore_changes=["securityGroupIds"]))
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.int] automatic_backup_retention_days: The number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days.
-        :param pulumi.Input[_builtins.str] backup_id: The ID of the source backup to create the filesystem from.
-        :param pulumi.Input[_builtins.bool] copy_tags_to_backups: A boolean flag indicating whether tags for the file system should be copied to backups. The default value is false.
-        :param pulumi.Input[_builtins.bool] copy_tags_to_volumes: A boolean flag indicating whether tags for the file system should be copied to snapshots. The default value is false.
-        :param pulumi.Input[_builtins.str] daily_automatic_backup_start_time: A recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. Requires `automatic_backup_retention_days` to be set.
+        :param pulumi.Input[_builtins.int] automatic_backup_retention_days: Number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days.
+        :param pulumi.Input[_builtins.str] backup_id: ID of the source backup to create the filesystem from.
+        :param pulumi.Input[_builtins.bool] copy_tags_to_backups: Whether tags for the file system should be copied to backups. Default value is false.
+        :param pulumi.Input[_builtins.bool] copy_tags_to_volumes: Whether tags for the file system should be copied to snapshots. Default value is false.
+        :param pulumi.Input[_builtins.str] daily_automatic_backup_start_time: Recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. Requires `automatic_backup_retention_days` to be set.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] delete_options: List of delete options, which at present supports only one value that specifies whether to delete all child volumes and snapshots when the file system is deleted. Valid values: `DELETE_CHILD_VOLUMES_AND_SNAPSHOTS`.
         :param pulumi.Input[_builtins.str] deployment_type: Filesystem deployment type. See the [AWS API documentation](https://docs.aws.amazon.com/fsx/latest/APIReference/API_CreateFileSystemOpenZFSConfiguration.html#FSx-Type-CreateFileSystemOpenZFSConfiguration-DeploymentType) for a list of valid values.
-        :param pulumi.Input[Union['OpenZfsFileSystemDiskIopsConfigurationArgs', 'OpenZfsFileSystemDiskIopsConfigurationArgsDict']] disk_iops_configuration: The SSD IOPS configuration for the Amazon FSx for OpenZFS file system. See `disk_iops_configuration` Block for details.
+        :param pulumi.Input[Union['OpenZfsFileSystemDiskIopsConfigurationArgs', 'OpenZfsFileSystemDiskIopsConfigurationArgsDict']] disk_iops_configuration: SSD IOPS configuration for the Amazon FSx for OpenZFS file system. See `disk_iops_configuration` Block for details.
         :param pulumi.Input[_builtins.str] endpoint_ip_address_range: (Multi-AZ only) Specifies the IP address range in which the endpoints to access your file system will be created.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] final_backup_tags: A map of tags to apply to the file system's final backup.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] final_backup_tags: Map of tags to apply to the file system's final backup.
         :param pulumi.Input[_builtins.str] kms_key_id: ARN for the KMS Key to encrypt the file system at rest, Defaults to an AWS managed KMS Key.
+        :param pulumi.Input[_builtins.str] network_type: Network type. Valid values are `IPV4` and `DUAL`. Default value is `IPV4`.
         :param pulumi.Input[_builtins.str] preferred_subnet_id: (Multi-AZ only) Required when `deployment_type` is set to `MULTI_AZ_1`. This specifies the subnet in which you want the preferred file server to be located.
         :param pulumi.Input[Union['OpenZfsFileSystemReadCacheConfigurationArgs', 'OpenZfsFileSystemReadCacheConfigurationArgsDict']] read_cache_configuration: Configuration block for optional provisioned SSD read cache on file systems that use the Intelligent-Tiering storage class. Required when `storage_type` is set to `INTELLIGENT_TIERING`. See `read_cache_configuration` Block for details.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Union['OpenZfsFileSystemRootVolumeConfigurationArgs', 'OpenZfsFileSystemRootVolumeConfigurationArgsDict']] root_volume_configuration: The configuration for the root volume of the file system. All other volumes are children or the root volume. See `root_volume_configuration` Block for details.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] route_table_ids: (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all virtual private cloud (VPC) route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_group_ids: A list of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups will apply to all network interfaces.
+        :param pulumi.Input[Union['OpenZfsFileSystemRootVolumeConfigurationArgs', 'OpenZfsFileSystemRootVolumeConfigurationArgsDict']] root_volume_configuration: Configuration for the root volume of the file system. All other volumes are children or the root volume. See `root_volume_configuration` Block for details.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] route_table_ids: (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all VPC route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_group_ids: List of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups will apply to all network interfaces.
         :param pulumi.Input[_builtins.bool] skip_final_backup: When enabled, will skip the default final backup taken when the file system is deleted. This configuration must be applied separately before attempting to delete the resource to have the desired behavior. Defaults to `false`.
-        :param pulumi.Input[_builtins.int] storage_capacity: The storage capacity (GiB) of the file system. Valid values between `64` and `524288`. Required when `storage_type` is set to `SSD`. Must not be set when `storage_type` is set to `INTELLIGENT_TIERING`.
-        :param pulumi.Input[_builtins.str] storage_type: The filesystem storage type. Valid values are `SSD` and `INTELLIGENT_TIERING`. `INTELLIGENT_TIERING` requires `deployment_type` to be `MULTI_AZ_1`.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnet_ids: A list of IDs for the subnets that the file system will be accessible from.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the file system. .If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[_builtins.int] storage_capacity: Storage capacity (GiB) of the file system. Valid values between `64` and `524288`. Required when `storage_type` is set to `SSD`. Must not be set when `storage_type` is set to `INTELLIGENT_TIERING`.
+        :param pulumi.Input[_builtins.str] storage_type: Filesystem storage type. Valid values are `SSD` and `INTELLIGENT_TIERING`. `INTELLIGENT_TIERING` requires `deployment_type` to be `MULTI_AZ_1`.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnet_ids: List of IDs for the subnets that the file system will be accessible from.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the file system. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[_builtins.int] throughput_capacity: Throughput (MB/s) of the file system. Valid values depend on `deployment_type`. Must be one of `64`, `128`, `256`, `512`, `1024`, `2048`, `3072`, `4096` for `SINGLE_AZ_1`. Must be one of `160`, `320`, `640`, `1280`, `2560`, `3840`, `5120`, `7680`, `10240` for `SINGLE_AZ_2`.
                
                The following arguments are optional:
-        :param pulumi.Input[_builtins.str] weekly_maintenance_start_time: The preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
+        :param pulumi.Input[_builtins.str] weekly_maintenance_start_time: Preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
         """
         ...
     @overload
@@ -1066,8 +1104,10 @@ class OpenZfsFileSystem(pulumi.CustomResource):
         import pulumi
         import pulumi_aws as aws
 
-        example = aws.fsx.OpenZfsFileSystem("example", security_group_ids=[example_aws_security_group["id"]])
+        example = aws.fsx.OpenZfsFileSystem("example", security_group_ids=[example_aws_security_group["id"]],
+        opts = pulumi.ResourceOptions(ignore_changes=["securityGroupIds"]))
         ```
+
 
         :param str resource_name: The name of the resource.
         :param OpenZfsFileSystemArgs args: The arguments to use to populate this resource's properties.
@@ -1084,30 +1124,31 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 automatic_backup_retention_days: Optional[pulumi.Input[_builtins.int]] = None,
-                 backup_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 copy_tags_to_backups: Optional[pulumi.Input[_builtins.bool]] = None,
-                 copy_tags_to_volumes: Optional[pulumi.Input[_builtins.bool]] = None,
-                 daily_automatic_backup_start_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete_options: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 deployment_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 disk_iops_configuration: Optional[pulumi.Input[Union['OpenZfsFileSystemDiskIopsConfigurationArgs', 'OpenZfsFileSystemDiskIopsConfigurationArgsDict']]] = None,
-                 endpoint_ip_address_range: Optional[pulumi.Input[_builtins.str]] = None,
-                 final_backup_tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 preferred_subnet_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 read_cache_configuration: Optional[pulumi.Input[Union['OpenZfsFileSystemReadCacheConfigurationArgs', 'OpenZfsFileSystemReadCacheConfigurationArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 root_volume_configuration: Optional[pulumi.Input[Union['OpenZfsFileSystemRootVolumeConfigurationArgs', 'OpenZfsFileSystemRootVolumeConfigurationArgsDict']]] = None,
-                 route_table_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 skip_final_backup: Optional[pulumi.Input[_builtins.bool]] = None,
-                 storage_capacity: Optional[pulumi.Input[_builtins.int]] = None,
-                 storage_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 subnet_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 throughput_capacity: Optional[pulumi.Input[_builtins.int]] = None,
-                 weekly_maintenance_start_time: Optional[pulumi.Input[_builtins.str]] = None,
+                 automatic_backup_retention_days: pulumi.Input[Optional[_builtins.int]] = None,
+                 backup_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 copy_tags_to_backups: pulumi.Input[Optional[_builtins.bool]] = None,
+                 copy_tags_to_volumes: pulumi.Input[Optional[_builtins.bool]] = None,
+                 daily_automatic_backup_start_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete_options: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 deployment_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 disk_iops_configuration: pulumi.Input[Optional[Union['OpenZfsFileSystemDiskIopsConfigurationArgs', 'OpenZfsFileSystemDiskIopsConfigurationArgsDict']]] = None,
+                 endpoint_ip_address_range: pulumi.Input[Optional[_builtins.str]] = None,
+                 final_backup_tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 network_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 preferred_subnet_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 read_cache_configuration: pulumi.Input[Optional[Union['OpenZfsFileSystemReadCacheConfigurationArgs', 'OpenZfsFileSystemReadCacheConfigurationArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 root_volume_configuration: pulumi.Input[Optional[Union['OpenZfsFileSystemRootVolumeConfigurationArgs', 'OpenZfsFileSystemRootVolumeConfigurationArgsDict']]] = None,
+                 route_table_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 skip_final_backup: pulumi.Input[Optional[_builtins.bool]] = None,
+                 storage_capacity: pulumi.Input[Optional[_builtins.int]] = None,
+                 storage_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 subnet_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 throughput_capacity: pulumi.Input[Optional[_builtins.int]] = None,
+                 weekly_maintenance_start_time: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -1130,6 +1171,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
             __props__.__dict__["endpoint_ip_address_range"] = endpoint_ip_address_range
             __props__.__dict__["final_backup_tags"] = final_backup_tags
             __props__.__dict__["kms_key_id"] = kms_key_id
+            __props__.__dict__["network_type"] = network_type
             __props__.__dict__["preferred_subnet_id"] = preferred_subnet_id
             __props__.__dict__["read_cache_configuration"] = read_cache_configuration
             __props__.__dict__["region"] = region
@@ -1165,38 +1207,39 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            automatic_backup_retention_days: Optional[pulumi.Input[_builtins.int]] = None,
-            backup_id: Optional[pulumi.Input[_builtins.str]] = None,
-            copy_tags_to_backups: Optional[pulumi.Input[_builtins.bool]] = None,
-            copy_tags_to_volumes: Optional[pulumi.Input[_builtins.bool]] = None,
-            daily_automatic_backup_start_time: Optional[pulumi.Input[_builtins.str]] = None,
-            delete_options: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            deployment_type: Optional[pulumi.Input[_builtins.str]] = None,
-            disk_iops_configuration: Optional[pulumi.Input[Union['OpenZfsFileSystemDiskIopsConfigurationArgs', 'OpenZfsFileSystemDiskIopsConfigurationArgsDict']]] = None,
-            dns_name: Optional[pulumi.Input[_builtins.str]] = None,
-            endpoint_ip_address: Optional[pulumi.Input[_builtins.str]] = None,
-            endpoint_ip_address_range: Optional[pulumi.Input[_builtins.str]] = None,
-            final_backup_tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-            network_interface_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            owner_id: Optional[pulumi.Input[_builtins.str]] = None,
-            preferred_subnet_id: Optional[pulumi.Input[_builtins.str]] = None,
-            read_cache_configuration: Optional[pulumi.Input[Union['OpenZfsFileSystemReadCacheConfigurationArgs', 'OpenZfsFileSystemReadCacheConfigurationArgsDict']]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            root_volume_configuration: Optional[pulumi.Input[Union['OpenZfsFileSystemRootVolumeConfigurationArgs', 'OpenZfsFileSystemRootVolumeConfigurationArgsDict']]] = None,
-            root_volume_id: Optional[pulumi.Input[_builtins.str]] = None,
-            route_table_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            skip_final_backup: Optional[pulumi.Input[_builtins.bool]] = None,
-            storage_capacity: Optional[pulumi.Input[_builtins.int]] = None,
-            storage_type: Optional[pulumi.Input[_builtins.str]] = None,
-            subnet_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            throughput_capacity: Optional[pulumi.Input[_builtins.int]] = None,
-            vpc_id: Optional[pulumi.Input[_builtins.str]] = None,
-            weekly_maintenance_start_time: Optional[pulumi.Input[_builtins.str]] = None) -> 'OpenZfsFileSystem':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            automatic_backup_retention_days: pulumi.Input[Optional[_builtins.int]] = None,
+            backup_id: pulumi.Input[Optional[_builtins.str]] = None,
+            copy_tags_to_backups: pulumi.Input[Optional[_builtins.bool]] = None,
+            copy_tags_to_volumes: pulumi.Input[Optional[_builtins.bool]] = None,
+            daily_automatic_backup_start_time: pulumi.Input[Optional[_builtins.str]] = None,
+            delete_options: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            deployment_type: pulumi.Input[Optional[_builtins.str]] = None,
+            disk_iops_configuration: pulumi.Input[Optional[Union['OpenZfsFileSystemDiskIopsConfigurationArgs', 'OpenZfsFileSystemDiskIopsConfigurationArgsDict']]] = None,
+            dns_name: pulumi.Input[Optional[_builtins.str]] = None,
+            endpoint_ip_address: pulumi.Input[Optional[_builtins.str]] = None,
+            endpoint_ip_address_range: pulumi.Input[Optional[_builtins.str]] = None,
+            final_backup_tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+            network_interface_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            network_type: pulumi.Input[Optional[_builtins.str]] = None,
+            owner_id: pulumi.Input[Optional[_builtins.str]] = None,
+            preferred_subnet_id: pulumi.Input[Optional[_builtins.str]] = None,
+            read_cache_configuration: pulumi.Input[Optional[Union['OpenZfsFileSystemReadCacheConfigurationArgs', 'OpenZfsFileSystemReadCacheConfigurationArgsDict']]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            root_volume_configuration: pulumi.Input[Optional[Union['OpenZfsFileSystemRootVolumeConfigurationArgs', 'OpenZfsFileSystemRootVolumeConfigurationArgsDict']]] = None,
+            root_volume_id: pulumi.Input[Optional[_builtins.str]] = None,
+            route_table_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            skip_final_backup: pulumi.Input[Optional[_builtins.bool]] = None,
+            storage_capacity: pulumi.Input[Optional[_builtins.int]] = None,
+            storage_type: pulumi.Input[Optional[_builtins.str]] = None,
+            subnet_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            throughput_capacity: pulumi.Input[Optional[_builtins.int]] = None,
+            vpc_id: pulumi.Input[Optional[_builtins.str]] = None,
+            weekly_maintenance_start_time: pulumi.Input[Optional[_builtins.str]] = None) -> 'OpenZfsFileSystem':
         """
         Get an existing OpenZfsFileSystem resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -1204,40 +1247,41 @@ class OpenZfsFileSystem(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name of the file system.
-        :param pulumi.Input[_builtins.int] automatic_backup_retention_days: The number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days.
-        :param pulumi.Input[_builtins.str] backup_id: The ID of the source backup to create the filesystem from.
-        :param pulumi.Input[_builtins.bool] copy_tags_to_backups: A boolean flag indicating whether tags for the file system should be copied to backups. The default value is false.
-        :param pulumi.Input[_builtins.bool] copy_tags_to_volumes: A boolean flag indicating whether tags for the file system should be copied to snapshots. The default value is false.
-        :param pulumi.Input[_builtins.str] daily_automatic_backup_start_time: A recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. Requires `automatic_backup_retention_days` to be set.
+        :param pulumi.Input[_builtins.str] arn: ARN of the file system.
+        :param pulumi.Input[_builtins.int] automatic_backup_retention_days: Number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days.
+        :param pulumi.Input[_builtins.str] backup_id: ID of the source backup to create the filesystem from.
+        :param pulumi.Input[_builtins.bool] copy_tags_to_backups: Whether tags for the file system should be copied to backups. Default value is false.
+        :param pulumi.Input[_builtins.bool] copy_tags_to_volumes: Whether tags for the file system should be copied to snapshots. Default value is false.
+        :param pulumi.Input[_builtins.str] daily_automatic_backup_start_time: Recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. Requires `automatic_backup_retention_days` to be set.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] delete_options: List of delete options, which at present supports only one value that specifies whether to delete all child volumes and snapshots when the file system is deleted. Valid values: `DELETE_CHILD_VOLUMES_AND_SNAPSHOTS`.
         :param pulumi.Input[_builtins.str] deployment_type: Filesystem deployment type. See the [AWS API documentation](https://docs.aws.amazon.com/fsx/latest/APIReference/API_CreateFileSystemOpenZFSConfiguration.html#FSx-Type-CreateFileSystemOpenZFSConfiguration-DeploymentType) for a list of valid values.
-        :param pulumi.Input[Union['OpenZfsFileSystemDiskIopsConfigurationArgs', 'OpenZfsFileSystemDiskIopsConfigurationArgsDict']] disk_iops_configuration: The SSD IOPS configuration for the Amazon FSx for OpenZFS file system. See `disk_iops_configuration` Block for details.
+        :param pulumi.Input[Union['OpenZfsFileSystemDiskIopsConfigurationArgs', 'OpenZfsFileSystemDiskIopsConfigurationArgsDict']] disk_iops_configuration: SSD IOPS configuration for the Amazon FSx for OpenZFS file system. See `disk_iops_configuration` Block for details.
         :param pulumi.Input[_builtins.str] dns_name: DNS name for the file system, e.g., `fs-12345678.fsx.us-west-2.amazonaws.com`
         :param pulumi.Input[_builtins.str] endpoint_ip_address: IP address of the endpoint that is used to access data or to manage the file system.
         :param pulumi.Input[_builtins.str] endpoint_ip_address_range: (Multi-AZ only) Specifies the IP address range in which the endpoints to access your file system will be created.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] final_backup_tags: A map of tags to apply to the file system's final backup.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] final_backup_tags: Map of tags to apply to the file system's final backup.
         :param pulumi.Input[_builtins.str] kms_key_id: ARN for the KMS Key to encrypt the file system at rest, Defaults to an AWS managed KMS Key.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] network_interface_ids: Set of Elastic Network Interface identifiers from which the file system is accessible The first network interface returned is the primary network interface.
+        :param pulumi.Input[_builtins.str] network_type: Network type. Valid values are `IPV4` and `DUAL`. Default value is `IPV4`.
         :param pulumi.Input[_builtins.str] owner_id: AWS account identifier that created the file system.
         :param pulumi.Input[_builtins.str] preferred_subnet_id: (Multi-AZ only) Required when `deployment_type` is set to `MULTI_AZ_1`. This specifies the subnet in which you want the preferred file server to be located.
         :param pulumi.Input[Union['OpenZfsFileSystemReadCacheConfigurationArgs', 'OpenZfsFileSystemReadCacheConfigurationArgsDict']] read_cache_configuration: Configuration block for optional provisioned SSD read cache on file systems that use the Intelligent-Tiering storage class. Required when `storage_type` is set to `INTELLIGENT_TIERING`. See `read_cache_configuration` Block for details.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Union['OpenZfsFileSystemRootVolumeConfigurationArgs', 'OpenZfsFileSystemRootVolumeConfigurationArgsDict']] root_volume_configuration: The configuration for the root volume of the file system. All other volumes are children or the root volume. See `root_volume_configuration` Block for details.
+        :param pulumi.Input[Union['OpenZfsFileSystemRootVolumeConfigurationArgs', 'OpenZfsFileSystemRootVolumeConfigurationArgsDict']] root_volume_configuration: Configuration for the root volume of the file system. All other volumes are children or the root volume. See `root_volume_configuration` Block for details.
         :param pulumi.Input[_builtins.str] root_volume_id: Identifier of the root volume, e.g., `fsvol-12345678`
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] route_table_ids: (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all virtual private cloud (VPC) route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_group_ids: A list of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups will apply to all network interfaces.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] route_table_ids: (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all VPC route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_group_ids: List of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups will apply to all network interfaces.
         :param pulumi.Input[_builtins.bool] skip_final_backup: When enabled, will skip the default final backup taken when the file system is deleted. This configuration must be applied separately before attempting to delete the resource to have the desired behavior. Defaults to `false`.
-        :param pulumi.Input[_builtins.int] storage_capacity: The storage capacity (GiB) of the file system. Valid values between `64` and `524288`. Required when `storage_type` is set to `SSD`. Must not be set when `storage_type` is set to `INTELLIGENT_TIERING`.
-        :param pulumi.Input[_builtins.str] storage_type: The filesystem storage type. Valid values are `SSD` and `INTELLIGENT_TIERING`. `INTELLIGENT_TIERING` requires `deployment_type` to be `MULTI_AZ_1`.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnet_ids: A list of IDs for the subnets that the file system will be accessible from.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the file system. .If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        :param pulumi.Input[_builtins.int] storage_capacity: Storage capacity (GiB) of the file system. Valid values between `64` and `524288`. Required when `storage_type` is set to `SSD`. Must not be set when `storage_type` is set to `INTELLIGENT_TIERING`.
+        :param pulumi.Input[_builtins.str] storage_type: Filesystem storage type. Valid values are `SSD` and `INTELLIGENT_TIERING`. `INTELLIGENT_TIERING` requires `deployment_type` to be `MULTI_AZ_1`.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnet_ids: List of IDs for the subnets that the file system will be accessible from.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the file system. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         :param pulumi.Input[_builtins.int] throughput_capacity: Throughput (MB/s) of the file system. Valid values depend on `deployment_type`. Must be one of `64`, `128`, `256`, `512`, `1024`, `2048`, `3072`, `4096` for `SINGLE_AZ_1`. Must be one of `160`, `320`, `640`, `1280`, `2560`, `3840`, `5120`, `7680`, `10240` for `SINGLE_AZ_2`.
                
                The following arguments are optional:
-        :param pulumi.Input[_builtins.str] vpc_id: Identifier of the Virtual Private Cloud for the file system.
-        :param pulumi.Input[_builtins.str] weekly_maintenance_start_time: The preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
+        :param pulumi.Input[_builtins.str] vpc_id: Identifier of the VPC for the file system.
+        :param pulumi.Input[_builtins.str] weekly_maintenance_start_time: Preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -1258,6 +1302,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
         __props__.__dict__["final_backup_tags"] = final_backup_tags
         __props__.__dict__["kms_key_id"] = kms_key_id
         __props__.__dict__["network_interface_ids"] = network_interface_ids
+        __props__.__dict__["network_type"] = network_type
         __props__.__dict__["owner_id"] = owner_id
         __props__.__dict__["preferred_subnet_id"] = preferred_subnet_id
         __props__.__dict__["read_cache_configuration"] = read_cache_configuration
@@ -1281,7 +1326,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        Amazon Resource Name of the file system.
+        ARN of the file system.
         """
         return pulumi.get(self, "arn")
 
@@ -1289,7 +1334,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter(name="automaticBackupRetentionDays")
     def automatic_backup_retention_days(self) -> pulumi.Output[Optional[_builtins.int]]:
         """
-        The number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days.
+        Number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days.
         """
         return pulumi.get(self, "automatic_backup_retention_days")
 
@@ -1297,7 +1342,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter(name="backupId")
     def backup_id(self) -> pulumi.Output[Optional[_builtins.str]]:
         """
-        The ID of the source backup to create the filesystem from.
+        ID of the source backup to create the filesystem from.
         """
         return pulumi.get(self, "backup_id")
 
@@ -1305,7 +1350,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter(name="copyTagsToBackups")
     def copy_tags_to_backups(self) -> pulumi.Output[Optional[_builtins.bool]]:
         """
-        A boolean flag indicating whether tags for the file system should be copied to backups. The default value is false.
+        Whether tags for the file system should be copied to backups. Default value is false.
         """
         return pulumi.get(self, "copy_tags_to_backups")
 
@@ -1313,7 +1358,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter(name="copyTagsToVolumes")
     def copy_tags_to_volumes(self) -> pulumi.Output[Optional[_builtins.bool]]:
         """
-        A boolean flag indicating whether tags for the file system should be copied to snapshots. The default value is false.
+        Whether tags for the file system should be copied to snapshots. Default value is false.
         """
         return pulumi.get(self, "copy_tags_to_volumes")
 
@@ -1321,7 +1366,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter(name="dailyAutomaticBackupStartTime")
     def daily_automatic_backup_start_time(self) -> pulumi.Output[_builtins.str]:
         """
-        A recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. Requires `automatic_backup_retention_days` to be set.
+        Recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. Requires `automatic_backup_retention_days` to be set.
         """
         return pulumi.get(self, "daily_automatic_backup_start_time")
 
@@ -1345,7 +1390,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter(name="diskIopsConfiguration")
     def disk_iops_configuration(self) -> pulumi.Output['outputs.OpenZfsFileSystemDiskIopsConfiguration']:
         """
-        The SSD IOPS configuration for the Amazon FSx for OpenZFS file system. See `disk_iops_configuration` Block for details.
+        SSD IOPS configuration for the Amazon FSx for OpenZFS file system. See `disk_iops_configuration` Block for details.
         """
         return pulumi.get(self, "disk_iops_configuration")
 
@@ -1377,7 +1422,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter(name="finalBackupTags")
     def final_backup_tags(self) -> pulumi.Output[Optional[Mapping[str, _builtins.str]]]:
         """
-        A map of tags to apply to the file system's final backup.
+        Map of tags to apply to the file system's final backup.
         """
         return pulumi.get(self, "final_backup_tags")
 
@@ -1396,6 +1441,14 @@ class OpenZfsFileSystem(pulumi.CustomResource):
         Set of Elastic Network Interface identifiers from which the file system is accessible The first network interface returned is the primary network interface.
         """
         return pulumi.get(self, "network_interface_ids")
+
+    @_builtins.property
+    @pulumi.getter(name="networkType")
+    def network_type(self) -> pulumi.Output[_builtins.str]:
+        """
+        Network type. Valid values are `IPV4` and `DUAL`. Default value is `IPV4`.
+        """
+        return pulumi.get(self, "network_type")
 
     @_builtins.property
     @pulumi.getter(name="ownerId")
@@ -1433,7 +1486,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter(name="rootVolumeConfiguration")
     def root_volume_configuration(self) -> pulumi.Output['outputs.OpenZfsFileSystemRootVolumeConfiguration']:
         """
-        The configuration for the root volume of the file system. All other volumes are children or the root volume. See `root_volume_configuration` Block for details.
+        Configuration for the root volume of the file system. All other volumes are children or the root volume. See `root_volume_configuration` Block for details.
         """
         return pulumi.get(self, "root_volume_configuration")
 
@@ -1449,7 +1502,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter(name="routeTableIds")
     def route_table_ids(self) -> pulumi.Output[Sequence[_builtins.str]]:
         """
-        (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all virtual private cloud (VPC) route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.
+        (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all VPC route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.
         """
         return pulumi.get(self, "route_table_ids")
 
@@ -1457,7 +1510,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter(name="securityGroupIds")
     def security_group_ids(self) -> pulumi.Output[Optional[Sequence[_builtins.str]]]:
         """
-        A list of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups will apply to all network interfaces.
+        List of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups will apply to all network interfaces.
         """
         return pulumi.get(self, "security_group_ids")
 
@@ -1473,7 +1526,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter(name="storageCapacity")
     def storage_capacity(self) -> pulumi.Output[Optional[_builtins.int]]:
         """
-        The storage capacity (GiB) of the file system. Valid values between `64` and `524288`. Required when `storage_type` is set to `SSD`. Must not be set when `storage_type` is set to `INTELLIGENT_TIERING`.
+        Storage capacity (GiB) of the file system. Valid values between `64` and `524288`. Required when `storage_type` is set to `SSD`. Must not be set when `storage_type` is set to `INTELLIGENT_TIERING`.
         """
         return pulumi.get(self, "storage_capacity")
 
@@ -1481,7 +1534,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter(name="storageType")
     def storage_type(self) -> pulumi.Output[Optional[_builtins.str]]:
         """
-        The filesystem storage type. Valid values are `SSD` and `INTELLIGENT_TIERING`. `INTELLIGENT_TIERING` requires `deployment_type` to be `MULTI_AZ_1`.
+        Filesystem storage type. Valid values are `SSD` and `INTELLIGENT_TIERING`. `INTELLIGENT_TIERING` requires `deployment_type` to be `MULTI_AZ_1`.
         """
         return pulumi.get(self, "storage_type")
 
@@ -1489,7 +1542,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter(name="subnetIds")
     def subnet_ids(self) -> pulumi.Output[Sequence[_builtins.str]]:
         """
-        A list of IDs for the subnets that the file system will be accessible from.
+        List of IDs for the subnets that the file system will be accessible from.
         """
         return pulumi.get(self, "subnet_ids")
 
@@ -1497,7 +1550,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, _builtins.str]]]:
         """
-        A map of tags to assign to the file system. .If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        Map of tags to assign to the file system. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
@@ -1505,7 +1558,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter(name="tagsAll")
     def tags_all(self) -> pulumi.Output[Mapping[str, _builtins.str]]:
         """
-        A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
@@ -1523,7 +1576,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Output[_builtins.str]:
         """
-        Identifier of the Virtual Private Cloud for the file system.
+        Identifier of the VPC for the file system.
         """
         return pulumi.get(self, "vpc_id")
 
@@ -1531,7 +1584,7 @@ class OpenZfsFileSystem(pulumi.CustomResource):
     @pulumi.getter(name="weeklyMaintenanceStartTime")
     def weekly_maintenance_start_time(self) -> pulumi.Output[_builtins.str]:
         """
-        The preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
+        Preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.
         """
         return pulumi.get(self, "weekly_maintenance_start_time")
 

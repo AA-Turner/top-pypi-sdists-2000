@@ -118,7 +118,7 @@ class GetTaskDefinitionResult:
     @pulumi.getter(name="containerDefinitions")
     def container_definitions(self) -> _builtins.str:
         """
-        A list of valid [container definitions](http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html) provided as a single valid JSON document. Please note that you should only provide values that are part of the container definition document. For a detailed description of what parameters are available, see the [Task Definition Parameters](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html) section from the official [Developer Guide](https://docs.aws.amazon.com/AmazonECS/latest/developerguide).
+        List of valid [container definitions](http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html) provided as a single valid JSON document. Please note that you should only provide values that are part of the container definition document. For a detailed description of what parameters are available, see the [Task Definition Parameters](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html) section from the official [Developer Guide](https://docs.aws.amazon.com/AmazonECS/latest/developerguide).
         """
         return pulumi.get(self, "container_definitions")
 
@@ -142,7 +142,7 @@ class GetTaskDefinitionResult:
     @pulumi.getter(name="ephemeralStorages")
     def ephemeral_storages(self) -> Sequence['outputs.GetTaskDefinitionEphemeralStorageResult']:
         """
-        The amount of ephemeral storage to allocate for the task. This parameter is used to expand the total amount of ephemeral storage available, beyond the default amount, for tasks hosted on AWS Fargate. See Ephemeral Storage.
+        Amount of ephemeral storage to allocate for the task. This parameter is used to expand the total amount of ephemeral storage available, beyond the default amount, for tasks hosted on AWS Fargate. See `ephemeral_storage` Block.
         """
         return pulumi.get(self, "ephemeral_storages")
 
@@ -158,7 +158,7 @@ class GetTaskDefinitionResult:
     @pulumi.getter
     def family(self) -> _builtins.str:
         """
-        A unique name for your task definition.
+        Unique name for your task definition.
         The following arguments are optional:
         """
         return pulumi.get(self, "family")
@@ -207,7 +207,7 @@ class GetTaskDefinitionResult:
     @pulumi.getter(name="placementConstraints")
     def placement_constraints(self) -> Sequence['outputs.GetTaskDefinitionPlacementConstraintResult']:
         """
-        Configuration block for rules that are taken into consideration during task placement. Maximum number of `placement_constraints` is `10`. Detailed below.
+        Configuration block for rules that are taken into consideration during task placement. Maximum number of `placement_constraints` is `10`. See `placement_constraints` Block.
         """
         return pulumi.get(self, "placement_constraints")
 
@@ -215,7 +215,7 @@ class GetTaskDefinitionResult:
     @pulumi.getter(name="proxyConfigurations")
     def proxy_configurations(self) -> Sequence['outputs.GetTaskDefinitionProxyConfigurationResult']:
         """
-        Configuration block for the App Mesh proxy. Detailed below.
+        Configuration block for the App Mesh proxy. See `proxy_configuration` Block.
         """
         return pulumi.get(self, "proxy_configurations")
 
@@ -273,7 +273,7 @@ class GetTaskDefinitionResult:
     @pulumi.getter
     def volumes(self) -> Sequence['outputs.GetTaskDefinitionVolumeResult']:
         """
-        Configuration block for volumes that containers in your task may use. Detailed below.
+        Configuration block for volumes that containers in your task may use. See `volume` Block for details.
         """
         return pulumi.get(self, "volumes")
 
@@ -383,8 +383,8 @@ def get_task_definition(region: Optional[_builtins.str] = None,
         task_definition=pulumi.get(__ret__, 'task_definition'),
         task_role_arn=pulumi.get(__ret__, 'task_role_arn'),
         volumes=pulumi.get(__ret__, 'volumes'))
-def get_task_definition_output(region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                               task_definition: Optional[pulumi.Input[_builtins.str]] = None,
+def get_task_definition_output(region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                               task_definition: pulumi.Input[Optional[_builtins.str]] = None,
                                opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetTaskDefinitionResult]:
     """
     The ECS task definition data source allows access to details of

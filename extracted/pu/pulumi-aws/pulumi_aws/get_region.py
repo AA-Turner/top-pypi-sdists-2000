@@ -58,9 +58,10 @@ class GetRegionResult:
 
     @_builtins.property
     @pulumi.getter
+    @_utilities.deprecated("""Use 'region' instead. This attribute will be removed in a future version of the provider.""")
     def id(self) -> _builtins.str:
         """
-        Region's name (e.g. `us-east-1`).
+        (**Deprecated**) Region's name (e.g. `us-east-1`).
         """
         return pulumi.get(self, "id")
 
@@ -116,7 +117,7 @@ def get_region(endpoint: Optional[_builtins.str] = None,
 
 
     :param _builtins.str endpoint: EC2 endpoint of the region to select.
-    :param _builtins.str id: Region's name (e.g. `us-east-1`).
+    :param _builtins.str id: (**Deprecated**) Region's name (e.g. `us-east-1`).
     :param _builtins.str name: Full name of the region to select. Use `region` instead.
     :param _builtins.str region: Full name of the region to select (e.g. `us-east-1`), and the region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     """
@@ -134,10 +135,10 @@ def get_region(endpoint: Optional[_builtins.str] = None,
         id=pulumi.get(__ret__, 'id'),
         name=pulumi.get(__ret__, 'name'),
         region=pulumi.get(__ret__, 'region'))
-def get_region_output(endpoint: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                      id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                      name: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                      region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_region_output(endpoint: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                      id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                      name: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                      region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                       opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetRegionResult]:
     """
     `get_region` provides details about a specific AWS Region.
@@ -161,7 +162,7 @@ def get_region_output(endpoint: Optional[pulumi.Input[Optional[_builtins.str]]] 
 
 
     :param _builtins.str endpoint: EC2 endpoint of the region to select.
-    :param _builtins.str id: Region's name (e.g. `us-east-1`).
+    :param _builtins.str id: (**Deprecated**) Region's name (e.g. `us-east-1`).
     :param _builtins.str name: Full name of the region to select. Use `region` instead.
     :param _builtins.str region: Full name of the region to select (e.g. `us-east-1`), and the region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     """

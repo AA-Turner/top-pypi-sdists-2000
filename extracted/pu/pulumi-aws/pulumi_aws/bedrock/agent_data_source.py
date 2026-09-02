@@ -23,15 +23,16 @@ class AgentDataSourceArgs:
     def __init__(__self__, *,
                  data_source_configuration: pulumi.Input['AgentDataSourceDataSourceConfigurationArgs'],
                  knowledge_base_id: pulumi.Input[_builtins.str],
-                 data_deletion_policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 server_side_encryption_configuration: Optional[pulumi.Input['AgentDataSourceServerSideEncryptionConfigurationArgs']] = None,
-                 timeouts: Optional[pulumi.Input['AgentDataSourceTimeoutsArgs']] = None,
-                 vector_ingestion_configuration: Optional[pulumi.Input['AgentDataSourceVectorIngestionConfigurationArgs']] = None):
+                 data_deletion_policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 server_side_encryption_configuration: pulumi.Input[Optional['AgentDataSourceServerSideEncryptionConfigurationArgs']] = None,
+                 timeouts: pulumi.Input[Optional['AgentDataSourceTimeoutsArgs']] = None,
+                 vector_ingestion_configuration: pulumi.Input[Optional['AgentDataSourceVectorIngestionConfigurationArgs']] = None):
         """
         The set of arguments for constructing a AgentDataSource resource.
+
         :param pulumi.Input['AgentDataSourceDataSourceConfigurationArgs'] data_source_configuration: Details about how the data source is stored. See `data_source_configuration` block for details.
         :param pulumi.Input[_builtins.str] knowledge_base_id: Unique identifier of the knowledge base to which the data source belongs.
         :param pulumi.Input[_builtins.str] data_deletion_policy: Data deletion policy for a data source. Valid values: `RETAIN`, `DELETE`.
@@ -86,31 +87,31 @@ class AgentDataSourceArgs:
 
     @_builtins.property
     @pulumi.getter(name="dataDeletionPolicy")
-    def data_deletion_policy(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def data_deletion_policy(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Data deletion policy for a data source. Valid values: `RETAIN`, `DELETE`.
         """
         return pulumi.get(self, "data_deletion_policy")
 
     @data_deletion_policy.setter
-    def data_deletion_policy(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def data_deletion_policy(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "data_deletion_policy", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the data source.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the data source.
 
@@ -119,70 +120,71 @@ class AgentDataSourceArgs:
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="serverSideEncryptionConfiguration")
-    def server_side_encryption_configuration(self) -> Optional[pulumi.Input['AgentDataSourceServerSideEncryptionConfigurationArgs']]:
+    def server_side_encryption_configuration(self) -> pulumi.Input[Optional['AgentDataSourceServerSideEncryptionConfigurationArgs']]:
         """
         Details about the configuration of the server-side encryption. See `server_side_encryption_configuration` block for details.
         """
         return pulumi.get(self, "server_side_encryption_configuration")
 
     @server_side_encryption_configuration.setter
-    def server_side_encryption_configuration(self, value: Optional[pulumi.Input['AgentDataSourceServerSideEncryptionConfigurationArgs']]):
+    def server_side_encryption_configuration(self, value: pulumi.Input[Optional['AgentDataSourceServerSideEncryptionConfigurationArgs']]):
         pulumi.set(self, "server_side_encryption_configuration", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['AgentDataSourceTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['AgentDataSourceTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['AgentDataSourceTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['AgentDataSourceTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter(name="vectorIngestionConfiguration")
-    def vector_ingestion_configuration(self) -> Optional[pulumi.Input['AgentDataSourceVectorIngestionConfigurationArgs']]:
+    def vector_ingestion_configuration(self) -> pulumi.Input[Optional['AgentDataSourceVectorIngestionConfigurationArgs']]:
         """
         Details about the configuration of the server-side encryption. See `vector_ingestion_configuration` block for details.
         """
         return pulumi.get(self, "vector_ingestion_configuration")
 
     @vector_ingestion_configuration.setter
-    def vector_ingestion_configuration(self, value: Optional[pulumi.Input['AgentDataSourceVectorIngestionConfigurationArgs']]):
+    def vector_ingestion_configuration(self, value: pulumi.Input[Optional['AgentDataSourceVectorIngestionConfigurationArgs']]):
         pulumi.set(self, "vector_ingestion_configuration", value)
 
 
 @pulumi.input_type
 class _AgentDataSourceState:
     def __init__(__self__, *,
-                 data_deletion_policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 data_source_configuration: Optional[pulumi.Input['AgentDataSourceDataSourceConfigurationArgs']] = None,
-                 data_source_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 knowledge_base_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 server_side_encryption_configuration: Optional[pulumi.Input['AgentDataSourceServerSideEncryptionConfigurationArgs']] = None,
-                 timeouts: Optional[pulumi.Input['AgentDataSourceTimeoutsArgs']] = None,
-                 vector_ingestion_configuration: Optional[pulumi.Input['AgentDataSourceVectorIngestionConfigurationArgs']] = None):
+                 data_deletion_policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 data_source_configuration: pulumi.Input[Optional['AgentDataSourceDataSourceConfigurationArgs']] = None,
+                 data_source_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 knowledge_base_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 server_side_encryption_configuration: pulumi.Input[Optional['AgentDataSourceServerSideEncryptionConfigurationArgs']] = None,
+                 timeouts: pulumi.Input[Optional['AgentDataSourceTimeoutsArgs']] = None,
+                 vector_ingestion_configuration: pulumi.Input[Optional['AgentDataSourceVectorIngestionConfigurationArgs']] = None):
         """
         Input properties used for looking up and filtering AgentDataSource resources.
+
         :param pulumi.Input[_builtins.str] data_deletion_policy: Data deletion policy for a data source. Valid values: `RETAIN`, `DELETE`.
         :param pulumi.Input['AgentDataSourceDataSourceConfigurationArgs'] data_source_configuration: Details about how the data source is stored. See `data_source_configuration` block for details.
         :param pulumi.Input[_builtins.str] data_source_id: Unique identifier of the data source.
@@ -218,67 +220,67 @@ class _AgentDataSourceState:
 
     @_builtins.property
     @pulumi.getter(name="dataDeletionPolicy")
-    def data_deletion_policy(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def data_deletion_policy(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Data deletion policy for a data source. Valid values: `RETAIN`, `DELETE`.
         """
         return pulumi.get(self, "data_deletion_policy")
 
     @data_deletion_policy.setter
-    def data_deletion_policy(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def data_deletion_policy(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "data_deletion_policy", value)
 
     @_builtins.property
     @pulumi.getter(name="dataSourceConfiguration")
-    def data_source_configuration(self) -> Optional[pulumi.Input['AgentDataSourceDataSourceConfigurationArgs']]:
+    def data_source_configuration(self) -> pulumi.Input[Optional['AgentDataSourceDataSourceConfigurationArgs']]:
         """
         Details about how the data source is stored. See `data_source_configuration` block for details.
         """
         return pulumi.get(self, "data_source_configuration")
 
     @data_source_configuration.setter
-    def data_source_configuration(self, value: Optional[pulumi.Input['AgentDataSourceDataSourceConfigurationArgs']]):
+    def data_source_configuration(self, value: pulumi.Input[Optional['AgentDataSourceDataSourceConfigurationArgs']]):
         pulumi.set(self, "data_source_configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="dataSourceId")
-    def data_source_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def data_source_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique identifier of the data source.
         """
         return pulumi.get(self, "data_source_id")
 
     @data_source_id.setter
-    def data_source_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def data_source_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "data_source_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the data source.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="knowledgeBaseId")
-    def knowledge_base_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def knowledge_base_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique identifier of the knowledge base to which the data source belongs.
         """
         return pulumi.get(self, "knowledge_base_id")
 
     @knowledge_base_id.setter
-    def knowledge_base_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def knowledge_base_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "knowledge_base_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the data source.
 
@@ -287,52 +289,52 @@ class _AgentDataSourceState:
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="serverSideEncryptionConfiguration")
-    def server_side_encryption_configuration(self) -> Optional[pulumi.Input['AgentDataSourceServerSideEncryptionConfigurationArgs']]:
+    def server_side_encryption_configuration(self) -> pulumi.Input[Optional['AgentDataSourceServerSideEncryptionConfigurationArgs']]:
         """
         Details about the configuration of the server-side encryption. See `server_side_encryption_configuration` block for details.
         """
         return pulumi.get(self, "server_side_encryption_configuration")
 
     @server_side_encryption_configuration.setter
-    def server_side_encryption_configuration(self, value: Optional[pulumi.Input['AgentDataSourceServerSideEncryptionConfigurationArgs']]):
+    def server_side_encryption_configuration(self, value: pulumi.Input[Optional['AgentDataSourceServerSideEncryptionConfigurationArgs']]):
         pulumi.set(self, "server_side_encryption_configuration", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['AgentDataSourceTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['AgentDataSourceTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['AgentDataSourceTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['AgentDataSourceTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter(name="vectorIngestionConfiguration")
-    def vector_ingestion_configuration(self) -> Optional[pulumi.Input['AgentDataSourceVectorIngestionConfigurationArgs']]:
+    def vector_ingestion_configuration(self) -> pulumi.Input[Optional['AgentDataSourceVectorIngestionConfigurationArgs']]:
         """
         Details about the configuration of the server-side encryption. See `vector_ingestion_configuration` block for details.
         """
         return pulumi.get(self, "vector_ingestion_configuration")
 
     @vector_ingestion_configuration.setter
-    def vector_ingestion_configuration(self, value: Optional[pulumi.Input['AgentDataSourceVectorIngestionConfigurationArgs']]):
+    def vector_ingestion_configuration(self, value: pulumi.Input[Optional['AgentDataSourceVectorIngestionConfigurationArgs']]):
         pulumi.set(self, "vector_ingestion_configuration", value)
 
 
@@ -342,15 +344,15 @@ class AgentDataSource(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 data_deletion_policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 data_source_configuration: Optional[pulumi.Input[Union['AgentDataSourceDataSourceConfigurationArgs', 'AgentDataSourceDataSourceConfigurationArgsDict']]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 knowledge_base_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 server_side_encryption_configuration: Optional[pulumi.Input[Union['AgentDataSourceServerSideEncryptionConfigurationArgs', 'AgentDataSourceServerSideEncryptionConfigurationArgsDict']]] = None,
-                 timeouts: Optional[pulumi.Input[Union['AgentDataSourceTimeoutsArgs', 'AgentDataSourceTimeoutsArgsDict']]] = None,
-                 vector_ingestion_configuration: Optional[pulumi.Input[Union['AgentDataSourceVectorIngestionConfigurationArgs', 'AgentDataSourceVectorIngestionConfigurationArgsDict']]] = None,
+                 data_deletion_policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 data_source_configuration: pulumi.Input[Optional[Union['AgentDataSourceDataSourceConfigurationArgs', 'AgentDataSourceDataSourceConfigurationArgsDict']]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 knowledge_base_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 server_side_encryption_configuration: pulumi.Input[Optional[Union['AgentDataSourceServerSideEncryptionConfigurationArgs', 'AgentDataSourceServerSideEncryptionConfigurationArgsDict']]] = None,
+                 timeouts: pulumi.Input[Optional[Union['AgentDataSourceTimeoutsArgs', 'AgentDataSourceTimeoutsArgsDict']]] = None,
+                 vector_ingestion_configuration: pulumi.Input[Optional[Union['AgentDataSourceVectorIngestionConfigurationArgs', 'AgentDataSourceVectorIngestionConfigurationArgsDict']]] = None,
                  __props__=None):
         """
         Resource for managing an AWS Agents for Amazon Bedrock Data Source.
@@ -364,14 +366,89 @@ class AgentDataSource(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.bedrock.AgentDataSource("example",
-            knowledge_base_id="EMDPPAYPZI",
-            name="example",
             data_source_configuration={
-                "type": "S3",
                 "s3_configuration": {
                     "bucket_arn": "arn:aws:s3:::example-bucket",
                 },
-            })
+                "type": "S3",
+            },
+            knowledge_base_id="EMDPPAYPZI",
+            name="example")
+        ```
+
+        ### Managed Knowledge Base Connector - S3
+
+        ```python
+        import pulumi
+        import json
+        import pulumi_aws as aws
+
+        example = aws.bedrock.AgentDataSource("example",
+            data_source_configuration={
+                "managed_knowledge_base_connector_configuration": {
+                    "media_extraction_configuration": {
+                        "image_extraction_configuration": {
+                            "image_extraction_status": "ENABLED",
+                        },
+                    },
+                    "connector_parameters": json.dumps({
+                        "type": "S3",
+                        "version": "1",
+                        "connectionConfiguration": {
+                            "bucketName": "my-documents-bucket",
+                            "bucketOwnerAccountId": "123456789012",
+                        },
+                        "aclEnabled": False,
+                        "filterConfiguration": {
+                            "maxFileSizeInMegaBytes": "500",
+                        },
+                    }),
+                },
+                "type": "MANAGED_KNOWLEDGE_BASE_CONNECTOR",
+            },
+            vector_ingestion_configuration={
+                "parsing_configuration": {
+                    "parsing_strategy": "SMART_PARSING",
+                },
+            },
+            knowledge_base_id=example_aws_bedrockagent_knowledge_base["id"],
+            name="example-s3-managed")
+        ```
+
+        ### Managed Knowledge Base Connector - SharePoint
+
+        ```python
+        import pulumi
+        import json
+        import pulumi_aws as aws
+
+        sharepoint = aws.bedrock.AgentDataSource("sharepoint",
+            data_source_configuration={
+                "managed_knowledge_base_connector_configuration": {
+                    "connector_parameters": json.dumps({
+                        "type": "SHAREPOINT",
+                        "version": "1",
+                        "connectionConfiguration": {
+                            "tenantId": "your-entra-tenant-id",
+                            "authType": "ENTRA_ID_APP_ONLY",
+                            "secretArn": "arn:aws:secretsmanager:us-east-1:123456789012:secret:my-sharepoint-secret",
+                            "certificateS3Path": {
+                                "s3BucketName": "my-certs-bucket",
+                                "s3KeyName": "certs/sharepoint-cert.crt",
+                            },
+                        },
+                        "dataEntityConfiguration": {
+                            "type": "DOCUMENT",
+                            "crawlFiles": "true",
+                            "crawlPages": "true",
+                            "siteUrls": ["https://company.sharepoint.com/sites/MySite"],
+                        },
+                    }),
+                },
+                "type": "MANAGED_KNOWLEDGE_BASE_CONNECTOR",
+            },
+            knowledge_base_id=example["id"],
+            name="example-sharepoint")
         ```
 
         ### Multimodal Parsing
@@ -381,33 +458,33 @@ class AgentDataSource(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.bedrock.AgentDataSource("example",
-            knowledge_base_id=example_aws_bedrockagent_knowledge_base["id"],
-            name="multimodal-example",
             data_source_configuration={
-                "type": "S3",
                 "s3_configuration": {
                     "bucket_arn": example_aws_s3_bucket["arn"],
                 },
+                "type": "S3",
             },
             vector_ingestion_configuration={
                 "chunking_configuration": {
-                    "chunking_strategy": "FIXED_SIZE",
                     "fixed_size_chunking_configuration": {
                         "max_tokens": 512,
                         "overlap_percentage": 20,
                     },
+                    "chunking_strategy": "FIXED_SIZE",
                 },
                 "parsing_configuration": {
-                    "parsing_strategy": "BEDROCK_FOUNDATION_MODEL",
                     "bedrock_foundation_model_configuration": {
-                        "model_arn": "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-sonnet-20240229-v1:0",
-                        "parsing_modality": "MULTIMODAL",
                         "parsing_prompt": {
                             "parsing_prompt_string": "Extract and transcribe all text and visual content from the document.",
                         },
+                        "model_arn": "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-sonnet-20240229-v1:0",
+                        "parsing_modality": "MULTIMODAL",
                     },
+                    "parsing_strategy": "BEDROCK_FOUNDATION_MODEL",
                 },
-            })
+            },
+            knowledge_base_id=example_aws_bedrockagent_knowledge_base["id"],
+            name="multimodal-example")
         ```
 
         ## Import
@@ -418,10 +495,6 @@ class AgentDataSource(pulumi.CustomResource):
         $ pulumi import aws:bedrock/agentDataSource:AgentDataSource example GWCMFMQF6T,EMDPPAYPZI
         ```
 
-        [1]: https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent_ConfluenceDataSourceConfiguration.html
-        [2]: https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent_SalesforceDataSourceConfiguration.html
-        [3]: https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent_SharePointDataSourceConfiguration.html
-        [4]: https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent_WebDataSourceConfiguration.html
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -454,14 +527,89 @@ class AgentDataSource(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.bedrock.AgentDataSource("example",
-            knowledge_base_id="EMDPPAYPZI",
-            name="example",
             data_source_configuration={
-                "type": "S3",
                 "s3_configuration": {
                     "bucket_arn": "arn:aws:s3:::example-bucket",
                 },
-            })
+                "type": "S3",
+            },
+            knowledge_base_id="EMDPPAYPZI",
+            name="example")
+        ```
+
+        ### Managed Knowledge Base Connector - S3
+
+        ```python
+        import pulumi
+        import json
+        import pulumi_aws as aws
+
+        example = aws.bedrock.AgentDataSource("example",
+            data_source_configuration={
+                "managed_knowledge_base_connector_configuration": {
+                    "media_extraction_configuration": {
+                        "image_extraction_configuration": {
+                            "image_extraction_status": "ENABLED",
+                        },
+                    },
+                    "connector_parameters": json.dumps({
+                        "type": "S3",
+                        "version": "1",
+                        "connectionConfiguration": {
+                            "bucketName": "my-documents-bucket",
+                            "bucketOwnerAccountId": "123456789012",
+                        },
+                        "aclEnabled": False,
+                        "filterConfiguration": {
+                            "maxFileSizeInMegaBytes": "500",
+                        },
+                    }),
+                },
+                "type": "MANAGED_KNOWLEDGE_BASE_CONNECTOR",
+            },
+            vector_ingestion_configuration={
+                "parsing_configuration": {
+                    "parsing_strategy": "SMART_PARSING",
+                },
+            },
+            knowledge_base_id=example_aws_bedrockagent_knowledge_base["id"],
+            name="example-s3-managed")
+        ```
+
+        ### Managed Knowledge Base Connector - SharePoint
+
+        ```python
+        import pulumi
+        import json
+        import pulumi_aws as aws
+
+        sharepoint = aws.bedrock.AgentDataSource("sharepoint",
+            data_source_configuration={
+                "managed_knowledge_base_connector_configuration": {
+                    "connector_parameters": json.dumps({
+                        "type": "SHAREPOINT",
+                        "version": "1",
+                        "connectionConfiguration": {
+                            "tenantId": "your-entra-tenant-id",
+                            "authType": "ENTRA_ID_APP_ONLY",
+                            "secretArn": "arn:aws:secretsmanager:us-east-1:123456789012:secret:my-sharepoint-secret",
+                            "certificateS3Path": {
+                                "s3BucketName": "my-certs-bucket",
+                                "s3KeyName": "certs/sharepoint-cert.crt",
+                            },
+                        },
+                        "dataEntityConfiguration": {
+                            "type": "DOCUMENT",
+                            "crawlFiles": "true",
+                            "crawlPages": "true",
+                            "siteUrls": ["https://company.sharepoint.com/sites/MySite"],
+                        },
+                    }),
+                },
+                "type": "MANAGED_KNOWLEDGE_BASE_CONNECTOR",
+            },
+            knowledge_base_id=example["id"],
+            name="example-sharepoint")
         ```
 
         ### Multimodal Parsing
@@ -471,33 +619,33 @@ class AgentDataSource(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.bedrock.AgentDataSource("example",
-            knowledge_base_id=example_aws_bedrockagent_knowledge_base["id"],
-            name="multimodal-example",
             data_source_configuration={
-                "type": "S3",
                 "s3_configuration": {
                     "bucket_arn": example_aws_s3_bucket["arn"],
                 },
+                "type": "S3",
             },
             vector_ingestion_configuration={
                 "chunking_configuration": {
-                    "chunking_strategy": "FIXED_SIZE",
                     "fixed_size_chunking_configuration": {
                         "max_tokens": 512,
                         "overlap_percentage": 20,
                     },
+                    "chunking_strategy": "FIXED_SIZE",
                 },
                 "parsing_configuration": {
-                    "parsing_strategy": "BEDROCK_FOUNDATION_MODEL",
                     "bedrock_foundation_model_configuration": {
-                        "model_arn": "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-sonnet-20240229-v1:0",
-                        "parsing_modality": "MULTIMODAL",
                         "parsing_prompt": {
                             "parsing_prompt_string": "Extract and transcribe all text and visual content from the document.",
                         },
+                        "model_arn": "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-sonnet-20240229-v1:0",
+                        "parsing_modality": "MULTIMODAL",
                     },
+                    "parsing_strategy": "BEDROCK_FOUNDATION_MODEL",
                 },
-            })
+            },
+            knowledge_base_id=example_aws_bedrockagent_knowledge_base["id"],
+            name="multimodal-example")
         ```
 
         ## Import
@@ -508,10 +656,6 @@ class AgentDataSource(pulumi.CustomResource):
         $ pulumi import aws:bedrock/agentDataSource:AgentDataSource example GWCMFMQF6T,EMDPPAYPZI
         ```
 
-        [1]: https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent_ConfluenceDataSourceConfiguration.html
-        [2]: https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent_SalesforceDataSourceConfiguration.html
-        [3]: https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent_SharePointDataSourceConfiguration.html
-        [4]: https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent_WebDataSourceConfiguration.html
 
         :param str resource_name: The name of the resource.
         :param AgentDataSourceArgs args: The arguments to use to populate this resource's properties.
@@ -528,15 +672,15 @@ class AgentDataSource(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 data_deletion_policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 data_source_configuration: Optional[pulumi.Input[Union['AgentDataSourceDataSourceConfigurationArgs', 'AgentDataSourceDataSourceConfigurationArgsDict']]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 knowledge_base_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 server_side_encryption_configuration: Optional[pulumi.Input[Union['AgentDataSourceServerSideEncryptionConfigurationArgs', 'AgentDataSourceServerSideEncryptionConfigurationArgsDict']]] = None,
-                 timeouts: Optional[pulumi.Input[Union['AgentDataSourceTimeoutsArgs', 'AgentDataSourceTimeoutsArgsDict']]] = None,
-                 vector_ingestion_configuration: Optional[pulumi.Input[Union['AgentDataSourceVectorIngestionConfigurationArgs', 'AgentDataSourceVectorIngestionConfigurationArgsDict']]] = None,
+                 data_deletion_policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 data_source_configuration: pulumi.Input[Optional[Union['AgentDataSourceDataSourceConfigurationArgs', 'AgentDataSourceDataSourceConfigurationArgsDict']]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 knowledge_base_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 server_side_encryption_configuration: pulumi.Input[Optional[Union['AgentDataSourceServerSideEncryptionConfigurationArgs', 'AgentDataSourceServerSideEncryptionConfigurationArgsDict']]] = None,
+                 timeouts: pulumi.Input[Optional[Union['AgentDataSourceTimeoutsArgs', 'AgentDataSourceTimeoutsArgsDict']]] = None,
+                 vector_ingestion_configuration: pulumi.Input[Optional[Union['AgentDataSourceVectorIngestionConfigurationArgs', 'AgentDataSourceVectorIngestionConfigurationArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -570,16 +714,16 @@ class AgentDataSource(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            data_deletion_policy: Optional[pulumi.Input[_builtins.str]] = None,
-            data_source_configuration: Optional[pulumi.Input[Union['AgentDataSourceDataSourceConfigurationArgs', 'AgentDataSourceDataSourceConfigurationArgsDict']]] = None,
-            data_source_id: Optional[pulumi.Input[_builtins.str]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            knowledge_base_id: Optional[pulumi.Input[_builtins.str]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            server_side_encryption_configuration: Optional[pulumi.Input[Union['AgentDataSourceServerSideEncryptionConfigurationArgs', 'AgentDataSourceServerSideEncryptionConfigurationArgsDict']]] = None,
-            timeouts: Optional[pulumi.Input[Union['AgentDataSourceTimeoutsArgs', 'AgentDataSourceTimeoutsArgsDict']]] = None,
-            vector_ingestion_configuration: Optional[pulumi.Input[Union['AgentDataSourceVectorIngestionConfigurationArgs', 'AgentDataSourceVectorIngestionConfigurationArgsDict']]] = None) -> 'AgentDataSource':
+            data_deletion_policy: pulumi.Input[Optional[_builtins.str]] = None,
+            data_source_configuration: pulumi.Input[Optional[Union['AgentDataSourceDataSourceConfigurationArgs', 'AgentDataSourceDataSourceConfigurationArgsDict']]] = None,
+            data_source_id: pulumi.Input[Optional[_builtins.str]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            knowledge_base_id: pulumi.Input[Optional[_builtins.str]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            server_side_encryption_configuration: pulumi.Input[Optional[Union['AgentDataSourceServerSideEncryptionConfigurationArgs', 'AgentDataSourceServerSideEncryptionConfigurationArgsDict']]] = None,
+            timeouts: pulumi.Input[Optional[Union['AgentDataSourceTimeoutsArgs', 'AgentDataSourceTimeoutsArgsDict']]] = None,
+            vector_ingestion_configuration: pulumi.Input[Optional[Union['AgentDataSourceVectorIngestionConfigurationArgs', 'AgentDataSourceVectorIngestionConfigurationArgsDict']]] = None) -> 'AgentDataSource':
         """
         Get an existing AgentDataSource resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

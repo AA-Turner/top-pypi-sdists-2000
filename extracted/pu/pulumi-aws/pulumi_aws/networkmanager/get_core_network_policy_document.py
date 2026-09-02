@@ -157,9 +157,37 @@ def get_core_network_policy_document(attachment_policies: Optional[Sequence[Unio
     import pulumi
     import pulumi_aws as aws
 
-    test = aws.networkmanager.get_core_network_policy_document(core_network_configurations=[{
-            "vpn_ecmp_support": False,
-            "asn_ranges": ["64512-64555"],
+    test = aws.networkmanager.get_core_network_policy_document(attachment_policies=[
+            {
+                "action": {
+                    "association_method": "constant",
+                    "segment": "shared",
+                },
+                "conditions": [{
+                    "type": "tag-value",
+                    "operator": "equals",
+                    "key": "segment",
+                    "value": "shared",
+                }],
+                "rule_number": 100,
+                "condition_logic": "or",
+            },
+            {
+                "action": {
+                    "association_method": "constant",
+                    "segment": "prod",
+                },
+                "conditions": [{
+                    "type": "tag-value",
+                    "operator": "equals",
+                    "key": "segment",
+                    "value": "prod",
+                }],
+                "rule_number": 200,
+                "condition_logic": "or",
+            },
+        ],
+        core_network_configurations=[{
             "edge_locations": [
                 {
                     "location": "us-east-1",
@@ -170,6 +198,14 @@ def get_core_network_policy_document(attachment_policies: Optional[Sequence[Unio
                     "asn": "64513",
                 },
             ],
+            "vpn_ecmp_support": False,
+            "asn_ranges": ["64512-64555"],
+        }],
+        segment_actions=[{
+            "action": "share",
+            "mode": "attachment-route",
+            "segment": "shared",
+            "share_withs": ["*"],
         }],
         segments=[
             {
@@ -181,42 +217,6 @@ def get_core_network_policy_document(attachment_policies: Optional[Sequence[Unio
                 "name": "prod",
                 "description": "Segment for prod services",
                 "require_attachment_acceptance": True,
-            },
-        ],
-        segment_actions=[{
-            "action": "share",
-            "mode": "attachment-route",
-            "segment": "shared",
-            "share_withs": ["*"],
-        }],
-        attachment_policies=[
-            {
-                "rule_number": 100,
-                "condition_logic": "or",
-                "conditions": [{
-                    "type": "tag-value",
-                    "operator": "equals",
-                    "key": "segment",
-                    "value": "shared",
-                }],
-                "action": {
-                    "association_method": "constant",
-                    "segment": "shared",
-                },
-            },
-            {
-                "rule_number": 200,
-                "condition_logic": "or",
-                "conditions": [{
-                    "type": "tag-value",
-                    "operator": "equals",
-                    "key": "segment",
-                    "value": "prod",
-                }],
-                "action": {
-                    "association_method": "constant",
-                    "segment": "prod",
-                },
             },
         ])
     ```
@@ -256,14 +256,14 @@ def get_core_network_policy_document(attachment_policies: Optional[Sequence[Unio
         segment_actions=pulumi.get(__ret__, 'segment_actions'),
         segments=pulumi.get(__ret__, 'segments'),
         version=pulumi.get(__ret__, 'version'))
-def get_core_network_policy_document_output(attachment_policies: Optional[pulumi.Input[Optional[Sequence[Union['GetCoreNetworkPolicyDocumentAttachmentPolicyArgs', 'GetCoreNetworkPolicyDocumentAttachmentPolicyArgsDict']]]]] = None,
-                                            attachment_routing_policy_rules: Optional[pulumi.Input[Optional[Sequence[Union['GetCoreNetworkPolicyDocumentAttachmentRoutingPolicyRuleArgs', 'GetCoreNetworkPolicyDocumentAttachmentRoutingPolicyRuleArgsDict']]]]] = None,
-                                            core_network_configurations: Optional[pulumi.Input[Sequence[Union['GetCoreNetworkPolicyDocumentCoreNetworkConfigurationArgs', 'GetCoreNetworkPolicyDocumentCoreNetworkConfigurationArgsDict']]]] = None,
-                                            network_function_groups: Optional[pulumi.Input[Optional[Sequence[Union['GetCoreNetworkPolicyDocumentNetworkFunctionGroupArgs', 'GetCoreNetworkPolicyDocumentNetworkFunctionGroupArgsDict']]]]] = None,
-                                            routing_policies: Optional[pulumi.Input[Optional[Sequence[Union['GetCoreNetworkPolicyDocumentRoutingPolicyArgs', 'GetCoreNetworkPolicyDocumentRoutingPolicyArgsDict']]]]] = None,
-                                            segment_actions: Optional[pulumi.Input[Optional[Sequence[Union['GetCoreNetworkPolicyDocumentSegmentActionArgs', 'GetCoreNetworkPolicyDocumentSegmentActionArgsDict']]]]] = None,
-                                            segments: Optional[pulumi.Input[Sequence[Union['GetCoreNetworkPolicyDocumentSegmentArgs', 'GetCoreNetworkPolicyDocumentSegmentArgsDict']]]] = None,
-                                            version: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_core_network_policy_document_output(attachment_policies: pulumi.Input[Optional[Optional[Sequence[Union['GetCoreNetworkPolicyDocumentAttachmentPolicyArgs', 'GetCoreNetworkPolicyDocumentAttachmentPolicyArgsDict']]]]] = None,
+                                            attachment_routing_policy_rules: pulumi.Input[Optional[Optional[Sequence[Union['GetCoreNetworkPolicyDocumentAttachmentRoutingPolicyRuleArgs', 'GetCoreNetworkPolicyDocumentAttachmentRoutingPolicyRuleArgsDict']]]]] = None,
+                                            core_network_configurations: pulumi.Input[Optional[Sequence[Union['GetCoreNetworkPolicyDocumentCoreNetworkConfigurationArgs', 'GetCoreNetworkPolicyDocumentCoreNetworkConfigurationArgsDict']]]] = None,
+                                            network_function_groups: pulumi.Input[Optional[Optional[Sequence[Union['GetCoreNetworkPolicyDocumentNetworkFunctionGroupArgs', 'GetCoreNetworkPolicyDocumentNetworkFunctionGroupArgsDict']]]]] = None,
+                                            routing_policies: pulumi.Input[Optional[Optional[Sequence[Union['GetCoreNetworkPolicyDocumentRoutingPolicyArgs', 'GetCoreNetworkPolicyDocumentRoutingPolicyArgsDict']]]]] = None,
+                                            segment_actions: pulumi.Input[Optional[Optional[Sequence[Union['GetCoreNetworkPolicyDocumentSegmentActionArgs', 'GetCoreNetworkPolicyDocumentSegmentActionArgsDict']]]]] = None,
+                                            segments: pulumi.Input[Optional[Sequence[Union['GetCoreNetworkPolicyDocumentSegmentArgs', 'GetCoreNetworkPolicyDocumentSegmentArgsDict']]]] = None,
+                                            version: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                             opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetCoreNetworkPolicyDocumentResult]:
     """
     Generates a Core Network policy document in JSON format for use with resources that expect core network policy documents such as `awscc_networkmanager_core_network`. It follows the API definition from the [core-network-policy documentation](https://docs.aws.amazon.com/vpc/latest/cloudwan/cloudwan-policies-json.html).
@@ -278,9 +278,37 @@ def get_core_network_policy_document_output(attachment_policies: Optional[pulumi
     import pulumi
     import pulumi_aws as aws
 
-    test = aws.networkmanager.get_core_network_policy_document(core_network_configurations=[{
-            "vpn_ecmp_support": False,
-            "asn_ranges": ["64512-64555"],
+    test = aws.networkmanager.get_core_network_policy_document(attachment_policies=[
+            {
+                "action": {
+                    "association_method": "constant",
+                    "segment": "shared",
+                },
+                "conditions": [{
+                    "type": "tag-value",
+                    "operator": "equals",
+                    "key": "segment",
+                    "value": "shared",
+                }],
+                "rule_number": 100,
+                "condition_logic": "or",
+            },
+            {
+                "action": {
+                    "association_method": "constant",
+                    "segment": "prod",
+                },
+                "conditions": [{
+                    "type": "tag-value",
+                    "operator": "equals",
+                    "key": "segment",
+                    "value": "prod",
+                }],
+                "rule_number": 200,
+                "condition_logic": "or",
+            },
+        ],
+        core_network_configurations=[{
             "edge_locations": [
                 {
                     "location": "us-east-1",
@@ -291,6 +319,14 @@ def get_core_network_policy_document_output(attachment_policies: Optional[pulumi
                     "asn": "64513",
                 },
             ],
+            "vpn_ecmp_support": False,
+            "asn_ranges": ["64512-64555"],
+        }],
+        segment_actions=[{
+            "action": "share",
+            "mode": "attachment-route",
+            "segment": "shared",
+            "share_withs": ["*"],
         }],
         segments=[
             {
@@ -302,42 +338,6 @@ def get_core_network_policy_document_output(attachment_policies: Optional[pulumi
                 "name": "prod",
                 "description": "Segment for prod services",
                 "require_attachment_acceptance": True,
-            },
-        ],
-        segment_actions=[{
-            "action": "share",
-            "mode": "attachment-route",
-            "segment": "shared",
-            "share_withs": ["*"],
-        }],
-        attachment_policies=[
-            {
-                "rule_number": 100,
-                "condition_logic": "or",
-                "conditions": [{
-                    "type": "tag-value",
-                    "operator": "equals",
-                    "key": "segment",
-                    "value": "shared",
-                }],
-                "action": {
-                    "association_method": "constant",
-                    "segment": "shared",
-                },
-            },
-            {
-                "rule_number": 200,
-                "condition_logic": "or",
-                "conditions": [{
-                    "type": "tag-value",
-                    "operator": "equals",
-                    "key": "segment",
-                    "value": "prod",
-                }],
-                "action": {
-                    "association_method": "constant",
-                    "segment": "prod",
-                },
             },
         ])
     ```

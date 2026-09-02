@@ -23,11 +23,12 @@ class MultiplexProgramArgs:
     def __init__(__self__, *,
                  multiplex_id: pulumi.Input[_builtins.str],
                  program_name: pulumi.Input[_builtins.str],
-                 multiplex_program_settings: Optional[pulumi.Input['MultiplexProgramMultiplexProgramSettingsArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['MultiplexProgramTimeoutsArgs']] = None):
+                 multiplex_program_settings: pulumi.Input[Optional['MultiplexProgramMultiplexProgramSettingsArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['MultiplexProgramTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a MultiplexProgram resource.
+
         :param pulumi.Input[_builtins.str] multiplex_id: Multiplex ID.
         :param pulumi.Input[_builtins.str] program_name: Unique program name.
         :param pulumi.Input['MultiplexProgramMultiplexProgramSettingsArgs'] multiplex_program_settings: MultiplexProgram settings. See Multiplex Program Settings for more details.
@@ -70,7 +71,7 @@ class MultiplexProgramArgs:
 
     @_builtins.property
     @pulumi.getter(name="multiplexProgramSettings")
-    def multiplex_program_settings(self) -> Optional[pulumi.Input['MultiplexProgramMultiplexProgramSettingsArgs']]:
+    def multiplex_program_settings(self) -> pulumi.Input[Optional['MultiplexProgramMultiplexProgramSettingsArgs']]:
         """
         MultiplexProgram settings. See Multiplex Program Settings for more details.
 
@@ -79,41 +80,42 @@ class MultiplexProgramArgs:
         return pulumi.get(self, "multiplex_program_settings")
 
     @multiplex_program_settings.setter
-    def multiplex_program_settings(self, value: Optional[pulumi.Input['MultiplexProgramMultiplexProgramSettingsArgs']]):
+    def multiplex_program_settings(self, value: pulumi.Input[Optional['MultiplexProgramMultiplexProgramSettingsArgs']]):
         pulumi.set(self, "multiplex_program_settings", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['MultiplexProgramTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['MultiplexProgramTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['MultiplexProgramTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['MultiplexProgramTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _MultiplexProgramState:
     def __init__(__self__, *,
-                 multiplex_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 multiplex_program_settings: Optional[pulumi.Input['MultiplexProgramMultiplexProgramSettingsArgs']] = None,
-                 program_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['MultiplexProgramTimeoutsArgs']] = None):
+                 multiplex_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 multiplex_program_settings: pulumi.Input[Optional['MultiplexProgramMultiplexProgramSettingsArgs']] = None,
+                 program_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['MultiplexProgramTimeoutsArgs']] = None):
         """
         Input properties used for looking up and filtering MultiplexProgram resources.
+
         :param pulumi.Input[_builtins.str] multiplex_id: Multiplex ID.
         :param pulumi.Input['MultiplexProgramMultiplexProgramSettingsArgs'] multiplex_program_settings: MultiplexProgram settings. See Multiplex Program Settings for more details.
                
@@ -134,19 +136,19 @@ class _MultiplexProgramState:
 
     @_builtins.property
     @pulumi.getter(name="multiplexId")
-    def multiplex_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def multiplex_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Multiplex ID.
         """
         return pulumi.get(self, "multiplex_id")
 
     @multiplex_id.setter
-    def multiplex_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def multiplex_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "multiplex_id", value)
 
     @_builtins.property
     @pulumi.getter(name="multiplexProgramSettings")
-    def multiplex_program_settings(self) -> Optional[pulumi.Input['MultiplexProgramMultiplexProgramSettingsArgs']]:
+    def multiplex_program_settings(self) -> pulumi.Input[Optional['MultiplexProgramMultiplexProgramSettingsArgs']]:
         """
         MultiplexProgram settings. See Multiplex Program Settings for more details.
 
@@ -155,40 +157,40 @@ class _MultiplexProgramState:
         return pulumi.get(self, "multiplex_program_settings")
 
     @multiplex_program_settings.setter
-    def multiplex_program_settings(self, value: Optional[pulumi.Input['MultiplexProgramMultiplexProgramSettingsArgs']]):
+    def multiplex_program_settings(self, value: pulumi.Input[Optional['MultiplexProgramMultiplexProgramSettingsArgs']]):
         pulumi.set(self, "multiplex_program_settings", value)
 
     @_builtins.property
     @pulumi.getter(name="programName")
-    def program_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def program_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique program name.
         """
         return pulumi.get(self, "program_name")
 
     @program_name.setter
-    def program_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def program_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "program_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['MultiplexProgramTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['MultiplexProgramTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['MultiplexProgramTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['MultiplexProgramTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
@@ -198,11 +200,11 @@ class MultiplexProgram(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 multiplex_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 multiplex_program_settings: Optional[pulumi.Input[Union['MultiplexProgramMultiplexProgramSettingsArgs', 'MultiplexProgramMultiplexProgramSettingsArgsDict']]] = None,
-                 program_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['MultiplexProgramTimeoutsArgs', 'MultiplexProgramTimeoutsArgsDict']]] = None,
+                 multiplex_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 multiplex_program_settings: pulumi.Input[Optional[Union['MultiplexProgramMultiplexProgramSettingsArgs', 'MultiplexProgramMultiplexProgramSettingsArgsDict']]] = None,
+                 program_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['MultiplexProgramTimeoutsArgs', 'MultiplexProgramTimeoutsArgsDict']]] = None,
                  __props__=None):
         """
         Resource for managing an AWS MediaLive MultiplexProgram.
@@ -217,40 +219,53 @@ class MultiplexProgram(pulumi.CustomResource):
 
         available = aws.get_availability_zones(state="available")
         example = aws.medialive.Multiplex("example",
-            name="example-multiplex-changed",
-            availability_zones=[
-                available.names[0],
-                available.names[1],
-            ],
             multiplex_settings={
                 "transport_stream_bitrate": 1000000,
                 "transport_stream_id": 1,
                 "transport_stream_reserved_bitrate": 1,
                 "maximum_video_buffer_delay_milliseconds": 1000,
             },
+            name="example-multiplex-changed",
+            availability_zones=[
+                available.names[0],
+                available.names[1],
+            ],
             start_multiplex=True,
             tags={
                 "tag1": "value1",
             })
         example_multiplex_program = aws.medialive.MultiplexProgram("example",
-            program_name="example_program",
-            multiplex_id=example.id,
             multiplex_program_settings={
-                "program_number": 1,
-                "preferred_channel_pipeline": "CURRENTLY_ACTIVE",
                 "video_settings": {
                     "constant_bitrate": 100000,
                 },
-            })
+                "program_number": 1,
+                "preferred_channel_pipeline": "CURRENTLY_ACTIVE",
+            },
+            program_name="example_program",
+            multiplex_id=example.id)
         ```
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `multiplex_id` (String) ID of the Multiplex.
+        * `program_name` (String) Unique program name.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
         Using `pulumi import`, import MediaLive MultiplexProgram using the `id`, or a combination of "`program_name`/`multiplex_id`". For example:
 
         ```sh
-        $ pulumi import aws:medialive/multiplexProgram:MultiplexProgram example example_program/1234567
+        $ pulumi import aws:medialive/multiplexProgram:MultiplexProgram example example_program/12345678
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -280,40 +295,53 @@ class MultiplexProgram(pulumi.CustomResource):
 
         available = aws.get_availability_zones(state="available")
         example = aws.medialive.Multiplex("example",
-            name="example-multiplex-changed",
-            availability_zones=[
-                available.names[0],
-                available.names[1],
-            ],
             multiplex_settings={
                 "transport_stream_bitrate": 1000000,
                 "transport_stream_id": 1,
                 "transport_stream_reserved_bitrate": 1,
                 "maximum_video_buffer_delay_milliseconds": 1000,
             },
+            name="example-multiplex-changed",
+            availability_zones=[
+                available.names[0],
+                available.names[1],
+            ],
             start_multiplex=True,
             tags={
                 "tag1": "value1",
             })
         example_multiplex_program = aws.medialive.MultiplexProgram("example",
-            program_name="example_program",
-            multiplex_id=example.id,
             multiplex_program_settings={
-                "program_number": 1,
-                "preferred_channel_pipeline": "CURRENTLY_ACTIVE",
                 "video_settings": {
                     "constant_bitrate": 100000,
                 },
-            })
+                "program_number": 1,
+                "preferred_channel_pipeline": "CURRENTLY_ACTIVE",
+            },
+            program_name="example_program",
+            multiplex_id=example.id)
         ```
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `multiplex_id` (String) ID of the Multiplex.
+        * `program_name` (String) Unique program name.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
         Using `pulumi import`, import MediaLive MultiplexProgram using the `id`, or a combination of "`program_name`/`multiplex_id`". For example:
 
         ```sh
-        $ pulumi import aws:medialive/multiplexProgram:MultiplexProgram example example_program/1234567
+        $ pulumi import aws:medialive/multiplexProgram:MultiplexProgram example example_program/12345678
         ```
+
 
         :param str resource_name: The name of the resource.
         :param MultiplexProgramArgs args: The arguments to use to populate this resource's properties.
@@ -330,11 +358,11 @@ class MultiplexProgram(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 multiplex_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 multiplex_program_settings: Optional[pulumi.Input[Union['MultiplexProgramMultiplexProgramSettingsArgs', 'MultiplexProgramMultiplexProgramSettingsArgsDict']]] = None,
-                 program_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['MultiplexProgramTimeoutsArgs', 'MultiplexProgramTimeoutsArgsDict']]] = None,
+                 multiplex_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 multiplex_program_settings: pulumi.Input[Optional[Union['MultiplexProgramMultiplexProgramSettingsArgs', 'MultiplexProgramMultiplexProgramSettingsArgsDict']]] = None,
+                 program_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['MultiplexProgramTimeoutsArgs', 'MultiplexProgramTimeoutsArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -363,11 +391,11 @@ class MultiplexProgram(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            multiplex_id: Optional[pulumi.Input[_builtins.str]] = None,
-            multiplex_program_settings: Optional[pulumi.Input[Union['MultiplexProgramMultiplexProgramSettingsArgs', 'MultiplexProgramMultiplexProgramSettingsArgsDict']]] = None,
-            program_name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            timeouts: Optional[pulumi.Input[Union['MultiplexProgramTimeoutsArgs', 'MultiplexProgramTimeoutsArgsDict']]] = None) -> 'MultiplexProgram':
+            multiplex_id: pulumi.Input[Optional[_builtins.str]] = None,
+            multiplex_program_settings: pulumi.Input[Optional[Union['MultiplexProgramMultiplexProgramSettingsArgs', 'MultiplexProgramMultiplexProgramSettingsArgsDict']]] = None,
+            program_name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            timeouts: pulumi.Input[Optional[Union['MultiplexProgramTimeoutsArgs', 'MultiplexProgramTimeoutsArgsDict']]] = None) -> 'MultiplexProgram':
         """
         Get an existing MultiplexProgram resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

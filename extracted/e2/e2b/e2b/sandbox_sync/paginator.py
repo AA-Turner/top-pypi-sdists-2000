@@ -1,13 +1,23 @@
 import urllib.parse
 from typing import Optional, List
 
+from typing_extensions import Unpack
+
+from e2b.api import handle_api_exception
 from e2b.api.client.api.sandboxes import get_v2_sandboxes
-from e2b.api.client.types import UNSET
-from e2b.exceptions import SandboxException
-from e2b.sandbox.main import SandboxBase
-from e2b.sandbox.sandbox_api import SandboxPaginatorBase, SandboxInfo
-from e2b.api import handle_api_exception, ApiClient
+from e2b.api.client.api.snapshots import get_snapshots
 from e2b.api.client.models.error import Error
+from e2b.api.client.models.order_direction import OrderDirection
+from e2b.api.client.types import UNSET
+from e2b.connection_config import ApiParams, ConnectionConfig, merge_api_params
+from e2b.exceptions import InvalidArgumentException, SandboxException
+from e2b.sandbox.sandbox_api import (
+    SandboxPaginatorBase,
+    SandboxInfo,
+    SnapshotPaginatorBase,
+    SnapshotInfo,
+)
+from e2b.api.client_sync import get_api_client
 
 
 class SandboxPaginator(SandboxPaginatorBase):
@@ -24,11 +34,15 @@ class SandboxPaginator(SandboxPaginatorBase):
     ```
     """
 
-    def next_items(self) -> List[SandboxInfo]:
+    def next_items(self, **opts: Unpack[ApiParams]) -> List[SandboxInfo]:
         """
         Returns the next page of sandboxes.
 
         Call this method only if `has_next` is `True`, otherwise it will raise an exception.
+
+        :param opts: Per-call connection options (e.g. `api_key`, `domain`,
+            `headers`, `request_timeout`). When provided, this call uses these
+            options on top of the ones the paginator was constructed with.
 
         :returns: List of sandboxes
         """
@@ -44,29 +58,104 @@ class SandboxPaginator(SandboxPaginatorBase):
             }
             metadata = urllib.parse.urlencode(quoted_metadata)
 
-        with ApiClient(
-            self._config,
-            limits=SandboxBase._limits,
-        ) as api_client:
-            res = get_v2_sandboxes.sync_detailed(
-                client=api_client,
-                metadata=metadata if metadata else UNSET,
-                state=self.query.state if self.query and self.query.state else UNSET,
-                limit=self.limit if self.limit else UNSET,
-                next_token=self._next_token if self._next_token else UNSET,
+        if self.order is None:
+            order = UNSET
+        else:
+            try:
+                order = OrderDirection(self.order)
+            except ValueError:
+                raise InvalidArgumentException(
+                    f"Invalid order {self.order!r}, expected 'asc' or 'desc'"
+                )
+
+        config = ConnectionConfig(**merge_api_params(self._opts, opts))
+        api_client = get_api_client(config)
+        res = get_v2_sandboxes.sync_detailed(
+            client=api_client,
+            metadata=metadata if metadata else UNSET,
+            state=self.query.state if self.query and self.query.state else UNSET,
+            started_after=(
+                self.query.started_after.astimezone()
+                if self.query and self.query.started_after
+                else UNSET
+            ),
+            template=(
+                self.query.template if self.query and self.query.template else UNSET
+            ),
+            order=order,
+            limit=self.limit if self.limit else UNSET,
+            next_token=self._next_token if self._next_token else UNSET,
+        )
+
+        if res.status_code >= 300:
+            raise handle_api_exception(res)
+
+        self._update_pagination(res.headers)
+
+        if res.parsed is None:
+            return []
+
+        # Check if res.parsed is Error
+        if isinstance(res.parsed, Error):
+            raise SandboxException(f"{res.parsed.message}: Request failed")
+
+        return [SandboxInfo._from_listed_sandbox(sandbox) for sandbox in res.parsed]
+
+
+class SnapshotPaginator(SnapshotPaginatorBase):
+    """
+    Paginator for listing snapshots.
+
+    Example:
+    ```python
+    paginator = Sandbox.list_snapshots()
+
+    while paginator.has_next:
+        snapshots = paginator.next_items()
+        print(snapshots)
+    ```
+    """
+
+    def next_items(self, **opts: Unpack[ApiParams]) -> List[SnapshotInfo]:
+        """
+        Returns the next page of snapshots.
+
+        Call this method only if `has_next` is `True`, otherwise it will raise an exception.
+
+        :param opts: Per-call connection options (e.g. `api_key`, `domain`,
+            `headers`, `request_timeout`). When provided, this call uses these
+            options on top of the ones the paginator was constructed with.
+
+        :returns: List of snapshots
+        """
+        if not self.has_next:
+            raise Exception("No more items to fetch")
+
+        config = ConnectionConfig(**merge_api_params(self._opts, opts))
+        api_client = get_api_client(config)
+        res = get_snapshots.sync_detailed(
+            client=api_client,
+            sandbox_id=self.sandbox_id if self.sandbox_id else UNSET,
+            name=self.name if self.name else UNSET,
+            limit=self.limit if self.limit else UNSET,
+            next_token=self._next_token if self._next_token else UNSET,
+        )
+
+        if res.status_code >= 300:
+            raise handle_api_exception(res)
+
+        self._update_pagination(res.headers)
+
+        if res.parsed is None:
+            return []
+
+        if isinstance(res.parsed, Error):
+            raise SandboxException(f"{res.parsed.message}: Request failed")
+
+        return [
+            SnapshotInfo(
+                snapshot_id=snapshot.snapshot_id,
+                names=list(snapshot.names) if snapshot.names else [],
             )
-
-            if res.status_code >= 300:
-                raise handle_api_exception(res)
-
-            self._next_token = res.headers.get("x-next-token")
-            self._has_next = bool(self._next_token)
-
-            if res.parsed is None:
-                return []
-
-            # Check if res.parse is Error
-            if isinstance(res.parsed, Error):
-                raise SandboxException(f"{res.parsed.message}: Request failed")
-
-            return [SandboxInfo._from_listed_sandbox(sandbox) for sandbox in res.parsed]
+            for snapshot in res.parsed
+        ]

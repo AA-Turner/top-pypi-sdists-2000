@@ -22,24 +22,25 @@ __all__ = ['TrailArgs', 'Trail']
 class TrailArgs:
     def __init__(__self__, *,
                  s3_bucket_name: pulumi.Input[_builtins.str],
-                 advanced_event_selectors: Optional[pulumi.Input[Sequence[pulumi.Input['TrailAdvancedEventSelectorArgs']]]] = None,
-                 cloud_watch_logs_group_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 cloud_watch_logs_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 enable_log_file_validation: Optional[pulumi.Input[_builtins.bool]] = None,
-                 enable_logging: Optional[pulumi.Input[_builtins.bool]] = None,
-                 event_selectors: Optional[pulumi.Input[Sequence[pulumi.Input['TrailEventSelectorArgs']]]] = None,
-                 include_global_service_events: Optional[pulumi.Input[_builtins.bool]] = None,
-                 insight_selectors: Optional[pulumi.Input[Sequence[pulumi.Input['TrailInsightSelectorArgs']]]] = None,
-                 is_multi_region_trail: Optional[pulumi.Input[_builtins.bool]] = None,
-                 is_organization_trail: Optional[pulumi.Input[_builtins.bool]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_key_prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 sns_topic_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 advanced_event_selectors: pulumi.Input[Optional[Sequence[pulumi.Input['TrailAdvancedEventSelectorArgs']]]] = None,
+                 cloud_watch_logs_group_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 cloud_watch_logs_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 enable_log_file_validation: pulumi.Input[Optional[_builtins.bool]] = None,
+                 enable_logging: pulumi.Input[Optional[_builtins.bool]] = None,
+                 event_selectors: pulumi.Input[Optional[Sequence[pulumi.Input['TrailEventSelectorArgs']]]] = None,
+                 include_global_service_events: pulumi.Input[Optional[_builtins.bool]] = None,
+                 insight_selectors: pulumi.Input[Optional[Sequence[pulumi.Input['TrailInsightSelectorArgs']]]] = None,
+                 is_multi_region_trail: pulumi.Input[Optional[_builtins.bool]] = None,
+                 is_organization_trail: pulumi.Input[Optional[_builtins.bool]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_key_prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 sns_topic_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a Trail resource.
+
         :param pulumi.Input[_builtins.str] s3_bucket_name: Name of the S3 bucket designated for publishing log files.
                
                The following arguments are optional:
@@ -110,223 +111,224 @@ class TrailArgs:
 
     @_builtins.property
     @pulumi.getter(name="advancedEventSelectors")
-    def advanced_event_selectors(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TrailAdvancedEventSelectorArgs']]]]:
+    def advanced_event_selectors(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['TrailAdvancedEventSelectorArgs']]]]:
         """
         Specifies an advanced event selector for enabling data event logging. Fields documented below. Conflicts with `event_selector`.
         """
         return pulumi.get(self, "advanced_event_selectors")
 
     @advanced_event_selectors.setter
-    def advanced_event_selectors(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['TrailAdvancedEventSelectorArgs']]]]):
+    def advanced_event_selectors(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['TrailAdvancedEventSelectorArgs']]]]):
         pulumi.set(self, "advanced_event_selectors", value)
 
     @_builtins.property
     @pulumi.getter(name="cloudWatchLogsGroupArn")
-    def cloud_watch_logs_group_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def cloud_watch_logs_group_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Log group name using an ARN that represents the log group to which CloudTrail logs will be delivered. Note that CloudTrail requires the Log Stream wildcard.
         """
         return pulumi.get(self, "cloud_watch_logs_group_arn")
 
     @cloud_watch_logs_group_arn.setter
-    def cloud_watch_logs_group_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def cloud_watch_logs_group_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "cloud_watch_logs_group_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="cloudWatchLogsRoleArn")
-    def cloud_watch_logs_role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def cloud_watch_logs_role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Role for the CloudWatch Logs endpoint to assume to write to a user’s log group.
         """
         return pulumi.get(self, "cloud_watch_logs_role_arn")
 
     @cloud_watch_logs_role_arn.setter
-    def cloud_watch_logs_role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def cloud_watch_logs_role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "cloud_watch_logs_role_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="enableLogFileValidation")
-    def enable_log_file_validation(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enable_log_file_validation(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether log file integrity validation is enabled. Defaults to `false`.
         """
         return pulumi.get(self, "enable_log_file_validation")
 
     @enable_log_file_validation.setter
-    def enable_log_file_validation(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enable_log_file_validation(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enable_log_file_validation", value)
 
     @_builtins.property
     @pulumi.getter(name="enableLogging")
-    def enable_logging(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enable_logging(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Enables logging for the trail. When set to `true`, logging is started by calling the [`StartLogging`](https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StartLogging.html) API. When set to `false`, logging is stopped by calling the [`StopLogging`](https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StopLogging.html) API. Defaults to `true`.
         """
         return pulumi.get(self, "enable_logging")
 
     @enable_logging.setter
-    def enable_logging(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enable_logging(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enable_logging", value)
 
     @_builtins.property
     @pulumi.getter(name="eventSelectors")
-    def event_selectors(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TrailEventSelectorArgs']]]]:
+    def event_selectors(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['TrailEventSelectorArgs']]]]:
         """
         Specifies an event selector for enabling data event logging. Fields documented below. Please note the [CloudTrail limits](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html) when configuring these. Conflicts with `advanced_event_selector`.
         """
         return pulumi.get(self, "event_selectors")
 
     @event_selectors.setter
-    def event_selectors(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['TrailEventSelectorArgs']]]]):
+    def event_selectors(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['TrailEventSelectorArgs']]]]):
         pulumi.set(self, "event_selectors", value)
 
     @_builtins.property
     @pulumi.getter(name="includeGlobalServiceEvents")
-    def include_global_service_events(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def include_global_service_events(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the trail is publishing events from global services such as IAM to the log files. Defaults to `true`.
         """
         return pulumi.get(self, "include_global_service_events")
 
     @include_global_service_events.setter
-    def include_global_service_events(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def include_global_service_events(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "include_global_service_events", value)
 
     @_builtins.property
     @pulumi.getter(name="insightSelectors")
-    def insight_selectors(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TrailInsightSelectorArgs']]]]:
+    def insight_selectors(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['TrailInsightSelectorArgs']]]]:
         """
         Configuration block for identifying unusual operational activity. See details below.
         """
         return pulumi.get(self, "insight_selectors")
 
     @insight_selectors.setter
-    def insight_selectors(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['TrailInsightSelectorArgs']]]]):
+    def insight_selectors(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['TrailInsightSelectorArgs']]]]):
         pulumi.set(self, "insight_selectors", value)
 
     @_builtins.property
     @pulumi.getter(name="isMultiRegionTrail")
-    def is_multi_region_trail(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def is_multi_region_trail(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the trail is created in the current region or in all regions. Defaults to `false`.
         """
         return pulumi.get(self, "is_multi_region_trail")
 
     @is_multi_region_trail.setter
-    def is_multi_region_trail(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def is_multi_region_trail(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "is_multi_region_trail", value)
 
     @_builtins.property
     @pulumi.getter(name="isOrganizationTrail")
-    def is_organization_trail(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def is_organization_trail(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the trail is an AWS Organizations trail. Organization trails log events for the master account and all member accounts. Can only be created in the organization master account. Defaults to `false`.
         """
         return pulumi.get(self, "is_organization_trail")
 
     @is_organization_trail.setter
-    def is_organization_trail(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def is_organization_trail(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "is_organization_trail", value)
 
     @_builtins.property
     @pulumi.getter(name="kmsKeyId")
-    def kms_key_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         KMS key ARN to use to encrypt the logs delivered by CloudTrail.
         """
         return pulumi.get(self, "kms_key_id")
 
     @kms_key_id.setter
-    def kms_key_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the trail.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="s3KeyPrefix")
-    def s3_key_prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def s3_key_prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         S3 key prefix that follows the name of the bucket you have designated for log file delivery.
         """
         return pulumi.get(self, "s3_key_prefix")
 
     @s3_key_prefix.setter
-    def s3_key_prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def s3_key_prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "s3_key_prefix", value)
 
     @_builtins.property
     @pulumi.getter(name="snsTopicName")
-    def sns_topic_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def sns_topic_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the Amazon SNS topic defined for notification of log file delivery. Specify the SNS topic ARN if it resides in another region.
         """
         return pulumi.get(self, "sns_topic_name")
 
     @sns_topic_name.setter
-    def sns_topic_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def sns_topic_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "sns_topic_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags to assign to the trail. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _TrailState:
     def __init__(__self__, *,
-                 advanced_event_selectors: Optional[pulumi.Input[Sequence[pulumi.Input['TrailAdvancedEventSelectorArgs']]]] = None,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 cloud_watch_logs_group_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 cloud_watch_logs_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 enable_log_file_validation: Optional[pulumi.Input[_builtins.bool]] = None,
-                 enable_logging: Optional[pulumi.Input[_builtins.bool]] = None,
-                 event_selectors: Optional[pulumi.Input[Sequence[pulumi.Input['TrailEventSelectorArgs']]]] = None,
-                 home_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 include_global_service_events: Optional[pulumi.Input[_builtins.bool]] = None,
-                 insight_selectors: Optional[pulumi.Input[Sequence[pulumi.Input['TrailInsightSelectorArgs']]]] = None,
-                 is_multi_region_trail: Optional[pulumi.Input[_builtins.bool]] = None,
-                 is_organization_trail: Optional[pulumi.Input[_builtins.bool]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_bucket_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_key_prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 sns_topic_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 sns_topic_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 advanced_event_selectors: pulumi.Input[Optional[Sequence[pulumi.Input['TrailAdvancedEventSelectorArgs']]]] = None,
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 cloud_watch_logs_group_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 cloud_watch_logs_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 enable_log_file_validation: pulumi.Input[Optional[_builtins.bool]] = None,
+                 enable_logging: pulumi.Input[Optional[_builtins.bool]] = None,
+                 event_selectors: pulumi.Input[Optional[Sequence[pulumi.Input['TrailEventSelectorArgs']]]] = None,
+                 home_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 include_global_service_events: pulumi.Input[Optional[_builtins.bool]] = None,
+                 insight_selectors: pulumi.Input[Optional[Sequence[pulumi.Input['TrailInsightSelectorArgs']]]] = None,
+                 is_multi_region_trail: pulumi.Input[Optional[_builtins.bool]] = None,
+                 is_organization_trail: pulumi.Input[Optional[_builtins.bool]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_bucket_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_key_prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 sns_topic_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 sns_topic_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         Input properties used for looking up and filtering Trail resources.
+
         :param pulumi.Input[Sequence[pulumi.Input['TrailAdvancedEventSelectorArgs']]] advanced_event_selectors: Specifies an advanced event selector for enabling data event logging. Fields documented below. Conflicts with `event_selector`.
         :param pulumi.Input[_builtins.str] arn: ARN of the trail.
         :param pulumi.Input[_builtins.str] cloud_watch_logs_group_arn: Log group name using an ARN that represents the log group to which CloudTrail logs will be delivered. Note that CloudTrail requires the Log Stream wildcard.
@@ -396,187 +398,187 @@ class _TrailState:
 
     @_builtins.property
     @pulumi.getter(name="advancedEventSelectors")
-    def advanced_event_selectors(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TrailAdvancedEventSelectorArgs']]]]:
+    def advanced_event_selectors(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['TrailAdvancedEventSelectorArgs']]]]:
         """
         Specifies an advanced event selector for enabling data event logging. Fields documented below. Conflicts with `event_selector`.
         """
         return pulumi.get(self, "advanced_event_selectors")
 
     @advanced_event_selectors.setter
-    def advanced_event_selectors(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['TrailAdvancedEventSelectorArgs']]]]):
+    def advanced_event_selectors(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['TrailAdvancedEventSelectorArgs']]]]):
         pulumi.set(self, "advanced_event_selectors", value)
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the trail.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="cloudWatchLogsGroupArn")
-    def cloud_watch_logs_group_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def cloud_watch_logs_group_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Log group name using an ARN that represents the log group to which CloudTrail logs will be delivered. Note that CloudTrail requires the Log Stream wildcard.
         """
         return pulumi.get(self, "cloud_watch_logs_group_arn")
 
     @cloud_watch_logs_group_arn.setter
-    def cloud_watch_logs_group_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def cloud_watch_logs_group_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "cloud_watch_logs_group_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="cloudWatchLogsRoleArn")
-    def cloud_watch_logs_role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def cloud_watch_logs_role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Role for the CloudWatch Logs endpoint to assume to write to a user’s log group.
         """
         return pulumi.get(self, "cloud_watch_logs_role_arn")
 
     @cloud_watch_logs_role_arn.setter
-    def cloud_watch_logs_role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def cloud_watch_logs_role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "cloud_watch_logs_role_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="enableLogFileValidation")
-    def enable_log_file_validation(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enable_log_file_validation(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether log file integrity validation is enabled. Defaults to `false`.
         """
         return pulumi.get(self, "enable_log_file_validation")
 
     @enable_log_file_validation.setter
-    def enable_log_file_validation(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enable_log_file_validation(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enable_log_file_validation", value)
 
     @_builtins.property
     @pulumi.getter(name="enableLogging")
-    def enable_logging(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enable_logging(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Enables logging for the trail. When set to `true`, logging is started by calling the [`StartLogging`](https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StartLogging.html) API. When set to `false`, logging is stopped by calling the [`StopLogging`](https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StopLogging.html) API. Defaults to `true`.
         """
         return pulumi.get(self, "enable_logging")
 
     @enable_logging.setter
-    def enable_logging(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enable_logging(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enable_logging", value)
 
     @_builtins.property
     @pulumi.getter(name="eventSelectors")
-    def event_selectors(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TrailEventSelectorArgs']]]]:
+    def event_selectors(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['TrailEventSelectorArgs']]]]:
         """
         Specifies an event selector for enabling data event logging. Fields documented below. Please note the [CloudTrail limits](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html) when configuring these. Conflicts with `advanced_event_selector`.
         """
         return pulumi.get(self, "event_selectors")
 
     @event_selectors.setter
-    def event_selectors(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['TrailEventSelectorArgs']]]]):
+    def event_selectors(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['TrailEventSelectorArgs']]]]):
         pulumi.set(self, "event_selectors", value)
 
     @_builtins.property
     @pulumi.getter(name="homeRegion")
-    def home_region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def home_region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region in which the trail was created.
         """
         return pulumi.get(self, "home_region")
 
     @home_region.setter
-    def home_region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def home_region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "home_region", value)
 
     @_builtins.property
     @pulumi.getter(name="includeGlobalServiceEvents")
-    def include_global_service_events(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def include_global_service_events(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the trail is publishing events from global services such as IAM to the log files. Defaults to `true`.
         """
         return pulumi.get(self, "include_global_service_events")
 
     @include_global_service_events.setter
-    def include_global_service_events(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def include_global_service_events(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "include_global_service_events", value)
 
     @_builtins.property
     @pulumi.getter(name="insightSelectors")
-    def insight_selectors(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TrailInsightSelectorArgs']]]]:
+    def insight_selectors(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['TrailInsightSelectorArgs']]]]:
         """
         Configuration block for identifying unusual operational activity. See details below.
         """
         return pulumi.get(self, "insight_selectors")
 
     @insight_selectors.setter
-    def insight_selectors(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['TrailInsightSelectorArgs']]]]):
+    def insight_selectors(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['TrailInsightSelectorArgs']]]]):
         pulumi.set(self, "insight_selectors", value)
 
     @_builtins.property
     @pulumi.getter(name="isMultiRegionTrail")
-    def is_multi_region_trail(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def is_multi_region_trail(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the trail is created in the current region or in all regions. Defaults to `false`.
         """
         return pulumi.get(self, "is_multi_region_trail")
 
     @is_multi_region_trail.setter
-    def is_multi_region_trail(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def is_multi_region_trail(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "is_multi_region_trail", value)
 
     @_builtins.property
     @pulumi.getter(name="isOrganizationTrail")
-    def is_organization_trail(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def is_organization_trail(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the trail is an AWS Organizations trail. Organization trails log events for the master account and all member accounts. Can only be created in the organization master account. Defaults to `false`.
         """
         return pulumi.get(self, "is_organization_trail")
 
     @is_organization_trail.setter
-    def is_organization_trail(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def is_organization_trail(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "is_organization_trail", value)
 
     @_builtins.property
     @pulumi.getter(name="kmsKeyId")
-    def kms_key_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         KMS key ARN to use to encrypt the logs delivered by CloudTrail.
         """
         return pulumi.get(self, "kms_key_id")
 
     @kms_key_id.setter
-    def kms_key_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the trail.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="s3BucketName")
-    def s3_bucket_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def s3_bucket_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the S3 bucket designated for publishing log files.
 
@@ -585,67 +587,67 @@ class _TrailState:
         return pulumi.get(self, "s3_bucket_name")
 
     @s3_bucket_name.setter
-    def s3_bucket_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def s3_bucket_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "s3_bucket_name", value)
 
     @_builtins.property
     @pulumi.getter(name="s3KeyPrefix")
-    def s3_key_prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def s3_key_prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         S3 key prefix that follows the name of the bucket you have designated for log file delivery.
         """
         return pulumi.get(self, "s3_key_prefix")
 
     @s3_key_prefix.setter
-    def s3_key_prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def s3_key_prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "s3_key_prefix", value)
 
     @_builtins.property
     @pulumi.getter(name="snsTopicArn")
-    def sns_topic_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def sns_topic_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the Amazon SNS topic that CloudTrail uses to send notifications when log files are delivered.
         """
         return pulumi.get(self, "sns_topic_arn")
 
     @sns_topic_arn.setter
-    def sns_topic_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def sns_topic_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "sns_topic_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="snsTopicName")
-    def sns_topic_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def sns_topic_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the Amazon SNS topic defined for notification of log file delivery. Specify the SNS topic ARN if it resides in another region.
         """
         return pulumi.get(self, "sns_topic_name")
 
     @sns_topic_name.setter
-    def sns_topic_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def sns_topic_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "sns_topic_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags to assign to the trail. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
 
@@ -655,23 +657,23 @@ class Trail(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 advanced_event_selectors: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TrailAdvancedEventSelectorArgs', 'TrailAdvancedEventSelectorArgsDict']]]]] = None,
-                 cloud_watch_logs_group_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 cloud_watch_logs_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 enable_log_file_validation: Optional[pulumi.Input[_builtins.bool]] = None,
-                 enable_logging: Optional[pulumi.Input[_builtins.bool]] = None,
-                 event_selectors: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TrailEventSelectorArgs', 'TrailEventSelectorArgsDict']]]]] = None,
-                 include_global_service_events: Optional[pulumi.Input[_builtins.bool]] = None,
-                 insight_selectors: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TrailInsightSelectorArgs', 'TrailInsightSelectorArgsDict']]]]] = None,
-                 is_multi_region_trail: Optional[pulumi.Input[_builtins.bool]] = None,
-                 is_organization_trail: Optional[pulumi.Input[_builtins.bool]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_bucket_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_key_prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 sns_topic_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 advanced_event_selectors: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TrailAdvancedEventSelectorArgs', 'TrailAdvancedEventSelectorArgsDict']]]]] = None,
+                 cloud_watch_logs_group_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 cloud_watch_logs_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 enable_log_file_validation: pulumi.Input[Optional[_builtins.bool]] = None,
+                 enable_logging: pulumi.Input[Optional[_builtins.bool]] = None,
+                 event_selectors: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TrailEventSelectorArgs', 'TrailEventSelectorArgsDict']]]]] = None,
+                 include_global_service_events: pulumi.Input[Optional[_builtins.bool]] = None,
+                 insight_selectors: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TrailInsightSelectorArgs', 'TrailInsightSelectorArgsDict']]]]] = None,
+                 is_multi_region_trail: pulumi.Input[Optional[_builtins.bool]] = None,
+                 is_organization_trail: pulumi.Input[Optional[_builtins.bool]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_bucket_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_key_prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 sns_topic_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Provides a CloudTrail resource.
@@ -699,29 +701,21 @@ class Trail(pulumi.CustomResource):
         current_get_region = aws.get_region()
         example = aws.iam.get_policy_document_output(statements=[
             {
-                "sid": "AWSCloudTrailAclCheck",
-                "effect": "Allow",
-                "principals": [{
-                    "type": "Service",
-                    "identifiers": ["cloudtrail.amazonaws.com"],
-                }],
-                "actions": ["s3:GetBucketAcl"],
-                "resources": [example_bucket.arn],
                 "conditions": [{
                     "test": "StringEquals",
                     "variable": "aws:SourceArn",
                     "values": [f"arn:{current_get_partition.partition}:cloudtrail:{current_get_region.region}:{current.account_id}:trail/example"],
                 }],
-            },
-            {
-                "sid": "AWSCloudTrailWrite",
-                "effect": "Allow",
                 "principals": [{
                     "type": "Service",
                     "identifiers": ["cloudtrail.amazonaws.com"],
                 }],
-                "actions": ["s3:PutObject"],
-                "resources": [example_bucket.arn.apply(lambda arn: f"{arn}/prefix/AWSLogs/{current.account_id}/*")],
+                "sid": "AWSCloudTrailAclCheck",
+                "effect": "Allow",
+                "actions": ["s3:GetBucketAcl"],
+                "resources": [example_bucket.arn],
+            },
+            {
                 "conditions": [
                     {
                         "test": "StringEquals",
@@ -734,6 +728,14 @@ class Trail(pulumi.CustomResource):
                         "values": [f"arn:{current_get_partition.partition}:cloudtrail:{current_get_region.region}:{current.account_id}:trail/example"],
                     },
                 ],
+                "principals": [{
+                    "type": "Service",
+                    "identifiers": ["cloudtrail.amazonaws.com"],
+                }],
+                "sid": "AWSCloudTrailWrite",
+                "effect": "Allow",
+                "actions": ["s3:PutObject"],
+                "resources": [example_bucket.arn.apply(lambda arn: f"{arn}/prefix/AWSLogs/{current.account_id}/*")],
             },
         ])
         example_bucket_policy = aws.s3.BucketPolicy("example",
@@ -761,12 +763,12 @@ class Trail(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.cloudtrail.Trail("example", event_selectors=[{
-            "read_write_type": "All",
-            "include_management_events": True,
             "data_resources": [{
                 "type": "AWS::Lambda::Function",
                 "values": ["arn:aws:lambda"],
             }],
+            "read_write_type": "All",
+            "include_management_events": True,
         }])
         ```
 
@@ -777,12 +779,12 @@ class Trail(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.cloudtrail.Trail("example", event_selectors=[{
-            "read_write_type": "All",
-            "include_management_events": True,
             "data_resources": [{
                 "type": "AWS::S3::Object",
                 "values": ["arn:aws:s3"],
             }],
+            "read_write_type": "All",
+            "include_management_events": True,
         }])
         ```
 
@@ -794,12 +796,12 @@ class Trail(pulumi.CustomResource):
 
         important_bucket = aws.s3.get_bucket(bucket="important-bucket")
         example = aws.cloudtrail.Trail("example", event_selectors=[{
-            "read_write_type": "All",
-            "include_management_events": True,
             "data_resources": [{
                 "type": "AWS::S3::Object",
                 "values": [f"{important_bucket.arn}/"],
             }],
+            "read_write_type": "All",
+            "include_management_events": True,
         }])
         ```
 
@@ -813,7 +815,6 @@ class Trail(pulumi.CustomResource):
         not_important_bucket_2 = aws.s3.get_bucket(bucket="not-important-bucket-2")
         example = aws.cloudtrail.Trail("example", advanced_event_selectors=[
             {
-                "name": "Log all S3 objects events except for two S3 buckets",
                 "field_selectors": [
                     {
                         "field": "eventCategory",
@@ -831,13 +832,14 @@ class Trail(pulumi.CustomResource):
                         "equals": ["AWS::S3::Object"],
                     },
                 ],
+                "name": "Log all S3 objects events except for two S3 buckets",
             },
             {
-                "name": "Log readOnly and writeOnly management events",
                 "field_selectors": [{
                     "field": "eventCategory",
                     "equals": ["Management"],
                 }],
+                "name": "Log readOnly and writeOnly management events",
             },
         ])
         ```
@@ -853,7 +855,6 @@ class Trail(pulumi.CustomResource):
         important_bucket_3 = aws.s3.get_bucket(bucket="important-bucket-3")
         example = aws.cloudtrail.Trail("example", advanced_event_selectors=[
             {
-                "name": "Log PutObject and DeleteObject events for two S3 buckets",
                 "field_selectors": [
                     {
                         "field": "eventCategory",
@@ -882,9 +883,9 @@ class Trail(pulumi.CustomResource):
                         "equals": ["AWS::S3::Object"],
                     },
                 ],
+                "name": "Log PutObject and DeleteObject events for two S3 buckets",
             },
             {
-                "name": "Log Delete* events for one S3 bucket",
                 "field_selectors": [
                     {
                         "field": "eventCategory",
@@ -907,6 +908,7 @@ class Trail(pulumi.CustomResource):
                         "equals": ["AWS::S3::Object"],
                     },
                 ],
+                "name": "Log Delete* events for one S3 bucket",
             },
         ])
         ```
@@ -923,11 +925,18 @@ class Trail(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        - `arn` (String) ARN of the CloudTrail trail.
+
         Using `pulumi import`, import Cloudtrails using the `arn`. For example:
 
         ```sh
         $ pulumi import aws:cloudtrail/trail:Trail sample arn:aws:cloudtrail:us-east-1:123456789012:trail/my-sample-trail
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -983,29 +992,21 @@ class Trail(pulumi.CustomResource):
         current_get_region = aws.get_region()
         example = aws.iam.get_policy_document_output(statements=[
             {
-                "sid": "AWSCloudTrailAclCheck",
-                "effect": "Allow",
-                "principals": [{
-                    "type": "Service",
-                    "identifiers": ["cloudtrail.amazonaws.com"],
-                }],
-                "actions": ["s3:GetBucketAcl"],
-                "resources": [example_bucket.arn],
                 "conditions": [{
                     "test": "StringEquals",
                     "variable": "aws:SourceArn",
                     "values": [f"arn:{current_get_partition.partition}:cloudtrail:{current_get_region.region}:{current.account_id}:trail/example"],
                 }],
-            },
-            {
-                "sid": "AWSCloudTrailWrite",
-                "effect": "Allow",
                 "principals": [{
                     "type": "Service",
                     "identifiers": ["cloudtrail.amazonaws.com"],
                 }],
-                "actions": ["s3:PutObject"],
-                "resources": [example_bucket.arn.apply(lambda arn: f"{arn}/prefix/AWSLogs/{current.account_id}/*")],
+                "sid": "AWSCloudTrailAclCheck",
+                "effect": "Allow",
+                "actions": ["s3:GetBucketAcl"],
+                "resources": [example_bucket.arn],
+            },
+            {
                 "conditions": [
                     {
                         "test": "StringEquals",
@@ -1018,6 +1019,14 @@ class Trail(pulumi.CustomResource):
                         "values": [f"arn:{current_get_partition.partition}:cloudtrail:{current_get_region.region}:{current.account_id}:trail/example"],
                     },
                 ],
+                "principals": [{
+                    "type": "Service",
+                    "identifiers": ["cloudtrail.amazonaws.com"],
+                }],
+                "sid": "AWSCloudTrailWrite",
+                "effect": "Allow",
+                "actions": ["s3:PutObject"],
+                "resources": [example_bucket.arn.apply(lambda arn: f"{arn}/prefix/AWSLogs/{current.account_id}/*")],
             },
         ])
         example_bucket_policy = aws.s3.BucketPolicy("example",
@@ -1045,12 +1054,12 @@ class Trail(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.cloudtrail.Trail("example", event_selectors=[{
-            "read_write_type": "All",
-            "include_management_events": True,
             "data_resources": [{
                 "type": "AWS::Lambda::Function",
                 "values": ["arn:aws:lambda"],
             }],
+            "read_write_type": "All",
+            "include_management_events": True,
         }])
         ```
 
@@ -1061,12 +1070,12 @@ class Trail(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.cloudtrail.Trail("example", event_selectors=[{
-            "read_write_type": "All",
-            "include_management_events": True,
             "data_resources": [{
                 "type": "AWS::S3::Object",
                 "values": ["arn:aws:s3"],
             }],
+            "read_write_type": "All",
+            "include_management_events": True,
         }])
         ```
 
@@ -1078,12 +1087,12 @@ class Trail(pulumi.CustomResource):
 
         important_bucket = aws.s3.get_bucket(bucket="important-bucket")
         example = aws.cloudtrail.Trail("example", event_selectors=[{
-            "read_write_type": "All",
-            "include_management_events": True,
             "data_resources": [{
                 "type": "AWS::S3::Object",
                 "values": [f"{important_bucket.arn}/"],
             }],
+            "read_write_type": "All",
+            "include_management_events": True,
         }])
         ```
 
@@ -1097,7 +1106,6 @@ class Trail(pulumi.CustomResource):
         not_important_bucket_2 = aws.s3.get_bucket(bucket="not-important-bucket-2")
         example = aws.cloudtrail.Trail("example", advanced_event_selectors=[
             {
-                "name": "Log all S3 objects events except for two S3 buckets",
                 "field_selectors": [
                     {
                         "field": "eventCategory",
@@ -1115,13 +1123,14 @@ class Trail(pulumi.CustomResource):
                         "equals": ["AWS::S3::Object"],
                     },
                 ],
+                "name": "Log all S3 objects events except for two S3 buckets",
             },
             {
-                "name": "Log readOnly and writeOnly management events",
                 "field_selectors": [{
                     "field": "eventCategory",
                     "equals": ["Management"],
                 }],
+                "name": "Log readOnly and writeOnly management events",
             },
         ])
         ```
@@ -1137,7 +1146,6 @@ class Trail(pulumi.CustomResource):
         important_bucket_3 = aws.s3.get_bucket(bucket="important-bucket-3")
         example = aws.cloudtrail.Trail("example", advanced_event_selectors=[
             {
-                "name": "Log PutObject and DeleteObject events for two S3 buckets",
                 "field_selectors": [
                     {
                         "field": "eventCategory",
@@ -1166,9 +1174,9 @@ class Trail(pulumi.CustomResource):
                         "equals": ["AWS::S3::Object"],
                     },
                 ],
+                "name": "Log PutObject and DeleteObject events for two S3 buckets",
             },
             {
-                "name": "Log Delete* events for one S3 bucket",
                 "field_selectors": [
                     {
                         "field": "eventCategory",
@@ -1191,6 +1199,7 @@ class Trail(pulumi.CustomResource):
                         "equals": ["AWS::S3::Object"],
                     },
                 ],
+                "name": "Log Delete* events for one S3 bucket",
             },
         ])
         ```
@@ -1207,11 +1216,18 @@ class Trail(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        - `arn` (String) ARN of the CloudTrail trail.
+
         Using `pulumi import`, import Cloudtrails using the `arn`. For example:
 
         ```sh
         $ pulumi import aws:cloudtrail/trail:Trail sample arn:aws:cloudtrail:us-east-1:123456789012:trail/my-sample-trail
         ```
+
 
         :param str resource_name: The name of the resource.
         :param TrailArgs args: The arguments to use to populate this resource's properties.
@@ -1228,23 +1244,23 @@ class Trail(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 advanced_event_selectors: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TrailAdvancedEventSelectorArgs', 'TrailAdvancedEventSelectorArgsDict']]]]] = None,
-                 cloud_watch_logs_group_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 cloud_watch_logs_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 enable_log_file_validation: Optional[pulumi.Input[_builtins.bool]] = None,
-                 enable_logging: Optional[pulumi.Input[_builtins.bool]] = None,
-                 event_selectors: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TrailEventSelectorArgs', 'TrailEventSelectorArgsDict']]]]] = None,
-                 include_global_service_events: Optional[pulumi.Input[_builtins.bool]] = None,
-                 insight_selectors: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TrailInsightSelectorArgs', 'TrailInsightSelectorArgsDict']]]]] = None,
-                 is_multi_region_trail: Optional[pulumi.Input[_builtins.bool]] = None,
-                 is_organization_trail: Optional[pulumi.Input[_builtins.bool]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_bucket_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_key_prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 sns_topic_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 advanced_event_selectors: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TrailAdvancedEventSelectorArgs', 'TrailAdvancedEventSelectorArgsDict']]]]] = None,
+                 cloud_watch_logs_group_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 cloud_watch_logs_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 enable_log_file_validation: pulumi.Input[Optional[_builtins.bool]] = None,
+                 enable_logging: pulumi.Input[Optional[_builtins.bool]] = None,
+                 event_selectors: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TrailEventSelectorArgs', 'TrailEventSelectorArgsDict']]]]] = None,
+                 include_global_service_events: pulumi.Input[Optional[_builtins.bool]] = None,
+                 insight_selectors: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TrailInsightSelectorArgs', 'TrailInsightSelectorArgsDict']]]]] = None,
+                 is_multi_region_trail: pulumi.Input[Optional[_builtins.bool]] = None,
+                 is_organization_trail: pulumi.Input[Optional[_builtins.bool]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_bucket_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_key_prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 sns_topic_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -1287,27 +1303,27 @@ class Trail(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            advanced_event_selectors: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TrailAdvancedEventSelectorArgs', 'TrailAdvancedEventSelectorArgsDict']]]]] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            cloud_watch_logs_group_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            cloud_watch_logs_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            enable_log_file_validation: Optional[pulumi.Input[_builtins.bool]] = None,
-            enable_logging: Optional[pulumi.Input[_builtins.bool]] = None,
-            event_selectors: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TrailEventSelectorArgs', 'TrailEventSelectorArgsDict']]]]] = None,
-            home_region: Optional[pulumi.Input[_builtins.str]] = None,
-            include_global_service_events: Optional[pulumi.Input[_builtins.bool]] = None,
-            insight_selectors: Optional[pulumi.Input[Sequence[pulumi.Input[Union['TrailInsightSelectorArgs', 'TrailInsightSelectorArgsDict']]]]] = None,
-            is_multi_region_trail: Optional[pulumi.Input[_builtins.bool]] = None,
-            is_organization_trail: Optional[pulumi.Input[_builtins.bool]] = None,
-            kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            s3_bucket_name: Optional[pulumi.Input[_builtins.str]] = None,
-            s3_key_prefix: Optional[pulumi.Input[_builtins.str]] = None,
-            sns_topic_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            sns_topic_name: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'Trail':
+            advanced_event_selectors: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TrailAdvancedEventSelectorArgs', 'TrailAdvancedEventSelectorArgsDict']]]]] = None,
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            cloud_watch_logs_group_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            cloud_watch_logs_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            enable_log_file_validation: pulumi.Input[Optional[_builtins.bool]] = None,
+            enable_logging: pulumi.Input[Optional[_builtins.bool]] = None,
+            event_selectors: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TrailEventSelectorArgs', 'TrailEventSelectorArgsDict']]]]] = None,
+            home_region: pulumi.Input[Optional[_builtins.str]] = None,
+            include_global_service_events: pulumi.Input[Optional[_builtins.bool]] = None,
+            insight_selectors: pulumi.Input[Optional[Sequence[pulumi.Input[Union['TrailInsightSelectorArgs', 'TrailInsightSelectorArgsDict']]]]] = None,
+            is_multi_region_trail: pulumi.Input[Optional[_builtins.bool]] = None,
+            is_organization_trail: pulumi.Input[Optional[_builtins.bool]] = None,
+            kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            s3_bucket_name: pulumi.Input[Optional[_builtins.str]] = None,
+            s3_key_prefix: pulumi.Input[Optional[_builtins.str]] = None,
+            sns_topic_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            sns_topic_name: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'Trail':
         """
         Get an existing Trail resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

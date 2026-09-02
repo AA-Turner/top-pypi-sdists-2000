@@ -109,7 +109,7 @@ class GetVpcConnectionResult:
     @pulumi.getter(name="targetClusterArn")
     def target_cluster_arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) of the cluster.
+        ARN of the cluster.
         """
         return pulumi.get(self, "target_cluster_arn")
 
@@ -177,9 +177,9 @@ def get_vpc_connection(arn: Optional[_builtins.str] = None,
         tags=pulumi.get(__ret__, 'tags'),
         target_cluster_arn=pulumi.get(__ret__, 'target_cluster_arn'),
         vpc_id=pulumi.get(__ret__, 'vpc_id'))
-def get_vpc_connection_output(arn: Optional[pulumi.Input[_builtins.str]] = None,
-                              region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_vpc_connection_output(arn: pulumi.Input[Optional[_builtins.str]] = None,
+                              region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                               opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetVpcConnectionResult]:
     """
     Get information on an Amazon MSK VPC Connection.

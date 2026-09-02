@@ -27,10 +27,7 @@ class GetNetworkPeeringConnectionsResult:
     """
     A collection of values returned by getNetworkPeeringConnections.
     """
-    def __init__(__self__, id=None, odb_peering_connections=None, region=None):
-        if id and not isinstance(id, str):
-            raise TypeError("Expected argument 'id' to be a str")
-        pulumi.set(__self__, "id", id)
+    def __init__(__self__, odb_peering_connections=None, region=None):
         if odb_peering_connections and not isinstance(odb_peering_connections, list):
             raise TypeError("Expected argument 'odb_peering_connections' to be a list")
         pulumi.set(__self__, "odb_peering_connections", odb_peering_connections)
@@ -39,18 +36,10 @@ class GetNetworkPeeringConnectionsResult:
         pulumi.set(__self__, "region", region)
 
     @_builtins.property
-    @pulumi.getter
-    def id(self) -> _builtins.str:
-        """
-        The provider-assigned unique ID for this managed resource.
-        """
-        return pulumi.get(self, "id")
-
-    @_builtins.property
     @pulumi.getter(name="odbPeeringConnections")
     def odb_peering_connections(self) -> Sequence['outputs.GetNetworkPeeringConnectionsOdbPeeringConnectionResult']:
         """
-        The list of ODB peering connections. A summary of an ODB peering connection.
+        List of ODB peering connections. A summary of an ODB peering connection.
         """
         return pulumi.get(self, "odb_peering_connections")
 
@@ -66,7 +55,6 @@ class AwaitableGetNetworkPeeringConnectionsResult(GetNetworkPeeringConnectionsRe
         if False:
             yield self
         return GetNetworkPeeringConnectionsResult(
-            id=self.id,
             odb_peering_connections=self.odb_peering_connections,
             region=self.region)
 
@@ -98,10 +86,9 @@ def get_network_peering_connections(region: Optional[_builtins.str] = None,
     __ret__ = pulumi.runtime.invoke('aws:odb/getNetworkPeeringConnections:getNetworkPeeringConnections', __args__, opts=opts, typ=GetNetworkPeeringConnectionsResult).value
 
     return AwaitableGetNetworkPeeringConnectionsResult(
-        id=pulumi.get(__ret__, 'id'),
         odb_peering_connections=pulumi.get(__ret__, 'odb_peering_connections'),
         region=pulumi.get(__ret__, 'region'))
-def get_network_peering_connections_output(region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_network_peering_connections_output(region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                            opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetNetworkPeeringConnectionsResult]:
     """
     Data source for retrieving all oracle database network peering resource in Oracle Database@AWS.
@@ -127,6 +114,5 @@ def get_network_peering_connections_output(region: Optional[pulumi.Input[Optiona
     opts = pulumi.InvokeOutputOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
     __ret__ = pulumi.runtime.invoke_output('aws:odb/getNetworkPeeringConnections:getNetworkPeeringConnections', __args__, opts=opts, typ=GetNetworkPeeringConnectionsResult)
     return __ret__.apply(lambda __response__: GetNetworkPeeringConnectionsResult(
-        id=pulumi.get(__response__, 'id'),
         odb_peering_connections=pulumi.get(__response__, 'odb_peering_connections'),
         region=pulumi.get(__response__, 'region')))

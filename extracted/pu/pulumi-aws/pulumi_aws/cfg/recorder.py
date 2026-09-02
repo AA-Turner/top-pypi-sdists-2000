@@ -22,14 +22,15 @@ __all__ = ['RecorderArgs', 'Recorder']
 class RecorderArgs:
     def __init__(__self__, *,
                  role_arn: pulumi.Input[_builtins.str],
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 recording_group: Optional[pulumi.Input['RecorderRecordingGroupArgs']] = None,
-                 recording_mode: Optional[pulumi.Input['RecorderRecordingModeArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 recording_group: pulumi.Input[Optional['RecorderRecordingGroupArgs']] = None,
+                 recording_mode: pulumi.Input[Optional['RecorderRecordingModeArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a Recorder resource.
-        :param pulumi.Input[_builtins.str] role_arn: Amazon Resource Name (ARN) of the IAM role. Used to make read or write requests to the delivery channel and to describe the AWS resources associated with the account. See [AWS Docs](http://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html) for more details.
-        :param pulumi.Input[_builtins.str] name: The name of the recorder. Defaults to `default`. Changing it recreates the resource.
+
+        :param pulumi.Input[_builtins.str] role_arn: ARN of the IAM role. Used to make read or write requests to the delivery channel and to describe the AWS resources associated with the account. See [AWS Docs](http://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html) for more details.
+        :param pulumi.Input[_builtins.str] name: The name of the configuration recorder. Defaults to `default`. Changing it recreates the resource.
         :param pulumi.Input['RecorderRecordingGroupArgs'] recording_group: Recording group - see below.
         :param pulumi.Input['RecorderRecordingModeArgs'] recording_mode: Recording mode - see below.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -48,7 +49,7 @@ class RecorderArgs:
     @pulumi.getter(name="roleArn")
     def role_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the IAM role. Used to make read or write requests to the delivery channel and to describe the AWS resources associated with the account. See [AWS Docs](http://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html) for more details.
+        ARN of the IAM role. Used to make read or write requests to the delivery channel and to describe the AWS resources associated with the account. See [AWS Docs](http://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html) for more details.
         """
         return pulumi.get(self, "role_arn")
 
@@ -58,68 +59,69 @@ class RecorderArgs:
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The name of the recorder. Defaults to `default`. Changing it recreates the resource.
+        The name of the configuration recorder. Defaults to `default`. Changing it recreates the resource.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="recordingGroup")
-    def recording_group(self) -> Optional[pulumi.Input['RecorderRecordingGroupArgs']]:
+    def recording_group(self) -> pulumi.Input[Optional['RecorderRecordingGroupArgs']]:
         """
         Recording group - see below.
         """
         return pulumi.get(self, "recording_group")
 
     @recording_group.setter
-    def recording_group(self, value: Optional[pulumi.Input['RecorderRecordingGroupArgs']]):
+    def recording_group(self, value: pulumi.Input[Optional['RecorderRecordingGroupArgs']]):
         pulumi.set(self, "recording_group", value)
 
     @_builtins.property
     @pulumi.getter(name="recordingMode")
-    def recording_mode(self) -> Optional[pulumi.Input['RecorderRecordingModeArgs']]:
+    def recording_mode(self) -> pulumi.Input[Optional['RecorderRecordingModeArgs']]:
         """
         Recording mode - see below.
         """
         return pulumi.get(self, "recording_mode")
 
     @recording_mode.setter
-    def recording_mode(self, value: Optional[pulumi.Input['RecorderRecordingModeArgs']]):
+    def recording_mode(self, value: pulumi.Input[Optional['RecorderRecordingModeArgs']]):
         pulumi.set(self, "recording_mode", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _RecorderState:
     def __init__(__self__, *,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 recording_group: Optional[pulumi.Input['RecorderRecordingGroupArgs']] = None,
-                 recording_mode: Optional[pulumi.Input['RecorderRecordingModeArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None):
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 recording_group: pulumi.Input[Optional['RecorderRecordingGroupArgs']] = None,
+                 recording_mode: pulumi.Input[Optional['RecorderRecordingModeArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering Recorder resources.
-        :param pulumi.Input[_builtins.str] name: The name of the recorder. Defaults to `default`. Changing it recreates the resource.
+
+        :param pulumi.Input[_builtins.str] name: The name of the configuration recorder. Defaults to `default`. Changing it recreates the resource.
         :param pulumi.Input['RecorderRecordingGroupArgs'] recording_group: Recording group - see below.
         :param pulumi.Input['RecorderRecordingModeArgs'] recording_mode: Recording mode - see below.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] role_arn: Amazon Resource Name (ARN) of the IAM role. Used to make read or write requests to the delivery channel and to describe the AWS resources associated with the account. See [AWS Docs](http://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html) for more details.
+        :param pulumi.Input[_builtins.str] role_arn: ARN of the IAM role. Used to make read or write requests to the delivery channel and to describe the AWS resources associated with the account. See [AWS Docs](http://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html) for more details.
         """
         if name is not None:
             pulumi.set(__self__, "name", name)
@@ -134,62 +136,62 @@ class _RecorderState:
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The name of the recorder. Defaults to `default`. Changing it recreates the resource.
+        The name of the configuration recorder. Defaults to `default`. Changing it recreates the resource.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="recordingGroup")
-    def recording_group(self) -> Optional[pulumi.Input['RecorderRecordingGroupArgs']]:
+    def recording_group(self) -> pulumi.Input[Optional['RecorderRecordingGroupArgs']]:
         """
         Recording group - see below.
         """
         return pulumi.get(self, "recording_group")
 
     @recording_group.setter
-    def recording_group(self, value: Optional[pulumi.Input['RecorderRecordingGroupArgs']]):
+    def recording_group(self, value: pulumi.Input[Optional['RecorderRecordingGroupArgs']]):
         pulumi.set(self, "recording_group", value)
 
     @_builtins.property
     @pulumi.getter(name="recordingMode")
-    def recording_mode(self) -> Optional[pulumi.Input['RecorderRecordingModeArgs']]:
+    def recording_mode(self) -> pulumi.Input[Optional['RecorderRecordingModeArgs']]:
         """
         Recording mode - see below.
         """
         return pulumi.get(self, "recording_mode")
 
     @recording_mode.setter
-    def recording_mode(self, value: Optional[pulumi.Input['RecorderRecordingModeArgs']]):
+    def recording_mode(self, value: pulumi.Input[Optional['RecorderRecordingModeArgs']]):
         pulumi.set(self, "recording_mode", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="roleArn")
-    def role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Amazon Resource Name (ARN) of the IAM role. Used to make read or write requests to the delivery channel and to describe the AWS resources associated with the account. See [AWS Docs](http://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html) for more details.
+        ARN of the IAM role. Used to make read or write requests to the delivery channel and to describe the AWS resources associated with the account. See [AWS Docs](http://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html) for more details.
         """
         return pulumi.get(self, "role_arn")
 
     @role_arn.setter
-    def role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "role_arn", value)
 
 
@@ -199,11 +201,11 @@ class Recorder(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 recording_group: Optional[pulumi.Input[Union['RecorderRecordingGroupArgs', 'RecorderRecordingGroupArgsDict']]] = None,
-                 recording_mode: Optional[pulumi.Input[Union['RecorderRecordingModeArgs', 'RecorderRecordingModeArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 recording_group: pulumi.Input[Optional[Union['RecorderRecordingGroupArgs', 'RecorderRecordingGroupArgsDict']]] = None,
+                 recording_mode: pulumi.Input[Optional[Union['RecorderRecordingModeArgs', 'RecorderRecordingModeArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides an AWS Config Configuration Recorder. Please note that this resource **does not start** the created recorder automatically.
@@ -219,11 +221,11 @@ class Recorder(pulumi.CustomResource):
         import pulumi_aws as aws
 
         assume_role = aws.iam.get_policy_document(statements=[{
-            "effect": "Allow",
             "principals": [{
                 "type": "Service",
                 "identifiers": ["config.amazonaws.com"],
             }],
+            "effect": "Allow",
             "actions": ["sts:AssumeRole"],
         }])
         r = aws.iam.Role("r",
@@ -241,17 +243,17 @@ class Recorder(pulumi.CustomResource):
         import pulumi_aws as aws
 
         foo = aws.cfg.Recorder("foo",
-            name="example",
-            role_arn=r["arn"],
             recording_group={
-                "all_supported": False,
                 "exclusion_by_resource_types": [{
                     "resource_types": ["AWS::EC2::Instance"],
                 }],
                 "recording_strategies": [{
                     "use_only": "EXCLUSION_BY_RESOURCE_TYPES",
                 }],
-            })
+                "all_supported": False,
+            },
+            name="example",
+            role_arn=r["arn"])
         ```
 
         ### Periodic Recording
@@ -261,8 +263,6 @@ class Recorder(pulumi.CustomResource):
         import pulumi_aws as aws
 
         foo = aws.cfg.Recorder("foo",
-            name="example",
-            role_arn=r["arn"],
             recording_group={
                 "all_supported": False,
                 "include_global_resource_types": False,
@@ -272,30 +272,44 @@ class Recorder(pulumi.CustomResource):
                 ],
             },
             recording_mode={
-                "recording_frequency": "CONTINUOUS",
                 "recording_mode_override": {
                     "description": "Only record EC2 network interfaces daily",
                     "resource_types": ["AWS::EC2::NetworkInterface"],
                     "recording_frequency": "DAILY",
                 },
-            })
+                "recording_frequency": "CONTINUOUS",
+            },
+            name="example",
+            role_arn=r["arn"])
         ```
 
         ## Import
 
-        Using `pulumi import`, import Configuration Recorder using the name. For example:
+        ### Identity Schema
+
+        #### Required
+
+        * `name` (String) Name of the configuration recorder.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
+        Using `pulumi import`, import Configuration Recorders using the `name`. For example:
 
         ```sh
-        $ pulumi import aws:cfg/recorder:Recorder foo example
+        $ pulumi import aws:cfg/recorder:Recorder example example
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] name: The name of the recorder. Defaults to `default`. Changing it recreates the resource.
+        :param pulumi.Input[_builtins.str] name: The name of the configuration recorder. Defaults to `default`. Changing it recreates the resource.
         :param pulumi.Input[Union['RecorderRecordingGroupArgs', 'RecorderRecordingGroupArgsDict']] recording_group: Recording group - see below.
         :param pulumi.Input[Union['RecorderRecordingModeArgs', 'RecorderRecordingModeArgsDict']] recording_mode: Recording mode - see below.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] role_arn: Amazon Resource Name (ARN) of the IAM role. Used to make read or write requests to the delivery channel and to describe the AWS resources associated with the account. See [AWS Docs](http://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html) for more details.
+        :param pulumi.Input[_builtins.str] role_arn: ARN of the IAM role. Used to make read or write requests to the delivery channel and to describe the AWS resources associated with the account. See [AWS Docs](http://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html) for more details.
         """
         ...
     @overload
@@ -317,11 +331,11 @@ class Recorder(pulumi.CustomResource):
         import pulumi_aws as aws
 
         assume_role = aws.iam.get_policy_document(statements=[{
-            "effect": "Allow",
             "principals": [{
                 "type": "Service",
                 "identifiers": ["config.amazonaws.com"],
             }],
+            "effect": "Allow",
             "actions": ["sts:AssumeRole"],
         }])
         r = aws.iam.Role("r",
@@ -339,17 +353,17 @@ class Recorder(pulumi.CustomResource):
         import pulumi_aws as aws
 
         foo = aws.cfg.Recorder("foo",
-            name="example",
-            role_arn=r["arn"],
             recording_group={
-                "all_supported": False,
                 "exclusion_by_resource_types": [{
                     "resource_types": ["AWS::EC2::Instance"],
                 }],
                 "recording_strategies": [{
                     "use_only": "EXCLUSION_BY_RESOURCE_TYPES",
                 }],
-            })
+                "all_supported": False,
+            },
+            name="example",
+            role_arn=r["arn"])
         ```
 
         ### Periodic Recording
@@ -359,8 +373,6 @@ class Recorder(pulumi.CustomResource):
         import pulumi_aws as aws
 
         foo = aws.cfg.Recorder("foo",
-            name="example",
-            role_arn=r["arn"],
             recording_group={
                 "all_supported": False,
                 "include_global_resource_types": False,
@@ -370,22 +382,36 @@ class Recorder(pulumi.CustomResource):
                 ],
             },
             recording_mode={
-                "recording_frequency": "CONTINUOUS",
                 "recording_mode_override": {
                     "description": "Only record EC2 network interfaces daily",
                     "resource_types": ["AWS::EC2::NetworkInterface"],
                     "recording_frequency": "DAILY",
                 },
-            })
+                "recording_frequency": "CONTINUOUS",
+            },
+            name="example",
+            role_arn=r["arn"])
         ```
 
         ## Import
 
-        Using `pulumi import`, import Configuration Recorder using the name. For example:
+        ### Identity Schema
+
+        #### Required
+
+        * `name` (String) Name of the configuration recorder.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
+        Using `pulumi import`, import Configuration Recorders using the `name`. For example:
 
         ```sh
-        $ pulumi import aws:cfg/recorder:Recorder foo example
+        $ pulumi import aws:cfg/recorder:Recorder example example
         ```
+
 
         :param str resource_name: The name of the resource.
         :param RecorderArgs args: The arguments to use to populate this resource's properties.
@@ -402,11 +428,11 @@ class Recorder(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 recording_group: Optional[pulumi.Input[Union['RecorderRecordingGroupArgs', 'RecorderRecordingGroupArgsDict']]] = None,
-                 recording_mode: Optional[pulumi.Input[Union['RecorderRecordingModeArgs', 'RecorderRecordingModeArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 recording_group: pulumi.Input[Optional[Union['RecorderRecordingGroupArgs', 'RecorderRecordingGroupArgsDict']]] = None,
+                 recording_mode: pulumi.Input[Optional[Union['RecorderRecordingModeArgs', 'RecorderRecordingModeArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -433,11 +459,11 @@ class Recorder(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            recording_group: Optional[pulumi.Input[Union['RecorderRecordingGroupArgs', 'RecorderRecordingGroupArgsDict']]] = None,
-            recording_mode: Optional[pulumi.Input[Union['RecorderRecordingModeArgs', 'RecorderRecordingModeArgsDict']]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            role_arn: Optional[pulumi.Input[_builtins.str]] = None) -> 'Recorder':
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            recording_group: pulumi.Input[Optional[Union['RecorderRecordingGroupArgs', 'RecorderRecordingGroupArgsDict']]] = None,
+            recording_mode: pulumi.Input[Optional[Union['RecorderRecordingModeArgs', 'RecorderRecordingModeArgsDict']]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            role_arn: pulumi.Input[Optional[_builtins.str]] = None) -> 'Recorder':
         """
         Get an existing Recorder resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -445,11 +471,11 @@ class Recorder(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] name: The name of the recorder. Defaults to `default`. Changing it recreates the resource.
+        :param pulumi.Input[_builtins.str] name: The name of the configuration recorder. Defaults to `default`. Changing it recreates the resource.
         :param pulumi.Input[Union['RecorderRecordingGroupArgs', 'RecorderRecordingGroupArgsDict']] recording_group: Recording group - see below.
         :param pulumi.Input[Union['RecorderRecordingModeArgs', 'RecorderRecordingModeArgsDict']] recording_mode: Recording mode - see below.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] role_arn: Amazon Resource Name (ARN) of the IAM role. Used to make read or write requests to the delivery channel and to describe the AWS resources associated with the account. See [AWS Docs](http://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html) for more details.
+        :param pulumi.Input[_builtins.str] role_arn: ARN of the IAM role. Used to make read or write requests to the delivery channel and to describe the AWS resources associated with the account. See [AWS Docs](http://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html) for more details.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -466,7 +492,7 @@ class Recorder(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[_builtins.str]:
         """
-        The name of the recorder. Defaults to `default`. Changing it recreates the resource.
+        The name of the configuration recorder. Defaults to `default`. Changing it recreates the resource.
         """
         return pulumi.get(self, "name")
 
@@ -498,7 +524,7 @@ class Recorder(pulumi.CustomResource):
     @pulumi.getter(name="roleArn")
     def role_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the IAM role. Used to make read or write requests to the delivery channel and to describe the AWS resources associated with the account. See [AWS Docs](http://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html) for more details.
+        ARN of the IAM role. Used to make read or write requests to the delivery channel and to describe the AWS resources associated with the account. See [AWS Docs](http://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html) for more details.
         """
         return pulumi.get(self, "role_arn")
 

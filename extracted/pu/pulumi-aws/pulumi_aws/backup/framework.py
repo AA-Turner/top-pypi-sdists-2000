@@ -22,12 +22,13 @@ __all__ = ['FrameworkArgs', 'Framework']
 class FrameworkArgs:
     def __init__(__self__, *,
                  controls: pulumi.Input[Sequence[pulumi.Input['FrameworkControlArgs']]],
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a Framework resource.
+
         :param pulumi.Input[Sequence[pulumi.Input['FrameworkControlArgs']]] controls: One or more control blocks that make up the framework. Each control in the list has a name, input parameters, and scope. Detailed below.
         :param pulumi.Input[_builtins.str] description: The description of the framework with a maximum of 1,024 characters
         :param pulumi.Input[_builtins.str] name: The unique name of the framework. The name must be between 1 and 256 characters, starting with a letter, and consisting of letters, numbers, and underscores.
@@ -58,68 +59,69 @@ class FrameworkArgs:
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The description of the framework with a maximum of 1,024 characters
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The unique name of the framework. The name must be between 1 and 256 characters, starting with a letter, and consisting of letters, numbers, and underscores.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Metadata that you can assign to help organize the frameworks you create. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _FrameworkState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 controls: Optional[pulumi.Input[Sequence[pulumi.Input['FrameworkControlArgs']]]] = None,
-                 creation_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 deployment_status: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 controls: pulumi.Input[Optional[Sequence[pulumi.Input['FrameworkControlArgs']]]] = None,
+                 creation_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 deployment_status: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         Input properties used for looking up and filtering Framework resources.
+
         :param pulumi.Input[_builtins.str] arn: The ARN of the backup framework.
         :param pulumi.Input[Sequence[pulumi.Input['FrameworkControlArgs']]] controls: One or more control blocks that make up the framework. Each control in the list has a name, input parameters, and scope. Detailed below.
         :param pulumi.Input[_builtins.str] creation_time: The date and time that a framework is created, in Unix format and Coordinated Universal Time (UTC).
@@ -154,122 +156,122 @@ class _FrameworkState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of the backup framework.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def controls(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['FrameworkControlArgs']]]]:
+    def controls(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['FrameworkControlArgs']]]]:
         """
         One or more control blocks that make up the framework. Each control in the list has a name, input parameters, and scope. Detailed below.
         """
         return pulumi.get(self, "controls")
 
     @controls.setter
-    def controls(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['FrameworkControlArgs']]]]):
+    def controls(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['FrameworkControlArgs']]]]):
         pulumi.set(self, "controls", value)
 
     @_builtins.property
     @pulumi.getter(name="creationTime")
-    def creation_time(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def creation_time(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The date and time that a framework is created, in Unix format and Coordinated Universal Time (UTC).
         """
         return pulumi.get(self, "creation_time")
 
     @creation_time.setter
-    def creation_time(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def creation_time(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "creation_time", value)
 
     @_builtins.property
     @pulumi.getter(name="deploymentStatus")
-    def deployment_status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def deployment_status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The deployment status of a framework. The statuses are: `CREATE_IN_PROGRESS` | `UPDATE_IN_PROGRESS` | `DELETE_IN_PROGRESS` | `COMPLETED` | `FAILED`.
         """
         return pulumi.get(self, "deployment_status")
 
     @deployment_status.setter
-    def deployment_status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def deployment_status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "deployment_status", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The description of the framework with a maximum of 1,024 characters
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The unique name of the framework. The name must be between 1 and 256 characters, starting with a letter, and consisting of letters, numbers, and underscores.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A framework consists of one or more controls. Each control governs a resource, such as backup plans, backup selections, backup vaults, or recovery points. You can also turn AWS Config recording on or off for each resource. For more information refer to the [AWS documentation for Framework Status](https://docs.aws.amazon.com/aws-backup/latest/devguide/API_DescribeFramework.html#Backup-DescribeFramework-response-FrameworkStatus)
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Metadata that you can assign to help organize the frameworks you create. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
 
@@ -279,11 +281,11 @@ class Framework(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 controls: Optional[pulumi.Input[Sequence[pulumi.Input[Union['FrameworkControlArgs', 'FrameworkControlArgsDict']]]]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 controls: pulumi.Input[Optional[Sequence[pulumi.Input[Union['FrameworkControlArgs', 'FrameworkControlArgsDict']]]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Provides an AWS Backup Framework resource.
@@ -297,18 +299,15 @@ class Framework(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.backup.Framework("Example",
-            name="exampleFramework",
-            description="this is an example framework",
             controls=[
                 {
-                    "name": "BACKUP_RECOVERY_POINT_MINIMUM_RETENTION_CHECK",
                     "input_parameters": [{
                         "name": "requiredRetentionDays",
                         "value": "35",
                     }],
+                    "name": "BACKUP_RECOVERY_POINT_MINIMUM_RETENTION_CHECK",
                 },
                 {
-                    "name": "BACKUP_PLAN_MIN_FREQUENCY_AND_MIN_RETENTION_CHECK",
                     "input_parameters": [
                         {
                             "name": "requiredFrequencyUnit",
@@ -323,21 +322,24 @@ class Framework(pulumi.CustomResource):
                             "value": "1",
                         },
                     ],
+                    "name": "BACKUP_PLAN_MIN_FREQUENCY_AND_MIN_RETENTION_CHECK",
                 },
                 {
                     "name": "BACKUP_RECOVERY_POINT_ENCRYPTED",
                 },
                 {
-                    "name": "BACKUP_RESOURCES_PROTECTED_BY_BACKUP_PLAN",
                     "scope": {
                         "compliance_resource_types": ["EBS"],
                     },
+                    "name": "BACKUP_RESOURCES_PROTECTED_BY_BACKUP_PLAN",
                 },
                 {
                     "name": "BACKUP_RECOVERY_POINT_MANUAL_DELETION_DISABLED",
                 },
                 {
-                    "name": "BACKUP_RESOURCES_PROTECTED_BY_BACKUP_VAULT_LOCK",
+                    "scope": {
+                        "compliance_resource_types": ["EBS"],
+                    },
                     "input_parameters": [
                         {
                             "name": "maxRetentionDays",
@@ -348,12 +350,12 @@ class Framework(pulumi.CustomResource):
                             "value": "1",
                         },
                     ],
+                    "name": "BACKUP_RESOURCES_PROTECTED_BY_BACKUP_VAULT_LOCK",
+                },
+                {
                     "scope": {
                         "compliance_resource_types": ["EBS"],
                     },
-                },
-                {
-                    "name": "BACKUP_LAST_RECOVERY_POINT_CREATED",
                     "input_parameters": [
                         {
                             "name": "recoveryPointAgeUnit",
@@ -364,11 +366,11 @@ class Framework(pulumi.CustomResource):
                             "value": "1",
                         },
                     ],
-                    "scope": {
-                        "compliance_resource_types": ["EBS"],
-                    },
+                    "name": "BACKUP_LAST_RECOVERY_POINT_CREATED",
                 },
             ],
+            name="exampleFramework",
+            description="this is an example framework",
             tags={
                 "Name": "Example Framework",
             })
@@ -381,6 +383,7 @@ class Framework(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:backup/framework:Framework test <id>
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -408,18 +411,15 @@ class Framework(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.backup.Framework("Example",
-            name="exampleFramework",
-            description="this is an example framework",
             controls=[
                 {
-                    "name": "BACKUP_RECOVERY_POINT_MINIMUM_RETENTION_CHECK",
                     "input_parameters": [{
                         "name": "requiredRetentionDays",
                         "value": "35",
                     }],
+                    "name": "BACKUP_RECOVERY_POINT_MINIMUM_RETENTION_CHECK",
                 },
                 {
-                    "name": "BACKUP_PLAN_MIN_FREQUENCY_AND_MIN_RETENTION_CHECK",
                     "input_parameters": [
                         {
                             "name": "requiredFrequencyUnit",
@@ -434,21 +434,24 @@ class Framework(pulumi.CustomResource):
                             "value": "1",
                         },
                     ],
+                    "name": "BACKUP_PLAN_MIN_FREQUENCY_AND_MIN_RETENTION_CHECK",
                 },
                 {
                     "name": "BACKUP_RECOVERY_POINT_ENCRYPTED",
                 },
                 {
-                    "name": "BACKUP_RESOURCES_PROTECTED_BY_BACKUP_PLAN",
                     "scope": {
                         "compliance_resource_types": ["EBS"],
                     },
+                    "name": "BACKUP_RESOURCES_PROTECTED_BY_BACKUP_PLAN",
                 },
                 {
                     "name": "BACKUP_RECOVERY_POINT_MANUAL_DELETION_DISABLED",
                 },
                 {
-                    "name": "BACKUP_RESOURCES_PROTECTED_BY_BACKUP_VAULT_LOCK",
+                    "scope": {
+                        "compliance_resource_types": ["EBS"],
+                    },
                     "input_parameters": [
                         {
                             "name": "maxRetentionDays",
@@ -459,12 +462,12 @@ class Framework(pulumi.CustomResource):
                             "value": "1",
                         },
                     ],
+                    "name": "BACKUP_RESOURCES_PROTECTED_BY_BACKUP_VAULT_LOCK",
+                },
+                {
                     "scope": {
                         "compliance_resource_types": ["EBS"],
                     },
-                },
-                {
-                    "name": "BACKUP_LAST_RECOVERY_POINT_CREATED",
                     "input_parameters": [
                         {
                             "name": "recoveryPointAgeUnit",
@@ -475,11 +478,11 @@ class Framework(pulumi.CustomResource):
                             "value": "1",
                         },
                     ],
-                    "scope": {
-                        "compliance_resource_types": ["EBS"],
-                    },
+                    "name": "BACKUP_LAST_RECOVERY_POINT_CREATED",
                 },
             ],
+            name="exampleFramework",
+            description="this is an example framework",
             tags={
                 "Name": "Example Framework",
             })
@@ -492,6 +495,7 @@ class Framework(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:backup/framework:Framework test <id>
         ```
+
 
         :param str resource_name: The name of the resource.
         :param FrameworkArgs args: The arguments to use to populate this resource's properties.
@@ -508,11 +512,11 @@ class Framework(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 controls: Optional[pulumi.Input[Sequence[pulumi.Input[Union['FrameworkControlArgs', 'FrameworkControlArgsDict']]]]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 controls: pulumi.Input[Optional[Sequence[pulumi.Input[Union['FrameworkControlArgs', 'FrameworkControlArgsDict']]]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -544,16 +548,16 @@ class Framework(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            controls: Optional[pulumi.Input[Sequence[pulumi.Input[Union['FrameworkControlArgs', 'FrameworkControlArgsDict']]]]] = None,
-            creation_time: Optional[pulumi.Input[_builtins.str]] = None,
-            deployment_status: Optional[pulumi.Input[_builtins.str]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            status: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'Framework':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            controls: pulumi.Input[Optional[Sequence[pulumi.Input[Union['FrameworkControlArgs', 'FrameworkControlArgsDict']]]]] = None,
+            creation_time: pulumi.Input[Optional[_builtins.str]] = None,
+            deployment_status: pulumi.Input[Optional[_builtins.str]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            status: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'Framework':
         """
         Get an existing Framework resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

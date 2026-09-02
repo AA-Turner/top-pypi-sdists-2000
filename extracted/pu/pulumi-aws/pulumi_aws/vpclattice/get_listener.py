@@ -86,7 +86,7 @@ class GetListenerResult:
     @pulumi.getter(name="createdAt")
     def created_at(self) -> _builtins.str:
         """
-        The date and time that the listener was created.
+        Date and time that the listener was created.
         """
         return pulumi.get(self, "created_at")
 
@@ -94,7 +94,7 @@ class GetListenerResult:
     @pulumi.getter(name="defaultActions")
     def default_actions(self) -> Sequence['outputs.GetListenerDefaultActionResult']:
         """
-        The actions for the default listener rule.
+        Action for the default listener rule. See `default_action` Block below.
         """
         return pulumi.get(self, "default_actions")
 
@@ -110,7 +110,7 @@ class GetListenerResult:
     @pulumi.getter(name="lastUpdatedAt")
     def last_updated_at(self) -> _builtins.str:
         """
-        The date and time the listener was last updated.
+        Date and time the listener was last updated.
         """
         return pulumi.get(self, "last_updated_at")
 
@@ -118,7 +118,7 @@ class GetListenerResult:
     @pulumi.getter(name="listenerId")
     def listener_id(self) -> _builtins.str:
         """
-        The ID of the listener.
+        ID of the listener.
         """
         return pulumi.get(self, "listener_id")
 
@@ -131,7 +131,7 @@ class GetListenerResult:
     @pulumi.getter
     def name(self) -> _builtins.str:
         """
-        The name of the listener.
+        Name of the listener.
         """
         return pulumi.get(self, "name")
 
@@ -139,7 +139,7 @@ class GetListenerResult:
     @pulumi.getter
     def port(self) -> _builtins.int:
         """
-        The listener port.
+        Listener port.
         """
         return pulumi.get(self, "port")
 
@@ -147,7 +147,7 @@ class GetListenerResult:
     @pulumi.getter
     def protocol(self) -> _builtins.str:
         """
-        The listener protocol. Either `HTTPS` or `HTTP`.
+        Listener protocol. Either `HTTPS` or `HTTP`.
         """
         return pulumi.get(self, "protocol")
 
@@ -160,7 +160,7 @@ class GetListenerResult:
     @pulumi.getter(name="serviceArn")
     def service_arn(self) -> _builtins.str:
         """
-        The ARN of the service.
+        ARN of the service.
         """
         return pulumi.get(self, "service_arn")
 
@@ -168,7 +168,7 @@ class GetListenerResult:
     @pulumi.getter(name="serviceId")
     def service_id(self) -> _builtins.str:
         """
-        The ID of the service.
+        ID of the service.
         """
         return pulumi.get(self, "service_id")
 
@@ -229,9 +229,9 @@ def get_listener(listener_identifier: Optional[_builtins.str] = None,
     ```
 
 
-    :param _builtins.str listener_identifier: ID or Amazon Resource Name (ARN) of the listener
+    :param _builtins.str listener_identifier: ID or ARN of the listener
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param _builtins.str service_identifier: ID or Amazon Resource Name (ARN) of the service network
+    :param _builtins.str service_identifier: ID or ARN of the service network
     :param Mapping[str, _builtins.str] tags: List of tags associated with the listener.
     """
     __args__ = dict()
@@ -258,10 +258,10 @@ def get_listener(listener_identifier: Optional[_builtins.str] = None,
         service_id=pulumi.get(__ret__, 'service_id'),
         service_identifier=pulumi.get(__ret__, 'service_identifier'),
         tags=pulumi.get(__ret__, 'tags'))
-def get_listener_output(listener_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                        region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                        service_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                        tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_listener_output(listener_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                        region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                        service_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                        tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                         opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetListenerResult]:
     """
     Data source for managing an AWS VPC Lattice Listener.
@@ -278,9 +278,9 @@ def get_listener_output(listener_identifier: Optional[pulumi.Input[_builtins.str
     ```
 
 
-    :param _builtins.str listener_identifier: ID or Amazon Resource Name (ARN) of the listener
+    :param _builtins.str listener_identifier: ID or ARN of the listener
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param _builtins.str service_identifier: ID or Amazon Resource Name (ARN) of the service network
+    :param _builtins.str service_identifier: ID or ARN of the service network
     :param Mapping[str, _builtins.str] tags: List of tags associated with the listener.
     """
     __args__ = dict()

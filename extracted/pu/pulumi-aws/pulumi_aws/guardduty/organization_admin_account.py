@@ -20,9 +20,10 @@ __all__ = ['OrganizationAdminAccountArgs', 'OrganizationAdminAccount']
 class OrganizationAdminAccountArgs:
     def __init__(__self__, *,
                  admin_account_id: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a OrganizationAdminAccount resource.
+
         :param pulumi.Input[_builtins.str] admin_account_id: AWS account identifier to designate as a delegated administrator for GuardDuty.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
@@ -44,24 +45,25 @@ class OrganizationAdminAccountArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _OrganizationAdminAccountState:
     def __init__(__self__, *,
-                 admin_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 admin_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering OrganizationAdminAccount resources.
+
         :param pulumi.Input[_builtins.str] admin_account_id: AWS account identifier to designate as a delegated administrator for GuardDuty.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
@@ -72,26 +74,26 @@ class _OrganizationAdminAccountState:
 
     @_builtins.property
     @pulumi.getter(name="adminAccountId")
-    def admin_account_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def admin_account_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         AWS account identifier to designate as a delegated administrator for GuardDuty.
         """
         return pulumi.get(self, "admin_account_id")
 
     @admin_account_id.setter
-    def admin_account_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def admin_account_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "admin_account_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -101,8 +103,8 @@ class OrganizationAdminAccount(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 admin_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 admin_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Manages a GuardDuty Organization Admin Account. The AWS account utilizing this resource must be an Organizations primary account. More information about Organizations support in GuardDuty can be found in the [GuardDuty User Guide](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_organizations.html).
@@ -128,6 +130,7 @@ class OrganizationAdminAccount(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:guardduty/organizationAdminAccount:OrganizationAdminAccount example 123456789012
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -165,6 +168,7 @@ class OrganizationAdminAccount(pulumi.CustomResource):
         $ pulumi import aws:guardduty/organizationAdminAccount:OrganizationAdminAccount example 123456789012
         ```
 
+
         :param str resource_name: The name of the resource.
         :param OrganizationAdminAccountArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -180,8 +184,8 @@ class OrganizationAdminAccount(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 admin_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 admin_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -205,8 +209,8 @@ class OrganizationAdminAccount(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            admin_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'OrganizationAdminAccount':
+            admin_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'OrganizationAdminAccount':
         """
         Get an existing OrganizationAdminAccount resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

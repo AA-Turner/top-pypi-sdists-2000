@@ -15,15 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 """
-import numpy as np
 import scipy.sparse as sp
 
 import cvxpy.settings as s
-from cvxpy.constraints import PSD, SOC, ExpCone, PowCone3D
-from cvxpy.expressions.expression import Expression
+from cvxpy.constraints import SOC, ExpCone, PowCone3D, PowConeND, SvecPSD
 from cvxpy.reductions.solution import Solution, failure_solution
 from cvxpy.reductions.solvers import utilities
 from cvxpy.reductions.solvers.conic_solvers.conic_solver import ConicSolver
+from cvxpy.reductions.solvers.solver_inverse_data import SolverInverseData
+from cvxpy.utilities.citations import CITATION_DICT
+from cvxpy.utilities.psd_utils import TriangleKind
 
 
 def dims_to_solver_cones(cone_dims):
@@ -51,78 +52,14 @@ def dims_to_solver_cones(cone_dims):
 
     for pow in cone_dims.p3d:
         cones.append(clarabel.PowerConeT(pow))
+
+    for pow in cone_dims.pnd:
+        # TODO: On the right hand side, we may want to
+        # extend to support higher dim values for z
+        # instead of hardcoding 1.
+        cones.append(clarabel.GenPowerConeT(pow, 1))
     return cones
 
-
-def triu_to_full(upper_tri, n):
-    """Expands n*(n+1)//2 upper triangular to full matrix, scaling
-    off diagonals by 1/sqrt(2).   This is similar to the SCS behaviour,
-    but the upper triangle is used.
-
-    Parameters
-    ----------
-    upper_tri : numpy.ndarray
-        A NumPy array representing the upper triangular part of the
-        matrix, stacked in column-major order.
-    n : int
-        The number of rows (columns) in the full square matrix.
-
-    Returns
-    -------
-    numpy.ndarray
-        A 2-dimensional ndarray that is the scaled expansion of the upper
-        triangular array.
-
-    Notes
-    -----
-    As in the related SCS function, the function below appears to have
-    triu/tril confused but is nevertheless correct.
-
-    """
-    full = np.zeros((n, n))
-    full[np.tril_indices(n)] = upper_tri
-    full += full.T
-    full[np.diag_indices(n)] /= 2
-    full[np.tril_indices(n, k=-1)] /= np.sqrt(2)
-    full[np.triu_indices(n, k=1)] /= np.sqrt(2)
-    return np.reshape(full, n*n, order="F")
-
-
-def clarabel_psdvec_to_psdmat(vec: Expression, indices: np.ndarray) -> Expression:
-    """
-    Return "V" so that "vec[indices] belongs to the Clarabel PSDTriangleCone"
-    can be written in natural cvxpy syntax as "V >> 0".
-
-    Parameters
-    ----------
-    vec : cvxpy.expressions.expression.Expression
-        Must have ``vec.is_affine() == True``.
-    indices : ndarray
-        Contains nonnegative integers, which can index into ``vec``.
-
-    Notes
-    -----
-    This function is similar to ``triu_to_full``, which is also found
-    in this file. The difference is that this function works without
-    indexed assignment ``mat[i,j] = expr``. Such indexed assignment
-    cannot be used, because this function builds a cvxpy Expression,
-    rather than a numpy ndarray.
-    """
-    n = int(np.sqrt(indices.size * 2))
-    rows, cols = np.tril_indices(n)   # tril here not an error
-    mats = []
-    for i, idx in enumerate(indices):
-        r, c = rows[i], cols[i]
-        mat = np.zeros(shape=(n, n))
-        if r == c:
-            mat[r, r] = 1
-        else:
-            mat[r, c] = 1 / np.sqrt(2)
-            mat[c, r] = 1 / np.sqrt(2)
-        mat = vec[idx] * mat
-        mats.append(mat)
-    V = sum(mats)
-    return V
 
 
 class CLARABEL(ConicSolver):
@@ -132,19 +69,35 @@ class CLARABEL(ConicSolver):
     # Solver capabilities.
     MIP_CAPABLE = False
     SUPPORTED_CONSTRAINTS = ConicSolver.SUPPORTED_CONSTRAINTS \
-        + [SOC, ExpCone, PowCone3D, PSD]
+        + [SOC, ExpCone, PowCone3D, SvecPSD, PowConeND]
+    PSD_TRIANGLE_KIND = TriangleKind.UPPER
+    PSD_SQRT2_SCALING = True
 
+    # Status messages from clarabel.
+    SOLVED = "Solved"
+    PRIMAL_INFEASIBLE = "PrimalInfeasible"
+    DUAL_INFEASIBLE = "DualInfeasible"
+    ALMOST_SOLVED = "AlmostSolved"
+    ALMOST_PRIMAL_INFEASIBLE = "AlmostPrimalInfeasible"
+    ALMOST_DUAL_INFEASIBLE = "AlmostDualInfeasible"
+    MAX_ITERATIONS = "MaxIterations"
+    MAX_TIME = "MaxTime"
+    NUMERICAL_ERROR = "NumericalError"
+    INSUFFICIENT_PROGRESS = "InsufficientProgress"
+    ACCEPT_UNKNOWN = "accept_unknown"
+    UNSOLVED = "Unsolved"
     STATUS_MAP = {
-                    "Solved": s.OPTIMAL,
-                    "PrimalInfeasible": s.INFEASIBLE,
-                    "DualInfeasible": s.UNBOUNDED,
-                    "AlmostSolved": s.OPTIMAL_INACCURATE,
-                    "AlmostPrimalInfeasible": s.INFEASIBLE_INACCURATE,
-                    "AlmostDualInfeasible": s.UNBOUNDED_INACCURATE,
-                    "MaxIterations": s.USER_LIMIT,
-                    "MaxTime": s.USER_LIMIT,
-                    "NumericalError": s.SOLVER_ERROR,
-                    "InsufficientProgress": s.SOLVER_ERROR
+                    SOLVED: s.OPTIMAL,
+                    PRIMAL_INFEASIBLE: s.INFEASIBLE,
+                    DUAL_INFEASIBLE: s.UNBOUNDED,
+                    ALMOST_SOLVED: s.OPTIMAL_INACCURATE,
+                    ALMOST_PRIMAL_INFEASIBLE: s.INFEASIBLE_INACCURATE,
+                    ALMOST_DUAL_INFEASIBLE: s.UNBOUNDED_INACCURATE,
+                    MAX_ITERATIONS: s.USER_LIMIT,
+                    MAX_TIME: s.USER_LIMIT,
+                    NUMERICAL_ERROR: s.SOLVER_ERROR,
+                    INSUFFICIENT_PROGRESS: s.SOLVER_ERROR,
+                    UNSOLVED: s.SOLVER_ERROR,
                 }
 
     # Order of exponential cone arguments for solver.
@@ -166,94 +119,49 @@ class CLARABEL(ConicSolver):
         """
         return True
 
-    @staticmethod
-    def psd_format_mat(constr):
-        """Return a linear operator to multiply by PSD constraint coefficients.
-
-        Special cases PSD constraints, as Clarabel expects constraints to be
-        imposed on the upper triangular part of the variable matrix with
-        symmetric scaling (i.e. off-diagonal sqrt(2) scalinig) applied.
-
-        """
-        rows = cols = constr.expr.shape[0]
-        entries = rows * (cols + 1)//2
-
-        row_arr = np.arange(0, entries)
-
-        upper_diag_indices = np.triu_indices(rows)
-        col_arr = np.sort(np.ravel_multi_index(upper_diag_indices,
-                                               (rows, cols),
-                                               order='F'))
-
-        val_arr = np.zeros((rows, cols))
-        val_arr[upper_diag_indices] = np.sqrt(2)
-        np.fill_diagonal(val_arr, 1.0)
-        val_arr = np.ravel(val_arr, order='F')
-        val_arr = val_arr[np.nonzero(val_arr)]
-
-        shape = (entries, rows*cols)
-        scaled_upper_tri = sp.csc_matrix((val_arr, (row_arr, col_arr)), shape)
-
-        idx = np.arange(rows * cols)
-        val_symm = 0.5 * np.ones(2 * rows * cols)
-        K = idx.reshape((rows, cols))
-        row_symm = np.append(idx, np.ravel(K, order='F'))
-        col_symm = np.append(idx, np.ravel(K.T, order='F'))
-        symm_matrix = sp.csc_matrix((val_symm, (row_symm, col_symm)))
-
-        return scaled_upper_tri @ symm_matrix
-
-    @staticmethod
-    def extract_dual_value(result_vec, offset, constraint):
-        """Extracts the dual value for constraint starting at offset.
-        """
-
-        # special case: PSD constraints treated internally in
-        # svec (scaled triangular) form
-        if isinstance(constraint, PSD):
-            dim = constraint.shape[0]
-            upper_tri_dim = dim * (dim + 1) >> 1
-            new_offset = offset + upper_tri_dim
-            upper_tri = result_vec[offset:new_offset]
-            full = triu_to_full(upper_tri, dim)
-            return full, new_offset
-
-        else:
-            return utilities.extract_dual_value(result_vec, offset, constraint)
-
     def invert(self, solution, inverse_data):
         """Returns the solution to the original problem given the inverse_data.
         """
-
         attr = {}
-        status = self.STATUS_MAP[str(solution.status)]
+        status_map = self.STATUS_MAP.copy()
+
+        # if accept unknown was specified and solution is present, then an insufficient progress
+        # status will be mapped to OPTIMAL_INACCURATE.
+        if isinstance(inverse_data, SolverInverseData) and\
+            CLARABEL.ACCEPT_UNKNOWN in inverse_data.solver_options and\
+            solution.x is not None and solution.z is not None:
+            status_map["InsufficientProgress"] = s.OPTIMAL_INACCURATE
+        status = status_map.get(str(solution.status), s.SOLVER_ERROR)
         attr[s.SOLVE_TIME] = solution.solve_time
         attr[s.NUM_ITERS] = solution.iterations
         # more detailed statistics here when available
         # attr[s.EXTRA_STATS] = solution.extra.FOO
 
+        if solution.z is not None:
+            zero_idx = inverse_data[ConicSolver.DIMS].zero
+            eq_dual_vars = utilities.get_dual_values(
+                solution.z[:zero_idx],
+                utilities.extract_dual_value,
+                inverse_data[self.EQ_CONSTR]
+            )
+            ineq_dual_vars = utilities.get_dual_values(
+                solution.z[zero_idx:],
+                utilities.extract_dual_value,
+                inverse_data[self.NEQ_CONSTR]
+            )
+            dual_vars = eq_dual_vars | ineq_dual_vars
+        else:
+            dual_vars = {}
+
         if status in s.SOLUTION_PRESENT:
             primal_val = solution.obj_val
             opt_val = primal_val + inverse_data[s.OFFSET]
             primal_vars = {
-                inverse_data[CLARABEL.VAR_ID]: solution.x
+                inverse_data[self.VAR_ID]: solution.x
             }
-            eq_dual_vars = utilities.get_dual_values(
-                solution.z[:inverse_data[ConicSolver.DIMS].zero],
-                self.extract_dual_value,
-                inverse_data[CLARABEL.EQ_CONSTR]
-            )
-            ineq_dual_vars = utilities.get_dual_values(
-                solution.z[inverse_data[ConicSolver.DIMS].zero:],
-                self.extract_dual_value,
-                inverse_data[CLARABEL.NEQ_CONSTR]
-            )
-            dual_vars = {}
-            dual_vars.update(eq_dual_vars)
-            dual_vars.update(ineq_dual_vars)
             return Solution(status, opt_val, primal_vars, dual_vars, attr)
         else:
-            return failure_solution(status, attr)
+            return failure_solution(status, attr, dual_vars)
 
     @staticmethod
     def parse_solver_opts(verbose, opts, settings=None):
@@ -264,11 +172,15 @@ class CLARABEL(ConicSolver):
 
         settings.verbose = verbose
 
-        # use_quad_obj is only for canonicalization.
-        if "use_quad_obj" in opts:
-            del opts["use_quad_obj"]
+        keys = list(opts.keys())
 
-        for opt in opts.keys():
+        # use_quad_obj is only for canonicalization.
+        if "use_quad_obj" in keys:
+            keys.remove("use_quad_obj")
+        if CLARABEL.ACCEPT_UNKNOWN in keys:
+            keys.remove(CLARABEL.ACCEPT_UNKNOWN)
+
+        for opt in keys:
             try:
                 settings.__setattr__(opt, opts[opt])
             except TypeError as e:
@@ -306,7 +218,7 @@ class CLARABEL(ConicSolver):
             P = data[s.P]
         else:
             nvars = q.size
-            P = sp.csc_matrix((nvars, nvars))
+            P = sp.csc_array((nvars, nvars))
 
         P = sp.triu(P).tocsc()
 
@@ -314,7 +226,7 @@ class CLARABEL(ConicSolver):
 
         def new_solver():
 
-            _settings = CLARABEL.parse_solver_opts(verbose, solver_opts)
+            _settings = self.parse_solver_opts(verbose, solver_opts)
             _solver = clarabel.DefaultSolver(P, q, A, b, cones, _settings)
             return _solver
 
@@ -333,14 +245,18 @@ class CLARABEL(ConicSolver):
             else:
                 # current internal settings, to be updated if needed
                 oldsettings = _solver.get_settings()
-                newsettings = CLARABEL.parse_solver_opts(verbose, solver_opts, oldsettings)
+                newsettings = self.parse_solver_opts(verbose, solver_opts, oldsettings)
 
                 # this overwrites all data in the solver but will not
                 # reallocate internal memory.  Could be faster if it
                 # were known which terms (or partial terms) have changed.
-                # Will error ail if dimensions are sparsity has changed
-                _solver.update(P=P, q=q, A=A, b=b, settings=newsettings)
-                return _solver
+                try:
+                    _solver.update(P=P, q=q, A=A, b=b, settings=newsettings)
+                    return _solver
+                except Exception:
+                    # If sparsity pattern or dimensions changed, update() fails.
+                    # Return None to trigger a full new_solver() re-initialization.
+                    return None
 
         # Try to get cached data
         solver = updated_solver()
@@ -354,3 +270,13 @@ class CLARABEL(ConicSolver):
             solver_cache[self.name()] = solver
 
         return results
+
+    def cite(self, data):
+        """Returns bibtex citation for the solver.
+
+        Parameters
+        ----------
+        data : dict
+            Data generated via an apply call.
+        """
+        return CITATION_DICT["CLARABEL"]

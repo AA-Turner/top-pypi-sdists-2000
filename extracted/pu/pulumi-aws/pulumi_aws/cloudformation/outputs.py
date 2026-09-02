@@ -54,7 +54,7 @@ class CloudFormationTypeLoggingConfig(dict):
                  log_role_arn: _builtins.str):
         """
         :param _builtins.str log_group_name: Name of the CloudWatch Log Group where CloudFormation sends error logging information when invoking the type's handlers.
-        :param _builtins.str log_role_arn: Amazon Resource Name (ARN) of the IAM Role CloudFormation assumes when sending error logging information to CloudWatch Logs.
+        :param _builtins.str log_role_arn: ARN of the IAM Role CloudFormation assumes when sending error logging information to CloudWatch Logs.
         """
         pulumi.set(__self__, "log_group_name", log_group_name)
         pulumi.set(__self__, "log_role_arn", log_role_arn)
@@ -71,7 +71,7 @@ class CloudFormationTypeLoggingConfig(dict):
     @pulumi.getter(name="logRoleArn")
     def log_role_arn(self) -> _builtins.str:
         """
-        Amazon Resource Name (ARN) of the IAM Role CloudFormation assumes when sending error logging information to CloudWatch Logs.
+        ARN of the IAM Role CloudFormation assumes when sending error logging information to CloudWatch Logs.
         """
         return pulumi.get(self, "log_role_arn")
 
@@ -421,7 +421,9 @@ class StackSetAutoDeployment(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "retainStacksOnAccountRemoval":
+        if key == "dependsOnStackSets":
+            suggest = "depends_on_stack_sets"
+        elif key == "retainStacksOnAccountRemoval":
             suggest = "retain_stacks_on_account_removal"
 
         if suggest:
@@ -436,16 +438,28 @@ class StackSetAutoDeployment(dict):
         return super().get(key, default)
 
     def __init__(__self__, *,
+                 depends_on_stack_sets: Optional[Sequence[_builtins.str]] = None,
                  enabled: Optional[_builtins.bool] = None,
                  retain_stacks_on_account_removal: Optional[_builtins.bool] = None):
         """
+        :param Sequence[_builtins.str] depends_on_stack_sets: A list of StackSet ARNs that this StackSet depends on for auto-deployment operations. When auto-deployment is triggered, operations will be sequenced to ensure all dependencies complete successfully before this StackSet's operation begins.
         :param _builtins.bool enabled: Whether or not auto-deployment is enabled.
         :param _builtins.bool retain_stacks_on_account_removal: Whether or not to retain stacks when the account is removed.
         """
+        if depends_on_stack_sets is not None:
+            pulumi.set(__self__, "depends_on_stack_sets", depends_on_stack_sets)
         if enabled is not None:
             pulumi.set(__self__, "enabled", enabled)
         if retain_stacks_on_account_removal is not None:
             pulumi.set(__self__, "retain_stacks_on_account_removal", retain_stacks_on_account_removal)
+
+    @_builtins.property
+    @pulumi.getter(name="dependsOnStackSets")
+    def depends_on_stack_sets(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        A list of StackSet ARNs that this StackSet depends on for auto-deployment operations. When auto-deployment is triggered, operations will be sequenced to ensure all dependencies complete successfully before this StackSet's operation begins.
+        """
+        return pulumi.get(self, "depends_on_stack_sets")
 
     @_builtins.property
     @pulumi.getter

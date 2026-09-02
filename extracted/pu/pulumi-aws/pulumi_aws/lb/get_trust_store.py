@@ -81,8 +81,6 @@ def get_trust_store(arn: Optional[_builtins.str] = None,
                     region: Optional[_builtins.str] = None,
                     opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetTrustStoreResult:
     """
-    > **Note:** `aws_alb_trust_store` is known as `lb.TrustStore`. The functionality is identical.
-
     Provides information about a Load Balancer Trust Store.
 
     This data source can prove useful when a module accepts an LB Trust Store as an
@@ -125,13 +123,11 @@ def get_trust_store(arn: Optional[_builtins.str] = None,
         id=pulumi.get(__ret__, 'id'),
         name=pulumi.get(__ret__, 'name'),
         region=pulumi.get(__ret__, 'region'))
-def get_trust_store_output(arn: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                           name: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                           region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_trust_store_output(arn: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                           name: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                           region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                            opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetTrustStoreResult]:
     """
-    > **Note:** `aws_alb_trust_store` is known as `lb.TrustStore`. The functionality is identical.
-
     Provides information about a Load Balancer Trust Store.
 
     This data source can prove useful when a module accepts an LB Trust Store as an

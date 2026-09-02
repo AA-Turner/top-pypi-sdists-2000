@@ -22,10 +22,11 @@ __all__ = ['RegistryScanningConfigurationArgs', 'RegistryScanningConfiguration']
 class RegistryScanningConfigurationArgs:
     def __init__(__self__, *,
                  scan_type: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rules: Optional[pulumi.Input[Sequence[pulumi.Input['RegistryScanningConfigurationRuleArgs']]]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rules: pulumi.Input[Optional[Sequence[pulumi.Input['RegistryScanningConfigurationRuleArgs']]]] = None):
         """
         The set of arguments for constructing a RegistryScanningConfiguration resource.
+
         :param pulumi.Input[_builtins.str] scan_type: the scanning type to set for the registry. Can be either `ENHANCED` or `BASIC`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Sequence[pulumi.Input['RegistryScanningConfigurationRuleArgs']]] rules: One or multiple blocks specifying scanning rules to determine which repository filters are used and at what frequency scanning will occur. See below for schema.
@@ -50,38 +51,39 @@ class RegistryScanningConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def rules(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['RegistryScanningConfigurationRuleArgs']]]]:
+    def rules(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['RegistryScanningConfigurationRuleArgs']]]]:
         """
         One or multiple blocks specifying scanning rules to determine which repository filters are used and at what frequency scanning will occur. See below for schema.
         """
         return pulumi.get(self, "rules")
 
     @rules.setter
-    def rules(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['RegistryScanningConfigurationRuleArgs']]]]):
+    def rules(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['RegistryScanningConfigurationRuleArgs']]]]):
         pulumi.set(self, "rules", value)
 
 
 @pulumi.input_type
 class _RegistryScanningConfigurationState:
     def __init__(__self__, *,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 registry_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 rules: Optional[pulumi.Input[Sequence[pulumi.Input['RegistryScanningConfigurationRuleArgs']]]] = None,
-                 scan_type: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 registry_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 rules: pulumi.Input[Optional[Sequence[pulumi.Input['RegistryScanningConfigurationRuleArgs']]]] = None,
+                 scan_type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering RegistryScanningConfiguration resources.
+
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[_builtins.str] registry_id: The registry ID the scanning configuration applies to.
         :param pulumi.Input[Sequence[pulumi.Input['RegistryScanningConfigurationRuleArgs']]] rules: One or multiple blocks specifying scanning rules to determine which repository filters are used and at what frequency scanning will occur. See below for schema.
@@ -98,50 +100,50 @@ class _RegistryScanningConfigurationState:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="registryId")
-    def registry_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def registry_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The registry ID the scanning configuration applies to.
         """
         return pulumi.get(self, "registry_id")
 
     @registry_id.setter
-    def registry_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def registry_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "registry_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def rules(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['RegistryScanningConfigurationRuleArgs']]]]:
+    def rules(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['RegistryScanningConfigurationRuleArgs']]]]:
         """
         One or multiple blocks specifying scanning rules to determine which repository filters are used and at what frequency scanning will occur. See below for schema.
         """
         return pulumi.get(self, "rules")
 
     @rules.setter
-    def rules(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['RegistryScanningConfigurationRuleArgs']]]]):
+    def rules(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['RegistryScanningConfigurationRuleArgs']]]]):
         pulumi.set(self, "rules", value)
 
     @_builtins.property
     @pulumi.getter(name="scanType")
-    def scan_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def scan_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         the scanning type to set for the registry. Can be either `ENHANCED` or `BASIC`.
         """
         return pulumi.get(self, "scan_type")
 
     @scan_type.setter
-    def scan_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def scan_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "scan_type", value)
 
 
@@ -151,9 +153,9 @@ class RegistryScanningConfiguration(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rules: Optional[pulumi.Input[Sequence[pulumi.Input[Union['RegistryScanningConfigurationRuleArgs', 'RegistryScanningConfigurationRuleArgsDict']]]]] = None,
-                 scan_type: Optional[pulumi.Input[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rules: pulumi.Input[Optional[Sequence[pulumi.Input[Union['RegistryScanningConfigurationRuleArgs', 'RegistryScanningConfigurationRuleArgsDict']]]]] = None,
+                 scan_type: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides an Elastic Container Registry Scanning Configuration. Can't be completely deleted, instead reverts to the default `BASIC` scanning configuration without rules.
@@ -167,14 +169,14 @@ class RegistryScanningConfiguration(pulumi.CustomResource):
         import pulumi_aws as aws
 
         configuration = aws.ecr.RegistryScanningConfiguration("configuration",
-            scan_type="ENHANCED",
             rules=[{
-                "scan_frequency": "CONTINUOUS_SCAN",
                 "repository_filters": [{
                     "filter": "example",
                     "filter_type": "WILDCARD",
                 }],
-            }])
+                "scan_frequency": "CONTINUOUS_SCAN",
+            }],
+            scan_type="ENHANCED")
         ```
 
         ### Multiple rules
@@ -184,23 +186,23 @@ class RegistryScanningConfiguration(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.ecr.RegistryScanningConfiguration("test",
-            scan_type="ENHANCED",
             rules=[
                 {
-                    "scan_frequency": "SCAN_ON_PUSH",
                     "repository_filters": [{
                         "filter": "*",
                         "filter_type": "WILDCARD",
                     }],
+                    "scan_frequency": "SCAN_ON_PUSH",
                 },
                 {
-                    "scan_frequency": "CONTINUOUS_SCAN",
                     "repository_filters": [{
                         "filter": "example",
                         "filter_type": "WILDCARD",
                     }],
+                    "scan_frequency": "CONTINUOUS_SCAN",
                 },
-            ])
+            ],
+            scan_type="ENHANCED")
         ```
 
         ## Import
@@ -210,6 +212,7 @@ class RegistryScanningConfiguration(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:ecr/registryScanningConfiguration:RegistryScanningConfiguration example 123456789012
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -235,14 +238,14 @@ class RegistryScanningConfiguration(pulumi.CustomResource):
         import pulumi_aws as aws
 
         configuration = aws.ecr.RegistryScanningConfiguration("configuration",
-            scan_type="ENHANCED",
             rules=[{
-                "scan_frequency": "CONTINUOUS_SCAN",
                 "repository_filters": [{
                     "filter": "example",
                     "filter_type": "WILDCARD",
                 }],
-            }])
+                "scan_frequency": "CONTINUOUS_SCAN",
+            }],
+            scan_type="ENHANCED")
         ```
 
         ### Multiple rules
@@ -252,23 +255,23 @@ class RegistryScanningConfiguration(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.ecr.RegistryScanningConfiguration("test",
-            scan_type="ENHANCED",
             rules=[
                 {
-                    "scan_frequency": "SCAN_ON_PUSH",
                     "repository_filters": [{
                         "filter": "*",
                         "filter_type": "WILDCARD",
                     }],
+                    "scan_frequency": "SCAN_ON_PUSH",
                 },
                 {
-                    "scan_frequency": "CONTINUOUS_SCAN",
                     "repository_filters": [{
                         "filter": "example",
                         "filter_type": "WILDCARD",
                     }],
+                    "scan_frequency": "CONTINUOUS_SCAN",
                 },
-            ])
+            ],
+            scan_type="ENHANCED")
         ```
 
         ## Import
@@ -278,6 +281,7 @@ class RegistryScanningConfiguration(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:ecr/registryScanningConfiguration:RegistryScanningConfiguration example 123456789012
         ```
+
 
         :param str resource_name: The name of the resource.
         :param RegistryScanningConfigurationArgs args: The arguments to use to populate this resource's properties.
@@ -294,9 +298,9 @@ class RegistryScanningConfiguration(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rules: Optional[pulumi.Input[Sequence[pulumi.Input[Union['RegistryScanningConfigurationRuleArgs', 'RegistryScanningConfigurationRuleArgsDict']]]]] = None,
-                 scan_type: Optional[pulumi.Input[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rules: pulumi.Input[Optional[Sequence[pulumi.Input[Union['RegistryScanningConfigurationRuleArgs', 'RegistryScanningConfigurationRuleArgsDict']]]]] = None,
+                 scan_type: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -322,10 +326,10 @@ class RegistryScanningConfiguration(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            registry_id: Optional[pulumi.Input[_builtins.str]] = None,
-            rules: Optional[pulumi.Input[Sequence[pulumi.Input[Union['RegistryScanningConfigurationRuleArgs', 'RegistryScanningConfigurationRuleArgsDict']]]]] = None,
-            scan_type: Optional[pulumi.Input[_builtins.str]] = None) -> 'RegistryScanningConfiguration':
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            registry_id: pulumi.Input[Optional[_builtins.str]] = None,
+            rules: pulumi.Input[Optional[Sequence[pulumi.Input[Union['RegistryScanningConfigurationRuleArgs', 'RegistryScanningConfigurationRuleArgsDict']]]]] = None,
+            scan_type: pulumi.Input[Optional[_builtins.str]] = None) -> 'RegistryScanningConfiguration':
         """
         Get an existing RegistryScanningConfiguration resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

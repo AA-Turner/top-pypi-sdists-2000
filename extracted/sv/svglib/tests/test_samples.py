@@ -1,8 +1,6 @@
 """Testsuite for svglib.
 
 This module tests conversion of sample SVG files into PDF files.
-Some tests try using a tool called uniconv (if installed)
-to convert SVG files into PDF for comparision with svglib.
 
 Run with one of these lines from inside the test directory:
 
@@ -18,13 +16,14 @@ import os
 import re
 import tarfile
 import textwrap
+import time
 from http.client import HTTPSConnection
-from os.path import basename, dirname, exists, getsize, join, splitext
+from os.path import basename, dirname, exists, join, splitext
 from typing import Any
 from urllib.parse import quote, unquote, urlparse
 
 import pytest
-from reportlab.graphics import renderPDF, renderPM
+from reportlab.graphics import renderPDF, renderPM, renderSVG
 from reportlab.graphics.shapes import Group, Rect
 
 from svglib import svglib
@@ -32,11 +31,14 @@ from svglib import svglib
 TEST_ROOT = dirname(__file__)
 
 
-def found_uniconv() -> bool:
-    "Do we have uniconv installed?"
+def has_renderpm_backend() -> bool:
+    """Return whether ReportLab can load a renderPM bitmap backend."""
 
-    res = os.popen("which uniconv").read().strip()
-    return len(res) > 0
+    try:
+        renderPM._getPMBackend()
+    except renderPM.RenderPMError:
+        return False
+    return True
 
 
 def fetch_file(
@@ -44,50 +46,65 @@ def fetch_file(
     mime_accept: str = "text/svg",
     uncompress: bool = True,
     raise_exc: bool = False,
+    retries: int = 5,
 ) -> Any:
     """
     Get given URL content using http.client module, uncompress if needed and
-    `uncompress` is True.
+    `uncompress` is True. Retries with exponential backoff on 429 responses.
     """
 
     parsed = urlparse(url)
-    conn = HTTPSConnection(parsed.netloc)
-    conn.request(
-        "GET",
-        parsed.path,
-        headers={
-            "Host": parsed.netloc,
-            "Accept": mime_accept,
-            "User-Agent": "Python/http.client",
-        },
-    )
-    response = conn.getresponse()
-    if (response.status, response.reason) == (200, "OK"):
-        data: Any = response.read()
-        content_type = response.getheader("content-type")
-        if (
-            uncompress
-            and (
-                response.getheader("content-encoding") == "gzip"
-                or (content_type is not None and "gzip" in content_type)
+    for attempt in range(retries):
+        conn = HTTPSConnection(parsed.netloc)
+        conn.request(
+            "GET",
+            parsed.path,
+            headers={
+                "Host": parsed.netloc,
+                "Accept": mime_accept,
+                "User-Agent": "Python/http.client",
+            },
+        )
+        response = conn.getresponse()
+        if response.status == 429:
+            wait = 2**attempt
+            print(
+                f"rate limited, retrying in {wait}s (attempt {attempt + 1}/{retries})"
             )
-            and data[:2] == b"\x1f\x8b"
-        ):
-            with gzip.open(io.BytesIO(data), mode="rb") as zfile:
-                data = zfile.read()
-        if "text" in mime_accept:
-            data = data.decode("utf-8")
-    else:
-        if raise_exc:
             conn.close()
-            raise Exception(
-                f"Unable to fetch file {url}, got {response.status} response "
-                f"({response.reason})"
-            )
-        data = None
-    conn.close()
+            time.sleep(wait)
+            continue
+        if (response.status, response.reason) == (200, "OK"):
+            data: Any = response.read()
+            content_type = response.getheader("content-type")
+            if (
+                uncompress
+                and (
+                    response.getheader("content-encoding") == "gzip"
+                    or (content_type is not None and "gzip" in content_type)
+                )
+                and data[:2] == b"\x1f\x8b"
+            ):
+                with gzip.open(io.BytesIO(data), mode="rb") as zfile:
+                    data = zfile.read()
+            if "text" in mime_accept:
+                data = data.decode("utf-8")
+        else:
+            if raise_exc:
+                conn.close()
+                raise Exception(
+                    f"Unable to fetch file {url}, got {response.status} response "
+                    f"({response.reason})"
+                )
+            data = None
+        conn.close()
+        return data
 
-    return data
+    if raise_exc:
+        raise Exception(
+            f"Unable to fetch file {url}: rate limited after {retries} retries"
+        )
+    return None
 
 
 class TestSVGSamples:
@@ -105,7 +122,7 @@ class TestSVGSamples:
         "Test convert sample SVG files to PDF using svglib."
 
         paths = glob.glob(f"{TEST_ROOT}/samples/misc/*")
-        paths = [p for p in paths if splitext(p.lower())[1] in [".svg", ".svgz"]]
+        paths = [p for p in paths if splitext(p.lower())[1] in {".svg", ".svgz"}]
         for i, path in enumerate(paths):
             print(f"working on [{i}] {path}")
 
@@ -116,17 +133,30 @@ class TestSVGSamples:
             base = splitext(path)[0] + "-svglib.pdf"
             renderPDF.drawToFile(drawing, base, showBoundary=0)
 
-    @pytest.mark.skipif(not found_uniconv(), reason="needs uniconv")
-    def test_create_pdf_uniconv(self):
-        "Test converting sample SVG files to PDF using uniconverter."
 
-        paths = glob.glob(f"{TEST_ROOT}/samples/misc/*.svg")
-        for path in paths:
-            out = splitext(path)[0] + "-uniconv.pdf"
-            cmd = f"uniconv '{path}' '{out}'"
-            os.popen(cmd).read()
-            if exists(out) and getsize(out) == 0:
-                os.remove(out)
+class TestSVGCanvas:
+    "Test SVGCanvas."
+
+    def test_canvas(self):
+        "Test SVGCanvas for _shape_to_pdf_path."
+        paths = [
+            f"{TEST_ROOT}/samples/misc/{filename}"
+            for filename in (
+                "firefox-logo.svg",
+                "gradient_showcase.svg",
+                "Python_logo_and_wordmark.svg",
+            )
+        ]
+        for i, path in enumerate(paths):
+            print(f"working on [{i}] {path}")
+            drawing = svglib.svg2rlg(path)
+            canvas = renderSVG.SVGCanvas()
+            renderSVG.draw(drawing, canvas)
+            buffer = io.StringIO()
+            canvas.save(buffer)
+            content = buffer.getvalue()
+            assert "<title>...</title>" in content
+            assert "<desc>...</desc>" in content
 
 
 class TestWikipediaSymbols:
@@ -191,7 +221,7 @@ class TestWikipediaSymbols:
         "Test converting symbol SVG files to PDF using svglib."
 
         paths = glob.glob(f"{self.folder_path}/*")
-        paths = [p for p in paths if splitext(p.lower())[1] in [".svg", ".svgz"]]
+        paths = [p for p in paths if splitext(p.lower())[1] in {".svg", ".svgz"}]
         for i, path in enumerate(paths):
             print(f"working on [{i}] {path}")
 
@@ -201,19 +231,6 @@ class TestWikipediaSymbols:
             # save as PDF
             base = splitext(path)[0] + "-svglib.pdf"
             renderPDF.drawToFile(drawing, base, showBoundary=0)
-
-    @pytest.mark.skipif(not found_uniconv(), reason="needs uniconv")
-    def test_convert_pdf_uniconv(self):
-        "Test converting symbol SVG files to PDF using uniconverter."
-
-        paths = glob.glob(f"{self.folder_path}/*")
-        paths = [p for p in paths if splitext(p.lower())[1] in [".svg", ".svgz"]]
-        for path in paths:
-            out = splitext(path)[0] + "-uniconv.pdf"
-            cmd = f"uniconv '{path}' '{out}'"
-            os.popen(cmd).read()
-            if exists(out) and getsize(out) == 0:
-                os.remove(out)
 
 
 class TestWikipediaFlags:
@@ -235,10 +252,15 @@ class TestWikipediaFlags:
 
         return path
 
+    # Maximum wall-clock seconds allowed for the cold-cache download phase.
+    # On a warm cache all files exist and setup completes instantly.
+    SETUP_TIMEOUT = 300
+
     def setup_method(self):
         "Check if files exists, else download."
 
         self.folder_path = f"{TEST_ROOT}/samples/wikipedia/flags"
+        self._setup_deadline = time.monotonic() + self.SETUP_TIMEOUT
 
         # create directory if not already present
         if not exists(self.folder_path):
@@ -267,6 +289,11 @@ class TestWikipediaFlags:
             flag_url_map = []
             prefix = "https://en.wikipedia.org/wiki/File:"
             for i, fn in enumerate(flag_names):
+                if time.monotonic() > self._setup_deadline:
+                    pytest.skip(
+                        f"Wikipedia flags setup timed out after {self.SETUP_TIMEOUT}s "
+                        "(cold cache). Missing flags will be fetched on the next run."
+                    )
                 # load single flag HTML page, like
                 # https://en.wikipedia.org/wiki/Image:Flag_of_Bhutan.svg
                 flag_html = fetch_file(prefix + quote(fn))
@@ -288,10 +315,18 @@ class TestWikipediaFlags:
         with open(json_path, encoding="UTF-8") as fh:
             flag_url_map = json.load(fh)
         for dummy, flag_url in flag_url_map:
+            if time.monotonic() > self._setup_deadline:
+                pytest.skip(
+                    f"Wikipedia flags setup timed out after {self.SETUP_TIMEOUT}s "
+                    f"(cold cache). Remaining flags will be downloaded on the next run."
+                )
             path = join(self.folder_path, self.flag_url2filename(flag_url))
             if not exists(path):
                 print(f"fetch {flag_url}")
-                flag_svg = fetch_file(flag_url, raise_exc=True)
+                flag_svg = fetch_file(flag_url, raise_exc=False)
+                if flag_svg is None:
+                    print(f"skipping {flag_url} (download failed after retries)")
+                    continue
                 with open(path, "w", encoding="UTF-8") as f:
                     f.write(flag_svg)
 
@@ -307,7 +342,7 @@ class TestWikipediaFlags:
         "Test converting flag SVG files to PDF using svglib."
 
         paths = glob.glob(f"{self.folder_path}/*")
-        paths = [p for p in paths if splitext(p.lower())[1] in [".svg", ".svgz"]]
+        paths = [p for p in paths if splitext(p.lower())[1] in {".svg", ".svgz"}]
         for i, path in enumerate(paths):
             print(f"working on [{i}] {path}")
 
@@ -317,19 +352,6 @@ class TestWikipediaFlags:
             # save as PDF
             base = splitext(path)[0] + "-svglib.pdf"
             renderPDF.drawToFile(drawing, base, showBoundary=0)
-
-    @pytest.mark.skipif(not found_uniconv(), reason="needs uniconv")
-    def test_convert_pdf_uniconv(self):
-        "Test converting flag SVG files to PDF using uniconverer."
-
-        paths = glob.glob(f"{self.folder_path}/*")
-        paths = [p for p in paths if splitext(p.lower())[1] in [".svg", ".svgz"]]
-        for path in paths:
-            out = splitext(path)[0] + "-uniconv.pdf"
-            cmd = f"uniconv '{path}' '{out}'"
-            os.popen(cmd).read()
-            if exists(out) and getsize(out) == 0:
-                os.remove(out)
 
 
 class TestW3CSVG:
@@ -367,12 +389,13 @@ class TestW3CSVG:
         "Remove generated files when running this test class."
 
         paths = glob.glob(join(self.folder_path, "svg/*-svglib.pdf"))
-        paths += glob.glob(join(self.folder_path, "svg/*-uniconv.pdf"))
         paths += glob.glob(join(self.folder_path, "svg/*-svglib.png"))
         for i, path in enumerate(paths):
             print(f"deleting [{i}] {path}")
             os.remove(path)
 
+    @pytest.mark.skipif(not has_renderpm_backend(), reason="needs a renderPM backend")
+    @pytest.mark.filterwarnings("ignore:Palette images with Transparency.*:UserWarning")
     def test_convert_pdf_png(self):
         """
         Test converting W3C SVG files to PDF and PNG using svglib.
@@ -380,6 +403,17 @@ class TestW3CSVG:
         ``renderPM.drawToFile()`` used in this test is known to trigger an
         error sometimes in reportlab which was fixed in reportlab 3.3.26.
         See https://github.com/deeplook/svglib/issues/47
+
+        struct-image-09-t.svg references a palette PNG with a tRNS chunk by
+        file path. svglib only normalizes palette+transparency images to
+        RGBA for base64-embedded `<image>` data (see
+        ``_convert_palette_to_rgba``); for a file path it passes the path
+        straight to ReportLab's ``Image`` shape, which is the correct,
+        efficient choice for PDF embedding. It's reportlab's own
+        ``renderPM.drawImage`` that reopens that file and calls
+        ``PIL.Image.convert('RGB')`` directly, without normalizing first,
+        which is what triggers this warning. The PNG still renders
+        correctly; there's nothing to fix on the svglib side.
         """
 
         exclude_list = [
@@ -418,19 +452,6 @@ class TestW3CSVG:
                 print("Svglib: Consider upgrading reportlab to version >= 3.3.26!")
                 raise
 
-    @pytest.mark.skipif(not found_uniconv(), reason="needs uniconv")
-    def test_convert_pdf_uniconv(self):
-        "Test converting W3C SVG files to PDF using uniconverter."
-
-        paths = glob.glob(f"{self.folder_path}/svg/*")
-        paths = [p for p in paths if splitext(p.lower())[1] in [".svg", ".svgz"]]
-        for path in paths:
-            out = splitext(path)[0] + "-uniconv.pdf"
-            cmd = f"uniconv '{path}' '{out}'"
-            os.popen(cmd).read()
-            if exists(out) and getsize(out) == 0:
-                os.remove(out)
-
 
 class TestOtherFiles:
     def test_png_in_svg(self):
@@ -461,7 +482,9 @@ class TestOtherFiles:
         unit_names = ["px", "pt", "mm", "ex", "ch", "em", "pc", "cm"]
         lengths_by_name = dict(zip(unit_names, unit_widths))
         assert lengths_by_name["px"] == lengths_by_name["pt"] * 0.75
-        assert lengths_by_name["em"] == svglib.DEFAULT_FONT_SIZE  # 1 em == font size
+        assert (
+            lengths_by_name["em"] == svglib.DEFAULT_FONT_SIZE / svglib.PX_TO_PT
+        )  # 1 em == font size in user units
         assert lengths_by_name["ex"] == lengths_by_name["em"] / 2
         assert lengths_by_name["ch"] == lengths_by_name["ex"]
 

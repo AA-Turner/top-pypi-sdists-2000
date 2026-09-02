@@ -85,11 +85,11 @@ def get_registration_code(region: Optional[_builtins.str] = None,
     example = aws.iot.get_registration_code()
     verification = tls.PrivateKey("verification", algorithm="RSA")
     verification_cert_request = tls.CertRequest("verification",
-        key_algorithm="RSA",
-        private_key_pem=verification.private_key_pem,
         subject=[{
             "commonName": example.registration_code,
-        }])
+        }],
+        key_algorithm="RSA",
+        private_key_pem=verification.private_key_pem)
     ```
 
 
@@ -104,7 +104,7 @@ def get_registration_code(region: Optional[_builtins.str] = None,
         id=pulumi.get(__ret__, 'id'),
         region=pulumi.get(__ret__, 'region'),
         registration_code=pulumi.get(__ret__, 'registration_code'))
-def get_registration_code_output(region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_registration_code_output(region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                  opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetRegistrationCodeResult]:
     """
     Gets a registration code used to register a CA certificate with AWS IoT.
@@ -119,11 +119,11 @@ def get_registration_code_output(region: Optional[pulumi.Input[Optional[_builtin
     example = aws.iot.get_registration_code()
     verification = tls.PrivateKey("verification", algorithm="RSA")
     verification_cert_request = tls.CertRequest("verification",
-        key_algorithm="RSA",
-        private_key_pem=verification.private_key_pem,
         subject=[{
             "commonName": example.registration_code,
-        }])
+        }],
+        key_algorithm="RSA",
+        private_key_pem=verification.private_key_pem)
     ```
 
 

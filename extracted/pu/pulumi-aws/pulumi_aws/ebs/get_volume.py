@@ -273,8 +273,7 @@ def get_volume(filters: Optional[Sequence[Union['GetVolumeFilterArgs', 'GetVolum
     import pulumi
     import pulumi_aws as aws
 
-    ebs_volume = aws.ebs.get_volume(most_recent=True,
-        filters=[
+    ebs_volume = aws.ebs.get_volume(filters=[
             {
                 "name": "volume-type",
                 "values": ["gp2"],
@@ -283,13 +282,14 @@ def get_volume(filters: Optional[Sequence[Union['GetVolumeFilterArgs', 'GetVolum
                 "name": "tag:Name",
                 "values": ["Example"],
             },
-        ])
+        ],
+        most_recent=True)
     ```
 
 
     :param Sequence[Union['GetVolumeFilterArgs', 'GetVolumeFilterArgsDict']] filters: One or more name/value pairs to filter off of. There are
            several valid keys, for a full reference, check out
-           [describe-volumes in the AWS CLI reference][1].
+           [describe-volumes in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-volumes.html).
     :param _builtins.bool most_recent: If more than one result is returned, use the most
            recent volume.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -323,10 +323,10 @@ def get_volume(filters: Optional[Sequence[Union['GetVolumeFilterArgs', 'GetVolum
         volume_id=pulumi.get(__ret__, 'volume_id'),
         volume_initialization_rate=pulumi.get(__ret__, 'volume_initialization_rate'),
         volume_type=pulumi.get(__ret__, 'volume_type'))
-def get_volume_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['GetVolumeFilterArgs', 'GetVolumeFilterArgsDict']]]]] = None,
-                      most_recent: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                      region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                      tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_volume_output(filters: pulumi.Input[Optional[Optional[Sequence[Union['GetVolumeFilterArgs', 'GetVolumeFilterArgsDict']]]]] = None,
+                      most_recent: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                      region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                      tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                       opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetVolumeResult]:
     """
     Use this data source to get information about an EBS volume for use in other
@@ -338,8 +338,7 @@ def get_volume_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['Ge
     import pulumi
     import pulumi_aws as aws
 
-    ebs_volume = aws.ebs.get_volume(most_recent=True,
-        filters=[
+    ebs_volume = aws.ebs.get_volume(filters=[
             {
                 "name": "volume-type",
                 "values": ["gp2"],
@@ -348,13 +347,14 @@ def get_volume_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['Ge
                 "name": "tag:Name",
                 "values": ["Example"],
             },
-        ])
+        ],
+        most_recent=True)
     ```
 
 
     :param Sequence[Union['GetVolumeFilterArgs', 'GetVolumeFilterArgsDict']] filters: One or more name/value pairs to filter off of. There are
            several valid keys, for a full reference, check out
-           [describe-volumes in the AWS CLI reference][1].
+           [describe-volumes in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-volumes.html).
     :param _builtins.bool most_recent: If more than one result is returned, use the most
            recent volume.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.

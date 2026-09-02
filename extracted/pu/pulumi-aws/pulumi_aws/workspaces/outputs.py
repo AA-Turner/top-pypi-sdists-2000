@@ -13,6 +13,7 @@ if sys.version_info >= (3, 11):
 else:
     from typing_extensions import NotRequired, TypedDict, TypeAlias
 from .. import _utilities
+from . import outputs
 
 __all__ = [
     'ConnectionAliasTimeouts',
@@ -21,8 +22,15 @@ __all__ = [
     'DirectorySamlProperties',
     'DirectorySelfServicePermissions',
     'DirectoryWorkspaceAccessProperties',
+    'DirectoryWorkspaceAccessPropertiesAccessEndpointConfig',
+    'DirectoryWorkspaceAccessPropertiesAccessEndpointConfigAccessEndpoint',
     'DirectoryWorkspaceCreationProperties',
     'IpGroupRule',
+    'PoolApplicationSetting',
+    'PoolCapacity',
+    'PoolCapacityStatus',
+    'PoolTimeoutSetting',
+    'PoolTimeouts',
     'WorkspaceWorkspaceProperties',
     'GetBundleComputeTypeResult',
     'GetBundleRootStorageResult',
@@ -138,7 +146,7 @@ class DirectoryCertificateBasedAuthProperties(dict):
                  certificate_authority_arn: Optional[_builtins.str] = None,
                  status: Optional[_builtins.str] = None):
         """
-        :param _builtins.str certificate_authority_arn: The Amazon Resource Name (ARN) of the certificate manager private certificate authority (ACM-PCA) that is used for certificate-based authentication.
+        :param _builtins.str certificate_authority_arn: ARN of the certificate manager private certificate authority (ACM-PCA) that is used for certificate-based authentication.
         :param _builtins.str status: Status of certificate-based authentication. Default `DISABLED`.
         """
         if certificate_authority_arn is not None:
@@ -150,7 +158,7 @@ class DirectoryCertificateBasedAuthProperties(dict):
     @pulumi.getter(name="certificateAuthorityArn")
     def certificate_authority_arn(self) -> Optional[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the certificate manager private certificate authority (ACM-PCA) that is used for certificate-based authentication.
+        ARN of the certificate manager private certificate authority (ACM-PCA) that is used for certificate-based authentication.
         """
         return pulumi.get(self, "certificate_authority_arn")
 
@@ -322,7 +330,9 @@ class DirectoryWorkspaceAccessProperties(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "deviceTypeAndroid":
+        if key == "accessEndpointConfig":
+            suggest = "access_endpoint_config"
+        elif key == "deviceTypeAndroid":
             suggest = "device_type_android"
         elif key == "deviceTypeChromeos":
             suggest = "device_type_chromeos"
@@ -351,6 +361,7 @@ class DirectoryWorkspaceAccessProperties(dict):
         return super().get(key, default)
 
     def __init__(__self__, *,
+                 access_endpoint_config: Optional['outputs.DirectoryWorkspaceAccessPropertiesAccessEndpointConfig'] = None,
                  device_type_android: Optional[_builtins.str] = None,
                  device_type_chromeos: Optional[_builtins.str] = None,
                  device_type_ios: Optional[_builtins.str] = None,
@@ -360,6 +371,7 @@ class DirectoryWorkspaceAccessProperties(dict):
                  device_type_windows: Optional[_builtins.str] = None,
                  device_type_zeroclient: Optional[_builtins.str] = None):
         """
+        :param 'DirectoryWorkspaceAccessPropertiesAccessEndpointConfigArgs' access_endpoint_config: Configuration for accessing WorkSpaces through VPC endpoints instead of the public internet. Defined below.
         :param _builtins.str device_type_android: Indicates whether users can use Android devices to access their WorkSpaces.
         :param _builtins.str device_type_chromeos: Indicates whether users can use Chromebooks to access their WorkSpaces.
         :param _builtins.str device_type_ios: Indicates whether users can use iOS devices to access their WorkSpaces.
@@ -369,6 +381,8 @@ class DirectoryWorkspaceAccessProperties(dict):
         :param _builtins.str device_type_windows: Indicates whether users can use Windows clients to access their WorkSpaces.
         :param _builtins.str device_type_zeroclient: Indicates whether users can use zero client devices to access their WorkSpaces.
         """
+        if access_endpoint_config is not None:
+            pulumi.set(__self__, "access_endpoint_config", access_endpoint_config)
         if device_type_android is not None:
             pulumi.set(__self__, "device_type_android", device_type_android)
         if device_type_chromeos is not None:
@@ -385,6 +399,14 @@ class DirectoryWorkspaceAccessProperties(dict):
             pulumi.set(__self__, "device_type_windows", device_type_windows)
         if device_type_zeroclient is not None:
             pulumi.set(__self__, "device_type_zeroclient", device_type_zeroclient)
+
+    @_builtins.property
+    @pulumi.getter(name="accessEndpointConfig")
+    def access_endpoint_config(self) -> Optional['outputs.DirectoryWorkspaceAccessPropertiesAccessEndpointConfig']:
+        """
+        Configuration for accessing WorkSpaces through VPC endpoints instead of the public internet. Defined below.
+        """
+        return pulumi.get(self, "access_endpoint_config")
 
     @_builtins.property
     @pulumi.getter(name="deviceTypeAndroid")
@@ -449,6 +471,103 @@ class DirectoryWorkspaceAccessProperties(dict):
         Indicates whether users can use zero client devices to access their WorkSpaces.
         """
         return pulumi.get(self, "device_type_zeroclient")
+
+
+@pulumi.output_type
+class DirectoryWorkspaceAccessPropertiesAccessEndpointConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "accessEndpoints":
+            suggest = "access_endpoints"
+        elif key == "internetFallbackProtocols":
+            suggest = "internet_fallback_protocols"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in DirectoryWorkspaceAccessPropertiesAccessEndpointConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        DirectoryWorkspaceAccessPropertiesAccessEndpointConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        DirectoryWorkspaceAccessPropertiesAccessEndpointConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 access_endpoints: Sequence['outputs.DirectoryWorkspaceAccessPropertiesAccessEndpointConfigAccessEndpoint'],
+                 internet_fallback_protocols: Optional[Sequence[_builtins.str]] = None):
+        """
+        :param Sequence['DirectoryWorkspaceAccessPropertiesAccessEndpointConfigAccessEndpointArgs'] access_endpoints: Set of access endpoints used to control the network paths that users use to access their WorkSpaces. Defined below.
+        :param Sequence[_builtins.str] internet_fallback_protocols: List of protocols that fall back to the public internet when streaming over a VPC endpoint is unavailable. Valid value is `PCOIP`.
+        """
+        pulumi.set(__self__, "access_endpoints", access_endpoints)
+        if internet_fallback_protocols is not None:
+            pulumi.set(__self__, "internet_fallback_protocols", internet_fallback_protocols)
+
+    @_builtins.property
+    @pulumi.getter(name="accessEndpoints")
+    def access_endpoints(self) -> Sequence['outputs.DirectoryWorkspaceAccessPropertiesAccessEndpointConfigAccessEndpoint']:
+        """
+        Set of access endpoints used to control the network paths that users use to access their WorkSpaces. Defined below.
+        """
+        return pulumi.get(self, "access_endpoints")
+
+    @_builtins.property
+    @pulumi.getter(name="internetFallbackProtocols")
+    def internet_fallback_protocols(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        List of protocols that fall back to the public internet when streaming over a VPC endpoint is unavailable. Valid value is `PCOIP`.
+        """
+        return pulumi.get(self, "internet_fallback_protocols")
+
+
+@pulumi.output_type
+class DirectoryWorkspaceAccessPropertiesAccessEndpointConfigAccessEndpoint(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "accessEndpointType":
+            suggest = "access_endpoint_type"
+        elif key == "vpcEndpointId":
+            suggest = "vpc_endpoint_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in DirectoryWorkspaceAccessPropertiesAccessEndpointConfigAccessEndpoint. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        DirectoryWorkspaceAccessPropertiesAccessEndpointConfigAccessEndpoint.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        DirectoryWorkspaceAccessPropertiesAccessEndpointConfigAccessEndpoint.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 access_endpoint_type: _builtins.str,
+                 vpc_endpoint_id: _builtins.str):
+        """
+        :param _builtins.str access_endpoint_type: Type of access endpoint. Valid value is `STREAMING_WSP`.
+        :param _builtins.str vpc_endpoint_id: Identifier of the VPC endpoint that the access endpoint uses.
+        """
+        pulumi.set(__self__, "access_endpoint_type", access_endpoint_type)
+        pulumi.set(__self__, "vpc_endpoint_id", vpc_endpoint_id)
+
+    @_builtins.property
+    @pulumi.getter(name="accessEndpointType")
+    def access_endpoint_type(self) -> _builtins.str:
+        """
+        Type of access endpoint. Valid value is `STREAMING_WSP`.
+        """
+        return pulumi.get(self, "access_endpoint_type")
+
+    @_builtins.property
+    @pulumi.getter(name="vpcEndpointId")
+    def vpc_endpoint_id(self) -> _builtins.str:
+        """
+        Identifier of the VPC endpoint that the access endpoint uses.
+        """
+        return pulumi.get(self, "vpc_endpoint_id")
 
 
 @pulumi.output_type
@@ -574,6 +693,265 @@ class IpGroupRule(dict):
 
 
 @pulumi.output_type
+class PoolApplicationSetting(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "settingsGroup":
+            suggest = "settings_group"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in PoolApplicationSetting. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        PoolApplicationSetting.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        PoolApplicationSetting.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 settings_group: _builtins.str,
+                 status: _builtins.str):
+        """
+        :param _builtins.str settings_group: Name of the settings group for the application settings.
+        :param _builtins.str status: Status of the application settings. Valid values are `ENABLED` and `DISABLED`.
+        """
+        pulumi.set(__self__, "settings_group", settings_group)
+        pulumi.set(__self__, "status", status)
+
+    @_builtins.property
+    @pulumi.getter(name="settingsGroup")
+    def settings_group(self) -> _builtins.str:
+        """
+        Name of the settings group for the application settings.
+        """
+        return pulumi.get(self, "settings_group")
+
+    @_builtins.property
+    @pulumi.getter
+    def status(self) -> _builtins.str:
+        """
+        Status of the application settings. Valid values are `ENABLED` and `DISABLED`.
+        """
+        return pulumi.get(self, "status")
+
+
+@pulumi.output_type
+class PoolCapacity(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "desiredUserSessions":
+            suggest = "desired_user_sessions"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in PoolCapacity. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        PoolCapacity.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        PoolCapacity.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 desired_user_sessions: _builtins.int):
+        """
+        :param _builtins.int desired_user_sessions: Desired number of user sessions for the WorkSpaces Pool.
+        """
+        pulumi.set(__self__, "desired_user_sessions", desired_user_sessions)
+
+    @_builtins.property
+    @pulumi.getter(name="desiredUserSessions")
+    def desired_user_sessions(self) -> _builtins.int:
+        """
+        Desired number of user sessions for the WorkSpaces Pool.
+        """
+        return pulumi.get(self, "desired_user_sessions")
+
+
+@pulumi.output_type
+class PoolCapacityStatus(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "activeUserSessions":
+            suggest = "active_user_sessions"
+        elif key == "actualUserSessions":
+            suggest = "actual_user_sessions"
+        elif key == "availableUserSessions":
+            suggest = "available_user_sessions"
+        elif key == "desiredUserSessions":
+            suggest = "desired_user_sessions"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in PoolCapacityStatus. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        PoolCapacityStatus.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        PoolCapacityStatus.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 active_user_sessions: _builtins.int,
+                 actual_user_sessions: _builtins.int,
+                 available_user_sessions: _builtins.int,
+                 desired_user_sessions: _builtins.int):
+        """
+        :param _builtins.int active_user_sessions: Number of user sessions that are currently being used for WorkSpaces in the pool.
+        :param _builtins.int actual_user_sessions: Number of user sessions currently being used for WorkSpaces in the pool.
+        :param _builtins.int available_user_sessions: Number of user sessions available for WorkSpaces in the pool.
+        :param _builtins.int desired_user_sessions: Number of user sessions required for WorkSpaces in the pool.
+        """
+        pulumi.set(__self__, "active_user_sessions", active_user_sessions)
+        pulumi.set(__self__, "actual_user_sessions", actual_user_sessions)
+        pulumi.set(__self__, "available_user_sessions", available_user_sessions)
+        pulumi.set(__self__, "desired_user_sessions", desired_user_sessions)
+
+    @_builtins.property
+    @pulumi.getter(name="activeUserSessions")
+    def active_user_sessions(self) -> _builtins.int:
+        """
+        Number of user sessions that are currently being used for WorkSpaces in the pool.
+        """
+        return pulumi.get(self, "active_user_sessions")
+
+    @_builtins.property
+    @pulumi.getter(name="actualUserSessions")
+    def actual_user_sessions(self) -> _builtins.int:
+        """
+        Number of user sessions currently being used for WorkSpaces in the pool.
+        """
+        return pulumi.get(self, "actual_user_sessions")
+
+    @_builtins.property
+    @pulumi.getter(name="availableUserSessions")
+    def available_user_sessions(self) -> _builtins.int:
+        """
+        Number of user sessions available for WorkSpaces in the pool.
+        """
+        return pulumi.get(self, "available_user_sessions")
+
+    @_builtins.property
+    @pulumi.getter(name="desiredUserSessions")
+    def desired_user_sessions(self) -> _builtins.int:
+        """
+        Number of user sessions required for WorkSpaces in the pool.
+        """
+        return pulumi.get(self, "desired_user_sessions")
+
+
+@pulumi.output_type
+class PoolTimeoutSetting(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "disconnectTimeoutInSeconds":
+            suggest = "disconnect_timeout_in_seconds"
+        elif key == "idleDisconnectTimeoutInSeconds":
+            suggest = "idle_disconnect_timeout_in_seconds"
+        elif key == "maxUserDurationInSeconds":
+            suggest = "max_user_duration_in_seconds"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in PoolTimeoutSetting. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        PoolTimeoutSetting.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        PoolTimeoutSetting.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 disconnect_timeout_in_seconds: _builtins.int,
+                 idle_disconnect_timeout_in_seconds: _builtins.int,
+                 max_user_duration_in_seconds: _builtins.int):
+        """
+        :param _builtins.int disconnect_timeout_in_seconds: Time after disconnection when a user is logged out of their WorkSpace. Must be between 1 and 36000.
+        :param _builtins.int idle_disconnect_timeout_in_seconds: Time after inactivity when a user is disconnected from their WorkSpace. Must be between 1 and 36000.
+        :param _builtins.int max_user_duration_in_seconds: Maximum time that a user can be connected to their WorkSpace. Must be between 1 and 432000.
+        """
+        pulumi.set(__self__, "disconnect_timeout_in_seconds", disconnect_timeout_in_seconds)
+        pulumi.set(__self__, "idle_disconnect_timeout_in_seconds", idle_disconnect_timeout_in_seconds)
+        pulumi.set(__self__, "max_user_duration_in_seconds", max_user_duration_in_seconds)
+
+    @_builtins.property
+    @pulumi.getter(name="disconnectTimeoutInSeconds")
+    def disconnect_timeout_in_seconds(self) -> _builtins.int:
+        """
+        Time after disconnection when a user is logged out of their WorkSpace. Must be between 1 and 36000.
+        """
+        return pulumi.get(self, "disconnect_timeout_in_seconds")
+
+    @_builtins.property
+    @pulumi.getter(name="idleDisconnectTimeoutInSeconds")
+    def idle_disconnect_timeout_in_seconds(self) -> _builtins.int:
+        """
+        Time after inactivity when a user is disconnected from their WorkSpace. Must be between 1 and 36000.
+        """
+        return pulumi.get(self, "idle_disconnect_timeout_in_seconds")
+
+    @_builtins.property
+    @pulumi.getter(name="maxUserDurationInSeconds")
+    def max_user_duration_in_seconds(self) -> _builtins.int:
+        """
+        Maximum time that a user can be connected to their WorkSpace. Must be between 1 and 432000.
+        """
+        return pulumi.get(self, "max_user_duration_in_seconds")
+
+
+@pulumi.output_type
+class PoolTimeouts(dict):
+    def __init__(__self__, *,
+                 create: Optional[_builtins.str] = None,
+                 delete: Optional[_builtins.str] = None,
+                 update: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        :param _builtins.str delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        :param _builtins.str update: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        if create is not None:
+            pulumi.set(__self__, "create", create)
+        if delete is not None:
+            pulumi.set(__self__, "delete", delete)
+        if update is not None:
+            pulumi.set(__self__, "update", update)
+
+    @_builtins.property
+    @pulumi.getter
+    def create(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "create")
+
+    @_builtins.property
+    @pulumi.getter
+    def delete(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        return pulumi.get(self, "delete")
+
+    @_builtins.property
+    @pulumi.getter
+    def update(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "update")
+
+
+@pulumi.output_type
 class WorkspaceWorkspaceProperties(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -607,7 +985,7 @@ class WorkspaceWorkspaceProperties(dict):
                  running_mode_auto_stop_timeout_in_minutes: Optional[_builtins.int] = None,
                  user_volume_size_gib: Optional[_builtins.int] = None):
         """
-        :param _builtins.str compute_type_name: The compute type. For more information, see [Amazon WorkSpaces Bundles](http://aws.amazon.com/workspaces/details/#Amazon_WorkSpaces_Bundles). Valid values are `VALUE`, `STANDARD`, `PERFORMANCE`, `POWER`, `GRAPHICS`, `POWERPRO`, `GRAPHICSPRO`, `GRAPHICS_G4DN`, and `GRAPHICSPRO_G4DN`.
+        :param _builtins.str compute_type_name: The compute type. For more information, see [Amazon WorkSpaces Bundles](http://aws.amazon.com/workspaces/details/#Amazon_WorkSpaces_Bundles). Valid values are `VALUE`, `STANDARD`, `PERFORMANCE`, `POWER`, `GRAPHICS`, `POWERPRO`, `GENERALPURPOSE_4XLARGE`, `GENERALPURPOSE_8XLARGE`, `GRAPHICSPRO`, `GRAPHICS_G4DN`, `GRAPHICSPRO_G4DN`, `GRAPHICS_G6_XLARGE`, `GRAPHICS_G6_2XLARGE`, `GRAPHICS_G6_4XLARGE`, `GRAPHICS_G6_8XLARGE`, `GRAPHICS_G6_16XLARGE`, `GRAPHICS_GR6_4XLARGE`, `GRAPHICS_GR6_8XLARGE`, `GRAPHICS_G6F_LARGE`, `GRAPHICS_G6F_XLARGE`, `GRAPHICS_G6F_2XLARGE`, `GRAPHICS_G6F_4XLARGE`, and `GRAPHICS_GR6F_4XLARGE`.
         :param _builtins.int root_volume_size_gib: The size of the root volume.
         :param _builtins.str running_mode: The running mode. For more information, see [Manage the WorkSpace Running Mode](https://docs.aws.amazon.com/workspaces/latest/adminguide/running-mode.html). Valid values are `AUTO_STOP` and `ALWAYS_ON`.
         :param _builtins.int running_mode_auto_stop_timeout_in_minutes: The time after a user logs off when WorkSpaces are automatically stopped. Configured in 60-minute intervals.
@@ -628,7 +1006,7 @@ class WorkspaceWorkspaceProperties(dict):
     @pulumi.getter(name="computeTypeName")
     def compute_type_name(self) -> Optional[_builtins.str]:
         """
-        The compute type. For more information, see [Amazon WorkSpaces Bundles](http://aws.amazon.com/workspaces/details/#Amazon_WorkSpaces_Bundles). Valid values are `VALUE`, `STANDARD`, `PERFORMANCE`, `POWER`, `GRAPHICS`, `POWERPRO`, `GRAPHICSPRO`, `GRAPHICS_G4DN`, and `GRAPHICSPRO_G4DN`.
+        The compute type. For more information, see [Amazon WorkSpaces Bundles](http://aws.amazon.com/workspaces/details/#Amazon_WorkSpaces_Bundles). Valid values are `VALUE`, `STANDARD`, `PERFORMANCE`, `POWER`, `GRAPHICS`, `POWERPRO`, `GENERALPURPOSE_4XLARGE`, `GENERALPURPOSE_8XLARGE`, `GRAPHICSPRO`, `GRAPHICS_G4DN`, `GRAPHICSPRO_G4DN`, `GRAPHICS_G6_XLARGE`, `GRAPHICS_G6_2XLARGE`, `GRAPHICS_G6_4XLARGE`, `GRAPHICS_G6_8XLARGE`, `GRAPHICS_G6_16XLARGE`, `GRAPHICS_GR6_4XLARGE`, `GRAPHICS_GR6_8XLARGE`, `GRAPHICS_G6F_LARGE`, `GRAPHICS_G6F_XLARGE`, `GRAPHICS_G6F_2XLARGE`, `GRAPHICS_G6F_4XLARGE`, and `GRAPHICS_GR6F_4XLARGE`.
         """
         return pulumi.get(self, "compute_type_name")
 

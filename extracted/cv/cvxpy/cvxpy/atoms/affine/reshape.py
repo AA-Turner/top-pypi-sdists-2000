@@ -16,8 +16,7 @@ limitations under the License.
 from __future__ import annotations
 
 import numbers
-import warnings
-from typing import List, Literal, Tuple
+from typing import Literal
 
 import numpy as np
 
@@ -28,7 +27,9 @@ from cvxpy.atoms.affine.affine_atom import AffAtom
 from cvxpy.atoms.affine.hstack import hstack
 from cvxpy.constraints.constraint import Constraint
 from cvxpy.expressions.expression import DEFAULT_ORDER_DEPRECATION_MSG, Expression
+from cvxpy.utilities import bounds as bounds_utils
 from cvxpy.utilities.shape import size_from_shape
+from cvxpy.utilities.warn import warn
 
 
 class reshape(AffAtom):
@@ -42,16 +43,16 @@ class reshape(AffAtom):
     Parameters
     ----------
     expr : Expression
-       The expression to promote.
+       The expression to reshape
     shape : tuple or int
-        The shape to promote to.
+        The shape to reshape to
     order : F(ortran) or C
     """
 
     def __init__(
         self,
         expr,
-        shape: int | Tuple[int, ...],
+        shape: int | tuple[int, ...],
         order: Literal["F", "C", None] = None
     ) -> None:
         if isinstance(shape, numbers.Integral):
@@ -65,27 +66,29 @@ class reshape(AffAtom):
         self._shape = tuple(shape)
         if order is None:
             reshape_order_warning = DEFAULT_ORDER_DEPRECATION_MSG.replace("FUNC_NAME", "reshape")
-            warnings.warn(reshape_order_warning, FutureWarning)
+            warn(reshape_order_warning, FutureWarning)
             order = 'F'
         assert order in ['F', 'C']
         self.order = order
         super(reshape, self).__init__(expr)
 
     @staticmethod
-    def _infer_shape(shape: Tuple[int, ...], size: int) -> Tuple[int, ...]:
+    def _infer_shape(shape: tuple[int, ...], size: int) -> tuple[int, ...]:
         assert shape.count(-1) == 1, "Only one dimension can be -1."
         if len(shape) == 1:
             shape = (size,)
         else:
             unspecified_index = shape.index(-1)
-            specified = shape[1 - unspecified_index]
-            assert specified >= 0, "Specified dimension must be nonnegative."
-            unspecified, remainder = np.divmod(size, shape[1 - unspecified_index])
+            specified_dims = [d for i, d in enumerate(shape) if i != unspecified_index]
+            for d in specified_dims:
+                assert d >= 0, "Specified dimension must be nonnegative."
+            divisor = int(np.prod(specified_dims))
+            unspecified, remainder = np.divmod(size, divisor)
             if remainder != 0:
                 raise ValueError(
                     f"Cannot reshape expression of size {size} into shape {shape}."
                 )
-            shape = tuple(unspecified if d == -1 else specified for d in shape)
+            shape = tuple(int(unspecified) if d == -1 else d for d in shape)
         return shape
 
     def is_atom_log_log_convex(self) -> bool:
@@ -97,6 +100,11 @@ class reshape(AffAtom):
         """Is the atom log-log concave?
         """
         return True
+
+    def bounds_from_args(self) -> tuple[np.ndarray, np.ndarray]:
+        """Returns bounds for reshaped expression."""
+        lb, ub = self.args[0].get_bounds()
+        return bounds_utils.reshape_bounds(lb, ub, self._shape, order=self.order)
 
     @AffAtom.numpy_numeric
     def numeric(self, values):
@@ -114,8 +122,8 @@ class reshape(AffAtom):
                 "Invalid reshape dimensions %s." % (self._shape,)
             )
 
-    def shape_from_args(self) -> Tuple[int, ...]:
-        """Returns the shape from the rows, cols arguments.
+    def shape_from_args(self) -> tuple[int, ...]:
+        """Returns the shape argument.
         """
         return self._shape
 
@@ -125,8 +133,8 @@ class reshape(AffAtom):
         return [self._shape, self.order]
 
     def graph_implementation(
-        self, arg_objs, shape: Tuple[int, ...], data=None
-    ) -> Tuple[lo.LinOp, List[Constraint]]:
+        self, arg_objs, shape: tuple[int, ...], data=None
+    ) -> tuple[lo.LinOp, list[Constraint]]:
         """Reshape
 
         Parameters

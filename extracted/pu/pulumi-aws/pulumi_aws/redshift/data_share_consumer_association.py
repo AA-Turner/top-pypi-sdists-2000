@@ -20,19 +20,20 @@ __all__ = ['DataShareConsumerAssociationArgs', 'DataShareConsumerAssociation']
 class DataShareConsumerAssociationArgs:
     def __init__(__self__, *,
                  data_share_arn: pulumi.Input[_builtins.str],
-                 allow_writes: Optional[pulumi.Input[_builtins.bool]] = None,
-                 associate_entire_account: Optional[pulumi.Input[_builtins.bool]] = None,
-                 consumer_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 consumer_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 allow_writes: pulumi.Input[Optional[_builtins.bool]] = None,
+                 associate_entire_account: pulumi.Input[Optional[_builtins.bool]] = None,
+                 consumer_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 consumer_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a DataShareConsumerAssociation resource.
-        :param pulumi.Input[_builtins.str] data_share_arn: Amazon Resource Name (ARN) of the datashare that the consumer is to use with the account or the namespace.
+
+        :param pulumi.Input[_builtins.str] data_share_arn: ARN of the datashare that the consumer is to use with the account or the namespace.
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.bool] allow_writes: Whether to allow write operations for a datashare.
         :param pulumi.Input[_builtins.bool] associate_entire_account: Whether the datashare is associated with the entire account. Conflicts with `consumer_arn` and `consumer_region`.
-        :param pulumi.Input[_builtins.str] consumer_arn: Amazon Resource Name (ARN) of the consumer that is associated with the datashare. Conflicts with `associate_entire_account` and `consumer_region`.
+        :param pulumi.Input[_builtins.str] consumer_arn: ARN of the consumer that is associated with the datashare. Conflicts with `associate_entire_account` and `consumer_region`.
         :param pulumi.Input[_builtins.str] consumer_region: From a datashare consumer account, associates a datashare with all existing and future namespaces in the specified AWS Region. Conflicts with `associate_entire_account` and `consumer_arn`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
@@ -52,7 +53,7 @@ class DataShareConsumerAssociationArgs:
     @pulumi.getter(name="dataShareArn")
     def data_share_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the datashare that the consumer is to use with the account or the namespace.
+        ARN of the datashare that the consumer is to use with the account or the namespace.
 
         The following arguments are optional:
         """
@@ -64,87 +65,88 @@ class DataShareConsumerAssociationArgs:
 
     @_builtins.property
     @pulumi.getter(name="allowWrites")
-    def allow_writes(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def allow_writes(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to allow write operations for a datashare.
         """
         return pulumi.get(self, "allow_writes")
 
     @allow_writes.setter
-    def allow_writes(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def allow_writes(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "allow_writes", value)
 
     @_builtins.property
     @pulumi.getter(name="associateEntireAccount")
-    def associate_entire_account(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def associate_entire_account(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the datashare is associated with the entire account. Conflicts with `consumer_arn` and `consumer_region`.
         """
         return pulumi.get(self, "associate_entire_account")
 
     @associate_entire_account.setter
-    def associate_entire_account(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def associate_entire_account(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "associate_entire_account", value)
 
     @_builtins.property
     @pulumi.getter(name="consumerArn")
-    def consumer_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def consumer_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Amazon Resource Name (ARN) of the consumer that is associated with the datashare. Conflicts with `associate_entire_account` and `consumer_region`.
+        ARN of the consumer that is associated with the datashare. Conflicts with `associate_entire_account` and `consumer_region`.
         """
         return pulumi.get(self, "consumer_arn")
 
     @consumer_arn.setter
-    def consumer_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def consumer_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "consumer_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="consumerRegion")
-    def consumer_region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def consumer_region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         From a datashare consumer account, associates a datashare with all existing and future namespaces in the specified AWS Region. Conflicts with `associate_entire_account` and `consumer_arn`.
         """
         return pulumi.get(self, "consumer_region")
 
     @consumer_region.setter
-    def consumer_region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def consumer_region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "consumer_region", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _DataShareConsumerAssociationState:
     def __init__(__self__, *,
-                 allow_writes: Optional[pulumi.Input[_builtins.bool]] = None,
-                 associate_entire_account: Optional[pulumi.Input[_builtins.bool]] = None,
-                 consumer_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 consumer_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 data_share_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 managed_by: Optional[pulumi.Input[_builtins.str]] = None,
-                 producer_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 allow_writes: pulumi.Input[Optional[_builtins.bool]] = None,
+                 associate_entire_account: pulumi.Input[Optional[_builtins.bool]] = None,
+                 consumer_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 consumer_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 data_share_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 managed_by: pulumi.Input[Optional[_builtins.str]] = None,
+                 producer_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering DataShareConsumerAssociation resources.
+
         :param pulumi.Input[_builtins.bool] allow_writes: Whether to allow write operations for a datashare.
         :param pulumi.Input[_builtins.bool] associate_entire_account: Whether the datashare is associated with the entire account. Conflicts with `consumer_arn` and `consumer_region`.
-        :param pulumi.Input[_builtins.str] consumer_arn: Amazon Resource Name (ARN) of the consumer that is associated with the datashare. Conflicts with `associate_entire_account` and `consumer_region`.
+        :param pulumi.Input[_builtins.str] consumer_arn: ARN of the consumer that is associated with the datashare. Conflicts with `associate_entire_account` and `consumer_region`.
         :param pulumi.Input[_builtins.str] consumer_region: From a datashare consumer account, associates a datashare with all existing and future namespaces in the specified AWS Region. Conflicts with `associate_entire_account` and `consumer_arn`.
-        :param pulumi.Input[_builtins.str] data_share_arn: Amazon Resource Name (ARN) of the datashare that the consumer is to use with the account or the namespace.
+        :param pulumi.Input[_builtins.str] data_share_arn: ARN of the datashare that the consumer is to use with the account or the namespace.
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] managed_by: Identifier of a datashare to show its managing entity.
-        :param pulumi.Input[_builtins.str] producer_arn: Amazon Resource Name (ARN) of the producer.
+        :param pulumi.Input[_builtins.str] producer_arn: ARN of the producer.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         if allow_writes is not None:
@@ -166,100 +168,100 @@ class _DataShareConsumerAssociationState:
 
     @_builtins.property
     @pulumi.getter(name="allowWrites")
-    def allow_writes(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def allow_writes(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to allow write operations for a datashare.
         """
         return pulumi.get(self, "allow_writes")
 
     @allow_writes.setter
-    def allow_writes(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def allow_writes(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "allow_writes", value)
 
     @_builtins.property
     @pulumi.getter(name="associateEntireAccount")
-    def associate_entire_account(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def associate_entire_account(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the datashare is associated with the entire account. Conflicts with `consumer_arn` and `consumer_region`.
         """
         return pulumi.get(self, "associate_entire_account")
 
     @associate_entire_account.setter
-    def associate_entire_account(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def associate_entire_account(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "associate_entire_account", value)
 
     @_builtins.property
     @pulumi.getter(name="consumerArn")
-    def consumer_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def consumer_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Amazon Resource Name (ARN) of the consumer that is associated with the datashare. Conflicts with `associate_entire_account` and `consumer_region`.
+        ARN of the consumer that is associated with the datashare. Conflicts with `associate_entire_account` and `consumer_region`.
         """
         return pulumi.get(self, "consumer_arn")
 
     @consumer_arn.setter
-    def consumer_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def consumer_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "consumer_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="consumerRegion")
-    def consumer_region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def consumer_region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         From a datashare consumer account, associates a datashare with all existing and future namespaces in the specified AWS Region. Conflicts with `associate_entire_account` and `consumer_arn`.
         """
         return pulumi.get(self, "consumer_region")
 
     @consumer_region.setter
-    def consumer_region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def consumer_region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "consumer_region", value)
 
     @_builtins.property
     @pulumi.getter(name="dataShareArn")
-    def data_share_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def data_share_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Amazon Resource Name (ARN) of the datashare that the consumer is to use with the account or the namespace.
+        ARN of the datashare that the consumer is to use with the account or the namespace.
 
         The following arguments are optional:
         """
         return pulumi.get(self, "data_share_arn")
 
     @data_share_arn.setter
-    def data_share_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def data_share_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "data_share_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="managedBy")
-    def managed_by(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def managed_by(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Identifier of a datashare to show its managing entity.
         """
         return pulumi.get(self, "managed_by")
 
     @managed_by.setter
-    def managed_by(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def managed_by(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "managed_by", value)
 
     @_builtins.property
     @pulumi.getter(name="producerArn")
-    def producer_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def producer_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Amazon Resource Name (ARN) of the producer.
+        ARN of the producer.
         """
         return pulumi.get(self, "producer_arn")
 
     @producer_arn.setter
-    def producer_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def producer_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "producer_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -269,12 +271,12 @@ class DataShareConsumerAssociation(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 allow_writes: Optional[pulumi.Input[_builtins.bool]] = None,
-                 associate_entire_account: Optional[pulumi.Input[_builtins.bool]] = None,
-                 consumer_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 consumer_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 data_share_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 allow_writes: pulumi.Input[Optional[_builtins.bool]] = None,
+                 associate_entire_account: pulumi.Input[Optional[_builtins.bool]] = None,
+                 consumer_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 consumer_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 data_share_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing an AWS Redshift Data Share Consumer Association.
@@ -311,13 +313,14 @@ class DataShareConsumerAssociation(pulumi.CustomResource):
         $ pulumi import aws:redshift/dataShareConsumerAssociation:DataShareConsumerAssociation example arn:aws:redshift:us-west-2:123456789012:datashare:b3bfde75-73fd-408b-9086-d6fccfd6d588/example,,,us-west-2
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.bool] allow_writes: Whether to allow write operations for a datashare.
         :param pulumi.Input[_builtins.bool] associate_entire_account: Whether the datashare is associated with the entire account. Conflicts with `consumer_arn` and `consumer_region`.
-        :param pulumi.Input[_builtins.str] consumer_arn: Amazon Resource Name (ARN) of the consumer that is associated with the datashare. Conflicts with `associate_entire_account` and `consumer_region`.
+        :param pulumi.Input[_builtins.str] consumer_arn: ARN of the consumer that is associated with the datashare. Conflicts with `associate_entire_account` and `consumer_region`.
         :param pulumi.Input[_builtins.str] consumer_region: From a datashare consumer account, associates a datashare with all existing and future namespaces in the specified AWS Region. Conflicts with `associate_entire_account` and `consumer_arn`.
-        :param pulumi.Input[_builtins.str] data_share_arn: Amazon Resource Name (ARN) of the datashare that the consumer is to use with the account or the namespace.
+        :param pulumi.Input[_builtins.str] data_share_arn: ARN of the datashare that the consumer is to use with the account or the namespace.
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -363,6 +366,7 @@ class DataShareConsumerAssociation(pulumi.CustomResource):
         $ pulumi import aws:redshift/dataShareConsumerAssociation:DataShareConsumerAssociation example arn:aws:redshift:us-west-2:123456789012:datashare:b3bfde75-73fd-408b-9086-d6fccfd6d588/example,,,us-west-2
         ```
 
+
         :param str resource_name: The name of the resource.
         :param DataShareConsumerAssociationArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -378,12 +382,12 @@ class DataShareConsumerAssociation(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 allow_writes: Optional[pulumi.Input[_builtins.bool]] = None,
-                 associate_entire_account: Optional[pulumi.Input[_builtins.bool]] = None,
-                 consumer_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 consumer_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 data_share_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 allow_writes: pulumi.Input[Optional[_builtins.bool]] = None,
+                 associate_entire_account: pulumi.Input[Optional[_builtins.bool]] = None,
+                 consumer_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 consumer_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 data_share_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -413,14 +417,14 @@ class DataShareConsumerAssociation(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            allow_writes: Optional[pulumi.Input[_builtins.bool]] = None,
-            associate_entire_account: Optional[pulumi.Input[_builtins.bool]] = None,
-            consumer_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            consumer_region: Optional[pulumi.Input[_builtins.str]] = None,
-            data_share_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            managed_by: Optional[pulumi.Input[_builtins.str]] = None,
-            producer_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'DataShareConsumerAssociation':
+            allow_writes: pulumi.Input[Optional[_builtins.bool]] = None,
+            associate_entire_account: pulumi.Input[Optional[_builtins.bool]] = None,
+            consumer_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            consumer_region: pulumi.Input[Optional[_builtins.str]] = None,
+            data_share_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            managed_by: pulumi.Input[Optional[_builtins.str]] = None,
+            producer_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'DataShareConsumerAssociation':
         """
         Get an existing DataShareConsumerAssociation resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -430,13 +434,13 @@ class DataShareConsumerAssociation(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.bool] allow_writes: Whether to allow write operations for a datashare.
         :param pulumi.Input[_builtins.bool] associate_entire_account: Whether the datashare is associated with the entire account. Conflicts with `consumer_arn` and `consumer_region`.
-        :param pulumi.Input[_builtins.str] consumer_arn: Amazon Resource Name (ARN) of the consumer that is associated with the datashare. Conflicts with `associate_entire_account` and `consumer_region`.
+        :param pulumi.Input[_builtins.str] consumer_arn: ARN of the consumer that is associated with the datashare. Conflicts with `associate_entire_account` and `consumer_region`.
         :param pulumi.Input[_builtins.str] consumer_region: From a datashare consumer account, associates a datashare with all existing and future namespaces in the specified AWS Region. Conflicts with `associate_entire_account` and `consumer_arn`.
-        :param pulumi.Input[_builtins.str] data_share_arn: Amazon Resource Name (ARN) of the datashare that the consumer is to use with the account or the namespace.
+        :param pulumi.Input[_builtins.str] data_share_arn: ARN of the datashare that the consumer is to use with the account or the namespace.
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] managed_by: Identifier of a datashare to show its managing entity.
-        :param pulumi.Input[_builtins.str] producer_arn: Amazon Resource Name (ARN) of the producer.
+        :param pulumi.Input[_builtins.str] producer_arn: ARN of the producer.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -473,7 +477,7 @@ class DataShareConsumerAssociation(pulumi.CustomResource):
     @pulumi.getter(name="consumerArn")
     def consumer_arn(self) -> pulumi.Output[Optional[_builtins.str]]:
         """
-        Amazon Resource Name (ARN) of the consumer that is associated with the datashare. Conflicts with `associate_entire_account` and `consumer_region`.
+        ARN of the consumer that is associated with the datashare. Conflicts with `associate_entire_account` and `consumer_region`.
         """
         return pulumi.get(self, "consumer_arn")
 
@@ -489,7 +493,7 @@ class DataShareConsumerAssociation(pulumi.CustomResource):
     @pulumi.getter(name="dataShareArn")
     def data_share_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the datashare that the consumer is to use with the account or the namespace.
+        ARN of the datashare that the consumer is to use with the account or the namespace.
 
         The following arguments are optional:
         """
@@ -507,7 +511,7 @@ class DataShareConsumerAssociation(pulumi.CustomResource):
     @pulumi.getter(name="producerArn")
     def producer_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the producer.
+        ARN of the producer.
         """
         return pulumi.get(self, "producer_arn")
 

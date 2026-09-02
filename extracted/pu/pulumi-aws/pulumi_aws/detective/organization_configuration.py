@@ -21,11 +21,12 @@ class OrganizationConfigurationArgs:
     def __init__(__self__, *,
                  auto_enable: pulumi.Input[_builtins.bool],
                  graph_arn: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a OrganizationConfiguration resource.
+
         :param pulumi.Input[_builtins.bool] auto_enable: When this setting is enabled, all new accounts that are created in, or added to, the organization are added as a member accounts of the organization’s Detective delegated administrator and Detective is enabled in that AWS Region.
-        :param pulumi.Input[_builtins.str] graph_arn: ARN of the behavior graph.
+        :param pulumi.Input[_builtins.str] graph_arn: ARN of the Detective behavior graph.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         pulumi.set(__self__, "auto_enable", auto_enable)
@@ -49,7 +50,7 @@ class OrganizationConfigurationArgs:
     @pulumi.getter(name="graphArn")
     def graph_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        ARN of the behavior graph.
+        ARN of the Detective behavior graph.
         """
         return pulumi.get(self, "graph_arn")
 
@@ -59,27 +60,28 @@ class OrganizationConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _OrganizationConfigurationState:
     def __init__(__self__, *,
-                 auto_enable: Optional[pulumi.Input[_builtins.bool]] = None,
-                 graph_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 auto_enable: pulumi.Input[Optional[_builtins.bool]] = None,
+                 graph_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering OrganizationConfiguration resources.
+
         :param pulumi.Input[_builtins.bool] auto_enable: When this setting is enabled, all new accounts that are created in, or added to, the organization are added as a member accounts of the organization’s Detective delegated administrator and Detective is enabled in that AWS Region.
-        :param pulumi.Input[_builtins.str] graph_arn: ARN of the behavior graph.
+        :param pulumi.Input[_builtins.str] graph_arn: ARN of the Detective behavior graph.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         if auto_enable is not None:
@@ -91,38 +93,38 @@ class _OrganizationConfigurationState:
 
     @_builtins.property
     @pulumi.getter(name="autoEnable")
-    def auto_enable(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def auto_enable(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         When this setting is enabled, all new accounts that are created in, or added to, the organization are added as a member accounts of the organization’s Detective delegated administrator and Detective is enabled in that AWS Region.
         """
         return pulumi.get(self, "auto_enable")
 
     @auto_enable.setter
-    def auto_enable(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def auto_enable(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "auto_enable", value)
 
     @_builtins.property
     @pulumi.getter(name="graphArn")
-    def graph_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def graph_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        ARN of the behavior graph.
+        ARN of the Detective behavior graph.
         """
         return pulumi.get(self, "graph_arn")
 
     @graph_arn.setter
-    def graph_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def graph_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "graph_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -132,9 +134,9 @@ class OrganizationConfiguration(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 auto_enable: Optional[pulumi.Input[_builtins.bool]] = None,
-                 graph_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 auto_enable: pulumi.Input[Optional[_builtins.bool]] = None,
+                 graph_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Manages the Detective Organization Configuration in the current AWS Region. The AWS account utilizing this resource must have been assigned as a delegated Organization administrator account, e.g., via the `detective.OrganizationAdminAccount` resource. More information about Organizations support in Detective can be found in the [Detective User Guide](https://docs.aws.amazon.com/detective/latest/adminguide/accounts-orgs-transition.html).
@@ -155,16 +157,23 @@ class OrganizationConfiguration(pulumi.CustomResource):
 
         ## Import
 
-        Using `pulumi import`, import `detective.OrganizationAdminAccount` using the behavior graph ARN. For example:
+        ### Identity Schema
+
+        #### Required
+
+        - `graph_arn` (String) ARN of the Detective behavior graph.
+
+        Using `pulumi import`, import Detective organization configurations using `graph_arn`. For example:
 
         ```sh
-        $ pulumi import aws:detective/organizationConfiguration:OrganizationConfiguration example arn:aws:detective:us-east-1:123456789012:graph:00b00fd5aecc0ab60a708659477e9617
+        $ pulumi import aws:detective/organizationConfiguration:OrganizationConfiguration example arn:aws:detective:us-east-1:187416307283:graph:f0bfed23303d420e838158775713bcb2
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.bool] auto_enable: When this setting is enabled, all new accounts that are created in, or added to, the organization are added as a member accounts of the organization’s Detective delegated administrator and Detective is enabled in that AWS Region.
-        :param pulumi.Input[_builtins.str] graph_arn: ARN of the behavior graph.
+        :param pulumi.Input[_builtins.str] graph_arn: ARN of the Detective behavior graph.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         ...
@@ -192,11 +201,18 @@ class OrganizationConfiguration(pulumi.CustomResource):
 
         ## Import
 
-        Using `pulumi import`, import `detective.OrganizationAdminAccount` using the behavior graph ARN. For example:
+        ### Identity Schema
+
+        #### Required
+
+        - `graph_arn` (String) ARN of the Detective behavior graph.
+
+        Using `pulumi import`, import Detective organization configurations using `graph_arn`. For example:
 
         ```sh
-        $ pulumi import aws:detective/organizationConfiguration:OrganizationConfiguration example arn:aws:detective:us-east-1:123456789012:graph:00b00fd5aecc0ab60a708659477e9617
+        $ pulumi import aws:detective/organizationConfiguration:OrganizationConfiguration example arn:aws:detective:us-east-1:187416307283:graph:f0bfed23303d420e838158775713bcb2
         ```
+
 
         :param str resource_name: The name of the resource.
         :param OrganizationConfigurationArgs args: The arguments to use to populate this resource's properties.
@@ -213,9 +229,9 @@ class OrganizationConfiguration(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 auto_enable: Optional[pulumi.Input[_builtins.bool]] = None,
-                 graph_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 auto_enable: pulumi.Input[Optional[_builtins.bool]] = None,
+                 graph_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -242,9 +258,9 @@ class OrganizationConfiguration(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            auto_enable: Optional[pulumi.Input[_builtins.bool]] = None,
-            graph_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'OrganizationConfiguration':
+            auto_enable: pulumi.Input[Optional[_builtins.bool]] = None,
+            graph_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'OrganizationConfiguration':
         """
         Get an existing OrganizationConfiguration resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -253,7 +269,7 @@ class OrganizationConfiguration(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.bool] auto_enable: When this setting is enabled, all new accounts that are created in, or added to, the organization are added as a member accounts of the organization’s Detective delegated administrator and Detective is enabled in that AWS Region.
-        :param pulumi.Input[_builtins.str] graph_arn: ARN of the behavior graph.
+        :param pulumi.Input[_builtins.str] graph_arn: ARN of the Detective behavior graph.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -277,7 +293,7 @@ class OrganizationConfiguration(pulumi.CustomResource):
     @pulumi.getter(name="graphArn")
     def graph_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        ARN of the behavior graph.
+        ARN of the Detective behavior graph.
         """
         return pulumi.get(self, "graph_arn")
 

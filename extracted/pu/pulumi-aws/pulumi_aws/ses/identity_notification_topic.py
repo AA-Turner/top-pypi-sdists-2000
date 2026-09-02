@@ -21,16 +21,17 @@ class IdentityNotificationTopicArgs:
     def __init__(__self__, *,
                  identity: pulumi.Input[_builtins.str],
                  notification_type: pulumi.Input[_builtins.str],
-                 include_original_headers: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 topic_arn: Optional[pulumi.Input[_builtins.str]] = None):
+                 include_original_headers: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 topic_arn: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a IdentityNotificationTopic resource.
-        :param pulumi.Input[_builtins.str] identity: The identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its Amazon Resource Name (ARN).
-        :param pulumi.Input[_builtins.str] notification_type: The type of notifications that will be published to the specified Amazon SNS topic. Valid Values: `Bounce`, `Complaint` or `Delivery`.
+
+        :param pulumi.Input[_builtins.str] identity: Identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its ARN.
+        :param pulumi.Input[_builtins.str] notification_type: Type of notifications that will be published to the specified Amazon SNS topic. Valid Values: `Bounce`, `Complaint` or `Delivery`.
         :param pulumi.Input[_builtins.bool] include_original_headers: Whether SES should include original email headers in SNS notifications of this type. `false` by default.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] topic_arn: The Amazon Resource Name (ARN) of the Amazon SNS topic. Can be set to `""` (an empty string) to disable publishing.
+        :param pulumi.Input[_builtins.str] topic_arn: ARN of the Amazon SNS topic. Can be set to `""` (an empty string) to disable publishing.
         """
         pulumi.set(__self__, "identity", identity)
         pulumi.set(__self__, "notification_type", notification_type)
@@ -45,7 +46,7 @@ class IdentityNotificationTopicArgs:
     @pulumi.getter
     def identity(self) -> pulumi.Input[_builtins.str]:
         """
-        The identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its Amazon Resource Name (ARN).
+        Identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its ARN.
         """
         return pulumi.get(self, "identity")
 
@@ -57,7 +58,7 @@ class IdentityNotificationTopicArgs:
     @pulumi.getter(name="notificationType")
     def notification_type(self) -> pulumi.Input[_builtins.str]:
         """
-        The type of notifications that will be published to the specified Amazon SNS topic. Valid Values: `Bounce`, `Complaint` or `Delivery`.
+        Type of notifications that will be published to the specified Amazon SNS topic. Valid Values: `Bounce`, `Complaint` or `Delivery`.
         """
         return pulumi.get(self, "notification_type")
 
@@ -67,56 +68,57 @@ class IdentityNotificationTopicArgs:
 
     @_builtins.property
     @pulumi.getter(name="includeOriginalHeaders")
-    def include_original_headers(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def include_original_headers(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether SES should include original email headers in SNS notifications of this type. `false` by default.
         """
         return pulumi.get(self, "include_original_headers")
 
     @include_original_headers.setter
-    def include_original_headers(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def include_original_headers(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "include_original_headers", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="topicArn")
-    def topic_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def topic_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the Amazon SNS topic. Can be set to `""` (an empty string) to disable publishing.
+        ARN of the Amazon SNS topic. Can be set to `""` (an empty string) to disable publishing.
         """
         return pulumi.get(self, "topic_arn")
 
     @topic_arn.setter
-    def topic_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def topic_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "topic_arn", value)
 
 
 @pulumi.input_type
 class _IdentityNotificationTopicState:
     def __init__(__self__, *,
-                 identity: Optional[pulumi.Input[_builtins.str]] = None,
-                 include_original_headers: Optional[pulumi.Input[_builtins.bool]] = None,
-                 notification_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 topic_arn: Optional[pulumi.Input[_builtins.str]] = None):
+                 identity: pulumi.Input[Optional[_builtins.str]] = None,
+                 include_original_headers: pulumi.Input[Optional[_builtins.bool]] = None,
+                 notification_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 topic_arn: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering IdentityNotificationTopic resources.
-        :param pulumi.Input[_builtins.str] identity: The identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its Amazon Resource Name (ARN).
+
+        :param pulumi.Input[_builtins.str] identity: Identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its ARN.
         :param pulumi.Input[_builtins.bool] include_original_headers: Whether SES should include original email headers in SNS notifications of this type. `false` by default.
-        :param pulumi.Input[_builtins.str] notification_type: The type of notifications that will be published to the specified Amazon SNS topic. Valid Values: `Bounce`, `Complaint` or `Delivery`.
+        :param pulumi.Input[_builtins.str] notification_type: Type of notifications that will be published to the specified Amazon SNS topic. Valid Values: `Bounce`, `Complaint` or `Delivery`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] topic_arn: The Amazon Resource Name (ARN) of the Amazon SNS topic. Can be set to `""` (an empty string) to disable publishing.
+        :param pulumi.Input[_builtins.str] topic_arn: ARN of the Amazon SNS topic. Can be set to `""` (an empty string) to disable publishing.
         """
         if identity is not None:
             pulumi.set(__self__, "identity", identity)
@@ -131,62 +133,62 @@ class _IdentityNotificationTopicState:
 
     @_builtins.property
     @pulumi.getter
-    def identity(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def identity(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its Amazon Resource Name (ARN).
+        Identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its ARN.
         """
         return pulumi.get(self, "identity")
 
     @identity.setter
-    def identity(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def identity(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "identity", value)
 
     @_builtins.property
     @pulumi.getter(name="includeOriginalHeaders")
-    def include_original_headers(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def include_original_headers(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether SES should include original email headers in SNS notifications of this type. `false` by default.
         """
         return pulumi.get(self, "include_original_headers")
 
     @include_original_headers.setter
-    def include_original_headers(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def include_original_headers(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "include_original_headers", value)
 
     @_builtins.property
     @pulumi.getter(name="notificationType")
-    def notification_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def notification_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The type of notifications that will be published to the specified Amazon SNS topic. Valid Values: `Bounce`, `Complaint` or `Delivery`.
+        Type of notifications that will be published to the specified Amazon SNS topic. Valid Values: `Bounce`, `Complaint` or `Delivery`.
         """
         return pulumi.get(self, "notification_type")
 
     @notification_type.setter
-    def notification_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def notification_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "notification_type", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="topicArn")
-    def topic_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def topic_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the Amazon SNS topic. Can be set to `""` (an empty string) to disable publishing.
+        ARN of the Amazon SNS topic. Can be set to `""` (an empty string) to disable publishing.
         """
         return pulumi.get(self, "topic_arn")
 
     @topic_arn.setter
-    def topic_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def topic_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "topic_arn", value)
 
 
@@ -196,11 +198,11 @@ class IdentityNotificationTopic(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 identity: Optional[pulumi.Input[_builtins.str]] = None,
-                 include_original_headers: Optional[pulumi.Input[_builtins.bool]] = None,
-                 notification_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 topic_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 identity: pulumi.Input[Optional[_builtins.str]] = None,
+                 include_original_headers: pulumi.Input[Optional[_builtins.bool]] = None,
+                 notification_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 topic_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing SES Identity Notification Topics
@@ -212,9 +214,9 @@ class IdentityNotificationTopic(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.ses.IdentityNotificationTopic("test",
-            topic_arn=example_aws_sns_topic["arn"],
+            topic_arn=example["arn"],
             notification_type="Bounce",
-            identity=example["domain"],
+            identity=example_aws_ses_domain_identity["domain"],
             include_original_headers=True)
         ```
 
@@ -226,13 +228,14 @@ class IdentityNotificationTopic(pulumi.CustomResource):
         $ pulumi import aws:ses/identityNotificationTopic:IdentityNotificationTopic test 'example.com|Bounce'
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] identity: The identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its Amazon Resource Name (ARN).
+        :param pulumi.Input[_builtins.str] identity: Identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its ARN.
         :param pulumi.Input[_builtins.bool] include_original_headers: Whether SES should include original email headers in SNS notifications of this type. `false` by default.
-        :param pulumi.Input[_builtins.str] notification_type: The type of notifications that will be published to the specified Amazon SNS topic. Valid Values: `Bounce`, `Complaint` or `Delivery`.
+        :param pulumi.Input[_builtins.str] notification_type: Type of notifications that will be published to the specified Amazon SNS topic. Valid Values: `Bounce`, `Complaint` or `Delivery`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] topic_arn: The Amazon Resource Name (ARN) of the Amazon SNS topic. Can be set to `""` (an empty string) to disable publishing.
+        :param pulumi.Input[_builtins.str] topic_arn: ARN of the Amazon SNS topic. Can be set to `""` (an empty string) to disable publishing.
         """
         ...
     @overload
@@ -250,9 +253,9 @@ class IdentityNotificationTopic(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.ses.IdentityNotificationTopic("test",
-            topic_arn=example_aws_sns_topic["arn"],
+            topic_arn=example["arn"],
             notification_type="Bounce",
-            identity=example["domain"],
+            identity=example_aws_ses_domain_identity["domain"],
             include_original_headers=True)
         ```
 
@@ -263,6 +266,7 @@ class IdentityNotificationTopic(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:ses/identityNotificationTopic:IdentityNotificationTopic test 'example.com|Bounce'
         ```
+
 
         :param str resource_name: The name of the resource.
         :param IdentityNotificationTopicArgs args: The arguments to use to populate this resource's properties.
@@ -279,11 +283,11 @@ class IdentityNotificationTopic(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 identity: Optional[pulumi.Input[_builtins.str]] = None,
-                 include_original_headers: Optional[pulumi.Input[_builtins.bool]] = None,
-                 notification_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 topic_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 identity: pulumi.Input[Optional[_builtins.str]] = None,
+                 include_original_headers: pulumi.Input[Optional[_builtins.bool]] = None,
+                 notification_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 topic_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -312,11 +316,11 @@ class IdentityNotificationTopic(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            identity: Optional[pulumi.Input[_builtins.str]] = None,
-            include_original_headers: Optional[pulumi.Input[_builtins.bool]] = None,
-            notification_type: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            topic_arn: Optional[pulumi.Input[_builtins.str]] = None) -> 'IdentityNotificationTopic':
+            identity: pulumi.Input[Optional[_builtins.str]] = None,
+            include_original_headers: pulumi.Input[Optional[_builtins.bool]] = None,
+            notification_type: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            topic_arn: pulumi.Input[Optional[_builtins.str]] = None) -> 'IdentityNotificationTopic':
         """
         Get an existing IdentityNotificationTopic resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -324,11 +328,11 @@ class IdentityNotificationTopic(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] identity: The identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its Amazon Resource Name (ARN).
+        :param pulumi.Input[_builtins.str] identity: Identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its ARN.
         :param pulumi.Input[_builtins.bool] include_original_headers: Whether SES should include original email headers in SNS notifications of this type. `false` by default.
-        :param pulumi.Input[_builtins.str] notification_type: The type of notifications that will be published to the specified Amazon SNS topic. Valid Values: `Bounce`, `Complaint` or `Delivery`.
+        :param pulumi.Input[_builtins.str] notification_type: Type of notifications that will be published to the specified Amazon SNS topic. Valid Values: `Bounce`, `Complaint` or `Delivery`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] topic_arn: The Amazon Resource Name (ARN) of the Amazon SNS topic. Can be set to `""` (an empty string) to disable publishing.
+        :param pulumi.Input[_builtins.str] topic_arn: ARN of the Amazon SNS topic. Can be set to `""` (an empty string) to disable publishing.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -345,7 +349,7 @@ class IdentityNotificationTopic(pulumi.CustomResource):
     @pulumi.getter
     def identity(self) -> pulumi.Output[_builtins.str]:
         """
-        The identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its Amazon Resource Name (ARN).
+        Identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its ARN.
         """
         return pulumi.get(self, "identity")
 
@@ -361,7 +365,7 @@ class IdentityNotificationTopic(pulumi.CustomResource):
     @pulumi.getter(name="notificationType")
     def notification_type(self) -> pulumi.Output[_builtins.str]:
         """
-        The type of notifications that will be published to the specified Amazon SNS topic. Valid Values: `Bounce`, `Complaint` or `Delivery`.
+        Type of notifications that will be published to the specified Amazon SNS topic. Valid Values: `Bounce`, `Complaint` or `Delivery`.
         """
         return pulumi.get(self, "notification_type")
 
@@ -377,7 +381,7 @@ class IdentityNotificationTopic(pulumi.CustomResource):
     @pulumi.getter(name="topicArn")
     def topic_arn(self) -> pulumi.Output[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the Amazon SNS topic. Can be set to `""` (an empty string) to disable publishing.
+        ARN of the Amazon SNS topic. Can be set to `""` (an empty string) to disable publishing.
         """
         return pulumi.get(self, "topic_arn")
 

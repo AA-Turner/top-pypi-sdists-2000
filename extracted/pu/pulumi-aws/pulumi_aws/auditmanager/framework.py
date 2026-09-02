@@ -21,14 +21,15 @@ __all__ = ['FrameworkArgs', 'Framework']
 @pulumi.input_type
 class FrameworkArgs:
     def __init__(__self__, *,
-                 compliance_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 control_sets: Optional[pulumi.Input[Sequence[pulumi.Input['FrameworkControlSetArgs']]]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 compliance_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 control_sets: pulumi.Input[Optional[Sequence[pulumi.Input['FrameworkControlSetArgs']]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a Framework resource.
+
         :param pulumi.Input[_builtins.str] compliance_type: Compliance type that the new custom framework supports, such as `CIS` or `HIPAA`.
         :param pulumi.Input[Sequence[pulumi.Input['FrameworkControlSetArgs']]] control_sets: Configuration block(s) for the control sets that are associated with the framework. See `control_sets` Block below for details.
                
@@ -53,19 +54,19 @@ class FrameworkArgs:
 
     @_builtins.property
     @pulumi.getter(name="complianceType")
-    def compliance_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def compliance_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Compliance type that the new custom framework supports, such as `CIS` or `HIPAA`.
         """
         return pulumi.get(self, "compliance_type")
 
     @compliance_type.setter
-    def compliance_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def compliance_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "compliance_type", value)
 
     @_builtins.property
     @pulumi.getter(name="controlSets")
-    def control_sets(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['FrameworkControlSetArgs']]]]:
+    def control_sets(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['FrameworkControlSetArgs']]]]:
         """
         Configuration block(s) for the control sets that are associated with the framework. See `control_sets` Block below for details.
 
@@ -74,73 +75,74 @@ class FrameworkArgs:
         return pulumi.get(self, "control_sets")
 
     @control_sets.setter
-    def control_sets(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['FrameworkControlSetArgs']]]]):
+    def control_sets(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['FrameworkControlSetArgs']]]]):
         pulumi.set(self, "control_sets", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the framework.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the framework.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags to assign to the framework. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _FrameworkState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 compliance_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 control_sets: Optional[pulumi.Input[Sequence[pulumi.Input['FrameworkControlSetArgs']]]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 framework_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 compliance_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 control_sets: pulumi.Input[Optional[Sequence[pulumi.Input['FrameworkControlSetArgs']]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 framework_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         Input properties used for looking up and filtering Framework resources.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name (ARN) of the framework.
+
+        :param pulumi.Input[_builtins.str] arn: ARN of the framework.
                * `control_sets[*].id` - Unique identifier for the framework control set.
         :param pulumi.Input[_builtins.str] compliance_type: Compliance type that the new custom framework supports, such as `CIS` or `HIPAA`.
         :param pulumi.Input[Sequence[pulumi.Input['FrameworkControlSetArgs']]] control_sets: Configuration block(s) for the control sets that are associated with the framework. See `control_sets` Block below for details.
@@ -173,32 +175,32 @@ class _FrameworkState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Amazon Resource Name (ARN) of the framework.
+        ARN of the framework.
         * `control_sets[*].id` - Unique identifier for the framework control set.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="complianceType")
-    def compliance_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def compliance_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Compliance type that the new custom framework supports, such as `CIS` or `HIPAA`.
         """
         return pulumi.get(self, "compliance_type")
 
     @compliance_type.setter
-    def compliance_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def compliance_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "compliance_type", value)
 
     @_builtins.property
     @pulumi.getter(name="controlSets")
-    def control_sets(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['FrameworkControlSetArgs']]]]:
+    def control_sets(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['FrameworkControlSetArgs']]]]:
         """
         Configuration block(s) for the control sets that are associated with the framework. See `control_sets` Block below for details.
 
@@ -207,76 +209,76 @@ class _FrameworkState:
         return pulumi.get(self, "control_sets")
 
     @control_sets.setter
-    def control_sets(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['FrameworkControlSetArgs']]]]):
+    def control_sets(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['FrameworkControlSetArgs']]]]):
         pulumi.set(self, "control_sets", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the framework.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="frameworkType")
-    def framework_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def framework_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Framework type, such as a custom framework or a standard framework.
         """
         return pulumi.get(self, "framework_type")
 
     @framework_type.setter
-    def framework_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def framework_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "framework_type", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the framework.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags to assign to the framework. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
 
@@ -286,12 +288,12 @@ class Framework(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 compliance_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 control_sets: Optional[pulumi.Input[Sequence[pulumi.Input[Union['FrameworkControlSetArgs', 'FrameworkControlSetArgsDict']]]]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 compliance_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 control_sets: pulumi.Input[Optional[Sequence[pulumi.Input[Union['FrameworkControlSetArgs', 'FrameworkControlSetArgsDict']]]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Resource for managing an AWS Audit Manager Framework.
@@ -305,9 +307,7 @@ class Framework(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.auditmanager.Framework("test",
-            name="example",
             control_sets=[{
-                "name": "example",
                 "controls": [
                     {
                         "id": test1["id"],
@@ -316,16 +316,30 @@ class Framework(pulumi.CustomResource):
                         "id": test2["id"],
                     },
                 ],
-            }])
+                "name": "example",
+            }],
+            name="example")
         ```
 
         ## Import
+
+        ### Identity Schema
+
+        #### Required
+
+        * `id` (String) Unique identifier for the framework.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
 
         Using `pulumi import`, import Audit Manager Framework using the framework `id`. For example:
 
         ```sh
         $ pulumi import aws:auditmanager/framework:Framework example abc123-de45
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -356,9 +370,7 @@ class Framework(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.auditmanager.Framework("test",
-            name="example",
             control_sets=[{
-                "name": "example",
                 "controls": [
                     {
                         "id": test1["id"],
@@ -367,16 +379,30 @@ class Framework(pulumi.CustomResource):
                         "id": test2["id"],
                     },
                 ],
-            }])
+                "name": "example",
+            }],
+            name="example")
         ```
 
         ## Import
+
+        ### Identity Schema
+
+        #### Required
+
+        * `id` (String) Unique identifier for the framework.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
 
         Using `pulumi import`, import Audit Manager Framework using the framework `id`. For example:
 
         ```sh
         $ pulumi import aws:auditmanager/framework:Framework example abc123-de45
         ```
+
 
         :param str resource_name: The name of the resource.
         :param FrameworkArgs args: The arguments to use to populate this resource's properties.
@@ -393,12 +419,12 @@ class Framework(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 compliance_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 control_sets: Optional[pulumi.Input[Sequence[pulumi.Input[Union['FrameworkControlSetArgs', 'FrameworkControlSetArgsDict']]]]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 compliance_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 control_sets: pulumi.Input[Optional[Sequence[pulumi.Input[Union['FrameworkControlSetArgs', 'FrameworkControlSetArgsDict']]]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -427,15 +453,15 @@ class Framework(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            compliance_type: Optional[pulumi.Input[_builtins.str]] = None,
-            control_sets: Optional[pulumi.Input[Sequence[pulumi.Input[Union['FrameworkControlSetArgs', 'FrameworkControlSetArgsDict']]]]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            framework_type: Optional[pulumi.Input[_builtins.str]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'Framework':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            compliance_type: pulumi.Input[Optional[_builtins.str]] = None,
+            control_sets: pulumi.Input[Optional[Sequence[pulumi.Input[Union['FrameworkControlSetArgs', 'FrameworkControlSetArgsDict']]]]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            framework_type: pulumi.Input[Optional[_builtins.str]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'Framework':
         """
         Get an existing Framework resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -443,7 +469,7 @@ class Framework(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name (ARN) of the framework.
+        :param pulumi.Input[_builtins.str] arn: ARN of the framework.
                * `control_sets[*].id` - Unique identifier for the framework control set.
         :param pulumi.Input[_builtins.str] compliance_type: Compliance type that the new custom framework supports, such as `CIS` or `HIPAA`.
         :param pulumi.Input[Sequence[pulumi.Input[Union['FrameworkControlSetArgs', 'FrameworkControlSetArgsDict']]]] control_sets: Configuration block(s) for the control sets that are associated with the framework. See `control_sets` Block below for details.
@@ -474,7 +500,7 @@ class Framework(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the framework.
+        ARN of the framework.
         * `control_sets[*].id` - Unique identifier for the framework control set.
         """
         return pulumi.get(self, "arn")

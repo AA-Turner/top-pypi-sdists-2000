@@ -1,3 +1,5 @@
+#include "pythoncapi-compat/pythoncapi_compat.h"
+
 #ifndef PY_SCSOBJECT_H
 #define PY_SCSOBJECT_H
 
@@ -233,6 +235,9 @@ static void free_py_scs_data(ScsData *d, ScsCone *k, ScsSettings *stgs,
     if (k->s) {
       scs_free(k->s);
     }
+    if (k->cs) {
+      scs_free(k->cs);
+    }
     if (k->p) {
       scs_free(k->p);
     }
@@ -398,7 +403,8 @@ static int SCS_init(SCS *self, PyObject *args, PyObject *kwargs) {
   d->A = A;
 
   /* set P if passed in */
-  if ((void *)Px != Py_None && (void *)Pi != Py_None && (void *)Pp != Py_None) {
+  if (!Py_IsNone((PyObject *)Px) && !Py_IsNone((PyObject *)Pi) &&
+      !Py_IsNone((PyObject *)Pp)) {
     if (!PyArray_ISFLOAT(Px) || PyArray_NDIM(Px) != 1) {
       free_py_scs_data(d, k, stgs, &ps);
       return finish_with_error("Px must be a numpy array of floats");
@@ -494,6 +500,10 @@ static int SCS_init(SCS *self, PyObject *args, PyObject *kwargs) {
   if (get_cone_arr_dim("s", &(k->s), &(k->ssize), cone) < 0) {
     free_py_scs_data(d, k, stgs, &ps);
     return finish_with_error("Failed to parse cone field s");
+  }
+  if (get_cone_arr_dim("cs", &(k->cs), &(k->cssize), cone) < 0) {
+    free_py_scs_data(d, k, stgs, &ps);
+    return finish_with_error("Failed to parse cone field cs");
   }
   if (get_cone_float_arr("p", &(k->p), &(k->psize), cone) < 0) {
     free_py_scs_data(d, k, stgs, &ps);
@@ -605,17 +615,17 @@ static PyObject *SCS_solve(SCS *self, PyObject *args) {
 
   if (_warm_start) {
     /* If any of these of missing, we use the values in sol */
-    if ((void *)warm_x != Py_None) {
+    if (!Py_IsNone((PyObject *)warm_x)) {
       if (get_warm_start(self->sol->x, self->n, warm_x) < 0) {
         return none_with_error("Unable to parse x warm-start");
       }
     }
-    if ((void *)warm_y != Py_None) {
+    if (!Py_IsNone((PyObject *)warm_y)) {
       if (get_warm_start(self->sol->y, self->m, warm_y) < 0) {
         return none_with_error("Unable to parse y warm-start");
       }
     }
-    if ((void *)warm_s != Py_None) {
+    if (!Py_IsNone((PyObject *)warm_s)) {
       if (get_warm_start(self->sol->s, self->m, warm_s) < 0) {
         return none_with_error("Unable to parse s warm-start");
       }
@@ -727,7 +737,7 @@ PyObject *SCS_update(SCS *self, PyObject *args) {
     return none_with_error("Error parsing inputs");
   }
   /* set c */
-  if ((void *)c_new != Py_None) {
+  if (!Py_IsNone((PyObject *)c_new)) {
     if (!PyArray_ISFLOAT(c_new) || PyArray_NDIM(c_new) != 1) {
       return none_with_error(
           "c_new must be a dense numpy array with one dimension");
@@ -739,7 +749,7 @@ PyObject *SCS_update(SCS *self, PyObject *args) {
     c = (scs_float *)PyArray_DATA(c_new);
   }
   /* set b */
-  if ((void *)b_new != Py_None) {
+  if (!Py_IsNone((PyObject *)b_new)) {
     if (!PyArray_ISFLOAT(b_new) || PyArray_NDIM(b_new) != 1) {
       return none_with_error(
           "b must be a dense numpy array with one dimension");
@@ -776,7 +786,7 @@ static scs_int SCS_finish(SCS *self) {
   }
 
   /* Del python object */
-  PyObject_Del(self);
+  PyObject_Free(self);
 
   return 0;
 }

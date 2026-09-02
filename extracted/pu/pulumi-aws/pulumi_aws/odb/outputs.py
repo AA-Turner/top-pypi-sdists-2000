@@ -29,7 +29,9 @@ __all__ = [
     'CloudVmClusterIormConfigCache',
     'CloudVmClusterIormConfigCacheDbPlan',
     'CloudVmClusterTimeouts',
+    'IamRoleAssociationTimeouts',
     'NetworkManagedService',
+    'NetworkManagedServiceCrossRegionS3RestoreSourcesAccess',
     'NetworkManagedServiceKmsAccess',
     'NetworkManagedServiceManagedS3BackupAccess',
     'NetworkManagedServiceS3Access',
@@ -59,6 +61,7 @@ __all__ = [
     'GetDbSystemShapesDbSystemShapeResult',
     'GetGiVersionsGiVersionResult',
     'GetNetworkManagedServiceResult',
+    'GetNetworkManagedServiceCrossRegionS3RestoreSourcesAccessResult',
     'GetNetworkManagedServiceKmsAccessResult',
     'GetNetworkManagedServiceManagedS3BackupAccessResult',
     'GetNetworkManagedServiceS3AccessResult',
@@ -103,12 +106,12 @@ class CloudAutonomousVmClusterMaintenanceWindow(dict):
                  months: Optional[Sequence['outputs.CloudAutonomousVmClusterMaintenanceWindowMonth']] = None,
                  weeks_of_months: Optional[Sequence[_builtins.int]] = None):
         """
-        :param _builtins.str preference: The preference for the maintenance window scheduling. Changing this will force terraform to create new resource.
-        :param Sequence['CloudAutonomousVmClusterMaintenanceWindowDaysOfWeekArgs'] days_of_weeks: The days of the week when maintenance can be performed. Changing this will force terraform to create new resource.
-        :param Sequence[_builtins.int] hours_of_days: The hours of the day when maintenance can be performed. Changing this will force terraform to create new resource.
-        :param _builtins.int lead_time_in_weeks: The lead time in weeks before the maintenance window. Changing this will force terraform to create new resource.
-        :param Sequence['CloudAutonomousVmClusterMaintenanceWindowMonthArgs'] months: The months when maintenance can be performed. Changing this will force terraform to create new resource.
-        :param Sequence[_builtins.int] weeks_of_months: Indicates whether to skip release updates during maintenance. Changing this will force terraform to create new resource.
+        :param _builtins.str preference: Preference for the maintenance window scheduling. Changing this will force terraform to create new resource.
+        :param Sequence['CloudAutonomousVmClusterMaintenanceWindowDaysOfWeekArgs'] days_of_weeks: Days of the week when maintenance can be performed. Changing this will force terraform to create new resource. See `days_of_week` Block below.
+        :param Sequence[_builtins.int] hours_of_days: Hours of the day when maintenance can be performed. Changing this will force terraform to create new resource.
+        :param _builtins.int lead_time_in_weeks: Lead time in weeks before the maintenance window. Changing this will force terraform to create new resource.
+        :param Sequence['CloudAutonomousVmClusterMaintenanceWindowMonthArgs'] months: Months when maintenance can be performed. Changing this will force terraform to create new resource. See `months` Block below.
+        :param Sequence[_builtins.int] weeks_of_months: Whether to skip release updates during maintenance. Changing this will force terraform to create new resource.
         """
         pulumi.set(__self__, "preference", preference)
         if days_of_weeks is not None:
@@ -126,7 +129,7 @@ class CloudAutonomousVmClusterMaintenanceWindow(dict):
     @pulumi.getter
     def preference(self) -> _builtins.str:
         """
-        The preference for the maintenance window scheduling. Changing this will force terraform to create new resource.
+        Preference for the maintenance window scheduling. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "preference")
 
@@ -134,7 +137,7 @@ class CloudAutonomousVmClusterMaintenanceWindow(dict):
     @pulumi.getter(name="daysOfWeeks")
     def days_of_weeks(self) -> Optional[Sequence['outputs.CloudAutonomousVmClusterMaintenanceWindowDaysOfWeek']]:
         """
-        The days of the week when maintenance can be performed. Changing this will force terraform to create new resource.
+        Days of the week when maintenance can be performed. Changing this will force terraform to create new resource. See `days_of_week` Block below.
         """
         return pulumi.get(self, "days_of_weeks")
 
@@ -142,7 +145,7 @@ class CloudAutonomousVmClusterMaintenanceWindow(dict):
     @pulumi.getter(name="hoursOfDays")
     def hours_of_days(self) -> Optional[Sequence[_builtins.int]]:
         """
-        The hours of the day when maintenance can be performed. Changing this will force terraform to create new resource.
+        Hours of the day when maintenance can be performed. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "hours_of_days")
 
@@ -150,7 +153,7 @@ class CloudAutonomousVmClusterMaintenanceWindow(dict):
     @pulumi.getter(name="leadTimeInWeeks")
     def lead_time_in_weeks(self) -> Optional[_builtins.int]:
         """
-        The lead time in weeks before the maintenance window. Changing this will force terraform to create new resource.
+        Lead time in weeks before the maintenance window. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "lead_time_in_weeks")
 
@@ -158,7 +161,7 @@ class CloudAutonomousVmClusterMaintenanceWindow(dict):
     @pulumi.getter
     def months(self) -> Optional[Sequence['outputs.CloudAutonomousVmClusterMaintenanceWindowMonth']]:
         """
-        The months when maintenance can be performed. Changing this will force terraform to create new resource.
+        Months when maintenance can be performed. Changing this will force terraform to create new resource. See `months` Block below.
         """
         return pulumi.get(self, "months")
 
@@ -166,7 +169,7 @@ class CloudAutonomousVmClusterMaintenanceWindow(dict):
     @pulumi.getter(name="weeksOfMonths")
     def weeks_of_months(self) -> Optional[Sequence[_builtins.int]]:
         """
-        Indicates whether to skip release updates during maintenance. Changing this will force terraform to create new resource.
+        Whether to skip release updates during maintenance. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "weeks_of_months")
 
@@ -175,11 +178,17 @@ class CloudAutonomousVmClusterMaintenanceWindow(dict):
 class CloudAutonomousVmClusterMaintenanceWindowDaysOfWeek(dict):
     def __init__(__self__, *,
                  name: _builtins.str):
+        """
+        :param _builtins.str name: Name of the day of the week. Valid values are `MONDAY`, `TUESDAY`, `WEDNESDAY`, `THURSDAY`, `FRIDAY`, `SATURDAY`, and `SUNDAY`.
+        """
         pulumi.set(__self__, "name", name)
 
     @_builtins.property
     @pulumi.getter
     def name(self) -> _builtins.str:
+        """
+        Name of the day of the week. Valid values are `MONDAY`, `TUESDAY`, `WEDNESDAY`, `THURSDAY`, `FRIDAY`, `SATURDAY`, and `SUNDAY`.
+        """
         return pulumi.get(self, "name")
 
 
@@ -187,11 +196,17 @@ class CloudAutonomousVmClusterMaintenanceWindowDaysOfWeek(dict):
 class CloudAutonomousVmClusterMaintenanceWindowMonth(dict):
     def __init__(__self__, *,
                  name: _builtins.str):
+        """
+        :param _builtins.str name: Name of the month. Valid values are `JANUARY`, `FEBRUARY`, `MARCH`, `APRIL`, `MAY`, `JUNE`, `JULY`, `AUGUST`, `SEPTEMBER`, `OCTOBER`, `NOVEMBER`, and `DECEMBER`.
+        """
         pulumi.set(__self__, "name", name)
 
     @_builtins.property
     @pulumi.getter
     def name(self) -> _builtins.str:
+        """
+        Name of the month. Valid values are `JANUARY`, `FEBRUARY`, `MARCH`, `APRIL`, `MAY`, `JUNE`, `JULY`, `AUGUST`, `SEPTEMBER`, `OCTOBER`, `NOVEMBER`, and `DECEMBER`.
+        """
         return pulumi.get(self, "name")
 
 
@@ -242,11 +257,17 @@ class CloudAutonomousVmClusterTimeouts(dict):
 class CloudExadataInfrastructureCustomerContactsToSendToOci(dict):
     def __init__(__self__, *,
                  email: _builtins.str):
+        """
+        :param _builtins.str email: Email address of the contact.
+        """
         pulumi.set(__self__, "email", email)
 
     @_builtins.property
     @pulumi.getter
     def email(self) -> _builtins.str:
+        """
+        Email address of the contact.
+        """
         return pulumi.get(self, "email")
 
 
@@ -292,15 +313,15 @@ class CloudExadataInfrastructureMaintenanceWindow(dict):
                  months: Optional[Sequence['outputs.CloudExadataInfrastructureMaintenanceWindowMonth']] = None,
                  weeks_of_months: Optional[Sequence[_builtins.int]] = None):
         """
-        :param _builtins.int custom_action_timeout_in_mins: The custom action timeout in minutes for the maintenance window.
-        :param _builtins.bool is_custom_action_timeout_enabled: ndicates whether custom action timeout is enabled for the maintenance window.
-        :param _builtins.str patching_mode: The patching mode for the maintenance window.
-        :param _builtins.str preference: The preference for the maintenance window scheduling.
-        :param Sequence['CloudExadataInfrastructureMaintenanceWindowDaysOfWeekArgs'] days_of_weeks: The days of the week when maintenance can be performed.
-        :param Sequence[_builtins.int] hours_of_days: The hours of the day when maintenance can be performed.
-        :param _builtins.int lead_time_in_weeks: The lead time in weeks before the maintenance window.
-        :param Sequence['CloudExadataInfrastructureMaintenanceWindowMonthArgs'] months: The months when maintenance can be performed.
-        :param Sequence[_builtins.int] weeks_of_months: The weeks of the month when maintenance can be performed.
+        :param _builtins.int custom_action_timeout_in_mins: Custom action timeout in minutes for the maintenance window.
+        :param _builtins.bool is_custom_action_timeout_enabled: Whether custom action timeout is enabled for the maintenance window.
+        :param _builtins.str patching_mode: Patching mode for the maintenance window.
+        :param _builtins.str preference: Preference for the maintenance window scheduling.
+        :param Sequence['CloudExadataInfrastructureMaintenanceWindowDaysOfWeekArgs'] days_of_weeks: Days of the week when maintenance can be performed. See `days_of_week` Block below.
+        :param Sequence[_builtins.int] hours_of_days: Hours of the day when maintenance can be performed.
+        :param _builtins.int lead_time_in_weeks: Lead time in weeks before the maintenance window.
+        :param Sequence['CloudExadataInfrastructureMaintenanceWindowMonthArgs'] months: Months when maintenance can be performed. See `months` Block below.
+        :param Sequence[_builtins.int] weeks_of_months: Weeks of the month when maintenance can be performed.
         """
         pulumi.set(__self__, "custom_action_timeout_in_mins", custom_action_timeout_in_mins)
         pulumi.set(__self__, "is_custom_action_timeout_enabled", is_custom_action_timeout_enabled)
@@ -321,7 +342,7 @@ class CloudExadataInfrastructureMaintenanceWindow(dict):
     @pulumi.getter(name="customActionTimeoutInMins")
     def custom_action_timeout_in_mins(self) -> _builtins.int:
         """
-        The custom action timeout in minutes for the maintenance window.
+        Custom action timeout in minutes for the maintenance window.
         """
         return pulumi.get(self, "custom_action_timeout_in_mins")
 
@@ -329,7 +350,7 @@ class CloudExadataInfrastructureMaintenanceWindow(dict):
     @pulumi.getter(name="isCustomActionTimeoutEnabled")
     def is_custom_action_timeout_enabled(self) -> _builtins.bool:
         """
-        ndicates whether custom action timeout is enabled for the maintenance window.
+        Whether custom action timeout is enabled for the maintenance window.
         """
         return pulumi.get(self, "is_custom_action_timeout_enabled")
 
@@ -337,7 +358,7 @@ class CloudExadataInfrastructureMaintenanceWindow(dict):
     @pulumi.getter(name="patchingMode")
     def patching_mode(self) -> _builtins.str:
         """
-        The patching mode for the maintenance window.
+        Patching mode for the maintenance window.
         """
         return pulumi.get(self, "patching_mode")
 
@@ -345,7 +366,7 @@ class CloudExadataInfrastructureMaintenanceWindow(dict):
     @pulumi.getter
     def preference(self) -> _builtins.str:
         """
-        The preference for the maintenance window scheduling.
+        Preference for the maintenance window scheduling.
         """
         return pulumi.get(self, "preference")
 
@@ -353,7 +374,7 @@ class CloudExadataInfrastructureMaintenanceWindow(dict):
     @pulumi.getter(name="daysOfWeeks")
     def days_of_weeks(self) -> Optional[Sequence['outputs.CloudExadataInfrastructureMaintenanceWindowDaysOfWeek']]:
         """
-        The days of the week when maintenance can be performed.
+        Days of the week when maintenance can be performed. See `days_of_week` Block below.
         """
         return pulumi.get(self, "days_of_weeks")
 
@@ -361,7 +382,7 @@ class CloudExadataInfrastructureMaintenanceWindow(dict):
     @pulumi.getter(name="hoursOfDays")
     def hours_of_days(self) -> Optional[Sequence[_builtins.int]]:
         """
-        The hours of the day when maintenance can be performed.
+        Hours of the day when maintenance can be performed.
         """
         return pulumi.get(self, "hours_of_days")
 
@@ -369,7 +390,7 @@ class CloudExadataInfrastructureMaintenanceWindow(dict):
     @pulumi.getter(name="leadTimeInWeeks")
     def lead_time_in_weeks(self) -> Optional[_builtins.int]:
         """
-        The lead time in weeks before the maintenance window.
+        Lead time in weeks before the maintenance window.
         """
         return pulumi.get(self, "lead_time_in_weeks")
 
@@ -377,7 +398,7 @@ class CloudExadataInfrastructureMaintenanceWindow(dict):
     @pulumi.getter
     def months(self) -> Optional[Sequence['outputs.CloudExadataInfrastructureMaintenanceWindowMonth']]:
         """
-        The months when maintenance can be performed.
+        Months when maintenance can be performed. See `months` Block below.
         """
         return pulumi.get(self, "months")
 
@@ -385,7 +406,7 @@ class CloudExadataInfrastructureMaintenanceWindow(dict):
     @pulumi.getter(name="weeksOfMonths")
     def weeks_of_months(self) -> Optional[Sequence[_builtins.int]]:
         """
-        The weeks of the month when maintenance can be performed.
+        Weeks of the month when maintenance can be performed.
         """
         return pulumi.get(self, "weeks_of_months")
 
@@ -394,11 +415,17 @@ class CloudExadataInfrastructureMaintenanceWindow(dict):
 class CloudExadataInfrastructureMaintenanceWindowDaysOfWeek(dict):
     def __init__(__self__, *,
                  name: _builtins.str):
+        """
+        :param _builtins.str name: Name of the day of the week. Valid values are `MONDAY`, `TUESDAY`, `WEDNESDAY`, `THURSDAY`, `FRIDAY`, `SATURDAY`, and `SUNDAY`.
+        """
         pulumi.set(__self__, "name", name)
 
     @_builtins.property
     @pulumi.getter
     def name(self) -> _builtins.str:
+        """
+        Name of the day of the week. Valid values are `MONDAY`, `TUESDAY`, `WEDNESDAY`, `THURSDAY`, `FRIDAY`, `SATURDAY`, and `SUNDAY`.
+        """
         return pulumi.get(self, "name")
 
 
@@ -406,11 +433,17 @@ class CloudExadataInfrastructureMaintenanceWindowDaysOfWeek(dict):
 class CloudExadataInfrastructureMaintenanceWindowMonth(dict):
     def __init__(__self__, *,
                  name: _builtins.str):
+        """
+        :param _builtins.str name: Name of the month. Valid values are `JANUARY`, `FEBRUARY`, `MARCH`, `APRIL`, `MAY`, `JUNE`, `JULY`, `AUGUST`, `SEPTEMBER`, `OCTOBER`, `NOVEMBER`, and `DECEMBER`.
+        """
         pulumi.set(__self__, "name", name)
 
     @_builtins.property
     @pulumi.getter
     def name(self) -> _builtins.str:
+        """
+        Name of the month. Valid values are `JANUARY`, `FEBRUARY`, `MARCH`, `APRIL`, `MAY`, `JUNE`, `JULY`, `AUGUST`, `SEPTEMBER`, `OCTOBER`, `NOVEMBER`, and `DECEMBER`.
+        """
         return pulumi.get(self, "name")
 
 
@@ -484,6 +517,11 @@ class CloudVmClusterDataCollectionOptions(dict):
                  is_diagnostics_events_enabled: _builtins.bool,
                  is_health_monitoring_enabled: _builtins.bool,
                  is_incident_logs_enabled: _builtins.bool):
+        """
+        :param _builtins.bool is_diagnostics_events_enabled: Whether to enable diagnostic events for the VM cluster. Changing this will create a new resource.
+        :param _builtins.bool is_health_monitoring_enabled: Whether to enable health monitoring for the VM cluster. Changing this will create a new resource.
+        :param _builtins.bool is_incident_logs_enabled: Whether to enable incident logs for the VM cluster. Changing this will create a new resource.
+        """
         pulumi.set(__self__, "is_diagnostics_events_enabled", is_diagnostics_events_enabled)
         pulumi.set(__self__, "is_health_monitoring_enabled", is_health_monitoring_enabled)
         pulumi.set(__self__, "is_incident_logs_enabled", is_incident_logs_enabled)
@@ -491,16 +529,25 @@ class CloudVmClusterDataCollectionOptions(dict):
     @_builtins.property
     @pulumi.getter(name="isDiagnosticsEventsEnabled")
     def is_diagnostics_events_enabled(self) -> _builtins.bool:
+        """
+        Whether to enable diagnostic events for the VM cluster. Changing this will create a new resource.
+        """
         return pulumi.get(self, "is_diagnostics_events_enabled")
 
     @_builtins.property
     @pulumi.getter(name="isHealthMonitoringEnabled")
     def is_health_monitoring_enabled(self) -> _builtins.bool:
+        """
+        Whether to enable health monitoring for the VM cluster. Changing this will create a new resource.
+        """
         return pulumi.get(self, "is_health_monitoring_enabled")
 
     @_builtins.property
     @pulumi.getter(name="isIncidentLogsEnabled")
     def is_incident_logs_enabled(self) -> _builtins.bool:
+        """
+        Whether to enable incident logs for the VM cluster. Changing this will create a new resource.
+        """
         return pulumi.get(self, "is_incident_logs_enabled")
 
 
@@ -532,6 +579,12 @@ class CloudVmClusterIormConfigCache(dict):
                  lifecycle_details: _builtins.str,
                  lifecycle_state: _builtins.str,
                  objective: _builtins.str):
+        """
+        :param Sequence['CloudVmClusterIormConfigCacheDbPlanArgs'] db_plans: List of IORM (I/O Resource Manager) database plans for the VM cluster. See `db_plans` Block below.
+        :param _builtins.str lifecycle_details: Additional information about the current lifecycle state of the IORM configuration.
+        :param _builtins.str lifecycle_state: Current lifecycle state of the IORM configuration.
+        :param _builtins.str objective: Current value for the IORM objective.
+        """
         pulumi.set(__self__, "db_plans", db_plans)
         pulumi.set(__self__, "lifecycle_details", lifecycle_details)
         pulumi.set(__self__, "lifecycle_state", lifecycle_state)
@@ -540,21 +593,33 @@ class CloudVmClusterIormConfigCache(dict):
     @_builtins.property
     @pulumi.getter(name="dbPlans")
     def db_plans(self) -> Sequence['outputs.CloudVmClusterIormConfigCacheDbPlan']:
+        """
+        List of IORM (I/O Resource Manager) database plans for the VM cluster. See `db_plans` Block below.
+        """
         return pulumi.get(self, "db_plans")
 
     @_builtins.property
     @pulumi.getter(name="lifecycleDetails")
     def lifecycle_details(self) -> _builtins.str:
+        """
+        Additional information about the current lifecycle state of the IORM configuration.
+        """
         return pulumi.get(self, "lifecycle_details")
 
     @_builtins.property
     @pulumi.getter(name="lifecycleState")
     def lifecycle_state(self) -> _builtins.str:
+        """
+        Current lifecycle state of the IORM configuration.
+        """
         return pulumi.get(self, "lifecycle_state")
 
     @_builtins.property
     @pulumi.getter
     def objective(self) -> _builtins.str:
+        """
+        Current value for the IORM objective.
+        """
         return pulumi.get(self, "objective")
 
 
@@ -583,6 +648,11 @@ class CloudVmClusterIormConfigCacheDbPlan(dict):
                  db_name: _builtins.str,
                  flash_cache_limit: _builtins.str,
                  share: _builtins.int):
+        """
+        :param _builtins.str db_name: Database name to which the IORM plan applies.
+        :param _builtins.str flash_cache_limit: Flash cache limit for the database plan.
+        :param _builtins.int share: Relative priority of the database in the IORM plan.
+        """
         pulumi.set(__self__, "db_name", db_name)
         pulumi.set(__self__, "flash_cache_limit", flash_cache_limit)
         pulumi.set(__self__, "share", share)
@@ -590,16 +660,25 @@ class CloudVmClusterIormConfigCacheDbPlan(dict):
     @_builtins.property
     @pulumi.getter(name="dbName")
     def db_name(self) -> _builtins.str:
+        """
+        Database name to which the IORM plan applies.
+        """
         return pulumi.get(self, "db_name")
 
     @_builtins.property
     @pulumi.getter(name="flashCacheLimit")
     def flash_cache_limit(self) -> _builtins.str:
+        """
+        Flash cache limit for the database plan.
+        """
         return pulumi.get(self, "flash_cache_limit")
 
     @_builtins.property
     @pulumi.getter
     def share(self) -> _builtins.int:
+        """
+        Relative priority of the database in the IORM plan.
+        """
         return pulumi.get(self, "share")
 
 
@@ -647,11 +726,56 @@ class CloudVmClusterTimeouts(dict):
 
 
 @pulumi.output_type
+class IamRoleAssociationTimeouts(dict):
+    def __init__(__self__, *,
+                 create: Optional[_builtins.str] = None,
+                 delete: Optional[_builtins.str] = None,
+                 update: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        :param _builtins.str delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        :param _builtins.str update: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        if create is not None:
+            pulumi.set(__self__, "create", create)
+        if delete is not None:
+            pulumi.set(__self__, "delete", delete)
+        if update is not None:
+            pulumi.set(__self__, "update", update)
+
+    @_builtins.property
+    @pulumi.getter
+    def create(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "create")
+
+    @_builtins.property
+    @pulumi.getter
+    def delete(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        return pulumi.get(self, "delete")
+
+    @_builtins.property
+    @pulumi.getter
+    def update(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "update")
+
+
+@pulumi.output_type
 class NetworkManagedService(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "kmsAccesses":
+        if key == "crossRegionS3RestoreSourcesAccesses":
+            suggest = "cross_region_s3_restore_sources_accesses"
+        elif key == "kmsAccesses":
             suggest = "kms_accesses"
         elif key == "managedS3BackupAccesses":
             suggest = "managed_s3_backup_accesses"
@@ -682,6 +806,7 @@ class NetworkManagedService(dict):
         return super().get(key, default)
 
     def __init__(__self__, *,
+                 cross_region_s3_restore_sources_accesses: Sequence['outputs.NetworkManagedServiceCrossRegionS3RestoreSourcesAccess'],
                  kms_accesses: Sequence['outputs.NetworkManagedServiceKmsAccess'],
                  managed_s3_backup_accesses: Sequence['outputs.NetworkManagedServiceManagedS3BackupAccess'],
                  managed_service_ipv4_cidrs: Sequence[_builtins.str],
@@ -692,13 +817,20 @@ class NetworkManagedService(dict):
                  sts_accesses: Sequence['outputs.NetworkManagedServiceStsAccess'],
                  zero_etl_accesses: Sequence['outputs.NetworkManagedServiceZeroEtlAccess']):
         """
-        :param Sequence['NetworkManagedServiceKmsAccessArgs'] kms_accesses: Specifies the configuration for KMS access from the ODB network.
-        :param Sequence['NetworkManagedServiceS3AccessArgs'] s3_accesses: Specifies the configuration for Amazon S3 access from the ODB network.
-        :param Sequence['NetworkManagedServiceStsAccessArgs'] sts_accesses: Specifies the configuration for STS access from the ODB network.
-        :param Sequence['NetworkManagedServiceZeroEtlAccessArgs'] zero_etl_accesses: Specifies the configuration for Zero-ETL access from the ODB network.
+        :param Sequence['NetworkManagedServiceCrossRegionS3RestoreSourcesAccessArgs'] cross_region_s3_restore_sources_accesses: List of regions enabled for cross-region restore in the ODB network.
+        :param Sequence['NetworkManagedServiceKmsAccessArgs'] kms_accesses: Configuration for KMS access from the ODB network.
+        :param Sequence['NetworkManagedServiceManagedS3BackupAccessArgs'] managed_s3_backup_accesses: Managed S3 backup access configuration. See `managed_s3_backup_access` Block below.
+        :param Sequence[_builtins.str] managed_service_ipv4_cidrs: List of IPv4 CIDR ranges used by the managed services.
+        :param _builtins.str resource_gateway_arn: ARN of the resource gateway.
+        :param Sequence['NetworkManagedServiceS3AccessArgs'] s3_accesses: Configuration for Amazon S3 access from the ODB network.
+        :param _builtins.str service_network_arn: ARN of the service network.
+        :param Sequence['NetworkManagedServiceServiceNetworkEndpointArgs'] service_network_endpoints: Service network endpoint configuration. See `service_network_endpoint` Block below.
+        :param Sequence['NetworkManagedServiceStsAccessArgs'] sts_accesses: Configuration for STS access from the ODB network.
+        :param Sequence['NetworkManagedServiceZeroEtlAccessArgs'] zero_etl_accesses: Configuration for Zero-ETL access from the ODB network.
                
                The following arguments are optional:
         """
+        pulumi.set(__self__, "cross_region_s3_restore_sources_accesses", cross_region_s3_restore_sources_accesses)
         pulumi.set(__self__, "kms_accesses", kms_accesses)
         pulumi.set(__self__, "managed_s3_backup_accesses", managed_s3_backup_accesses)
         pulumi.set(__self__, "managed_service_ipv4_cidrs", managed_service_ipv4_cidrs)
@@ -710,51 +842,74 @@ class NetworkManagedService(dict):
         pulumi.set(__self__, "zero_etl_accesses", zero_etl_accesses)
 
     @_builtins.property
+    @pulumi.getter(name="crossRegionS3RestoreSourcesAccesses")
+    def cross_region_s3_restore_sources_accesses(self) -> Sequence['outputs.NetworkManagedServiceCrossRegionS3RestoreSourcesAccess']:
+        """
+        List of regions enabled for cross-region restore in the ODB network.
+        """
+        return pulumi.get(self, "cross_region_s3_restore_sources_accesses")
+
+    @_builtins.property
     @pulumi.getter(name="kmsAccesses")
     def kms_accesses(self) -> Sequence['outputs.NetworkManagedServiceKmsAccess']:
         """
-        Specifies the configuration for KMS access from the ODB network.
+        Configuration for KMS access from the ODB network.
         """
         return pulumi.get(self, "kms_accesses")
 
     @_builtins.property
     @pulumi.getter(name="managedS3BackupAccesses")
     def managed_s3_backup_accesses(self) -> Sequence['outputs.NetworkManagedServiceManagedS3BackupAccess']:
+        """
+        Managed S3 backup access configuration. See `managed_s3_backup_access` Block below.
+        """
         return pulumi.get(self, "managed_s3_backup_accesses")
 
     @_builtins.property
     @pulumi.getter(name="managedServiceIpv4Cidrs")
     def managed_service_ipv4_cidrs(self) -> Sequence[_builtins.str]:
+        """
+        List of IPv4 CIDR ranges used by the managed services.
+        """
         return pulumi.get(self, "managed_service_ipv4_cidrs")
 
     @_builtins.property
     @pulumi.getter(name="resourceGatewayArn")
     def resource_gateway_arn(self) -> _builtins.str:
+        """
+        ARN of the resource gateway.
+        """
         return pulumi.get(self, "resource_gateway_arn")
 
     @_builtins.property
     @pulumi.getter(name="s3Accesses")
     def s3_accesses(self) -> Sequence['outputs.NetworkManagedServiceS3Access']:
         """
-        Specifies the configuration for Amazon S3 access from the ODB network.
+        Configuration for Amazon S3 access from the ODB network.
         """
         return pulumi.get(self, "s3_accesses")
 
     @_builtins.property
     @pulumi.getter(name="serviceNetworkArn")
     def service_network_arn(self) -> _builtins.str:
+        """
+        ARN of the service network.
+        """
         return pulumi.get(self, "service_network_arn")
 
     @_builtins.property
     @pulumi.getter(name="serviceNetworkEndpoints")
     def service_network_endpoints(self) -> Sequence['outputs.NetworkManagedServiceServiceNetworkEndpoint']:
+        """
+        Service network endpoint configuration. See `service_network_endpoint` Block below.
+        """
         return pulumi.get(self, "service_network_endpoints")
 
     @_builtins.property
     @pulumi.getter(name="stsAccesses")
     def sts_accesses(self) -> Sequence['outputs.NetworkManagedServiceStsAccess']:
         """
-        Specifies the configuration for STS access from the ODB network.
+        Configuration for STS access from the ODB network.
         """
         return pulumi.get(self, "sts_accesses")
 
@@ -762,11 +917,68 @@ class NetworkManagedService(dict):
     @pulumi.getter(name="zeroEtlAccesses")
     def zero_etl_accesses(self) -> Sequence['outputs.NetworkManagedServiceZeroEtlAccess']:
         """
-        Specifies the configuration for Zero-ETL access from the ODB network.
+        Configuration for Zero-ETL access from the ODB network.
 
         The following arguments are optional:
         """
         return pulumi.get(self, "zero_etl_accesses")
+
+
+@pulumi.output_type
+class NetworkManagedServiceCrossRegionS3RestoreSourcesAccess(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "ipv4Addresses":
+            suggest = "ipv4_addresses"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkManagedServiceCrossRegionS3RestoreSourcesAccess. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkManagedServiceCrossRegionS3RestoreSourcesAccess.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkManagedServiceCrossRegionS3RestoreSourcesAccess.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 ipv4_addresses: Sequence[_builtins.str],
+                 region: _builtins.str,
+                 status: _builtins.str):
+        """
+        :param Sequence[_builtins.str] ipv4_addresses: List of IPv4 addresses for the Amazon STS access.
+        :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param _builtins.str status: Status of the Zero-ETL access.
+        """
+        pulumi.set(__self__, "ipv4_addresses", ipv4_addresses)
+        pulumi.set(__self__, "region", region)
+        pulumi.set(__self__, "status", status)
+
+    @_builtins.property
+    @pulumi.getter(name="ipv4Addresses")
+    def ipv4_addresses(self) -> Sequence[_builtins.str]:
+        """
+        List of IPv4 addresses for the Amazon STS access.
+        """
+        return pulumi.get(self, "ipv4_addresses")
+
+    @_builtins.property
+    @pulumi.getter
+    def region(self) -> _builtins.str:
+        """
+        Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        """
+        return pulumi.get(self, "region")
+
+    @_builtins.property
+    @pulumi.getter
+    def status(self) -> _builtins.str:
+        """
+        Status of the Zero-ETL access.
+        """
+        return pulumi.get(self, "status")
 
 
 @pulumi.output_type
@@ -798,8 +1010,10 @@ class NetworkManagedServiceKmsAccess(dict):
                  kms_policy_document: _builtins.str,
                  status: _builtins.str):
         """
-        :param _builtins.str kms_policy_document: Specifies the endpoint policy for KMS access from the ODB network.
-        :param _builtins.str status: The status of the network resource.
+        :param _builtins.str domain_name: Domain name for which the DNS queries are forwarded.
+        :param Sequence[_builtins.str] ipv4_addresses: List of IPv4 addresses for the Amazon STS access.
+        :param _builtins.str kms_policy_document: Endpoint policy for KMS access from the ODB network.
+        :param _builtins.str status: Status of the Zero-ETL access.
         """
         pulumi.set(__self__, "domain_name", domain_name)
         pulumi.set(__self__, "ipv4_addresses", ipv4_addresses)
@@ -809,18 +1023,24 @@ class NetworkManagedServiceKmsAccess(dict):
     @_builtins.property
     @pulumi.getter(name="domainName")
     def domain_name(self) -> _builtins.str:
+        """
+        Domain name for which the DNS queries are forwarded.
+        """
         return pulumi.get(self, "domain_name")
 
     @_builtins.property
     @pulumi.getter(name="ipv4Addresses")
     def ipv4_addresses(self) -> Sequence[_builtins.str]:
+        """
+        List of IPv4 addresses for the Amazon STS access.
+        """
         return pulumi.get(self, "ipv4_addresses")
 
     @_builtins.property
     @pulumi.getter(name="kmsPolicyDocument")
     def kms_policy_document(self) -> _builtins.str:
         """
-        Specifies the endpoint policy for KMS access from the ODB network.
+        Endpoint policy for KMS access from the ODB network.
         """
         return pulumi.get(self, "kms_policy_document")
 
@@ -828,7 +1048,7 @@ class NetworkManagedServiceKmsAccess(dict):
     @pulumi.getter
     def status(self) -> _builtins.str:
         """
-        The status of the network resource.
+        Status of the Zero-ETL access.
         """
         return pulumi.get(self, "status")
 
@@ -856,7 +1076,8 @@ class NetworkManagedServiceManagedS3BackupAccess(dict):
                  ipv4_addresses: Sequence[_builtins.str],
                  status: _builtins.str):
         """
-        :param _builtins.str status: The status of the network resource.
+        :param Sequence[_builtins.str] ipv4_addresses: List of IPv4 addresses for the Amazon STS access.
+        :param _builtins.str status: Status of the Zero-ETL access.
         """
         pulumi.set(__self__, "ipv4_addresses", ipv4_addresses)
         pulumi.set(__self__, "status", status)
@@ -864,13 +1085,16 @@ class NetworkManagedServiceManagedS3BackupAccess(dict):
     @_builtins.property
     @pulumi.getter(name="ipv4Addresses")
     def ipv4_addresses(self) -> Sequence[_builtins.str]:
+        """
+        List of IPv4 addresses for the Amazon STS access.
+        """
         return pulumi.get(self, "ipv4_addresses")
 
     @_builtins.property
     @pulumi.getter
     def status(self) -> _builtins.str:
         """
-        The status of the network resource.
+        Status of the Zero-ETL access.
         """
         return pulumi.get(self, "status")
 
@@ -904,8 +1128,10 @@ class NetworkManagedServiceS3Access(dict):
                  s3_policy_document: _builtins.str,
                  status: _builtins.str):
         """
-        :param _builtins.str s3_policy_document: Specifies the endpoint policy for Amazon S3 access from the ODB network.
-        :param _builtins.str status: The status of the network resource.
+        :param _builtins.str domain_name: Domain name for which the DNS queries are forwarded.
+        :param Sequence[_builtins.str] ipv4_addresses: List of IPv4 addresses for the Amazon STS access.
+        :param _builtins.str s3_policy_document: Endpoint policy for Amazon S3 access from the ODB network.
+        :param _builtins.str status: Status of the Zero-ETL access.
         """
         pulumi.set(__self__, "domain_name", domain_name)
         pulumi.set(__self__, "ipv4_addresses", ipv4_addresses)
@@ -915,18 +1141,24 @@ class NetworkManagedServiceS3Access(dict):
     @_builtins.property
     @pulumi.getter(name="domainName")
     def domain_name(self) -> _builtins.str:
+        """
+        Domain name for which the DNS queries are forwarded.
+        """
         return pulumi.get(self, "domain_name")
 
     @_builtins.property
     @pulumi.getter(name="ipv4Addresses")
     def ipv4_addresses(self) -> Sequence[_builtins.str]:
+        """
+        List of IPv4 addresses for the Amazon STS access.
+        """
         return pulumi.get(self, "ipv4_addresses")
 
     @_builtins.property
     @pulumi.getter(name="s3PolicyDocument")
     def s3_policy_document(self) -> _builtins.str:
         """
-        Specifies the endpoint policy for Amazon S3 access from the ODB network.
+        Endpoint policy for Amazon S3 access from the ODB network.
         """
         return pulumi.get(self, "s3_policy_document")
 
@@ -934,7 +1166,7 @@ class NetworkManagedServiceS3Access(dict):
     @pulumi.getter
     def status(self) -> _builtins.str:
         """
-        The status of the network resource.
+        Status of the Zero-ETL access.
         """
         return pulumi.get(self, "status")
 
@@ -963,17 +1195,27 @@ class NetworkManagedServiceServiceNetworkEndpoint(dict):
     def __init__(__self__, *,
                  vpc_endpoint_id: _builtins.str,
                  vpc_endpoint_type: _builtins.str):
+        """
+        :param _builtins.str vpc_endpoint_id: Unique identifier of the VPC endpoint.
+        :param _builtins.str vpc_endpoint_type: Type of the VPC endpoint.
+        """
         pulumi.set(__self__, "vpc_endpoint_id", vpc_endpoint_id)
         pulumi.set(__self__, "vpc_endpoint_type", vpc_endpoint_type)
 
     @_builtins.property
     @pulumi.getter(name="vpcEndpointId")
     def vpc_endpoint_id(self) -> _builtins.str:
+        """
+        Unique identifier of the VPC endpoint.
+        """
         return pulumi.get(self, "vpc_endpoint_id")
 
     @_builtins.property
     @pulumi.getter(name="vpcEndpointType")
     def vpc_endpoint_type(self) -> _builtins.str:
+        """
+        Type of the VPC endpoint.
+        """
         return pulumi.get(self, "vpc_endpoint_type")
 
 
@@ -1006,8 +1248,10 @@ class NetworkManagedServiceStsAccess(dict):
                  status: _builtins.str,
                  sts_policy_document: _builtins.str):
         """
-        :param _builtins.str status: The status of the network resource.
-        :param _builtins.str sts_policy_document: Specifies the endpoint policy for STS access from the ODB network.
+        :param _builtins.str domain_name: Domain name for which the DNS queries are forwarded.
+        :param Sequence[_builtins.str] ipv4_addresses: List of IPv4 addresses for the Amazon STS access.
+        :param _builtins.str status: Status of the Zero-ETL access.
+        :param _builtins.str sts_policy_document: Endpoint policy for STS access from the ODB network.
         """
         pulumi.set(__self__, "domain_name", domain_name)
         pulumi.set(__self__, "ipv4_addresses", ipv4_addresses)
@@ -1017,18 +1261,24 @@ class NetworkManagedServiceStsAccess(dict):
     @_builtins.property
     @pulumi.getter(name="domainName")
     def domain_name(self) -> _builtins.str:
+        """
+        Domain name for which the DNS queries are forwarded.
+        """
         return pulumi.get(self, "domain_name")
 
     @_builtins.property
     @pulumi.getter(name="ipv4Addresses")
     def ipv4_addresses(self) -> Sequence[_builtins.str]:
+        """
+        List of IPv4 addresses for the Amazon STS access.
+        """
         return pulumi.get(self, "ipv4_addresses")
 
     @_builtins.property
     @pulumi.getter
     def status(self) -> _builtins.str:
         """
-        The status of the network resource.
+        Status of the Zero-ETL access.
         """
         return pulumi.get(self, "status")
 
@@ -1036,7 +1286,7 @@ class NetworkManagedServiceStsAccess(dict):
     @pulumi.getter(name="stsPolicyDocument")
     def sts_policy_document(self) -> _builtins.str:
         """
-        Specifies the endpoint policy for STS access from the ODB network.
+        Endpoint policy for STS access from the ODB network.
         """
         return pulumi.get(self, "sts_policy_document")
 
@@ -1047,7 +1297,8 @@ class NetworkManagedServiceZeroEtlAccess(dict):
                  cidr: _builtins.str,
                  status: _builtins.str):
         """
-        :param _builtins.str status: The status of the network resource.
+        :param _builtins.str cidr: CIDR range for the Zero-ETL access.
+        :param _builtins.str status: Status of the Zero-ETL access.
         """
         pulumi.set(__self__, "cidr", cidr)
         pulumi.set(__self__, "status", status)
@@ -1055,13 +1306,16 @@ class NetworkManagedServiceZeroEtlAccess(dict):
     @_builtins.property
     @pulumi.getter
     def cidr(self) -> _builtins.str:
+        """
+        CIDR range for the Zero-ETL access.
+        """
         return pulumi.get(self, "cidr")
 
     @_builtins.property
     @pulumi.getter
     def status(self) -> _builtins.str:
         """
-        The status of the network resource.
+        Status of the Zero-ETL access.
         """
         return pulumi.get(self, "status")
 
@@ -1090,17 +1344,27 @@ class NetworkOciDnsForwardingConfig(dict):
     def __init__(__self__, *,
                  domain_name: _builtins.str,
                  oci_dns_listener_ip: _builtins.str):
+        """
+        :param _builtins.str domain_name: Domain name for which the DNS queries are forwarded.
+        :param _builtins.str oci_dns_listener_ip: IP address of the OCI DNS listener.
+        """
         pulumi.set(__self__, "domain_name", domain_name)
         pulumi.set(__self__, "oci_dns_listener_ip", oci_dns_listener_ip)
 
     @_builtins.property
     @pulumi.getter(name="domainName")
     def domain_name(self) -> _builtins.str:
+        """
+        Domain name for which the DNS queries are forwarded.
+        """
         return pulumi.get(self, "domain_name")
 
     @_builtins.property
     @pulumi.getter(name="ociDnsListenerIp")
     def oci_dns_listener_ip(self) -> _builtins.str:
+        """
+        IP address of the OCI DNS listener.
+        """
         return pulumi.get(self, "oci_dns_listener_ip")
 
 
@@ -1273,14 +1537,14 @@ class GetCloudAutonomousVmClustersCloudAutonomousVmClusterResult(dict):
                  ocid: _builtins.str,
                  odb_network_id: _builtins.str):
         """
-        :param _builtins.str arn: The Amazon Resource Name (ARN) for the Exadata infrastructure.
+        :param _builtins.str arn: ARN for the Exadata infrastructure.
         :param _builtins.str cloud_exadata_infrastructure_id: Cloud exadata infrastructure id associated with this cloud autonomous VM cluster.
-        :param _builtins.str display_name: The display name of the Autonomous VM cluster.
-        :param _builtins.str id: The unique identifier of the cloud autonomous vm cluster.
-        :param _builtins.str oci_resource_anchor_name: The name of the OCI resource anchor associated with this Autonomous VM cluster.
-        :param _builtins.str oci_url: The URL for accessing the OCI console page for this Autonomous VM cluster.
-        :param _builtins.str ocid: The Oracle Cloud Identifier (OCID) of the Autonomous VM cluster.
-        :param _builtins.str odb_network_id: The unique identifier of the ODB network associated with this Autonomous VM cluster.
+        :param _builtins.str display_name: Display name of the Autonomous VM cluster.
+        :param _builtins.str id: Unique identifier of the cloud autonomous vm cluster.
+        :param _builtins.str oci_resource_anchor_name: Name of the OCI resource anchor associated with this Autonomous VM cluster.
+        :param _builtins.str oci_url: URL for accessing the OCI console page for this Autonomous VM cluster.
+        :param _builtins.str ocid: Oracle Cloud Identifier (OCID) of the Autonomous VM cluster.
+        :param _builtins.str odb_network_id: Unique identifier of the ODB network associated with this Autonomous VM cluster.
         """
         pulumi.set(__self__, "arn", arn)
         pulumi.set(__self__, "cloud_exadata_infrastructure_id", cloud_exadata_infrastructure_id)
@@ -1295,7 +1559,7 @@ class GetCloudAutonomousVmClustersCloudAutonomousVmClusterResult(dict):
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) for the Exadata infrastructure.
+        ARN for the Exadata infrastructure.
         """
         return pulumi.get(self, "arn")
 
@@ -1311,7 +1575,7 @@ class GetCloudAutonomousVmClustersCloudAutonomousVmClusterResult(dict):
     @pulumi.getter(name="displayName")
     def display_name(self) -> _builtins.str:
         """
-        The display name of the Autonomous VM cluster.
+        Display name of the Autonomous VM cluster.
         """
         return pulumi.get(self, "display_name")
 
@@ -1319,7 +1583,7 @@ class GetCloudAutonomousVmClustersCloudAutonomousVmClusterResult(dict):
     @pulumi.getter
     def id(self) -> _builtins.str:
         """
-        The unique identifier of the cloud autonomous vm cluster.
+        Unique identifier of the cloud autonomous vm cluster.
         """
         return pulumi.get(self, "id")
 
@@ -1327,7 +1591,7 @@ class GetCloudAutonomousVmClustersCloudAutonomousVmClusterResult(dict):
     @pulumi.getter(name="ociResourceAnchorName")
     def oci_resource_anchor_name(self) -> _builtins.str:
         """
-        The name of the OCI resource anchor associated with this Autonomous VM cluster.
+        Name of the OCI resource anchor associated with this Autonomous VM cluster.
         """
         return pulumi.get(self, "oci_resource_anchor_name")
 
@@ -1335,7 +1599,7 @@ class GetCloudAutonomousVmClustersCloudAutonomousVmClusterResult(dict):
     @pulumi.getter(name="ociUrl")
     def oci_url(self) -> _builtins.str:
         """
-        The URL for accessing the OCI console page for this Autonomous VM cluster.
+        URL for accessing the OCI console page for this Autonomous VM cluster.
         """
         return pulumi.get(self, "oci_url")
 
@@ -1343,7 +1607,7 @@ class GetCloudAutonomousVmClustersCloudAutonomousVmClusterResult(dict):
     @pulumi.getter
     def ocid(self) -> _builtins.str:
         """
-        The Oracle Cloud Identifier (OCID) of the Autonomous VM cluster.
+        Oracle Cloud Identifier (OCID) of the Autonomous VM cluster.
         """
         return pulumi.get(self, "ocid")
 
@@ -1351,7 +1615,7 @@ class GetCloudAutonomousVmClustersCloudAutonomousVmClusterResult(dict):
     @pulumi.getter(name="odbNetworkId")
     def odb_network_id(self) -> _builtins.str:
         """
-        The unique identifier of the ODB network associated with this Autonomous VM cluster.
+        Unique identifier of the ODB network associated with this Autonomous VM cluster.
         """
         return pulumi.get(self, "odb_network_id")
 
@@ -1470,12 +1734,12 @@ class GetCloudExadataInfrastructuresCloudExadataInfrastructureResult(dict):
                  oci_url: _builtins.str,
                  ocid: _builtins.str):
         """
-        :param _builtins.str arn: The Amazon Resource Name (ARN) for the Exadata infrastructure.
-        :param _builtins.str display_name: The display name of the Exadata infrastructure.
-        :param _builtins.str id: The unique identifier of the Exadata infrastructure.
-        :param _builtins.str oci_resource_anchor_name: The name of the OCI resource anchor for the Exadata infrastructure.
-        :param _builtins.str oci_url: The HTTPS link to the Exadata infrastructure in OCI.
-        :param _builtins.str ocid: The OCID of the Exadata infrastructure in OCI.
+        :param _builtins.str arn: ARN for the Exadata infrastructure.
+        :param _builtins.str display_name: Display name of the Exadata infrastructure.
+        :param _builtins.str id: Unique identifier of the Exadata infrastructure.
+        :param _builtins.str oci_resource_anchor_name: Name of the OCI resource anchor for the Exadata infrastructure.
+        :param _builtins.str oci_url: HTTPS link to the Exadata infrastructure in OCI.
+        :param _builtins.str ocid: OCID of the Exadata infrastructure in OCI.
         """
         pulumi.set(__self__, "arn", arn)
         pulumi.set(__self__, "display_name", display_name)
@@ -1488,7 +1752,7 @@ class GetCloudExadataInfrastructuresCloudExadataInfrastructureResult(dict):
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) for the Exadata infrastructure.
+        ARN for the Exadata infrastructure.
         """
         return pulumi.get(self, "arn")
 
@@ -1496,7 +1760,7 @@ class GetCloudExadataInfrastructuresCloudExadataInfrastructureResult(dict):
     @pulumi.getter(name="displayName")
     def display_name(self) -> _builtins.str:
         """
-        The display name of the Exadata infrastructure.
+        Display name of the Exadata infrastructure.
         """
         return pulumi.get(self, "display_name")
 
@@ -1504,7 +1768,7 @@ class GetCloudExadataInfrastructuresCloudExadataInfrastructureResult(dict):
     @pulumi.getter
     def id(self) -> _builtins.str:
         """
-        The unique identifier of the Exadata infrastructure.
+        Unique identifier of the Exadata infrastructure.
         """
         return pulumi.get(self, "id")
 
@@ -1512,7 +1776,7 @@ class GetCloudExadataInfrastructuresCloudExadataInfrastructureResult(dict):
     @pulumi.getter(name="ociResourceAnchorName")
     def oci_resource_anchor_name(self) -> _builtins.str:
         """
-        The name of the OCI resource anchor for the Exadata infrastructure.
+        Name of the OCI resource anchor for the Exadata infrastructure.
         """
         return pulumi.get(self, "oci_resource_anchor_name")
 
@@ -1520,7 +1784,7 @@ class GetCloudExadataInfrastructuresCloudExadataInfrastructureResult(dict):
     @pulumi.getter(name="ociUrl")
     def oci_url(self) -> _builtins.str:
         """
-        The HTTPS link to the Exadata infrastructure in OCI.
+        HTTPS link to the Exadata infrastructure in OCI.
         """
         return pulumi.get(self, "oci_url")
 
@@ -1528,7 +1792,7 @@ class GetCloudExadataInfrastructuresCloudExadataInfrastructureResult(dict):
     @pulumi.getter
     def ocid(self) -> _builtins.str:
         """
-        The OCID of the Exadata infrastructure in OCI.
+        OCID of the Exadata infrastructure in OCI.
         """
         return pulumi.get(self, "ocid")
 
@@ -1630,14 +1894,14 @@ class GetCloudVmClustersCloudVmClusterResult(dict):
                  ocid: _builtins.str,
                  odb_network_id: _builtins.str):
         """
-        :param _builtins.str arn: The Amazon Resource Name (ARN) for the cloud vm cluster.
-        :param _builtins.str cloud_exadata_infrastructure_id: The ID of the Cloud Exadata Infrastructure.
-        :param _builtins.str display_name: The display name of the VM cluster.
-        :param _builtins.str id: The unique identifier of the cloud vm cluster.
-        :param _builtins.str oci_resource_anchor_name: The name of the OCI Resource Anchor.
-        :param _builtins.str oci_url: The HTTPS link to the VM cluster in OCI.
-        :param _builtins.str ocid: The OCID of the VM cluster.
-        :param _builtins.str odb_network_id: The ID of the ODB network.
+        :param _builtins.str arn: ARN for the cloud vm cluster.
+        :param _builtins.str cloud_exadata_infrastructure_id: ID of the Cloud Exadata Infrastructure.
+        :param _builtins.str display_name: Display name of the VM cluster.
+        :param _builtins.str id: Unique identifier of the cloud vm cluster.
+        :param _builtins.str oci_resource_anchor_name: Name of the OCI Resource Anchor.
+        :param _builtins.str oci_url: HTTPS link to the VM cluster in OCI.
+        :param _builtins.str ocid: OCID of the VM cluster.
+        :param _builtins.str odb_network_id: ID of the ODB network.
         """
         pulumi.set(__self__, "arn", arn)
         pulumi.set(__self__, "cloud_exadata_infrastructure_id", cloud_exadata_infrastructure_id)
@@ -1652,7 +1916,7 @@ class GetCloudVmClustersCloudVmClusterResult(dict):
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) for the cloud vm cluster.
+        ARN for the cloud vm cluster.
         """
         return pulumi.get(self, "arn")
 
@@ -1660,7 +1924,7 @@ class GetCloudVmClustersCloudVmClusterResult(dict):
     @pulumi.getter(name="cloudExadataInfrastructureId")
     def cloud_exadata_infrastructure_id(self) -> _builtins.str:
         """
-        The ID of the Cloud Exadata Infrastructure.
+        ID of the Cloud Exadata Infrastructure.
         """
         return pulumi.get(self, "cloud_exadata_infrastructure_id")
 
@@ -1668,7 +1932,7 @@ class GetCloudVmClustersCloudVmClusterResult(dict):
     @pulumi.getter(name="displayName")
     def display_name(self) -> _builtins.str:
         """
-        The display name of the VM cluster.
+        Display name of the VM cluster.
         """
         return pulumi.get(self, "display_name")
 
@@ -1676,7 +1940,7 @@ class GetCloudVmClustersCloudVmClusterResult(dict):
     @pulumi.getter
     def id(self) -> _builtins.str:
         """
-        The unique identifier of the cloud vm cluster.
+        Unique identifier of the cloud vm cluster.
         """
         return pulumi.get(self, "id")
 
@@ -1684,7 +1948,7 @@ class GetCloudVmClustersCloudVmClusterResult(dict):
     @pulumi.getter(name="ociResourceAnchorName")
     def oci_resource_anchor_name(self) -> _builtins.str:
         """
-        The name of the OCI Resource Anchor.
+        Name of the OCI Resource Anchor.
         """
         return pulumi.get(self, "oci_resource_anchor_name")
 
@@ -1692,7 +1956,7 @@ class GetCloudVmClustersCloudVmClusterResult(dict):
     @pulumi.getter(name="ociUrl")
     def oci_url(self) -> _builtins.str:
         """
-        The HTTPS link to the VM cluster in OCI.
+        HTTPS link to the VM cluster in OCI.
         """
         return pulumi.get(self, "oci_url")
 
@@ -1700,7 +1964,7 @@ class GetCloudVmClustersCloudVmClusterResult(dict):
     @pulumi.getter
     def ocid(self) -> _builtins.str:
         """
-        The OCID of the VM cluster.
+        OCID of the VM cluster.
         """
         return pulumi.get(self, "ocid")
 
@@ -1708,7 +1972,7 @@ class GetCloudVmClustersCloudVmClusterResult(dict):
     @pulumi.getter(name="odbNetworkId")
     def odb_network_id(self) -> _builtins.str:
         """
-        The ID of the ODB network.
+        ID of the ODB network.
         """
         return pulumi.get(self, "odb_network_id")
 
@@ -1744,24 +2008,31 @@ class GetDbNodesDbNodeResult(dict):
                  vnic_id: _builtins.str):
         """
         :param _builtins.str additional_details: Additional information about the planned maintenance.
-        :param _builtins.str backup_ip_id: The Oracle Cloud ID (OCID) of the backup IP address that's associated with the DB node.
-        :param _builtins.str backup_vnic_id: The OCID of the backup VNIC for the DB node.
-        :param _builtins.int cpu_core_count: The number of CPU cores enabled on the DB node.
-        :param _builtins.str created_at: The date and time when the DB node was created.
-        :param _builtins.str db_server_id: The unique identifier of the database server that's associated with the DB node.
-        :param _builtins.str db_system_id: The OCID of the DB system.
-        :param _builtins.str fault_domain: The name of the fault domain where the DB node is located.
-        :param _builtins.str host_ip_id: The OCID of the host IP address that's associated with the DB node.
-        :param _builtins.str hostname: The host name for the DB node.
-        :param _builtins.str maintenance_type: The type of maintenance the DB node is undergoing.
-        :param _builtins.str oci_resource_anchor_name: The name of the OCI resource anchor for the DB node.
-        :param _builtins.str ocid: The OCID of the DB node.
-        :param _builtins.str status: The current status of the DB node.
+        :param _builtins.str arn: ARN of the DB node.
+        :param _builtins.str backup_ip_id: Oracle Cloud ID (OCID) of the backup IP address that's associated with the DB node.
+        :param _builtins.str backup_vnic2_id: OCID of the second backup virtual network interface card (VNIC) for the DB node.
+        :param _builtins.str backup_vnic_id: OCID of the backup VNIC for the DB node.
+        :param _builtins.int cpu_core_count: Number of CPU cores enabled on the DB node.
+        :param _builtins.str created_at: Date and time when the DB node was created.
+        :param _builtins.int db_node_storage_size: Amount of local node storage, in gigabytes (GB), that's allocated on the DB node.
+        :param _builtins.str db_server_id: Unique identifier of the database server that's associated with the DB node.
+        :param _builtins.str db_system_id: OCID of the DB system.
+        :param _builtins.str fault_domain: Name of the fault domain where the DB node is located.
+        :param _builtins.str host_ip_id: OCID of the host IP address that's associated with the DB node.
+        :param _builtins.str hostname: Host name for the DB node.
+        :param _builtins.str id: Unique identifier of the DB node.
+        :param _builtins.str maintenance_type: Type of maintenance the DB node is undergoing.
+        :param _builtins.int memory_size: Amount of memory, in gigabytes (GB), that's allocated on the DB node.
+        :param _builtins.str oci_resource_anchor_name: Name of the OCI resource anchor for the DB node.
+        :param _builtins.str ocid: OCID of the DB node.
+        :param _builtins.int software_storage_size: Size of the block storage volume, in gigabytes (GB), that's allocated for the DB system. This attribute applies only for virtual machine DB systems.
+        :param _builtins.str status: Current status of the DB node.
         :param _builtins.str status_reason: Additional information about the status of the DB node.
-        :param _builtins.str time_maintenance_window_end: The end date and time of the maintenance window.
-        :param _builtins.str time_maintenance_window_start: The start date and time of the maintenance window.
-        :param _builtins.int total_cpu_core_count: The total number of CPU cores reserved on the DB node.
-        :param _builtins.str vnic_id: The OCID of the VNIC.
+        :param _builtins.str time_maintenance_window_end: End date and time of the maintenance window.
+        :param _builtins.str time_maintenance_window_start: Start date and time of the maintenance window.
+        :param _builtins.int total_cpu_core_count: Total number of CPU cores reserved on the DB node.
+        :param _builtins.str vnic2_id: OCID of the second VNIC.
+        :param _builtins.str vnic_id: OCID of the VNIC.
         """
         pulumi.set(__self__, "additional_details", additional_details)
         pulumi.set(__self__, "arn", arn)
@@ -1801,26 +2072,32 @@ class GetDbNodesDbNodeResult(dict):
     @_builtins.property
     @pulumi.getter
     def arn(self) -> _builtins.str:
+        """
+        ARN of the DB node.
+        """
         return pulumi.get(self, "arn")
 
     @_builtins.property
     @pulumi.getter(name="backupIpId")
     def backup_ip_id(self) -> _builtins.str:
         """
-        The Oracle Cloud ID (OCID) of the backup IP address that's associated with the DB node.
+        Oracle Cloud ID (OCID) of the backup IP address that's associated with the DB node.
         """
         return pulumi.get(self, "backup_ip_id")
 
     @_builtins.property
     @pulumi.getter(name="backupVnic2Id")
     def backup_vnic2_id(self) -> _builtins.str:
+        """
+        OCID of the second backup virtual network interface card (VNIC) for the DB node.
+        """
         return pulumi.get(self, "backup_vnic2_id")
 
     @_builtins.property
     @pulumi.getter(name="backupVnicId")
     def backup_vnic_id(self) -> _builtins.str:
         """
-        The OCID of the backup VNIC for the DB node.
+        OCID of the backup VNIC for the DB node.
         """
         return pulumi.get(self, "backup_vnic_id")
 
@@ -1828,7 +2105,7 @@ class GetDbNodesDbNodeResult(dict):
     @pulumi.getter(name="cpuCoreCount")
     def cpu_core_count(self) -> _builtins.int:
         """
-        The number of CPU cores enabled on the DB node.
+        Number of CPU cores enabled on the DB node.
         """
         return pulumi.get(self, "cpu_core_count")
 
@@ -1836,20 +2113,23 @@ class GetDbNodesDbNodeResult(dict):
     @pulumi.getter(name="createdAt")
     def created_at(self) -> _builtins.str:
         """
-        The date and time when the DB node was created.
+        Date and time when the DB node was created.
         """
         return pulumi.get(self, "created_at")
 
     @_builtins.property
     @pulumi.getter(name="dbNodeStorageSize")
     def db_node_storage_size(self) -> _builtins.int:
+        """
+        Amount of local node storage, in gigabytes (GB), that's allocated on the DB node.
+        """
         return pulumi.get(self, "db_node_storage_size")
 
     @_builtins.property
     @pulumi.getter(name="dbServerId")
     def db_server_id(self) -> _builtins.str:
         """
-        The unique identifier of the database server that's associated with the DB node.
+        Unique identifier of the database server that's associated with the DB node.
         """
         return pulumi.get(self, "db_server_id")
 
@@ -1857,7 +2137,7 @@ class GetDbNodesDbNodeResult(dict):
     @pulumi.getter(name="dbSystemId")
     def db_system_id(self) -> _builtins.str:
         """
-        The OCID of the DB system.
+        OCID of the DB system.
         """
         return pulumi.get(self, "db_system_id")
 
@@ -1865,7 +2145,7 @@ class GetDbNodesDbNodeResult(dict):
     @pulumi.getter(name="faultDomain")
     def fault_domain(self) -> _builtins.str:
         """
-        The name of the fault domain where the DB node is located.
+        Name of the fault domain where the DB node is located.
         """
         return pulumi.get(self, "fault_domain")
 
@@ -1873,7 +2153,7 @@ class GetDbNodesDbNodeResult(dict):
     @pulumi.getter(name="hostIpId")
     def host_ip_id(self) -> _builtins.str:
         """
-        The OCID of the host IP address that's associated with the DB node.
+        OCID of the host IP address that's associated with the DB node.
         """
         return pulumi.get(self, "host_ip_id")
 
@@ -1881,33 +2161,39 @@ class GetDbNodesDbNodeResult(dict):
     @pulumi.getter
     def hostname(self) -> _builtins.str:
         """
-        The host name for the DB node.
+        Host name for the DB node.
         """
         return pulumi.get(self, "hostname")
 
     @_builtins.property
     @pulumi.getter
     def id(self) -> _builtins.str:
+        """
+        Unique identifier of the DB node.
+        """
         return pulumi.get(self, "id")
 
     @_builtins.property
     @pulumi.getter(name="maintenanceType")
     def maintenance_type(self) -> _builtins.str:
         """
-        The type of maintenance the DB node is undergoing.
+        Type of maintenance the DB node is undergoing.
         """
         return pulumi.get(self, "maintenance_type")
 
     @_builtins.property
     @pulumi.getter(name="memorySize")
     def memory_size(self) -> _builtins.int:
+        """
+        Amount of memory, in gigabytes (GB), that's allocated on the DB node.
+        """
         return pulumi.get(self, "memory_size")
 
     @_builtins.property
     @pulumi.getter(name="ociResourceAnchorName")
     def oci_resource_anchor_name(self) -> _builtins.str:
         """
-        The name of the OCI resource anchor for the DB node.
+        Name of the OCI resource anchor for the DB node.
         """
         return pulumi.get(self, "oci_resource_anchor_name")
 
@@ -1915,20 +2201,23 @@ class GetDbNodesDbNodeResult(dict):
     @pulumi.getter
     def ocid(self) -> _builtins.str:
         """
-        The OCID of the DB node.
+        OCID of the DB node.
         """
         return pulumi.get(self, "ocid")
 
     @_builtins.property
     @pulumi.getter(name="softwareStorageSize")
     def software_storage_size(self) -> _builtins.int:
+        """
+        Size of the block storage volume, in gigabytes (GB), that's allocated for the DB system. This attribute applies only for virtual machine DB systems.
+        """
         return pulumi.get(self, "software_storage_size")
 
     @_builtins.property
     @pulumi.getter
     def status(self) -> _builtins.str:
         """
-        The current status of the DB node.
+        Current status of the DB node.
         """
         return pulumi.get(self, "status")
 
@@ -1944,7 +2233,7 @@ class GetDbNodesDbNodeResult(dict):
     @pulumi.getter(name="timeMaintenanceWindowEnd")
     def time_maintenance_window_end(self) -> _builtins.str:
         """
-        The end date and time of the maintenance window.
+        End date and time of the maintenance window.
         """
         return pulumi.get(self, "time_maintenance_window_end")
 
@@ -1952,7 +2241,7 @@ class GetDbNodesDbNodeResult(dict):
     @pulumi.getter(name="timeMaintenanceWindowStart")
     def time_maintenance_window_start(self) -> _builtins.str:
         """
-        The start date and time of the maintenance window.
+        Start date and time of the maintenance window.
         """
         return pulumi.get(self, "time_maintenance_window_start")
 
@@ -1960,20 +2249,23 @@ class GetDbNodesDbNodeResult(dict):
     @pulumi.getter(name="totalCpuCoreCount")
     def total_cpu_core_count(self) -> _builtins.int:
         """
-        The total number of CPU cores reserved on the DB node.
+        Total number of CPU cores reserved on the DB node.
         """
         return pulumi.get(self, "total_cpu_core_count")
 
     @_builtins.property
     @pulumi.getter(name="vnic2Id")
     def vnic2_id(self) -> _builtins.str:
+        """
+        OCID of the second VNIC.
+        """
         return pulumi.get(self, "vnic2_id")
 
     @_builtins.property
     @pulumi.getter(name="vnicId")
     def vnic_id(self) -> _builtins.str:
         """
-        The OCID of the VNIC.
+        OCID of the VNIC.
         """
         return pulumi.get(self, "vnic_id")
 
@@ -1985,6 +2277,12 @@ class GetDbServerDbServerPatchingDetailResult(dict):
                  patching_status: _builtins.str,
                  time_patching_ended: _builtins.str,
                  time_patching_started: _builtins.str):
+        """
+        :param _builtins.int estimated_patch_duration: Estimated time, in minutes, that it takes to patch the database server.
+        :param _builtins.str patching_status: Status of the patching operation.
+        :param _builtins.str time_patching_ended: Date and time when the patching operation ended.
+        :param _builtins.str time_patching_started: Date and time when the patching operation started.
+        """
         pulumi.set(__self__, "estimated_patch_duration", estimated_patch_duration)
         pulumi.set(__self__, "patching_status", patching_status)
         pulumi.set(__self__, "time_patching_ended", time_patching_ended)
@@ -1993,21 +2291,33 @@ class GetDbServerDbServerPatchingDetailResult(dict):
     @_builtins.property
     @pulumi.getter(name="estimatedPatchDuration")
     def estimated_patch_duration(self) -> _builtins.int:
+        """
+        Estimated time, in minutes, that it takes to patch the database server.
+        """
         return pulumi.get(self, "estimated_patch_duration")
 
     @_builtins.property
     @pulumi.getter(name="patchingStatus")
     def patching_status(self) -> _builtins.str:
+        """
+        Status of the patching operation.
+        """
         return pulumi.get(self, "patching_status")
 
     @_builtins.property
     @pulumi.getter(name="timePatchingEnded")
     def time_patching_ended(self) -> _builtins.str:
+        """
+        Date and time when the patching operation ended.
+        """
         return pulumi.get(self, "time_patching_ended")
 
     @_builtins.property
     @pulumi.getter(name="timePatchingStarted")
     def time_patching_started(self) -> _builtins.str:
+        """
+        Date and time when the patching operation started.
+        """
         return pulumi.get(self, "time_patching_started")
 
 
@@ -2035,26 +2345,26 @@ class GetDbServersDbServerResult(dict):
                  status_reason: _builtins.str,
                  vm_cluster_ids: Sequence[_builtins.str]):
         """
-        :param Sequence[_builtins.str] autonomous_virtual_machine_ids: A list of unique identifiers for the Autonomous VMs.
-        :param Sequence[_builtins.str] autonomous_vm_cluster_ids: A list of identifiers for the Autonomous VM clusters.
-        :param _builtins.str compute_model: The OCI compute model used when you create or clone an instance: **ECPU** or **OCPU**. ECPUs are based on the number of cores elastically allocated from a pool of compute and storage servers, while OCPUs are based on the physical core of a processor with hyper-threading enabled.
-        :param _builtins.int cpu_core_count: The number of CPU cores enabled on the database server.
-        :param _builtins.str created_at: The date and time when the database server was created.
-        :param _builtins.int db_node_storage_size_in_gbs: The amount of local node storage, in gigabytes (GB), that's allocated on the database server.
-        :param Sequence['GetDbServersDbServerDbServerPatchingDetailArgs'] db_server_patching_details: The scheduling details for the quarterly maintenance window. Patching and system updates take place during the maintenance window.
-        :param _builtins.str display_name: The user-friendly name of the database server. The name doesn't need to be unique.
-        :param _builtins.str exadata_infrastructure_id: The ID of the Exadata infrastructure that hosts the database server.
-        :param _builtins.str id: The unique identifier of the database server.
-        :param _builtins.int max_cpu_count: The total number of CPU cores available on the database server.
-        :param _builtins.int max_db_node_storage_in_gbs: The total amount of local node storage, in gigabytes (GB), that's available on the database server.
-        :param _builtins.int max_memory_in_gbs: The total amount of memory, in gigabytes (GB), that's available on the database server.
-        :param _builtins.int memory_size_in_gbs: The amount of memory, in gigabytes (GB), that's allocated on the database server.
-        :param _builtins.str oci_resource_anchor_name: The name of the OCI resource anchor for the database server.
-        :param _builtins.str ocid: The OCID of the database server.
-        :param _builtins.str shape: The hardware system model of the Exadata infrastructure that the database server is hosted on. The shape determines the amount of CPU, storage, and memory resources available.
-        :param _builtins.str status: The current status of the database server.
+        :param Sequence[_builtins.str] autonomous_virtual_machine_ids: List of unique identifiers for the Autonomous VMs.
+        :param Sequence[_builtins.str] autonomous_vm_cluster_ids: List of identifiers for the Autonomous VM clusters.
+        :param _builtins.str compute_model: OCI compute model used when you create or clone an instance: **ECPU** or **OCPU**. ECPUs are based on the number of cores elastically allocated from a pool of compute and storage servers, while OCPUs are based on the physical core of a processor with hyper-threading enabled.
+        :param _builtins.int cpu_core_count: Number of CPU cores enabled on the database server.
+        :param _builtins.str created_at: Date and time when the database server was created.
+        :param _builtins.int db_node_storage_size_in_gbs: Amount of local node storage, in gigabytes (GB), that's allocated on the database server.
+        :param Sequence['GetDbServersDbServerDbServerPatchingDetailArgs'] db_server_patching_details: Scheduling details for the quarterly maintenance window. Patching and system updates take place during the maintenance window.
+        :param _builtins.str display_name: User-friendly name of the database server. The name doesn't need to be unique.
+        :param _builtins.str exadata_infrastructure_id: ID of the Exadata infrastructure that hosts the database server.
+        :param _builtins.str id: Unique identifier of the database server.
+        :param _builtins.int max_cpu_count: Total number of CPU cores available on the database server.
+        :param _builtins.int max_db_node_storage_in_gbs: Total amount of local node storage, in gigabytes (GB), that's available on the database server.
+        :param _builtins.int max_memory_in_gbs: Total amount of memory, in gigabytes (GB), that's available on the database server.
+        :param _builtins.int memory_size_in_gbs: Amount of memory, in gigabytes (GB), that's allocated on the database server.
+        :param _builtins.str oci_resource_anchor_name: Name of the OCI resource anchor for the database server.
+        :param _builtins.str ocid: OCID of the database server.
+        :param _builtins.str shape: Hardware system model of the Exadata infrastructure that the database server is hosted on. The shape determines the amount of CPU, storage, and memory resources available.
+        :param _builtins.str status: Current status of the database server.
         :param _builtins.str status_reason: Additional information about the status of the database server.
-        :param Sequence[_builtins.str] vm_cluster_ids: The IDs of the VM clusters that are associated with the database server.
+        :param Sequence[_builtins.str] vm_cluster_ids: IDs of the VM clusters that are associated with the database server.
         """
         pulumi.set(__self__, "autonomous_virtual_machine_ids", autonomous_virtual_machine_ids)
         pulumi.set(__self__, "autonomous_vm_cluster_ids", autonomous_vm_cluster_ids)
@@ -2081,7 +2391,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter(name="autonomousVirtualMachineIds")
     def autonomous_virtual_machine_ids(self) -> Sequence[_builtins.str]:
         """
-        A list of unique identifiers for the Autonomous VMs.
+        List of unique identifiers for the Autonomous VMs.
         """
         return pulumi.get(self, "autonomous_virtual_machine_ids")
 
@@ -2089,7 +2399,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter(name="autonomousVmClusterIds")
     def autonomous_vm_cluster_ids(self) -> Sequence[_builtins.str]:
         """
-        A list of identifiers for the Autonomous VM clusters.
+        List of identifiers for the Autonomous VM clusters.
         """
         return pulumi.get(self, "autonomous_vm_cluster_ids")
 
@@ -2097,7 +2407,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter(name="computeModel")
     def compute_model(self) -> _builtins.str:
         """
-        The OCI compute model used when you create or clone an instance: **ECPU** or **OCPU**. ECPUs are based on the number of cores elastically allocated from a pool of compute and storage servers, while OCPUs are based on the physical core of a processor with hyper-threading enabled.
+        OCI compute model used when you create or clone an instance: **ECPU** or **OCPU**. ECPUs are based on the number of cores elastically allocated from a pool of compute and storage servers, while OCPUs are based on the physical core of a processor with hyper-threading enabled.
         """
         return pulumi.get(self, "compute_model")
 
@@ -2105,7 +2415,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter(name="cpuCoreCount")
     def cpu_core_count(self) -> _builtins.int:
         """
-        The number of CPU cores enabled on the database server.
+        Number of CPU cores enabled on the database server.
         """
         return pulumi.get(self, "cpu_core_count")
 
@@ -2113,7 +2423,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter(name="createdAt")
     def created_at(self) -> _builtins.str:
         """
-        The date and time when the database server was created.
+        Date and time when the database server was created.
         """
         return pulumi.get(self, "created_at")
 
@@ -2121,7 +2431,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter(name="dbNodeStorageSizeInGbs")
     def db_node_storage_size_in_gbs(self) -> _builtins.int:
         """
-        The amount of local node storage, in gigabytes (GB), that's allocated on the database server.
+        Amount of local node storage, in gigabytes (GB), that's allocated on the database server.
         """
         return pulumi.get(self, "db_node_storage_size_in_gbs")
 
@@ -2129,7 +2439,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter(name="dbServerPatchingDetails")
     def db_server_patching_details(self) -> Sequence['outputs.GetDbServersDbServerDbServerPatchingDetailResult']:
         """
-        The scheduling details for the quarterly maintenance window. Patching and system updates take place during the maintenance window.
+        Scheduling details for the quarterly maintenance window. Patching and system updates take place during the maintenance window.
         """
         return pulumi.get(self, "db_server_patching_details")
 
@@ -2137,7 +2447,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter(name="displayName")
     def display_name(self) -> _builtins.str:
         """
-        The user-friendly name of the database server. The name doesn't need to be unique.
+        User-friendly name of the database server. The name doesn't need to be unique.
         """
         return pulumi.get(self, "display_name")
 
@@ -2145,7 +2455,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter(name="exadataInfrastructureId")
     def exadata_infrastructure_id(self) -> _builtins.str:
         """
-        The ID of the Exadata infrastructure that hosts the database server.
+        ID of the Exadata infrastructure that hosts the database server.
         """
         return pulumi.get(self, "exadata_infrastructure_id")
 
@@ -2153,7 +2463,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter
     def id(self) -> _builtins.str:
         """
-        The unique identifier of the database server.
+        Unique identifier of the database server.
         """
         return pulumi.get(self, "id")
 
@@ -2161,7 +2471,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter(name="maxCpuCount")
     def max_cpu_count(self) -> _builtins.int:
         """
-        The total number of CPU cores available on the database server.
+        Total number of CPU cores available on the database server.
         """
         return pulumi.get(self, "max_cpu_count")
 
@@ -2169,7 +2479,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter(name="maxDbNodeStorageInGbs")
     def max_db_node_storage_in_gbs(self) -> _builtins.int:
         """
-        The total amount of local node storage, in gigabytes (GB), that's available on the database server.
+        Total amount of local node storage, in gigabytes (GB), that's available on the database server.
         """
         return pulumi.get(self, "max_db_node_storage_in_gbs")
 
@@ -2177,7 +2487,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter(name="maxMemoryInGbs")
     def max_memory_in_gbs(self) -> _builtins.int:
         """
-        The total amount of memory, in gigabytes (GB), that's available on the database server.
+        Total amount of memory, in gigabytes (GB), that's available on the database server.
         """
         return pulumi.get(self, "max_memory_in_gbs")
 
@@ -2185,7 +2495,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter(name="memorySizeInGbs")
     def memory_size_in_gbs(self) -> _builtins.int:
         """
-        The amount of memory, in gigabytes (GB), that's allocated on the database server.
+        Amount of memory, in gigabytes (GB), that's allocated on the database server.
         """
         return pulumi.get(self, "memory_size_in_gbs")
 
@@ -2193,7 +2503,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter(name="ociResourceAnchorName")
     def oci_resource_anchor_name(self) -> _builtins.str:
         """
-        The name of the OCI resource anchor for the database server.
+        Name of the OCI resource anchor for the database server.
         """
         return pulumi.get(self, "oci_resource_anchor_name")
 
@@ -2201,7 +2511,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter
     def ocid(self) -> _builtins.str:
         """
-        The OCID of the database server.
+        OCID of the database server.
         """
         return pulumi.get(self, "ocid")
 
@@ -2209,7 +2519,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter
     def shape(self) -> _builtins.str:
         """
-        The hardware system model of the Exadata infrastructure that the database server is hosted on. The shape determines the amount of CPU, storage, and memory resources available.
+        Hardware system model of the Exadata infrastructure that the database server is hosted on. The shape determines the amount of CPU, storage, and memory resources available.
         """
         return pulumi.get(self, "shape")
 
@@ -2217,7 +2527,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter
     def status(self) -> _builtins.str:
         """
-        The current status of the database server.
+        Current status of the database server.
         """
         return pulumi.get(self, "status")
 
@@ -2233,7 +2543,7 @@ class GetDbServersDbServerResult(dict):
     @pulumi.getter(name="vmClusterIds")
     def vm_cluster_ids(self) -> Sequence[_builtins.str]:
         """
-        The IDs of the VM clusters that are associated with the database server.
+        IDs of the VM clusters that are associated with the database server.
         """
         return pulumi.get(self, "vm_cluster_ids")
 
@@ -2245,6 +2555,12 @@ class GetDbServersDbServerDbServerPatchingDetailResult(dict):
                  patching_status: _builtins.str,
                  time_patching_ended: _builtins.str,
                  time_patching_started: _builtins.str):
+        """
+        :param _builtins.int estimated_patch_duration: Estimated time, in minutes, that it takes to patch the database server.
+        :param _builtins.str patching_status: Status of the patching operation.
+        :param _builtins.str time_patching_ended: Date and time when the patching operation ended.
+        :param _builtins.str time_patching_started: Date and time when the patching operation started.
+        """
         pulumi.set(__self__, "estimated_patch_duration", estimated_patch_duration)
         pulumi.set(__self__, "patching_status", patching_status)
         pulumi.set(__self__, "time_patching_ended", time_patching_ended)
@@ -2253,21 +2569,33 @@ class GetDbServersDbServerDbServerPatchingDetailResult(dict):
     @_builtins.property
     @pulumi.getter(name="estimatedPatchDuration")
     def estimated_patch_duration(self) -> _builtins.int:
+        """
+        Estimated time, in minutes, that it takes to patch the database server.
+        """
         return pulumi.get(self, "estimated_patch_duration")
 
     @_builtins.property
     @pulumi.getter(name="patchingStatus")
     def patching_status(self) -> _builtins.str:
+        """
+        Status of the patching operation.
+        """
         return pulumi.get(self, "patching_status")
 
     @_builtins.property
     @pulumi.getter(name="timePatchingEnded")
     def time_patching_ended(self) -> _builtins.str:
+        """
+        Date and time when the patching operation ended.
+        """
         return pulumi.get(self, "time_patching_ended")
 
     @_builtins.property
     @pulumi.getter(name="timePatchingStarted")
     def time_patching_started(self) -> _builtins.str:
+        """
+        Date and time when the patching operation started.
+        """
         return pulumi.get(self, "time_patching_started")
 
 
@@ -2297,28 +2625,28 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
                  shape_family: _builtins.str,
                  shape_type: _builtins.str):
         """
-        :param _builtins.int available_core_count: The maximum number of CPU cores that can be enabled for the shape.
-        :param _builtins.int available_core_count_per_node: The maximum number of CPU cores per DB node that can be enabled for the shape.
-        :param _builtins.int available_data_storage_in_tbs: The maximum amount of data storage, in terabytes (TB), that can be enabled for the shape.
-        :param _builtins.int available_data_storage_per_server_in_tbs: The maximum amount of data storage, in terabytes (TB), that's available per storage server for the shape.
-        :param _builtins.int available_db_node_per_node_in_gbs: The maximum amount of DB node storage, in gigabytes (GB), that's available per DB node for the shape.
-        :param _builtins.int available_db_node_storage_in_gbs: The maximum amount of DB node storage, in gigabytes (GB), that can be enabled for the shape.
-        :param _builtins.int available_memory_in_gbs: The maximum amount of memory, in gigabytes (GB), that can be enabled for the shape.
-        :param _builtins.int available_memory_per_node_in_gbs: The maximum amount of memory, in gigabytes (GB), that's available per DB node for the shape.
-        :param _builtins.int core_count_increment: The discrete number by which the CPU core count for the shape can be increased or decreased.
-        :param _builtins.int max_storage_count: The maximum number of Exadata storage servers available for the shape.
-        :param _builtins.int maximum_node_count: The maximum number of compute servers available for the shape.
-        :param _builtins.int min_core_count_per_node: The minimum number of CPU cores that can be enabled per node for the shape.
-        :param _builtins.int min_data_storage_in_tbs: The minimum amount of data storage, in terabytes (TB), that must be allocated for the shape.
-        :param _builtins.int min_db_node_storage_per_node_in_gbs: The minimum amount of DB node storage, in gigabytes (GB), that must be allocated per DB node for the shape.
-        :param _builtins.int min_memory_per_node_in_gbs: The minimum amount of memory, in gigabytes (GB), that must be allocated per DB node for the shape.
-        :param _builtins.int min_storage_count: The minimum number of Exadata storage servers available for the shape.
-        :param _builtins.int minimum_core_count: The minimum number of CPU cores that can be enabled for the shape.
-        :param _builtins.int minimum_node_count: The minimum number of compute servers available for the shape.
-        :param _builtins.str name: The name of the shape.
-        :param _builtins.int runtime_minimum_core_count: The runtime minimum number of CPU cores that can be enabled for the shape.
-        :param _builtins.str shape_family: The family of the shape.
-        :param _builtins.str shape_type: The shape type, determined by the CPU hardware.
+        :param _builtins.int available_core_count: Maximum number of CPU cores that can be enabled for the shape.
+        :param _builtins.int available_core_count_per_node: Maximum number of CPU cores per DB node that can be enabled for the shape.
+        :param _builtins.int available_data_storage_in_tbs: Maximum amount of data storage, in terabytes (TB), that can be enabled for the shape.
+        :param _builtins.int available_data_storage_per_server_in_tbs: Maximum amount of data storage, in terabytes (TB), that's available per storage server for the shape.
+        :param _builtins.int available_db_node_per_node_in_gbs: Maximum amount of DB node storage, in gigabytes (GB), that's available per DB node for the shape.
+        :param _builtins.int available_db_node_storage_in_gbs: Maximum amount of DB node storage, in gigabytes (GB), that can be enabled for the shape.
+        :param _builtins.int available_memory_in_gbs: Maximum amount of memory, in gigabytes (GB), that can be enabled for the shape.
+        :param _builtins.int available_memory_per_node_in_gbs: Maximum amount of memory, in gigabytes (GB), that's available per DB node for the shape.
+        :param _builtins.int core_count_increment: Discrete number by which the CPU core count for the shape can be increased or decreased.
+        :param _builtins.int max_storage_count: Maximum number of Exadata storage servers available for the shape.
+        :param _builtins.int maximum_node_count: Maximum number of compute servers available for the shape.
+        :param _builtins.int min_core_count_per_node: Minimum number of CPU cores that can be enabled per node for the shape.
+        :param _builtins.int min_data_storage_in_tbs: Minimum amount of data storage, in terabytes (TB), that must be allocated for the shape.
+        :param _builtins.int min_db_node_storage_per_node_in_gbs: Minimum amount of DB node storage, in gigabytes (GB), that must be allocated per DB node for the shape.
+        :param _builtins.int min_memory_per_node_in_gbs: Minimum amount of memory, in gigabytes (GB), that must be allocated per DB node for the shape.
+        :param _builtins.int min_storage_count: Minimum number of Exadata storage servers available for the shape.
+        :param _builtins.int minimum_core_count: Minimum number of CPU cores that can be enabled for the shape.
+        :param _builtins.int minimum_node_count: Minimum number of compute servers available for the shape.
+        :param _builtins.str name: Name of the shape.
+        :param _builtins.int runtime_minimum_core_count: Runtime minimum number of CPU cores that can be enabled for the shape.
+        :param _builtins.str shape_family: Family of the shape.
+        :param _builtins.str shape_type: Shape type, determined by the CPU hardware.
         """
         pulumi.set(__self__, "available_core_count", available_core_count)
         pulumi.set(__self__, "available_core_count_per_node", available_core_count_per_node)
@@ -2347,7 +2675,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="availableCoreCount")
     def available_core_count(self) -> _builtins.int:
         """
-        The maximum number of CPU cores that can be enabled for the shape.
+        Maximum number of CPU cores that can be enabled for the shape.
         """
         return pulumi.get(self, "available_core_count")
 
@@ -2355,7 +2683,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="availableCoreCountPerNode")
     def available_core_count_per_node(self) -> _builtins.int:
         """
-        The maximum number of CPU cores per DB node that can be enabled for the shape.
+        Maximum number of CPU cores per DB node that can be enabled for the shape.
         """
         return pulumi.get(self, "available_core_count_per_node")
 
@@ -2363,7 +2691,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="availableDataStorageInTbs")
     def available_data_storage_in_tbs(self) -> _builtins.int:
         """
-        The maximum amount of data storage, in terabytes (TB), that can be enabled for the shape.
+        Maximum amount of data storage, in terabytes (TB), that can be enabled for the shape.
         """
         return pulumi.get(self, "available_data_storage_in_tbs")
 
@@ -2371,7 +2699,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="availableDataStoragePerServerInTbs")
     def available_data_storage_per_server_in_tbs(self) -> _builtins.int:
         """
-        The maximum amount of data storage, in terabytes (TB), that's available per storage server for the shape.
+        Maximum amount of data storage, in terabytes (TB), that's available per storage server for the shape.
         """
         return pulumi.get(self, "available_data_storage_per_server_in_tbs")
 
@@ -2379,7 +2707,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="availableDbNodePerNodeInGbs")
     def available_db_node_per_node_in_gbs(self) -> _builtins.int:
         """
-        The maximum amount of DB node storage, in gigabytes (GB), that's available per DB node for the shape.
+        Maximum amount of DB node storage, in gigabytes (GB), that's available per DB node for the shape.
         """
         return pulumi.get(self, "available_db_node_per_node_in_gbs")
 
@@ -2387,7 +2715,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="availableDbNodeStorageInGbs")
     def available_db_node_storage_in_gbs(self) -> _builtins.int:
         """
-        The maximum amount of DB node storage, in gigabytes (GB), that can be enabled for the shape.
+        Maximum amount of DB node storage, in gigabytes (GB), that can be enabled for the shape.
         """
         return pulumi.get(self, "available_db_node_storage_in_gbs")
 
@@ -2395,7 +2723,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="availableMemoryInGbs")
     def available_memory_in_gbs(self) -> _builtins.int:
         """
-        The maximum amount of memory, in gigabytes (GB), that can be enabled for the shape.
+        Maximum amount of memory, in gigabytes (GB), that can be enabled for the shape.
         """
         return pulumi.get(self, "available_memory_in_gbs")
 
@@ -2403,7 +2731,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="availableMemoryPerNodeInGbs")
     def available_memory_per_node_in_gbs(self) -> _builtins.int:
         """
-        The maximum amount of memory, in gigabytes (GB), that's available per DB node for the shape.
+        Maximum amount of memory, in gigabytes (GB), that's available per DB node for the shape.
         """
         return pulumi.get(self, "available_memory_per_node_in_gbs")
 
@@ -2411,7 +2739,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="coreCountIncrement")
     def core_count_increment(self) -> _builtins.int:
         """
-        The discrete number by which the CPU core count for the shape can be increased or decreased.
+        Discrete number by which the CPU core count for the shape can be increased or decreased.
         """
         return pulumi.get(self, "core_count_increment")
 
@@ -2419,7 +2747,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="maxStorageCount")
     def max_storage_count(self) -> _builtins.int:
         """
-        The maximum number of Exadata storage servers available for the shape.
+        Maximum number of Exadata storage servers available for the shape.
         """
         return pulumi.get(self, "max_storage_count")
 
@@ -2427,7 +2755,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="maximumNodeCount")
     def maximum_node_count(self) -> _builtins.int:
         """
-        The maximum number of compute servers available for the shape.
+        Maximum number of compute servers available for the shape.
         """
         return pulumi.get(self, "maximum_node_count")
 
@@ -2435,7 +2763,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="minCoreCountPerNode")
     def min_core_count_per_node(self) -> _builtins.int:
         """
-        The minimum number of CPU cores that can be enabled per node for the shape.
+        Minimum number of CPU cores that can be enabled per node for the shape.
         """
         return pulumi.get(self, "min_core_count_per_node")
 
@@ -2443,7 +2771,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="minDataStorageInTbs")
     def min_data_storage_in_tbs(self) -> _builtins.int:
         """
-        The minimum amount of data storage, in terabytes (TB), that must be allocated for the shape.
+        Minimum amount of data storage, in terabytes (TB), that must be allocated for the shape.
         """
         return pulumi.get(self, "min_data_storage_in_tbs")
 
@@ -2451,7 +2779,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="minDbNodeStoragePerNodeInGbs")
     def min_db_node_storage_per_node_in_gbs(self) -> _builtins.int:
         """
-        The minimum amount of DB node storage, in gigabytes (GB), that must be allocated per DB node for the shape.
+        Minimum amount of DB node storage, in gigabytes (GB), that must be allocated per DB node for the shape.
         """
         return pulumi.get(self, "min_db_node_storage_per_node_in_gbs")
 
@@ -2459,7 +2787,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="minMemoryPerNodeInGbs")
     def min_memory_per_node_in_gbs(self) -> _builtins.int:
         """
-        The minimum amount of memory, in gigabytes (GB), that must be allocated per DB node for the shape.
+        Minimum amount of memory, in gigabytes (GB), that must be allocated per DB node for the shape.
         """
         return pulumi.get(self, "min_memory_per_node_in_gbs")
 
@@ -2467,7 +2795,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="minStorageCount")
     def min_storage_count(self) -> _builtins.int:
         """
-        The minimum number of Exadata storage servers available for the shape.
+        Minimum number of Exadata storage servers available for the shape.
         """
         return pulumi.get(self, "min_storage_count")
 
@@ -2475,7 +2803,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="minimumCoreCount")
     def minimum_core_count(self) -> _builtins.int:
         """
-        The minimum number of CPU cores that can be enabled for the shape.
+        Minimum number of CPU cores that can be enabled for the shape.
         """
         return pulumi.get(self, "minimum_core_count")
 
@@ -2483,7 +2811,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="minimumNodeCount")
     def minimum_node_count(self) -> _builtins.int:
         """
-        The minimum number of compute servers available for the shape.
+        Minimum number of compute servers available for the shape.
         """
         return pulumi.get(self, "minimum_node_count")
 
@@ -2491,7 +2819,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter
     def name(self) -> _builtins.str:
         """
-        The name of the shape.
+        Name of the shape.
         """
         return pulumi.get(self, "name")
 
@@ -2499,7 +2827,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="runtimeMinimumCoreCount")
     def runtime_minimum_core_count(self) -> _builtins.int:
         """
-        The runtime minimum number of CPU cores that can be enabled for the shape.
+        Runtime minimum number of CPU cores that can be enabled for the shape.
         """
         return pulumi.get(self, "runtime_minimum_core_count")
 
@@ -2507,7 +2835,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="shapeFamily")
     def shape_family(self) -> _builtins.str:
         """
-        The family of the shape.
+        Family of the shape.
         """
         return pulumi.get(self, "shape_family")
 
@@ -2515,7 +2843,7 @@ class GetDbSystemShapesDbSystemShapeResult(dict):
     @pulumi.getter(name="shapeType")
     def shape_type(self) -> _builtins.str:
         """
-        The shape type, determined by the CPU hardware.
+        Shape type, determined by the CPU hardware.
         """
         return pulumi.get(self, "shape_type")
 
@@ -2525,7 +2853,7 @@ class GetGiVersionsGiVersionResult(dict):
     def __init__(__self__, *,
                  version: _builtins.str):
         """
-        :param _builtins.str version: The GI software version.
+        :param _builtins.str version: GI software version.
         """
         pulumi.set(__self__, "version", version)
 
@@ -2533,7 +2861,7 @@ class GetGiVersionsGiVersionResult(dict):
     @pulumi.getter
     def version(self) -> _builtins.str:
         """
-        The GI software version.
+        GI software version.
         """
         return pulumi.get(self, "version")
 
@@ -2541,6 +2869,7 @@ class GetGiVersionsGiVersionResult(dict):
 @pulumi.output_type
 class GetNetworkManagedServiceResult(dict):
     def __init__(__self__, *,
+                 cross_region_s3_restore_sources_accesses: Sequence['outputs.GetNetworkManagedServiceCrossRegionS3RestoreSourcesAccessResult'],
                  kms_accesses: Sequence['outputs.GetNetworkManagedServiceKmsAccessResult'],
                  managed_s3_backup_accesses: Sequence['outputs.GetNetworkManagedServiceManagedS3BackupAccessResult'],
                  managed_service_ipv4_cidrs: Sequence[_builtins.str],
@@ -2550,6 +2879,7 @@ class GetNetworkManagedServiceResult(dict):
                  service_network_endpoints: Sequence['outputs.GetNetworkManagedServiceServiceNetworkEndpointResult'],
                  sts_accesses: Sequence['outputs.GetNetworkManagedServiceStsAccessResult'],
                  zero_tl_accesses: Sequence['outputs.GetNetworkManagedServiceZeroTlAccessResult']):
+        pulumi.set(__self__, "cross_region_s3_restore_sources_accesses", cross_region_s3_restore_sources_accesses)
         pulumi.set(__self__, "kms_accesses", kms_accesses)
         pulumi.set(__self__, "managed_s3_backup_accesses", managed_s3_backup_accesses)
         pulumi.set(__self__, "managed_service_ipv4_cidrs", managed_service_ipv4_cidrs)
@@ -2559,6 +2889,11 @@ class GetNetworkManagedServiceResult(dict):
         pulumi.set(__self__, "service_network_endpoints", service_network_endpoints)
         pulumi.set(__self__, "sts_accesses", sts_accesses)
         pulumi.set(__self__, "zero_tl_accesses", zero_tl_accesses)
+
+    @_builtins.property
+    @pulumi.getter(name="crossRegionS3RestoreSourcesAccesses")
+    def cross_region_s3_restore_sources_accesses(self) -> Sequence['outputs.GetNetworkManagedServiceCrossRegionS3RestoreSourcesAccessResult']:
+        return pulumi.get(self, "cross_region_s3_restore_sources_accesses")
 
     @_builtins.property
     @pulumi.getter(name="kmsAccesses")
@@ -2607,6 +2942,42 @@ class GetNetworkManagedServiceResult(dict):
 
 
 @pulumi.output_type
+class GetNetworkManagedServiceCrossRegionS3RestoreSourcesAccessResult(dict):
+    def __init__(__self__, *,
+                 ipv4_addresses: Sequence[_builtins.str],
+                 region: _builtins.str,
+                 status: _builtins.str):
+        """
+        :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param _builtins.str status: Status of the network resource.
+        """
+        pulumi.set(__self__, "ipv4_addresses", ipv4_addresses)
+        pulumi.set(__self__, "region", region)
+        pulumi.set(__self__, "status", status)
+
+    @_builtins.property
+    @pulumi.getter(name="ipv4Addresses")
+    def ipv4_addresses(self) -> Sequence[_builtins.str]:
+        return pulumi.get(self, "ipv4_addresses")
+
+    @_builtins.property
+    @pulumi.getter
+    def region(self) -> _builtins.str:
+        """
+        Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        """
+        return pulumi.get(self, "region")
+
+    @_builtins.property
+    @pulumi.getter
+    def status(self) -> _builtins.str:
+        """
+        Status of the network resource.
+        """
+        return pulumi.get(self, "status")
+
+
+@pulumi.output_type
 class GetNetworkManagedServiceKmsAccessResult(dict):
     def __init__(__self__, *,
                  domain_name: _builtins.str,
@@ -2614,7 +2985,7 @@ class GetNetworkManagedServiceKmsAccessResult(dict):
                  kms_policy_document: _builtins.str,
                  status: _builtins.str):
         """
-        :param _builtins.str status: The status of the network resource.
+        :param _builtins.str status: Status of the network resource.
         """
         pulumi.set(__self__, "domain_name", domain_name)
         pulumi.set(__self__, "ipv4_addresses", ipv4_addresses)
@@ -2640,7 +3011,7 @@ class GetNetworkManagedServiceKmsAccessResult(dict):
     @pulumi.getter
     def status(self) -> _builtins.str:
         """
-        The status of the network resource.
+        Status of the network resource.
         """
         return pulumi.get(self, "status")
 
@@ -2651,7 +3022,7 @@ class GetNetworkManagedServiceManagedS3BackupAccessResult(dict):
                  ipv4_addresses: Sequence[_builtins.str],
                  status: _builtins.str):
         """
-        :param _builtins.str status: The status of the network resource.
+        :param _builtins.str status: Status of the network resource.
         """
         pulumi.set(__self__, "ipv4_addresses", ipv4_addresses)
         pulumi.set(__self__, "status", status)
@@ -2665,7 +3036,7 @@ class GetNetworkManagedServiceManagedS3BackupAccessResult(dict):
     @pulumi.getter
     def status(self) -> _builtins.str:
         """
-        The status of the network resource.
+        Status of the network resource.
         """
         return pulumi.get(self, "status")
 
@@ -2678,7 +3049,7 @@ class GetNetworkManagedServiceS3AccessResult(dict):
                  s3_policy_document: _builtins.str,
                  status: _builtins.str):
         """
-        :param _builtins.str status: The status of the network resource.
+        :param _builtins.str status: Status of the network resource.
         """
         pulumi.set(__self__, "domain_name", domain_name)
         pulumi.set(__self__, "ipv4_addresses", ipv4_addresses)
@@ -2704,7 +3075,7 @@ class GetNetworkManagedServiceS3AccessResult(dict):
     @pulumi.getter
     def status(self) -> _builtins.str:
         """
-        The status of the network resource.
+        Status of the network resource.
         """
         return pulumi.get(self, "status")
 
@@ -2736,7 +3107,7 @@ class GetNetworkManagedServiceStsAccessResult(dict):
                  status: _builtins.str,
                  sts_policy_document: _builtins.str):
         """
-        :param _builtins.str status: The status of the network resource.
+        :param _builtins.str status: Status of the network resource.
         """
         pulumi.set(__self__, "domain_name", domain_name)
         pulumi.set(__self__, "ipv4_addresses", ipv4_addresses)
@@ -2757,7 +3128,7 @@ class GetNetworkManagedServiceStsAccessResult(dict):
     @pulumi.getter
     def status(self) -> _builtins.str:
         """
-        The status of the network resource.
+        Status of the network resource.
         """
         return pulumi.get(self, "status")
 
@@ -2773,7 +3144,7 @@ class GetNetworkManagedServiceZeroTlAccessResult(dict):
                  cidr: _builtins.str,
                  status: _builtins.str):
         """
-        :param _builtins.str status: The status of the network resource.
+        :param _builtins.str status: Status of the network resource.
         """
         pulumi.set(__self__, "cidr", cidr)
         pulumi.set(__self__, "status", status)
@@ -2787,7 +3158,7 @@ class GetNetworkManagedServiceZeroTlAccessResult(dict):
     @pulumi.getter
     def status(self) -> _builtins.str:
         """
-        The status of the network resource.
+        Status of the network resource.
         """
         return pulumi.get(self, "status")
 
@@ -2820,9 +3191,9 @@ class GetNetworkPeeringConnectionsOdbPeeringConnectionResult(dict):
                  odb_network_arn: _builtins.str,
                  peer_network_arn: _builtins.str):
         """
-        :param _builtins.str arn: The Amazon Resource Name (ARN) for the  ODB network peering connection.
+        :param _builtins.str arn: ARN for the ODB network peering connection.
         :param _builtins.str display_name: Display name of the ODB network peering connection.
-        :param _builtins.str id: The unique identifier of the  ODB network peering connection.
+        :param _builtins.str id: Unique identifier of the ODB network peering connection.
         :param _builtins.str odb_network_arn: ARN of the ODB network peering connection.
         :param _builtins.str peer_network_arn: ARN of the peer network peering connection.
         """
@@ -2836,7 +3207,7 @@ class GetNetworkPeeringConnectionsOdbPeeringConnectionResult(dict):
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) for the  ODB network peering connection.
+        ARN for the ODB network peering connection.
         """
         return pulumi.get(self, "arn")
 
@@ -2852,7 +3223,7 @@ class GetNetworkPeeringConnectionsOdbPeeringConnectionResult(dict):
     @pulumi.getter
     def id(self) -> _builtins.str:
         """
-        The unique identifier of the  ODB network peering connection.
+        Unique identifier of the ODB network peering connection.
         """
         return pulumi.get(self, "id")
 
@@ -2883,12 +3254,12 @@ class GetNetworksOdbNetworkResult(dict):
                  oci_vcn_id: _builtins.str,
                  oci_vcn_url: _builtins.str):
         """
-        :param _builtins.str arn: Amazon Resource Name (ARN) of the odb network resource.
+        :param _builtins.str arn: ARN of the odb network resource.
         :param _builtins.str display_name: Display name for the network resource.
         :param _builtins.str id: Unique identifier of the odb network resource.
-        :param _builtins.str oci_network_anchor_id: The unique identifier of the OCI network anchor for the ODB network.
-        :param _builtins.str oci_vcn_id: The unique identifier  Oracle Cloud ID (OCID) of the OCI VCN for the ODB network.
-        :param _builtins.str oci_vcn_url: The URL of the OCI VCN for the ODB network.
+        :param _builtins.str oci_network_anchor_id: Unique identifier of the OCI network anchor for the ODB network.
+        :param _builtins.str oci_vcn_id: Unique identifier  Oracle Cloud ID (OCID) of the OCI VCN for the ODB network.
+        :param _builtins.str oci_vcn_url: URL of the OCI VCN for the ODB network.
         """
         pulumi.set(__self__, "arn", arn)
         pulumi.set(__self__, "display_name", display_name)
@@ -2901,7 +3272,7 @@ class GetNetworksOdbNetworkResult(dict):
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        Amazon Resource Name (ARN) of the odb network resource.
+        ARN of the odb network resource.
         """
         return pulumi.get(self, "arn")
 
@@ -2925,7 +3296,7 @@ class GetNetworksOdbNetworkResult(dict):
     @pulumi.getter(name="ociNetworkAnchorId")
     def oci_network_anchor_id(self) -> _builtins.str:
         """
-        The unique identifier of the OCI network anchor for the ODB network.
+        Unique identifier of the OCI network anchor for the ODB network.
         """
         return pulumi.get(self, "oci_network_anchor_id")
 
@@ -2933,7 +3304,7 @@ class GetNetworksOdbNetworkResult(dict):
     @pulumi.getter(name="ociVcnId")
     def oci_vcn_id(self) -> _builtins.str:
         """
-        The unique identifier  Oracle Cloud ID (OCID) of the OCI VCN for the ODB network.
+        Unique identifier  Oracle Cloud ID (OCID) of the OCI VCN for the ODB network.
         """
         return pulumi.get(self, "oci_vcn_id")
 
@@ -2941,7 +3312,7 @@ class GetNetworksOdbNetworkResult(dict):
     @pulumi.getter(name="ociVcnUrl")
     def oci_vcn_url(self) -> _builtins.str:
         """
-        The URL of the OCI VCN for the ODB network.
+        URL of the OCI VCN for the ODB network.
         """
         return pulumi.get(self, "oci_vcn_url")
 

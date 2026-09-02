@@ -21,19 +21,20 @@ __all__ = ['FileSystemArgs', 'FileSystem']
 @pulumi.input_type
 class FileSystemArgs:
     def __init__(__self__, *,
-                 availability_zone_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 creation_token: Optional[pulumi.Input[_builtins.str]] = None,
-                 encrypted: Optional[pulumi.Input[_builtins.bool]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 lifecycle_policies: Optional[pulumi.Input[Sequence[pulumi.Input['FileSystemLifecyclePolicyArgs']]]] = None,
-                 performance_mode: Optional[pulumi.Input[_builtins.str]] = None,
-                 protection: Optional[pulumi.Input['FileSystemProtectionArgs']] = None,
-                 provisioned_throughput_in_mibps: Optional[pulumi.Input[_builtins.float]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 throughput_mode: Optional[pulumi.Input[_builtins.str]] = None):
+                 availability_zone_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 creation_token: pulumi.Input[Optional[_builtins.str]] = None,
+                 encrypted: pulumi.Input[Optional[_builtins.bool]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 lifecycle_policies: pulumi.Input[Optional[Sequence[pulumi.Input['FileSystemLifecyclePolicyArgs']]]] = None,
+                 performance_mode: pulumi.Input[Optional[_builtins.str]] = None,
+                 protection: pulumi.Input[Optional['FileSystemProtectionArgs']] = None,
+                 provisioned_throughput_in_mibps: pulumi.Input[Optional[_builtins.float]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 throughput_mode: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a FileSystem resource.
+
         :param pulumi.Input[_builtins.str] availability_zone_name: the AWS Availability Zone in which to create the file system. Used to create a file system that uses One Zone storage classes. See [user guide](https://docs.aws.amazon.com/efs/latest/ug/availability-durability.html) for more information.
         :param pulumi.Input[_builtins.str] creation_token: A unique name (a maximum of 64 characters are allowed)
                used as reference when creating the Elastic File System to ensure idempotent file
@@ -47,7 +48,7 @@ class FileSystemArgs:
         :param pulumi.Input[_builtins.float] provisioned_throughput_in_mibps: The throughput, measured in MiB/s, that you want to provision for the file system. Only applicable with `throughput_mode` set to `provisioned`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the file system. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[_builtins.str] throughput_mode: Throughput mode for the file system. Defaults to `bursting`. Valid values: `bursting`, `provisioned`, or `elastic`. When using `provisioned`, also set `provisioned_throughput_in_mibps`.
+        :param pulumi.Input[_builtins.str] throughput_mode: Throughput mode for the file system. Defaults to `bursting`, matching the [`CreateFileSystem`](https://docs.aws.amazon.com/efs/latest/ug/API_CreateFileSystem.html) API default. Note that AWS [recommends `elastic` for most use cases](https://docs.aws.amazon.com/efs/latest/ug/managing-throughput.html), and `elastic` is the default in the Amazon EFS console. Valid values: `bursting`, `provisioned`, or `elastic`. When using `provisioned`, also set `provisioned_throughput_in_mibps`.
         """
         if availability_zone_name is not None:
             pulumi.set(__self__, "availability_zone_name", availability_zone_name)
@@ -74,19 +75,19 @@ class FileSystemArgs:
 
     @_builtins.property
     @pulumi.getter(name="availabilityZoneName")
-    def availability_zone_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def availability_zone_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         the AWS Availability Zone in which to create the file system. Used to create a file system that uses One Zone storage classes. See [user guide](https://docs.aws.amazon.com/efs/latest/ug/availability-durability.html) for more information.
         """
         return pulumi.get(self, "availability_zone_name")
 
     @availability_zone_name.setter
-    def availability_zone_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def availability_zone_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "availability_zone_name", value)
 
     @_builtins.property
     @pulumi.getter(name="creationToken")
-    def creation_token(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def creation_token(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A unique name (a maximum of 64 characters are allowed)
         used as reference when creating the Elastic File System to ensure idempotent file
@@ -96,143 +97,144 @@ class FileSystemArgs:
         return pulumi.get(self, "creation_token")
 
     @creation_token.setter
-    def creation_token(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def creation_token(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "creation_token", value)
 
     @_builtins.property
     @pulumi.getter
-    def encrypted(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def encrypted(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         If true, the disk will be encrypted.
         """
         return pulumi.get(self, "encrypted")
 
     @encrypted.setter
-    def encrypted(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def encrypted(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "encrypted", value)
 
     @_builtins.property
     @pulumi.getter(name="kmsKeyId")
-    def kms_key_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN for the KMS encryption key. When specifying kms_key_id, encrypted needs to be set to true.
         """
         return pulumi.get(self, "kms_key_id")
 
     @kms_key_id.setter
-    def kms_key_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key_id", value)
 
     @_builtins.property
     @pulumi.getter(name="lifecyclePolicies")
-    def lifecycle_policies(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['FileSystemLifecyclePolicyArgs']]]]:
+    def lifecycle_policies(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['FileSystemLifecyclePolicyArgs']]]]:
         """
         A file system [lifecycle policy](https://docs.aws.amazon.com/efs/latest/ug/API_LifecyclePolicy.html) object. See `lifecycle_policy` block below for details.
         """
         return pulumi.get(self, "lifecycle_policies")
 
     @lifecycle_policies.setter
-    def lifecycle_policies(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['FileSystemLifecyclePolicyArgs']]]]):
+    def lifecycle_policies(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['FileSystemLifecyclePolicyArgs']]]]):
         pulumi.set(self, "lifecycle_policies", value)
 
     @_builtins.property
     @pulumi.getter(name="performanceMode")
-    def performance_mode(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def performance_mode(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The file system performance mode. Can be either `"generalPurpose"` or `"maxIO"` (Default: `"generalPurpose"`).
         """
         return pulumi.get(self, "performance_mode")
 
     @performance_mode.setter
-    def performance_mode(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def performance_mode(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "performance_mode", value)
 
     @_builtins.property
     @pulumi.getter
-    def protection(self) -> Optional[pulumi.Input['FileSystemProtectionArgs']]:
+    def protection(self) -> pulumi.Input[Optional['FileSystemProtectionArgs']]:
         """
         A file system [protection](https://docs.aws.amazon.com/efs/latest/ug/API_FileSystemProtectionDescription.html) object. See `protection` block below for details.
         """
         return pulumi.get(self, "protection")
 
     @protection.setter
-    def protection(self, value: Optional[pulumi.Input['FileSystemProtectionArgs']]):
+    def protection(self, value: pulumi.Input[Optional['FileSystemProtectionArgs']]):
         pulumi.set(self, "protection", value)
 
     @_builtins.property
     @pulumi.getter(name="provisionedThroughputInMibps")
-    def provisioned_throughput_in_mibps(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def provisioned_throughput_in_mibps(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
         The throughput, measured in MiB/s, that you want to provision for the file system. Only applicable with `throughput_mode` set to `provisioned`.
         """
         return pulumi.get(self, "provisioned_throughput_in_mibps")
 
     @provisioned_throughput_in_mibps.setter
-    def provisioned_throughput_in_mibps(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def provisioned_throughput_in_mibps(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "provisioned_throughput_in_mibps", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags to assign to the file system. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="throughputMode")
-    def throughput_mode(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def throughput_mode(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Throughput mode for the file system. Defaults to `bursting`. Valid values: `bursting`, `provisioned`, or `elastic`. When using `provisioned`, also set `provisioned_throughput_in_mibps`.
+        Throughput mode for the file system. Defaults to `bursting`, matching the [`CreateFileSystem`](https://docs.aws.amazon.com/efs/latest/ug/API_CreateFileSystem.html) API default. Note that AWS [recommends `elastic` for most use cases](https://docs.aws.amazon.com/efs/latest/ug/managing-throughput.html), and `elastic` is the default in the Amazon EFS console. Valid values: `bursting`, `provisioned`, or `elastic`. When using `provisioned`, also set `provisioned_throughput_in_mibps`.
         """
         return pulumi.get(self, "throughput_mode")
 
     @throughput_mode.setter
-    def throughput_mode(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def throughput_mode(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "throughput_mode", value)
 
 
 @pulumi.input_type
 class _FileSystemState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 availability_zone_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 availability_zone_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 creation_token: Optional[pulumi.Input[_builtins.str]] = None,
-                 dns_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 encrypted: Optional[pulumi.Input[_builtins.bool]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 lifecycle_policies: Optional[pulumi.Input[Sequence[pulumi.Input['FileSystemLifecyclePolicyArgs']]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 number_of_mount_targets: Optional[pulumi.Input[_builtins.int]] = None,
-                 owner_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 performance_mode: Optional[pulumi.Input[_builtins.str]] = None,
-                 protection: Optional[pulumi.Input['FileSystemProtectionArgs']] = None,
-                 provisioned_throughput_in_mibps: Optional[pulumi.Input[_builtins.float]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 size_in_bytes: Optional[pulumi.Input[Sequence[pulumi.Input['FileSystemSizeInByteArgs']]]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 throughput_mode: Optional[pulumi.Input[_builtins.str]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 availability_zone_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 availability_zone_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 creation_token: pulumi.Input[Optional[_builtins.str]] = None,
+                 dns_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 encrypted: pulumi.Input[Optional[_builtins.bool]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 lifecycle_policies: pulumi.Input[Optional[Sequence[pulumi.Input['FileSystemLifecyclePolicyArgs']]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 number_of_mount_targets: pulumi.Input[Optional[_builtins.int]] = None,
+                 owner_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 performance_mode: pulumi.Input[Optional[_builtins.str]] = None,
+                 protection: pulumi.Input[Optional['FileSystemProtectionArgs']] = None,
+                 provisioned_throughput_in_mibps: pulumi.Input[Optional[_builtins.float]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 size_in_bytes: pulumi.Input[Optional[Sequence[pulumi.Input['FileSystemSizeInByteArgs']]]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 throughput_mode: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering FileSystem resources.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name of the file system.
+
+        :param pulumi.Input[_builtins.str] arn: ARN of the file system.
         :param pulumi.Input[_builtins.str] availability_zone_id: The identifier of the Availability Zone in which the file system's One Zone storage classes exist.
         :param pulumi.Input[_builtins.str] availability_zone_name: the AWS Availability Zone in which to create the file system. Used to create a file system that uses One Zone storage classes. See [user guide](https://docs.aws.amazon.com/efs/latest/ug/availability-durability.html) for more information.
         :param pulumi.Input[_builtins.str] creation_token: A unique name (a maximum of 64 characters are allowed)
@@ -253,7 +255,7 @@ class _FileSystemState:
         :param pulumi.Input[Sequence[pulumi.Input['FileSystemSizeInByteArgs']]] size_in_bytes: The latest known metered size (in bytes) of data stored in the file system, the value is not the exact size that the file system was at any point in time. See Size In Bytes.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the file system. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
-        :param pulumi.Input[_builtins.str] throughput_mode: Throughput mode for the file system. Defaults to `bursting`. Valid values: `bursting`, `provisioned`, or `elastic`. When using `provisioned`, also set `provisioned_throughput_in_mibps`.
+        :param pulumi.Input[_builtins.str] throughput_mode: Throughput mode for the file system. Defaults to `bursting`, matching the [`CreateFileSystem`](https://docs.aws.amazon.com/efs/latest/ug/API_CreateFileSystem.html) API default. Note that AWS [recommends `elastic` for most use cases](https://docs.aws.amazon.com/efs/latest/ug/managing-throughput.html), and `elastic` is the default in the Amazon EFS console. Valid values: `bursting`, `provisioned`, or `elastic`. When using `provisioned`, also set `provisioned_throughput_in_mibps`.
         """
         if arn is not None:
             pulumi.set(__self__, "arn", arn)
@@ -296,43 +298,43 @@ class _FileSystemState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Amazon Resource Name of the file system.
+        ARN of the file system.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="availabilityZoneId")
-    def availability_zone_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def availability_zone_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The identifier of the Availability Zone in which the file system's One Zone storage classes exist.
         """
         return pulumi.get(self, "availability_zone_id")
 
     @availability_zone_id.setter
-    def availability_zone_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def availability_zone_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "availability_zone_id", value)
 
     @_builtins.property
     @pulumi.getter(name="availabilityZoneName")
-    def availability_zone_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def availability_zone_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         the AWS Availability Zone in which to create the file system. Used to create a file system that uses One Zone storage classes. See [user guide](https://docs.aws.amazon.com/efs/latest/ug/availability-durability.html) for more information.
         """
         return pulumi.get(self, "availability_zone_name")
 
     @availability_zone_name.setter
-    def availability_zone_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def availability_zone_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "availability_zone_name", value)
 
     @_builtins.property
     @pulumi.getter(name="creationToken")
-    def creation_token(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def creation_token(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A unique name (a maximum of 64 characters are allowed)
         used as reference when creating the Elastic File System to ensure idempotent file
@@ -342,187 +344,187 @@ class _FileSystemState:
         return pulumi.get(self, "creation_token")
 
     @creation_token.setter
-    def creation_token(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def creation_token(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "creation_token", value)
 
     @_builtins.property
     @pulumi.getter(name="dnsName")
-    def dns_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def dns_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The DNS name for the filesystem per [documented convention](http://docs.aws.amazon.com/efs/latest/ug/mounting-fs-mount-cmd-dns-name.html).
         """
         return pulumi.get(self, "dns_name")
 
     @dns_name.setter
-    def dns_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def dns_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "dns_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def encrypted(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def encrypted(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         If true, the disk will be encrypted.
         """
         return pulumi.get(self, "encrypted")
 
     @encrypted.setter
-    def encrypted(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def encrypted(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "encrypted", value)
 
     @_builtins.property
     @pulumi.getter(name="kmsKeyId")
-    def kms_key_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN for the KMS encryption key. When specifying kms_key_id, encrypted needs to be set to true.
         """
         return pulumi.get(self, "kms_key_id")
 
     @kms_key_id.setter
-    def kms_key_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key_id", value)
 
     @_builtins.property
     @pulumi.getter(name="lifecyclePolicies")
-    def lifecycle_policies(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['FileSystemLifecyclePolicyArgs']]]]:
+    def lifecycle_policies(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['FileSystemLifecyclePolicyArgs']]]]:
         """
         A file system [lifecycle policy](https://docs.aws.amazon.com/efs/latest/ug/API_LifecyclePolicy.html) object. See `lifecycle_policy` block below for details.
         """
         return pulumi.get(self, "lifecycle_policies")
 
     @lifecycle_policies.setter
-    def lifecycle_policies(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['FileSystemLifecyclePolicyArgs']]]]):
+    def lifecycle_policies(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['FileSystemLifecyclePolicyArgs']]]]):
         pulumi.set(self, "lifecycle_policies", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The value of the file system's `Name` tag.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="numberOfMountTargets")
-    def number_of_mount_targets(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def number_of_mount_targets(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         The current number of mount targets that the file system has.
         """
         return pulumi.get(self, "number_of_mount_targets")
 
     @number_of_mount_targets.setter
-    def number_of_mount_targets(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def number_of_mount_targets(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "number_of_mount_targets", value)
 
     @_builtins.property
     @pulumi.getter(name="ownerId")
-    def owner_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def owner_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The AWS account that created the file system. If the file system was createdby an IAM user, the parent account to which the user belongs is the owner.
         """
         return pulumi.get(self, "owner_id")
 
     @owner_id.setter
-    def owner_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def owner_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "owner_id", value)
 
     @_builtins.property
     @pulumi.getter(name="performanceMode")
-    def performance_mode(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def performance_mode(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The file system performance mode. Can be either `"generalPurpose"` or `"maxIO"` (Default: `"generalPurpose"`).
         """
         return pulumi.get(self, "performance_mode")
 
     @performance_mode.setter
-    def performance_mode(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def performance_mode(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "performance_mode", value)
 
     @_builtins.property
     @pulumi.getter
-    def protection(self) -> Optional[pulumi.Input['FileSystemProtectionArgs']]:
+    def protection(self) -> pulumi.Input[Optional['FileSystemProtectionArgs']]:
         """
         A file system [protection](https://docs.aws.amazon.com/efs/latest/ug/API_FileSystemProtectionDescription.html) object. See `protection` block below for details.
         """
         return pulumi.get(self, "protection")
 
     @protection.setter
-    def protection(self, value: Optional[pulumi.Input['FileSystemProtectionArgs']]):
+    def protection(self, value: pulumi.Input[Optional['FileSystemProtectionArgs']]):
         pulumi.set(self, "protection", value)
 
     @_builtins.property
     @pulumi.getter(name="provisionedThroughputInMibps")
-    def provisioned_throughput_in_mibps(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def provisioned_throughput_in_mibps(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
         The throughput, measured in MiB/s, that you want to provision for the file system. Only applicable with `throughput_mode` set to `provisioned`.
         """
         return pulumi.get(self, "provisioned_throughput_in_mibps")
 
     @provisioned_throughput_in_mibps.setter
-    def provisioned_throughput_in_mibps(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def provisioned_throughput_in_mibps(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "provisioned_throughput_in_mibps", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="sizeInBytes")
-    def size_in_bytes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['FileSystemSizeInByteArgs']]]]:
+    def size_in_bytes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['FileSystemSizeInByteArgs']]]]:
         """
         The latest known metered size (in bytes) of data stored in the file system, the value is not the exact size that the file system was at any point in time. See Size In Bytes.
         """
         return pulumi.get(self, "size_in_bytes")
 
     @size_in_bytes.setter
-    def size_in_bytes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['FileSystemSizeInByteArgs']]]]):
+    def size_in_bytes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['FileSystemSizeInByteArgs']]]]):
         pulumi.set(self, "size_in_bytes", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags to assign to the file system. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter(name="throughputMode")
-    def throughput_mode(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def throughput_mode(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Throughput mode for the file system. Defaults to `bursting`. Valid values: `bursting`, `provisioned`, or `elastic`. When using `provisioned`, also set `provisioned_throughput_in_mibps`.
+        Throughput mode for the file system. Defaults to `bursting`, matching the [`CreateFileSystem`](https://docs.aws.amazon.com/efs/latest/ug/API_CreateFileSystem.html) API default. Note that AWS [recommends `elastic` for most use cases](https://docs.aws.amazon.com/efs/latest/ug/managing-throughput.html), and `elastic` is the default in the Amazon EFS console. Valid values: `bursting`, `provisioned`, or `elastic`. When using `provisioned`, also set `provisioned_throughput_in_mibps`.
         """
         return pulumi.get(self, "throughput_mode")
 
     @throughput_mode.setter
-    def throughput_mode(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def throughput_mode(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "throughput_mode", value)
 
 
@@ -532,17 +534,17 @@ class FileSystem(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 availability_zone_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 creation_token: Optional[pulumi.Input[_builtins.str]] = None,
-                 encrypted: Optional[pulumi.Input[_builtins.bool]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 lifecycle_policies: Optional[pulumi.Input[Sequence[pulumi.Input[Union['FileSystemLifecyclePolicyArgs', 'FileSystemLifecyclePolicyArgsDict']]]]] = None,
-                 performance_mode: Optional[pulumi.Input[_builtins.str]] = None,
-                 protection: Optional[pulumi.Input[Union['FileSystemProtectionArgs', 'FileSystemProtectionArgsDict']]] = None,
-                 provisioned_throughput_in_mibps: Optional[pulumi.Input[_builtins.float]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 throughput_mode: Optional[pulumi.Input[_builtins.str]] = None,
+                 availability_zone_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 creation_token: pulumi.Input[Optional[_builtins.str]] = None,
+                 encrypted: pulumi.Input[Optional[_builtins.bool]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 lifecycle_policies: pulumi.Input[Optional[Sequence[pulumi.Input[Union['FileSystemLifecyclePolicyArgs', 'FileSystemLifecyclePolicyArgsDict']]]]] = None,
+                 performance_mode: pulumi.Input[Optional[_builtins.str]] = None,
+                 protection: pulumi.Input[Optional[Union['FileSystemProtectionArgs', 'FileSystemProtectionArgsDict']]] = None,
+                 provisioned_throughput_in_mibps: pulumi.Input[Optional[_builtins.float]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 throughput_mode: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides an Elastic File System (EFS) File System resource.
@@ -569,10 +571,10 @@ class FileSystem(pulumi.CustomResource):
         import pulumi_aws as aws
 
         foo_with_lifecyle_policy = aws.efs.FileSystem("foo_with_lifecyle_policy",
-            creation_token="my-product",
             lifecycle_policies=[{
                 "transition_to_ia": "AFTER_30_DAYS",
-            }])
+            }],
+            creation_token="my-product")
         ```
 
         ## Import
@@ -582,6 +584,7 @@ class FileSystem(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:efs/fileSystem:FileSystem foo fs-6fa144c6
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -598,7 +601,7 @@ class FileSystem(pulumi.CustomResource):
         :param pulumi.Input[_builtins.float] provisioned_throughput_in_mibps: The throughput, measured in MiB/s, that you want to provision for the file system. Only applicable with `throughput_mode` set to `provisioned`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the file system. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[_builtins.str] throughput_mode: Throughput mode for the file system. Defaults to `bursting`. Valid values: `bursting`, `provisioned`, or `elastic`. When using `provisioned`, also set `provisioned_throughput_in_mibps`.
+        :param pulumi.Input[_builtins.str] throughput_mode: Throughput mode for the file system. Defaults to `bursting`, matching the [`CreateFileSystem`](https://docs.aws.amazon.com/efs/latest/ug/API_CreateFileSystem.html) API default. Note that AWS [recommends `elastic` for most use cases](https://docs.aws.amazon.com/efs/latest/ug/managing-throughput.html), and `elastic` is the default in the Amazon EFS console. Valid values: `bursting`, `provisioned`, or `elastic`. When using `provisioned`, also set `provisioned_throughput_in_mibps`.
         """
         ...
     @overload
@@ -631,10 +634,10 @@ class FileSystem(pulumi.CustomResource):
         import pulumi_aws as aws
 
         foo_with_lifecyle_policy = aws.efs.FileSystem("foo_with_lifecyle_policy",
-            creation_token="my-product",
             lifecycle_policies=[{
                 "transition_to_ia": "AFTER_30_DAYS",
-            }])
+            }],
+            creation_token="my-product")
         ```
 
         ## Import
@@ -644,6 +647,7 @@ class FileSystem(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:efs/fileSystem:FileSystem foo fs-6fa144c6
         ```
+
 
         :param str resource_name: The name of the resource.
         :param FileSystemArgs args: The arguments to use to populate this resource's properties.
@@ -660,17 +664,17 @@ class FileSystem(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 availability_zone_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 creation_token: Optional[pulumi.Input[_builtins.str]] = None,
-                 encrypted: Optional[pulumi.Input[_builtins.bool]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 lifecycle_policies: Optional[pulumi.Input[Sequence[pulumi.Input[Union['FileSystemLifecyclePolicyArgs', 'FileSystemLifecyclePolicyArgsDict']]]]] = None,
-                 performance_mode: Optional[pulumi.Input[_builtins.str]] = None,
-                 protection: Optional[pulumi.Input[Union['FileSystemProtectionArgs', 'FileSystemProtectionArgsDict']]] = None,
-                 provisioned_throughput_in_mibps: Optional[pulumi.Input[_builtins.float]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 throughput_mode: Optional[pulumi.Input[_builtins.str]] = None,
+                 availability_zone_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 creation_token: pulumi.Input[Optional[_builtins.str]] = None,
+                 encrypted: pulumi.Input[Optional[_builtins.bool]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 lifecycle_policies: pulumi.Input[Optional[Sequence[pulumi.Input[Union['FileSystemLifecyclePolicyArgs', 'FileSystemLifecyclePolicyArgsDict']]]]] = None,
+                 performance_mode: pulumi.Input[Optional[_builtins.str]] = None,
+                 protection: pulumi.Input[Optional[Union['FileSystemProtectionArgs', 'FileSystemProtectionArgsDict']]] = None,
+                 provisioned_throughput_in_mibps: pulumi.Input[Optional[_builtins.float]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 throughput_mode: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -709,25 +713,25 @@ class FileSystem(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            availability_zone_id: Optional[pulumi.Input[_builtins.str]] = None,
-            availability_zone_name: Optional[pulumi.Input[_builtins.str]] = None,
-            creation_token: Optional[pulumi.Input[_builtins.str]] = None,
-            dns_name: Optional[pulumi.Input[_builtins.str]] = None,
-            encrypted: Optional[pulumi.Input[_builtins.bool]] = None,
-            kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-            lifecycle_policies: Optional[pulumi.Input[Sequence[pulumi.Input[Union['FileSystemLifecyclePolicyArgs', 'FileSystemLifecyclePolicyArgsDict']]]]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            number_of_mount_targets: Optional[pulumi.Input[_builtins.int]] = None,
-            owner_id: Optional[pulumi.Input[_builtins.str]] = None,
-            performance_mode: Optional[pulumi.Input[_builtins.str]] = None,
-            protection: Optional[pulumi.Input[Union['FileSystemProtectionArgs', 'FileSystemProtectionArgsDict']]] = None,
-            provisioned_throughput_in_mibps: Optional[pulumi.Input[_builtins.float]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            size_in_bytes: Optional[pulumi.Input[Sequence[pulumi.Input[Union['FileSystemSizeInByteArgs', 'FileSystemSizeInByteArgsDict']]]]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            throughput_mode: Optional[pulumi.Input[_builtins.str]] = None) -> 'FileSystem':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            availability_zone_id: pulumi.Input[Optional[_builtins.str]] = None,
+            availability_zone_name: pulumi.Input[Optional[_builtins.str]] = None,
+            creation_token: pulumi.Input[Optional[_builtins.str]] = None,
+            dns_name: pulumi.Input[Optional[_builtins.str]] = None,
+            encrypted: pulumi.Input[Optional[_builtins.bool]] = None,
+            kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+            lifecycle_policies: pulumi.Input[Optional[Sequence[pulumi.Input[Union['FileSystemLifecyclePolicyArgs', 'FileSystemLifecyclePolicyArgsDict']]]]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            number_of_mount_targets: pulumi.Input[Optional[_builtins.int]] = None,
+            owner_id: pulumi.Input[Optional[_builtins.str]] = None,
+            performance_mode: pulumi.Input[Optional[_builtins.str]] = None,
+            protection: pulumi.Input[Optional[Union['FileSystemProtectionArgs', 'FileSystemProtectionArgsDict']]] = None,
+            provisioned_throughput_in_mibps: pulumi.Input[Optional[_builtins.float]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            size_in_bytes: pulumi.Input[Optional[Sequence[pulumi.Input[Union['FileSystemSizeInByteArgs', 'FileSystemSizeInByteArgsDict']]]]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            throughput_mode: pulumi.Input[Optional[_builtins.str]] = None) -> 'FileSystem':
         """
         Get an existing FileSystem resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -735,7 +739,7 @@ class FileSystem(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name of the file system.
+        :param pulumi.Input[_builtins.str] arn: ARN of the file system.
         :param pulumi.Input[_builtins.str] availability_zone_id: The identifier of the Availability Zone in which the file system's One Zone storage classes exist.
         :param pulumi.Input[_builtins.str] availability_zone_name: the AWS Availability Zone in which to create the file system. Used to create a file system that uses One Zone storage classes. See [user guide](https://docs.aws.amazon.com/efs/latest/ug/availability-durability.html) for more information.
         :param pulumi.Input[_builtins.str] creation_token: A unique name (a maximum of 64 characters are allowed)
@@ -756,7 +760,7 @@ class FileSystem(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[Union['FileSystemSizeInByteArgs', 'FileSystemSizeInByteArgsDict']]]] size_in_bytes: The latest known metered size (in bytes) of data stored in the file system, the value is not the exact size that the file system was at any point in time. See Size In Bytes.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the file system. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
-        :param pulumi.Input[_builtins.str] throughput_mode: Throughput mode for the file system. Defaults to `bursting`. Valid values: `bursting`, `provisioned`, or `elastic`. When using `provisioned`, also set `provisioned_throughput_in_mibps`.
+        :param pulumi.Input[_builtins.str] throughput_mode: Throughput mode for the file system. Defaults to `bursting`, matching the [`CreateFileSystem`](https://docs.aws.amazon.com/efs/latest/ug/API_CreateFileSystem.html) API default. Note that AWS [recommends `elastic` for most use cases](https://docs.aws.amazon.com/efs/latest/ug/managing-throughput.html), and `elastic` is the default in the Amazon EFS console. Valid values: `bursting`, `provisioned`, or `elastic`. When using `provisioned`, also set `provisioned_throughput_in_mibps`.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -787,7 +791,7 @@ class FileSystem(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        Amazon Resource Name of the file system.
+        ARN of the file system.
         """
         return pulumi.get(self, "arn")
 
@@ -934,7 +938,7 @@ class FileSystem(pulumi.CustomResource):
     @pulumi.getter(name="throughputMode")
     def throughput_mode(self) -> pulumi.Output[Optional[_builtins.str]]:
         """
-        Throughput mode for the file system. Defaults to `bursting`. Valid values: `bursting`, `provisioned`, or `elastic`. When using `provisioned`, also set `provisioned_throughput_in_mibps`.
+        Throughput mode for the file system. Defaults to `bursting`, matching the [`CreateFileSystem`](https://docs.aws.amazon.com/efs/latest/ug/API_CreateFileSystem.html) API default. Note that AWS [recommends `elastic` for most use cases](https://docs.aws.amazon.com/efs/latest/ug/managing-throughput.html), and `elastic` is the default in the Amazon EFS console. Valid values: `bursting`, `provisioned`, or `elastic`. When using `provisioned`, also set `provisioned_throughput_in_mibps`.
         """
         return pulumi.get(self, "throughput_mode")
 

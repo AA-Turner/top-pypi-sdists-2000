@@ -116,7 +116,7 @@ class GetApplicationResult:
     @pulumi.getter(name="portalOptions")
     def portal_options(self) -> Sequence['outputs.GetApplicationPortalOptionResult']:
         """
-        Options for the portal associated with an application. See the `ssoadmin.Application` resource documentation. The attributes are the same.
+        Options for the portal associated with an application. See `portal_options` Block below.
         """
         return pulumi.get(self, "portal_options")
 
@@ -190,8 +190,8 @@ def get_application(application_arn: Optional[_builtins.str] = None,
         portal_options=pulumi.get(__ret__, 'portal_options'),
         region=pulumi.get(__ret__, 'region'),
         status=pulumi.get(__ret__, 'status'))
-def get_application_output(application_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                           region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_application_output(application_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                           region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                            opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetApplicationResult]:
     """
     Data source for managing an AWS SSO Admin Application.

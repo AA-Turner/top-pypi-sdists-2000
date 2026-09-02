@@ -125,14 +125,8 @@ def get_log_data_protection_policy_document(configuration: Optional[Union['GetLo
     import pulumi
     import pulumi_aws as aws
 
-    example = aws.cloudwatch.get_log_data_protection_policy_document(name="Example",
-        statements=[
+    example = aws.cloudwatch.get_log_data_protection_policy_document(statements=[
             {
-                "sid": "Audit",
-                "data_identifiers": [
-                    "arn:aws:dataprotection::aws:data-identifier/EmailAddress",
-                    "arn:aws:dataprotection::aws:data-identifier/DriversLicense-US",
-                ],
                 "operation": {
                     "audit": {
                         "findings_destination": {
@@ -148,20 +142,26 @@ def get_log_data_protection_policy_document(configuration: Optional[Union['GetLo
                         },
                     },
                 },
-            },
-            {
-                "sid": "Deidentify",
+                "sid": "Audit",
                 "data_identifiers": [
                     "arn:aws:dataprotection::aws:data-identifier/EmailAddress",
                     "arn:aws:dataprotection::aws:data-identifier/DriversLicense-US",
                 ],
+            },
+            {
                 "operation": {
                     "deidentify": {
                         "mask_config": {},
                     },
                 },
+                "sid": "Deidentify",
+                "data_identifiers": [
+                    "arn:aws:dataprotection::aws:data-identifier/EmailAddress",
+                    "arn:aws:dataprotection::aws:data-identifier/DriversLicense-US",
+                ],
             },
-        ])
+        ],
+        name="Example")
     example_log_data_protection_policy = aws.cloudwatch.LogDataProtectionPolicy("example",
         log_group_name=example_aws_cloudwatch_log_group["name"],
         policy_document=example.json)
@@ -192,11 +192,11 @@ def get_log_data_protection_policy_document(configuration: Optional[Union['GetLo
         name=pulumi.get(__ret__, 'name'),
         statements=pulumi.get(__ret__, 'statements'),
         version=pulumi.get(__ret__, 'version'))
-def get_log_data_protection_policy_document_output(configuration: Optional[pulumi.Input[Optional[Union['GetLogDataProtectionPolicyDocumentConfigurationArgs', 'GetLogDataProtectionPolicyDocumentConfigurationArgsDict']]]] = None,
-                                                   description: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                                   name: Optional[pulumi.Input[_builtins.str]] = None,
-                                                   statements: Optional[pulumi.Input[Sequence[Union['GetLogDataProtectionPolicyDocumentStatementArgs', 'GetLogDataProtectionPolicyDocumentStatementArgsDict']]]] = None,
-                                                   version: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_log_data_protection_policy_document_output(configuration: pulumi.Input[Optional[Optional[Union['GetLogDataProtectionPolicyDocumentConfigurationArgs', 'GetLogDataProtectionPolicyDocumentConfigurationArgsDict']]]] = None,
+                                                   description: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                                   name: pulumi.Input[Optional[_builtins.str]] = None,
+                                                   statements: pulumi.Input[Optional[Sequence[Union['GetLogDataProtectionPolicyDocumentStatementArgs', 'GetLogDataProtectionPolicyDocumentStatementArgsDict']]]] = None,
+                                                   version: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                                    opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetLogDataProtectionPolicyDocumentResult]:
     """
     Generates a CloudWatch Log Group Data Protection Policy document in JSON format for use with the `cloudwatch.LogDataProtectionPolicy` resource.
@@ -209,14 +209,8 @@ def get_log_data_protection_policy_document_output(configuration: Optional[pulum
     import pulumi
     import pulumi_aws as aws
 
-    example = aws.cloudwatch.get_log_data_protection_policy_document(name="Example",
-        statements=[
+    example = aws.cloudwatch.get_log_data_protection_policy_document(statements=[
             {
-                "sid": "Audit",
-                "data_identifiers": [
-                    "arn:aws:dataprotection::aws:data-identifier/EmailAddress",
-                    "arn:aws:dataprotection::aws:data-identifier/DriversLicense-US",
-                ],
                 "operation": {
                     "audit": {
                         "findings_destination": {
@@ -232,20 +226,26 @@ def get_log_data_protection_policy_document_output(configuration: Optional[pulum
                         },
                     },
                 },
-            },
-            {
-                "sid": "Deidentify",
+                "sid": "Audit",
                 "data_identifiers": [
                     "arn:aws:dataprotection::aws:data-identifier/EmailAddress",
                     "arn:aws:dataprotection::aws:data-identifier/DriversLicense-US",
                 ],
+            },
+            {
                 "operation": {
                     "deidentify": {
                         "mask_config": {},
                     },
                 },
+                "sid": "Deidentify",
+                "data_identifiers": [
+                    "arn:aws:dataprotection::aws:data-identifier/EmailAddress",
+                    "arn:aws:dataprotection::aws:data-identifier/DriversLicense-US",
+                ],
             },
-        ])
+        ],
+        name="Example")
     example_log_data_protection_policy = aws.cloudwatch.LogDataProtectionPolicy("example",
         log_group_name=example_aws_cloudwatch_log_group["name"],
         policy_document=example.json)

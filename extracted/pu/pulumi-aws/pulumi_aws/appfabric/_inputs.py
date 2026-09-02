@@ -52,11 +52,11 @@ __all__ = [
 class AppAuthorizationConnectionAuthRequestArgsDict(TypedDict):
     code: pulumi.Input[_builtins.str]
     """
-    The authorization code returned by the application after permission is granted in the application OAuth page (after clicking on the AuthURL)..
+    Authorization code returned by the application after permission is granted in the application OAuth page (after clicking on the AuthURL).
     """
     redirect_uri: pulumi.Input[_builtins.str]
     """
-    The redirect URL that is specified in the AuthURL and the application client.
+    Redirect URL that is specified in the AuthURL and the application client.
     """
 
 @pulumi.input_type
@@ -65,8 +65,8 @@ class AppAuthorizationConnectionAuthRequestArgs:
                  code: pulumi.Input[_builtins.str],
                  redirect_uri: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] code: The authorization code returned by the application after permission is granted in the application OAuth page (after clicking on the AuthURL)..
-        :param pulumi.Input[_builtins.str] redirect_uri: The redirect URL that is specified in the AuthURL and the application client.
+        :param pulumi.Input[_builtins.str] code: Authorization code returned by the application after permission is granted in the application OAuth page (after clicking on the AuthURL).
+        :param pulumi.Input[_builtins.str] redirect_uri: Redirect URL that is specified in the AuthURL and the application client.
         """
         pulumi.set(__self__, "code", code)
         pulumi.set(__self__, "redirect_uri", redirect_uri)
@@ -75,7 +75,7 @@ class AppAuthorizationConnectionAuthRequestArgs:
     @pulumi.getter
     def code(self) -> pulumi.Input[_builtins.str]:
         """
-        The authorization code returned by the application after permission is granted in the application OAuth page (after clicking on the AuthURL)..
+        Authorization code returned by the application after permission is granted in the application OAuth page (after clicking on the AuthURL).
         """
         return pulumi.get(self, "code")
 
@@ -87,7 +87,7 @@ class AppAuthorizationConnectionAuthRequestArgs:
     @pulumi.getter(name="redirectUri")
     def redirect_uri(self) -> pulumi.Input[_builtins.str]:
         """
-        The redirect URL that is specified in the AuthURL and the application client.
+        Redirect URL that is specified in the AuthURL and the application client.
         """
         return pulumi.get(self, "redirect_uri")
 
@@ -98,19 +98,32 @@ class AppAuthorizationConnectionAuthRequestArgs:
 
 class AppAuthorizationConnectionTenantArgsDict(TypedDict):
     tenant_display_name: pulumi.Input[_builtins.str]
+    """
+    Display name of the tenant.
+    """
     tenant_identifier: pulumi.Input[_builtins.str]
+    """
+    ID of the application tenant.
+    """
 
 @pulumi.input_type
 class AppAuthorizationConnectionTenantArgs:
     def __init__(__self__, *,
                  tenant_display_name: pulumi.Input[_builtins.str],
                  tenant_identifier: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] tenant_display_name: Display name of the tenant.
+        :param pulumi.Input[_builtins.str] tenant_identifier: ID of the application tenant.
+        """
         pulumi.set(__self__, "tenant_display_name", tenant_display_name)
         pulumi.set(__self__, "tenant_identifier", tenant_identifier)
 
     @_builtins.property
     @pulumi.getter(name="tenantDisplayName")
     def tenant_display_name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Display name of the tenant.
+        """
         return pulumi.get(self, "tenant_display_name")
 
     @tenant_display_name.setter
@@ -120,6 +133,9 @@ class AppAuthorizationConnectionTenantArgs:
     @_builtins.property
     @pulumi.getter(name="tenantIdentifier")
     def tenant_identifier(self) -> pulumi.Input[_builtins.str]:
+        """
+        ID of the application tenant.
+        """
         return pulumi.get(self, "tenant_identifier")
 
     @tenant_identifier.setter
@@ -128,7 +144,7 @@ class AppAuthorizationConnectionTenantArgs:
 
 
 class AppAuthorizationConnectionTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -136,7 +152,7 @@ class AppAuthorizationConnectionTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class AppAuthorizationConnectionTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
@@ -145,35 +161,35 @@ class AppAuthorizationConnectionTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
 
 class AppAuthorizationCredentialArgsDict(TypedDict):
-    api_key_credentials: NotRequired[pulumi.Input[Sequence[pulumi.Input['AppAuthorizationCredentialApiKeyCredentialArgsDict']]]]
+    api_key_credentials: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['AppAuthorizationCredentialApiKeyCredentialArgsDict']]]]]
     """
-    Contains API key credential information.
+    API key credential information. See `api_key_credential` Block for details.
     """
-    oauth2_credential: NotRequired[pulumi.Input['AppAuthorizationCredentialOauth2CredentialArgsDict']]
+    oauth2_credential: NotRequired[pulumi.Input[Optional['AppAuthorizationCredentialOauth2CredentialArgsDict']]]
     """
-    Contains OAuth2 client credential information.
+    OAuth2 client credential information. See `oauth2_credential` Block for details.
     """
 
 @pulumi.input_type
 class AppAuthorizationCredentialArgs:
     def __init__(__self__, *,
-                 api_key_credentials: Optional[pulumi.Input[Sequence[pulumi.Input['AppAuthorizationCredentialApiKeyCredentialArgs']]]] = None,
-                 oauth2_credential: Optional[pulumi.Input['AppAuthorizationCredentialOauth2CredentialArgs']] = None):
+                 api_key_credentials: pulumi.Input[Optional[Sequence[pulumi.Input['AppAuthorizationCredentialApiKeyCredentialArgs']]]] = None,
+                 oauth2_credential: pulumi.Input[Optional['AppAuthorizationCredentialOauth2CredentialArgs']] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['AppAuthorizationCredentialApiKeyCredentialArgs']]] api_key_credentials: Contains API key credential information.
-        :param pulumi.Input['AppAuthorizationCredentialOauth2CredentialArgs'] oauth2_credential: Contains OAuth2 client credential information.
+        :param pulumi.Input[Sequence[pulumi.Input['AppAuthorizationCredentialApiKeyCredentialArgs']]] api_key_credentials: API key credential information. See `api_key_credential` Block for details.
+        :param pulumi.Input['AppAuthorizationCredentialOauth2CredentialArgs'] oauth2_credential: OAuth2 client credential information. See `oauth2_credential` Block for details.
         """
         if api_key_credentials is not None:
             pulumi.set(__self__, "api_key_credentials", api_key_credentials)
@@ -182,33 +198,33 @@ class AppAuthorizationCredentialArgs:
 
     @_builtins.property
     @pulumi.getter(name="apiKeyCredentials")
-    def api_key_credentials(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['AppAuthorizationCredentialApiKeyCredentialArgs']]]]:
+    def api_key_credentials(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['AppAuthorizationCredentialApiKeyCredentialArgs']]]]:
         """
-        Contains API key credential information.
+        API key credential information. See `api_key_credential` Block for details.
         """
         return pulumi.get(self, "api_key_credentials")
 
     @api_key_credentials.setter
-    def api_key_credentials(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['AppAuthorizationCredentialApiKeyCredentialArgs']]]]):
+    def api_key_credentials(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['AppAuthorizationCredentialApiKeyCredentialArgs']]]]):
         pulumi.set(self, "api_key_credentials", value)
 
     @_builtins.property
     @pulumi.getter(name="oauth2Credential")
-    def oauth2_credential(self) -> Optional[pulumi.Input['AppAuthorizationCredentialOauth2CredentialArgs']]:
+    def oauth2_credential(self) -> pulumi.Input[Optional['AppAuthorizationCredentialOauth2CredentialArgs']]:
         """
-        Contains OAuth2 client credential information.
+        OAuth2 client credential information. See `oauth2_credential` Block for details.
         """
         return pulumi.get(self, "oauth2_credential")
 
     @oauth2_credential.setter
-    def oauth2_credential(self, value: Optional[pulumi.Input['AppAuthorizationCredentialOauth2CredentialArgs']]):
+    def oauth2_credential(self, value: pulumi.Input[Optional['AppAuthorizationCredentialOauth2CredentialArgs']]):
         pulumi.set(self, "oauth2_credential", value)
 
 
 class AppAuthorizationCredentialApiKeyCredentialArgsDict(TypedDict):
     api_key: pulumi.Input[_builtins.str]
     """
-    Contains API key credential information.
+    API key.
     """
 
 @pulumi.input_type
@@ -216,7 +232,7 @@ class AppAuthorizationCredentialApiKeyCredentialArgs:
     def __init__(__self__, *,
                  api_key: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] api_key: Contains API key credential information.
+        :param pulumi.Input[_builtins.str] api_key: API key.
         """
         pulumi.set(__self__, "api_key", api_key)
 
@@ -224,7 +240,7 @@ class AppAuthorizationCredentialApiKeyCredentialArgs:
     @pulumi.getter(name="apiKey")
     def api_key(self) -> pulumi.Input[_builtins.str]:
         """
-        Contains API key credential information.
+        API key.
         """
         return pulumi.get(self, "api_key")
 
@@ -236,11 +252,11 @@ class AppAuthorizationCredentialApiKeyCredentialArgs:
 class AppAuthorizationCredentialOauth2CredentialArgsDict(TypedDict):
     client_id: pulumi.Input[_builtins.str]
     """
-    The client ID of the client application.
+    Client ID of the client application.
     """
     client_secret: pulumi.Input[_builtins.str]
     """
-    The client secret of the client application.
+    Client secret of the client application.
     """
 
 @pulumi.input_type
@@ -249,8 +265,8 @@ class AppAuthorizationCredentialOauth2CredentialArgs:
                  client_id: pulumi.Input[_builtins.str],
                  client_secret: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] client_id: The client ID of the client application.
-        :param pulumi.Input[_builtins.str] client_secret: The client secret of the client application.
+        :param pulumi.Input[_builtins.str] client_id: Client ID of the client application.
+        :param pulumi.Input[_builtins.str] client_secret: Client secret of the client application.
         """
         pulumi.set(__self__, "client_id", client_id)
         pulumi.set(__self__, "client_secret", client_secret)
@@ -259,7 +275,7 @@ class AppAuthorizationCredentialOauth2CredentialArgs:
     @pulumi.getter(name="clientId")
     def client_id(self) -> pulumi.Input[_builtins.str]:
         """
-        The client ID of the client application.
+        Client ID of the client application.
         """
         return pulumi.get(self, "client_id")
 
@@ -271,7 +287,7 @@ class AppAuthorizationCredentialOauth2CredentialArgs:
     @pulumi.getter(name="clientSecret")
     def client_secret(self) -> pulumi.Input[_builtins.str]:
         """
-        The client secret of the client application.
+        Client secret of the client application.
         """
         return pulumi.get(self, "client_secret")
 
@@ -283,11 +299,11 @@ class AppAuthorizationCredentialOauth2CredentialArgs:
 class AppAuthorizationTenantArgsDict(TypedDict):
     tenant_display_name: pulumi.Input[_builtins.str]
     """
-    The display name of the tenant.
+    Display name of the tenant.
     """
     tenant_identifier: pulumi.Input[_builtins.str]
     """
-    The ID of the application tenant.
+    ID of the application tenant.
     """
 
 @pulumi.input_type
@@ -296,8 +312,8 @@ class AppAuthorizationTenantArgs:
                  tenant_display_name: pulumi.Input[_builtins.str],
                  tenant_identifier: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] tenant_display_name: The display name of the tenant.
-        :param pulumi.Input[_builtins.str] tenant_identifier: The ID of the application tenant.
+        :param pulumi.Input[_builtins.str] tenant_display_name: Display name of the tenant.
+        :param pulumi.Input[_builtins.str] tenant_identifier: ID of the application tenant.
         """
         pulumi.set(__self__, "tenant_display_name", tenant_display_name)
         pulumi.set(__self__, "tenant_identifier", tenant_identifier)
@@ -306,7 +322,7 @@ class AppAuthorizationTenantArgs:
     @pulumi.getter(name="tenantDisplayName")
     def tenant_display_name(self) -> pulumi.Input[_builtins.str]:
         """
-        The display name of the tenant.
+        Display name of the tenant.
         """
         return pulumi.get(self, "tenant_display_name")
 
@@ -318,7 +334,7 @@ class AppAuthorizationTenantArgs:
     @pulumi.getter(name="tenantIdentifier")
     def tenant_identifier(self) -> pulumi.Input[_builtins.str]:
         """
-        The ID of the application tenant.
+        ID of the application tenant.
         """
         return pulumi.get(self, "tenant_identifier")
 
@@ -328,15 +344,15 @@ class AppAuthorizationTenantArgs:
 
 
 class AppAuthorizationTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
-    update: NotRequired[pulumi.Input[_builtins.str]]
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -344,9 +360,9 @@ class AppAuthorizationTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class AppAuthorizationTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None,
-                 update: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -361,45 +377,45 @@ class AppAuthorizationTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def update(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "update")
 
     @update.setter
-    def update(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update", value)
 
 
 class IngestionDestinationDestinationConfigurationArgsDict(TypedDict):
     audit_log: pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogArgsDict']
     """
-    Contains information about an audit log processing configuration.
+    Audit log destination configuration. See `destination_configuration.audit_log` Block below.
     """
 
 @pulumi.input_type
@@ -407,7 +423,7 @@ class IngestionDestinationDestinationConfigurationArgs:
     def __init__(__self__, *,
                  audit_log: pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogArgs']):
         """
-        :param pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogArgs'] audit_log: Contains information about an audit log processing configuration.
+        :param pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogArgs'] audit_log: Audit log destination configuration. See `destination_configuration.audit_log` Block below.
         """
         pulumi.set(__self__, "audit_log", audit_log)
 
@@ -415,7 +431,7 @@ class IngestionDestinationDestinationConfigurationArgs:
     @pulumi.getter(name="auditLog")
     def audit_log(self) -> pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogArgs']:
         """
-        Contains information about an audit log processing configuration.
+        Audit log destination configuration. See `destination_configuration.audit_log` Block below.
         """
         return pulumi.get(self, "audit_log")
 
@@ -427,7 +443,7 @@ class IngestionDestinationDestinationConfigurationArgs:
 class IngestionDestinationDestinationConfigurationAuditLogArgsDict(TypedDict):
     destination: pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationArgsDict']
     """
-    Contains information about an audit log destination. Only one destination (Firehose Stream) or (S3 Bucket) can be specified.
+    Destination for the audit log. Only one destination, either `firehose_stream` or `s3_bucket`, can be specified. See `destination_configuration.audit_log.destination` Block below.
     """
 
 @pulumi.input_type
@@ -435,7 +451,7 @@ class IngestionDestinationDestinationConfigurationAuditLogArgs:
     def __init__(__self__, *,
                  destination: pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationArgs']):
         """
-        :param pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationArgs'] destination: Contains information about an audit log destination. Only one destination (Firehose Stream) or (S3 Bucket) can be specified.
+        :param pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationArgs'] destination: Destination for the audit log. Only one destination, either `firehose_stream` or `s3_bucket`, can be specified. See `destination_configuration.audit_log.destination` Block below.
         """
         pulumi.set(__self__, "destination", destination)
 
@@ -443,7 +459,7 @@ class IngestionDestinationDestinationConfigurationAuditLogArgs:
     @pulumi.getter
     def destination(self) -> pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationArgs']:
         """
-        Contains information about an audit log destination. Only one destination (Firehose Stream) or (S3 Bucket) can be specified.
+        Destination for the audit log. Only one destination, either `firehose_stream` or `s3_bucket`, can be specified. See `destination_configuration.audit_log.destination` Block below.
         """
         return pulumi.get(self, "destination")
 
@@ -453,23 +469,23 @@ class IngestionDestinationDestinationConfigurationAuditLogArgs:
 
 
 class IngestionDestinationDestinationConfigurationAuditLogDestinationArgsDict(TypedDict):
-    firehose_stream: NotRequired[pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationFirehoseStreamArgsDict']]
+    firehose_stream: NotRequired[pulumi.Input[Optional['IngestionDestinationDestinationConfigurationAuditLogDestinationFirehoseStreamArgsDict']]]
     """
-    Contains information about an Amazon Data Firehose delivery stream.
+    Amazon Data Firehose delivery stream destination. See `destination_configuration.audit_log.destination.firehose_stream` Block below.
     """
-    s3_bucket: NotRequired[pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationS3BucketArgsDict']]
+    s3_bucket: NotRequired[pulumi.Input[Optional['IngestionDestinationDestinationConfigurationAuditLogDestinationS3BucketArgsDict']]]
     """
-    Contains information about an Amazon S3 bucket.
+    Amazon S3 bucket destination. See `destination_configuration.audit_log.destination.s3_bucket` Block below.
     """
 
 @pulumi.input_type
 class IngestionDestinationDestinationConfigurationAuditLogDestinationArgs:
     def __init__(__self__, *,
-                 firehose_stream: Optional[pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationFirehoseStreamArgs']] = None,
-                 s3_bucket: Optional[pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationS3BucketArgs']] = None):
+                 firehose_stream: pulumi.Input[Optional['IngestionDestinationDestinationConfigurationAuditLogDestinationFirehoseStreamArgs']] = None,
+                 s3_bucket: pulumi.Input[Optional['IngestionDestinationDestinationConfigurationAuditLogDestinationS3BucketArgs']] = None):
         """
-        :param pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationFirehoseStreamArgs'] firehose_stream: Contains information about an Amazon Data Firehose delivery stream.
-        :param pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationS3BucketArgs'] s3_bucket: Contains information about an Amazon S3 bucket.
+        :param pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationFirehoseStreamArgs'] firehose_stream: Amazon Data Firehose delivery stream destination. See `destination_configuration.audit_log.destination.firehose_stream` Block below.
+        :param pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationS3BucketArgs'] s3_bucket: Amazon S3 bucket destination. See `destination_configuration.audit_log.destination.s3_bucket` Block below.
         """
         if firehose_stream is not None:
             pulumi.set(__self__, "firehose_stream", firehose_stream)
@@ -478,41 +494,50 @@ class IngestionDestinationDestinationConfigurationAuditLogDestinationArgs:
 
     @_builtins.property
     @pulumi.getter(name="firehoseStream")
-    def firehose_stream(self) -> Optional[pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationFirehoseStreamArgs']]:
+    def firehose_stream(self) -> pulumi.Input[Optional['IngestionDestinationDestinationConfigurationAuditLogDestinationFirehoseStreamArgs']]:
         """
-        Contains information about an Amazon Data Firehose delivery stream.
+        Amazon Data Firehose delivery stream destination. See `destination_configuration.audit_log.destination.firehose_stream` Block below.
         """
         return pulumi.get(self, "firehose_stream")
 
     @firehose_stream.setter
-    def firehose_stream(self, value: Optional[pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationFirehoseStreamArgs']]):
+    def firehose_stream(self, value: pulumi.Input[Optional['IngestionDestinationDestinationConfigurationAuditLogDestinationFirehoseStreamArgs']]):
         pulumi.set(self, "firehose_stream", value)
 
     @_builtins.property
     @pulumi.getter(name="s3Bucket")
-    def s3_bucket(self) -> Optional[pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationS3BucketArgs']]:
+    def s3_bucket(self) -> pulumi.Input[Optional['IngestionDestinationDestinationConfigurationAuditLogDestinationS3BucketArgs']]:
         """
-        Contains information about an Amazon S3 bucket.
+        Amazon S3 bucket destination. See `destination_configuration.audit_log.destination.s3_bucket` Block below.
         """
         return pulumi.get(self, "s3_bucket")
 
     @s3_bucket.setter
-    def s3_bucket(self, value: Optional[pulumi.Input['IngestionDestinationDestinationConfigurationAuditLogDestinationS3BucketArgs']]):
+    def s3_bucket(self, value: pulumi.Input[Optional['IngestionDestinationDestinationConfigurationAuditLogDestinationS3BucketArgs']]):
         pulumi.set(self, "s3_bucket", value)
 
 
 class IngestionDestinationDestinationConfigurationAuditLogDestinationFirehoseStreamArgsDict(TypedDict):
     stream_name: pulumi.Input[_builtins.str]
+    """
+    Name of the Amazon Data Firehose delivery stream.
+    """
 
 @pulumi.input_type
 class IngestionDestinationDestinationConfigurationAuditLogDestinationFirehoseStreamArgs:
     def __init__(__self__, *,
                  stream_name: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] stream_name: Name of the Amazon Data Firehose delivery stream.
+        """
         pulumi.set(__self__, "stream_name", stream_name)
 
     @_builtins.property
     @pulumi.getter(name="streamName")
     def stream_name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Name of the Amazon Data Firehose delivery stream.
+        """
         return pulumi.get(self, "stream_name")
 
     @stream_name.setter
@@ -522,18 +547,22 @@ class IngestionDestinationDestinationConfigurationAuditLogDestinationFirehoseStr
 
 class IngestionDestinationDestinationConfigurationAuditLogDestinationS3BucketArgsDict(TypedDict):
     bucket_name: pulumi.Input[_builtins.str]
-    prefix: NotRequired[pulumi.Input[_builtins.str]]
     """
-    The object key to use.
+    Name of the Amazon S3 bucket.
+    """
+    prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Object key to use.
     """
 
 @pulumi.input_type
 class IngestionDestinationDestinationConfigurationAuditLogDestinationS3BucketArgs:
     def __init__(__self__, *,
                  bucket_name: pulumi.Input[_builtins.str],
-                 prefix: Optional[pulumi.Input[_builtins.str]] = None):
+                 prefix: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] prefix: The object key to use.
+        :param pulumi.Input[_builtins.str] bucket_name: Name of the Amazon S3 bucket.
+        :param pulumi.Input[_builtins.str] prefix: Object key to use.
         """
         pulumi.set(__self__, "bucket_name", bucket_name)
         if prefix is not None:
@@ -542,6 +571,9 @@ class IngestionDestinationDestinationConfigurationAuditLogDestinationS3BucketArg
     @_builtins.property
     @pulumi.getter(name="bucketName")
     def bucket_name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Name of the Amazon S3 bucket.
+        """
         return pulumi.get(self, "bucket_name")
 
     @bucket_name.setter
@@ -550,21 +582,21 @@ class IngestionDestinationDestinationConfigurationAuditLogDestinationS3BucketArg
 
     @_builtins.property
     @pulumi.getter
-    def prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The object key to use.
+        Object key to use.
         """
         return pulumi.get(self, "prefix")
 
     @prefix.setter
-    def prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "prefix", value)
 
 
 class IngestionDestinationProcessingConfigurationArgsDict(TypedDict):
     audit_log: pulumi.Input['IngestionDestinationProcessingConfigurationAuditLogArgsDict']
     """
-    Contains information about an audit log processing configuration.
+    Audit log processing configuration. See `processing_configuration.audit_log` Block below.
     """
 
 @pulumi.input_type
@@ -572,7 +604,7 @@ class IngestionDestinationProcessingConfigurationArgs:
     def __init__(__self__, *,
                  audit_log: pulumi.Input['IngestionDestinationProcessingConfigurationAuditLogArgs']):
         """
-        :param pulumi.Input['IngestionDestinationProcessingConfigurationAuditLogArgs'] audit_log: Contains information about an audit log processing configuration.
+        :param pulumi.Input['IngestionDestinationProcessingConfigurationAuditLogArgs'] audit_log: Audit log processing configuration. See `processing_configuration.audit_log` Block below.
         """
         pulumi.set(__self__, "audit_log", audit_log)
 
@@ -580,7 +612,7 @@ class IngestionDestinationProcessingConfigurationArgs:
     @pulumi.getter(name="auditLog")
     def audit_log(self) -> pulumi.Input['IngestionDestinationProcessingConfigurationAuditLogArgs']:
         """
-        Contains information about an audit log processing configuration.
+        Audit log processing configuration. See `processing_configuration.audit_log` Block below.
         """
         return pulumi.get(self, "audit_log")
 
@@ -592,11 +624,11 @@ class IngestionDestinationProcessingConfigurationArgs:
 class IngestionDestinationProcessingConfigurationAuditLogArgsDict(TypedDict):
     format: pulumi.Input[_builtins.str]
     """
-    The format in which the audit logs need to be formatted. Valid values: `json`, `parquet`.
+    Format in which the audit logs need to be formatted. Valid values: `json`, `parquet`.
     """
     schema: pulumi.Input[_builtins.str]
     """
-    The event schema in which the audit logs need to be formatted. Valid values: `ocsf`, `raw`.
+    Event schema in which the audit logs need to be formatted. Valid values: `ocsf`, `raw`.
     """
 
 @pulumi.input_type
@@ -605,8 +637,8 @@ class IngestionDestinationProcessingConfigurationAuditLogArgs:
                  format: pulumi.Input[_builtins.str],
                  schema: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] format: The format in which the audit logs need to be formatted. Valid values: `json`, `parquet`.
-        :param pulumi.Input[_builtins.str] schema: The event schema in which the audit logs need to be formatted. Valid values: `ocsf`, `raw`.
+        :param pulumi.Input[_builtins.str] format: Format in which the audit logs need to be formatted. Valid values: `json`, `parquet`.
+        :param pulumi.Input[_builtins.str] schema: Event schema in which the audit logs need to be formatted. Valid values: `ocsf`, `raw`.
         """
         pulumi.set(__self__, "format", format)
         pulumi.set(__self__, "schema", schema)
@@ -615,7 +647,7 @@ class IngestionDestinationProcessingConfigurationAuditLogArgs:
     @pulumi.getter
     def format(self) -> pulumi.Input[_builtins.str]:
         """
-        The format in which the audit logs need to be formatted. Valid values: `json`, `parquet`.
+        Format in which the audit logs need to be formatted. Valid values: `json`, `parquet`.
         """
         return pulumi.get(self, "format")
 
@@ -627,7 +659,7 @@ class IngestionDestinationProcessingConfigurationAuditLogArgs:
     @pulumi.getter
     def schema(self) -> pulumi.Input[_builtins.str]:
         """
-        The event schema in which the audit logs need to be formatted. Valid values: `ocsf`, `raw`.
+        Event schema in which the audit logs need to be formatted. Valid values: `ocsf`, `raw`.
         """
         return pulumi.get(self, "schema")
 
@@ -637,15 +669,15 @@ class IngestionDestinationProcessingConfigurationAuditLogArgs:
 
 
 class IngestionDestinationTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
-    update: NotRequired[pulumi.Input[_builtins.str]]
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -653,9 +685,9 @@ class IngestionDestinationTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class IngestionDestinationTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None,
-                 update: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -670,38 +702,38 @@ class IngestionDestinationTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def update(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "update")
 
     @update.setter
-    def update(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update", value)
 
 

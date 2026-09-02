@@ -5,13 +5,19 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Optional
 from typing import Literal, TypeAlias
 
 
 class CreateWebhookEndpointEvents(str, Enum):
     """Known values for CreateWebhookEndpointEvents."""
 
+    AGENT_BLUEPRINT_CREATED = "agent.blueprint.created"
+    AGENT_BLUEPRINT_DELETED = "agent.blueprint.deleted"
+    AGENT_BLUEPRINT_UPDATED = "agent.blueprint.updated"
+    AGENT_INSTANCE_CREATED = "agent.instance.created"
+    AGENT_INSTANCE_DELETED = "agent.instance.deleted"
+    AGENT_INSTANCE_SESSION_CREATED = "agent.instance.session.created"
+    AGENT_INSTANCE_SESSION_REVOKED = "agent.instance.session.revoked"
     AGENT_REGISTRATION_CREATED = "agent.registration.created"
     AGENT_REGISTRATION_CLAIM_ATTEMPT_CREATED = (
         "agent.registration.claim.attempt.created"
@@ -19,6 +25,7 @@ class CreateWebhookEndpointEvents(str, Enum):
     AGENT_REGISTRATION_CLAIM_COMPLETED = "agent.registration.claim.completed"
     AGENT_REGISTRATION_CREDENTIAL_ISSUED = "agent.registration.credential.issued"
     AGENT_REGISTRATION_DELETED = "agent.registration.deleted"
+    AGENT_REGISTRATION_REFRESHED = "agent.registration.refreshed"
     AGENT_REGISTRATION_EXPIRED = "agent.registration.expired"
     AGENT_REGISTRATION_ORGANIZATION_SWITCHED = (
         "agent.registration.organization.switched"
@@ -120,7 +127,7 @@ class CreateWebhookEndpointEvents(str, Enum):
     WAITLIST_USER_DENIED = "waitlist_user.denied"
 
     @classmethod
-    def _missing_(cls, value: object) -> Optional["CreateWebhookEndpointEvents"]:
+    def _missing_(cls, value: object) -> CreateWebhookEndpointEvents | None:
         if not isinstance(value, str):
             return None
         unknown = str.__new__(cls, value)
@@ -130,11 +137,19 @@ class CreateWebhookEndpointEvents(str, Enum):
 
 
 CreateWebhookEndpointEventsLiteral: TypeAlias = Literal[
+    "agent.blueprint.created",
+    "agent.blueprint.deleted",
+    "agent.blueprint.updated",
+    "agent.instance.created",
+    "agent.instance.deleted",
+    "agent.instance.session.created",
+    "agent.instance.session.revoked",
     "agent.registration.created",
     "agent.registration.claim.attempt.created",
     "agent.registration.claim.completed",
     "agent.registration.credential.issued",
     "agent.registration.deleted",
+    "agent.registration.refreshed",
     "agent.registration.expired",
     "agent.registration.organization.switched",
     "agent.registration.revoked",

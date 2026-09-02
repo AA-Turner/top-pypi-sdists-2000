@@ -100,7 +100,7 @@ class GetClusterResult:
     @pulumi.getter(name="registeredContainerInstancesCount")
     def registered_container_instances_count(self) -> _builtins.int:
         """
-        The number of registered container instances for the ECS Cluster
+        Number of registered container instances for the ECS Cluster
         """
         return pulumi.get(self, "registered_container_instances_count")
 
@@ -116,7 +116,7 @@ class GetClusterResult:
     @pulumi.getter(name="serviceConnectDefaults")
     def service_connect_defaults(self) -> Sequence['outputs.GetClusterServiceConnectDefaultResult']:
         """
-        The default Service Connect namespace
+        Default Service Connect namespace
         """
         return pulumi.get(self, "service_connect_defaults")
 
@@ -205,9 +205,9 @@ def get_cluster(cluster_name: Optional[_builtins.str] = None,
         settings=pulumi.get(__ret__, 'settings'),
         status=pulumi.get(__ret__, 'status'),
         tags=pulumi.get(__ret__, 'tags'))
-def get_cluster_output(cluster_name: Optional[pulumi.Input[_builtins.str]] = None,
-                       region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                       tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_cluster_output(cluster_name: pulumi.Input[Optional[_builtins.str]] = None,
+                       region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                       tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                        opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetClusterResult]:
     """
     The ECS Cluster data source allows access to details of a specific

@@ -75,7 +75,7 @@ class GetDistributionTenantResult:
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        ARN (Amazon Resource Name) for the distribution tenant.
+        ARN for the distribution tenant.
         """
         return pulumi.get(self, "arn")
 
@@ -206,7 +206,7 @@ def get_distribution_tenant(arn: Optional[_builtins.str] = None,
     ```
 
 
-    :param _builtins.str arn: ARN (Amazon Resource Name) for the distribution tenant.
+    :param _builtins.str arn: ARN for the distribution tenant.
     :param _builtins.str domain: An associated domain of the distribution tenant. Exactly one of `id` or `domain` must be specified.
     :param _builtins.str id: Identifier for the distribution tenant. For example: `EDFDVBD632BHDS5`. Exactly one of `id` or `domain` must be specified.
     """
@@ -233,10 +233,10 @@ def get_distribution_tenant(arn: Optional[_builtins.str] = None,
         parameters=pulumi.get(__ret__, 'parameters'),
         status=pulumi.get(__ret__, 'status'),
         tags=pulumi.get(__ret__, 'tags'))
-def get_distribution_tenant_output(arn: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                   domain: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                   id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                   name: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_distribution_tenant_output(arn: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                   domain: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                   id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                   name: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                    opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetDistributionTenantResult]:
     """
     Use this data source to retrieve information about a CloudFront distribution tenant.
@@ -251,7 +251,7 @@ def get_distribution_tenant_output(arn: Optional[pulumi.Input[Optional[_builtins
     ```
 
 
-    :param _builtins.str arn: ARN (Amazon Resource Name) for the distribution tenant.
+    :param _builtins.str arn: ARN for the distribution tenant.
     :param _builtins.str domain: An associated domain of the distribution tenant. Exactly one of `id` or `domain` must be specified.
     :param _builtins.str id: Identifier for the distribution tenant. For example: `EDFDVBD632BHDS5`. Exactly one of `id` or `domain` must be specified.
     """

@@ -70,6 +70,7 @@ class GetIpRangesResult:
 
     @_builtins.property
     @pulumi.getter
+    @_utilities.deprecated("""This attribute will be removed in a future version of the provider.""")
     def id(self) -> _builtins.str:
         return pulumi.get(self, "id")
 
@@ -142,7 +143,6 @@ def get_ip_ranges(id: Optional[_builtins.str] = None,
         ],
         services=["ec2"])
     from_europe = aws.ec2.SecurityGroup("from_europe",
-        name="from_europe",
         ingress=[{
             "from_port": 443,
             "to_port": 443,
@@ -150,9 +150,10 @@ def get_ip_ranges(id: Optional[_builtins.str] = None,
             "cidr_blocks": european_ec2.cidr_blocks,
             "ipv6_cidr_blocks": european_ec2.ipv6_cidr_blocks,
         }],
+        name="from_europe",
         tags={
             "CreateDate": european_ec2.create_date,
-            "SyncToken": european_ec2.sync_token,
+            "SyncToken": output(european_ec2.sync_token).apply(lambda x: str(x)),
         })
     ```
 
@@ -164,7 +165,7 @@ def get_ip_ranges(id: Optional[_builtins.str] = None,
            (for amazon.com), `amazon_connect`, `api_gateway`, `cloud9`, `cloudfront`,
            `codebuild`, `dynamodb`, `ec2`, `ec2_instance_connect`, `globalaccelerator`,
            `route53`, `route53_healthchecks`, `s3` and `workspaces_gateways`. See the
-           [`service` attribute][2] documentation for other possible values.
+           [`service` attribute](https://docs.aws.amazon.com/general/latest/gr/aws-ip-ranges.html#aws-ip-syntax) documentation for other possible values.
            
            > **NOTE:** If the specified combination of regions and services does not yield any
            CIDR blocks, this call will fail.
@@ -187,10 +188,10 @@ def get_ip_ranges(id: Optional[_builtins.str] = None,
         services=pulumi.get(__ret__, 'services'),
         sync_token=pulumi.get(__ret__, 'sync_token'),
         url=pulumi.get(__ret__, 'url'))
-def get_ip_ranges_output(id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                         regions: Optional[pulumi.Input[Optional[Sequence[_builtins.str]]]] = None,
-                         services: Optional[pulumi.Input[Sequence[_builtins.str]]] = None,
-                         url: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_ip_ranges_output(id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                         regions: pulumi.Input[Optional[Optional[Sequence[_builtins.str]]]] = None,
+                         services: pulumi.Input[Optional[Sequence[_builtins.str]]] = None,
+                         url: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                          opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetIpRangesResult]:
     """
     Use this data source to get the IP ranges of various AWS products and services. For more information about the contents of this data source and required JSON syntax if referencing a custom URL, see the [AWS IP Address Ranges documentation](https://docs.aws.amazon.com/general/latest/gr/aws-ip-ranges.html).
@@ -207,7 +208,6 @@ def get_ip_ranges_output(id: Optional[pulumi.Input[Optional[_builtins.str]]] = N
         ],
         services=["ec2"])
     from_europe = aws.ec2.SecurityGroup("from_europe",
-        name="from_europe",
         ingress=[{
             "from_port": 443,
             "to_port": 443,
@@ -215,9 +215,10 @@ def get_ip_ranges_output(id: Optional[pulumi.Input[Optional[_builtins.str]]] = N
             "cidr_blocks": european_ec2.cidr_blocks,
             "ipv6_cidr_blocks": european_ec2.ipv6_cidr_blocks,
         }],
+        name="from_europe",
         tags={
             "CreateDate": european_ec2.create_date,
-            "SyncToken": european_ec2.sync_token,
+            "SyncToken": output(european_ec2.sync_token).apply(lambda x: str(x)),
         })
     ```
 
@@ -229,7 +230,7 @@ def get_ip_ranges_output(id: Optional[pulumi.Input[Optional[_builtins.str]]] = N
            (for amazon.com), `amazon_connect`, `api_gateway`, `cloud9`, `cloudfront`,
            `codebuild`, `dynamodb`, `ec2`, `ec2_instance_connect`, `globalaccelerator`,
            `route53`, `route53_healthchecks`, `s3` and `workspaces_gateways`. See the
-           [`service` attribute][2] documentation for other possible values.
+           [`service` attribute](https://docs.aws.amazon.com/general/latest/gr/aws-ip-ranges.html#aws-ip-syntax) documentation for other possible values.
            
            > **NOTE:** If the specified combination of regions and services does not yield any
            CIDR blocks, this call will fail.

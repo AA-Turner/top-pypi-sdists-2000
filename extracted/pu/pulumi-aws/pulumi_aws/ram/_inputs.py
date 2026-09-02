@@ -17,12 +17,14 @@ from .. import _utilities
 __all__ = [
     'PermissionTimeoutsArgs',
     'PermissionTimeoutsArgsDict',
+    'ResourceShareResourceShareConfigurationArgs',
+    'ResourceShareResourceShareConfigurationArgsDict',
     'GetResourceShareFilterArgs',
     'GetResourceShareFilterArgsDict',
 ]
 
 class PermissionTimeoutsArgsDict(TypedDict):
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
@@ -30,7 +32,7 @@ class PermissionTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class PermissionTimeoutsArgs:
     def __init__(__self__, *,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None):
+                 delete: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
@@ -39,15 +41,44 @@ class PermissionTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
+
+
+class ResourceShareResourceShareConfigurationArgsDict(TypedDict):
+    retain_sharing_on_account_leave_organization: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
+    """
+    Whether consumer account retains access to resource share after leaving AWS organization.
+    """
+
+@pulumi.input_type
+class ResourceShareResourceShareConfigurationArgs:
+    def __init__(__self__, *,
+                 retain_sharing_on_account_leave_organization: pulumi.Input[Optional[_builtins.bool]] = None):
+        """
+        :param pulumi.Input[_builtins.bool] retain_sharing_on_account_leave_organization: Whether consumer account retains access to resource share after leaving AWS organization.
+        """
+        if retain_sharing_on_account_leave_organization is not None:
+            pulumi.set(__self__, "retain_sharing_on_account_leave_organization", retain_sharing_on_account_leave_organization)
+
+    @_builtins.property
+    @pulumi.getter(name="retainSharingOnAccountLeaveOrganization")
+    def retain_sharing_on_account_leave_organization(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        Whether consumer account retains access to resource share after leaving AWS organization.
+        """
+        return pulumi.get(self, "retain_sharing_on_account_leave_organization")
+
+    @retain_sharing_on_account_leave_organization.setter
+    def retain_sharing_on_account_leave_organization(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "retain_sharing_on_account_leave_organization", value)
 
 
 class GetResourceShareFilterArgsDict(TypedDict):

@@ -22,6 +22,7 @@ __all__ = [
     'ApplicationTimeouts',
     'AuthorizeVpcEndpointAccessAuthorizedPrincipal',
     'DomainAdvancedSecurityOptions',
+    'DomainAdvancedSecurityOptionsJwtOptions',
     'DomainAdvancedSecurityOptionsMasterUserOptions',
     'DomainAimlOptions',
     'DomainAimlOptionsNaturalLanguageQueryGenerationOptions',
@@ -36,6 +37,7 @@ __all__ = [
     'DomainClusterConfigNodeOptionNodeConfig',
     'DomainClusterConfigZoneAwarenessConfig',
     'DomainCognitoOptions',
+    'DomainDeploymentStrategyOptions',
     'DomainDomainEndpointOptions',
     'DomainEbsOptions',
     'DomainEncryptAtRest',
@@ -55,11 +57,17 @@ __all__ = [
     'OutboundConnectionLocalDomainInfo',
     'OutboundConnectionRemoteDomainInfo',
     'PackagePackageSource',
+    'ServerlessCollectionEncryptionConfig',
+    'ServerlessCollectionGroupCapacityLimit',
     'ServerlessCollectionTimeouts',
+    'ServerlessCollectionVectorOption',
+    'ServerlessSecurityConfigIamFederationOptions',
+    'ServerlessSecurityConfigIamIdentityCenterOptions',
     'ServerlessSecurityConfigSamlOptions',
     'ServerlessVpcEndpointTimeouts',
     'VpcEndpointVpcOptions',
     'GetDomainAdvancedSecurityOptionResult',
+    'GetDomainAdvancedSecurityOptionJwtOptionResult',
     'GetDomainAutoTuneOptionResult',
     'GetDomainAutoTuneOptionMaintenanceScheduleResult',
     'GetDomainAutoTuneOptionMaintenanceScheduleDurationResult',
@@ -69,6 +77,7 @@ __all__ = [
     'GetDomainClusterConfigNodeOptionNodeConfigResult',
     'GetDomainClusterConfigZoneAwarenessConfigResult',
     'GetDomainCognitoOptionResult',
+    'GetDomainDeploymentStrategyOptionResult',
     'GetDomainEbsOptionResult',
     'GetDomainEncryptionAtRestResult',
     'GetDomainIdentityCenterOptionResult',
@@ -80,6 +89,11 @@ __all__ = [
     'GetDomainSnapshotOptionResult',
     'GetDomainSoftwareUpdateOptionResult',
     'GetDomainVpcOptionResult',
+    'GetServerlessCollectionGroupCapacityLimitResult',
+    'GetServerlessCollectionGroupsCollectionGroupSummaryResult',
+    'GetServerlessCollectionGroupsCollectionGroupSummaryCapacityLimitResult',
+    'GetServerlessSecurityConfigIamFederationOptionResult',
+    'GetServerlessSecurityConfigIamIdentityCenterOptionResult',
     'GetServerlessSecurityConfigSamlOptionResult',
 ]
 
@@ -139,7 +153,7 @@ class ApplicationDataSource(dict):
                  data_source_arn: Optional[_builtins.str] = None,
                  data_source_description: Optional[_builtins.str] = None):
         """
-        :param _builtins.str data_source_arn: The Amazon Resource Name (ARN) of the OpenSearch domain or collection. Must be between 20 and 2048 characters.
+        :param _builtins.str data_source_arn: ARN of the OpenSearch domain or collection. Must be between 20 and 2048 characters.
         :param _builtins.str data_source_description: A detailed description of the data source. Must be at most 1000 characters and contain only alphanumeric characters, underscores, spaces, and the following special characters: `@#%*+=:?./!-`.
         """
         if data_source_arn is not None:
@@ -151,7 +165,7 @@ class ApplicationDataSource(dict):
     @pulumi.getter(name="dataSourceArn")
     def data_source_arn(self) -> Optional[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the OpenSearch domain or collection. Must be between 20 and 2048 characters.
+        ARN of the OpenSearch domain or collection. Must be between 20 and 2048 characters.
         """
         return pulumi.get(self, "data_source_arn")
 
@@ -194,7 +208,7 @@ class ApplicationIamIdentityCenterOptions(dict):
                  iam_role_for_identity_center_application_arn: Optional[_builtins.str] = None):
         """
         :param _builtins.bool enabled: Specifies whether IAM Identity Center is enabled or disabled.
-        :param _builtins.str iam_identity_center_instance_arn: The Amazon Resource Name (ARN) of the IAM Identity Center instance. Must be between 20 and 2048 characters.
+        :param _builtins.str iam_identity_center_instance_arn: ARN of the IAM Identity Center instance. Must be between 20 and 2048 characters.
         :param _builtins.str iam_role_for_identity_center_application_arn: The ARN of the IAM role associated with the IAM Identity Center application. Must be between 20 and 2048 characters and match the pattern for IAM role ARNs.
         """
         if enabled is not None:
@@ -223,7 +237,7 @@ class ApplicationIamIdentityCenterOptions(dict):
     @pulumi.getter(name="iamIdentityCenterInstanceArn")
     def iam_identity_center_instance_arn(self) -> Optional[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the IAM Identity Center instance. Must be between 20 and 2048 characters.
+        ARN of the IAM Identity Center instance. Must be between 20 and 2048 characters.
         """
         return pulumi.get(self, "iam_identity_center_instance_arn")
 
@@ -334,6 +348,8 @@ class DomainAdvancedSecurityOptions(dict):
             suggest = "anonymous_auth_enabled"
         elif key == "internalUserDatabaseEnabled":
             suggest = "internal_user_database_enabled"
+        elif key == "jwtOptions":
+            suggest = "jwt_options"
         elif key == "masterUserOptions":
             suggest = "master_user_options"
 
@@ -352,11 +368,13 @@ class DomainAdvancedSecurityOptions(dict):
                  enabled: _builtins.bool,
                  anonymous_auth_enabled: Optional[_builtins.bool] = None,
                  internal_user_database_enabled: Optional[_builtins.bool] = None,
+                 jwt_options: Optional['outputs.DomainAdvancedSecurityOptionsJwtOptions'] = None,
                  master_user_options: Optional['outputs.DomainAdvancedSecurityOptionsMasterUserOptions'] = None):
         """
         :param _builtins.bool enabled: Whether advanced security is enabled.
         :param _builtins.bool anonymous_auth_enabled: Whether Anonymous auth is enabled. Enables fine-grained access control on an existing domain. Ignored unless `advanced_security_options` are enabled. _Can only be enabled on an existing domain._
         :param _builtins.bool internal_user_database_enabled: Whether the internal user database is enabled. Default is `false`.
+        :param 'DomainAdvancedSecurityOptionsJwtOptionsArgs' jwt_options: Configuration block for JWT authentication. Requires OpenSearch 2.11 or later. Detailed below.
         :param 'DomainAdvancedSecurityOptionsMasterUserOptionsArgs' master_user_options: Configuration block for the main user. Detailed below.
         """
         pulumi.set(__self__, "enabled", enabled)
@@ -364,6 +382,8 @@ class DomainAdvancedSecurityOptions(dict):
             pulumi.set(__self__, "anonymous_auth_enabled", anonymous_auth_enabled)
         if internal_user_database_enabled is not None:
             pulumi.set(__self__, "internal_user_database_enabled", internal_user_database_enabled)
+        if jwt_options is not None:
+            pulumi.set(__self__, "jwt_options", jwt_options)
         if master_user_options is not None:
             pulumi.set(__self__, "master_user_options", master_user_options)
 
@@ -392,12 +412,110 @@ class DomainAdvancedSecurityOptions(dict):
         return pulumi.get(self, "internal_user_database_enabled")
 
     @_builtins.property
+    @pulumi.getter(name="jwtOptions")
+    def jwt_options(self) -> Optional['outputs.DomainAdvancedSecurityOptionsJwtOptions']:
+        """
+        Configuration block for JWT authentication. Requires OpenSearch 2.11 or later. Detailed below.
+        """
+        return pulumi.get(self, "jwt_options")
+
+    @_builtins.property
     @pulumi.getter(name="masterUserOptions")
     def master_user_options(self) -> Optional['outputs.DomainAdvancedSecurityOptionsMasterUserOptions']:
         """
         Configuration block for the main user. Detailed below.
         """
         return pulumi.get(self, "master_user_options")
+
+
+@pulumi.output_type
+class DomainAdvancedSecurityOptionsJwtOptions(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "jwksUrl":
+            suggest = "jwks_url"
+        elif key == "publicKey":
+            suggest = "public_key"
+        elif key == "rolesKey":
+            suggest = "roles_key"
+        elif key == "subjectKey":
+            suggest = "subject_key"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in DomainAdvancedSecurityOptionsJwtOptions. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        DomainAdvancedSecurityOptionsJwtOptions.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        DomainAdvancedSecurityOptionsJwtOptions.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 enabled: Optional[_builtins.bool] = None,
+                 jwks_url: Optional[_builtins.str] = None,
+                 public_key: Optional[_builtins.str] = None,
+                 roles_key: Optional[_builtins.str] = None,
+                 subject_key: Optional[_builtins.str] = None):
+        """
+        :param _builtins.bool enabled: Whether JWT authentication is enabled.
+        :param _builtins.str jwks_url: URL endpoint that hosts the JSON Web Key Set (JWKS) containing public keys used to verify JWT signatures. This argument can be specified only with OpenSearch versions 3.3 and later. At least one of `jwks_url` or `public_key` must be specified when `enabled` is set to `true`.
+        :param _builtins.str public_key: PEM-encoded public key used to verify JWT signatures. At least one of `jwks_url` or `public_key` must be specified when `enabled` is set to `true`. If both `jwks_url` and `public_key` are specified, `public_key` is ignored.
+        :param _builtins.str roles_key: Element of the JWT assertion to use for roles. Default is `roles`.
+        :param _builtins.str subject_key: Element of the JWT assertion to use for the user name. Default is `sub`.
+        """
+        if enabled is not None:
+            pulumi.set(__self__, "enabled", enabled)
+        if jwks_url is not None:
+            pulumi.set(__self__, "jwks_url", jwks_url)
+        if public_key is not None:
+            pulumi.set(__self__, "public_key", public_key)
+        if roles_key is not None:
+            pulumi.set(__self__, "roles_key", roles_key)
+        if subject_key is not None:
+            pulumi.set(__self__, "subject_key", subject_key)
+
+    @_builtins.property
+    @pulumi.getter
+    def enabled(self) -> Optional[_builtins.bool]:
+        """
+        Whether JWT authentication is enabled.
+        """
+        return pulumi.get(self, "enabled")
+
+    @_builtins.property
+    @pulumi.getter(name="jwksUrl")
+    def jwks_url(self) -> Optional[_builtins.str]:
+        """
+        URL endpoint that hosts the JSON Web Key Set (JWKS) containing public keys used to verify JWT signatures. This argument can be specified only with OpenSearch versions 3.3 and later. At least one of `jwks_url` or `public_key` must be specified when `enabled` is set to `true`.
+        """
+        return pulumi.get(self, "jwks_url")
+
+    @_builtins.property
+    @pulumi.getter(name="publicKey")
+    def public_key(self) -> Optional[_builtins.str]:
+        """
+        PEM-encoded public key used to verify JWT signatures. At least one of `jwks_url` or `public_key` must be specified when `enabled` is set to `true`. If both `jwks_url` and `public_key` are specified, `public_key` is ignored.
+        """
+        return pulumi.get(self, "public_key")
+
+    @_builtins.property
+    @pulumi.getter(name="rolesKey")
+    def roles_key(self) -> Optional[_builtins.str]:
+        """
+        Element of the JWT assertion to use for roles. Default is `roles`.
+        """
+        return pulumi.get(self, "roles_key")
+
+    @_builtins.property
+    @pulumi.getter(name="subjectKey")
+    def subject_key(self) -> Optional[_builtins.str]:
+        """
+        Element of the JWT assertion to use for the user name. Default is `sub`.
+        """
+        return pulumi.get(self, "subject_key")
 
 
 @pulumi.output_type
@@ -1197,6 +1315,41 @@ class DomainCognitoOptions(dict):
 
 
 @pulumi.output_type
+class DomainDeploymentStrategyOptions(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "deploymentStrategy":
+            suggest = "deployment_strategy"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in DomainDeploymentStrategyOptions. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        DomainDeploymentStrategyOptions.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        DomainDeploymentStrategyOptions.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 deployment_strategy: _builtins.str):
+        """
+        :param _builtins.str deployment_strategy: Deployment strategy for the domain. Valid values: `Default` and `CapacityOptimized`.
+        """
+        pulumi.set(__self__, "deployment_strategy", deployment_strategy)
+
+    @_builtins.property
+    @pulumi.getter(name="deploymentStrategy")
+    def deployment_strategy(self) -> _builtins.str:
+        """
+        Deployment strategy for the domain. Valid values: `Default` and `CapacityOptimized`.
+        """
+        return pulumi.get(self, "deployment_strategy")
+
+
+@pulumi.output_type
 class DomainDomainEndpointOptions(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -1452,6 +1605,10 @@ class DomainIdentityCenterOptions(dict):
                  identity_center_instance_arn: Optional[_builtins.str] = None,
                  roles_key: Optional[_builtins.str] = None,
                  subject_key: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str roles_key: Element of the JWT assertion to use for roles. Default is `roles`.
+        :param _builtins.str subject_key: Element of the JWT assertion to use for the user name. Default is `sub`.
+        """
         if enabled_api_access is not None:
             pulumi.set(__self__, "enabled_api_access", enabled_api_access)
         if identity_center_instance_arn is not None:
@@ -1474,11 +1631,17 @@ class DomainIdentityCenterOptions(dict):
     @_builtins.property
     @pulumi.getter(name="rolesKey")
     def roles_key(self) -> Optional[_builtins.str]:
+        """
+        Element of the JWT assertion to use for roles. Default is `roles`.
+        """
         return pulumi.get(self, "roles_key")
 
     @_builtins.property
     @pulumi.getter(name="subjectKey")
     def subject_key(self) -> Optional[_builtins.str]:
+        """
+        Element of the JWT assertion to use for the user name. Default is `sub`.
+        """
         return pulumi.get(self, "subject_key")
 
 
@@ -2235,6 +2398,128 @@ class PackagePackageSource(dict):
 
 
 @pulumi.output_type
+class ServerlessCollectionEncryptionConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "awsOwnedKey":
+            suggest = "aws_owned_key"
+        elif key == "kmsKeyArn":
+            suggest = "kms_key_arn"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ServerlessCollectionEncryptionConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ServerlessCollectionEncryptionConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ServerlessCollectionEncryptionConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 aws_owned_key: _builtins.bool,
+                 kms_key_arn: _builtins.str):
+        """
+        :param _builtins.bool aws_owned_key: Whether to use an AWS owned key for collection encryption.
+        :param _builtins.str kms_key_arn: ARN of the AWS KMS key to use for collection encryption.
+        """
+        pulumi.set(__self__, "aws_owned_key", aws_owned_key)
+        pulumi.set(__self__, "kms_key_arn", kms_key_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="awsOwnedKey")
+    def aws_owned_key(self) -> _builtins.bool:
+        """
+        Whether to use an AWS owned key for collection encryption.
+        """
+        return pulumi.get(self, "aws_owned_key")
+
+    @_builtins.property
+    @pulumi.getter(name="kmsKeyArn")
+    def kms_key_arn(self) -> _builtins.str:
+        """
+        ARN of the AWS KMS key to use for collection encryption.
+        """
+        return pulumi.get(self, "kms_key_arn")
+
+
+@pulumi.output_type
+class ServerlessCollectionGroupCapacityLimit(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "maxIndexingCapacityInOcu":
+            suggest = "max_indexing_capacity_in_ocu"
+        elif key == "maxSearchCapacityInOcu":
+            suggest = "max_search_capacity_in_ocu"
+        elif key == "minIndexingCapacityInOcu":
+            suggest = "min_indexing_capacity_in_ocu"
+        elif key == "minSearchCapacityInOcu":
+            suggest = "min_search_capacity_in_ocu"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ServerlessCollectionGroupCapacityLimit. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ServerlessCollectionGroupCapacityLimit.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ServerlessCollectionGroupCapacityLimit.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 max_indexing_capacity_in_ocu: _builtins.float,
+                 max_search_capacity_in_ocu: _builtins.float,
+                 min_indexing_capacity_in_ocu: _builtins.float,
+                 min_search_capacity_in_ocu: _builtins.float):
+        """
+        :param _builtins.float max_indexing_capacity_in_ocu: Maximum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        :param _builtins.float max_search_capacity_in_ocu: Maximum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        :param _builtins.float min_indexing_capacity_in_ocu: Minimum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        :param _builtins.float min_search_capacity_in_ocu: Minimum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        pulumi.set(__self__, "max_indexing_capacity_in_ocu", max_indexing_capacity_in_ocu)
+        pulumi.set(__self__, "max_search_capacity_in_ocu", max_search_capacity_in_ocu)
+        pulumi.set(__self__, "min_indexing_capacity_in_ocu", min_indexing_capacity_in_ocu)
+        pulumi.set(__self__, "min_search_capacity_in_ocu", min_search_capacity_in_ocu)
+
+    @_builtins.property
+    @pulumi.getter(name="maxIndexingCapacityInOcu")
+    def max_indexing_capacity_in_ocu(self) -> _builtins.float:
+        """
+        Maximum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        return pulumi.get(self, "max_indexing_capacity_in_ocu")
+
+    @_builtins.property
+    @pulumi.getter(name="maxSearchCapacityInOcu")
+    def max_search_capacity_in_ocu(self) -> _builtins.float:
+        """
+        Maximum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        return pulumi.get(self, "max_search_capacity_in_ocu")
+
+    @_builtins.property
+    @pulumi.getter(name="minIndexingCapacityInOcu")
+    def min_indexing_capacity_in_ocu(self) -> _builtins.float:
+        """
+        Minimum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        return pulumi.get(self, "min_indexing_capacity_in_ocu")
+
+    @_builtins.property
+    @pulumi.getter(name="minSearchCapacityInOcu")
+    def min_search_capacity_in_ocu(self) -> _builtins.float:
+        """
+        Minimum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        return pulumi.get(self, "min_search_capacity_in_ocu")
+
+
+@pulumi.output_type
 class ServerlessCollectionTimeouts(dict):
     def __init__(__self__, *,
                  create: Optional[_builtins.str] = None,
@@ -2266,6 +2551,154 @@ class ServerlessCollectionTimeouts(dict):
 
 
 @pulumi.output_type
+class ServerlessCollectionVectorOption(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "serverlessVectorAcceleration":
+            suggest = "serverless_vector_acceleration"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ServerlessCollectionVectorOption. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ServerlessCollectionVectorOption.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ServerlessCollectionVectorOption.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 serverless_vector_acceleration: _builtins.str):
+        """
+        :param _builtins.str serverless_vector_acceleration: Status of serverless vector acceleration for the collection. One of `ENABLED`, `DISABLED`, or `ALLOWED`.
+        """
+        pulumi.set(__self__, "serverless_vector_acceleration", serverless_vector_acceleration)
+
+    @_builtins.property
+    @pulumi.getter(name="serverlessVectorAcceleration")
+    def serverless_vector_acceleration(self) -> _builtins.str:
+        """
+        Status of serverless vector acceleration for the collection. One of `ENABLED`, `DISABLED`, or `ALLOWED`.
+        """
+        return pulumi.get(self, "serverless_vector_acceleration")
+
+
+@pulumi.output_type
+class ServerlessSecurityConfigIamFederationOptions(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "groupAttribute":
+            suggest = "group_attribute"
+        elif key == "userAttribute":
+            suggest = "user_attribute"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ServerlessSecurityConfigIamFederationOptions. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ServerlessSecurityConfigIamFederationOptions.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ServerlessSecurityConfigIamFederationOptions.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 group_attribute: Optional[_builtins.str] = None,
+                 user_attribute: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str group_attribute: Group attribute for this IAM federation integration. At least one of `group_attribute` or `user_attribute` must be specified.
+        :param _builtins.str user_attribute: User attribute for this IAM federation integration. At least one of `group_attribute` or `user_attribute` must be specified.
+        """
+        if group_attribute is not None:
+            pulumi.set(__self__, "group_attribute", group_attribute)
+        if user_attribute is not None:
+            pulumi.set(__self__, "user_attribute", user_attribute)
+
+    @_builtins.property
+    @pulumi.getter(name="groupAttribute")
+    def group_attribute(self) -> Optional[_builtins.str]:
+        """
+        Group attribute for this IAM federation integration. At least one of `group_attribute` or `user_attribute` must be specified.
+        """
+        return pulumi.get(self, "group_attribute")
+
+    @_builtins.property
+    @pulumi.getter(name="userAttribute")
+    def user_attribute(self) -> Optional[_builtins.str]:
+        """
+        User attribute for this IAM federation integration. At least one of `group_attribute` or `user_attribute` must be specified.
+        """
+        return pulumi.get(self, "user_attribute")
+
+
+@pulumi.output_type
+class ServerlessSecurityConfigIamIdentityCenterOptions(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "instanceArn":
+            suggest = "instance_arn"
+        elif key == "groupAttribute":
+            suggest = "group_attribute"
+        elif key == "userAttribute":
+            suggest = "user_attribute"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ServerlessSecurityConfigIamIdentityCenterOptions. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ServerlessSecurityConfigIamIdentityCenterOptions.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ServerlessSecurityConfigIamIdentityCenterOptions.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 instance_arn: _builtins.str,
+                 group_attribute: Optional[_builtins.str] = None,
+                 user_attribute: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str instance_arn: ARN of the IAM Identity Center instance used to integrate with OpenSearch Serverless.
+        :param _builtins.str group_attribute: Group attribute for this IAM Identity Center integration. Valid values are `GroupId` and `GroupName`. Defaults to `GroupId`.
+        :param _builtins.str user_attribute: User attribute for this IAM Identity Center integration. Valid values are `UserId`, `UserName` and `Email`. Defaults to `UserId`.
+        """
+        pulumi.set(__self__, "instance_arn", instance_arn)
+        if group_attribute is not None:
+            pulumi.set(__self__, "group_attribute", group_attribute)
+        if user_attribute is not None:
+            pulumi.set(__self__, "user_attribute", user_attribute)
+
+    @_builtins.property
+    @pulumi.getter(name="instanceArn")
+    def instance_arn(self) -> _builtins.str:
+        """
+        ARN of the IAM Identity Center instance used to integrate with OpenSearch Serverless.
+        """
+        return pulumi.get(self, "instance_arn")
+
+    @_builtins.property
+    @pulumi.getter(name="groupAttribute")
+    def group_attribute(self) -> Optional[_builtins.str]:
+        """
+        Group attribute for this IAM Identity Center integration. Valid values are `GroupId` and `GroupName`. Defaults to `GroupId`.
+        """
+        return pulumi.get(self, "group_attribute")
+
+    @_builtins.property
+    @pulumi.getter(name="userAttribute")
+    def user_attribute(self) -> Optional[_builtins.str]:
+        """
+        User attribute for this IAM Identity Center integration. Valid values are `UserId`, `UserName` and `Email`. Defaults to `UserId`.
+        """
+        return pulumi.get(self, "user_attribute")
+
+
+@pulumi.output_type
 class ServerlessSecurityConfigSamlOptions(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -2294,7 +2727,7 @@ class ServerlessSecurityConfigSamlOptions(dict):
                  session_timeout: Optional[_builtins.int] = None,
                  user_attribute: Optional[_builtins.str] = None):
         """
-        :param _builtins.str metadata: The XML IdP metadata file generated from your identity provider.
+        :param _builtins.str metadata: XML IdP metadata file generated from your identity provider.
         :param _builtins.str group_attribute: Group attribute for this SAML integration.
         :param _builtins.int session_timeout: Session timeout, in minutes. Minimum is 5 minutes and maximum is 720 minutes (12 hours). Default is 60 minutes.
         :param _builtins.str user_attribute: User attribute for this SAML integration.
@@ -2311,7 +2744,7 @@ class ServerlessSecurityConfigSamlOptions(dict):
     @pulumi.getter
     def metadata(self) -> _builtins.str:
         """
-        The XML IdP metadata file generated from your identity provider.
+        XML IdP metadata file generated from your identity provider.
         """
         return pulumi.get(self, "metadata")
 
@@ -2457,18 +2890,25 @@ class GetDomainAdvancedSecurityOptionResult(dict):
     def __init__(__self__, *,
                  anonymous_auth_enabled: _builtins.bool,
                  enabled: _builtins.bool,
-                 internal_user_database_enabled: _builtins.bool):
+                 internal_user_database_enabled: _builtins.bool,
+                 jwt_options: Sequence['outputs.GetDomainAdvancedSecurityOptionJwtOptionResult']):
         """
+        :param _builtins.bool anonymous_auth_enabled: Whether Anonymous auth is enabled.
         :param _builtins.bool enabled: Enabled disabled toggle for off-peak update window
         :param _builtins.bool internal_user_database_enabled: Whether the internal user database is enabled.
+        :param Sequence['GetDomainAdvancedSecurityOptionJwtOptionArgs'] jwt_options: Block for JWT authentication.
         """
         pulumi.set(__self__, "anonymous_auth_enabled", anonymous_auth_enabled)
         pulumi.set(__self__, "enabled", enabled)
         pulumi.set(__self__, "internal_user_database_enabled", internal_user_database_enabled)
+        pulumi.set(__self__, "jwt_options", jwt_options)
 
     @_builtins.property
     @pulumi.getter(name="anonymousAuthEnabled")
     def anonymous_auth_enabled(self) -> _builtins.bool:
+        """
+        Whether Anonymous auth is enabled.
+        """
         return pulumi.get(self, "anonymous_auth_enabled")
 
     @_builtins.property
@@ -2486,6 +2926,76 @@ class GetDomainAdvancedSecurityOptionResult(dict):
         Whether the internal user database is enabled.
         """
         return pulumi.get(self, "internal_user_database_enabled")
+
+    @_builtins.property
+    @pulumi.getter(name="jwtOptions")
+    def jwt_options(self) -> Sequence['outputs.GetDomainAdvancedSecurityOptionJwtOptionResult']:
+        """
+        Block for JWT authentication.
+        """
+        return pulumi.get(self, "jwt_options")
+
+
+@pulumi.output_type
+class GetDomainAdvancedSecurityOptionJwtOptionResult(dict):
+    def __init__(__self__, *,
+                 enabled: _builtins.bool,
+                 jwks_url: _builtins.str,
+                 public_key: _builtins.str,
+                 roles_key: _builtins.str,
+                 subject_key: _builtins.str):
+        """
+        :param _builtins.bool enabled: Enabled disabled toggle for off-peak update window
+        :param _builtins.str jwks_url: URL endpoint that hosts the JSON Web Key Set (JWKS) containing public keys used to verify JWT signatures.
+        :param _builtins.str public_key: PEM-encoded public key used to verify JWT signatures.
+        :param _builtins.str roles_key: Attribute that contains the backend role identifier (such as group name or group ID) in IAM Identity Center.
+        :param _builtins.str subject_key: Attribute that contains the subject identifier (such as username, user ID, or email) in IAM Identity Center.
+        """
+        pulumi.set(__self__, "enabled", enabled)
+        pulumi.set(__self__, "jwks_url", jwks_url)
+        pulumi.set(__self__, "public_key", public_key)
+        pulumi.set(__self__, "roles_key", roles_key)
+        pulumi.set(__self__, "subject_key", subject_key)
+
+    @_builtins.property
+    @pulumi.getter
+    def enabled(self) -> _builtins.bool:
+        """
+        Enabled disabled toggle for off-peak update window
+        """
+        return pulumi.get(self, "enabled")
+
+    @_builtins.property
+    @pulumi.getter(name="jwksUrl")
+    def jwks_url(self) -> _builtins.str:
+        """
+        URL endpoint that hosts the JSON Web Key Set (JWKS) containing public keys used to verify JWT signatures.
+        """
+        return pulumi.get(self, "jwks_url")
+
+    @_builtins.property
+    @pulumi.getter(name="publicKey")
+    def public_key(self) -> _builtins.str:
+        """
+        PEM-encoded public key used to verify JWT signatures.
+        """
+        return pulumi.get(self, "public_key")
+
+    @_builtins.property
+    @pulumi.getter(name="rolesKey")
+    def roles_key(self) -> _builtins.str:
+        """
+        Attribute that contains the backend role identifier (such as group name or group ID) in IAM Identity Center.
+        """
+        return pulumi.get(self, "roles_key")
+
+    @_builtins.property
+    @pulumi.getter(name="subjectKey")
+    def subject_key(self) -> _builtins.str:
+        """
+        Attribute that contains the subject identifier (such as username, user ID, or email) in IAM Identity Center.
+        """
+        return pulumi.get(self, "subject_key")
 
 
 @pulumi.output_type
@@ -2916,6 +3426,24 @@ class GetDomainCognitoOptionResult(dict):
 
 
 @pulumi.output_type
+class GetDomainDeploymentStrategyOptionResult(dict):
+    def __init__(__self__, *,
+                 deployment_strategy: _builtins.str):
+        """
+        :param _builtins.str deployment_strategy: Deployment strategy for the domain.
+        """
+        pulumi.set(__self__, "deployment_strategy", deployment_strategy)
+
+    @_builtins.property
+    @pulumi.getter(name="deploymentStrategy")
+    def deployment_strategy(self) -> _builtins.str:
+        """
+        Deployment strategy for the domain.
+        """
+        return pulumi.get(self, "deployment_strategy")
+
+
+@pulumi.output_type
 class GetDomainEbsOptionResult(dict):
     def __init__(__self__, *,
                  ebs_enabled: _builtins.bool,
@@ -3275,6 +3803,261 @@ class GetDomainVpcOptionResult(dict):
 
 
 @pulumi.output_type
+class GetServerlessCollectionGroupCapacityLimitResult(dict):
+    def __init__(__self__, *,
+                 max_indexing_capacity_in_ocu: _builtins.float,
+                 max_search_capacity_in_ocu: _builtins.float,
+                 min_indexing_capacity_in_ocu: _builtins.float,
+                 min_search_capacity_in_ocu: _builtins.float):
+        """
+        :param _builtins.float max_indexing_capacity_in_ocu: Maximum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        :param _builtins.float max_search_capacity_in_ocu: Maximum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        :param _builtins.float min_indexing_capacity_in_ocu: Minimum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        :param _builtins.float min_search_capacity_in_ocu: Minimum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        pulumi.set(__self__, "max_indexing_capacity_in_ocu", max_indexing_capacity_in_ocu)
+        pulumi.set(__self__, "max_search_capacity_in_ocu", max_search_capacity_in_ocu)
+        pulumi.set(__self__, "min_indexing_capacity_in_ocu", min_indexing_capacity_in_ocu)
+        pulumi.set(__self__, "min_search_capacity_in_ocu", min_search_capacity_in_ocu)
+
+    @_builtins.property
+    @pulumi.getter(name="maxIndexingCapacityInOcu")
+    def max_indexing_capacity_in_ocu(self) -> _builtins.float:
+        """
+        Maximum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        return pulumi.get(self, "max_indexing_capacity_in_ocu")
+
+    @_builtins.property
+    @pulumi.getter(name="maxSearchCapacityInOcu")
+    def max_search_capacity_in_ocu(self) -> _builtins.float:
+        """
+        Maximum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        return pulumi.get(self, "max_search_capacity_in_ocu")
+
+    @_builtins.property
+    @pulumi.getter(name="minIndexingCapacityInOcu")
+    def min_indexing_capacity_in_ocu(self) -> _builtins.float:
+        """
+        Minimum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        return pulumi.get(self, "min_indexing_capacity_in_ocu")
+
+    @_builtins.property
+    @pulumi.getter(name="minSearchCapacityInOcu")
+    def min_search_capacity_in_ocu(self) -> _builtins.float:
+        """
+        Minimum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        return pulumi.get(self, "min_search_capacity_in_ocu")
+
+
+@pulumi.output_type
+class GetServerlessCollectionGroupsCollectionGroupSummaryResult(dict):
+    def __init__(__self__, *,
+                 arn: _builtins.str,
+                 capacity_limits: Sequence['outputs.GetServerlessCollectionGroupsCollectionGroupSummaryCapacityLimitResult'],
+                 created_date: _builtins.str,
+                 id: _builtins.str,
+                 name: _builtins.str,
+                 number_of_collections: _builtins.int,
+                 standby_replicas: _builtins.str):
+        """
+        :param _builtins.str arn: ARN of the collection group.
+        :param Sequence['GetServerlessCollectionGroupsCollectionGroupSummaryCapacityLimitArgs'] capacity_limits: Capacity limits configured for the collection group. See `capacity_limits` below for details.
+        :param _builtins.str created_date: Epoch time, in milliseconds, when the collection group was created.
+        :param _builtins.str id: Unique identifier for the collection group.
+        :param _builtins.str name: Name of the collection group.
+        :param _builtins.int number_of_collections: Number of collections currently associated with the collection group.
+        :param _builtins.str standby_replicas: Indicates whether standby replicas are used for collections in the group.
+        """
+        pulumi.set(__self__, "arn", arn)
+        pulumi.set(__self__, "capacity_limits", capacity_limits)
+        pulumi.set(__self__, "created_date", created_date)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "number_of_collections", number_of_collections)
+        pulumi.set(__self__, "standby_replicas", standby_replicas)
+
+    @_builtins.property
+    @pulumi.getter
+    def arn(self) -> _builtins.str:
+        """
+        ARN of the collection group.
+        """
+        return pulumi.get(self, "arn")
+
+    @_builtins.property
+    @pulumi.getter(name="capacityLimits")
+    def capacity_limits(self) -> Sequence['outputs.GetServerlessCollectionGroupsCollectionGroupSummaryCapacityLimitResult']:
+        """
+        Capacity limits configured for the collection group. See `capacity_limits` below for details.
+        """
+        return pulumi.get(self, "capacity_limits")
+
+    @_builtins.property
+    @pulumi.getter(name="createdDate")
+    def created_date(self) -> _builtins.str:
+        """
+        Epoch time, in milliseconds, when the collection group was created.
+        """
+        return pulumi.get(self, "created_date")
+
+    @_builtins.property
+    @pulumi.getter
+    def id(self) -> _builtins.str:
+        """
+        Unique identifier for the collection group.
+        """
+        return pulumi.get(self, "id")
+
+    @_builtins.property
+    @pulumi.getter
+    def name(self) -> _builtins.str:
+        """
+        Name of the collection group.
+        """
+        return pulumi.get(self, "name")
+
+    @_builtins.property
+    @pulumi.getter(name="numberOfCollections")
+    def number_of_collections(self) -> _builtins.int:
+        """
+        Number of collections currently associated with the collection group.
+        """
+        return pulumi.get(self, "number_of_collections")
+
+    @_builtins.property
+    @pulumi.getter(name="standbyReplicas")
+    def standby_replicas(self) -> _builtins.str:
+        """
+        Indicates whether standby replicas are used for collections in the group.
+        """
+        return pulumi.get(self, "standby_replicas")
+
+
+@pulumi.output_type
+class GetServerlessCollectionGroupsCollectionGroupSummaryCapacityLimitResult(dict):
+    def __init__(__self__, *,
+                 max_indexing_capacity_in_ocu: _builtins.float,
+                 max_search_capacity_in_ocu: _builtins.float,
+                 min_indexing_capacity_in_ocu: _builtins.float,
+                 min_search_capacity_in_ocu: _builtins.float):
+        """
+        :param _builtins.float max_indexing_capacity_in_ocu: Maximum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        :param _builtins.float max_search_capacity_in_ocu: Maximum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        :param _builtins.float min_indexing_capacity_in_ocu: Minimum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        :param _builtins.float min_search_capacity_in_ocu: Minimum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        pulumi.set(__self__, "max_indexing_capacity_in_ocu", max_indexing_capacity_in_ocu)
+        pulumi.set(__self__, "max_search_capacity_in_ocu", max_search_capacity_in_ocu)
+        pulumi.set(__self__, "min_indexing_capacity_in_ocu", min_indexing_capacity_in_ocu)
+        pulumi.set(__self__, "min_search_capacity_in_ocu", min_search_capacity_in_ocu)
+
+    @_builtins.property
+    @pulumi.getter(name="maxIndexingCapacityInOcu")
+    def max_indexing_capacity_in_ocu(self) -> _builtins.float:
+        """
+        Maximum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        return pulumi.get(self, "max_indexing_capacity_in_ocu")
+
+    @_builtins.property
+    @pulumi.getter(name="maxSearchCapacityInOcu")
+    def max_search_capacity_in_ocu(self) -> _builtins.float:
+        """
+        Maximum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        return pulumi.get(self, "max_search_capacity_in_ocu")
+
+    @_builtins.property
+    @pulumi.getter(name="minIndexingCapacityInOcu")
+    def min_indexing_capacity_in_ocu(self) -> _builtins.float:
+        """
+        Minimum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        return pulumi.get(self, "min_indexing_capacity_in_ocu")
+
+    @_builtins.property
+    @pulumi.getter(name="minSearchCapacityInOcu")
+    def min_search_capacity_in_ocu(self) -> _builtins.float:
+        """
+        Minimum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        return pulumi.get(self, "min_search_capacity_in_ocu")
+
+
+@pulumi.output_type
+class GetServerlessSecurityConfigIamFederationOptionResult(dict):
+    def __init__(__self__, *,
+                 group_attribute: _builtins.str,
+                 user_attribute: _builtins.str):
+        """
+        :param _builtins.str group_attribute: Group attribute for this SAML integration.
+        :param _builtins.str user_attribute: User attribute for this SAML integration.
+        """
+        pulumi.set(__self__, "group_attribute", group_attribute)
+        pulumi.set(__self__, "user_attribute", user_attribute)
+
+    @_builtins.property
+    @pulumi.getter(name="groupAttribute")
+    def group_attribute(self) -> _builtins.str:
+        """
+        Group attribute for this SAML integration.
+        """
+        return pulumi.get(self, "group_attribute")
+
+    @_builtins.property
+    @pulumi.getter(name="userAttribute")
+    def user_attribute(self) -> _builtins.str:
+        """
+        User attribute for this SAML integration.
+        """
+        return pulumi.get(self, "user_attribute")
+
+
+@pulumi.output_type
+class GetServerlessSecurityConfigIamIdentityCenterOptionResult(dict):
+    def __init__(__self__, *,
+                 group_attribute: _builtins.str,
+                 instance_arn: _builtins.str,
+                 user_attribute: _builtins.str):
+        """
+        :param _builtins.str group_attribute: Group attribute for this SAML integration.
+        :param _builtins.str instance_arn: ARN of the IAM Identity Center instance used to integrate with OpenSearch Serverless.
+        :param _builtins.str user_attribute: User attribute for this SAML integration.
+        """
+        pulumi.set(__self__, "group_attribute", group_attribute)
+        pulumi.set(__self__, "instance_arn", instance_arn)
+        pulumi.set(__self__, "user_attribute", user_attribute)
+
+    @_builtins.property
+    @pulumi.getter(name="groupAttribute")
+    def group_attribute(self) -> _builtins.str:
+        """
+        Group attribute for this SAML integration.
+        """
+        return pulumi.get(self, "group_attribute")
+
+    @_builtins.property
+    @pulumi.getter(name="instanceArn")
+    def instance_arn(self) -> _builtins.str:
+        """
+        ARN of the IAM Identity Center instance used to integrate with OpenSearch Serverless.
+        """
+        return pulumi.get(self, "instance_arn")
+
+    @_builtins.property
+    @pulumi.getter(name="userAttribute")
+    def user_attribute(self) -> _builtins.str:
+        """
+        User attribute for this SAML integration.
+        """
+        return pulumi.get(self, "user_attribute")
+
+
+@pulumi.output_type
 class GetServerlessSecurityConfigSamlOptionResult(dict):
     def __init__(__self__, *,
                  group_attribute: _builtins.str,
@@ -3283,7 +4066,7 @@ class GetServerlessSecurityConfigSamlOptionResult(dict):
                  user_attribute: _builtins.str):
         """
         :param _builtins.str group_attribute: Group attribute for this SAML integration.
-        :param _builtins.str metadata: The XML IdP metadata file generated from your identity provider.
+        :param _builtins.str metadata: XML IdP metadata file generated from your identity provider.
         :param _builtins.int session_timeout: Session timeout, in minutes. Minimum is 5 minutes and maximum is 720 minutes (12 hours). Default is 60 minutes.
         :param _builtins.str user_attribute: User attribute for this SAML integration.
         """
@@ -3304,7 +4087,7 @@ class GetServerlessSecurityConfigSamlOptionResult(dict):
     @pulumi.getter
     def metadata(self) -> _builtins.str:
         """
-        The XML IdP metadata file generated from your identity provider.
+        XML IdP metadata file generated from your identity provider.
         """
         return pulumi.get(self, "metadata")
 

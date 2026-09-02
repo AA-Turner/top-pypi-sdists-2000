@@ -58,8 +58,8 @@ class DirectoryConfigCertificateBasedAuthProperties(dict):
                  certificate_authority_arn: Optional[_builtins.str] = None,
                  status: Optional[_builtins.str] = None):
         """
-        :param _builtins.str certificate_authority_arn: The ARN of the AWS Certificate Manager Private CA resource.
-        :param _builtins.str status: The status of the certificate-based authentication properties. Valid values - ["DISABLED", "ENABLED", "ENABLED_NO_DIRECTORY_LOGIN_FALLBACK"].
+        :param _builtins.str certificate_authority_arn: ARN of the AWS Certificate Manager Private CA resource.
+        :param _builtins.str status: Status of the certificate-based authentication properties. Valid values - ["DISABLED", "ENABLED", "ENABLED_NO_DIRECTORY_LOGIN_FALLBACK"].
         """
         if certificate_authority_arn is not None:
             pulumi.set(__self__, "certificate_authority_arn", certificate_authority_arn)
@@ -70,7 +70,7 @@ class DirectoryConfigCertificateBasedAuthProperties(dict):
     @pulumi.getter(name="certificateAuthorityArn")
     def certificate_authority_arn(self) -> Optional[_builtins.str]:
         """
-        The ARN of the AWS Certificate Manager Private CA resource.
+        ARN of the AWS Certificate Manager Private CA resource.
         """
         return pulumi.get(self, "certificate_authority_arn")
 
@@ -78,7 +78,7 @@ class DirectoryConfigCertificateBasedAuthProperties(dict):
     @pulumi.getter
     def status(self) -> Optional[_builtins.str]:
         """
-        The status of the certificate-based authentication properties. Valid values - ["DISABLED", "ENABLED", "ENABLED_NO_DIRECTORY_LOGIN_FALLBACK"].
+        Status of the certificate-based authentication properties. Valid values - ["DISABLED", "ENABLED", "ENABLED_NO_DIRECTORY_LOGIN_FALLBACK"].
         """
         return pulumi.get(self, "status")
 
@@ -493,8 +493,7 @@ class StackAccessEndpoint(dict):
                  endpoint_type: _builtins.str,
                  vpce_id: Optional[_builtins.str] = None):
         """
-        :param _builtins.str endpoint_type: Type of the interface endpoint.
-               See the [`AccessEndpoint` AWS API documentation](https://docs.aws.amazon.com/appstream2/latest/APIReference/API_AccessEndpoint.html) for valid values.
+        :param _builtins.str endpoint_type: Type of the interface endpoint. See the [`AccessEndpoint` AWS API documentation](https://docs.aws.amazon.com/appstream2/latest/APIReference/API_AccessEndpoint.html) for valid values.
         :param _builtins.str vpce_id: ID of the VPC in which the interface endpoint is used.
         """
         pulumi.set(__self__, "endpoint_type", endpoint_type)
@@ -505,8 +504,7 @@ class StackAccessEndpoint(dict):
     @pulumi.getter(name="endpointType")
     def endpoint_type(self) -> _builtins.str:
         """
-        Type of the interface endpoint.
-        See the [`AccessEndpoint` AWS API documentation](https://docs.aws.amazon.com/appstream2/latest/APIReference/API_AccessEndpoint.html) for valid values.
+        Type of the interface endpoint. See the [`AccessEndpoint` AWS API documentation](https://docs.aws.amazon.com/appstream2/latest/APIReference/API_AccessEndpoint.html) for valid values.
         """
         return pulumi.get(self, "endpoint_type")
 
@@ -543,9 +541,7 @@ class StackApplicationSettings(dict):
                  settings_group: Optional[_builtins.str] = None):
         """
         :param _builtins.bool enabled: Whether application settings should be persisted.
-        :param _builtins.str settings_group: Name of the settings group.
-               Required when `enabled` is `true`.
-               Can be up to 100 characters.
+        :param _builtins.str settings_group: Name of the settings group. Required when `enabled` is `true`. Can be up to 100 characters.
         """
         pulumi.set(__self__, "enabled", enabled)
         if settings_group is not None:
@@ -563,9 +559,7 @@ class StackApplicationSettings(dict):
     @pulumi.getter(name="settingsGroup")
     def settings_group(self) -> Optional[_builtins.str]:
         """
-        Name of the settings group.
-        Required when `enabled` is `true`.
-        Can be up to 100 characters.
+        Name of the settings group. Required when `enabled` is `true`. Can be up to 100 characters.
         """
         return pulumi.get(self, "settings_group")
 
@@ -596,8 +590,7 @@ class StackStorageConnector(dict):
                  domains: Optional[Sequence[_builtins.str]] = None,
                  resource_identifier: Optional[_builtins.str] = None):
         """
-        :param _builtins.str connector_type: Type of storage connector.
-               Valid values are `HOMEFOLDERS`, `GOOGLE_DRIVE`, or `ONE_DRIVE`.
+        :param _builtins.str connector_type: Type of storage connector. Valid values are `HOMEFOLDERS`, `GOOGLE_DRIVE`, or `ONE_DRIVE`.
         :param Sequence[_builtins.str] domains: Names of the domains for the account.
         :param _builtins.str resource_identifier: ARN of the storage connector.
         """
@@ -611,8 +604,7 @@ class StackStorageConnector(dict):
     @pulumi.getter(name="connectorType")
     def connector_type(self) -> _builtins.str:
         """
-        Type of storage connector.
-        Valid values are `HOMEFOLDERS`, `GOOGLE_DRIVE`, or `ONE_DRIVE`.
+        Type of storage connector. Valid values are `HOMEFOLDERS`, `GOOGLE_DRIVE`, or `ONE_DRIVE`.
         """
         return pulumi.get(self, "connector_type")
 
@@ -655,8 +647,7 @@ class StackStreamingExperienceSettings(dict):
     def __init__(__self__, *,
                  preferred_protocol: Optional[_builtins.str] = None):
         """
-        :param _builtins.str preferred_protocol: The preferred protocol that you want to use while streaming your application.
-               Valid values are `TCP` and `UDP`.
+        :param _builtins.str preferred_protocol: Preferred protocol that you want to use while streaming your application. Valid values are `TCP` and `UDP`.
         """
         if preferred_protocol is not None:
             pulumi.set(__self__, "preferred_protocol", preferred_protocol)
@@ -665,8 +656,7 @@ class StackStreamingExperienceSettings(dict):
     @pulumi.getter(name="preferredProtocol")
     def preferred_protocol(self) -> Optional[_builtins.str]:
         """
-        The preferred protocol that you want to use while streaming your application.
-        Valid values are `TCP` and `UDP`.
+        Preferred protocol that you want to use while streaming your application. Valid values are `TCP` and `UDP`.
         """
         return pulumi.get(self, "preferred_protocol")
 
@@ -677,10 +667,8 @@ class StackUserSetting(dict):
                  action: _builtins.str,
                  permission: _builtins.str):
         """
-        :param _builtins.str action: Action that is enabled or disabled.
-               Valid values are `AUTO_TIME_ZONE_REDIRECTION`, `CLIPBOARD_COPY_FROM_LOCAL_DEVICE`, `CLIPBOARD_COPY_TO_LOCAL_DEVICE`, `DOMAIN_PASSWORD_SIGNIN`, `DOMAIN_SMART_CARD_SIGNIN`, `FILE_UPLOAD`, `FILE_DOWNLOAD`, or `PRINTING_TO_LOCAL_DEVICE`.
-        :param _builtins.str permission: Whether the action is enabled or disabled.
-               Valid values are `ENABLED` or `DISABLED`.
+        :param _builtins.str action: Action that is enabled or disabled. Valid values are `AUTO_TIME_ZONE_REDIRECTION`, `CLIPBOARD_COPY_FROM_LOCAL_DEVICE`, `CLIPBOARD_COPY_TO_LOCAL_DEVICE`, `DOMAIN_PASSWORD_SIGNIN`, `DOMAIN_SMART_CARD_SIGNIN`, `FILE_UPLOAD`, `FILE_DOWNLOAD`, or `PRINTING_TO_LOCAL_DEVICE`.
+        :param _builtins.str permission: Whether the action is enabled or disabled. Valid values are `ENABLED` or `DISABLED`.
         """
         pulumi.set(__self__, "action", action)
         pulumi.set(__self__, "permission", permission)
@@ -689,8 +677,7 @@ class StackUserSetting(dict):
     @pulumi.getter
     def action(self) -> _builtins.str:
         """
-        Action that is enabled or disabled.
-        Valid values are `AUTO_TIME_ZONE_REDIRECTION`, `CLIPBOARD_COPY_FROM_LOCAL_DEVICE`, `CLIPBOARD_COPY_TO_LOCAL_DEVICE`, `DOMAIN_PASSWORD_SIGNIN`, `DOMAIN_SMART_CARD_SIGNIN`, `FILE_UPLOAD`, `FILE_DOWNLOAD`, or `PRINTING_TO_LOCAL_DEVICE`.
+        Action that is enabled or disabled. Valid values are `AUTO_TIME_ZONE_REDIRECTION`, `CLIPBOARD_COPY_FROM_LOCAL_DEVICE`, `CLIPBOARD_COPY_TO_LOCAL_DEVICE`, `DOMAIN_PASSWORD_SIGNIN`, `DOMAIN_SMART_CARD_SIGNIN`, `FILE_UPLOAD`, `FILE_DOWNLOAD`, or `PRINTING_TO_LOCAL_DEVICE`.
         """
         return pulumi.get(self, "action")
 
@@ -698,8 +685,7 @@ class StackUserSetting(dict):
     @pulumi.getter
     def permission(self) -> _builtins.str:
         """
-        Whether the action is enabled or disabled.
-        Valid values are `ENABLED` or `DISABLED`.
+        Whether the action is enabled or disabled. Valid values are `ENABLED` or `DISABLED`.
         """
         return pulumi.get(self, "permission")
 
@@ -723,22 +709,20 @@ class GetImageApplicationResult(dict):
                  platforms: Sequence[_builtins.str],
                  working_directory: _builtins.str):
         """
-        :param _builtins.str app_block_arn: The app block ARN of the application.
+        :param _builtins.str app_block_arn: App block ARN of the application.
         :param _builtins.str arn: ARN of the image being searched for. Cannot be used with `name_regex` or `name`.
         :param _builtins.str created_time: Time at which this image was created.
         :param _builtins.str description: Description of image.
         :param _builtins.str display_name: Image name to display.
-        :param _builtins.bool enabled: Bool based on if the application is enabled.
-        :param Sequence['GetImageApplicationIconS3LocationArgs'] icon_s3_locations: A list named icon_s3_location that contains the following:
+        :param _builtins.bool enabled: Whether the application is enabled.
+        :param Sequence['GetImageApplicationIconS3LocationArgs'] icon_s3_locations: S3 location of the application icon and contains the following:
         :param _builtins.str icon_url: URL of the application icon. This URL may be time-limited.
         :param Sequence[_builtins.str] instance_families: List of the instance families of the application.
-        :param _builtins.str launch_parameters: Arguments that are passed to the application at it's launch.
-        :param _builtins.str launch_path: Path to the application's excecutable in the instance.
+        :param _builtins.str launch_parameters: Arguments that are passed to the application at its launch.
+        :param _builtins.str launch_path: Path to the application's executable in the instance.
         :param Mapping[str, _builtins.str] metadata: String to string map that contains additional attributes used to describe the application.
-               * `Name` - Name of the application.
         :param _builtins.str name: Name of the image being searched for. Cannot be used with `name_regex` or `arn`.
-        :param Sequence[_builtins.str] platforms: Array of strings describing the platforms on which the application can run.
-               Values will be from: WINDOWS | WINDOWS_SERVER_2016 | WINDOWS_SERVER_2019 | WINDOWS_SERVER_2022 | AMAZON_LINUX2
+        :param Sequence[_builtins.str] platforms: Array of strings describing the platforms on which the application can run. Values will be from: WINDOWS | WINDOWS_SERVER_2016 | WINDOWS_SERVER_2019 | WINDOWS_SERVER_2022 | AMAZON_LINUX2
         :param _builtins.str working_directory: Working directory for the application.
         """
         pulumi.set(__self__, "app_block_arn", app_block_arn)
@@ -761,7 +745,7 @@ class GetImageApplicationResult(dict):
     @pulumi.getter(name="appBlockArn")
     def app_block_arn(self) -> _builtins.str:
         """
-        The app block ARN of the application.
+        App block ARN of the application.
         """
         return pulumi.get(self, "app_block_arn")
 
@@ -801,7 +785,7 @@ class GetImageApplicationResult(dict):
     @pulumi.getter
     def enabled(self) -> _builtins.bool:
         """
-        Bool based on if the application is enabled.
+        Whether the application is enabled.
         """
         return pulumi.get(self, "enabled")
 
@@ -809,7 +793,7 @@ class GetImageApplicationResult(dict):
     @pulumi.getter(name="iconS3Locations")
     def icon_s3_locations(self) -> Sequence['outputs.GetImageApplicationIconS3LocationResult']:
         """
-        A list named icon_s3_location that contains the following:
+        S3 location of the application icon and contains the following:
         """
         return pulumi.get(self, "icon_s3_locations")
 
@@ -833,7 +817,7 @@ class GetImageApplicationResult(dict):
     @pulumi.getter(name="launchParameters")
     def launch_parameters(self) -> _builtins.str:
         """
-        Arguments that are passed to the application at it's launch.
+        Arguments that are passed to the application at its launch.
         """
         return pulumi.get(self, "launch_parameters")
 
@@ -841,7 +825,7 @@ class GetImageApplicationResult(dict):
     @pulumi.getter(name="launchPath")
     def launch_path(self) -> _builtins.str:
         """
-        Path to the application's excecutable in the instance.
+        Path to the application's executable in the instance.
         """
         return pulumi.get(self, "launch_path")
 
@@ -850,7 +834,6 @@ class GetImageApplicationResult(dict):
     def metadata(self) -> Mapping[str, _builtins.str]:
         """
         String to string map that contains additional attributes used to describe the application.
-        * `Name` - Name of the application.
         """
         return pulumi.get(self, "metadata")
 
@@ -866,8 +849,7 @@ class GetImageApplicationResult(dict):
     @pulumi.getter
     def platforms(self) -> Sequence[_builtins.str]:
         """
-        Array of strings describing the platforms on which the application can run.
-        Values will be from: WINDOWS | WINDOWS_SERVER_2016 | WINDOWS_SERVER_2019 | WINDOWS_SERVER_2022 | AMAZON_LINUX2
+        Array of strings describing the platforms on which the application can run. Values will be from: WINDOWS | WINDOWS_SERVER_2016 | WINDOWS_SERVER_2019 | WINDOWS_SERVER_2022 | AMAZON_LINUX2
         """
         return pulumi.get(self, "platforms")
 
@@ -886,8 +868,8 @@ class GetImageApplicationIconS3LocationResult(dict):
                  s3_bucket: _builtins.str,
                  s3_key: _builtins.str):
         """
-        :param _builtins.str s3_bucket: S3 bucket of the S3 object.
-        :param _builtins.str s3_key: S3 key of the S3 object.
+        :param _builtins.str s3_bucket: Name of the S3 bucket containing the icon.
+        :param _builtins.str s3_key: S3 key of the icon.
         """
         pulumi.set(__self__, "s3_bucket", s3_bucket)
         pulumi.set(__self__, "s3_key", s3_key)
@@ -896,7 +878,7 @@ class GetImageApplicationIconS3LocationResult(dict):
     @pulumi.getter(name="s3Bucket")
     def s3_bucket(self) -> _builtins.str:
         """
-        S3 bucket of the S3 object.
+        Name of the S3 bucket containing the icon.
         """
         return pulumi.get(self, "s3_bucket")
 
@@ -904,7 +886,7 @@ class GetImageApplicationIconS3LocationResult(dict):
     @pulumi.getter(name="s3Key")
     def s3_key(self) -> _builtins.str:
         """
-        S3 key of the S3 object.
+        S3 key of the icon.
         """
         return pulumi.get(self, "s3_key")
 
@@ -915,8 +897,8 @@ class GetImageImagePermissionResult(dict):
                  allow_fleet: _builtins.bool,
                  allow_image_builder: _builtins.bool):
         """
-        :param _builtins.bool allow_fleet: Boolean indicating if the image can be used for a fleet.
-        :param _builtins.bool allow_image_builder: indicated whether the image can be used for an image builder.
+        :param _builtins.bool allow_fleet: Whether the image can be used for a fleet.
+        :param _builtins.bool allow_image_builder: Whether the image can be used for an image builder.
         """
         pulumi.set(__self__, "allow_fleet", allow_fleet)
         pulumi.set(__self__, "allow_image_builder", allow_image_builder)
@@ -925,7 +907,7 @@ class GetImageImagePermissionResult(dict):
     @pulumi.getter(name="allowFleet")
     def allow_fleet(self) -> _builtins.bool:
         """
-        Boolean indicating if the image can be used for a fleet.
+        Whether the image can be used for a fleet.
         """
         return pulumi.get(self, "allow_fleet")
 
@@ -933,7 +915,7 @@ class GetImageImagePermissionResult(dict):
     @pulumi.getter(name="allowImageBuilder")
     def allow_image_builder(self) -> _builtins.bool:
         """
-        indicated whether the image can be used for an image builder.
+        Whether the image can be used for an image builder.
         """
         return pulumi.get(self, "allow_image_builder")
 
@@ -943,17 +925,27 @@ class GetImageStateChangeReasonResult(dict):
     def __init__(__self__, *,
                  code: _builtins.str,
                  message: _builtins.str):
+        """
+        :param _builtins.str code: State change reason code.
+        :param _builtins.str message: State change reason message.
+        """
         pulumi.set(__self__, "code", code)
         pulumi.set(__self__, "message", message)
 
     @_builtins.property
     @pulumi.getter
     def code(self) -> _builtins.str:
+        """
+        State change reason code.
+        """
         return pulumi.get(self, "code")
 
     @_builtins.property
     @pulumi.getter
     def message(self) -> _builtins.str:
+        """
+        State change reason message.
+        """
         return pulumi.get(self, "message")
 
 

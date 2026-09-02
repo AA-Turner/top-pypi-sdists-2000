@@ -30,40 +30,41 @@ class CloudAutonomousVmClusterArgs:
                  scan_listener_port_non_tls: pulumi.Input[_builtins.int],
                  scan_listener_port_tls: pulumi.Input[_builtins.int],
                  total_container_databases: pulumi.Input[_builtins.int],
-                 cloud_exadata_infrastructure_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 cloud_exadata_infrastructure_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 is_mtls_enabled_vm_cluster: Optional[pulumi.Input[_builtins.bool]] = None,
-                 license_model: Optional[pulumi.Input[_builtins.str]] = None,
-                 odb_network_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 odb_network_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 time_zone: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['CloudAutonomousVmClusterTimeoutsArgs']] = None):
+                 cloud_exadata_infrastructure_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 cloud_exadata_infrastructure_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 is_mtls_enabled_vm_cluster: pulumi.Input[Optional[_builtins.bool]] = None,
+                 license_model: pulumi.Input[Optional[_builtins.str]] = None,
+                 odb_network_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 odb_network_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 time_zone: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['CloudAutonomousVmClusterTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a CloudAutonomousVmCluster resource.
-        :param pulumi.Input[_builtins.float] autonomous_data_storage_size_in_tbs: The data storage size allocated for Autonomous Databases in the Autonomous VM cluster, in TB. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.int] cpu_core_count_per_node: The number of CPU cores enabled per node in the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] db_servers: The database servers in the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.str] display_name: The display name of the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowArgs'] maintenance_window: The maintenance window of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+
+        :param pulumi.Input[_builtins.float] autonomous_data_storage_size_in_tbs: Data storage size allocated for Autonomous Databases in the Autonomous VM cluster, in TB. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] cpu_core_count_per_node: Number of CPU cores enabled per node in the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] db_servers: Database servers in the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.str] display_name: Display name of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowArgs'] maintenance_window: Maintenance window of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] memory_per_oracle_compute_unit_in_gbs: Amount of memory allocated per Oracle Compute Unit, in GB. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] scan_listener_port_non_tls: SCAN listener port for non-TLS (TCP) protocol. The default is 1521. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] scan_listener_port_tls: SCAN listener port for TLS (TCP) protocol. The default is 2484. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] total_container_databases: Total number of Autonomous Container Databases that can be created with the allocated local storage. Changing this will force terraform to create new resource.
                
                The following arguments are optional:
-        :param pulumi.Input[_builtins.int] memory_per_oracle_compute_unit_in_gbs: The amount of memory allocated per Oracle Compute Unit, in GB. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.int] scan_listener_port_non_tls: The SCAN listener port for non-TLS (TCP) protocol. The default is 1521. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.int] scan_listener_port_tls: The SCAN listener port for TLS (TCP) protocol. The default is 2484. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.int] total_container_databases: The total number of Autonomous Container Databases that can be created with the allocated local storage. Changing this will force terraform to create new resource.
         :param pulumi.Input[_builtins.str] cloud_exadata_infrastructure_arn: Exadata infrastructure ARN. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         :param pulumi.Input[_builtins.str] cloud_exadata_infrastructure_id: Exadata infrastructure id. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
-        :param pulumi.Input[_builtins.str] description: The description of the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.bool] is_mtls_enabled_vm_cluster: Indicates whether mutual TLS (mTLS) authentication is enabled for the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.str] license_model: The license model for the Autonomous VM cluster. Valid values are LICENSE_INCLUDED or BRING_YOUR_OWN_LICENSE. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.str] description: Description of the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.bool] is_mtls_enabled_vm_cluster: Whether mutual TLS (mTLS) authentication is enabled for the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.str] license_model: License model for the Autonomous VM cluster. Valid values are LICENSE_INCLUDED or BRING_YOUR_OWN_LICENSE. Changing this will force terraform to create new resource.
         :param pulumi.Input[_builtins.str] odb_network_arn: ARN of the ODB network associated with this Autonomous VM Cluster. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         :param pulumi.Input[_builtins.str] odb_network_id: Unique identifier of the ODB network associated with this Autonomous VM Cluster. Changing this will force Terraform to create a new resource. Changing this will create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the exadata infrastructure. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[_builtins.str] time_zone: The time zone of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the exadata infrastructure. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[_builtins.str] time_zone: Time zone of the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         pulumi.set(__self__, "autonomous_data_storage_size_in_tbs", autonomous_data_storage_size_in_tbs)
         pulumi.set(__self__, "cpu_core_count_per_node", cpu_core_count_per_node)
@@ -101,7 +102,7 @@ class CloudAutonomousVmClusterArgs:
     @pulumi.getter(name="autonomousDataStorageSizeInTbs")
     def autonomous_data_storage_size_in_tbs(self) -> pulumi.Input[_builtins.float]:
         """
-        The data storage size allocated for Autonomous Databases in the Autonomous VM cluster, in TB. Changing this will force terraform to create new resource.
+        Data storage size allocated for Autonomous Databases in the Autonomous VM cluster, in TB. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "autonomous_data_storage_size_in_tbs")
 
@@ -113,7 +114,7 @@ class CloudAutonomousVmClusterArgs:
     @pulumi.getter(name="cpuCoreCountPerNode")
     def cpu_core_count_per_node(self) -> pulumi.Input[_builtins.int]:
         """
-        The number of CPU cores enabled per node in the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        Number of CPU cores enabled per node in the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "cpu_core_count_per_node")
 
@@ -125,7 +126,7 @@ class CloudAutonomousVmClusterArgs:
     @pulumi.getter(name="dbServers")
     def db_servers(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
         """
-        The database servers in the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        Database servers in the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "db_servers")
 
@@ -137,7 +138,7 @@ class CloudAutonomousVmClusterArgs:
     @pulumi.getter(name="displayName")
     def display_name(self) -> pulumi.Input[_builtins.str]:
         """
-        The display name of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        Display name of the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "display_name")
 
@@ -149,9 +150,7 @@ class CloudAutonomousVmClusterArgs:
     @pulumi.getter(name="maintenanceWindow")
     def maintenance_window(self) -> pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowArgs']:
         """
-        The maintenance window of the Autonomous VM cluster. Changing this will force terraform to create new resource.
-
-        The following arguments are optional:
+        Maintenance window of the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "maintenance_window")
 
@@ -163,7 +162,7 @@ class CloudAutonomousVmClusterArgs:
     @pulumi.getter(name="memoryPerOracleComputeUnitInGbs")
     def memory_per_oracle_compute_unit_in_gbs(self) -> pulumi.Input[_builtins.int]:
         """
-        The amount of memory allocated per Oracle Compute Unit, in GB. Changing this will force terraform to create new resource.
+        Amount of memory allocated per Oracle Compute Unit, in GB. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "memory_per_oracle_compute_unit_in_gbs")
 
@@ -175,7 +174,7 @@ class CloudAutonomousVmClusterArgs:
     @pulumi.getter(name="scanListenerPortNonTls")
     def scan_listener_port_non_tls(self) -> pulumi.Input[_builtins.int]:
         """
-        The SCAN listener port for non-TLS (TCP) protocol. The default is 1521. Changing this will force terraform to create new resource.
+        SCAN listener port for non-TLS (TCP) protocol. The default is 1521. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "scan_listener_port_non_tls")
 
@@ -187,7 +186,7 @@ class CloudAutonomousVmClusterArgs:
     @pulumi.getter(name="scanListenerPortTls")
     def scan_listener_port_tls(self) -> pulumi.Input[_builtins.int]:
         """
-        The SCAN listener port for TLS (TCP) protocol. The default is 2484. Changing this will force terraform to create new resource.
+        SCAN listener port for TLS (TCP) protocol. The default is 2484. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "scan_listener_port_tls")
 
@@ -199,7 +198,9 @@ class CloudAutonomousVmClusterArgs:
     @pulumi.getter(name="totalContainerDatabases")
     def total_container_databases(self) -> pulumi.Input[_builtins.int]:
         """
-        The total number of Autonomous Container Databases that can be created with the allocated local storage. Changing this will force terraform to create new resource.
+        Total number of Autonomous Container Databases that can be created with the allocated local storage. Changing this will force terraform to create new resource.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "total_container_databases")
 
@@ -209,248 +210,249 @@ class CloudAutonomousVmClusterArgs:
 
     @_builtins.property
     @pulumi.getter(name="cloudExadataInfrastructureArn")
-    def cloud_exadata_infrastructure_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def cloud_exadata_infrastructure_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Exadata infrastructure ARN. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         """
         return pulumi.get(self, "cloud_exadata_infrastructure_arn")
 
     @cloud_exadata_infrastructure_arn.setter
-    def cloud_exadata_infrastructure_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def cloud_exadata_infrastructure_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "cloud_exadata_infrastructure_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="cloudExadataInfrastructureId")
-    def cloud_exadata_infrastructure_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def cloud_exadata_infrastructure_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Exadata infrastructure id. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         """
         return pulumi.get(self, "cloud_exadata_infrastructure_id")
 
     @cloud_exadata_infrastructure_id.setter
-    def cloud_exadata_infrastructure_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def cloud_exadata_infrastructure_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "cloud_exadata_infrastructure_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The description of the Autonomous VM cluster.
+        Description of the Autonomous VM cluster.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="isMtlsEnabledVmCluster")
-    def is_mtls_enabled_vm_cluster(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def is_mtls_enabled_vm_cluster(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        Indicates whether mutual TLS (mTLS) authentication is enabled for the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        Whether mutual TLS (mTLS) authentication is enabled for the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "is_mtls_enabled_vm_cluster")
 
     @is_mtls_enabled_vm_cluster.setter
-    def is_mtls_enabled_vm_cluster(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def is_mtls_enabled_vm_cluster(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "is_mtls_enabled_vm_cluster", value)
 
     @_builtins.property
     @pulumi.getter(name="licenseModel")
-    def license_model(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def license_model(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The license model for the Autonomous VM cluster. Valid values are LICENSE_INCLUDED or BRING_YOUR_OWN_LICENSE. Changing this will force terraform to create new resource.
+        License model for the Autonomous VM cluster. Valid values are LICENSE_INCLUDED or BRING_YOUR_OWN_LICENSE. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "license_model")
 
     @license_model.setter
-    def license_model(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def license_model(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "license_model", value)
 
     @_builtins.property
     @pulumi.getter(name="odbNetworkArn")
-    def odb_network_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def odb_network_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the ODB network associated with this Autonomous VM Cluster. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         """
         return pulumi.get(self, "odb_network_arn")
 
     @odb_network_arn.setter
-    def odb_network_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def odb_network_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "odb_network_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="odbNetworkId")
-    def odb_network_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def odb_network_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique identifier of the ODB network associated with this Autonomous VM Cluster. Changing this will force Terraform to create a new resource. Changing this will create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         """
         return pulumi.get(self, "odb_network_id")
 
     @odb_network_id.setter
-    def odb_network_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def odb_network_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "odb_network_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A map of tags to assign to the exadata infrastructure. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        Map of tags to assign to the exadata infrastructure. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="timeZone")
-    def time_zone(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def time_zone(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The time zone of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        Time zone of the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "time_zone")
 
     @time_zone.setter
-    def time_zone(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def time_zone(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "time_zone", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['CloudAutonomousVmClusterTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['CloudAutonomousVmClusterTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['CloudAutonomousVmClusterTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['CloudAutonomousVmClusterTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _CloudAutonomousVmClusterState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 autonomous_data_storage_percentage: Optional[pulumi.Input[_builtins.float]] = None,
-                 autonomous_data_storage_size_in_tbs: Optional[pulumi.Input[_builtins.float]] = None,
-                 available_autonomous_data_storage_size_in_tbs: Optional[pulumi.Input[_builtins.float]] = None,
-                 available_container_databases: Optional[pulumi.Input[_builtins.int]] = None,
-                 available_cpus: Optional[pulumi.Input[_builtins.float]] = None,
-                 cloud_exadata_infrastructure_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 cloud_exadata_infrastructure_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 compute_model: Optional[pulumi.Input[_builtins.str]] = None,
-                 cpu_core_count: Optional[pulumi.Input[_builtins.int]] = None,
-                 cpu_core_count_per_node: Optional[pulumi.Input[_builtins.int]] = None,
-                 cpu_percentage: Optional[pulumi.Input[_builtins.float]] = None,
-                 created_at: Optional[pulumi.Input[_builtins.str]] = None,
-                 data_storage_size_in_gbs: Optional[pulumi.Input[_builtins.float]] = None,
-                 data_storage_size_in_tbs: Optional[pulumi.Input[_builtins.float]] = None,
-                 db_servers: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 display_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain: Optional[pulumi.Input[_builtins.str]] = None,
-                 exadata_storage_in_tbs_lowest_scaled_value: Optional[pulumi.Input[_builtins.float]] = None,
-                 hostname: Optional[pulumi.Input[_builtins.str]] = None,
-                 is_mtls_enabled_vm_cluster: Optional[pulumi.Input[_builtins.bool]] = None,
-                 license_model: Optional[pulumi.Input[_builtins.str]] = None,
-                 maintenance_window: Optional[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowArgs']] = None,
-                 max_acds_lowest_scaled_value: Optional[pulumi.Input[_builtins.int]] = None,
-                 memory_per_oracle_compute_unit_in_gbs: Optional[pulumi.Input[_builtins.int]] = None,
-                 memory_size_in_gbs: Optional[pulumi.Input[_builtins.int]] = None,
-                 node_count: Optional[pulumi.Input[_builtins.int]] = None,
-                 non_provisionable_autonomous_container_databases: Optional[pulumi.Input[_builtins.int]] = None,
-                 oci_resource_anchor_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 oci_url: Optional[pulumi.Input[_builtins.str]] = None,
-                 ocid: Optional[pulumi.Input[_builtins.str]] = None,
-                 odb_network_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 odb_network_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 odb_node_storage_size_in_gbs: Optional[pulumi.Input[_builtins.int]] = None,
-                 percent_progress: Optional[pulumi.Input[_builtins.float]] = None,
-                 provisionable_autonomous_container_databases: Optional[pulumi.Input[_builtins.int]] = None,
-                 provisioned_autonomous_container_databases: Optional[pulumi.Input[_builtins.int]] = None,
-                 provisioned_cpus: Optional[pulumi.Input[_builtins.float]] = None,
-                 reclaimable_cpus: Optional[pulumi.Input[_builtins.float]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 reserved_cpus: Optional[pulumi.Input[_builtins.float]] = None,
-                 scan_listener_port_non_tls: Optional[pulumi.Input[_builtins.int]] = None,
-                 scan_listener_port_tls: Optional[pulumi.Input[_builtins.int]] = None,
-                 shape: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 status_reason: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 time_database_ssl_certificate_expires: Optional[pulumi.Input[_builtins.str]] = None,
-                 time_ords_certificate_expires: Optional[pulumi.Input[_builtins.str]] = None,
-                 time_zone: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['CloudAutonomousVmClusterTimeoutsArgs']] = None,
-                 total_container_databases: Optional[pulumi.Input[_builtins.int]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 autonomous_data_storage_percentage: pulumi.Input[Optional[_builtins.float]] = None,
+                 autonomous_data_storage_size_in_tbs: pulumi.Input[Optional[_builtins.float]] = None,
+                 available_autonomous_data_storage_size_in_tbs: pulumi.Input[Optional[_builtins.float]] = None,
+                 available_container_databases: pulumi.Input[Optional[_builtins.int]] = None,
+                 available_cpus: pulumi.Input[Optional[_builtins.float]] = None,
+                 cloud_exadata_infrastructure_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 cloud_exadata_infrastructure_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 compute_model: pulumi.Input[Optional[_builtins.str]] = None,
+                 cpu_core_count: pulumi.Input[Optional[_builtins.int]] = None,
+                 cpu_core_count_per_node: pulumi.Input[Optional[_builtins.int]] = None,
+                 cpu_percentage: pulumi.Input[Optional[_builtins.float]] = None,
+                 created_at: pulumi.Input[Optional[_builtins.str]] = None,
+                 data_storage_size_in_gbs: pulumi.Input[Optional[_builtins.float]] = None,
+                 data_storage_size_in_tbs: pulumi.Input[Optional[_builtins.float]] = None,
+                 db_servers: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 display_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain: pulumi.Input[Optional[_builtins.str]] = None,
+                 exadata_storage_in_tbs_lowest_scaled_value: pulumi.Input[Optional[_builtins.float]] = None,
+                 hostname: pulumi.Input[Optional[_builtins.str]] = None,
+                 is_mtls_enabled_vm_cluster: pulumi.Input[Optional[_builtins.bool]] = None,
+                 license_model: pulumi.Input[Optional[_builtins.str]] = None,
+                 maintenance_window: pulumi.Input[Optional['CloudAutonomousVmClusterMaintenanceWindowArgs']] = None,
+                 max_acds_lowest_scaled_value: pulumi.Input[Optional[_builtins.int]] = None,
+                 memory_per_oracle_compute_unit_in_gbs: pulumi.Input[Optional[_builtins.int]] = None,
+                 memory_size_in_gbs: pulumi.Input[Optional[_builtins.int]] = None,
+                 node_count: pulumi.Input[Optional[_builtins.int]] = None,
+                 non_provisionable_autonomous_container_databases: pulumi.Input[Optional[_builtins.int]] = None,
+                 oci_resource_anchor_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 oci_url: pulumi.Input[Optional[_builtins.str]] = None,
+                 ocid: pulumi.Input[Optional[_builtins.str]] = None,
+                 odb_network_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 odb_network_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 odb_node_storage_size_in_gbs: pulumi.Input[Optional[_builtins.int]] = None,
+                 percent_progress: pulumi.Input[Optional[_builtins.float]] = None,
+                 provisionable_autonomous_container_databases: pulumi.Input[Optional[_builtins.int]] = None,
+                 provisioned_autonomous_container_databases: pulumi.Input[Optional[_builtins.int]] = None,
+                 provisioned_cpus: pulumi.Input[Optional[_builtins.float]] = None,
+                 reclaimable_cpus: pulumi.Input[Optional[_builtins.float]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 reserved_cpus: pulumi.Input[Optional[_builtins.float]] = None,
+                 scan_listener_port_non_tls: pulumi.Input[Optional[_builtins.int]] = None,
+                 scan_listener_port_tls: pulumi.Input[Optional[_builtins.int]] = None,
+                 shape: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 status_reason: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 time_database_ssl_certificate_expires: pulumi.Input[Optional[_builtins.str]] = None,
+                 time_ords_certificate_expires: pulumi.Input[Optional[_builtins.str]] = None,
+                 time_zone: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['CloudAutonomousVmClusterTimeoutsArgs']] = None,
+                 total_container_databases: pulumi.Input[Optional[_builtins.int]] = None):
         """
         Input properties used for looking up and filtering CloudAutonomousVmCluster resources.
-        :param pulumi.Input[_builtins.str] arn: The Amazon Resource Name (ARN) for the Exadata infrastructure.
-        :param pulumi.Input[_builtins.float] autonomous_data_storage_percentage: The progress of the current operation on the Autonomous VM cluster, as a percentage.
-        :param pulumi.Input[_builtins.float] autonomous_data_storage_size_in_tbs: The data storage size allocated for Autonomous Databases in the Autonomous VM cluster, in TB. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.float] available_autonomous_data_storage_size_in_tbs: The available data storage space for Autonomous Databases in the Autonomous VM cluster, in TB.
-        :param pulumi.Input[_builtins.int] available_container_databases: The number of Autonomous CDBs that you can create with the currently available storage.
-        :param pulumi.Input[_builtins.float] available_cpus: The number of CPU cores available for allocation to Autonomous Databases.
+
+        :param pulumi.Input[_builtins.str] arn: ARN for the Exadata infrastructure.
+        :param pulumi.Input[_builtins.float] autonomous_data_storage_percentage: Progress of the current operation on the Autonomous VM cluster, as a percentage.
+        :param pulumi.Input[_builtins.float] autonomous_data_storage_size_in_tbs: Data storage size allocated for Autonomous Databases in the Autonomous VM cluster, in TB. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.float] available_autonomous_data_storage_size_in_tbs: Available data storage space for Autonomous Databases in the Autonomous VM cluster, in TB.
+        :param pulumi.Input[_builtins.int] available_container_databases: Number of Autonomous CDBs that you can create with the currently available storage.
+        :param pulumi.Input[_builtins.float] available_cpus: Number of CPU cores available for allocation to Autonomous Databases.
         :param pulumi.Input[_builtins.str] cloud_exadata_infrastructure_arn: Exadata infrastructure ARN. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         :param pulumi.Input[_builtins.str] cloud_exadata_infrastructure_id: Exadata infrastructure id. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
-        :param pulumi.Input[_builtins.str] compute_model: The compute model of the Autonomous VM cluster: ECPU or OCPU.
-        :param pulumi.Input[_builtins.int] cpu_core_count: The total number of CPU cores in the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.int] cpu_core_count_per_node: The number of CPU cores enabled per node in the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.float] cpu_percentage: The percentage of total CPU cores currently in use in the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.str] created_at: The date and time when the Autonomous VM cluster was created.
-        :param pulumi.Input[_builtins.float] data_storage_size_in_gbs: The total data storage allocated to the Autonomous VM cluster, in GB.
-        :param pulumi.Input[_builtins.float] data_storage_size_in_tbs: The total data storage allocated to the Autonomous VM cluster, in TB.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] db_servers: The database servers in the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.str] description: The description of the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.str] display_name: The display name of the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.str] domain: The domain name of the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.float] exadata_storage_in_tbs_lowest_scaled_value: The minimum value to which you can scale down the Exadata storage, in TB.
-        :param pulumi.Input[_builtins.str] hostname: The hostname of the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.bool] is_mtls_enabled_vm_cluster: Indicates whether mutual TLS (mTLS) authentication is enabled for the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.str] license_model: The license model for the Autonomous VM cluster. Valid values are LICENSE_INCLUDED or BRING_YOUR_OWN_LICENSE. Changing this will force terraform to create new resource.
-        :param pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowArgs'] maintenance_window: The maintenance window of the Autonomous VM cluster. Changing this will force terraform to create new resource.
-               
-               The following arguments are optional:
-        :param pulumi.Input[_builtins.int] max_acds_lowest_scaled_value: The minimum value to which you can scale down the maximum number of Autonomous CDBs.
-        :param pulumi.Input[_builtins.int] memory_per_oracle_compute_unit_in_gbs: The amount of memory allocated per Oracle Compute Unit, in GB. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.int] memory_size_in_gbs: The total amount of memory allocated to the Autonomous VM cluster, in gigabytes(GB).
-        :param pulumi.Input[_builtins.int] node_count: The number of database server nodes in the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.int] non_provisionable_autonomous_container_databases: The number of Autonomous CDBs that can't be provisioned because of resource constraints.
-        :param pulumi.Input[_builtins.str] oci_resource_anchor_name: The name of the OCI resource anchor associated with this Autonomous VM cluster.
-        :param pulumi.Input[_builtins.str] oci_url: The URL for accessing the OCI console page for this Autonomous VM cluster.
-        :param pulumi.Input[_builtins.str] ocid: The Oracle Cloud Identifier (OCID) of the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.str] compute_model: Compute model of the Autonomous VM cluster: ECPU or OCPU.
+        :param pulumi.Input[_builtins.int] cpu_core_count: Total number of CPU cores in the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.int] cpu_core_count_per_node: Number of CPU cores enabled per node in the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.float] cpu_percentage: Percentage of total CPU cores currently in use in the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.str] created_at: Date and time when the Autonomous VM cluster was created.
+        :param pulumi.Input[_builtins.float] data_storage_size_in_gbs: Total data storage allocated to the Autonomous VM cluster, in GB.
+        :param pulumi.Input[_builtins.float] data_storage_size_in_tbs: Total data storage allocated to the Autonomous VM cluster, in TB.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] db_servers: Database servers in the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.str] description: Description of the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.str] display_name: Display name of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.str] domain: Domain name of the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.float] exadata_storage_in_tbs_lowest_scaled_value: Minimum value to which you can scale down the Exadata storage, in TB.
+        :param pulumi.Input[_builtins.str] hostname: Hostname of the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.bool] is_mtls_enabled_vm_cluster: Whether mutual TLS (mTLS) authentication is enabled for the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.str] license_model: License model for the Autonomous VM cluster. Valid values are LICENSE_INCLUDED or BRING_YOUR_OWN_LICENSE. Changing this will force terraform to create new resource.
+        :param pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowArgs'] maintenance_window: Maintenance window of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] max_acds_lowest_scaled_value: Minimum value to which you can scale down the maximum number of Autonomous CDBs.
+        :param pulumi.Input[_builtins.int] memory_per_oracle_compute_unit_in_gbs: Amount of memory allocated per Oracle Compute Unit, in GB. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] memory_size_in_gbs: Total amount of memory allocated to the Autonomous VM cluster, in gigabytes(GB).
+        :param pulumi.Input[_builtins.int] node_count: Number of database server nodes in the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.int] non_provisionable_autonomous_container_databases: Number of Autonomous CDBs that can't be provisioned because of resource constraints.
+        :param pulumi.Input[_builtins.str] oci_resource_anchor_name: Name of the OCI resource anchor associated with this Autonomous VM cluster.
+        :param pulumi.Input[_builtins.str] oci_url: URL for accessing the OCI console page for this Autonomous VM cluster.
+        :param pulumi.Input[_builtins.str] ocid: Oracle Cloud Identifier (OCID) of the Autonomous VM cluster.
         :param pulumi.Input[_builtins.str] odb_network_arn: ARN of the ODB network associated with this Autonomous VM Cluster. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         :param pulumi.Input[_builtins.str] odb_network_id: Unique identifier of the ODB network associated with this Autonomous VM Cluster. Changing this will force Terraform to create a new resource. Changing this will create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
-        :param pulumi.Input[_builtins.int] odb_node_storage_size_in_gbs: The local node storage allocated to the Autonomous VM cluster, in gigabytes (GB).
-        :param pulumi.Input[_builtins.float] percent_progress: The progress of the current operation on the Autonomous VM cluster, as a percentage.
-        :param pulumi.Input[_builtins.int] provisionable_autonomous_container_databases: The number of Autonomous CDBs that can be provisioned in the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.int] provisioned_autonomous_container_databases: The number of Autonomous CDBs currently provisioned in the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.float] provisioned_cpus: The number of CPUs provisioned in the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.float] reclaimable_cpus: The number of CPU cores that can be reclaimed from terminated or scaled-down Autonomous Databases.
+        :param pulumi.Input[_builtins.int] odb_node_storage_size_in_gbs: Local node storage allocated to the Autonomous VM cluster, in gigabytes (GB).
+        :param pulumi.Input[_builtins.float] percent_progress: Progress of the current operation on the Autonomous VM cluster, as a percentage.
+        :param pulumi.Input[_builtins.int] provisionable_autonomous_container_databases: Number of Autonomous CDBs that can be provisioned in the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.int] provisioned_autonomous_container_databases: Number of Autonomous CDBs currently provisioned in the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.float] provisioned_cpus: Number of CPUs provisioned in the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.float] reclaimable_cpus: Number of CPU cores that can be reclaimed from terminated or scaled-down Autonomous Databases.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.float] reserved_cpus: The number of CPU cores reserved for system operations and redundancy.
-        :param pulumi.Input[_builtins.int] scan_listener_port_non_tls: The SCAN listener port for non-TLS (TCP) protocol. The default is 1521. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.int] scan_listener_port_tls: The SCAN listener port for TLS (TCP) protocol. The default is 2484. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.str] shape: The shape of the Exadata infrastructure for the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.str] status: The status of the Autonomous VM cluster. Possible values include CREATING, AVAILABLE, UPDATING, DELETING, DELETED, FAILED.
+        :param pulumi.Input[_builtins.float] reserved_cpus: Number of CPU cores reserved for system operations and redundancy.
+        :param pulumi.Input[_builtins.int] scan_listener_port_non_tls: SCAN listener port for non-TLS (TCP) protocol. The default is 1521. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] scan_listener_port_tls: SCAN listener port for TLS (TCP) protocol. The default is 2484. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.str] shape: Shape of the Exadata infrastructure for the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.str] status: Status of the Autonomous VM cluster. Possible values include CREATING, AVAILABLE, UPDATING, DELETING, DELETED, FAILED.
         :param pulumi.Input[_builtins.str] status_reason: Additional information about the current status of the Autonomous VM cluster.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the exadata infrastructure. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: The combined set of user-defined and provider-defined tags.
-        :param pulumi.Input[_builtins.str] time_database_ssl_certificate_expires: The expiration date and time of the database SSL certificate.
-        :param pulumi.Input[_builtins.str] time_ords_certificate_expires: The expiration date and time of the ORDS certificate.
-        :param pulumi.Input[_builtins.str] time_zone: The time zone of the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.int] total_container_databases: The total number of Autonomous Container Databases that can be created with the allocated local storage. Changing this will force terraform to create new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the exadata infrastructure. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Combined set of user-defined and provider-defined tags.
+        :param pulumi.Input[_builtins.str] time_database_ssl_certificate_expires: Expiration date and time of the database SSL certificate.
+        :param pulumi.Input[_builtins.str] time_ords_certificate_expires: Expiration date and time of the ORDS certificate.
+        :param pulumi.Input[_builtins.str] time_zone: Time zone of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] total_container_databases: Total number of Autonomous Container Databases that can be created with the allocated local storage. Changing this will force terraform to create new resource.
+               
+               The following arguments are optional:
         """
         if arn is not None:
             pulumi.set(__self__, "arn", arn)
@@ -563,649 +565,649 @@ class _CloudAutonomousVmClusterState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) for the Exadata infrastructure.
+        ARN for the Exadata infrastructure.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="autonomousDataStoragePercentage")
-    def autonomous_data_storage_percentage(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def autonomous_data_storage_percentage(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
-        The progress of the current operation on the Autonomous VM cluster, as a percentage.
+        Progress of the current operation on the Autonomous VM cluster, as a percentage.
         """
         return pulumi.get(self, "autonomous_data_storage_percentage")
 
     @autonomous_data_storage_percentage.setter
-    def autonomous_data_storage_percentage(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def autonomous_data_storage_percentage(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "autonomous_data_storage_percentage", value)
 
     @_builtins.property
     @pulumi.getter(name="autonomousDataStorageSizeInTbs")
-    def autonomous_data_storage_size_in_tbs(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def autonomous_data_storage_size_in_tbs(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
-        The data storage size allocated for Autonomous Databases in the Autonomous VM cluster, in TB. Changing this will force terraform to create new resource.
+        Data storage size allocated for Autonomous Databases in the Autonomous VM cluster, in TB. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "autonomous_data_storage_size_in_tbs")
 
     @autonomous_data_storage_size_in_tbs.setter
-    def autonomous_data_storage_size_in_tbs(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def autonomous_data_storage_size_in_tbs(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "autonomous_data_storage_size_in_tbs", value)
 
     @_builtins.property
     @pulumi.getter(name="availableAutonomousDataStorageSizeInTbs")
-    def available_autonomous_data_storage_size_in_tbs(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def available_autonomous_data_storage_size_in_tbs(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
-        The available data storage space for Autonomous Databases in the Autonomous VM cluster, in TB.
+        Available data storage space for Autonomous Databases in the Autonomous VM cluster, in TB.
         """
         return pulumi.get(self, "available_autonomous_data_storage_size_in_tbs")
 
     @available_autonomous_data_storage_size_in_tbs.setter
-    def available_autonomous_data_storage_size_in_tbs(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def available_autonomous_data_storage_size_in_tbs(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "available_autonomous_data_storage_size_in_tbs", value)
 
     @_builtins.property
     @pulumi.getter(name="availableContainerDatabases")
-    def available_container_databases(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def available_container_databases(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The number of Autonomous CDBs that you can create with the currently available storage.
+        Number of Autonomous CDBs that you can create with the currently available storage.
         """
         return pulumi.get(self, "available_container_databases")
 
     @available_container_databases.setter
-    def available_container_databases(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def available_container_databases(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "available_container_databases", value)
 
     @_builtins.property
     @pulumi.getter(name="availableCpus")
-    def available_cpus(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def available_cpus(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
-        The number of CPU cores available for allocation to Autonomous Databases.
+        Number of CPU cores available for allocation to Autonomous Databases.
         """
         return pulumi.get(self, "available_cpus")
 
     @available_cpus.setter
-    def available_cpus(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def available_cpus(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "available_cpus", value)
 
     @_builtins.property
     @pulumi.getter(name="cloudExadataInfrastructureArn")
-    def cloud_exadata_infrastructure_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def cloud_exadata_infrastructure_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Exadata infrastructure ARN. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         """
         return pulumi.get(self, "cloud_exadata_infrastructure_arn")
 
     @cloud_exadata_infrastructure_arn.setter
-    def cloud_exadata_infrastructure_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def cloud_exadata_infrastructure_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "cloud_exadata_infrastructure_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="cloudExadataInfrastructureId")
-    def cloud_exadata_infrastructure_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def cloud_exadata_infrastructure_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Exadata infrastructure id. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         """
         return pulumi.get(self, "cloud_exadata_infrastructure_id")
 
     @cloud_exadata_infrastructure_id.setter
-    def cloud_exadata_infrastructure_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def cloud_exadata_infrastructure_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "cloud_exadata_infrastructure_id", value)
 
     @_builtins.property
     @pulumi.getter(name="computeModel")
-    def compute_model(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def compute_model(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The compute model of the Autonomous VM cluster: ECPU or OCPU.
+        Compute model of the Autonomous VM cluster: ECPU or OCPU.
         """
         return pulumi.get(self, "compute_model")
 
     @compute_model.setter
-    def compute_model(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def compute_model(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "compute_model", value)
 
     @_builtins.property
     @pulumi.getter(name="cpuCoreCount")
-    def cpu_core_count(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def cpu_core_count(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The total number of CPU cores in the Autonomous VM cluster.
+        Total number of CPU cores in the Autonomous VM cluster.
         """
         return pulumi.get(self, "cpu_core_count")
 
     @cpu_core_count.setter
-    def cpu_core_count(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def cpu_core_count(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "cpu_core_count", value)
 
     @_builtins.property
     @pulumi.getter(name="cpuCoreCountPerNode")
-    def cpu_core_count_per_node(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def cpu_core_count_per_node(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The number of CPU cores enabled per node in the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        Number of CPU cores enabled per node in the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "cpu_core_count_per_node")
 
     @cpu_core_count_per_node.setter
-    def cpu_core_count_per_node(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def cpu_core_count_per_node(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "cpu_core_count_per_node", value)
 
     @_builtins.property
     @pulumi.getter(name="cpuPercentage")
-    def cpu_percentage(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def cpu_percentage(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
-        The percentage of total CPU cores currently in use in the Autonomous VM cluster.
+        Percentage of total CPU cores currently in use in the Autonomous VM cluster.
         """
         return pulumi.get(self, "cpu_percentage")
 
     @cpu_percentage.setter
-    def cpu_percentage(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def cpu_percentage(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "cpu_percentage", value)
 
     @_builtins.property
     @pulumi.getter(name="createdAt")
-    def created_at(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def created_at(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The date and time when the Autonomous VM cluster was created.
+        Date and time when the Autonomous VM cluster was created.
         """
         return pulumi.get(self, "created_at")
 
     @created_at.setter
-    def created_at(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def created_at(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "created_at", value)
 
     @_builtins.property
     @pulumi.getter(name="dataStorageSizeInGbs")
-    def data_storage_size_in_gbs(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def data_storage_size_in_gbs(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
-        The total data storage allocated to the Autonomous VM cluster, in GB.
+        Total data storage allocated to the Autonomous VM cluster, in GB.
         """
         return pulumi.get(self, "data_storage_size_in_gbs")
 
     @data_storage_size_in_gbs.setter
-    def data_storage_size_in_gbs(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def data_storage_size_in_gbs(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "data_storage_size_in_gbs", value)
 
     @_builtins.property
     @pulumi.getter(name="dataStorageSizeInTbs")
-    def data_storage_size_in_tbs(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def data_storage_size_in_tbs(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
-        The total data storage allocated to the Autonomous VM cluster, in TB.
+        Total data storage allocated to the Autonomous VM cluster, in TB.
         """
         return pulumi.get(self, "data_storage_size_in_tbs")
 
     @data_storage_size_in_tbs.setter
-    def data_storage_size_in_tbs(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def data_storage_size_in_tbs(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "data_storage_size_in_tbs", value)
 
     @_builtins.property
     @pulumi.getter(name="dbServers")
-    def db_servers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def db_servers(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        The database servers in the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        Database servers in the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "db_servers")
 
     @db_servers.setter
-    def db_servers(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def db_servers(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "db_servers", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The description of the Autonomous VM cluster.
+        Description of the Autonomous VM cluster.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="displayName")
-    def display_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def display_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The display name of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        Display name of the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "display_name")
 
     @display_name.setter
-    def display_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def display_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "display_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def domain(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def domain(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The domain name of the Autonomous VM cluster.
+        Domain name of the Autonomous VM cluster.
         """
         return pulumi.get(self, "domain")
 
     @domain.setter
-    def domain(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def domain(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "domain", value)
 
     @_builtins.property
     @pulumi.getter(name="exadataStorageInTbsLowestScaledValue")
-    def exadata_storage_in_tbs_lowest_scaled_value(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def exadata_storage_in_tbs_lowest_scaled_value(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
-        The minimum value to which you can scale down the Exadata storage, in TB.
+        Minimum value to which you can scale down the Exadata storage, in TB.
         """
         return pulumi.get(self, "exadata_storage_in_tbs_lowest_scaled_value")
 
     @exadata_storage_in_tbs_lowest_scaled_value.setter
-    def exadata_storage_in_tbs_lowest_scaled_value(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def exadata_storage_in_tbs_lowest_scaled_value(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "exadata_storage_in_tbs_lowest_scaled_value", value)
 
     @_builtins.property
     @pulumi.getter
-    def hostname(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def hostname(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The hostname of the Autonomous VM cluster.
+        Hostname of the Autonomous VM cluster.
         """
         return pulumi.get(self, "hostname")
 
     @hostname.setter
-    def hostname(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def hostname(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "hostname", value)
 
     @_builtins.property
     @pulumi.getter(name="isMtlsEnabledVmCluster")
-    def is_mtls_enabled_vm_cluster(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def is_mtls_enabled_vm_cluster(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        Indicates whether mutual TLS (mTLS) authentication is enabled for the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        Whether mutual TLS (mTLS) authentication is enabled for the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "is_mtls_enabled_vm_cluster")
 
     @is_mtls_enabled_vm_cluster.setter
-    def is_mtls_enabled_vm_cluster(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def is_mtls_enabled_vm_cluster(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "is_mtls_enabled_vm_cluster", value)
 
     @_builtins.property
     @pulumi.getter(name="licenseModel")
-    def license_model(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def license_model(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The license model for the Autonomous VM cluster. Valid values are LICENSE_INCLUDED or BRING_YOUR_OWN_LICENSE. Changing this will force terraform to create new resource.
+        License model for the Autonomous VM cluster. Valid values are LICENSE_INCLUDED or BRING_YOUR_OWN_LICENSE. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "license_model")
 
     @license_model.setter
-    def license_model(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def license_model(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "license_model", value)
 
     @_builtins.property
     @pulumi.getter(name="maintenanceWindow")
-    def maintenance_window(self) -> Optional[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowArgs']]:
+    def maintenance_window(self) -> pulumi.Input[Optional['CloudAutonomousVmClusterMaintenanceWindowArgs']]:
         """
-        The maintenance window of the Autonomous VM cluster. Changing this will force terraform to create new resource.
-
-        The following arguments are optional:
+        Maintenance window of the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "maintenance_window")
 
     @maintenance_window.setter
-    def maintenance_window(self, value: Optional[pulumi.Input['CloudAutonomousVmClusterMaintenanceWindowArgs']]):
+    def maintenance_window(self, value: pulumi.Input[Optional['CloudAutonomousVmClusterMaintenanceWindowArgs']]):
         pulumi.set(self, "maintenance_window", value)
 
     @_builtins.property
     @pulumi.getter(name="maxAcdsLowestScaledValue")
-    def max_acds_lowest_scaled_value(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max_acds_lowest_scaled_value(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The minimum value to which you can scale down the maximum number of Autonomous CDBs.
+        Minimum value to which you can scale down the maximum number of Autonomous CDBs.
         """
         return pulumi.get(self, "max_acds_lowest_scaled_value")
 
     @max_acds_lowest_scaled_value.setter
-    def max_acds_lowest_scaled_value(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max_acds_lowest_scaled_value(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max_acds_lowest_scaled_value", value)
 
     @_builtins.property
     @pulumi.getter(name="memoryPerOracleComputeUnitInGbs")
-    def memory_per_oracle_compute_unit_in_gbs(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def memory_per_oracle_compute_unit_in_gbs(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The amount of memory allocated per Oracle Compute Unit, in GB. Changing this will force terraform to create new resource.
+        Amount of memory allocated per Oracle Compute Unit, in GB. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "memory_per_oracle_compute_unit_in_gbs")
 
     @memory_per_oracle_compute_unit_in_gbs.setter
-    def memory_per_oracle_compute_unit_in_gbs(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def memory_per_oracle_compute_unit_in_gbs(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "memory_per_oracle_compute_unit_in_gbs", value)
 
     @_builtins.property
     @pulumi.getter(name="memorySizeInGbs")
-    def memory_size_in_gbs(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def memory_size_in_gbs(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The total amount of memory allocated to the Autonomous VM cluster, in gigabytes(GB).
+        Total amount of memory allocated to the Autonomous VM cluster, in gigabytes(GB).
         """
         return pulumi.get(self, "memory_size_in_gbs")
 
     @memory_size_in_gbs.setter
-    def memory_size_in_gbs(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def memory_size_in_gbs(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "memory_size_in_gbs", value)
 
     @_builtins.property
     @pulumi.getter(name="nodeCount")
-    def node_count(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def node_count(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The number of database server nodes in the Autonomous VM cluster.
+        Number of database server nodes in the Autonomous VM cluster.
         """
         return pulumi.get(self, "node_count")
 
     @node_count.setter
-    def node_count(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def node_count(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "node_count", value)
 
     @_builtins.property
     @pulumi.getter(name="nonProvisionableAutonomousContainerDatabases")
-    def non_provisionable_autonomous_container_databases(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def non_provisionable_autonomous_container_databases(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The number of Autonomous CDBs that can't be provisioned because of resource constraints.
+        Number of Autonomous CDBs that can't be provisioned because of resource constraints.
         """
         return pulumi.get(self, "non_provisionable_autonomous_container_databases")
 
     @non_provisionable_autonomous_container_databases.setter
-    def non_provisionable_autonomous_container_databases(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def non_provisionable_autonomous_container_databases(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "non_provisionable_autonomous_container_databases", value)
 
     @_builtins.property
     @pulumi.getter(name="ociResourceAnchorName")
-    def oci_resource_anchor_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def oci_resource_anchor_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The name of the OCI resource anchor associated with this Autonomous VM cluster.
+        Name of the OCI resource anchor associated with this Autonomous VM cluster.
         """
         return pulumi.get(self, "oci_resource_anchor_name")
 
     @oci_resource_anchor_name.setter
-    def oci_resource_anchor_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def oci_resource_anchor_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "oci_resource_anchor_name", value)
 
     @_builtins.property
     @pulumi.getter(name="ociUrl")
-    def oci_url(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def oci_url(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The URL for accessing the OCI console page for this Autonomous VM cluster.
+        URL for accessing the OCI console page for this Autonomous VM cluster.
         """
         return pulumi.get(self, "oci_url")
 
     @oci_url.setter
-    def oci_url(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def oci_url(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "oci_url", value)
 
     @_builtins.property
     @pulumi.getter
-    def ocid(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def ocid(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Oracle Cloud Identifier (OCID) of the Autonomous VM cluster.
+        Oracle Cloud Identifier (OCID) of the Autonomous VM cluster.
         """
         return pulumi.get(self, "ocid")
 
     @ocid.setter
-    def ocid(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def ocid(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "ocid", value)
 
     @_builtins.property
     @pulumi.getter(name="odbNetworkArn")
-    def odb_network_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def odb_network_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the ODB network associated with this Autonomous VM Cluster. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         """
         return pulumi.get(self, "odb_network_arn")
 
     @odb_network_arn.setter
-    def odb_network_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def odb_network_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "odb_network_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="odbNetworkId")
-    def odb_network_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def odb_network_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique identifier of the ODB network associated with this Autonomous VM Cluster. Changing this will force Terraform to create a new resource. Changing this will create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         """
         return pulumi.get(self, "odb_network_id")
 
     @odb_network_id.setter
-    def odb_network_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def odb_network_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "odb_network_id", value)
 
     @_builtins.property
     @pulumi.getter(name="odbNodeStorageSizeInGbs")
-    def odb_node_storage_size_in_gbs(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def odb_node_storage_size_in_gbs(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The local node storage allocated to the Autonomous VM cluster, in gigabytes (GB).
+        Local node storage allocated to the Autonomous VM cluster, in gigabytes (GB).
         """
         return pulumi.get(self, "odb_node_storage_size_in_gbs")
 
     @odb_node_storage_size_in_gbs.setter
-    def odb_node_storage_size_in_gbs(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def odb_node_storage_size_in_gbs(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "odb_node_storage_size_in_gbs", value)
 
     @_builtins.property
     @pulumi.getter(name="percentProgress")
-    def percent_progress(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def percent_progress(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
-        The progress of the current operation on the Autonomous VM cluster, as a percentage.
+        Progress of the current operation on the Autonomous VM cluster, as a percentage.
         """
         return pulumi.get(self, "percent_progress")
 
     @percent_progress.setter
-    def percent_progress(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def percent_progress(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "percent_progress", value)
 
     @_builtins.property
     @pulumi.getter(name="provisionableAutonomousContainerDatabases")
-    def provisionable_autonomous_container_databases(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def provisionable_autonomous_container_databases(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The number of Autonomous CDBs that can be provisioned in the Autonomous VM cluster.
+        Number of Autonomous CDBs that can be provisioned in the Autonomous VM cluster.
         """
         return pulumi.get(self, "provisionable_autonomous_container_databases")
 
     @provisionable_autonomous_container_databases.setter
-    def provisionable_autonomous_container_databases(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def provisionable_autonomous_container_databases(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "provisionable_autonomous_container_databases", value)
 
     @_builtins.property
     @pulumi.getter(name="provisionedAutonomousContainerDatabases")
-    def provisioned_autonomous_container_databases(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def provisioned_autonomous_container_databases(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The number of Autonomous CDBs currently provisioned in the Autonomous VM cluster.
+        Number of Autonomous CDBs currently provisioned in the Autonomous VM cluster.
         """
         return pulumi.get(self, "provisioned_autonomous_container_databases")
 
     @provisioned_autonomous_container_databases.setter
-    def provisioned_autonomous_container_databases(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def provisioned_autonomous_container_databases(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "provisioned_autonomous_container_databases", value)
 
     @_builtins.property
     @pulumi.getter(name="provisionedCpus")
-    def provisioned_cpus(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def provisioned_cpus(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
-        The number of CPUs provisioned in the Autonomous VM cluster.
+        Number of CPUs provisioned in the Autonomous VM cluster.
         """
         return pulumi.get(self, "provisioned_cpus")
 
     @provisioned_cpus.setter
-    def provisioned_cpus(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def provisioned_cpus(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "provisioned_cpus", value)
 
     @_builtins.property
     @pulumi.getter(name="reclaimableCpus")
-    def reclaimable_cpus(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def reclaimable_cpus(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
-        The number of CPU cores that can be reclaimed from terminated or scaled-down Autonomous Databases.
+        Number of CPU cores that can be reclaimed from terminated or scaled-down Autonomous Databases.
         """
         return pulumi.get(self, "reclaimable_cpus")
 
     @reclaimable_cpus.setter
-    def reclaimable_cpus(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def reclaimable_cpus(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "reclaimable_cpus", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="reservedCpus")
-    def reserved_cpus(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def reserved_cpus(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
-        The number of CPU cores reserved for system operations and redundancy.
+        Number of CPU cores reserved for system operations and redundancy.
         """
         return pulumi.get(self, "reserved_cpus")
 
     @reserved_cpus.setter
-    def reserved_cpus(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def reserved_cpus(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "reserved_cpus", value)
 
     @_builtins.property
     @pulumi.getter(name="scanListenerPortNonTls")
-    def scan_listener_port_non_tls(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def scan_listener_port_non_tls(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The SCAN listener port for non-TLS (TCP) protocol. The default is 1521. Changing this will force terraform to create new resource.
+        SCAN listener port for non-TLS (TCP) protocol. The default is 1521. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "scan_listener_port_non_tls")
 
     @scan_listener_port_non_tls.setter
-    def scan_listener_port_non_tls(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def scan_listener_port_non_tls(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "scan_listener_port_non_tls", value)
 
     @_builtins.property
     @pulumi.getter(name="scanListenerPortTls")
-    def scan_listener_port_tls(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def scan_listener_port_tls(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The SCAN listener port for TLS (TCP) protocol. The default is 2484. Changing this will force terraform to create new resource.
+        SCAN listener port for TLS (TCP) protocol. The default is 2484. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "scan_listener_port_tls")
 
     @scan_listener_port_tls.setter
-    def scan_listener_port_tls(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def scan_listener_port_tls(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "scan_listener_port_tls", value)
 
     @_builtins.property
     @pulumi.getter
-    def shape(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def shape(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The shape of the Exadata infrastructure for the Autonomous VM cluster.
+        Shape of the Exadata infrastructure for the Autonomous VM cluster.
         """
         return pulumi.get(self, "shape")
 
     @shape.setter
-    def shape(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def shape(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "shape", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The status of the Autonomous VM cluster. Possible values include CREATING, AVAILABLE, UPDATING, DELETING, DELETED, FAILED.
+        Status of the Autonomous VM cluster. Possible values include CREATING, AVAILABLE, UPDATING, DELETING, DELETED, FAILED.
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
     @_builtins.property
     @pulumi.getter(name="statusReason")
-    def status_reason(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status_reason(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Additional information about the current status of the Autonomous VM cluster.
         """
         return pulumi.get(self, "status_reason")
 
     @status_reason.setter
-    def status_reason(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status_reason(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status_reason", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A map of tags to assign to the exadata infrastructure. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        Map of tags to assign to the exadata infrastructure. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        The combined set of user-defined and provider-defined tags.
+        Combined set of user-defined and provider-defined tags.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter(name="timeDatabaseSslCertificateExpires")
-    def time_database_ssl_certificate_expires(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def time_database_ssl_certificate_expires(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The expiration date and time of the database SSL certificate.
+        Expiration date and time of the database SSL certificate.
         """
         return pulumi.get(self, "time_database_ssl_certificate_expires")
 
     @time_database_ssl_certificate_expires.setter
-    def time_database_ssl_certificate_expires(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def time_database_ssl_certificate_expires(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "time_database_ssl_certificate_expires", value)
 
     @_builtins.property
     @pulumi.getter(name="timeOrdsCertificateExpires")
-    def time_ords_certificate_expires(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def time_ords_certificate_expires(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The expiration date and time of the ORDS certificate.
+        Expiration date and time of the ORDS certificate.
         """
         return pulumi.get(self, "time_ords_certificate_expires")
 
     @time_ords_certificate_expires.setter
-    def time_ords_certificate_expires(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def time_ords_certificate_expires(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "time_ords_certificate_expires", value)
 
     @_builtins.property
     @pulumi.getter(name="timeZone")
-    def time_zone(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def time_zone(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The time zone of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        Time zone of the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "time_zone")
 
     @time_zone.setter
-    def time_zone(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def time_zone(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "time_zone", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['CloudAutonomousVmClusterTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['CloudAutonomousVmClusterTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['CloudAutonomousVmClusterTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['CloudAutonomousVmClusterTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter(name="totalContainerDatabases")
-    def total_container_databases(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def total_container_databases(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The total number of Autonomous Container Databases that can be created with the allocated local storage. Changing this will force terraform to create new resource.
+        Total number of Autonomous Container Databases that can be created with the allocated local storage. Changing this will force terraform to create new resource.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "total_container_databases")
 
     @total_container_databases.setter
-    def total_container_databases(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def total_container_databases(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "total_container_databases", value)
 
 
@@ -1215,26 +1217,26 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 autonomous_data_storage_size_in_tbs: Optional[pulumi.Input[_builtins.float]] = None,
-                 cloud_exadata_infrastructure_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 cloud_exadata_infrastructure_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 cpu_core_count_per_node: Optional[pulumi.Input[_builtins.int]] = None,
-                 db_servers: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 display_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 is_mtls_enabled_vm_cluster: Optional[pulumi.Input[_builtins.bool]] = None,
-                 license_model: Optional[pulumi.Input[_builtins.str]] = None,
-                 maintenance_window: Optional[pulumi.Input[Union['CloudAutonomousVmClusterMaintenanceWindowArgs', 'CloudAutonomousVmClusterMaintenanceWindowArgsDict']]] = None,
-                 memory_per_oracle_compute_unit_in_gbs: Optional[pulumi.Input[_builtins.int]] = None,
-                 odb_network_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 odb_network_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 scan_listener_port_non_tls: Optional[pulumi.Input[_builtins.int]] = None,
-                 scan_listener_port_tls: Optional[pulumi.Input[_builtins.int]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 time_zone: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['CloudAutonomousVmClusterTimeoutsArgs', 'CloudAutonomousVmClusterTimeoutsArgsDict']]] = None,
-                 total_container_databases: Optional[pulumi.Input[_builtins.int]] = None,
+                 autonomous_data_storage_size_in_tbs: pulumi.Input[Optional[_builtins.float]] = None,
+                 cloud_exadata_infrastructure_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 cloud_exadata_infrastructure_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 cpu_core_count_per_node: pulumi.Input[Optional[_builtins.int]] = None,
+                 db_servers: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 display_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 is_mtls_enabled_vm_cluster: pulumi.Input[Optional[_builtins.bool]] = None,
+                 license_model: pulumi.Input[Optional[_builtins.str]] = None,
+                 maintenance_window: pulumi.Input[Optional[Union['CloudAutonomousVmClusterMaintenanceWindowArgs', 'CloudAutonomousVmClusterMaintenanceWindowArgsDict']]] = None,
+                 memory_per_oracle_compute_unit_in_gbs: pulumi.Input[Optional[_builtins.int]] = None,
+                 odb_network_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 odb_network_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 scan_listener_port_non_tls: pulumi.Input[Optional[_builtins.int]] = None,
+                 scan_listener_port_tls: pulumi.Input[Optional[_builtins.int]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 time_zone: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['CloudAutonomousVmClusterTimeoutsArgs', 'CloudAutonomousVmClusterTimeoutsArgsDict']]] = None,
+                 total_container_databases: pulumi.Input[Optional[_builtins.int]] = None,
                  __props__=None):
         """
         Resource managing cloud autonomous vm cluster in AWS for Oracle Database@AWS.
@@ -1250,37 +1252,21 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
         import pulumi_aws as aws
 
         avmc_with_minimum_parameters = aws.odb.CloudAutonomousVmCluster("avmc_with_minimum_parameters",
+            maintenance_window={
+                "preference": "NO_PREFERENCE",
+            },
             cloud_exadata_infrastructure_id="<aws_odb_cloud_exadata_infrastructure_id>",
             odb_network_id="<aws_odb_network_id>",
             display_name="my_autonomous_vm_cluster",
-            autonomous_data_storage_size_in_tbs=5,
+            autonomous_data_storage_size_in_tbs=float(5),
             memory_per_oracle_compute_unit_in_gbs=2,
             total_container_databases=1,
             cpu_core_count_per_node=40,
             license_model="LICENSE_INCLUDED",
             db_servers=["<my_db_server_id>"],
             scan_listener_port_tls=8561,
-            scan_listener_port_non_tls=1024,
-            maintenance_window={
-                "preference": "NO_PREFERENCE",
-            })
+            scan_listener_port_non_tls=1024)
         avmc_with_all_params = aws.odb.CloudAutonomousVmCluster("avmc_with_all_params",
-            description="my first avmc",
-            time_zone="UTC",
-            cloud_exadata_infrastructure_id="<aws_odb_cloud_exadata_infrastructure_id>",
-            odb_network_id="<aws_odb_network_id>",
-            display_name="my_autonomous_vm_cluster",
-            autonomous_data_storage_size_in_tbs=5,
-            memory_per_oracle_compute_unit_in_gbs=2,
-            total_container_databases=1,
-            cpu_core_count_per_node=40,
-            license_model="LICENSE_INCLUDED",
-            db_servers=[
-                "<my_db_server_1>",
-                "<my_db_server_2>",
-            ],
-            scan_listener_port_tls=8561,
-            scan_listener_port_non_tls=1024,
             maintenance_window={
                 "days_of_weeks": [
                     {
@@ -1315,6 +1301,22 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
                     4,
                 ],
             },
+            description="my first avmc",
+            time_zone="UTC",
+            cloud_exadata_infrastructure_id="<aws_odb_cloud_exadata_infrastructure_id>",
+            odb_network_id="<aws_odb_network_id>",
+            display_name="my_autonomous_vm_cluster",
+            autonomous_data_storage_size_in_tbs=float(5),
+            memory_per_oracle_compute_unit_in_gbs=2,
+            total_container_databases=1,
+            cpu_core_count_per_node=40,
+            license_model="LICENSE_INCLUDED",
+            db_servers=[
+                "<my_db_server_1>",
+                "<my_db_server_2>",
+            ],
+            scan_listener_port_tls=8561,
+            scan_listener_port_non_tls=1024,
             tags={
                 "env": "dev",
             })
@@ -1328,29 +1330,30 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
         $ pulumi import aws:odb/cloudAutonomousVmCluster:CloudAutonomousVmCluster example example
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.float] autonomous_data_storage_size_in_tbs: The data storage size allocated for Autonomous Databases in the Autonomous VM cluster, in TB. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.float] autonomous_data_storage_size_in_tbs: Data storage size allocated for Autonomous Databases in the Autonomous VM cluster, in TB. Changing this will force terraform to create new resource.
         :param pulumi.Input[_builtins.str] cloud_exadata_infrastructure_arn: Exadata infrastructure ARN. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         :param pulumi.Input[_builtins.str] cloud_exadata_infrastructure_id: Exadata infrastructure id. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
-        :param pulumi.Input[_builtins.int] cpu_core_count_per_node: The number of CPU cores enabled per node in the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] db_servers: The database servers in the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.str] description: The description of the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.str] display_name: The display name of the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.bool] is_mtls_enabled_vm_cluster: Indicates whether mutual TLS (mTLS) authentication is enabled for the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.str] license_model: The license model for the Autonomous VM cluster. Valid values are LICENSE_INCLUDED or BRING_YOUR_OWN_LICENSE. Changing this will force terraform to create new resource.
-        :param pulumi.Input[Union['CloudAutonomousVmClusterMaintenanceWindowArgs', 'CloudAutonomousVmClusterMaintenanceWindowArgsDict']] maintenance_window: The maintenance window of the Autonomous VM cluster. Changing this will force terraform to create new resource.
-               
-               The following arguments are optional:
-        :param pulumi.Input[_builtins.int] memory_per_oracle_compute_unit_in_gbs: The amount of memory allocated per Oracle Compute Unit, in GB. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] cpu_core_count_per_node: Number of CPU cores enabled per node in the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] db_servers: Database servers in the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.str] description: Description of the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.str] display_name: Display name of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.bool] is_mtls_enabled_vm_cluster: Whether mutual TLS (mTLS) authentication is enabled for the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.str] license_model: License model for the Autonomous VM cluster. Valid values are LICENSE_INCLUDED or BRING_YOUR_OWN_LICENSE. Changing this will force terraform to create new resource.
+        :param pulumi.Input[Union['CloudAutonomousVmClusterMaintenanceWindowArgs', 'CloudAutonomousVmClusterMaintenanceWindowArgsDict']] maintenance_window: Maintenance window of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] memory_per_oracle_compute_unit_in_gbs: Amount of memory allocated per Oracle Compute Unit, in GB. Changing this will force terraform to create new resource.
         :param pulumi.Input[_builtins.str] odb_network_arn: ARN of the ODB network associated with this Autonomous VM Cluster. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         :param pulumi.Input[_builtins.str] odb_network_id: Unique identifier of the ODB network associated with this Autonomous VM Cluster. Changing this will force Terraform to create a new resource. Changing this will create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.int] scan_listener_port_non_tls: The SCAN listener port for non-TLS (TCP) protocol. The default is 1521. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.int] scan_listener_port_tls: The SCAN listener port for TLS (TCP) protocol. The default is 2484. Changing this will force terraform to create new resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the exadata infrastructure. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[_builtins.str] time_zone: The time zone of the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.int] total_container_databases: The total number of Autonomous Container Databases that can be created with the allocated local storage. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] scan_listener_port_non_tls: SCAN listener port for non-TLS (TCP) protocol. The default is 1521. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] scan_listener_port_tls: SCAN listener port for TLS (TCP) protocol. The default is 2484. Changing this will force terraform to create new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the exadata infrastructure. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[_builtins.str] time_zone: Time zone of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] total_container_databases: Total number of Autonomous Container Databases that can be created with the allocated local storage. Changing this will force terraform to create new resource.
+               
+               The following arguments are optional:
         """
         ...
     @overload
@@ -1372,37 +1375,21 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
         import pulumi_aws as aws
 
         avmc_with_minimum_parameters = aws.odb.CloudAutonomousVmCluster("avmc_with_minimum_parameters",
+            maintenance_window={
+                "preference": "NO_PREFERENCE",
+            },
             cloud_exadata_infrastructure_id="<aws_odb_cloud_exadata_infrastructure_id>",
             odb_network_id="<aws_odb_network_id>",
             display_name="my_autonomous_vm_cluster",
-            autonomous_data_storage_size_in_tbs=5,
+            autonomous_data_storage_size_in_tbs=float(5),
             memory_per_oracle_compute_unit_in_gbs=2,
             total_container_databases=1,
             cpu_core_count_per_node=40,
             license_model="LICENSE_INCLUDED",
             db_servers=["<my_db_server_id>"],
             scan_listener_port_tls=8561,
-            scan_listener_port_non_tls=1024,
-            maintenance_window={
-                "preference": "NO_PREFERENCE",
-            })
+            scan_listener_port_non_tls=1024)
         avmc_with_all_params = aws.odb.CloudAutonomousVmCluster("avmc_with_all_params",
-            description="my first avmc",
-            time_zone="UTC",
-            cloud_exadata_infrastructure_id="<aws_odb_cloud_exadata_infrastructure_id>",
-            odb_network_id="<aws_odb_network_id>",
-            display_name="my_autonomous_vm_cluster",
-            autonomous_data_storage_size_in_tbs=5,
-            memory_per_oracle_compute_unit_in_gbs=2,
-            total_container_databases=1,
-            cpu_core_count_per_node=40,
-            license_model="LICENSE_INCLUDED",
-            db_servers=[
-                "<my_db_server_1>",
-                "<my_db_server_2>",
-            ],
-            scan_listener_port_tls=8561,
-            scan_listener_port_non_tls=1024,
             maintenance_window={
                 "days_of_weeks": [
                     {
@@ -1437,6 +1424,22 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
                     4,
                 ],
             },
+            description="my first avmc",
+            time_zone="UTC",
+            cloud_exadata_infrastructure_id="<aws_odb_cloud_exadata_infrastructure_id>",
+            odb_network_id="<aws_odb_network_id>",
+            display_name="my_autonomous_vm_cluster",
+            autonomous_data_storage_size_in_tbs=float(5),
+            memory_per_oracle_compute_unit_in_gbs=2,
+            total_container_databases=1,
+            cpu_core_count_per_node=40,
+            license_model="LICENSE_INCLUDED",
+            db_servers=[
+                "<my_db_server_1>",
+                "<my_db_server_2>",
+            ],
+            scan_listener_port_tls=8561,
+            scan_listener_port_non_tls=1024,
             tags={
                 "env": "dev",
             })
@@ -1449,6 +1452,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:odb/cloudAutonomousVmCluster:CloudAutonomousVmCluster example example
         ```
+
 
         :param str resource_name: The name of the resource.
         :param CloudAutonomousVmClusterArgs args: The arguments to use to populate this resource's properties.
@@ -1465,26 +1469,26 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 autonomous_data_storage_size_in_tbs: Optional[pulumi.Input[_builtins.float]] = None,
-                 cloud_exadata_infrastructure_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 cloud_exadata_infrastructure_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 cpu_core_count_per_node: Optional[pulumi.Input[_builtins.int]] = None,
-                 db_servers: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 display_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 is_mtls_enabled_vm_cluster: Optional[pulumi.Input[_builtins.bool]] = None,
-                 license_model: Optional[pulumi.Input[_builtins.str]] = None,
-                 maintenance_window: Optional[pulumi.Input[Union['CloudAutonomousVmClusterMaintenanceWindowArgs', 'CloudAutonomousVmClusterMaintenanceWindowArgsDict']]] = None,
-                 memory_per_oracle_compute_unit_in_gbs: Optional[pulumi.Input[_builtins.int]] = None,
-                 odb_network_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 odb_network_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 scan_listener_port_non_tls: Optional[pulumi.Input[_builtins.int]] = None,
-                 scan_listener_port_tls: Optional[pulumi.Input[_builtins.int]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 time_zone: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['CloudAutonomousVmClusterTimeoutsArgs', 'CloudAutonomousVmClusterTimeoutsArgsDict']]] = None,
-                 total_container_databases: Optional[pulumi.Input[_builtins.int]] = None,
+                 autonomous_data_storage_size_in_tbs: pulumi.Input[Optional[_builtins.float]] = None,
+                 cloud_exadata_infrastructure_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 cloud_exadata_infrastructure_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 cpu_core_count_per_node: pulumi.Input[Optional[_builtins.int]] = None,
+                 db_servers: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 display_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 is_mtls_enabled_vm_cluster: pulumi.Input[Optional[_builtins.bool]] = None,
+                 license_model: pulumi.Input[Optional[_builtins.str]] = None,
+                 maintenance_window: pulumi.Input[Optional[Union['CloudAutonomousVmClusterMaintenanceWindowArgs', 'CloudAutonomousVmClusterMaintenanceWindowArgsDict']]] = None,
+                 memory_per_oracle_compute_unit_in_gbs: pulumi.Input[Optional[_builtins.int]] = None,
+                 odb_network_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 odb_network_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 scan_listener_port_non_tls: pulumi.Input[Optional[_builtins.int]] = None,
+                 scan_listener_port_tls: pulumi.Input[Optional[_builtins.int]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 time_zone: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['CloudAutonomousVmClusterTimeoutsArgs', 'CloudAutonomousVmClusterTimeoutsArgsDict']]] = None,
+                 total_container_databases: pulumi.Input[Optional[_builtins.int]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -1576,60 +1580,60 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            autonomous_data_storage_percentage: Optional[pulumi.Input[_builtins.float]] = None,
-            autonomous_data_storage_size_in_tbs: Optional[pulumi.Input[_builtins.float]] = None,
-            available_autonomous_data_storage_size_in_tbs: Optional[pulumi.Input[_builtins.float]] = None,
-            available_container_databases: Optional[pulumi.Input[_builtins.int]] = None,
-            available_cpus: Optional[pulumi.Input[_builtins.float]] = None,
-            cloud_exadata_infrastructure_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            cloud_exadata_infrastructure_id: Optional[pulumi.Input[_builtins.str]] = None,
-            compute_model: Optional[pulumi.Input[_builtins.str]] = None,
-            cpu_core_count: Optional[pulumi.Input[_builtins.int]] = None,
-            cpu_core_count_per_node: Optional[pulumi.Input[_builtins.int]] = None,
-            cpu_percentage: Optional[pulumi.Input[_builtins.float]] = None,
-            created_at: Optional[pulumi.Input[_builtins.str]] = None,
-            data_storage_size_in_gbs: Optional[pulumi.Input[_builtins.float]] = None,
-            data_storage_size_in_tbs: Optional[pulumi.Input[_builtins.float]] = None,
-            db_servers: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            display_name: Optional[pulumi.Input[_builtins.str]] = None,
-            domain: Optional[pulumi.Input[_builtins.str]] = None,
-            exadata_storage_in_tbs_lowest_scaled_value: Optional[pulumi.Input[_builtins.float]] = None,
-            hostname: Optional[pulumi.Input[_builtins.str]] = None,
-            is_mtls_enabled_vm_cluster: Optional[pulumi.Input[_builtins.bool]] = None,
-            license_model: Optional[pulumi.Input[_builtins.str]] = None,
-            maintenance_window: Optional[pulumi.Input[Union['CloudAutonomousVmClusterMaintenanceWindowArgs', 'CloudAutonomousVmClusterMaintenanceWindowArgsDict']]] = None,
-            max_acds_lowest_scaled_value: Optional[pulumi.Input[_builtins.int]] = None,
-            memory_per_oracle_compute_unit_in_gbs: Optional[pulumi.Input[_builtins.int]] = None,
-            memory_size_in_gbs: Optional[pulumi.Input[_builtins.int]] = None,
-            node_count: Optional[pulumi.Input[_builtins.int]] = None,
-            non_provisionable_autonomous_container_databases: Optional[pulumi.Input[_builtins.int]] = None,
-            oci_resource_anchor_name: Optional[pulumi.Input[_builtins.str]] = None,
-            oci_url: Optional[pulumi.Input[_builtins.str]] = None,
-            ocid: Optional[pulumi.Input[_builtins.str]] = None,
-            odb_network_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            odb_network_id: Optional[pulumi.Input[_builtins.str]] = None,
-            odb_node_storage_size_in_gbs: Optional[pulumi.Input[_builtins.int]] = None,
-            percent_progress: Optional[pulumi.Input[_builtins.float]] = None,
-            provisionable_autonomous_container_databases: Optional[pulumi.Input[_builtins.int]] = None,
-            provisioned_autonomous_container_databases: Optional[pulumi.Input[_builtins.int]] = None,
-            provisioned_cpus: Optional[pulumi.Input[_builtins.float]] = None,
-            reclaimable_cpus: Optional[pulumi.Input[_builtins.float]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            reserved_cpus: Optional[pulumi.Input[_builtins.float]] = None,
-            scan_listener_port_non_tls: Optional[pulumi.Input[_builtins.int]] = None,
-            scan_listener_port_tls: Optional[pulumi.Input[_builtins.int]] = None,
-            shape: Optional[pulumi.Input[_builtins.str]] = None,
-            status: Optional[pulumi.Input[_builtins.str]] = None,
-            status_reason: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            time_database_ssl_certificate_expires: Optional[pulumi.Input[_builtins.str]] = None,
-            time_ords_certificate_expires: Optional[pulumi.Input[_builtins.str]] = None,
-            time_zone: Optional[pulumi.Input[_builtins.str]] = None,
-            timeouts: Optional[pulumi.Input[Union['CloudAutonomousVmClusterTimeoutsArgs', 'CloudAutonomousVmClusterTimeoutsArgsDict']]] = None,
-            total_container_databases: Optional[pulumi.Input[_builtins.int]] = None) -> 'CloudAutonomousVmCluster':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            autonomous_data_storage_percentage: pulumi.Input[Optional[_builtins.float]] = None,
+            autonomous_data_storage_size_in_tbs: pulumi.Input[Optional[_builtins.float]] = None,
+            available_autonomous_data_storage_size_in_tbs: pulumi.Input[Optional[_builtins.float]] = None,
+            available_container_databases: pulumi.Input[Optional[_builtins.int]] = None,
+            available_cpus: pulumi.Input[Optional[_builtins.float]] = None,
+            cloud_exadata_infrastructure_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            cloud_exadata_infrastructure_id: pulumi.Input[Optional[_builtins.str]] = None,
+            compute_model: pulumi.Input[Optional[_builtins.str]] = None,
+            cpu_core_count: pulumi.Input[Optional[_builtins.int]] = None,
+            cpu_core_count_per_node: pulumi.Input[Optional[_builtins.int]] = None,
+            cpu_percentage: pulumi.Input[Optional[_builtins.float]] = None,
+            created_at: pulumi.Input[Optional[_builtins.str]] = None,
+            data_storage_size_in_gbs: pulumi.Input[Optional[_builtins.float]] = None,
+            data_storage_size_in_tbs: pulumi.Input[Optional[_builtins.float]] = None,
+            db_servers: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            display_name: pulumi.Input[Optional[_builtins.str]] = None,
+            domain: pulumi.Input[Optional[_builtins.str]] = None,
+            exadata_storage_in_tbs_lowest_scaled_value: pulumi.Input[Optional[_builtins.float]] = None,
+            hostname: pulumi.Input[Optional[_builtins.str]] = None,
+            is_mtls_enabled_vm_cluster: pulumi.Input[Optional[_builtins.bool]] = None,
+            license_model: pulumi.Input[Optional[_builtins.str]] = None,
+            maintenance_window: pulumi.Input[Optional[Union['CloudAutonomousVmClusterMaintenanceWindowArgs', 'CloudAutonomousVmClusterMaintenanceWindowArgsDict']]] = None,
+            max_acds_lowest_scaled_value: pulumi.Input[Optional[_builtins.int]] = None,
+            memory_per_oracle_compute_unit_in_gbs: pulumi.Input[Optional[_builtins.int]] = None,
+            memory_size_in_gbs: pulumi.Input[Optional[_builtins.int]] = None,
+            node_count: pulumi.Input[Optional[_builtins.int]] = None,
+            non_provisionable_autonomous_container_databases: pulumi.Input[Optional[_builtins.int]] = None,
+            oci_resource_anchor_name: pulumi.Input[Optional[_builtins.str]] = None,
+            oci_url: pulumi.Input[Optional[_builtins.str]] = None,
+            ocid: pulumi.Input[Optional[_builtins.str]] = None,
+            odb_network_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            odb_network_id: pulumi.Input[Optional[_builtins.str]] = None,
+            odb_node_storage_size_in_gbs: pulumi.Input[Optional[_builtins.int]] = None,
+            percent_progress: pulumi.Input[Optional[_builtins.float]] = None,
+            provisionable_autonomous_container_databases: pulumi.Input[Optional[_builtins.int]] = None,
+            provisioned_autonomous_container_databases: pulumi.Input[Optional[_builtins.int]] = None,
+            provisioned_cpus: pulumi.Input[Optional[_builtins.float]] = None,
+            reclaimable_cpus: pulumi.Input[Optional[_builtins.float]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            reserved_cpus: pulumi.Input[Optional[_builtins.float]] = None,
+            scan_listener_port_non_tls: pulumi.Input[Optional[_builtins.int]] = None,
+            scan_listener_port_tls: pulumi.Input[Optional[_builtins.int]] = None,
+            shape: pulumi.Input[Optional[_builtins.str]] = None,
+            status: pulumi.Input[Optional[_builtins.str]] = None,
+            status_reason: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            time_database_ssl_certificate_expires: pulumi.Input[Optional[_builtins.str]] = None,
+            time_ords_certificate_expires: pulumi.Input[Optional[_builtins.str]] = None,
+            time_zone: pulumi.Input[Optional[_builtins.str]] = None,
+            timeouts: pulumi.Input[Optional[Union['CloudAutonomousVmClusterTimeoutsArgs', 'CloudAutonomousVmClusterTimeoutsArgsDict']]] = None,
+            total_container_databases: pulumi.Input[Optional[_builtins.int]] = None) -> 'CloudAutonomousVmCluster':
         """
         Get an existing CloudAutonomousVmCluster resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -1637,61 +1641,61 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] arn: The Amazon Resource Name (ARN) for the Exadata infrastructure.
-        :param pulumi.Input[_builtins.float] autonomous_data_storage_percentage: The progress of the current operation on the Autonomous VM cluster, as a percentage.
-        :param pulumi.Input[_builtins.float] autonomous_data_storage_size_in_tbs: The data storage size allocated for Autonomous Databases in the Autonomous VM cluster, in TB. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.float] available_autonomous_data_storage_size_in_tbs: The available data storage space for Autonomous Databases in the Autonomous VM cluster, in TB.
-        :param pulumi.Input[_builtins.int] available_container_databases: The number of Autonomous CDBs that you can create with the currently available storage.
-        :param pulumi.Input[_builtins.float] available_cpus: The number of CPU cores available for allocation to Autonomous Databases.
+        :param pulumi.Input[_builtins.str] arn: ARN for the Exadata infrastructure.
+        :param pulumi.Input[_builtins.float] autonomous_data_storage_percentage: Progress of the current operation on the Autonomous VM cluster, as a percentage.
+        :param pulumi.Input[_builtins.float] autonomous_data_storage_size_in_tbs: Data storage size allocated for Autonomous Databases in the Autonomous VM cluster, in TB. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.float] available_autonomous_data_storage_size_in_tbs: Available data storage space for Autonomous Databases in the Autonomous VM cluster, in TB.
+        :param pulumi.Input[_builtins.int] available_container_databases: Number of Autonomous CDBs that you can create with the currently available storage.
+        :param pulumi.Input[_builtins.float] available_cpus: Number of CPU cores available for allocation to Autonomous Databases.
         :param pulumi.Input[_builtins.str] cloud_exadata_infrastructure_arn: Exadata infrastructure ARN. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         :param pulumi.Input[_builtins.str] cloud_exadata_infrastructure_id: Exadata infrastructure id. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
-        :param pulumi.Input[_builtins.str] compute_model: The compute model of the Autonomous VM cluster: ECPU or OCPU.
-        :param pulumi.Input[_builtins.int] cpu_core_count: The total number of CPU cores in the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.int] cpu_core_count_per_node: The number of CPU cores enabled per node in the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.float] cpu_percentage: The percentage of total CPU cores currently in use in the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.str] created_at: The date and time when the Autonomous VM cluster was created.
-        :param pulumi.Input[_builtins.float] data_storage_size_in_gbs: The total data storage allocated to the Autonomous VM cluster, in GB.
-        :param pulumi.Input[_builtins.float] data_storage_size_in_tbs: The total data storage allocated to the Autonomous VM cluster, in TB.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] db_servers: The database servers in the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.str] description: The description of the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.str] display_name: The display name of the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.str] domain: The domain name of the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.float] exadata_storage_in_tbs_lowest_scaled_value: The minimum value to which you can scale down the Exadata storage, in TB.
-        :param pulumi.Input[_builtins.str] hostname: The hostname of the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.bool] is_mtls_enabled_vm_cluster: Indicates whether mutual TLS (mTLS) authentication is enabled for the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.str] license_model: The license model for the Autonomous VM cluster. Valid values are LICENSE_INCLUDED or BRING_YOUR_OWN_LICENSE. Changing this will force terraform to create new resource.
-        :param pulumi.Input[Union['CloudAutonomousVmClusterMaintenanceWindowArgs', 'CloudAutonomousVmClusterMaintenanceWindowArgsDict']] maintenance_window: The maintenance window of the Autonomous VM cluster. Changing this will force terraform to create new resource.
-               
-               The following arguments are optional:
-        :param pulumi.Input[_builtins.int] max_acds_lowest_scaled_value: The minimum value to which you can scale down the maximum number of Autonomous CDBs.
-        :param pulumi.Input[_builtins.int] memory_per_oracle_compute_unit_in_gbs: The amount of memory allocated per Oracle Compute Unit, in GB. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.int] memory_size_in_gbs: The total amount of memory allocated to the Autonomous VM cluster, in gigabytes(GB).
-        :param pulumi.Input[_builtins.int] node_count: The number of database server nodes in the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.int] non_provisionable_autonomous_container_databases: The number of Autonomous CDBs that can't be provisioned because of resource constraints.
-        :param pulumi.Input[_builtins.str] oci_resource_anchor_name: The name of the OCI resource anchor associated with this Autonomous VM cluster.
-        :param pulumi.Input[_builtins.str] oci_url: The URL for accessing the OCI console page for this Autonomous VM cluster.
-        :param pulumi.Input[_builtins.str] ocid: The Oracle Cloud Identifier (OCID) of the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.str] compute_model: Compute model of the Autonomous VM cluster: ECPU or OCPU.
+        :param pulumi.Input[_builtins.int] cpu_core_count: Total number of CPU cores in the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.int] cpu_core_count_per_node: Number of CPU cores enabled per node in the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.float] cpu_percentage: Percentage of total CPU cores currently in use in the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.str] created_at: Date and time when the Autonomous VM cluster was created.
+        :param pulumi.Input[_builtins.float] data_storage_size_in_gbs: Total data storage allocated to the Autonomous VM cluster, in GB.
+        :param pulumi.Input[_builtins.float] data_storage_size_in_tbs: Total data storage allocated to the Autonomous VM cluster, in TB.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] db_servers: Database servers in the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.str] description: Description of the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.str] display_name: Display name of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.str] domain: Domain name of the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.float] exadata_storage_in_tbs_lowest_scaled_value: Minimum value to which you can scale down the Exadata storage, in TB.
+        :param pulumi.Input[_builtins.str] hostname: Hostname of the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.bool] is_mtls_enabled_vm_cluster: Whether mutual TLS (mTLS) authentication is enabled for the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.str] license_model: License model for the Autonomous VM cluster. Valid values are LICENSE_INCLUDED or BRING_YOUR_OWN_LICENSE. Changing this will force terraform to create new resource.
+        :param pulumi.Input[Union['CloudAutonomousVmClusterMaintenanceWindowArgs', 'CloudAutonomousVmClusterMaintenanceWindowArgsDict']] maintenance_window: Maintenance window of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] max_acds_lowest_scaled_value: Minimum value to which you can scale down the maximum number of Autonomous CDBs.
+        :param pulumi.Input[_builtins.int] memory_per_oracle_compute_unit_in_gbs: Amount of memory allocated per Oracle Compute Unit, in GB. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] memory_size_in_gbs: Total amount of memory allocated to the Autonomous VM cluster, in gigabytes(GB).
+        :param pulumi.Input[_builtins.int] node_count: Number of database server nodes in the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.int] non_provisionable_autonomous_container_databases: Number of Autonomous CDBs that can't be provisioned because of resource constraints.
+        :param pulumi.Input[_builtins.str] oci_resource_anchor_name: Name of the OCI resource anchor associated with this Autonomous VM cluster.
+        :param pulumi.Input[_builtins.str] oci_url: URL for accessing the OCI console page for this Autonomous VM cluster.
+        :param pulumi.Input[_builtins.str] ocid: Oracle Cloud Identifier (OCID) of the Autonomous VM cluster.
         :param pulumi.Input[_builtins.str] odb_network_arn: ARN of the ODB network associated with this Autonomous VM Cluster. Changing this will force Terraform to create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
         :param pulumi.Input[_builtins.str] odb_network_id: Unique identifier of the ODB network associated with this Autonomous VM Cluster. Changing this will force Terraform to create a new resource. Changing this will create a new resource. Either the combination of `cloud_exadata_infrastructure_id` and `odb_network_id` or `cloud_exadata_infrastructure_arn` and `odb_network_arn` must be used.
-        :param pulumi.Input[_builtins.int] odb_node_storage_size_in_gbs: The local node storage allocated to the Autonomous VM cluster, in gigabytes (GB).
-        :param pulumi.Input[_builtins.float] percent_progress: The progress of the current operation on the Autonomous VM cluster, as a percentage.
-        :param pulumi.Input[_builtins.int] provisionable_autonomous_container_databases: The number of Autonomous CDBs that can be provisioned in the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.int] provisioned_autonomous_container_databases: The number of Autonomous CDBs currently provisioned in the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.float] provisioned_cpus: The number of CPUs provisioned in the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.float] reclaimable_cpus: The number of CPU cores that can be reclaimed from terminated or scaled-down Autonomous Databases.
+        :param pulumi.Input[_builtins.int] odb_node_storage_size_in_gbs: Local node storage allocated to the Autonomous VM cluster, in gigabytes (GB).
+        :param pulumi.Input[_builtins.float] percent_progress: Progress of the current operation on the Autonomous VM cluster, as a percentage.
+        :param pulumi.Input[_builtins.int] provisionable_autonomous_container_databases: Number of Autonomous CDBs that can be provisioned in the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.int] provisioned_autonomous_container_databases: Number of Autonomous CDBs currently provisioned in the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.float] provisioned_cpus: Number of CPUs provisioned in the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.float] reclaimable_cpus: Number of CPU cores that can be reclaimed from terminated or scaled-down Autonomous Databases.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.float] reserved_cpus: The number of CPU cores reserved for system operations and redundancy.
-        :param pulumi.Input[_builtins.int] scan_listener_port_non_tls: The SCAN listener port for non-TLS (TCP) protocol. The default is 1521. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.int] scan_listener_port_tls: The SCAN listener port for TLS (TCP) protocol. The default is 2484. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.str] shape: The shape of the Exadata infrastructure for the Autonomous VM cluster.
-        :param pulumi.Input[_builtins.str] status: The status of the Autonomous VM cluster. Possible values include CREATING, AVAILABLE, UPDATING, DELETING, DELETED, FAILED.
+        :param pulumi.Input[_builtins.float] reserved_cpus: Number of CPU cores reserved for system operations and redundancy.
+        :param pulumi.Input[_builtins.int] scan_listener_port_non_tls: SCAN listener port for non-TLS (TCP) protocol. The default is 1521. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] scan_listener_port_tls: SCAN listener port for TLS (TCP) protocol. The default is 2484. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.str] shape: Shape of the Exadata infrastructure for the Autonomous VM cluster.
+        :param pulumi.Input[_builtins.str] status: Status of the Autonomous VM cluster. Possible values include CREATING, AVAILABLE, UPDATING, DELETING, DELETED, FAILED.
         :param pulumi.Input[_builtins.str] status_reason: Additional information about the current status of the Autonomous VM cluster.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the exadata infrastructure. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: The combined set of user-defined and provider-defined tags.
-        :param pulumi.Input[_builtins.str] time_database_ssl_certificate_expires: The expiration date and time of the database SSL certificate.
-        :param pulumi.Input[_builtins.str] time_ords_certificate_expires: The expiration date and time of the ORDS certificate.
-        :param pulumi.Input[_builtins.str] time_zone: The time zone of the Autonomous VM cluster. Changing this will force terraform to create new resource.
-        :param pulumi.Input[_builtins.int] total_container_databases: The total number of Autonomous Container Databases that can be created with the allocated local storage. Changing this will force terraform to create new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the exadata infrastructure. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Combined set of user-defined and provider-defined tags.
+        :param pulumi.Input[_builtins.str] time_database_ssl_certificate_expires: Expiration date and time of the database SSL certificate.
+        :param pulumi.Input[_builtins.str] time_ords_certificate_expires: Expiration date and time of the ORDS certificate.
+        :param pulumi.Input[_builtins.str] time_zone: Time zone of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        :param pulumi.Input[_builtins.int] total_container_databases: Total number of Autonomous Container Databases that can be created with the allocated local storage. Changing this will force terraform to create new resource.
+               
+               The following arguments are optional:
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -1757,7 +1761,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) for the Exadata infrastructure.
+        ARN for the Exadata infrastructure.
         """
         return pulumi.get(self, "arn")
 
@@ -1765,7 +1769,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="autonomousDataStoragePercentage")
     def autonomous_data_storage_percentage(self) -> pulumi.Output[_builtins.float]:
         """
-        The progress of the current operation on the Autonomous VM cluster, as a percentage.
+        Progress of the current operation on the Autonomous VM cluster, as a percentage.
         """
         return pulumi.get(self, "autonomous_data_storage_percentage")
 
@@ -1773,7 +1777,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="autonomousDataStorageSizeInTbs")
     def autonomous_data_storage_size_in_tbs(self) -> pulumi.Output[_builtins.float]:
         """
-        The data storage size allocated for Autonomous Databases in the Autonomous VM cluster, in TB. Changing this will force terraform to create new resource.
+        Data storage size allocated for Autonomous Databases in the Autonomous VM cluster, in TB. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "autonomous_data_storage_size_in_tbs")
 
@@ -1781,7 +1785,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="availableAutonomousDataStorageSizeInTbs")
     def available_autonomous_data_storage_size_in_tbs(self) -> pulumi.Output[_builtins.float]:
         """
-        The available data storage space for Autonomous Databases in the Autonomous VM cluster, in TB.
+        Available data storage space for Autonomous Databases in the Autonomous VM cluster, in TB.
         """
         return pulumi.get(self, "available_autonomous_data_storage_size_in_tbs")
 
@@ -1789,7 +1793,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="availableContainerDatabases")
     def available_container_databases(self) -> pulumi.Output[_builtins.int]:
         """
-        The number of Autonomous CDBs that you can create with the currently available storage.
+        Number of Autonomous CDBs that you can create with the currently available storage.
         """
         return pulumi.get(self, "available_container_databases")
 
@@ -1797,7 +1801,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="availableCpus")
     def available_cpus(self) -> pulumi.Output[_builtins.float]:
         """
-        The number of CPU cores available for allocation to Autonomous Databases.
+        Number of CPU cores available for allocation to Autonomous Databases.
         """
         return pulumi.get(self, "available_cpus")
 
@@ -1821,7 +1825,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="computeModel")
     def compute_model(self) -> pulumi.Output[_builtins.str]:
         """
-        The compute model of the Autonomous VM cluster: ECPU or OCPU.
+        Compute model of the Autonomous VM cluster: ECPU or OCPU.
         """
         return pulumi.get(self, "compute_model")
 
@@ -1829,7 +1833,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="cpuCoreCount")
     def cpu_core_count(self) -> pulumi.Output[_builtins.int]:
         """
-        The total number of CPU cores in the Autonomous VM cluster.
+        Total number of CPU cores in the Autonomous VM cluster.
         """
         return pulumi.get(self, "cpu_core_count")
 
@@ -1837,7 +1841,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="cpuCoreCountPerNode")
     def cpu_core_count_per_node(self) -> pulumi.Output[_builtins.int]:
         """
-        The number of CPU cores enabled per node in the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        Number of CPU cores enabled per node in the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "cpu_core_count_per_node")
 
@@ -1845,7 +1849,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="cpuPercentage")
     def cpu_percentage(self) -> pulumi.Output[_builtins.float]:
         """
-        The percentage of total CPU cores currently in use in the Autonomous VM cluster.
+        Percentage of total CPU cores currently in use in the Autonomous VM cluster.
         """
         return pulumi.get(self, "cpu_percentage")
 
@@ -1853,7 +1857,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="createdAt")
     def created_at(self) -> pulumi.Output[_builtins.str]:
         """
-        The date and time when the Autonomous VM cluster was created.
+        Date and time when the Autonomous VM cluster was created.
         """
         return pulumi.get(self, "created_at")
 
@@ -1861,7 +1865,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="dataStorageSizeInGbs")
     def data_storage_size_in_gbs(self) -> pulumi.Output[_builtins.float]:
         """
-        The total data storage allocated to the Autonomous VM cluster, in GB.
+        Total data storage allocated to the Autonomous VM cluster, in GB.
         """
         return pulumi.get(self, "data_storage_size_in_gbs")
 
@@ -1869,7 +1873,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="dataStorageSizeInTbs")
     def data_storage_size_in_tbs(self) -> pulumi.Output[_builtins.float]:
         """
-        The total data storage allocated to the Autonomous VM cluster, in TB.
+        Total data storage allocated to the Autonomous VM cluster, in TB.
         """
         return pulumi.get(self, "data_storage_size_in_tbs")
 
@@ -1877,7 +1881,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="dbServers")
     def db_servers(self) -> pulumi.Output[Sequence[_builtins.str]]:
         """
-        The database servers in the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        Database servers in the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "db_servers")
 
@@ -1885,7 +1889,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[_builtins.str]]:
         """
-        The description of the Autonomous VM cluster.
+        Description of the Autonomous VM cluster.
         """
         return pulumi.get(self, "description")
 
@@ -1893,7 +1897,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="displayName")
     def display_name(self) -> pulumi.Output[_builtins.str]:
         """
-        The display name of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        Display name of the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "display_name")
 
@@ -1901,7 +1905,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter
     def domain(self) -> pulumi.Output[_builtins.str]:
         """
-        The domain name of the Autonomous VM cluster.
+        Domain name of the Autonomous VM cluster.
         """
         return pulumi.get(self, "domain")
 
@@ -1909,7 +1913,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="exadataStorageInTbsLowestScaledValue")
     def exadata_storage_in_tbs_lowest_scaled_value(self) -> pulumi.Output[_builtins.float]:
         """
-        The minimum value to which you can scale down the Exadata storage, in TB.
+        Minimum value to which you can scale down the Exadata storage, in TB.
         """
         return pulumi.get(self, "exadata_storage_in_tbs_lowest_scaled_value")
 
@@ -1917,7 +1921,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter
     def hostname(self) -> pulumi.Output[_builtins.str]:
         """
-        The hostname of the Autonomous VM cluster.
+        Hostname of the Autonomous VM cluster.
         """
         return pulumi.get(self, "hostname")
 
@@ -1925,7 +1929,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="isMtlsEnabledVmCluster")
     def is_mtls_enabled_vm_cluster(self) -> pulumi.Output[_builtins.bool]:
         """
-        Indicates whether mutual TLS (mTLS) authentication is enabled for the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        Whether mutual TLS (mTLS) authentication is enabled for the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "is_mtls_enabled_vm_cluster")
 
@@ -1933,7 +1937,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="licenseModel")
     def license_model(self) -> pulumi.Output[_builtins.str]:
         """
-        The license model for the Autonomous VM cluster. Valid values are LICENSE_INCLUDED or BRING_YOUR_OWN_LICENSE. Changing this will force terraform to create new resource.
+        License model for the Autonomous VM cluster. Valid values are LICENSE_INCLUDED or BRING_YOUR_OWN_LICENSE. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "license_model")
 
@@ -1941,9 +1945,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="maintenanceWindow")
     def maintenance_window(self) -> pulumi.Output['outputs.CloudAutonomousVmClusterMaintenanceWindow']:
         """
-        The maintenance window of the Autonomous VM cluster. Changing this will force terraform to create new resource.
-
-        The following arguments are optional:
+        Maintenance window of the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "maintenance_window")
 
@@ -1951,7 +1953,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="maxAcdsLowestScaledValue")
     def max_acds_lowest_scaled_value(self) -> pulumi.Output[_builtins.int]:
         """
-        The minimum value to which you can scale down the maximum number of Autonomous CDBs.
+        Minimum value to which you can scale down the maximum number of Autonomous CDBs.
         """
         return pulumi.get(self, "max_acds_lowest_scaled_value")
 
@@ -1959,7 +1961,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="memoryPerOracleComputeUnitInGbs")
     def memory_per_oracle_compute_unit_in_gbs(self) -> pulumi.Output[_builtins.int]:
         """
-        The amount of memory allocated per Oracle Compute Unit, in GB. Changing this will force terraform to create new resource.
+        Amount of memory allocated per Oracle Compute Unit, in GB. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "memory_per_oracle_compute_unit_in_gbs")
 
@@ -1967,7 +1969,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="memorySizeInGbs")
     def memory_size_in_gbs(self) -> pulumi.Output[_builtins.int]:
         """
-        The total amount of memory allocated to the Autonomous VM cluster, in gigabytes(GB).
+        Total amount of memory allocated to the Autonomous VM cluster, in gigabytes(GB).
         """
         return pulumi.get(self, "memory_size_in_gbs")
 
@@ -1975,7 +1977,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="nodeCount")
     def node_count(self) -> pulumi.Output[_builtins.int]:
         """
-        The number of database server nodes in the Autonomous VM cluster.
+        Number of database server nodes in the Autonomous VM cluster.
         """
         return pulumi.get(self, "node_count")
 
@@ -1983,7 +1985,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="nonProvisionableAutonomousContainerDatabases")
     def non_provisionable_autonomous_container_databases(self) -> pulumi.Output[_builtins.int]:
         """
-        The number of Autonomous CDBs that can't be provisioned because of resource constraints.
+        Number of Autonomous CDBs that can't be provisioned because of resource constraints.
         """
         return pulumi.get(self, "non_provisionable_autonomous_container_databases")
 
@@ -1991,7 +1993,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="ociResourceAnchorName")
     def oci_resource_anchor_name(self) -> pulumi.Output[_builtins.str]:
         """
-        The name of the OCI resource anchor associated with this Autonomous VM cluster.
+        Name of the OCI resource anchor associated with this Autonomous VM cluster.
         """
         return pulumi.get(self, "oci_resource_anchor_name")
 
@@ -1999,7 +2001,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="ociUrl")
     def oci_url(self) -> pulumi.Output[_builtins.str]:
         """
-        The URL for accessing the OCI console page for this Autonomous VM cluster.
+        URL for accessing the OCI console page for this Autonomous VM cluster.
         """
         return pulumi.get(self, "oci_url")
 
@@ -2007,7 +2009,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter
     def ocid(self) -> pulumi.Output[_builtins.str]:
         """
-        The Oracle Cloud Identifier (OCID) of the Autonomous VM cluster.
+        Oracle Cloud Identifier (OCID) of the Autonomous VM cluster.
         """
         return pulumi.get(self, "ocid")
 
@@ -2031,7 +2033,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="odbNodeStorageSizeInGbs")
     def odb_node_storage_size_in_gbs(self) -> pulumi.Output[_builtins.int]:
         """
-        The local node storage allocated to the Autonomous VM cluster, in gigabytes (GB).
+        Local node storage allocated to the Autonomous VM cluster, in gigabytes (GB).
         """
         return pulumi.get(self, "odb_node_storage_size_in_gbs")
 
@@ -2039,7 +2041,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="percentProgress")
     def percent_progress(self) -> pulumi.Output[_builtins.float]:
         """
-        The progress of the current operation on the Autonomous VM cluster, as a percentage.
+        Progress of the current operation on the Autonomous VM cluster, as a percentage.
         """
         return pulumi.get(self, "percent_progress")
 
@@ -2047,7 +2049,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="provisionableAutonomousContainerDatabases")
     def provisionable_autonomous_container_databases(self) -> pulumi.Output[_builtins.int]:
         """
-        The number of Autonomous CDBs that can be provisioned in the Autonomous VM cluster.
+        Number of Autonomous CDBs that can be provisioned in the Autonomous VM cluster.
         """
         return pulumi.get(self, "provisionable_autonomous_container_databases")
 
@@ -2055,7 +2057,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="provisionedAutonomousContainerDatabases")
     def provisioned_autonomous_container_databases(self) -> pulumi.Output[_builtins.int]:
         """
-        The number of Autonomous CDBs currently provisioned in the Autonomous VM cluster.
+        Number of Autonomous CDBs currently provisioned in the Autonomous VM cluster.
         """
         return pulumi.get(self, "provisioned_autonomous_container_databases")
 
@@ -2063,7 +2065,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="provisionedCpus")
     def provisioned_cpus(self) -> pulumi.Output[_builtins.float]:
         """
-        The number of CPUs provisioned in the Autonomous VM cluster.
+        Number of CPUs provisioned in the Autonomous VM cluster.
         """
         return pulumi.get(self, "provisioned_cpus")
 
@@ -2071,7 +2073,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="reclaimableCpus")
     def reclaimable_cpus(self) -> pulumi.Output[_builtins.float]:
         """
-        The number of CPU cores that can be reclaimed from terminated or scaled-down Autonomous Databases.
+        Number of CPU cores that can be reclaimed from terminated or scaled-down Autonomous Databases.
         """
         return pulumi.get(self, "reclaimable_cpus")
 
@@ -2087,7 +2089,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="reservedCpus")
     def reserved_cpus(self) -> pulumi.Output[_builtins.float]:
         """
-        The number of CPU cores reserved for system operations and redundancy.
+        Number of CPU cores reserved for system operations and redundancy.
         """
         return pulumi.get(self, "reserved_cpus")
 
@@ -2095,7 +2097,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="scanListenerPortNonTls")
     def scan_listener_port_non_tls(self) -> pulumi.Output[_builtins.int]:
         """
-        The SCAN listener port for non-TLS (TCP) protocol. The default is 1521. Changing this will force terraform to create new resource.
+        SCAN listener port for non-TLS (TCP) protocol. The default is 1521. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "scan_listener_port_non_tls")
 
@@ -2103,7 +2105,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="scanListenerPortTls")
     def scan_listener_port_tls(self) -> pulumi.Output[_builtins.int]:
         """
-        The SCAN listener port for TLS (TCP) protocol. The default is 2484. Changing this will force terraform to create new resource.
+        SCAN listener port for TLS (TCP) protocol. The default is 2484. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "scan_listener_port_tls")
 
@@ -2111,7 +2113,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter
     def shape(self) -> pulumi.Output[_builtins.str]:
         """
-        The shape of the Exadata infrastructure for the Autonomous VM cluster.
+        Shape of the Exadata infrastructure for the Autonomous VM cluster.
         """
         return pulumi.get(self, "shape")
 
@@ -2119,7 +2121,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter
     def status(self) -> pulumi.Output[_builtins.str]:
         """
-        The status of the Autonomous VM cluster. Possible values include CREATING, AVAILABLE, UPDATING, DELETING, DELETED, FAILED.
+        Status of the Autonomous VM cluster. Possible values include CREATING, AVAILABLE, UPDATING, DELETING, DELETED, FAILED.
         """
         return pulumi.get(self, "status")
 
@@ -2135,7 +2137,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, _builtins.str]]]:
         """
-        A map of tags to assign to the exadata infrastructure. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        Map of tags to assign to the exadata infrastructure. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
@@ -2143,7 +2145,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="tagsAll")
     def tags_all(self) -> pulumi.Output[Mapping[str, _builtins.str]]:
         """
-        The combined set of user-defined and provider-defined tags.
+        Combined set of user-defined and provider-defined tags.
         """
         return pulumi.get(self, "tags_all")
 
@@ -2151,7 +2153,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="timeDatabaseSslCertificateExpires")
     def time_database_ssl_certificate_expires(self) -> pulumi.Output[_builtins.str]:
         """
-        The expiration date and time of the database SSL certificate.
+        Expiration date and time of the database SSL certificate.
         """
         return pulumi.get(self, "time_database_ssl_certificate_expires")
 
@@ -2159,7 +2161,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="timeOrdsCertificateExpires")
     def time_ords_certificate_expires(self) -> pulumi.Output[_builtins.str]:
         """
-        The expiration date and time of the ORDS certificate.
+        Expiration date and time of the ORDS certificate.
         """
         return pulumi.get(self, "time_ords_certificate_expires")
 
@@ -2167,7 +2169,7 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="timeZone")
     def time_zone(self) -> pulumi.Output[_builtins.str]:
         """
-        The time zone of the Autonomous VM cluster. Changing this will force terraform to create new resource.
+        Time zone of the Autonomous VM cluster. Changing this will force terraform to create new resource.
         """
         return pulumi.get(self, "time_zone")
 
@@ -2180,7 +2182,9 @@ class CloudAutonomousVmCluster(pulumi.CustomResource):
     @pulumi.getter(name="totalContainerDatabases")
     def total_container_databases(self) -> pulumi.Output[_builtins.int]:
         """
-        The total number of Autonomous Container Databases that can be created with the allocated local storage. Changing this will force terraform to create new resource.
+        Total number of Autonomous Container Databases that can be created with the allocated local storage. Changing this will force terraform to create new resource.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "total_container_databases")
 

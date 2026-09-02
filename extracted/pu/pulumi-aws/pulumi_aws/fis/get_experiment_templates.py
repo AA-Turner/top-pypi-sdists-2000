@@ -26,10 +26,7 @@ class GetExperimentTemplatesResult:
     """
     A collection of values returned by getExperimentTemplates.
     """
-    def __init__(__self__, id=None, ids=None, region=None, tags=None):
-        if id and not isinstance(id, str):
-            raise TypeError("Expected argument 'id' to be a str")
-        pulumi.set(__self__, "id", id)
+    def __init__(__self__, ids=None, region=None, tags=None):
         if ids and not isinstance(ids, list):
             raise TypeError("Expected argument 'ids' to be a list")
         pulumi.set(__self__, "ids", ids)
@@ -39,14 +36,6 @@ class GetExperimentTemplatesResult:
         if tags and not isinstance(tags, dict):
             raise TypeError("Expected argument 'tags' to be a dict")
         pulumi.set(__self__, "tags", tags)
-
-    @_builtins.property
-    @pulumi.getter
-    def id(self) -> _builtins.str:
-        """
-        The provider-assigned unique ID for this managed resource.
-        """
-        return pulumi.get(self, "id")
 
     @_builtins.property
     @pulumi.getter
@@ -73,7 +62,6 @@ class AwaitableGetExperimentTemplatesResult(GetExperimentTemplatesResult):
         if False:
             yield self
         return GetExperimentTemplatesResult(
-            id=self.id,
             ids=self.ids,
             region=self.region,
             tags=self.tags)
@@ -120,8 +108,7 @@ def get_experiment_templates(region: Optional[_builtins.str] = None,
 
 
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param Mapping[str, _builtins.str] tags: Map of tags, each pair of which must exactly match
-           a pair on the desired experiment templates.
+    :param Mapping[str, _builtins.str] tags: Map of tags, each pair of which must exactly match a pair on the desired experiment templates.
     """
     __args__ = dict()
     __args__['region'] = region
@@ -130,12 +117,11 @@ def get_experiment_templates(region: Optional[_builtins.str] = None,
     __ret__ = pulumi.runtime.invoke('aws:fis/getExperimentTemplates:getExperimentTemplates', __args__, opts=opts, typ=GetExperimentTemplatesResult).value
 
     return AwaitableGetExperimentTemplatesResult(
-        id=pulumi.get(__ret__, 'id'),
         ids=pulumi.get(__ret__, 'ids'),
         region=pulumi.get(__ret__, 'region'),
         tags=pulumi.get(__ret__, 'tags'))
-def get_experiment_templates_output(region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                    tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_experiment_templates_output(region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                    tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                                     opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetExperimentTemplatesResult]:
     """
     This resource can be useful for getting back a set of FIS experiment template IDs.
@@ -175,8 +161,7 @@ def get_experiment_templates_output(region: Optional[pulumi.Input[Optional[_buil
 
 
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param Mapping[str, _builtins.str] tags: Map of tags, each pair of which must exactly match
-           a pair on the desired experiment templates.
+    :param Mapping[str, _builtins.str] tags: Map of tags, each pair of which must exactly match a pair on the desired experiment templates.
     """
     __args__ = dict()
     __args__['region'] = region
@@ -184,7 +169,6 @@ def get_experiment_templates_output(region: Optional[pulumi.Input[Optional[_buil
     opts = pulumi.InvokeOutputOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
     __ret__ = pulumi.runtime.invoke_output('aws:fis/getExperimentTemplates:getExperimentTemplates', __args__, opts=opts, typ=GetExperimentTemplatesResult)
     return __ret__.apply(lambda __response__: GetExperimentTemplatesResult(
-        id=pulumi.get(__response__, 'id'),
         ids=pulumi.get(__response__, 'ids'),
         region=pulumi.get(__response__, 'region'),
         tags=pulumi.get(__response__, 'tags')))

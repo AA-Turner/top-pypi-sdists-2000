@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import re
 import warnings
 
 import numpy as np
@@ -73,8 +74,6 @@ class TestExpressions(BaseTest):
         self.assertEqual(x.shape, (2,))
         self.assertEqual(y.shape, tuple())
         self.assertEqual(x.curvature, s.AFFINE)
-        # self.assertEqual(x.canonical_form[0].shape, (2, 1))
-        # self.assertEqual(x.canonical_form[1], [])
 
         self.assertEqual(repr(self.x), "Variable((2,), x)")
         self.assertEqual(repr(self.A), "Variable((2, 2), A)")
@@ -85,14 +84,10 @@ class TestExpressions(BaseTest):
         # Test shape provided as list instead of tuple
         self.assertEqual(cp.Variable(shape=[2], integer=True).shape, (2,))
 
-        with self.assertRaises(Exception) as cm:
-            Variable((2, 2), diag=True, symmetric=True)
-        self.assertEqual(str(cm.exception),
-                         "Cannot set more than one special attribute in Variable.")
-
-        with self.assertRaises(Exception) as cm:
-            Variable((2, 0))
-        self.assertEqual(str(cm.exception), "Invalid dimensions (2, 0).")
+        # Zero-sized variables are allowed.
+        v = Variable((2, 0))
+        self.assertEqual(v.shape, (2, 0))
+        self.assertEqual(v.size, 0)
 
         with self.assertRaises(Exception) as cm:
             Variable((2, .5))
@@ -275,7 +270,7 @@ class TestExpressions(BaseTest):
         self.assertFalse(P.is_nsd())
 
         # Check with sparse inputs
-        P = Constant(sp.eye(10))
+        P = Constant(sp.eye_array(10))
         self.assertTrue(gershgorin_psd_check(P.value, s.EIGVAL_TOL))
         self.assertTrue(P.is_psd())
         self.assertTrue((-P).is_nsd())
@@ -312,17 +307,17 @@ class TestExpressions(BaseTest):
         self.assertFalse(C.is_skew_symmetric())
 
         # Test sparse constants
-        C = Constant(sp.csc_matrix(M1_false))
+        C = Constant(sp.csc_array(M1_false))
         self.assertFalse(C.is_skew_symmetric())
-        C = Constant(sp.csc_matrix(M2_true))
+        C = Constant(sp.csc_array(M2_true))
         self.assertTrue(C.is_skew_symmetric())
-        C = Constant(sp.csc_matrix(M4_true))
+        C = Constant(sp.csc_array(M4_true))
         self.assertTrue(C.is_skew_symmetric())
-        C = Constant(sp.csc_matrix(M5_false))
+        C = Constant(sp.csc_array(M5_false))
         self.assertFalse(C.is_skew_symmetric())
-        C = Constant(sp.csc_matrix(M6_false))
+        C = Constant(sp.csc_array(M6_false))
         self.assertFalse(C.is_skew_symmetric())
-        C = Constant(sp.csc_matrix(M7_false))
+        C = Constant(sp.csc_array(M7_false))
         self.assertFalse(C.is_skew_symmetric())
 
         # Test complex inputs: never recognized as skew-symmetric.
@@ -337,6 +332,38 @@ class TestExpressions(BaseTest):
         C = Constant(1j * M4_true)
         self.assertFalse(C.is_skew_symmetric())
         pass
+
+    def test_sparse_symmetry_checks_positions(self) -> None:
+        """Asymmetric sparse matrices whose triangle values match must not pass."""
+        # A[1, 0] = 5, A[0, 2] = 5: value multisets of the triangles match.
+        A = sp.coo_array(([5.0, 5.0], ((1, 0), (0, 2))), shape=(3, 3))
+        self.assertFalse(intf.is_sparse_symmetric(A))
+        self.assertFalse(Constant(A).is_symmetric())
+        with self.assertRaises(ValueError):
+            cp.quad_form(Variable(3), A)
+
+        H = sp.coo_array(([5 + 1j, 5 - 1j], ((1, 0), (0, 2))), shape=(3, 3))
+        self.assertFalse(Constant(H).is_hermitian())
+
+        B = sp.coo_array(([5.0, -5.0], ((1, 0), (0, 2))), shape=(3, 3))
+        self.assertFalse(intf.is_sparse_skew_symmetric(B))
+        self.assertFalse(Constant(B).is_skew_symmetric())
+
+        # Duplicate COO entries and explicit zeros must not break detection.
+        S = sp.coo_array(([2.0, 3.0, 5.0, 0.0], ((1, 1, 0, 2), (0, 0, 1, 0))), shape=(3, 3))
+        self.assertTrue(intf.is_sparse_symmetric(S))
+        K = sp.coo_array(([5.0, -5.0, 0.0], ((1, 0, 2), (0, 1, 2))), shape=(3, 3))
+        self.assertTrue(intf.is_sparse_skew_symmetric(K))
+
+        # Sparse and dense classification agree on random matrices.
+        rng = np.random.default_rng(0)
+        for trial in range(20):
+            M = sp.random_array((5, 5), density=0.4, rng=rng)
+            if trial % 2 == 0:
+                M = (M + M.T).tocoo()
+            D = M.toarray()
+            self.assertEqual(intf.is_sparse_symmetric(M), np.allclose(D, D.T))
+            self.assertEqual(intf.is_sparse_skew_symmetric(M), np.allclose(D + D.T, 0))
 
     def test_1D_array(self) -> None:
         """Test NumPy 1D arrays as constants.
@@ -373,8 +400,44 @@ class TestExpressions(BaseTest):
 
         # Test valid diagonal parameter.
         p = Parameter((2, 2), diag=True)
-        p.value = sp.csc_matrix(np.eye(2))
+        p.value = sp.csc_array(np.eye(2))
         self.assertItemsAlmostEqual(p.value.todense(), np.eye(2), places=10)
+
+    def test_parameter_infinite_values(self) -> None:
+        """Test that +-inf values are accepted/rejected correctly."""
+        # Unconstrained scalar parameters accept +inf and -inf.
+        p = Parameter()
+        p.value = np.inf
+        self.assertEqual(p.value, np.inf)
+        p.value = -np.inf
+        self.assertEqual(p.value, -np.inf)
+
+        # Nonneg parameter accepts +inf but rejects -inf.
+        p = Parameter(nonneg=True)
+        p.value = np.inf
+        self.assertEqual(p.value, np.inf)
+        with self.assertRaises(Exception) as cm:
+            p.value = -np.inf
+        self.assertEqual(str(cm.exception), "Parameter value must be nonnegative.")
+
+        # Nonpos parameter accepts -inf but rejects +inf.
+        p = Parameter(nonpos=True)
+        p.value = -np.inf
+        self.assertEqual(p.value, -np.inf)
+        with self.assertRaises(Exception) as cm:
+            p.value = np.inf
+        self.assertEqual(str(cm.exception), "Parameter value must be nonpositive.")
+
+        # Vector parameter with mixed finite and infinite values.
+        p = Parameter(3)
+        p.value = np.array([1.0, np.inf, -np.inf])
+        self.assertItemsAlmostEqual(p.value, [1.0, np.inf, -np.inf])
+
+        # Setting inf values must not emit NumPy warnings.
+        p = Parameter(3)
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            p.value = np.array([np.inf, -np.inf, 0.0])
 
     def test_psd_nsd_parameters(self) -> None:
         # Test valid rank-deficeint PSD parameter.
@@ -456,11 +519,6 @@ class TestExpressions(BaseTest):
             p = Parameter((4, 3), nonneg=True, value=[1, 2])
         self.assertEqual(str(cm.exception), "Invalid dimensions (2,) for Parameter value.")
 
-        with self.assertRaises(Exception) as cm:
-            p = Parameter((2, 2), diag=True, symmetric=True)
-        self.assertEqual(str(cm.exception),
-                         "Cannot set more than one special attribute in Parameter.")
-
         # Boolean
         with self.assertRaises(Exception) as cm:
             p = Parameter((2, 2), boolean=True, value=[[1, 1], [1, -1]])
@@ -469,6 +527,16 @@ class TestExpressions(BaseTest):
         # Integer
         with self.assertRaises(Exception) as cm:
             p = Parameter((2, 2), integer=True, value=[[1, 1.5], [1, -1]])
+        self.assertEqual(str(cm.exception), "Parameter value must be integer.")
+
+         # Boolean indices
+        with self.assertRaises(Exception) as cm:
+             p = Parameter((2, 2), boolean=[(0, 0), (0, 1)], value=[[0, 2], [1, 0]])
+        self.assertEqual(str(cm.exception), "Parameter value must be boolean.")
+
+        # Integer indices
+        with self.assertRaises(Exception) as cm:
+             p = Parameter((2, 2), integer=[(0, 0), (0, 1)], value=[[1, 1.5], [1.4, 2.8]])
         self.assertEqual(str(cm.exception), "Parameter value must be integer.")
 
         # Diag.
@@ -541,7 +609,7 @@ class TestExpressions(BaseTest):
         expr = cp.real(v)
         assert expr.is_hermitian()
         expr = cp.imag(v)
-        assert expr.is_hermitian()
+        assert not expr.is_hermitian()  # imag(H) is skew-symmetric for Hermitian H
         expr = cp.conj(v)
         assert expr.is_hermitian()
         expr = cp.promote(Variable(), (2, 2))
@@ -607,7 +675,35 @@ class TestExpressions(BaseTest):
         self.assertEqual(A.is_psd(), True)
         self.assertEqual(A.is_nsd(), True)
 
-    # Test the AddExpresion class.
+    def test_partial_boolean_sign(self) -> None:
+        """A variable boolean only at some indices has unknown sign.
+
+        is_nonneg used to return the (truthy) index list itself, so the whole
+        variable was classified NONNEGATIVE, corrupting DCP analysis.
+        """
+        x = cp.Variable(2, boolean=[(0,)])
+        self.assertIs(x.is_nonneg(), False)
+        self.assertEqual(x.sign, s.UNKNOWN)
+        # Fully boolean variables remain nonnegative.
+        y = cp.Variable(2, boolean=True)
+        self.assertIs(y.is_nonneg(), True)
+
+    def test_project_boolean_indices(self) -> None:
+        idx = (np.array([0, 2]),)
+        leaf = cp.Variable((3,), boolean=idx)
+        val = np.array([-0.2, 0.5, 1.7])
+        projected = leaf.project(val)
+        # Only indices 0 and 2 are projected to boolean, index 1 is unchanged
+        assert (projected == np.array([0, 0.5, 1])).all()
+
+    def test_project_integer_indices(self) -> None:
+        idx = (np.array([1]),)
+        leaf = cp.Variable((3,), integer=idx)
+        val = np.array([1.2, 2.7, -0.8])
+        projected = leaf.project(val)
+        # Only index 1 is projected to integer, others unchanged
+        assert (projected == np.array([1.2, 3, -0.8])).all()
+
     def test_add_expression(self) -> None:
         # Vectors
         c = Constant([2, 2])
@@ -720,12 +816,12 @@ class TestExpressions(BaseTest):
             c * self.x
             self.assertEqual(2, len(w))
             self.assertEqual(w[0].category, UserWarning)
-            self.assertEqual(w[1].category, DeprecationWarning)
+            self.assertTrue(issubclass(w[1].category, DeprecationWarning))
             # repeat, to make sure warnings continue to be displayed
             c * self.x
             self.assertEqual(4, len(w))
             self.assertEqual(w[2].category, UserWarning)
-            self.assertEqual(w[3].category, DeprecationWarning)
+            self.assertTrue(issubclass(w[3].category, DeprecationWarning))
             # suppress one of the two warnings
             warnings.simplefilter('ignore', DeprecationWarning)
             c * self.x
@@ -862,15 +958,20 @@ class TestExpressions(BaseTest):
         assert exp.is_affine()
         self.assertEqual(exp.sign, s.UNKNOWN)
         assert not exp.is_nonneg()
-        # self.assertEqual(exp.canonical_form[0].shape, (2, 1))
-        # self.assertEqual(exp.canonical_form[1], [])
-        # self.assertEqual(exp.name(), "-%s" % self.x.name())
         self.assertEqual(exp.shape, self.x.shape)
+        self.assertEqual(exp.name(), "-%s" % self.x.name())
 
         # Matrices
         exp = -self.C
         self.assertEqual(exp.curvature, s.AFFINE)
         self.assertEqual(exp.shape, (3, 2))
+
+        # String
+        b = cp.Variable(name='b')
+        X = cp.Variable((2,1), name='X')
+        A = cp.Variable((1,2), name='A')
+        exp = -(A@X - b)
+        self.assertEqual(str(exp), "-(A @ X + -b)")
 
     # Test promotion of scalar constants.
     def test_scalar_const_promotion(self) -> None:
@@ -1221,6 +1322,91 @@ class TestExpressions(BaseTest):
         exp = self.x**-1
         self.assertEqual(exp.curvature, s.CONVEX)
 
+    def test_rpow(self) -> None:
+        """Test Expression.__rpow__ for expressions of the form a**x."""
+        x = Variable()
+
+        # Test 1: basic expression is created correctly
+        expr = 2 ** x
+        self.assertIsNotNone(expr)
+
+        # Test 2: minimize 2**x with x >= 1, optimal at x=1, value=2
+        prob = cp.Problem(cp.Minimize(2 ** x), [x >= 1, x <= 3])
+        prob.solve()
+        self.assertAlmostEqual(float(x.value), 1.0, places=3)
+        self.assertAlmostEqual(float(prob.value), 2.0, places=3)
+
+
+        # Test 3: base=10, minimize with x >= 2, optimal at x=2, value=100
+        prob2 = cp.Problem(cp.Minimize(10 ** x), [x >= 2])
+        prob2.solve()
+        self.assertAlmostEqual(float(x.value), 2.0, places=3)
+        self.assertAlmostEqual(float(prob2.value), 100.0, places=3)
+        # Test 4: base=1 gives value 1 regardless of x
+        prob3 = cp.Problem(cp.Minimize(1 ** x), [x >= 0])
+        prob3.solve()
+        self.assertAlmostEqual(float(prob3.value), 1.0, places=3)
+
+        # Test 5: negative base raises ValueError
+        with self.assertRaises(ValueError):
+            (-2) ** x
+
+        # Test 6: non-integer base 0.5**x, minimize with x in [-2, 0]
+        prob4 = cp.Problem(cp.Minimize(0.5 ** x), [x >= -2, x <= 0])
+        prob4.solve()
+        self.assertAlmostEqual(float(x.value), 0.0, places=3)
+        self.assertAlmostEqual(float(prob4.value), 1.0, places=3)
+
+        # Test 7: 2**x used in constraint, minimize 2**x subject to 2**x <= 8
+        prob5 = cp.Problem(cp.Minimize(x), [2 ** x <= 8, x >= 0])
+        prob5.solve()
+        self.assertAlmostEqual(float(x.value), 0.0, places=3)
+
+        # Test 8: non-constant base raises ValueError
+        y = Variable()
+        with self.assertRaises(ValueError):
+            y ** x
+
+    def test_power_const_base(self) -> None:
+        """Test cp.power(b, x) where b is constant and x is variable."""
+        x = Variable()
+
+        # Test 1: basic expression created correctly
+        expr = cp.power(2, x)
+        self.assertIsNotNone(expr)
+
+        # Test 2: minimize cp.power(2, x) with x >= 1, optimal at x=1, value=2
+        prob = cp.Problem(cp.Minimize(cp.power(2, x)), [x >= 1, x <= 3])
+        prob.solve()
+        self.assertAlmostEqual(float(x.value), 1.0, places=3)
+        self.assertAlmostEqual(float(prob.value), 2.0, places=3)
+
+        # Test 3: base=10, x >= 2, optimal value=100
+        prob2 = cp.Problem(cp.Minimize(cp.power(10, x)), [x >= 2])
+        prob2.solve()
+        self.assertAlmostEqual(float(x.value), 2.0, places=3)
+        self.assertAlmostEqual(float(prob2.value), 100.0, places=3)
+
+        # Test 4: negative base raises ValueError
+        with self.assertRaises(ValueError):
+            cp.power(-2, x)
+
+        # Test 5: Parameter(pos=True) as base for cp.power
+        b = cp.Parameter(pos=True)
+        b.value = 2.0
+        expr3 = cp.power(b, x)
+        self.assertIsNotNone(expr3)
+        prob3 = cp.Problem(cp.Minimize(cp.power(b, x)), [x >= 1, x <= 3])
+        prob3.solve()
+        self.assertAlmostEqual(float(x.value), 1.0, places=3)
+
+        # Test 6: Parameter(pos=True) as base for ** operator
+        expr4 = b ** x
+        self.assertIsNotNone(expr4)
+        prob4 = cp.Problem(cp.Minimize(b ** x), [x >= 1, x <= 3])
+        prob4.solve()
+        self.assertAlmostEqual(float(x.value), 1.0, places=3)
+
     def test_sum(self) -> None:
         """Test cvxpy sum function.
         """
@@ -1401,7 +1587,7 @@ class TestExpressions(BaseTest):
 
         # QuadForm with sparse matrices
         x = Variable(shape=(2,))
-        A = Constant(sp.eye(2))
+        A = Constant(sp.eye_array(2))
         expr = x.T.__matmul__(A).__matmul__(x)
         assert isinstance(expr, cp.QuadForm)
 
@@ -1569,7 +1755,7 @@ class TestND_Expressions():
 
     def test_nd_variable_value_error(self) -> None:
         prob = cp.Problem(self.obj, [self.x == self.target])
-        error_str = "Only the SCIPY and NUMPY backends are supported " \
+        error_str = "Only the COO and SCIPY backends are supported " \
                     "for problems with expressions of dimension greater than 2."
         with pytest.raises(ValueError, match=error_str):
             prob.solve(canon_backend=cp.CPP_CANON_BACKEND)
@@ -1706,6 +1892,75 @@ class TestND_Expressions():
         prob.solve(canon_backend=cp.SCIPY_CANON_BACKEND)
         assert np.allclose(expr.value, y)
 
+    @pytest.mark.parametrize("axes", [(0, 2, 1), (2, 0, 1), (1, 2, 0), (1, 0, 2), (-1, 0, 1)])
+    def test_nd_transpose_axes(self, axes) -> None:
+        var = cp.Variable((5, 24, 10))
+        target = np.arange(1200).reshape((5, 24, 10))
+        expr = cp.transpose(var, axes=axes)
+        y = target.transpose(axes)
+        prob = cp.Problem(self.obj, [expr == y])
+        prob.solve(canon_backend=cp.SCIPY_CANON_BACKEND)
+        assert np.allclose(expr.value, y)
+
+    @pytest.mark.parametrize("axes", [(0, 2, 1, 3), (2, 3, 0, 1), (3, 1, 2, 0)])
+    def test_permute_dims(self, axes) -> None:
+        var = cp.Variable((5, 6, 5, 6))
+        target = np.arange(900).reshape((5, 6, 5, 6))
+        expr = cp.permute_dims(var, axes=axes)
+        y = target.transpose(axes)
+        prob = cp.Problem(self.obj, [expr == y])
+        prob.solve(canon_backend=cp.SCIPY_CANON_BACKEND)
+        assert np.allclose(expr.value, y)
+
+    @pytest.mark.parametrize("axis1, axis2", [(0, 1), (1, 3), (3, 2), (0, 3), (1, 2)])
+    def test_swapaxes(self, axis1, axis2) -> None:
+        var = cp.Variable((5, 12, 6, 2))
+        target = np.arange(720).reshape((5, 12, 6, 2))
+        expr = cp.swapaxes(var, axis1=axis1, axis2=axis2)
+        y = target.swapaxes(axis1, axis2)
+        prob = cp.Problem(self.obj, [expr == y])
+        prob.solve(canon_backend=cp.SCIPY_CANON_BACKEND)
+        assert np.allclose(expr.value, y)
+
+    @pytest.mark.parametrize("source, destination", [([0], [2]), ([0, 1], [3, 2]),
+                                                     ([0, 1, 2], [3, 2, 1])])
+    def test_moveaxis(self, source, destination) -> None:
+        var = cp.Variable((5, 2, 6, 12))
+        target = np.arange(720).reshape((5, 2, 6, 12))
+        expr = cp.moveaxis(var, source=source, destination=destination)
+        y = np.moveaxis(target, source, destination)
+        prob = cp.Problem(self.obj, [expr == y])
+        prob.solve(canon_backend=cp.SCIPY_CANON_BACKEND)
+        assert np.allclose(expr.value, y)
+
+    @pytest.mark.parametrize("source, destination", [([0], [-1]), ([-1], [0]),
+                                                     ([0, 1], [-1, -2]), (0, -1), ([0], [0])])
+    @pytest.mark.parametrize("shape", [(2, 3, 4), (2, 3, 4, 5)])
+    def test_moveaxis_negative_axes(self, source, destination, shape) -> None:
+        target = np.arange(np.prod(shape)).reshape(shape)
+        expr = cp.moveaxis(cp.Constant(target), source, destination)
+        y = np.moveaxis(target, source, destination)
+        assert expr.shape == y.shape
+        assert np.allclose(expr.value, y)
+
+    def test_moveaxis_negative_axes_solve(self) -> None:
+        target = np.arange(24).reshape((2, 3, 4))
+        var = cp.Variable((2, 3, 4))
+        y = cp.Variable((4, 2, 3))
+        prob = cp.Problem(self.obj, [var == target, y == cp.moveaxis(var, [-1], [0])])
+        prob.solve(solver=cp.CLARABEL, canon_backend=cp.SCIPY_CANON_BACKEND)
+        assert np.allclose(y.value, np.moveaxis(target, [-1], [0]))
+
+    @pytest.mark.parametrize("source, destination", [([3], [0]), ([0], [-4]),
+                                                     ([0, 0], [1, 2]), ([0], [1, 2]),
+                                                     ([0, 1], [0, 0])])
+    def test_moveaxis_invalid_axes(self, source, destination) -> None:
+        target = np.zeros((2, 3, 4))
+        with pytest.raises(ValueError) as np_err:
+            np.moveaxis(target, source, destination)
+        with pytest.raises(ValueError, match=re.escape(str(np_err.value))):
+            cp.moveaxis(cp.Constant(target), source, destination)
+
     @pytest.mark.parametrize("shapes", [((3),(253, 253, 3)),
                                         ((7, 1, 5),(8, 7, 6, 5)),
                                         ((1),(5, 4)),
@@ -1786,3 +2041,81 @@ class TestND_Expressions():
         prob = cp.Problem(cp.Minimize(cp.sum(expr)), [expr == target - y])
         prob.solve(canon_backend=cp.SCIPY_CANON_BACKEND)
         assert np.allclose(x.value, target)
+
+    def test_nd_cumsum(self) -> None:
+        """Test that cumsum works correctly for ND arrays."""
+        # Test 3D array
+        x = cp.Variable((2, 3, 4))
+        x_val = np.arange(24).reshape((2, 3, 4)).astype(float)
+
+        for axis in [0, 1, 2, -1, -2, -3, None]:
+            expr = cp.cumsum(x, axis=axis)
+            expected = np.cumsum(x_val, axis=axis)
+            prob = cp.Problem(cp.Minimize(0), [x == x_val, expr == expected])
+            prob.solve()
+            assert expr.value is not None
+            assert np.allclose(expr.value, expected), f"Failed for axis={axis}"
+
+        # Test 4D array
+        y = cp.Variable((2, 3, 4, 2))
+        y_val = np.arange(48).reshape((2, 3, 4, 2)).astype(float)
+
+        for axis in range(4):
+            expr = cp.cumsum(y, axis=axis)
+            expected = np.cumsum(y_val, axis=axis)
+            prob = cp.Problem(cp.Minimize(0), [y == y_val, expr == expected])
+            prob.solve()
+            assert expr.value is not None
+            assert np.allclose(expr.value, expected), f"Failed for 4D axis={axis}"
+
+    def test_cumsum_0d_warning(self) -> None:
+        """Test that cumsum on 0D arrays raises FutureWarning."""
+        x = cp.Variable(())
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            expr = cp.cumsum(x)
+            # Check that a FutureWarning was raised
+            assert len(w) == 1
+            assert issubclass(w[0].category, FutureWarning)
+            assert "0-dimensional" in str(w[0].message)
+            assert "1-element array" in str(w[0].message)
+        # Verify the expression still works (returns scalar for now)
+        assert expr.shape == ()
+
+
+@pytest.mark.parametrize("shape,axis,keepdims,expected_shape,use_soc", [
+    # 2D cases
+    ((3, 4), 0, False, (4,), False),      # QP path
+    ((3, 4), 1, False, (3,), False),      # QP path
+    ((3, 4), 0, False, (4,), True),       # SOC path
+    ((3, 4), 1, False, (3,), True),       # SOC path
+    ((3, 4), 0, True, (1, 4), True),      # keepdims
+    ((3, 4), 1, True, (3, 1), True),      # keepdims
+    ((3, 4), None, True, (1, 1), True),   # scalar with keepdims
+    # ND cases with tuple axes
+    ((2, 3, 4), (0, 2), False, (3,), False),      # ND QP
+    ((2, 3, 4), (0, 2), False, (3,), True),       # ND SOC
+    ((2, 3, 4), (0, 2), True, (1, 3, 1), True),   # ND keepdims
+])
+def test_sum_squares_with_axis(shape, axis, keepdims, expected_shape, use_soc):
+    """Test sum_squares with axis, keepdims, tuple axes, QP and SOC paths."""
+    # Test shape
+    X = cp.Variable(shape)
+    s = cp.sum_squares(X, axis=axis, keepdims=keepdims)
+    assert s.shape == expected_shape
+
+    # Test numeric values match numpy
+    np.random.seed(42)
+    X_val = np.random.randn(*shape)
+    X.value = X_val
+    expected = (X_val**2).sum(axis=axis, keepdims=keepdims)
+    np.testing.assert_allclose(s.value, expected)
+
+    # Test optimization
+    Y = np.random.randn(*shape)
+    X = cp.Variable(shape)
+    obj = cp.sum(cp.sum_squares(X - Y, axis=axis, keepdims=keepdims))
+    prob = cp.Problem(cp.Minimize(obj))
+    prob.solve(solver=cp.CLARABEL, use_quad_obj=not use_soc)
+    assert prob.status == cp.OPTIMAL
+    np.testing.assert_allclose(X.value, Y, atol=1e-3)

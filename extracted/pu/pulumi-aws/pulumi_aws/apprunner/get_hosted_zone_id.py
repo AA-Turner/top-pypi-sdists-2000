@@ -72,14 +72,14 @@ def get_hosted_zone_id(region: Optional[_builtins.str] = None,
 
     main = aws.apprunner.get_hosted_zone_id()
     www = aws.route53.Record("www",
-        zone_id=primary["zoneId"],
-        name="example.com",
-        type=aws.route53.RecordType.A,
         aliases=[{
             "name": main_aws_apprunner_custom_domain_association["dnsTarget"],
             "zone_id": main.id,
             "evaluate_target_health": True,
-        }])
+        }],
+        zone_id=primary["zoneId"],
+        name="example.com",
+        type=aws.route53.RecordType.A)
     ```
 
 
@@ -93,7 +93,7 @@ def get_hosted_zone_id(region: Optional[_builtins.str] = None,
     return AwaitableGetHostedZoneIdResult(
         id=pulumi.get(__ret__, 'id'),
         region=pulumi.get(__ret__, 'region'))
-def get_hosted_zone_id_output(region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_hosted_zone_id_output(region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                               opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetHostedZoneIdResult]:
     """
     Use this data source to get the HostedZoneId of an AWS App Runner service deployed
@@ -107,14 +107,14 @@ def get_hosted_zone_id_output(region: Optional[pulumi.Input[Optional[_builtins.s
 
     main = aws.apprunner.get_hosted_zone_id()
     www = aws.route53.Record("www",
-        zone_id=primary["zoneId"],
-        name="example.com",
-        type=aws.route53.RecordType.A,
         aliases=[{
             "name": main_aws_apprunner_custom_domain_association["dnsTarget"],
             "zone_id": main.id,
             "evaluate_target_health": True,
-        }])
+        }],
+        zone_id=primary["zoneId"],
+        name="example.com",
+        type=aws.route53.RecordType.A)
     ```
 
 

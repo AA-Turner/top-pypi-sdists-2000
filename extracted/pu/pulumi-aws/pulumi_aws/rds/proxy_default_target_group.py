@@ -22,10 +22,11 @@ __all__ = ['ProxyDefaultTargetGroupArgs', 'ProxyDefaultTargetGroup']
 class ProxyDefaultTargetGroupArgs:
     def __init__(__self__, *,
                  db_proxy_name: pulumi.Input[_builtins.str],
-                 connection_pool_config: Optional[pulumi.Input['ProxyDefaultTargetGroupConnectionPoolConfigArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 connection_pool_config: pulumi.Input[Optional['ProxyDefaultTargetGroupConnectionPoolConfigArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a ProxyDefaultTargetGroup resource.
+
         :param pulumi.Input[_builtins.str] db_proxy_name: Name of the RDS DB Proxy.
         :param pulumi.Input['ProxyDefaultTargetGroupConnectionPoolConfigArgs'] connection_pool_config: The settings that determine the size and behavior of the connection pool for the target group.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -50,40 +51,41 @@ class ProxyDefaultTargetGroupArgs:
 
     @_builtins.property
     @pulumi.getter(name="connectionPoolConfig")
-    def connection_pool_config(self) -> Optional[pulumi.Input['ProxyDefaultTargetGroupConnectionPoolConfigArgs']]:
+    def connection_pool_config(self) -> pulumi.Input[Optional['ProxyDefaultTargetGroupConnectionPoolConfigArgs']]:
         """
         The settings that determine the size and behavior of the connection pool for the target group.
         """
         return pulumi.get(self, "connection_pool_config")
 
     @connection_pool_config.setter
-    def connection_pool_config(self, value: Optional[pulumi.Input['ProxyDefaultTargetGroupConnectionPoolConfigArgs']]):
+    def connection_pool_config(self, value: pulumi.Input[Optional['ProxyDefaultTargetGroupConnectionPoolConfigArgs']]):
         pulumi.set(self, "connection_pool_config", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _ProxyDefaultTargetGroupState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 connection_pool_config: Optional[pulumi.Input['ProxyDefaultTargetGroupConnectionPoolConfigArgs']] = None,
-                 db_proxy_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 connection_pool_config: pulumi.Input[Optional['ProxyDefaultTargetGroupConnectionPoolConfigArgs']] = None,
+                 db_proxy_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering ProxyDefaultTargetGroup resources.
-        :param pulumi.Input[_builtins.str] arn: The Amazon Resource Name (ARN) representing the target group.
+
+        :param pulumi.Input[_builtins.str] arn: ARN representing the target group.
         :param pulumi.Input['ProxyDefaultTargetGroupConnectionPoolConfigArgs'] connection_pool_config: The settings that determine the size and behavior of the connection pool for the target group.
         :param pulumi.Input[_builtins.str] db_proxy_name: Name of the RDS DB Proxy.
         :param pulumi.Input[_builtins.str] name: The name of the default target group.
@@ -102,62 +104,62 @@ class _ProxyDefaultTargetGroupState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) representing the target group.
+        ARN representing the target group.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="connectionPoolConfig")
-    def connection_pool_config(self) -> Optional[pulumi.Input['ProxyDefaultTargetGroupConnectionPoolConfigArgs']]:
+    def connection_pool_config(self) -> pulumi.Input[Optional['ProxyDefaultTargetGroupConnectionPoolConfigArgs']]:
         """
         The settings that determine the size and behavior of the connection pool for the target group.
         """
         return pulumi.get(self, "connection_pool_config")
 
     @connection_pool_config.setter
-    def connection_pool_config(self, value: Optional[pulumi.Input['ProxyDefaultTargetGroupConnectionPoolConfigArgs']]):
+    def connection_pool_config(self, value: pulumi.Input[Optional['ProxyDefaultTargetGroupConnectionPoolConfigArgs']]):
         pulumi.set(self, "connection_pool_config", value)
 
     @_builtins.property
     @pulumi.getter(name="dbProxyName")
-    def db_proxy_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def db_proxy_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the RDS DB Proxy.
         """
         return pulumi.get(self, "db_proxy_name")
 
     @db_proxy_name.setter
-    def db_proxy_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def db_proxy_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "db_proxy_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the default target group.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -167,9 +169,9 @@ class ProxyDefaultTargetGroup(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 connection_pool_config: Optional[pulumi.Input[Union['ProxyDefaultTargetGroupConnectionPoolConfigArgs', 'ProxyDefaultTargetGroupConnectionPoolConfigArgsDict']]] = None,
-                 db_proxy_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 connection_pool_config: pulumi.Input[Optional[Union['ProxyDefaultTargetGroupConnectionPoolConfigArgs', 'ProxyDefaultTargetGroupConnectionPoolConfigArgsDict']]] = None,
+                 db_proxy_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides a resource to manage an RDS DB proxy default target group resource.
@@ -185,6 +187,7 @@ class ProxyDefaultTargetGroup(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:rds/proxyDefaultTargetGroup:ProxyDefaultTargetGroup example example
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -213,6 +216,7 @@ class ProxyDefaultTargetGroup(pulumi.CustomResource):
         $ pulumi import aws:rds/proxyDefaultTargetGroup:ProxyDefaultTargetGroup example example
         ```
 
+
         :param str resource_name: The name of the resource.
         :param ProxyDefaultTargetGroupArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -228,9 +232,9 @@ class ProxyDefaultTargetGroup(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 connection_pool_config: Optional[pulumi.Input[Union['ProxyDefaultTargetGroupConnectionPoolConfigArgs', 'ProxyDefaultTargetGroupConnectionPoolConfigArgsDict']]] = None,
-                 db_proxy_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 connection_pool_config: pulumi.Input[Optional[Union['ProxyDefaultTargetGroupConnectionPoolConfigArgs', 'ProxyDefaultTargetGroupConnectionPoolConfigArgsDict']]] = None,
+                 db_proxy_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -257,11 +261,11 @@ class ProxyDefaultTargetGroup(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            connection_pool_config: Optional[pulumi.Input[Union['ProxyDefaultTargetGroupConnectionPoolConfigArgs', 'ProxyDefaultTargetGroupConnectionPoolConfigArgsDict']]] = None,
-            db_proxy_name: Optional[pulumi.Input[_builtins.str]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'ProxyDefaultTargetGroup':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            connection_pool_config: pulumi.Input[Optional[Union['ProxyDefaultTargetGroupConnectionPoolConfigArgs', 'ProxyDefaultTargetGroupConnectionPoolConfigArgsDict']]] = None,
+            db_proxy_name: pulumi.Input[Optional[_builtins.str]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'ProxyDefaultTargetGroup':
         """
         Get an existing ProxyDefaultTargetGroup resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -269,7 +273,7 @@ class ProxyDefaultTargetGroup(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] arn: The Amazon Resource Name (ARN) representing the target group.
+        :param pulumi.Input[_builtins.str] arn: ARN representing the target group.
         :param pulumi.Input[Union['ProxyDefaultTargetGroupConnectionPoolConfigArgs', 'ProxyDefaultTargetGroupConnectionPoolConfigArgsDict']] connection_pool_config: The settings that determine the size and behavior of the connection pool for the target group.
         :param pulumi.Input[_builtins.str] db_proxy_name: Name of the RDS DB Proxy.
         :param pulumi.Input[_builtins.str] name: The name of the default target group.
@@ -290,7 +294,7 @@ class ProxyDefaultTargetGroup(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) representing the target group.
+        ARN representing the target group.
         """
         return pulumi.get(self, "arn")
 

@@ -49,9 +49,20 @@ DEFAULT_DRIVER = FILE_DRIVER
 
 PROCESS_SUBDIR_PREFIX = 'ocdbt.process_'
 REPLICA_SUBDIR_SUFFIX = 'replica_'
+
+# OCDBT-specific options.
 _OCDBT_PROCESS_ID_RE = r'[A-Za-z0-9]+'
 _DEFAULT_OCDBT_TARGET_DATA_FILE_SIZE = 2**31  # 2 GiB
 _GCS_OCDBT_TARGET_DATA_FILE_SIZE = 400 * 2**20  # 400 MiB
+# By default, OCDBT stores both values (i.e. kvstore values, which are
+# .zarray metadata files and array chunk data files) and OCDBT B-tree metadata
+# (version tree nodes, b-tree nodes and inlined values) in the same data files
+# under 'd/' subdirectory. When store_ocdbt_metadata_and_values_separately
+# is enabled in ArrayWriteSpec, B-tree metadata will be stored in separate files
+# under 'ocdbt_meta/' subdirectory, while values will be stored in files under
+# 'ocdbt_data/' subdirectory.
+_OCDBT_SPLIT_VALUE_DATA_PREFIX = 'ocdbt_data/'
+_OCDBT_SPLIT_META_DATA_PREFIX = 'ocdbt_meta/'
 
 ZARR_VER2 = 'zarr'
 ZARR_VER3 = 'zarr3'
@@ -309,6 +320,8 @@ def _get_backend_ocdbt_target_data_file_size(
 def add_ocdbt_write_options(
     kvstore_tspec: JsonSpec,
     target_data_file_size: int | None = None,
+    *,
+    store_ocdbt_metadata_and_values_separately: bool = False,
 ) -> None:
   """Adds write-specific options to a TensorStore OCDBT KVStore spec."""
   if target_data_file_size is None:
@@ -323,8 +336,18 @@ def add_ocdbt_write_options(
     )
   kvstore_tspec['target_data_file_size'] = target_data_file_size
 
+  if store_ocdbt_metadata_and_values_separately:
+    kvstore_tspec['value_data_prefix'] = _OCDBT_SPLIT_VALUE_DATA_PREFIX
+    kvstore_tspec['btree_node_data_prefix'] = _OCDBT_SPLIT_META_DATA_PREFIX
+    kvstore_tspec['version_tree_node_data_prefix'] = (
+        _OCDBT_SPLIT_META_DATA_PREFIX
+    )
+
   kvstore_tspec['config'] = {
       # Store .zarray metadata inline but not large chunks.
+      # If separate storage for OCDBT metadata is enabled, this will mean that
+      # Zarr metadata will be stored in tree metadata files and not in the data
+      # files.
       'max_inline_value_bytes': 1024,
       # Large value allows a single root node to support faster traversal.
       'max_decoded_node_bytes': 100000000,
@@ -368,12 +391,12 @@ def build_zarr_shard_and_chunk_metadata(
     # Zarr v2.
     metadata['chunks'] = chunk_shape
     if use_compression:
-      metadata['compressor'] = {'id': 'zstd'}
+      metadata['compressor'] = {'id': 'zstd'}  # pyrefly: ignore[bad-assignment]
     else:
-      metadata['compressor'] = None
+      metadata['compressor'] = None  # pyrefly: ignore[bad-assignment]
   else:
     # Zarr v3.
-    metadata['chunk_grid'] = {
+    metadata['chunk_grid'] = {  # pyrefly: ignore[bad-assignment]
         'name': 'regular',
         'configuration': {
             'chunk_shape': chunk_shape,
@@ -382,7 +405,7 @@ def build_zarr_shard_and_chunk_metadata(
     # TODO: b/354139177 - Consider if using write shape equal to shard shape and
     # read shape equal to chosen chunk shape would be a better setting.
     del shard_shape  # Currently unused.
-    metadata['codecs'] = [
+    metadata['codecs'] = [  # pyrefly: ignore[bad-assignment]
         {
             'name': 'sharding_indexed',
             'configuration': {
@@ -400,7 +423,7 @@ def build_zarr_shard_and_chunk_metadata(
     ]
     if use_compression:
       # Remove zstd codec if not using compression.
-      metadata['codecs'][0]['configuration']['codecs'].append({'name': 'zstd'})
+      metadata['codecs'][0]['configuration']['codecs'].append({'name': 'zstd'})  # pyrefly: ignore[bad-index]
 
   return metadata
 
@@ -545,6 +568,7 @@ class ArrayWriteSpec:
       metadata_key: str | None = None,
       replica_separate_folder: bool = False,
       ext_metadata: ExtMetadata | None = None,
+      store_ocdbt_metadata_and_values_separately: bool = False,
   ):
     """Builds a TensorStore spec for writing an array."""
     # Construct the underlying KvStore spec.
@@ -573,6 +597,9 @@ class ArrayWriteSpec:
       add_ocdbt_write_options(
           tspec['kvstore'],
           ocdbt_target_data_file_size,
+          store_ocdbt_metadata_and_values_separately=(
+              store_ocdbt_metadata_and_values_separately
+          ),
       )
       chunk_byte_size = calculate_chunk_byte_size(
           write_shape,
@@ -803,8 +830,8 @@ def get_json_tspec_write(
   tspec['metadata'] = build_zarr_shard_and_chunk_metadata(
       global_shape=global_shape,
       shard_shape=local_shape,
-      use_compression=info.use_compression,
-      use_zarr3=info.use_zarr3,
+      use_compression=info.use_compression,  # pyrefly: ignore[bad-argument-type]
+      use_zarr3=info.use_zarr3,  # pyrefly: ignore[bad-argument-type]
       chunk_shape=chunk_shape,
   )
 
@@ -825,7 +852,7 @@ def build_array_read_spec(
   return ArrayReadSpec(
       directory=info.parent_dir.as_posix(),
       relative_array_filename=info.name,
-      use_zarr3=info.use_zarr3,
+      use_zarr3=info.use_zarr3,  # pyrefly: ignore[bad-argument-type]
       use_ocdbt=use_ocdbt,
       metadata_key=metadata_key,
       raise_array_data_missing_error=raise_array_data_missing_error,
@@ -862,8 +889,8 @@ def build_array_write_spec(
       target_dtype=(arg.dtype if arg is not None else None),
       chunk_byte_size=(arg.chunk_byte_size if arg is not None else None),
       shard_axes=(arg.shard_axes if arg is not None else tuple()),
-      use_compression=info.use_compression,
-      use_zarr3=info.use_zarr3,
+      use_compression=info.use_compression,  # pyrefly: ignore[bad-argument-type]
+      use_zarr3=info.use_zarr3,  # pyrefly: ignore[bad-argument-type]
       use_ocdbt=use_ocdbt,
       process_id=process_index,
       replica_separate_folder=replica_separate_folder,

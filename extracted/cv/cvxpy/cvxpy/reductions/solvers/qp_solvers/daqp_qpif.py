@@ -5,12 +5,14 @@ import numpy as np
 import cvxpy.interface as intf
 import cvxpy.settings as s
 from cvxpy.reductions.solution import Solution, failure_solution
+from cvxpy.reductions.solvers import utilities
 from cvxpy.reductions.solvers.qp_solvers.qp_solver import QpSolver
+from cvxpy.utilities.citations import CITATION_DICT
 
 
 class DAQP(QpSolver):
     """QP interface for the DAQP solver.
-    
+
     This is a simple implementation based on the `official DAQP documentation
     <https://darnstrom.github.io/daqp/>`_.
 
@@ -35,7 +37,7 @@ class DAQP(QpSolver):
                   -1: s.INFEASIBLE,
                   -3: s.UNBOUNDED,
                   # TODO to be tested
-                  -4: s.USER_LIMIT, # iter limit reached, should it be error?
+                  -4: s.USER_LIMIT, # iter limit reached
                   -5: s.SOLVER_ERROR, # non-convex problem, shouldn't happen
                   -6: s.INFEASIBLE} # provided active set (equality
                                     # constraints) infeasible
@@ -59,15 +61,14 @@ class DAQP(QpSolver):
         return s.DAQP
 
     def import_solver(self) -> None:
-        import daqp
-        daqp
+        import daqp  # noqa: F401
 
     def invert(self, solution, inverse_data):
 
         (xstar,fval,exitflag,info) = solution
 
         attr = {
-            s.SOLVE_TIME: info['solve_time'], 
+            s.SOLVE_TIME: info['solve_time'],
             s.SETUP_TIME: info['setup_time'],
         }
         attr[s.EXTRA_STATS] = info
@@ -81,9 +82,23 @@ class DAQP(QpSolver):
                 DAQP.VAR_ID:
                 intf.DEFAULT_INTF.const_to_matrix(np.array(xstar))
             }
-            # dual variables associated with var bounds: TODO
+            # Build dual vars dict keyed by constraint IDs
+            # DAQP returns duals for [var_bounds; eq_constrs; ineq_constrs]
+            # Skip variable bounds (len_primal), then get constraint duals
             len_primal = len(xstar)
-            dual_vars = {DAQP.DUAL_VAR_ID: np.array(info['lam'][len_primal:])}
+            y = np.array(info['lam'][len_primal:])
+            n_eq = inverse_data[self.DIMS].zero
+            eq_dual = utilities.get_dual_values(
+                y[:n_eq],
+                utilities.extract_dual_value,
+                inverse_data[self.EQ_CONSTR])
+            ineq_dual = utilities.get_dual_values(
+                y[n_eq:],
+                utilities.extract_dual_value,
+                inverse_data[self.NEQ_CONSTR])
+            dual_vars = {}
+            dual_vars.update(eq_dual)
+            dual_vars.update(ineq_dual)
             attr[s.NUM_ITERS] = info['iterations']
             sol = Solution(status, opt_val, primal_vars, dual_vars, attr)
         else:
@@ -104,7 +119,7 @@ class DAQP(QpSolver):
         import daqp
 
         # using naming conventions in
-        # https://darnstrom.github.io/daqp/start/python 
+        # https://darnstrom.github.io/daqp/start/python
 
         H = np.array(data[s.P].todense(), dtype=c_double)
         f = np.array(data[s.Q], dtype=c_double)
@@ -118,10 +133,10 @@ class DAQP(QpSolver):
             var_upper_bounds = np.ones(len(f), dtype=c_double) * np.inf
         else:
             var_upper_bounds = data[s.UPPER_BOUNDS]
-                    
+
         bupper = np.array(np.concatenate((
                 var_upper_bounds,
-                data[s.B], 
+                data[s.B],
                 data[s.G])),
             dtype=c_double)
 
@@ -134,7 +149,7 @@ class DAQP(QpSolver):
         blower = np.array(
             np.concatenate((
                 var_lower_bounds,
-                data[s.B], 
+                data[s.B],
                 -np.inf*np.ones(data[s.G].shape))),
             dtype=c_double)
 
@@ -176,3 +191,13 @@ class DAQP(QpSolver):
             H,f,A,bupper,blower,sense,**used_solver_opts)
 
         return (xstar,fval,exitflag,info)
+
+    def cite(self, data):
+        """Returns bibtex citation for the solver.
+
+        Parameters
+        ----------
+        data : dict
+            Data generated via an apply call.
+        """
+        return CITATION_DICT["DAQP"]

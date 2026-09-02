@@ -21,11 +21,12 @@ __all__ = ['ExportArgs', 'Export']
 @pulumi.input_type
 class ExportArgs:
     def __init__(__self__, *,
-                 export: Optional[pulumi.Input['ExportExportArgs']] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['ExportTimeoutsArgs']] = None):
+                 export: pulumi.Input[Optional['ExportExportArgs']] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['ExportTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a Export resource.
+
         :param pulumi.Input['ExportExportArgs'] export: The details of the export, including data query, name, description, and destination configuration.  See the `export` argument reference below.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
@@ -38,50 +39,51 @@ class ExportArgs:
 
     @_builtins.property
     @pulumi.getter
-    def export(self) -> Optional[pulumi.Input['ExportExportArgs']]:
+    def export(self) -> pulumi.Input[Optional['ExportExportArgs']]:
         """
         The details of the export, including data query, name, description, and destination configuration.  See the `export` argument reference below.
         """
         return pulumi.get(self, "export")
 
     @export.setter
-    def export(self, value: Optional[pulumi.Input['ExportExportArgs']]):
+    def export(self, value: pulumi.Input[Optional['ExportExportArgs']]):
         pulumi.set(self, "export", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['ExportTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['ExportTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['ExportTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['ExportTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _ExportState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 export: Optional[pulumi.Input['ExportExportArgs']] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['ExportTimeoutsArgs']] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 export: pulumi.Input[Optional['ExportExportArgs']] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['ExportTimeoutsArgs']] = None):
         """
         Input properties used for looking up and filtering Export resources.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name (ARN) for this export.
-               * `export[0].export_arn` - Amazon Resource Name (ARN) for this export.
+
+        :param pulumi.Input[_builtins.str] arn: ARN for this export.
+               * `export[0].export_arn` - ARN for this export.
         :param pulumi.Input['ExportExportArgs'] export: The details of the export, including data query, name, description, and destination configuration.  See the `export` argument reference below.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
@@ -98,57 +100,57 @@ class _ExportState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Amazon Resource Name (ARN) for this export.
-        * `export[0].export_arn` - Amazon Resource Name (ARN) for this export.
+        ARN for this export.
+        * `export[0].export_arn` - ARN for this export.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def export(self) -> Optional[pulumi.Input['ExportExportArgs']]:
+    def export(self) -> pulumi.Input[Optional['ExportExportArgs']]:
         """
         The details of the export, including data query, name, description, and destination configuration.  See the `export` argument reference below.
         """
         return pulumi.get(self, "export")
 
     @export.setter
-    def export(self, value: Optional[pulumi.Input['ExportExportArgs']]):
+    def export(self, value: pulumi.Input[Optional['ExportExportArgs']]):
         pulumi.set(self, "export", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['ExportTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['ExportTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['ExportTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['ExportTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
@@ -158,9 +160,9 @@ class Export(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 export: Optional[pulumi.Input[Union['ExportExportArgs', 'ExportExportArgsDict']]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['ExportTimeoutsArgs', 'ExportTimeoutsArgsDict']]] = None,
+                 export: pulumi.Input[Optional[Union['ExportExportArgs', 'ExportExportArgsDict']]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['ExportTimeoutsArgs', 'ExportTimeoutsArgsDict']]] = None,
                  __props__=None):
         """
         Resource for managing an AWS BCM Data Exports Export.
@@ -176,7 +178,6 @@ class Export(pulumi.CustomResource):
         current = aws.get_caller_identity()
         current_get_partition = aws.get_partition()
         test = aws.bcmdata.Export("test", export={
-            "name": "testexample",
             "data_queries": [{
                 "query_statement": "SELECT identity_line_item_id, identity_time_interval, line_item_product_code,line_item_unblended_cost FROM COST_AND_USAGE_REPORT",
                 "table_configurations": {
@@ -191,20 +192,21 @@ class Export(pulumi.CustomResource):
             }],
             "destination_configurations": [{
                 "s3_destinations": [{
-                    "s3_bucket": test_aws_s3_bucket["bucket"],
-                    "s3_prefix": test_aws_s3_bucket["bucketPrefix"],
-                    "s3_region": test_aws_s3_bucket["region"],
                     "s3_output_configurations": [{
                         "overwrite": "OVERWRITE_REPORT",
                         "format": "TEXT_OR_CSV",
                         "compression": "GZIP",
                         "output_type": "CUSTOM",
                     }],
+                    "s3_bucket": test_aws_s3_bucket["bucket"],
+                    "s3_prefix": test_aws_s3_bucket["bucketPrefix"],
+                    "s3_region": test_aws_s3_bucket["region"],
                 }],
             }],
             "refresh_cadences": [{
                 "frequency": "SYNCHRONOUS",
             }],
+            "name": "testexample",
         })
         ```
 
@@ -214,13 +216,14 @@ class Export(pulumi.CustomResource):
 
         #### Required
 
-        - `arn` (String) Amazon Resource Name (ARN) of the BCM Data Exports export.
+        - `arn` (String) ARN of the BCM Data Exports export.
 
         Using `pulumi import`, import BCM Data Exports Export using the export ARN. For example:
 
         ```sh
         $ pulumi import aws:bcmdata/export:Export example arn:aws:bcm-data-exports:us-east-1:123456789012:export/CostUsageReport-9f1c75f3-f982-4d9a-b936-1e7ecab814b7
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -247,7 +250,6 @@ class Export(pulumi.CustomResource):
         current = aws.get_caller_identity()
         current_get_partition = aws.get_partition()
         test = aws.bcmdata.Export("test", export={
-            "name": "testexample",
             "data_queries": [{
                 "query_statement": "SELECT identity_line_item_id, identity_time_interval, line_item_product_code,line_item_unblended_cost FROM COST_AND_USAGE_REPORT",
                 "table_configurations": {
@@ -262,20 +264,21 @@ class Export(pulumi.CustomResource):
             }],
             "destination_configurations": [{
                 "s3_destinations": [{
-                    "s3_bucket": test_aws_s3_bucket["bucket"],
-                    "s3_prefix": test_aws_s3_bucket["bucketPrefix"],
-                    "s3_region": test_aws_s3_bucket["region"],
                     "s3_output_configurations": [{
                         "overwrite": "OVERWRITE_REPORT",
                         "format": "TEXT_OR_CSV",
                         "compression": "GZIP",
                         "output_type": "CUSTOM",
                     }],
+                    "s3_bucket": test_aws_s3_bucket["bucket"],
+                    "s3_prefix": test_aws_s3_bucket["bucketPrefix"],
+                    "s3_region": test_aws_s3_bucket["region"],
                 }],
             }],
             "refresh_cadences": [{
                 "frequency": "SYNCHRONOUS",
             }],
+            "name": "testexample",
         })
         ```
 
@@ -285,13 +288,14 @@ class Export(pulumi.CustomResource):
 
         #### Required
 
-        - `arn` (String) Amazon Resource Name (ARN) of the BCM Data Exports export.
+        - `arn` (String) ARN of the BCM Data Exports export.
 
         Using `pulumi import`, import BCM Data Exports Export using the export ARN. For example:
 
         ```sh
         $ pulumi import aws:bcmdata/export:Export example arn:aws:bcm-data-exports:us-east-1:123456789012:export/CostUsageReport-9f1c75f3-f982-4d9a-b936-1e7ecab814b7
         ```
+
 
         :param str resource_name: The name of the resource.
         :param ExportArgs args: The arguments to use to populate this resource's properties.
@@ -308,9 +312,9 @@ class Export(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 export: Optional[pulumi.Input[Union['ExportExportArgs', 'ExportExportArgsDict']]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['ExportTimeoutsArgs', 'ExportTimeoutsArgsDict']]] = None,
+                 export: pulumi.Input[Optional[Union['ExportExportArgs', 'ExportExportArgsDict']]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['ExportTimeoutsArgs', 'ExportTimeoutsArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -335,11 +339,11 @@ class Export(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            export: Optional[pulumi.Input[Union['ExportExportArgs', 'ExportExportArgsDict']]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            timeouts: Optional[pulumi.Input[Union['ExportTimeoutsArgs', 'ExportTimeoutsArgsDict']]] = None) -> 'Export':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            export: pulumi.Input[Optional[Union['ExportExportArgs', 'ExportExportArgsDict']]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            timeouts: pulumi.Input[Optional[Union['ExportTimeoutsArgs', 'ExportTimeoutsArgsDict']]] = None) -> 'Export':
         """
         Get an existing Export resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -347,8 +351,8 @@ class Export(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name (ARN) for this export.
-               * `export[0].export_arn` - Amazon Resource Name (ARN) for this export.
+        :param pulumi.Input[_builtins.str] arn: ARN for this export.
+               * `export[0].export_arn` - ARN for this export.
         :param pulumi.Input[Union['ExportExportArgs', 'ExportExportArgsDict']] export: The details of the export, including data query, name, description, and destination configuration.  See the `export` argument reference below.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
@@ -367,8 +371,8 @@ class Export(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        Amazon Resource Name (ARN) for this export.
-        * `export[0].export_arn` - Amazon Resource Name (ARN) for this export.
+        ARN for this export.
+        * `export[0].export_arn` - ARN for this export.
         """
         return pulumi.get(self, "arn")
 

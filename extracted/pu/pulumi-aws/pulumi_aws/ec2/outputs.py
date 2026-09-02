@@ -65,6 +65,7 @@ __all__ = [
     'FleetSpotOptionsMaintenanceStrategiesCapacityRebalance',
     'FleetTargetCapacitySpecification',
     'FlowLogDestinationOptions',
+    'FlowLogTagFieldSpecification',
     'InstanceCapacityReservationSpecification',
     'InstanceCapacityReservationSpecificationCapacityReservationTarget',
     'InstanceCpuOptions',
@@ -120,12 +121,29 @@ __all__ = [
     'LaunchTemplatePrivateDnsNameOptions',
     'LaunchTemplateSecondaryInterface',
     'LaunchTemplateTagSpecification',
+    'LocalGatewayRouteTableTimeouts',
     'ManagedPrefixListEntry',
     'NatGatewayAvailabilityZoneAddress',
     'NatGatewayEipAssociationTimeouts',
     'NatGatewayRegionalNatGatewayAddress',
     'NetworkAclEgress',
     'NetworkAclIngress',
+    'NetworkInsightsAccessScopeExcludePath',
+    'NetworkInsightsAccessScopeExcludePathDestination',
+    'NetworkInsightsAccessScopeExcludePathDestinationPacketHeaderStatement',
+    'NetworkInsightsAccessScopeExcludePathDestinationResourceStatement',
+    'NetworkInsightsAccessScopeExcludePathSource',
+    'NetworkInsightsAccessScopeExcludePathSourcePacketHeaderStatement',
+    'NetworkInsightsAccessScopeExcludePathSourceResourceStatement',
+    'NetworkInsightsAccessScopeExcludePathThroughResource',
+    'NetworkInsightsAccessScopeExcludePathThroughResourceResourceStatement',
+    'NetworkInsightsAccessScopeMatchPath',
+    'NetworkInsightsAccessScopeMatchPathDestination',
+    'NetworkInsightsAccessScopeMatchPathDestinationPacketHeaderStatement',
+    'NetworkInsightsAccessScopeMatchPathDestinationResourceStatement',
+    'NetworkInsightsAccessScopeMatchPathSource',
+    'NetworkInsightsAccessScopeMatchPathSourcePacketHeaderStatement',
+    'NetworkInsightsAccessScopeMatchPathSourceResourceStatement',
     'NetworkInsightsAnalysisAlternatePathHint',
     'NetworkInsightsAnalysisExplanation',
     'NetworkInsightsAnalysisExplanationAcl',
@@ -213,6 +231,8 @@ __all__ = [
     'NetworkInsightsPathFilterAtSourceDestinationPortRange',
     'NetworkInsightsPathFilterAtSourceSourcePortRange',
     'NetworkInterfaceAttachment',
+    'NetworkInterfaceEnaSrdSpecification',
+    'NetworkInterfaceEnaSrdSpecificationEnaSrdUdpSpecification',
     'NetworkInterfacePermissionTimeouts',
     'PeeringConnectionOptionsAccepter',
     'PeeringConnectionOptionsRequester',
@@ -294,12 +314,20 @@ __all__ = [
     'GetAmiFilterResult',
     'GetAmiIdsFilterResult',
     'GetAmiProductCodeResult',
+    'GetCapacityBlockReservationCommitmentInfoResult',
+    'GetCapacityBlockReservationFilterResult',
+    'GetCapacityBlockReservationInterruptibleCapacityAllocationResult',
+    'GetCapacityBlockReservationInterruptionInfoResult',
     'GetCoipPoolFilterResult',
     'GetCoipPoolsFilterResult',
     'GetCustomerGatewayFilterResult',
+    'GetDedicatedHostAvailableCapacityResult',
+    'GetDedicatedHostAvailableCapacityAvailableInstanceCapacityResult',
     'GetDedicatedHostFilterResult',
+    'GetDedicatedHostInstanceResult',
     'GetEipsFilterResult',
     'GetElasticIpFilterResult',
+    'GetHostsFilterResult',
     'GetInstanceCreditSpecificationResult',
     'GetInstanceEbsBlockDeviceResult',
     'GetInstanceEnclaveOptionResult',
@@ -465,6 +493,8 @@ __all__ = [
     'GetNetworkInsightsPathFilterAtSourceSourcePortRangeResult',
     'GetNetworkInterfaceAssociationResult',
     'GetNetworkInterfaceAttachmentResult',
+    'GetNetworkInterfaceEnaSrdSpecificationResult',
+    'GetNetworkInterfaceEnaSrdSpecificationEnaSrdUdpSpecificationResult',
     'GetNetworkInterfaceFilterResult',
     'GetNetworkInterfacesFilterResult',
     'GetPrefixListFilterResult',
@@ -476,6 +506,8 @@ __all__ = [
     'GetRouteTablesFilterResult',
     'GetSecurityGroupFilterResult',
     'GetSecurityGroupsFilterResult',
+    'GetServiceLinkVirtualInterfaceFilterResult',
+    'GetServiceLinkVirtualInterfacesFilterResult',
     'GetSpotPriceFilterResult',
     'GetSubnetFilterResult',
     'GetSubnetsFilterResult',
@@ -497,6 +529,7 @@ __all__ = [
     'GetVpcIpamsFilterResult',
     'GetVpcIpamsIpamResult',
     'GetVpcIpamsIpamOperatingRegionResult',
+    'GetVpcIpv6CidrBlockAssociationResult',
     'GetVpcPeeringConnectionCidrBlockSetResult',
     'GetVpcPeeringConnectionFilterResult',
     'GetVpcPeeringConnectionIpv6CidrBlockSetResult',
@@ -1701,7 +1734,7 @@ class DefaultRouteTableRoute(dict):
                  vpc_peering_connection_id: Optional[_builtins.str] = None):
         """
         :param _builtins.str cidr_block: The CIDR block of the route.
-        :param _builtins.str core_network_arn: The Amazon Resource Name (ARN) of a core network.
+        :param _builtins.str core_network_arn: ARN of a core network.
         :param _builtins.str destination_prefix_list_id: The ID of a managed prefix list destination of the route.
                
                One of the following target arguments must be supplied:
@@ -1754,7 +1787,7 @@ class DefaultRouteTableRoute(dict):
     @pulumi.getter(name="coreNetworkArn")
     def core_network_arn(self) -> Optional[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of a core network.
+        ARN of a core network.
         """
         return pulumi.get(self, "core_network_arn")
 
@@ -3107,7 +3140,7 @@ class FleetLaunchTemplateConfigOverrideInstanceRequirements(dict):
         :param 'FleetLaunchTemplateConfigOverrideInstanceRequirementsBaselineEbsBandwidthMbpsArgs' baseline_ebs_bandwidth_mbps: Block describing the minimum and maximum baseline EBS bandwidth, in Mbps. Default is no minimum or maximum.
         :param _builtins.str burstable_performance: Indicates whether burstable performance T instance types are `included`, `excluded`, or `required`. Default is `excluded`.
         :param Sequence[_builtins.str] cpu_manufacturers: The CPU manufacturers to include. Default is any manufacturer.
-               > **NOTE:** Don't confuse the CPU hardware manufacturer with the CPU hardware architecture. Instances will be launched with a compatible CPU architecture based on the Amazon Machine Image (AMI) that you specify in your launch template.
+               > **NOTE:** Don't confuse the CPU hardware manufacturer with the CPU hardware architecture. Instances will be launched with a compatible CPU architecture based on the AMI that you specify in your launch template.
         :param Sequence[_builtins.str] excluded_instance_types: The instance types to exclude. You can use strings with one or more wild cards, represented by an asterisk (\\*). The following are examples: `c5*`, `m5a.*`, `r*`, `*3*`. For example, if you specify `c5*`, you are excluding the entire C5 instance family, which includes all C5a and C5n instance types. If you specify `m5a.*`, you are excluding all the M5a instance types, but not the M5n instance types. Maximum of 400 entries in the list; each entry is limited to 30 characters. Default is no excluded instance types.
                
                If you specify `AllowedInstanceTypes`, you can't specify `ExcludedInstanceTypes`.
@@ -3269,7 +3302,7 @@ class FleetLaunchTemplateConfigOverrideInstanceRequirements(dict):
     def cpu_manufacturers(self) -> Optional[Sequence[_builtins.str]]:
         """
         The CPU manufacturers to include. Default is any manufacturer.
-        > **NOTE:** Don't confuse the CPU hardware manufacturer with the CPU hardware architecture. Instances will be launched with a compatible CPU architecture based on the Amazon Machine Image (AMI) that you specify in your launch template.
+        > **NOTE:** Don't confuse the CPU hardware manufacturer with the CPU hardware architecture. Instances will be launched with a compatible CPU architecture based on the AMI that you specify in your launch template.
         """
         return pulumi.get(self, "cpu_manufacturers")
 
@@ -4134,8 +4167,8 @@ class FlowLogDestinationOptions(dict):
                  per_hour_partition: Optional[_builtins.bool] = None):
         """
         :param _builtins.str file_format: File format for the flow log. Default value: `plain-text`. Valid values: `plain-text`, `parquet`.
-        :param _builtins.bool hive_compatible_partitions: Indicates whether to use Hive-compatible prefixes for flow logs stored in Amazon S3. Default value: `false`.
-        :param _builtins.bool per_hour_partition: Indicates whether to partition the flow log per hour. This reduces the cost and response time for queries. Default value: `false`.
+        :param _builtins.bool hive_compatible_partitions: Whether to use Hive-compatible prefixes for flow logs stored in Amazon S3. Default value: `false`.
+        :param _builtins.bool per_hour_partition: Whether to partition the flow log per hour. This reduces the cost and response time for queries. Default value: `false`.
         """
         if file_format is not None:
             pulumi.set(__self__, "file_format", file_format)
@@ -4156,7 +4189,7 @@ class FlowLogDestinationOptions(dict):
     @pulumi.getter(name="hiveCompatiblePartitions")
     def hive_compatible_partitions(self) -> Optional[_builtins.bool]:
         """
-        Indicates whether to use Hive-compatible prefixes for flow logs stored in Amazon S3. Default value: `false`.
+        Whether to use Hive-compatible prefixes for flow logs stored in Amazon S3. Default value: `false`.
         """
         return pulumi.get(self, "hive_compatible_partitions")
 
@@ -4164,9 +4197,57 @@ class FlowLogDestinationOptions(dict):
     @pulumi.getter(name="perHourPartition")
     def per_hour_partition(self) -> Optional[_builtins.bool]:
         """
-        Indicates whether to partition the flow log per hour. This reduces the cost and response time for queries. Default value: `false`.
+        Whether to partition the flow log per hour. This reduces the cost and response time for queries. Default value: `false`.
         """
         return pulumi.get(self, "per_hour_partition")
+
+
+@pulumi.output_type
+class FlowLogTagFieldSpecification(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "resourceType":
+            suggest = "resource_type"
+        elif key == "tagKeys":
+            suggest = "tag_keys"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in FlowLogTagFieldSpecification. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        FlowLogTagFieldSpecification.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        FlowLogTagFieldSpecification.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 resource_type: _builtins.str,
+                 tag_keys: Sequence[_builtins.str]):
+        """
+        :param _builtins.str resource_type: Resource type to associate the tag keys with. Valid values: `instance`, `network-interface`, `auto-scaling-group`.
+        :param Sequence[_builtins.str] tag_keys: Ordered list of tag keys, on resources of `resource_type`, to display in Flow Log records. The position of each key determines which field it populates in `log_format` (e.g., the first `instance` tag key populates `$${instance-tag}` and the second populates `$${instance-tag-2}`).
+        """
+        pulumi.set(__self__, "resource_type", resource_type)
+        pulumi.set(__self__, "tag_keys", tag_keys)
+
+    @_builtins.property
+    @pulumi.getter(name="resourceType")
+    def resource_type(self) -> _builtins.str:
+        """
+        Resource type to associate the tag keys with. Valid values: `instance`, `network-interface`, `auto-scaling-group`.
+        """
+        return pulumi.get(self, "resource_type")
+
+    @_builtins.property
+    @pulumi.getter(name="tagKeys")
+    def tag_keys(self) -> Sequence[_builtins.str]:
+        """
+        Ordered list of tag keys, on resources of `resource_type`, to display in Flow Log records. The position of each key determines which field it populates in `log_format` (e.g., the first `instance` tag key populates `$${instance-tag}` and the second populates `$${instance-tag-2}`).
+        """
+        return pulumi.get(self, "tag_keys")
 
 
 @pulumi.output_type
@@ -4442,7 +4523,7 @@ class InstanceEbsBlockDevice(dict):
         :param _builtins.bool delete_on_termination: Whether the volume should be destroyed on instance termination. Defaults to `true`.
         :param _builtins.bool encrypted: Enables [EBS encryption](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html) on the volume. Defaults to `false`. Cannot be used with `snapshot_id`. Must be configured to perform drift detection.
         :param _builtins.int iops: Amount of provisioned [IOPS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-io-characteristics.html). Only valid for volume_type of `io1`, `io2` or `gp3`.
-        :param _builtins.str kms_key_id: Amazon Resource Name (ARN) of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection.
+        :param _builtins.str kms_key_id: ARN of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection.
         :param _builtins.str snapshot_id: Snapshot ID to mount.
         :param Mapping[str, _builtins.str] tags: Map of tags to assign to the device. **Note:** Tags specified here are applied after instance creation via a separate API call. This means they cannot be used with IAM policies that require tags during resource creation (e.g., ABAC policies with `ec2:CreateAction` conditions or SCPs requiring volume tags). For ABAC compliance, use `volume_tags` instead, which applies uniform tags to all volumes during instance creation.
         :param Mapping[str, _builtins.str] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
@@ -4513,7 +4594,7 @@ class InstanceEbsBlockDevice(dict):
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> Optional[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection.
+        ARN of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection.
         """
         return pulumi.get(self, "kms_key_id")
 
@@ -4691,7 +4772,7 @@ class InstanceInstanceMarketOptions(dict):
                  market_type: Optional[_builtins.str] = None,
                  spot_options: Optional['outputs.InstanceInstanceMarketOptionsSpotOptions'] = None):
         """
-        :param _builtins.str market_type: Type of market for the instance. Valid values are `spot` and `capacity-block`. Defaults to `spot`. Required if `spot_options` is specified.
+        :param _builtins.str market_type: Type of market for the instance. Valid values are `spot`, `capacity-block`, and `interruptible-capacity-reservation`. Use `interruptible-capacity-reservation` to launch instances into [interruptible Capacity Reservations](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/capacity-consumer-procedures.html). Defaults to `spot`. Required if `spot_options` is specified.
         :param 'InstanceInstanceMarketOptionsSpotOptionsArgs' spot_options: Block to configure the options for Spot Instances. See Spot Options below for details on attributes.
         """
         if market_type is not None:
@@ -4703,7 +4784,7 @@ class InstanceInstanceMarketOptions(dict):
     @pulumi.getter(name="marketType")
     def market_type(self) -> Optional[_builtins.str]:
         """
-        Type of market for the instance. Valid values are `spot` and `capacity-block`. Defaults to `spot`. Required if `spot_options` is specified.
+        Type of market for the instance. Valid values are `spot`, `capacity-block`, and `interruptible-capacity-reservation`. Use `interruptible-capacity-reservation` to launch instances into [interruptible Capacity Reservations](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/capacity-consumer-procedures.html). Defaults to `spot`. Required if `spot_options` is specified.
         """
         return pulumi.get(self, "market_type")
 
@@ -5206,7 +5287,7 @@ class InstanceRootBlockDevice(dict):
         :param _builtins.str device_name: Device name, e.g., `/dev/sdh` or `xvdh`.
         :param _builtins.bool encrypted: Whether to enable volume encryption. Defaults to `false`. Must be configured to perform drift detection.
         :param _builtins.int iops: Amount of provisioned [IOPS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-io-characteristics.html). Only valid for volume_type of `io1`, `io2` or `gp3`.
-        :param _builtins.str kms_key_id: Amazon Resource Name (ARN) of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection.
+        :param _builtins.str kms_key_id: ARN of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection.
         :param Mapping[str, _builtins.str] tags: Map of tags to assign to the device. **Note:** Tags specified here are applied after instance creation via a separate API call. This means they cannot be used with IAM policies that require tags during resource creation (e.g., ABAC policies with `ec2:CreateAction` conditions or SCPs requiring volume tags). For ABAC compliance, use `volume_tags` instead, which applies uniform tags to all volumes during instance creation.
         :param Mapping[str, _builtins.str] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         :param _builtins.int throughput: Throughput to provision for a volume in mebibytes per second (MiB/s). This is only valid for `volume_type` of `gp3`.
@@ -5275,7 +5356,7 @@ class InstanceRootBlockDevice(dict):
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> Optional[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection.
+        ARN of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection.
         """
         return pulumi.get(self, "kms_key_id")
 
@@ -5539,6 +5620,20 @@ class LaunchConfigurationEbsBlockDevice(dict):
                  throughput: Optional[_builtins.int] = None,
                  volume_size: Optional[_builtins.int] = None,
                  volume_type: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str device_name: The name of the device to mount.
+        :param _builtins.bool delete_on_termination: Whether the volume should be destroyed
+               on instance termination (Default: `true`).
+        :param _builtins.bool encrypted: Whether the volume should be encrypted or not. Defaults to `false`.
+        :param _builtins.int iops: The amount of provisioned
+               [IOPS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-io-characteristics.html).
+               This must be set with a `volume_type` of `"io1"`.
+        :param _builtins.bool no_device: Whether the device in the block device mapping of the AMI is suppressed.
+        :param _builtins.str snapshot_id: The Snapshot ID to mount.
+        :param _builtins.int throughput: The throughput (MiBps) to provision for a `gp3` volume.
+        :param _builtins.int volume_size: The size of the volume in gigabytes.
+        :param _builtins.str volume_type: The type of volume. Can be `standard`, `gp2`, `gp3`, `st1`, `sc1` or `io1`.
+        """
         pulumi.set(__self__, "device_name", device_name)
         if delete_on_termination is not None:
             pulumi.set(__self__, "delete_on_termination", delete_on_termination)
@@ -5560,46 +5655,76 @@ class LaunchConfigurationEbsBlockDevice(dict):
     @_builtins.property
     @pulumi.getter(name="deviceName")
     def device_name(self) -> _builtins.str:
+        """
+        The name of the device to mount.
+        """
         return pulumi.get(self, "device_name")
 
     @_builtins.property
     @pulumi.getter(name="deleteOnTermination")
     def delete_on_termination(self) -> Optional[_builtins.bool]:
+        """
+        Whether the volume should be destroyed
+        on instance termination (Default: `true`).
+        """
         return pulumi.get(self, "delete_on_termination")
 
     @_builtins.property
     @pulumi.getter
     def encrypted(self) -> Optional[_builtins.bool]:
+        """
+        Whether the volume should be encrypted or not. Defaults to `false`.
+        """
         return pulumi.get(self, "encrypted")
 
     @_builtins.property
     @pulumi.getter
     def iops(self) -> Optional[_builtins.int]:
+        """
+        The amount of provisioned
+        [IOPS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-io-characteristics.html).
+        This must be set with a `volume_type` of `"io1"`.
+        """
         return pulumi.get(self, "iops")
 
     @_builtins.property
     @pulumi.getter(name="noDevice")
     def no_device(self) -> Optional[_builtins.bool]:
+        """
+        Whether the device in the block device mapping of the AMI is suppressed.
+        """
         return pulumi.get(self, "no_device")
 
     @_builtins.property
     @pulumi.getter(name="snapshotId")
     def snapshot_id(self) -> Optional[_builtins.str]:
+        """
+        The Snapshot ID to mount.
+        """
         return pulumi.get(self, "snapshot_id")
 
     @_builtins.property
     @pulumi.getter
     def throughput(self) -> Optional[_builtins.int]:
+        """
+        The throughput (MiBps) to provision for a `gp3` volume.
+        """
         return pulumi.get(self, "throughput")
 
     @_builtins.property
     @pulumi.getter(name="volumeSize")
     def volume_size(self) -> Optional[_builtins.int]:
+        """
+        The size of the volume in gigabytes.
+        """
         return pulumi.get(self, "volume_size")
 
     @_builtins.property
     @pulumi.getter(name="volumeType")
     def volume_type(self) -> Optional[_builtins.str]:
+        """
+        The type of volume. Can be `standard`, `gp2`, `gp3`, `st1`, `sc1` or `io1`.
+        """
         return pulumi.get(self, "volume_type")
 
 
@@ -5630,6 +5755,11 @@ class LaunchConfigurationEphemeralBlockDevice(dict):
                  device_name: _builtins.str,
                  no_device: Optional[_builtins.bool] = None,
                  virtual_name: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str device_name: The name of the block device to mount on the instance.
+        :param _builtins.bool no_device: Whether the device in the block device mapping of the AMI is suppressed.
+        :param _builtins.str virtual_name: The [Instance Store Device Name](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames).
+        """
         pulumi.set(__self__, "device_name", device_name)
         if no_device is not None:
             pulumi.set(__self__, "no_device", no_device)
@@ -5639,16 +5769,25 @@ class LaunchConfigurationEphemeralBlockDevice(dict):
     @_builtins.property
     @pulumi.getter(name="deviceName")
     def device_name(self) -> _builtins.str:
+        """
+        The name of the block device to mount on the instance.
+        """
         return pulumi.get(self, "device_name")
 
     @_builtins.property
     @pulumi.getter(name="noDevice")
     def no_device(self) -> Optional[_builtins.bool]:
+        """
+        Whether the device in the block device mapping of the AMI is suppressed.
+        """
         return pulumi.get(self, "no_device")
 
     @_builtins.property
     @pulumi.getter(name="virtualName")
     def virtual_name(self) -> Optional[_builtins.str]:
+        """
+        The [Instance Store Device Name](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames).
+        """
         return pulumi.get(self, "virtual_name")
 
 
@@ -5746,6 +5885,14 @@ class LaunchConfigurationRootBlockDevice(dict):
                  throughput: Optional[_builtins.int] = None,
                  volume_size: Optional[_builtins.int] = None,
                  volume_type: Optional[_builtins.str] = None):
+        """
+        :param _builtins.bool delete_on_termination: Whether the volume should be destroyed on instance termination. Defaults to `true`.
+        :param _builtins.bool encrypted: Whether the volume should be encrypted or not. Defaults to `false`.
+        :param _builtins.int iops: The amount of provisioned [IOPS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-io-characteristics.html). This must be set with a `volume_type` of `io1`.
+        :param _builtins.int throughput: The throughput (MiBps) to provision for a `gp3` volume.
+        :param _builtins.int volume_size: The size of the volume in gigabytes.
+        :param _builtins.str volume_type: The type of volume. Can be `standard`, `gp2`, `gp3`, `st1`, `sc1` or `io1`.
+        """
         if delete_on_termination is not None:
             pulumi.set(__self__, "delete_on_termination", delete_on_termination)
         if encrypted is not None:
@@ -5762,31 +5909,49 @@ class LaunchConfigurationRootBlockDevice(dict):
     @_builtins.property
     @pulumi.getter(name="deleteOnTermination")
     def delete_on_termination(self) -> Optional[_builtins.bool]:
+        """
+        Whether the volume should be destroyed on instance termination. Defaults to `true`.
+        """
         return pulumi.get(self, "delete_on_termination")
 
     @_builtins.property
     @pulumi.getter
     def encrypted(self) -> Optional[_builtins.bool]:
+        """
+        Whether the volume should be encrypted or not. Defaults to `false`.
+        """
         return pulumi.get(self, "encrypted")
 
     @_builtins.property
     @pulumi.getter
     def iops(self) -> Optional[_builtins.int]:
+        """
+        The amount of provisioned [IOPS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-io-characteristics.html). This must be set with a `volume_type` of `io1`.
+        """
         return pulumi.get(self, "iops")
 
     @_builtins.property
     @pulumi.getter
     def throughput(self) -> Optional[_builtins.int]:
+        """
+        The throughput (MiBps) to provision for a `gp3` volume.
+        """
         return pulumi.get(self, "throughput")
 
     @_builtins.property
     @pulumi.getter(name="volumeSize")
     def volume_size(self) -> Optional[_builtins.int]:
+        """
+        The size of the volume in gigabytes.
+        """
         return pulumi.get(self, "volume_size")
 
     @_builtins.property
     @pulumi.getter(name="volumeType")
     def volume_type(self) -> Optional[_builtins.str]:
+        """
+        The type of volume. Can be `standard`, `gp2`, `gp3`, `st1`, `sc1` or `io1`.
+        """
         return pulumi.get(self, "volume_type")
 
 
@@ -6297,7 +6462,7 @@ class LaunchTemplateIamInstanceProfile(dict):
                  arn: Optional[_builtins.str] = None,
                  name: Optional[_builtins.str] = None):
         """
-        :param _builtins.str arn: The Amazon Resource Name (ARN) of the instance profile. Conflicts with `name`.
+        :param _builtins.str arn: ARN of the instance profile. Conflicts with `name`.
         :param _builtins.str name: The name of the instance profile.
         """
         if arn is not None:
@@ -6309,7 +6474,7 @@ class LaunchTemplateIamInstanceProfile(dict):
     @pulumi.getter
     def arn(self) -> Optional[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the instance profile. Conflicts with `name`.
+        ARN of the instance profile. Conflicts with `name`.
         """
         return pulumi.get(self, "arn")
 
@@ -6598,7 +6763,7 @@ class LaunchTemplateInstanceRequirements(dict):
         :param _builtins.str burstable_performance: Indicate whether burstable performance instance types should be `included`, `excluded`, or `required`. Default is `excluded`.
         :param Sequence[_builtins.str] cpu_manufacturers: List of CPU manufacturer names. Default is any manufacturer.
                
-               > **NOTE:** Don't confuse the CPU hardware manufacturer with the CPU hardware architecture. Instances will be launched with a compatible CPU architecture based on the Amazon Machine Image (AMI) that you specify in your launch template.
+               > **NOTE:** Don't confuse the CPU hardware manufacturer with the CPU hardware architecture. Instances will be launched with a compatible CPU architecture based on the AMI that you specify in your launch template.
                
                ```
                Valid names:
@@ -6806,7 +6971,7 @@ class LaunchTemplateInstanceRequirements(dict):
         """
         List of CPU manufacturer names. Default is any manufacturer.
 
-        > **NOTE:** Don't confuse the CPU hardware manufacturer with the CPU hardware architecture. Instances will be launched with a compatible CPU architecture based on the Amazon Machine Image (AMI) that you specify in your launch template.
+        > **NOTE:** Don't confuse the CPU hardware manufacturer with the CPU hardware architecture. Instances will be launched with a compatible CPU architecture based on the AMI that you specify in your launch template.
 
         ```
         Valid names:
@@ -7410,6 +7575,8 @@ class LaunchTemplateNetworkInterface(dict):
             suggest = "delete_on_termination"
         elif key == "deviceIndex":
             suggest = "device_index"
+        elif key == "enaQueueCount":
+            suggest = "ena_queue_count"
         elif key == "enaSrdSpecification":
             suggest = "ena_srd_specification"
         elif key == "interfaceType":
@@ -7461,6 +7628,7 @@ class LaunchTemplateNetworkInterface(dict):
                  delete_on_termination: Optional[_builtins.str] = None,
                  description: Optional[_builtins.str] = None,
                  device_index: Optional[_builtins.int] = None,
+                 ena_queue_count: Optional[_builtins.int] = None,
                  ena_srd_specification: Optional['outputs.LaunchTemplateNetworkInterfaceEnaSrdSpecification'] = None,
                  interface_type: Optional[_builtins.str] = None,
                  ipv4_address_count: Optional[_builtins.int] = None,
@@ -7484,6 +7652,7 @@ class LaunchTemplateNetworkInterface(dict):
         :param _builtins.str delete_on_termination: Whether the network interface should be destroyed on instance termination.
         :param _builtins.str description: Description of the network interface.
         :param _builtins.int device_index: The integer index of the network interface attachment.
+        :param _builtins.int ena_queue_count: The number of ENA queues to be created with the instance. Requires an instance type and operating system that support [ENA queue configuration](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ena-queues.html).
         :param 'LaunchTemplateNetworkInterfaceEnaSrdSpecificationArgs' ena_srd_specification: Configuration for Elastic Network Adapter (ENA) Express settings. Applies to network interfaces that use the [ena Express](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/enhanced-networking-ena-express.html) feature. See details below.
         :param _builtins.str interface_type: The type of network interface. To create an Elastic Fabric Adapter (EFA), specify `efa`.
         :param _builtins.int ipv4_address_count: The number of secondary private IPv4 addresses to assign to a network interface. Conflicts with `ipv4_addresses`
@@ -7513,6 +7682,8 @@ class LaunchTemplateNetworkInterface(dict):
             pulumi.set(__self__, "description", description)
         if device_index is not None:
             pulumi.set(__self__, "device_index", device_index)
+        if ena_queue_count is not None:
+            pulumi.set(__self__, "ena_queue_count", ena_queue_count)
         if ena_srd_specification is not None:
             pulumi.set(__self__, "ena_srd_specification", ena_srd_specification)
         if interface_type is not None:
@@ -7593,6 +7764,14 @@ class LaunchTemplateNetworkInterface(dict):
         The integer index of the network interface attachment.
         """
         return pulumi.get(self, "device_index")
+
+    @_builtins.property
+    @pulumi.getter(name="enaQueueCount")
+    def ena_queue_count(self) -> Optional[_builtins.int]:
+        """
+        The number of ENA queues to be created with the instance. Requires an instance type and operating system that support [ENA queue configuration](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ena-queues.html).
+        """
+        return pulumi.get(self, "ena_queue_count")
 
     @_builtins.property
     @pulumi.getter(name="enaSrdSpecification")
@@ -8290,6 +8469,37 @@ class LaunchTemplateTagSpecification(dict):
 
 
 @pulumi.output_type
+class LocalGatewayRouteTableTimeouts(dict):
+    def __init__(__self__, *,
+                 create: Optional[_builtins.str] = None,
+                 delete: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        :param _builtins.str delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        if create is not None:
+            pulumi.set(__self__, "create", create)
+        if delete is not None:
+            pulumi.set(__self__, "delete", delete)
+
+    @_builtins.property
+    @pulumi.getter
+    def create(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "create")
+
+    @_builtins.property
+    @pulumi.getter
+    def delete(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        return pulumi.get(self, "delete")
+
+
+@pulumi.output_type
 class ManagedPrefixListEntry(dict):
     def __init__(__self__, *,
                  cidr: _builtins.str,
@@ -8827,6 +9037,1095 @@ class NetworkAclIngress(dict):
 
 
 @pulumi.output_type
+class NetworkInsightsAccessScopeExcludePath(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "throughResources":
+            suggest = "through_resources"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInsightsAccessScopeExcludePath. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInsightsAccessScopeExcludePath.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInsightsAccessScopeExcludePath.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 destination: Optional['outputs.NetworkInsightsAccessScopeExcludePathDestination'] = None,
+                 source: Optional['outputs.NetworkInsightsAccessScopeExcludePathSource'] = None,
+                 through_resources: Optional[Sequence['outputs.NetworkInsightsAccessScopeExcludePathThroughResource']] = None):
+        """
+        :param 'NetworkInsightsAccessScopeExcludePathDestinationArgs' destination: Path statement for the destination.
+               See `source` and `destination` below for details.
+        :param 'NetworkInsightsAccessScopeExcludePathSourceArgs' source: Path statement for the source.
+               See `source` and `destination` below for details.
+        :param Sequence['NetworkInsightsAccessScopeExcludePathThroughResourceArgs'] through_resources: Path statement for through resources.
+               See `through_resources` below for details.
+        """
+        if destination is not None:
+            pulumi.set(__self__, "destination", destination)
+        if source is not None:
+            pulumi.set(__self__, "source", source)
+        if through_resources is not None:
+            pulumi.set(__self__, "through_resources", through_resources)
+
+    @_builtins.property
+    @pulumi.getter
+    def destination(self) -> Optional['outputs.NetworkInsightsAccessScopeExcludePathDestination']:
+        """
+        Path statement for the destination.
+        See `source` and `destination` below for details.
+        """
+        return pulumi.get(self, "destination")
+
+    @_builtins.property
+    @pulumi.getter
+    def source(self) -> Optional['outputs.NetworkInsightsAccessScopeExcludePathSource']:
+        """
+        Path statement for the source.
+        See `source` and `destination` below for details.
+        """
+        return pulumi.get(self, "source")
+
+    @_builtins.property
+    @pulumi.getter(name="throughResources")
+    def through_resources(self) -> Optional[Sequence['outputs.NetworkInsightsAccessScopeExcludePathThroughResource']]:
+        """
+        Path statement for through resources.
+        See `through_resources` below for details.
+        """
+        return pulumi.get(self, "through_resources")
+
+
+@pulumi.output_type
+class NetworkInsightsAccessScopeExcludePathDestination(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "packetHeaderStatement":
+            suggest = "packet_header_statement"
+        elif key == "resourceStatement":
+            suggest = "resource_statement"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInsightsAccessScopeExcludePathDestination. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInsightsAccessScopeExcludePathDestination.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInsightsAccessScopeExcludePathDestination.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 packet_header_statement: Optional['outputs.NetworkInsightsAccessScopeExcludePathDestinationPacketHeaderStatement'] = None,
+                 resource_statement: Optional['outputs.NetworkInsightsAccessScopeExcludePathDestinationResourceStatement'] = None):
+        """
+        :param 'NetworkInsightsAccessScopeExcludePathDestinationPacketHeaderStatementArgs' packet_header_statement: Packet header statement.
+               See `packet_header_statement` below for details.
+        """
+        if packet_header_statement is not None:
+            pulumi.set(__self__, "packet_header_statement", packet_header_statement)
+        if resource_statement is not None:
+            pulumi.set(__self__, "resource_statement", resource_statement)
+
+    @_builtins.property
+    @pulumi.getter(name="packetHeaderStatement")
+    def packet_header_statement(self) -> Optional['outputs.NetworkInsightsAccessScopeExcludePathDestinationPacketHeaderStatement']:
+        """
+        Packet header statement.
+        See `packet_header_statement` below for details.
+        """
+        return pulumi.get(self, "packet_header_statement")
+
+    @_builtins.property
+    @pulumi.getter(name="resourceStatement")
+    def resource_statement(self) -> Optional['outputs.NetworkInsightsAccessScopeExcludePathDestinationResourceStatement']:
+        return pulumi.get(self, "resource_statement")
+
+
+@pulumi.output_type
+class NetworkInsightsAccessScopeExcludePathDestinationPacketHeaderStatement(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "destinationAddresses":
+            suggest = "destination_addresses"
+        elif key == "destinationPorts":
+            suggest = "destination_ports"
+        elif key == "destinationPrefixLists":
+            suggest = "destination_prefix_lists"
+        elif key == "sourceAddresses":
+            suggest = "source_addresses"
+        elif key == "sourcePorts":
+            suggest = "source_ports"
+        elif key == "sourcePrefixLists":
+            suggest = "source_prefix_lists"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInsightsAccessScopeExcludePathDestinationPacketHeaderStatement. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInsightsAccessScopeExcludePathDestinationPacketHeaderStatement.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInsightsAccessScopeExcludePathDestinationPacketHeaderStatement.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 destination_addresses: Optional[Sequence[_builtins.str]] = None,
+                 destination_ports: Optional[Sequence[_builtins.str]] = None,
+                 destination_prefix_lists: Optional[Sequence[_builtins.str]] = None,
+                 protocols: Optional[Sequence[_builtins.str]] = None,
+                 source_addresses: Optional[Sequence[_builtins.str]] = None,
+                 source_ports: Optional[Sequence[_builtins.str]] = None,
+                 source_prefix_lists: Optional[Sequence[_builtins.str]] = None):
+        """
+        :param Sequence[_builtins.str] destination_addresses: Set of destination addresses.
+        :param Sequence[_builtins.str] destination_ports: Set of destination ports.
+        :param Sequence[_builtins.str] destination_prefix_lists: Set of destination prefix lists.
+        :param Sequence[_builtins.str] protocols: Set of protocols.
+               Valid values are `tcp` and `udp`.
+        :param Sequence[_builtins.str] source_addresses: Set of source addresses.
+        :param Sequence[_builtins.str] source_ports: Set of source ports.
+        :param Sequence[_builtins.str] source_prefix_lists: Set of source prefix lists.
+        """
+        if destination_addresses is not None:
+            pulumi.set(__self__, "destination_addresses", destination_addresses)
+        if destination_ports is not None:
+            pulumi.set(__self__, "destination_ports", destination_ports)
+        if destination_prefix_lists is not None:
+            pulumi.set(__self__, "destination_prefix_lists", destination_prefix_lists)
+        if protocols is not None:
+            pulumi.set(__self__, "protocols", protocols)
+        if source_addresses is not None:
+            pulumi.set(__self__, "source_addresses", source_addresses)
+        if source_ports is not None:
+            pulumi.set(__self__, "source_ports", source_ports)
+        if source_prefix_lists is not None:
+            pulumi.set(__self__, "source_prefix_lists", source_prefix_lists)
+
+    @_builtins.property
+    @pulumi.getter(name="destinationAddresses")
+    def destination_addresses(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of destination addresses.
+        """
+        return pulumi.get(self, "destination_addresses")
+
+    @_builtins.property
+    @pulumi.getter(name="destinationPorts")
+    def destination_ports(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of destination ports.
+        """
+        return pulumi.get(self, "destination_ports")
+
+    @_builtins.property
+    @pulumi.getter(name="destinationPrefixLists")
+    def destination_prefix_lists(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of destination prefix lists.
+        """
+        return pulumi.get(self, "destination_prefix_lists")
+
+    @_builtins.property
+    @pulumi.getter
+    def protocols(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of protocols.
+        Valid values are `tcp` and `udp`.
+        """
+        return pulumi.get(self, "protocols")
+
+    @_builtins.property
+    @pulumi.getter(name="sourceAddresses")
+    def source_addresses(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of source addresses.
+        """
+        return pulumi.get(self, "source_addresses")
+
+    @_builtins.property
+    @pulumi.getter(name="sourcePorts")
+    def source_ports(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of source ports.
+        """
+        return pulumi.get(self, "source_ports")
+
+    @_builtins.property
+    @pulumi.getter(name="sourcePrefixLists")
+    def source_prefix_lists(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of source prefix lists.
+        """
+        return pulumi.get(self, "source_prefix_lists")
+
+
+@pulumi.output_type
+class NetworkInsightsAccessScopeExcludePathDestinationResourceStatement(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "resourceTypes":
+            suggest = "resource_types"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInsightsAccessScopeExcludePathDestinationResourceStatement. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInsightsAccessScopeExcludePathDestinationResourceStatement.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInsightsAccessScopeExcludePathDestinationResourceStatement.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 resource_types: Optional[Sequence[_builtins.str]] = None,
+                 resources: Optional[Sequence[_builtins.str]] = None):
+        """
+        :param Sequence[_builtins.str] resource_types: List of resource types.
+               Cannot be specified together with `resources`.
+        :param Sequence[_builtins.str] resources: List of resource ARNs.
+               Cannot be specified together with `resource_types`.
+        """
+        if resource_types is not None:
+            pulumi.set(__self__, "resource_types", resource_types)
+        if resources is not None:
+            pulumi.set(__self__, "resources", resources)
+
+    @_builtins.property
+    @pulumi.getter(name="resourceTypes")
+    def resource_types(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        List of resource types.
+        Cannot be specified together with `resources`.
+        """
+        return pulumi.get(self, "resource_types")
+
+    @_builtins.property
+    @pulumi.getter
+    def resources(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        List of resource ARNs.
+        Cannot be specified together with `resource_types`.
+        """
+        return pulumi.get(self, "resources")
+
+
+@pulumi.output_type
+class NetworkInsightsAccessScopeExcludePathSource(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "packetHeaderStatement":
+            suggest = "packet_header_statement"
+        elif key == "resourceStatement":
+            suggest = "resource_statement"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInsightsAccessScopeExcludePathSource. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInsightsAccessScopeExcludePathSource.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInsightsAccessScopeExcludePathSource.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 packet_header_statement: Optional['outputs.NetworkInsightsAccessScopeExcludePathSourcePacketHeaderStatement'] = None,
+                 resource_statement: Optional['outputs.NetworkInsightsAccessScopeExcludePathSourceResourceStatement'] = None):
+        """
+        :param 'NetworkInsightsAccessScopeExcludePathSourcePacketHeaderStatementArgs' packet_header_statement: Packet header statement.
+               See `packet_header_statement` below for details.
+        :param 'NetworkInsightsAccessScopeExcludePathSourceResourceStatementArgs' resource_statement: Resource statement.
+               Exactly one of `resources` or `resource_types` must be specified.
+               See `resource_statement` below for details.
+        """
+        if packet_header_statement is not None:
+            pulumi.set(__self__, "packet_header_statement", packet_header_statement)
+        if resource_statement is not None:
+            pulumi.set(__self__, "resource_statement", resource_statement)
+
+    @_builtins.property
+    @pulumi.getter(name="packetHeaderStatement")
+    def packet_header_statement(self) -> Optional['outputs.NetworkInsightsAccessScopeExcludePathSourcePacketHeaderStatement']:
+        """
+        Packet header statement.
+        See `packet_header_statement` below for details.
+        """
+        return pulumi.get(self, "packet_header_statement")
+
+    @_builtins.property
+    @pulumi.getter(name="resourceStatement")
+    def resource_statement(self) -> Optional['outputs.NetworkInsightsAccessScopeExcludePathSourceResourceStatement']:
+        """
+        Resource statement.
+        Exactly one of `resources` or `resource_types` must be specified.
+        See `resource_statement` below for details.
+        """
+        return pulumi.get(self, "resource_statement")
+
+
+@pulumi.output_type
+class NetworkInsightsAccessScopeExcludePathSourcePacketHeaderStatement(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "destinationAddresses":
+            suggest = "destination_addresses"
+        elif key == "destinationPorts":
+            suggest = "destination_ports"
+        elif key == "destinationPrefixLists":
+            suggest = "destination_prefix_lists"
+        elif key == "sourceAddresses":
+            suggest = "source_addresses"
+        elif key == "sourcePorts":
+            suggest = "source_ports"
+        elif key == "sourcePrefixLists":
+            suggest = "source_prefix_lists"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInsightsAccessScopeExcludePathSourcePacketHeaderStatement. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInsightsAccessScopeExcludePathSourcePacketHeaderStatement.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInsightsAccessScopeExcludePathSourcePacketHeaderStatement.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 destination_addresses: Optional[Sequence[_builtins.str]] = None,
+                 destination_ports: Optional[Sequence[_builtins.str]] = None,
+                 destination_prefix_lists: Optional[Sequence[_builtins.str]] = None,
+                 protocols: Optional[Sequence[_builtins.str]] = None,
+                 source_addresses: Optional[Sequence[_builtins.str]] = None,
+                 source_ports: Optional[Sequence[_builtins.str]] = None,
+                 source_prefix_lists: Optional[Sequence[_builtins.str]] = None):
+        """
+        :param Sequence[_builtins.str] destination_addresses: Set of destination addresses.
+        :param Sequence[_builtins.str] destination_ports: Set of destination ports.
+        :param Sequence[_builtins.str] destination_prefix_lists: Set of destination prefix lists.
+        :param Sequence[_builtins.str] protocols: Set of protocols.
+               Valid values are `tcp` and `udp`.
+        :param Sequence[_builtins.str] source_addresses: Set of source addresses.
+        :param Sequence[_builtins.str] source_ports: Set of source ports.
+        :param Sequence[_builtins.str] source_prefix_lists: Set of source prefix lists.
+        """
+        if destination_addresses is not None:
+            pulumi.set(__self__, "destination_addresses", destination_addresses)
+        if destination_ports is not None:
+            pulumi.set(__self__, "destination_ports", destination_ports)
+        if destination_prefix_lists is not None:
+            pulumi.set(__self__, "destination_prefix_lists", destination_prefix_lists)
+        if protocols is not None:
+            pulumi.set(__self__, "protocols", protocols)
+        if source_addresses is not None:
+            pulumi.set(__self__, "source_addresses", source_addresses)
+        if source_ports is not None:
+            pulumi.set(__self__, "source_ports", source_ports)
+        if source_prefix_lists is not None:
+            pulumi.set(__self__, "source_prefix_lists", source_prefix_lists)
+
+    @_builtins.property
+    @pulumi.getter(name="destinationAddresses")
+    def destination_addresses(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of destination addresses.
+        """
+        return pulumi.get(self, "destination_addresses")
+
+    @_builtins.property
+    @pulumi.getter(name="destinationPorts")
+    def destination_ports(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of destination ports.
+        """
+        return pulumi.get(self, "destination_ports")
+
+    @_builtins.property
+    @pulumi.getter(name="destinationPrefixLists")
+    def destination_prefix_lists(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of destination prefix lists.
+        """
+        return pulumi.get(self, "destination_prefix_lists")
+
+    @_builtins.property
+    @pulumi.getter
+    def protocols(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of protocols.
+        Valid values are `tcp` and `udp`.
+        """
+        return pulumi.get(self, "protocols")
+
+    @_builtins.property
+    @pulumi.getter(name="sourceAddresses")
+    def source_addresses(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of source addresses.
+        """
+        return pulumi.get(self, "source_addresses")
+
+    @_builtins.property
+    @pulumi.getter(name="sourcePorts")
+    def source_ports(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of source ports.
+        """
+        return pulumi.get(self, "source_ports")
+
+    @_builtins.property
+    @pulumi.getter(name="sourcePrefixLists")
+    def source_prefix_lists(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of source prefix lists.
+        """
+        return pulumi.get(self, "source_prefix_lists")
+
+
+@pulumi.output_type
+class NetworkInsightsAccessScopeExcludePathSourceResourceStatement(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "resourceTypes":
+            suggest = "resource_types"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInsightsAccessScopeExcludePathSourceResourceStatement. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInsightsAccessScopeExcludePathSourceResourceStatement.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInsightsAccessScopeExcludePathSourceResourceStatement.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 resource_types: Optional[Sequence[_builtins.str]] = None,
+                 resources: Optional[Sequence[_builtins.str]] = None):
+        """
+        :param Sequence[_builtins.str] resource_types: List of resource types.
+               Cannot be specified together with `resources`.
+        :param Sequence[_builtins.str] resources: List of resource ARNs.
+               Cannot be specified together with `resource_types`.
+        """
+        if resource_types is not None:
+            pulumi.set(__self__, "resource_types", resource_types)
+        if resources is not None:
+            pulumi.set(__self__, "resources", resources)
+
+    @_builtins.property
+    @pulumi.getter(name="resourceTypes")
+    def resource_types(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        List of resource types.
+        Cannot be specified together with `resources`.
+        """
+        return pulumi.get(self, "resource_types")
+
+    @_builtins.property
+    @pulumi.getter
+    def resources(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        List of resource ARNs.
+        Cannot be specified together with `resource_types`.
+        """
+        return pulumi.get(self, "resources")
+
+
+@pulumi.output_type
+class NetworkInsightsAccessScopeExcludePathThroughResource(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "resourceStatement":
+            suggest = "resource_statement"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInsightsAccessScopeExcludePathThroughResource. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInsightsAccessScopeExcludePathThroughResource.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInsightsAccessScopeExcludePathThroughResource.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 resource_statement: Optional['outputs.NetworkInsightsAccessScopeExcludePathThroughResourceResourceStatement'] = None):
+        """
+        :param 'NetworkInsightsAccessScopeExcludePathThroughResourceResourceStatementArgs' resource_statement: Resource statement.
+               Exactly one of `resources` or `resource_types` must be specified.
+               See `resource_statement` below for details.
+        """
+        if resource_statement is not None:
+            pulumi.set(__self__, "resource_statement", resource_statement)
+
+    @_builtins.property
+    @pulumi.getter(name="resourceStatement")
+    def resource_statement(self) -> Optional['outputs.NetworkInsightsAccessScopeExcludePathThroughResourceResourceStatement']:
+        """
+        Resource statement.
+        Exactly one of `resources` or `resource_types` must be specified.
+        See `resource_statement` below for details.
+        """
+        return pulumi.get(self, "resource_statement")
+
+
+@pulumi.output_type
+class NetworkInsightsAccessScopeExcludePathThroughResourceResourceStatement(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "resourceTypes":
+            suggest = "resource_types"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInsightsAccessScopeExcludePathThroughResourceResourceStatement. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInsightsAccessScopeExcludePathThroughResourceResourceStatement.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInsightsAccessScopeExcludePathThroughResourceResourceStatement.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 resource_types: Optional[Sequence[_builtins.str]] = None,
+                 resources: Optional[Sequence[_builtins.str]] = None):
+        """
+        :param Sequence[_builtins.str] resource_types: List of resource types.
+               Cannot be specified together with `resources`.
+        :param Sequence[_builtins.str] resources: List of resource ARNs.
+               Cannot be specified together with `resource_types`.
+        """
+        if resource_types is not None:
+            pulumi.set(__self__, "resource_types", resource_types)
+        if resources is not None:
+            pulumi.set(__self__, "resources", resources)
+
+    @_builtins.property
+    @pulumi.getter(name="resourceTypes")
+    def resource_types(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        List of resource types.
+        Cannot be specified together with `resources`.
+        """
+        return pulumi.get(self, "resource_types")
+
+    @_builtins.property
+    @pulumi.getter
+    def resources(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        List of resource ARNs.
+        Cannot be specified together with `resource_types`.
+        """
+        return pulumi.get(self, "resources")
+
+
+@pulumi.output_type
+class NetworkInsightsAccessScopeMatchPath(dict):
+    def __init__(__self__, *,
+                 destination: Optional['outputs.NetworkInsightsAccessScopeMatchPathDestination'] = None,
+                 source: Optional['outputs.NetworkInsightsAccessScopeMatchPathSource'] = None):
+        """
+        :param 'NetworkInsightsAccessScopeMatchPathDestinationArgs' destination: Path statement for the destination.
+               See `source` and `destination` below for details.
+        :param 'NetworkInsightsAccessScopeMatchPathSourceArgs' source: Path statement for the source.
+               See `source` and `destination` below for details.
+        """
+        if destination is not None:
+            pulumi.set(__self__, "destination", destination)
+        if source is not None:
+            pulumi.set(__self__, "source", source)
+
+    @_builtins.property
+    @pulumi.getter
+    def destination(self) -> Optional['outputs.NetworkInsightsAccessScopeMatchPathDestination']:
+        """
+        Path statement for the destination.
+        See `source` and `destination` below for details.
+        """
+        return pulumi.get(self, "destination")
+
+    @_builtins.property
+    @pulumi.getter
+    def source(self) -> Optional['outputs.NetworkInsightsAccessScopeMatchPathSource']:
+        """
+        Path statement for the source.
+        See `source` and `destination` below for details.
+        """
+        return pulumi.get(self, "source")
+
+
+@pulumi.output_type
+class NetworkInsightsAccessScopeMatchPathDestination(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "packetHeaderStatement":
+            suggest = "packet_header_statement"
+        elif key == "resourceStatement":
+            suggest = "resource_statement"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInsightsAccessScopeMatchPathDestination. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInsightsAccessScopeMatchPathDestination.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInsightsAccessScopeMatchPathDestination.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 packet_header_statement: Optional['outputs.NetworkInsightsAccessScopeMatchPathDestinationPacketHeaderStatement'] = None,
+                 resource_statement: Optional['outputs.NetworkInsightsAccessScopeMatchPathDestinationResourceStatement'] = None):
+        """
+        :param 'NetworkInsightsAccessScopeMatchPathDestinationPacketHeaderStatementArgs' packet_header_statement: Packet header statement.
+               See `packet_header_statement` below for details.
+        """
+        if packet_header_statement is not None:
+            pulumi.set(__self__, "packet_header_statement", packet_header_statement)
+        if resource_statement is not None:
+            pulumi.set(__self__, "resource_statement", resource_statement)
+
+    @_builtins.property
+    @pulumi.getter(name="packetHeaderStatement")
+    def packet_header_statement(self) -> Optional['outputs.NetworkInsightsAccessScopeMatchPathDestinationPacketHeaderStatement']:
+        """
+        Packet header statement.
+        See `packet_header_statement` below for details.
+        """
+        return pulumi.get(self, "packet_header_statement")
+
+    @_builtins.property
+    @pulumi.getter(name="resourceStatement")
+    def resource_statement(self) -> Optional['outputs.NetworkInsightsAccessScopeMatchPathDestinationResourceStatement']:
+        return pulumi.get(self, "resource_statement")
+
+
+@pulumi.output_type
+class NetworkInsightsAccessScopeMatchPathDestinationPacketHeaderStatement(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "destinationAddresses":
+            suggest = "destination_addresses"
+        elif key == "destinationPorts":
+            suggest = "destination_ports"
+        elif key == "destinationPrefixLists":
+            suggest = "destination_prefix_lists"
+        elif key == "sourceAddresses":
+            suggest = "source_addresses"
+        elif key == "sourcePorts":
+            suggest = "source_ports"
+        elif key == "sourcePrefixLists":
+            suggest = "source_prefix_lists"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInsightsAccessScopeMatchPathDestinationPacketHeaderStatement. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInsightsAccessScopeMatchPathDestinationPacketHeaderStatement.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInsightsAccessScopeMatchPathDestinationPacketHeaderStatement.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 destination_addresses: Optional[Sequence[_builtins.str]] = None,
+                 destination_ports: Optional[Sequence[_builtins.str]] = None,
+                 destination_prefix_lists: Optional[Sequence[_builtins.str]] = None,
+                 protocols: Optional[Sequence[_builtins.str]] = None,
+                 source_addresses: Optional[Sequence[_builtins.str]] = None,
+                 source_ports: Optional[Sequence[_builtins.str]] = None,
+                 source_prefix_lists: Optional[Sequence[_builtins.str]] = None):
+        """
+        :param Sequence[_builtins.str] destination_addresses: Set of destination addresses.
+        :param Sequence[_builtins.str] destination_ports: Set of destination ports.
+        :param Sequence[_builtins.str] destination_prefix_lists: Set of destination prefix lists.
+        :param Sequence[_builtins.str] protocols: Set of protocols.
+               Valid values are `tcp` and `udp`.
+        :param Sequence[_builtins.str] source_addresses: Set of source addresses.
+        :param Sequence[_builtins.str] source_ports: Set of source ports.
+        :param Sequence[_builtins.str] source_prefix_lists: Set of source prefix lists.
+        """
+        if destination_addresses is not None:
+            pulumi.set(__self__, "destination_addresses", destination_addresses)
+        if destination_ports is not None:
+            pulumi.set(__self__, "destination_ports", destination_ports)
+        if destination_prefix_lists is not None:
+            pulumi.set(__self__, "destination_prefix_lists", destination_prefix_lists)
+        if protocols is not None:
+            pulumi.set(__self__, "protocols", protocols)
+        if source_addresses is not None:
+            pulumi.set(__self__, "source_addresses", source_addresses)
+        if source_ports is not None:
+            pulumi.set(__self__, "source_ports", source_ports)
+        if source_prefix_lists is not None:
+            pulumi.set(__self__, "source_prefix_lists", source_prefix_lists)
+
+    @_builtins.property
+    @pulumi.getter(name="destinationAddresses")
+    def destination_addresses(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of destination addresses.
+        """
+        return pulumi.get(self, "destination_addresses")
+
+    @_builtins.property
+    @pulumi.getter(name="destinationPorts")
+    def destination_ports(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of destination ports.
+        """
+        return pulumi.get(self, "destination_ports")
+
+    @_builtins.property
+    @pulumi.getter(name="destinationPrefixLists")
+    def destination_prefix_lists(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of destination prefix lists.
+        """
+        return pulumi.get(self, "destination_prefix_lists")
+
+    @_builtins.property
+    @pulumi.getter
+    def protocols(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of protocols.
+        Valid values are `tcp` and `udp`.
+        """
+        return pulumi.get(self, "protocols")
+
+    @_builtins.property
+    @pulumi.getter(name="sourceAddresses")
+    def source_addresses(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of source addresses.
+        """
+        return pulumi.get(self, "source_addresses")
+
+    @_builtins.property
+    @pulumi.getter(name="sourcePorts")
+    def source_ports(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of source ports.
+        """
+        return pulumi.get(self, "source_ports")
+
+    @_builtins.property
+    @pulumi.getter(name="sourcePrefixLists")
+    def source_prefix_lists(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of source prefix lists.
+        """
+        return pulumi.get(self, "source_prefix_lists")
+
+
+@pulumi.output_type
+class NetworkInsightsAccessScopeMatchPathDestinationResourceStatement(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "resourceTypes":
+            suggest = "resource_types"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInsightsAccessScopeMatchPathDestinationResourceStatement. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInsightsAccessScopeMatchPathDestinationResourceStatement.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInsightsAccessScopeMatchPathDestinationResourceStatement.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 resource_types: Optional[Sequence[_builtins.str]] = None,
+                 resources: Optional[Sequence[_builtins.str]] = None):
+        """
+        :param Sequence[_builtins.str] resource_types: List of resource types.
+               Cannot be specified together with `resources`.
+        :param Sequence[_builtins.str] resources: List of resource ARNs.
+               Cannot be specified together with `resource_types`.
+        """
+        if resource_types is not None:
+            pulumi.set(__self__, "resource_types", resource_types)
+        if resources is not None:
+            pulumi.set(__self__, "resources", resources)
+
+    @_builtins.property
+    @pulumi.getter(name="resourceTypes")
+    def resource_types(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        List of resource types.
+        Cannot be specified together with `resources`.
+        """
+        return pulumi.get(self, "resource_types")
+
+    @_builtins.property
+    @pulumi.getter
+    def resources(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        List of resource ARNs.
+        Cannot be specified together with `resource_types`.
+        """
+        return pulumi.get(self, "resources")
+
+
+@pulumi.output_type
+class NetworkInsightsAccessScopeMatchPathSource(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "packetHeaderStatement":
+            suggest = "packet_header_statement"
+        elif key == "resourceStatement":
+            suggest = "resource_statement"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInsightsAccessScopeMatchPathSource. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInsightsAccessScopeMatchPathSource.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInsightsAccessScopeMatchPathSource.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 packet_header_statement: Optional['outputs.NetworkInsightsAccessScopeMatchPathSourcePacketHeaderStatement'] = None,
+                 resource_statement: Optional['outputs.NetworkInsightsAccessScopeMatchPathSourceResourceStatement'] = None):
+        """
+        :param 'NetworkInsightsAccessScopeMatchPathSourcePacketHeaderStatementArgs' packet_header_statement: Packet header statement.
+               See `packet_header_statement` below for details.
+        :param 'NetworkInsightsAccessScopeMatchPathSourceResourceStatementArgs' resource_statement: Resource statement.
+               Exactly one of `resources` or `resource_types` must be specified.
+               See `resource_statement` below for details.
+        """
+        if packet_header_statement is not None:
+            pulumi.set(__self__, "packet_header_statement", packet_header_statement)
+        if resource_statement is not None:
+            pulumi.set(__self__, "resource_statement", resource_statement)
+
+    @_builtins.property
+    @pulumi.getter(name="packetHeaderStatement")
+    def packet_header_statement(self) -> Optional['outputs.NetworkInsightsAccessScopeMatchPathSourcePacketHeaderStatement']:
+        """
+        Packet header statement.
+        See `packet_header_statement` below for details.
+        """
+        return pulumi.get(self, "packet_header_statement")
+
+    @_builtins.property
+    @pulumi.getter(name="resourceStatement")
+    def resource_statement(self) -> Optional['outputs.NetworkInsightsAccessScopeMatchPathSourceResourceStatement']:
+        """
+        Resource statement.
+        Exactly one of `resources` or `resource_types` must be specified.
+        See `resource_statement` below for details.
+        """
+        return pulumi.get(self, "resource_statement")
+
+
+@pulumi.output_type
+class NetworkInsightsAccessScopeMatchPathSourcePacketHeaderStatement(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "destinationAddresses":
+            suggest = "destination_addresses"
+        elif key == "destinationPorts":
+            suggest = "destination_ports"
+        elif key == "destinationPrefixLists":
+            suggest = "destination_prefix_lists"
+        elif key == "sourceAddresses":
+            suggest = "source_addresses"
+        elif key == "sourcePorts":
+            suggest = "source_ports"
+        elif key == "sourcePrefixLists":
+            suggest = "source_prefix_lists"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInsightsAccessScopeMatchPathSourcePacketHeaderStatement. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInsightsAccessScopeMatchPathSourcePacketHeaderStatement.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInsightsAccessScopeMatchPathSourcePacketHeaderStatement.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 destination_addresses: Optional[Sequence[_builtins.str]] = None,
+                 destination_ports: Optional[Sequence[_builtins.str]] = None,
+                 destination_prefix_lists: Optional[Sequence[_builtins.str]] = None,
+                 protocols: Optional[Sequence[_builtins.str]] = None,
+                 source_addresses: Optional[Sequence[_builtins.str]] = None,
+                 source_ports: Optional[Sequence[_builtins.str]] = None,
+                 source_prefix_lists: Optional[Sequence[_builtins.str]] = None):
+        """
+        :param Sequence[_builtins.str] destination_addresses: Set of destination addresses.
+        :param Sequence[_builtins.str] destination_ports: Set of destination ports.
+        :param Sequence[_builtins.str] destination_prefix_lists: Set of destination prefix lists.
+        :param Sequence[_builtins.str] protocols: Set of protocols.
+               Valid values are `tcp` and `udp`.
+        :param Sequence[_builtins.str] source_addresses: Set of source addresses.
+        :param Sequence[_builtins.str] source_ports: Set of source ports.
+        :param Sequence[_builtins.str] source_prefix_lists: Set of source prefix lists.
+        """
+        if destination_addresses is not None:
+            pulumi.set(__self__, "destination_addresses", destination_addresses)
+        if destination_ports is not None:
+            pulumi.set(__self__, "destination_ports", destination_ports)
+        if destination_prefix_lists is not None:
+            pulumi.set(__self__, "destination_prefix_lists", destination_prefix_lists)
+        if protocols is not None:
+            pulumi.set(__self__, "protocols", protocols)
+        if source_addresses is not None:
+            pulumi.set(__self__, "source_addresses", source_addresses)
+        if source_ports is not None:
+            pulumi.set(__self__, "source_ports", source_ports)
+        if source_prefix_lists is not None:
+            pulumi.set(__self__, "source_prefix_lists", source_prefix_lists)
+
+    @_builtins.property
+    @pulumi.getter(name="destinationAddresses")
+    def destination_addresses(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of destination addresses.
+        """
+        return pulumi.get(self, "destination_addresses")
+
+    @_builtins.property
+    @pulumi.getter(name="destinationPorts")
+    def destination_ports(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of destination ports.
+        """
+        return pulumi.get(self, "destination_ports")
+
+    @_builtins.property
+    @pulumi.getter(name="destinationPrefixLists")
+    def destination_prefix_lists(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of destination prefix lists.
+        """
+        return pulumi.get(self, "destination_prefix_lists")
+
+    @_builtins.property
+    @pulumi.getter
+    def protocols(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of protocols.
+        Valid values are `tcp` and `udp`.
+        """
+        return pulumi.get(self, "protocols")
+
+    @_builtins.property
+    @pulumi.getter(name="sourceAddresses")
+    def source_addresses(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of source addresses.
+        """
+        return pulumi.get(self, "source_addresses")
+
+    @_builtins.property
+    @pulumi.getter(name="sourcePorts")
+    def source_ports(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of source ports.
+        """
+        return pulumi.get(self, "source_ports")
+
+    @_builtins.property
+    @pulumi.getter(name="sourcePrefixLists")
+    def source_prefix_lists(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Set of source prefix lists.
+        """
+        return pulumi.get(self, "source_prefix_lists")
+
+
+@pulumi.output_type
+class NetworkInsightsAccessScopeMatchPathSourceResourceStatement(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "resourceTypes":
+            suggest = "resource_types"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInsightsAccessScopeMatchPathSourceResourceStatement. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInsightsAccessScopeMatchPathSourceResourceStatement.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInsightsAccessScopeMatchPathSourceResourceStatement.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 resource_types: Optional[Sequence[_builtins.str]] = None,
+                 resources: Optional[Sequence[_builtins.str]] = None):
+        """
+        :param Sequence[_builtins.str] resource_types: List of resource types.
+               Cannot be specified together with `resources`.
+        :param Sequence[_builtins.str] resources: List of resource ARNs.
+               Cannot be specified together with `resource_types`.
+        """
+        if resource_types is not None:
+            pulumi.set(__self__, "resource_types", resource_types)
+        if resources is not None:
+            pulumi.set(__self__, "resources", resources)
+
+    @_builtins.property
+    @pulumi.getter(name="resourceTypes")
+    def resource_types(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        List of resource types.
+        Cannot be specified together with `resources`.
+        """
+        return pulumi.get(self, "resource_types")
+
+    @_builtins.property
+    @pulumi.getter
+    def resources(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        List of resource ARNs.
+        Cannot be specified together with `resource_types`.
+        """
+        return pulumi.get(self, "resources")
+
+
+@pulumi.output_type
 class NetworkInsightsAnalysisAlternatePathHint(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -8851,7 +10150,7 @@ class NetworkInsightsAnalysisAlternatePathHint(dict):
                  component_arn: Optional[_builtins.str] = None,
                  component_id: Optional[_builtins.str] = None):
         """
-        :param _builtins.str component_arn: The Amazon Resource Name (ARN) of the component.
+        :param _builtins.str component_arn: ARN of the component.
         :param _builtins.str component_id: The ID of the component.
         """
         if component_arn is not None:
@@ -8863,7 +10162,7 @@ class NetworkInsightsAnalysisAlternatePathHint(dict):
     @pulumi.getter(name="componentArn")
     def component_arn(self) -> Optional[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the component.
+        ARN of the component.
         """
         return pulumi.get(self, "component_arn")
 
@@ -13765,6 +15064,92 @@ class NetworkInterfaceAttachment(dict):
 
 
 @pulumi.output_type
+class NetworkInterfaceEnaSrdSpecification(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "enaSrdEnabled":
+            suggest = "ena_srd_enabled"
+        elif key == "enaSrdUdpSpecification":
+            suggest = "ena_srd_udp_specification"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInterfaceEnaSrdSpecification. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInterfaceEnaSrdSpecification.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInterfaceEnaSrdSpecification.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 ena_srd_enabled: Optional[_builtins.bool] = None,
+                 ena_srd_udp_specification: Optional['outputs.NetworkInterfaceEnaSrdSpecificationEnaSrdUdpSpecification'] = None):
+        """
+        :param _builtins.bool ena_srd_enabled: Indicates whether ENA Express is enabled for the network interface.
+        :param 'NetworkInterfaceEnaSrdSpecificationEnaSrdUdpSpecificationArgs' ena_srd_udp_specification: Configures ENA Express for UDP network traffic. See ENA SRD UDP Specification below for more details.
+        """
+        if ena_srd_enabled is not None:
+            pulumi.set(__self__, "ena_srd_enabled", ena_srd_enabled)
+        if ena_srd_udp_specification is not None:
+            pulumi.set(__self__, "ena_srd_udp_specification", ena_srd_udp_specification)
+
+    @_builtins.property
+    @pulumi.getter(name="enaSrdEnabled")
+    def ena_srd_enabled(self) -> Optional[_builtins.bool]:
+        """
+        Indicates whether ENA Express is enabled for the network interface.
+        """
+        return pulumi.get(self, "ena_srd_enabled")
+
+    @_builtins.property
+    @pulumi.getter(name="enaSrdUdpSpecification")
+    def ena_srd_udp_specification(self) -> Optional['outputs.NetworkInterfaceEnaSrdSpecificationEnaSrdUdpSpecification']:
+        """
+        Configures ENA Express for UDP network traffic. See ENA SRD UDP Specification below for more details.
+        """
+        return pulumi.get(self, "ena_srd_udp_specification")
+
+
+@pulumi.output_type
+class NetworkInterfaceEnaSrdSpecificationEnaSrdUdpSpecification(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "enaSrdUdpEnabled":
+            suggest = "ena_srd_udp_enabled"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkInterfaceEnaSrdSpecificationEnaSrdUdpSpecification. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkInterfaceEnaSrdSpecificationEnaSrdUdpSpecification.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkInterfaceEnaSrdSpecificationEnaSrdUdpSpecification.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 ena_srd_udp_enabled: Optional[_builtins.bool] = None):
+        """
+        :param _builtins.bool ena_srd_udp_enabled: Indicates whether UDP traffic uses ENA Express. Requires `ena_srd_enabled` to be `true`.
+        """
+        if ena_srd_udp_enabled is not None:
+            pulumi.set(__self__, "ena_srd_udp_enabled", ena_srd_udp_enabled)
+
+    @_builtins.property
+    @pulumi.getter(name="enaSrdUdpEnabled")
+    def ena_srd_udp_enabled(self) -> Optional[_builtins.bool]:
+        """
+        Indicates whether UDP traffic uses ENA Express. Requires `ena_srd_enabled` to be `true`.
+        """
+        return pulumi.get(self, "ena_srd_udp_enabled")
+
+
+@pulumi.output_type
 class NetworkInterfacePermissionTimeouts(dict):
     def __init__(__self__, *,
                  create: Optional[_builtins.str] = None,
@@ -13892,6 +15277,8 @@ class RouteTableRoute(dict):
             suggest = "nat_gateway_id"
         elif key == "networkInterfaceId":
             suggest = "network_interface_id"
+        elif key == "odbNetworkArn":
+            suggest = "odb_network_arn"
         elif key == "transitGatewayId":
             suggest = "transit_gateway_id"
         elif key == "vpcEndpointId":
@@ -13921,13 +15308,14 @@ class RouteTableRoute(dict):
                  local_gateway_id: Optional[_builtins.str] = None,
                  nat_gateway_id: Optional[_builtins.str] = None,
                  network_interface_id: Optional[_builtins.str] = None,
+                 odb_network_arn: Optional[_builtins.str] = None,
                  transit_gateway_id: Optional[_builtins.str] = None,
                  vpc_endpoint_id: Optional[_builtins.str] = None,
                  vpc_peering_connection_id: Optional[_builtins.str] = None):
         """
         :param _builtins.str carrier_gateway_id: Identifier of a carrier gateway. This attribute can only be used when the VPC contains a subnet which is associated with a Wavelength Zone.
         :param _builtins.str cidr_block: The CIDR block of the route.
-        :param _builtins.str core_network_arn: The Amazon Resource Name (ARN) of a core network.
+        :param _builtins.str core_network_arn: ARN of a core network.
         :param _builtins.str destination_prefix_list_id: The ID of a managed prefix list destination of the route.
                
                One of the following target arguments must be supplied:
@@ -13937,6 +15325,7 @@ class RouteTableRoute(dict):
         :param _builtins.str local_gateway_id: Identifier of a Outpost local gateway.
         :param _builtins.str nat_gateway_id: Identifier of a VPC NAT gateway.
         :param _builtins.str network_interface_id: Identifier of an EC2 network interface.
+        :param _builtins.str odb_network_arn: ARN of an ODB network.
         :param _builtins.str transit_gateway_id: Identifier of an EC2 Transit Gateway.
         :param _builtins.str vpc_endpoint_id: Identifier of a VPC Endpoint.
         :param _builtins.str vpc_peering_connection_id: Identifier of a VPC peering connection.
@@ -13963,6 +15352,8 @@ class RouteTableRoute(dict):
             pulumi.set(__self__, "nat_gateway_id", nat_gateway_id)
         if network_interface_id is not None:
             pulumi.set(__self__, "network_interface_id", network_interface_id)
+        if odb_network_arn is not None:
+            pulumi.set(__self__, "odb_network_arn", odb_network_arn)
         if transit_gateway_id is not None:
             pulumi.set(__self__, "transit_gateway_id", transit_gateway_id)
         if vpc_endpoint_id is not None:
@@ -13990,7 +15381,7 @@ class RouteTableRoute(dict):
     @pulumi.getter(name="coreNetworkArn")
     def core_network_arn(self) -> Optional[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of a core network.
+        ARN of a core network.
         """
         return pulumi.get(self, "core_network_arn")
 
@@ -14051,6 +15442,14 @@ class RouteTableRoute(dict):
         Identifier of an EC2 network interface.
         """
         return pulumi.get(self, "network_interface_id")
+
+    @_builtins.property
+    @pulumi.getter(name="odbNetworkArn")
+    def odb_network_arn(self) -> Optional[_builtins.str]:
+        """
+        ARN of an ODB network.
+        """
+        return pulumi.get(self, "odb_network_arn")
 
     @_builtins.property
     @pulumi.getter(name="transitGatewayId")
@@ -15383,7 +16782,7 @@ class SpotFleetRequestLaunchTemplateConfigOverrideInstanceRequirements(dict):
         :param _builtins.str burstable_performance: Indicate whether burstable performance instance types should be `included`, `excluded`, or `required`. Default is `excluded`.
         :param Sequence[_builtins.str] cpu_manufacturers: List of CPU manufacturer names. Default is any manufacturer.
                
-               > **NOTE:** Don't confuse the CPU hardware manufacturer with the CPU hardware architecture. Instances will be launched with a compatible CPU architecture based on the Amazon Machine Image (AMI) that you specify in your launch template.
+               > **NOTE:** Don't confuse the CPU hardware manufacturer with the CPU hardware architecture. Instances will be launched with a compatible CPU architecture based on the AMI that you specify in your launch template.
                
                ```
                Valid names:
@@ -15576,7 +16975,7 @@ class SpotFleetRequestLaunchTemplateConfigOverrideInstanceRequirements(dict):
         """
         List of CPU manufacturer names. Default is any manufacturer.
 
-        > **NOTE:** Don't confuse the CPU hardware manufacturer with the CPU hardware architecture. Instances will be launched with a compatible CPU architecture based on the Amazon Machine Image (AMI) that you specify in your launch template.
+        > **NOTE:** Don't confuse the CPU hardware manufacturer with the CPU hardware architecture. Instances will be launched with a compatible CPU architecture based on the AMI that you specify in your launch template.
 
         ```
         Valid names:
@@ -16334,7 +17733,7 @@ class SpotInstanceRequestEbsBlockDevice(dict):
         :param _builtins.bool delete_on_termination: Whether the volume should be destroyed on instance termination. Defaults to `true`.
         :param _builtins.bool encrypted: Enables [EBS encryption](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html) on the volume. Defaults to `false`. Cannot be used with `snapshot_id`. Must be configured to perform drift detection.
         :param _builtins.int iops: Amount of provisioned [IOPS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-io-characteristics.html). Only valid for volume_type of `io1`, `io2` or `gp3`.
-        :param _builtins.str kms_key_id: Amazon Resource Name (ARN) of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection.
+        :param _builtins.str kms_key_id: ARN of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection.
         :param _builtins.str snapshot_id: Snapshot ID to mount.
         :param Mapping[str, _builtins.str] tags: Map of tags to assign to the device. **Note:** Tags specified here are applied after instance creation via a separate API call. This means they cannot be used with IAM policies that require tags during resource creation (e.g., ABAC policies with `ec2:CreateAction` conditions or SCPs requiring volume tags). For ABAC compliance, use `volume_tags` instead, which applies uniform tags to all volumes during instance creation.
         :param Mapping[str, _builtins.str] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
@@ -16404,7 +17803,7 @@ class SpotInstanceRequestEbsBlockDevice(dict):
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> Optional[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection.
+        ARN of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection.
         """
         return pulumi.get(self, "kms_key_id")
 
@@ -16966,7 +18365,7 @@ class SpotInstanceRequestRootBlockDevice(dict):
         :param _builtins.bool delete_on_termination: Whether the volume should be destroyed on instance termination. Defaults to `true`.
         :param _builtins.bool encrypted: Whether to enable volume encryption. Defaults to `false`. Must be configured to perform drift detection.
         :param _builtins.int iops: Amount of provisioned [IOPS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-io-characteristics.html). Only valid for volume_type of `io1`, `io2` or `gp3`.
-        :param _builtins.str kms_key_id: Amazon Resource Name (ARN) of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection.
+        :param _builtins.str kms_key_id: ARN of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection.
         :param Mapping[str, _builtins.str] tags: Map of tags to assign to the device. **Note:** Tags specified here are applied after instance creation via a separate API call. This means they cannot be used with IAM policies that require tags during resource creation (e.g., ABAC policies with `ec2:CreateAction` conditions or SCPs requiring volume tags). For ABAC compliance, use `volume_tags` instead, which applies uniform tags to all volumes during instance creation.
         :param Mapping[str, _builtins.str] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         :param _builtins.int throughput: Throughput to provision for a volume in mebibytes per second (MiB/s). This is only valid for `volume_type` of `gp3`.
@@ -17031,7 +18430,7 @@ class SpotInstanceRequestRootBlockDevice(dict):
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> Optional[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection.
+        ARN of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection.
         """
         return pulumi.get(self, "kms_key_id")
 
@@ -18715,10 +20114,10 @@ class VpnConnectionTunnel1LogOptionsCloudwatchLogOptions(dict):
                  log_output_format: Optional[_builtins.str] = None):
         """
         :param _builtins.bool bgp_log_enabled: Enable or disable BGP logging feature. The default is `false`.
-        :param _builtins.str bgp_log_group_arn: The Amazon Resource Name (ARN) of the CloudWatch log group to send BGP logs to.
+        :param _builtins.str bgp_log_group_arn: ARN of the CloudWatch log group to send BGP logs to.
         :param _builtins.str bgp_log_output_format: Set BGP log format. Default format is json. Possible values are: `json` and `text`. The default is `json`.
         :param _builtins.bool log_enabled: Enable or disable VPN tunnel logging feature. The default is `false`.
-        :param _builtins.str log_group_arn: The Amazon Resource Name (ARN) of the CloudWatch log group to send logs to.
+        :param _builtins.str log_group_arn: ARN of the CloudWatch log group to send logs to.
         :param _builtins.str log_output_format: Set log format. Default format is json. Possible values are: `json` and `text`. The default is `json`.
         """
         if bgp_log_enabled is not None:
@@ -18746,7 +20145,7 @@ class VpnConnectionTunnel1LogOptionsCloudwatchLogOptions(dict):
     @pulumi.getter(name="bgpLogGroupArn")
     def bgp_log_group_arn(self) -> Optional[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the CloudWatch log group to send BGP logs to.
+        ARN of the CloudWatch log group to send BGP logs to.
         """
         return pulumi.get(self, "bgp_log_group_arn")
 
@@ -18770,7 +20169,7 @@ class VpnConnectionTunnel1LogOptionsCloudwatchLogOptions(dict):
     @pulumi.getter(name="logGroupArn")
     def log_group_arn(self) -> Optional[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the CloudWatch log group to send logs to.
+        ARN of the CloudWatch log group to send logs to.
         """
         return pulumi.get(self, "log_group_arn")
 
@@ -18857,10 +20256,10 @@ class VpnConnectionTunnel2LogOptionsCloudwatchLogOptions(dict):
                  log_output_format: Optional[_builtins.str] = None):
         """
         :param _builtins.bool bgp_log_enabled: Enable or disable BGP logging feature. The default is `false`.
-        :param _builtins.str bgp_log_group_arn: The Amazon Resource Name (ARN) of the CloudWatch log group to send BGP logs to.
+        :param _builtins.str bgp_log_group_arn: ARN of the CloudWatch log group to send BGP logs to.
         :param _builtins.str bgp_log_output_format: Set BGP log format. Default format is json. Possible values are: `json` and `text`. The default is `json`.
         :param _builtins.bool log_enabled: Enable or disable VPN tunnel logging feature. The default is `false`.
-        :param _builtins.str log_group_arn: The Amazon Resource Name (ARN) of the CloudWatch log group to send logs to.
+        :param _builtins.str log_group_arn: ARN of the CloudWatch log group to send logs to.
         :param _builtins.str log_output_format: Set log format. Default format is json. Possible values are: `json` and `text`. The default is `json`.
         """
         if bgp_log_enabled is not None:
@@ -18888,7 +20287,7 @@ class VpnConnectionTunnel2LogOptionsCloudwatchLogOptions(dict):
     @pulumi.getter(name="bgpLogGroupArn")
     def bgp_log_group_arn(self) -> Optional[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the CloudWatch log group to send BGP logs to.
+        ARN of the CloudWatch log group to send BGP logs to.
         """
         return pulumi.get(self, "bgp_log_group_arn")
 
@@ -18912,7 +20311,7 @@ class VpnConnectionTunnel2LogOptionsCloudwatchLogOptions(dict):
     @pulumi.getter(name="logGroupArn")
     def log_group_arn(self) -> Optional[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the CloudWatch log group to send logs to.
+        ARN of the CloudWatch log group to send logs to.
         """
         return pulumi.get(self, "log_group_arn")
 
@@ -18961,7 +20360,7 @@ class VpnConnectionVgwTelemetry(dict):
                  status_message: Optional[_builtins.str] = None):
         """
         :param _builtins.int accepted_route_count: The number of accepted routes.
-        :param _builtins.str certificate_arn: The Amazon Resource Name (ARN) of the VPN tunnel endpoint certificate.
+        :param _builtins.str certificate_arn: ARN of the VPN tunnel endpoint certificate.
         :param _builtins.str last_status_change: The date and time of the last change in status.
         :param _builtins.str outside_ip_address: The Internet-routable IP address of the virtual private gateway's outside interface.
         :param _builtins.str status: The status of the VPN tunnel.
@@ -18992,7 +20391,7 @@ class VpnConnectionVgwTelemetry(dict):
     @pulumi.getter(name="certificateArn")
     def certificate_arn(self) -> Optional[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the VPN tunnel endpoint certificate.
+        ARN of the VPN tunnel endpoint certificate.
         """
         return pulumi.get(self, "certificate_arn")
 
@@ -19038,7 +20437,7 @@ class GetAmiBlockDeviceMappingResult(dict):
                  virtual_name: _builtins.str):
         """
         :param _builtins.str device_name: Physical name of the device.
-        :param Mapping[str, _builtins.str] ebs: Map containing EBS information, if the device is EBS based. Unlike most object attributes, these are accessed directly (e.g., `ebs.volume_size` or `ebs["volume_size"]`) rather than accessed through the first element of a list (e.g., `ebs[0].volume_size`).
+        :param Mapping[str, _builtins.str] ebs: Map containing EBS information, if the device is EBS based. Unlike most object attributes, these are accessed directly (e.g., `ebs.volume_size` or `ebs["volume_size"]`) rather than accessed through the first element of a list (e.g., `ebs[0].volume_size`). See `ebs` below.
         :param _builtins.str no_device: Suppresses the specified device included in the block device mapping of the AMI.
         :param _builtins.str virtual_name: Virtual device name (for instance stores).
         """
@@ -19059,7 +20458,7 @@ class GetAmiBlockDeviceMappingResult(dict):
     @pulumi.getter
     def ebs(self) -> Mapping[str, _builtins.str]:
         """
-        Map containing EBS information, if the device is EBS based. Unlike most object attributes, these are accessed directly (e.g., `ebs.volume_size` or `ebs["volume_size"]`) rather than accessed through the first element of a list (e.g., `ebs[0].volume_size`).
+        Map containing EBS information, if the device is EBS based. Unlike most object attributes, these are accessed directly (e.g., `ebs.volume_size` or `ebs["volume_size"]`) rather than accessed through the first element of a list (e.g., `ebs[0].volume_size`). See `ebs` below.
         """
         return pulumi.get(self, "ebs")
 
@@ -19086,7 +20485,8 @@ class GetAmiFilterResult(dict):
                  name: _builtins.str,
                  values: Sequence[_builtins.str]):
         """
-        :param _builtins.str name: Name of the AMI that was provided during image creation.
+        :param _builtins.str name: Name of the filter. For a full reference, check out [describe-images in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-images.html).
+        :param Sequence[_builtins.str] values: Set of values that are accepted for the given filter.
         """
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "values", values)
@@ -19095,13 +20495,16 @@ class GetAmiFilterResult(dict):
     @pulumi.getter
     def name(self) -> _builtins.str:
         """
-        Name of the AMI that was provided during image creation.
+        Name of the filter. For a full reference, check out [describe-images in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-images.html).
         """
         return pulumi.get(self, "name")
 
     @_builtins.property
     @pulumi.getter
     def values(self) -> Sequence[_builtins.str]:
+        """
+        Set of values that are accepted for the given filter.
+        """
         return pulumi.get(self, "values")
 
 
@@ -19110,17 +20513,27 @@ class GetAmiIdsFilterResult(dict):
     def __init__(__self__, *,
                  name: _builtins.str,
                  values: Sequence[_builtins.str]):
+        """
+        :param _builtins.str name: Name of the filter. For a full reference, check out [describe-images in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-images.html).
+        :param Sequence[_builtins.str] values: Set of values that are accepted for the given filter.
+        """
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "values", values)
 
     @_builtins.property
     @pulumi.getter
     def name(self) -> _builtins.str:
+        """
+        Name of the filter. For a full reference, check out [describe-images in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-images.html).
+        """
         return pulumi.get(self, "name")
 
     @_builtins.property
     @pulumi.getter
     def values(self) -> Sequence[_builtins.str]:
+        """
+        Set of values that are accepted for the given filter.
+        """
         return pulumi.get(self, "values")
 
 
@@ -19129,18 +20542,177 @@ class GetAmiProductCodeResult(dict):
     def __init__(__self__, *,
                  product_code_id: _builtins.str,
                  product_code_type: _builtins.str):
+        """
+        :param _builtins.str product_code_id: The product code.
+        :param _builtins.str product_code_type: The type of product code.
+        """
         pulumi.set(__self__, "product_code_id", product_code_id)
         pulumi.set(__self__, "product_code_type", product_code_type)
 
     @_builtins.property
     @pulumi.getter(name="productCodeId")
     def product_code_id(self) -> _builtins.str:
+        """
+        The product code.
+        """
         return pulumi.get(self, "product_code_id")
 
     @_builtins.property
     @pulumi.getter(name="productCodeType")
     def product_code_type(self) -> _builtins.str:
+        """
+        The type of product code.
+        """
         return pulumi.get(self, "product_code_type")
+
+
+@pulumi.output_type
+class GetCapacityBlockReservationCommitmentInfoResult(dict):
+    def __init__(__self__, *,
+                 commitment_end_date: _builtins.str,
+                 committed_instance_count: _builtins.int):
+        """
+        :param _builtins.str commitment_end_date: Date and time the commitment duration ends in [RFC3339 format](https://tools.ietf.org/html/rfc3339#section-5.8).
+        :param _builtins.int committed_instance_count: Number of instances committed to the Capacity Block reservation.
+        """
+        pulumi.set(__self__, "commitment_end_date", commitment_end_date)
+        pulumi.set(__self__, "committed_instance_count", committed_instance_count)
+
+    @_builtins.property
+    @pulumi.getter(name="commitmentEndDate")
+    def commitment_end_date(self) -> _builtins.str:
+        """
+        Date and time the commitment duration ends in [RFC3339 format](https://tools.ietf.org/html/rfc3339#section-5.8).
+        """
+        return pulumi.get(self, "commitment_end_date")
+
+    @_builtins.property
+    @pulumi.getter(name="committedInstanceCount")
+    def committed_instance_count(self) -> _builtins.int:
+        """
+        Number of instances committed to the Capacity Block reservation.
+        """
+        return pulumi.get(self, "committed_instance_count")
+
+
+@pulumi.output_type
+class GetCapacityBlockReservationFilterResult(dict):
+    def __init__(__self__, *,
+                 name: _builtins.str,
+                 values: Sequence[_builtins.str]):
+        """
+        :param _builtins.str name: Name of the filter field. See the [DescribeCapacityReservations API Reference](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeCapacityReservations.html) for valid values. Common filters include `instance-type`, `availability-zone`, `state`, `instance-platform`, `tenancy`, `outpost-arn`, `placement-group-arn`, `instance-match-criteria`, and `tag:<KEY>`.
+        :param Sequence[_builtins.str] values: Set of values that are accepted for the given filter field. A Capacity Block reservation will be selected if any one of the given values matches.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "values", values)
+
+    @_builtins.property
+    @pulumi.getter
+    def name(self) -> _builtins.str:
+        """
+        Name of the filter field. See the [DescribeCapacityReservations API Reference](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeCapacityReservations.html) for valid values. Common filters include `instance-type`, `availability-zone`, `state`, `instance-platform`, `tenancy`, `outpost-arn`, `placement-group-arn`, `instance-match-criteria`, and `tag:<KEY>`.
+        """
+        return pulumi.get(self, "name")
+
+    @_builtins.property
+    @pulumi.getter
+    def values(self) -> Sequence[_builtins.str]:
+        """
+        Set of values that are accepted for the given filter field. A Capacity Block reservation will be selected if any one of the given values matches.
+        """
+        return pulumi.get(self, "values")
+
+
+@pulumi.output_type
+class GetCapacityBlockReservationInterruptibleCapacityAllocationResult(dict):
+    def __init__(__self__, *,
+                 instance_count: _builtins.int,
+                 interruptible_capacity_reservation_id: _builtins.str,
+                 interruption_type: _builtins.str,
+                 status: _builtins.str,
+                 target_instance_count: _builtins.int):
+        """
+        :param _builtins.int instance_count: Number of instances allocated as interruptible capacity within the Capacity Block reservation.
+        :param _builtins.str interruptible_capacity_reservation_id: ID of the interruptible Capacity Reservation associated with this allocation.
+        :param _builtins.str interruption_type: Type of interruption that occurred. Either `spot-interruption` or `capacity-block-interruption`.
+        :param _builtins.str status: Status of the interruptible capacity allocation. One of `pending`, `confirmed`, or `cancelled`.
+        :param _builtins.int target_instance_count: Target number of interruptible instances for the allocation.
+        """
+        pulumi.set(__self__, "instance_count", instance_count)
+        pulumi.set(__self__, "interruptible_capacity_reservation_id", interruptible_capacity_reservation_id)
+        pulumi.set(__self__, "interruption_type", interruption_type)
+        pulumi.set(__self__, "status", status)
+        pulumi.set(__self__, "target_instance_count", target_instance_count)
+
+    @_builtins.property
+    @pulumi.getter(name="instanceCount")
+    def instance_count(self) -> _builtins.int:
+        """
+        Number of instances allocated as interruptible capacity within the Capacity Block reservation.
+        """
+        return pulumi.get(self, "instance_count")
+
+    @_builtins.property
+    @pulumi.getter(name="interruptibleCapacityReservationId")
+    def interruptible_capacity_reservation_id(self) -> _builtins.str:
+        """
+        ID of the interruptible Capacity Reservation associated with this allocation.
+        """
+        return pulumi.get(self, "interruptible_capacity_reservation_id")
+
+    @_builtins.property
+    @pulumi.getter(name="interruptionType")
+    def interruption_type(self) -> _builtins.str:
+        """
+        Type of interruption that occurred. Either `spot-interruption` or `capacity-block-interruption`.
+        """
+        return pulumi.get(self, "interruption_type")
+
+    @_builtins.property
+    @pulumi.getter
+    def status(self) -> _builtins.str:
+        """
+        Status of the interruptible capacity allocation. One of `pending`, `confirmed`, or `cancelled`.
+        """
+        return pulumi.get(self, "status")
+
+    @_builtins.property
+    @pulumi.getter(name="targetInstanceCount")
+    def target_instance_count(self) -> _builtins.int:
+        """
+        Target number of interruptible instances for the allocation.
+        """
+        return pulumi.get(self, "target_instance_count")
+
+
+@pulumi.output_type
+class GetCapacityBlockReservationInterruptionInfoResult(dict):
+    def __init__(__self__, *,
+                 interruption_type: _builtins.str,
+                 source_capacity_reservation_id: _builtins.str):
+        """
+        :param _builtins.str interruption_type: Type of interruption that occurred. Either `spot-interruption` or `capacity-block-interruption`.
+        :param _builtins.str source_capacity_reservation_id: ID of the source Capacity Reservation that originally held the capacity, if the reservation was created as a result of an interruption.
+        """
+        pulumi.set(__self__, "interruption_type", interruption_type)
+        pulumi.set(__self__, "source_capacity_reservation_id", source_capacity_reservation_id)
+
+    @_builtins.property
+    @pulumi.getter(name="interruptionType")
+    def interruption_type(self) -> _builtins.str:
+        """
+        Type of interruption that occurred. Either `spot-interruption` or `capacity-block-interruption`.
+        """
+        return pulumi.get(self, "interruption_type")
+
+    @_builtins.property
+    @pulumi.getter(name="sourceCapacityReservationId")
+    def source_capacity_reservation_id(self) -> _builtins.str:
+        """
+        ID of the source Capacity Reservation that originally held the capacity, if the reservation was created as a result of an interruption.
+        """
+        return pulumi.get(self, "source_capacity_reservation_id")
 
 
 @pulumi.output_type
@@ -19229,6 +20801,75 @@ class GetCustomerGatewayFilterResult(dict):
 
 
 @pulumi.output_type
+class GetDedicatedHostAvailableCapacityResult(dict):
+    def __init__(__self__, *,
+                 available_instance_capacities: Sequence['outputs.GetDedicatedHostAvailableCapacityAvailableInstanceCapacityResult'],
+                 available_vcpus: _builtins.int):
+        """
+        :param Sequence['GetDedicatedHostAvailableCapacityAvailableInstanceCapacityArgs'] available_instance_capacities: The number of instances that can be launched onto the Dedicated Host for each instance size supported. See `available_instance_capacity` below.
+        :param _builtins.int available_vcpus: The number of vCPUs available for launching instances onto the Dedicated Host.
+        """
+        pulumi.set(__self__, "available_instance_capacities", available_instance_capacities)
+        pulumi.set(__self__, "available_vcpus", available_vcpus)
+
+    @_builtins.property
+    @pulumi.getter(name="availableInstanceCapacities")
+    def available_instance_capacities(self) -> Sequence['outputs.GetDedicatedHostAvailableCapacityAvailableInstanceCapacityResult']:
+        """
+        The number of instances that can be launched onto the Dedicated Host for each instance size supported. See `available_instance_capacity` below.
+        """
+        return pulumi.get(self, "available_instance_capacities")
+
+    @_builtins.property
+    @pulumi.getter(name="availableVcpus")
+    def available_vcpus(self) -> _builtins.int:
+        """
+        The number of vCPUs available for launching instances onto the Dedicated Host.
+        """
+        return pulumi.get(self, "available_vcpus")
+
+
+@pulumi.output_type
+class GetDedicatedHostAvailableCapacityAvailableInstanceCapacityResult(dict):
+    def __init__(__self__, *,
+                 available_capacity: _builtins.int,
+                 instance_type: _builtins.str,
+                 total_capacity: _builtins.int):
+        """
+        :param _builtins.int available_capacity: The number of instances that can be launched onto the Dedicated Host based on the host's available capacity.
+        :param _builtins.str instance_type: The instance type of the running instance.
+        :param _builtins.int total_capacity: The total number of instances that can be launched onto the Dedicated Host if there are no instances running on it.
+        """
+        pulumi.set(__self__, "available_capacity", available_capacity)
+        pulumi.set(__self__, "instance_type", instance_type)
+        pulumi.set(__self__, "total_capacity", total_capacity)
+
+    @_builtins.property
+    @pulumi.getter(name="availableCapacity")
+    def available_capacity(self) -> _builtins.int:
+        """
+        The number of instances that can be launched onto the Dedicated Host based on the host's available capacity.
+        """
+        return pulumi.get(self, "available_capacity")
+
+    @_builtins.property
+    @pulumi.getter(name="instanceType")
+    def instance_type(self) -> _builtins.str:
+        """
+        The instance type of the running instance.
+        """
+        return pulumi.get(self, "instance_type")
+
+    @_builtins.property
+    @pulumi.getter(name="totalCapacity")
+    def total_capacity(self) -> _builtins.int:
+        """
+        The total number of instances that can be launched onto the Dedicated Host if there are no instances running on it.
+        """
+        return pulumi.get(self, "total_capacity")
+
+
+@pulumi.output_type
 class GetDedicatedHostFilterResult(dict):
     def __init__(__self__, *,
                  name: _builtins.str,
@@ -19255,6 +20896,46 @@ class GetDedicatedHostFilterResult(dict):
         Set of values that are accepted for the given field. A host will be selected if any one of the given values matches.
         """
         return pulumi.get(self, "values")
+
+
+@pulumi.output_type
+class GetDedicatedHostInstanceResult(dict):
+    def __init__(__self__, *,
+                 instance_id: _builtins.str,
+                 instance_type: _builtins.str,
+                 owner_id: _builtins.str):
+        """
+        :param _builtins.str instance_id: The ID of the instance running on the Dedicated Host.
+        :param _builtins.str instance_type: The instance type of the running instance.
+        :param _builtins.str owner_id: The ID of the AWS account that owns the instance.
+        """
+        pulumi.set(__self__, "instance_id", instance_id)
+        pulumi.set(__self__, "instance_type", instance_type)
+        pulumi.set(__self__, "owner_id", owner_id)
+
+    @_builtins.property
+    @pulumi.getter(name="instanceId")
+    def instance_id(self) -> _builtins.str:
+        """
+        The ID of the instance running on the Dedicated Host.
+        """
+        return pulumi.get(self, "instance_id")
+
+    @_builtins.property
+    @pulumi.getter(name="instanceType")
+    def instance_type(self) -> _builtins.str:
+        """
+        The instance type of the running instance.
+        """
+        return pulumi.get(self, "instance_type")
+
+    @_builtins.property
+    @pulumi.getter(name="ownerId")
+    def owner_id(self) -> _builtins.str:
+        """
+        The ID of the AWS account that owns the instance.
+        """
+        return pulumi.get(self, "owner_id")
 
 
 @pulumi.output_type
@@ -19304,6 +20985,35 @@ class GetElasticIpFilterResult(dict):
     @_builtins.property
     @pulumi.getter
     def values(self) -> Sequence[_builtins.str]:
+        return pulumi.get(self, "values")
+
+
+@pulumi.output_type
+class GetHostsFilterResult(dict):
+    def __init__(__self__, *,
+                 name: _builtins.str,
+                 values: Sequence[_builtins.str]):
+        """
+        :param _builtins.str name: Name of the filter.
+        :param Sequence[_builtins.str] values: List of one or more values for the filter.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "values", values)
+
+    @_builtins.property
+    @pulumi.getter
+    def name(self) -> _builtins.str:
+        """
+        Name of the filter.
+        """
+        return pulumi.get(self, "name")
+
+    @_builtins.property
+    @pulumi.getter
+    def values(self) -> Sequence[_builtins.str]:
+        """
+        List of one or more values for the filter.
+        """
         return pulumi.get(self, "values")
 
 
@@ -19506,7 +21216,7 @@ class GetInstanceFilterResult(dict):
                  values: Sequence[_builtins.str]):
         """
         :param _builtins.str name: Name of the filter.
-               For a full reference of filter names, see [describe-instances in the AWS CLI reference][1].
+               For a full reference of filter names, see [describe-instances in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html).
         :param Sequence[_builtins.str] values: One or more values to match.
         """
         pulumi.set(__self__, "name", name)
@@ -19517,7 +21227,7 @@ class GetInstanceFilterResult(dict):
     def name(self) -> _builtins.str:
         """
         Name of the filter.
-        For a full reference of filter names, see [describe-instances in the AWS CLI reference][1].
+        For a full reference of filter names, see [describe-instances in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html).
         """
         return pulumi.get(self, "name")
 
@@ -20121,7 +21831,7 @@ class GetInstancesFilterResult(dict):
                  values: Sequence[_builtins.str]):
         """
         :param _builtins.str name: Name of the filter.
-               For a full reference of filter names, see [describe-instances in the AWS CLI reference][1].
+               For a full reference of filter names, see [describe-instances in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html).
         :param Sequence[_builtins.str] values: One or more values to match.
         """
         pulumi.set(__self__, "name", name)
@@ -20132,7 +21842,7 @@ class GetInstancesFilterResult(dict):
     def name(self) -> _builtins.str:
         """
         Name of the filter.
-        For a full reference of filter names, see [describe-instances in the AWS CLI reference][1].
+        For a full reference of filter names, see [describe-instances in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html).
         """
         return pulumi.get(self, "name")
 
@@ -21232,6 +22942,7 @@ class GetLaunchTemplateNetworkInterfaceResult(dict):
                  connection_tracking_specifications: Sequence['outputs.GetLaunchTemplateNetworkInterfaceConnectionTrackingSpecificationResult'],
                  description: _builtins.str,
                  device_index: _builtins.int,
+                 ena_queue_count: _builtins.int,
                  interface_type: _builtins.str,
                  ipv4_address_count: _builtins.int,
                  ipv4_addresses: Sequence[_builtins.str],
@@ -21253,6 +22964,7 @@ class GetLaunchTemplateNetworkInterfaceResult(dict):
         pulumi.set(__self__, "connection_tracking_specifications", connection_tracking_specifications)
         pulumi.set(__self__, "description", description)
         pulumi.set(__self__, "device_index", device_index)
+        pulumi.set(__self__, "ena_queue_count", ena_queue_count)
         pulumi.set(__self__, "interface_type", interface_type)
         pulumi.set(__self__, "ipv4_address_count", ipv4_address_count)
         pulumi.set(__self__, "ipv4_addresses", ipv4_addresses)
@@ -21292,6 +23004,11 @@ class GetLaunchTemplateNetworkInterfaceResult(dict):
     @pulumi.getter(name="deviceIndex")
     def device_index(self) -> _builtins.int:
         return pulumi.get(self, "device_index")
+
+    @_builtins.property
+    @pulumi.getter(name="enaQueueCount")
+    def ena_queue_count(self) -> _builtins.int:
+        return pulumi.get(self, "ena_queue_count")
 
     @_builtins.property
     @pulumi.getter(name="interfaceType")
@@ -25723,6 +27440,53 @@ class GetNetworkInterfaceAttachmentResult(dict):
 
 
 @pulumi.output_type
+class GetNetworkInterfaceEnaSrdSpecificationResult(dict):
+    def __init__(__self__, *,
+                 ena_srd_enabled: _builtins.bool,
+                 ena_srd_udp_specifications: Sequence['outputs.GetNetworkInterfaceEnaSrdSpecificationEnaSrdUdpSpecificationResult']):
+        """
+        :param _builtins.bool ena_srd_enabled: Whether ENA Express is enabled for the network interface.
+        :param Sequence['GetNetworkInterfaceEnaSrdSpecificationEnaSrdUdpSpecificationArgs'] ena_srd_udp_specifications: ENA Express UDP configuration. See below.
+        """
+        pulumi.set(__self__, "ena_srd_enabled", ena_srd_enabled)
+        pulumi.set(__self__, "ena_srd_udp_specifications", ena_srd_udp_specifications)
+
+    @_builtins.property
+    @pulumi.getter(name="enaSrdEnabled")
+    def ena_srd_enabled(self) -> _builtins.bool:
+        """
+        Whether ENA Express is enabled for the network interface.
+        """
+        return pulumi.get(self, "ena_srd_enabled")
+
+    @_builtins.property
+    @pulumi.getter(name="enaSrdUdpSpecifications")
+    def ena_srd_udp_specifications(self) -> Sequence['outputs.GetNetworkInterfaceEnaSrdSpecificationEnaSrdUdpSpecificationResult']:
+        """
+        ENA Express UDP configuration. See below.
+        """
+        return pulumi.get(self, "ena_srd_udp_specifications")
+
+
+@pulumi.output_type
+class GetNetworkInterfaceEnaSrdSpecificationEnaSrdUdpSpecificationResult(dict):
+    def __init__(__self__, *,
+                 ena_srd_udp_enabled: _builtins.bool):
+        """
+        :param _builtins.bool ena_srd_udp_enabled: Whether UDP traffic uses ENA Express.
+        """
+        pulumi.set(__self__, "ena_srd_udp_enabled", ena_srd_udp_enabled)
+
+    @_builtins.property
+    @pulumi.getter(name="enaSrdUdpEnabled")
+    def ena_srd_udp_enabled(self) -> _builtins.bool:
+        """
+        Whether UDP traffic uses ENA Express.
+        """
+        return pulumi.get(self, "ena_srd_udp_enabled")
+
+
+@pulumi.output_type
 class GetNetworkInterfaceFilterResult(dict):
     def __init__(__self__, *,
                  name: _builtins.str,
@@ -25986,6 +27750,7 @@ class GetRouteTableRouteResult(dict):
                  local_gateway_id: _builtins.str,
                  nat_gateway_id: _builtins.str,
                  network_interface_id: _builtins.str,
+                 odb_network_arn: _builtins.str,
                  transit_gateway_id: _builtins.str,
                  vpc_endpoint_id: _builtins.str,
                  vpc_peering_connection_id: _builtins.str):
@@ -26001,6 +27766,7 @@ class GetRouteTableRouteResult(dict):
         :param _builtins.str local_gateway_id: Local Gateway ID.
         :param _builtins.str nat_gateway_id: NAT Gateway ID.
         :param _builtins.str network_interface_id: ID of the elastic network interface (eni) to use.
+        :param _builtins.str odb_network_arn: ARN of the ODB network.
         :param _builtins.str transit_gateway_id: EC2 Transit Gateway ID.
         :param _builtins.str vpc_endpoint_id: VPC Endpoint ID.
         :param _builtins.str vpc_peering_connection_id: VPC Peering ID.
@@ -26016,6 +27782,7 @@ class GetRouteTableRouteResult(dict):
         pulumi.set(__self__, "local_gateway_id", local_gateway_id)
         pulumi.set(__self__, "nat_gateway_id", nat_gateway_id)
         pulumi.set(__self__, "network_interface_id", network_interface_id)
+        pulumi.set(__self__, "odb_network_arn", odb_network_arn)
         pulumi.set(__self__, "transit_gateway_id", transit_gateway_id)
         pulumi.set(__self__, "vpc_endpoint_id", vpc_endpoint_id)
         pulumi.set(__self__, "vpc_peering_connection_id", vpc_peering_connection_id)
@@ -26107,6 +27874,14 @@ class GetRouteTableRouteResult(dict):
         ID of the elastic network interface (eni) to use.
         """
         return pulumi.get(self, "network_interface_id")
+
+    @_builtins.property
+    @pulumi.getter(name="odbNetworkArn")
+    def odb_network_arn(self) -> _builtins.str:
+        """
+        ARN of the ODB network.
+        """
+        return pulumi.get(self, "odb_network_arn")
 
     @_builtins.property
     @pulumi.getter(name="transitGatewayId")
@@ -26215,6 +27990,64 @@ class GetSecurityGroupsFilterResult(dict):
     @_builtins.property
     @pulumi.getter
     def values(self) -> Sequence[_builtins.str]:
+        return pulumi.get(self, "values")
+
+
+@pulumi.output_type
+class GetServiceLinkVirtualInterfaceFilterResult(dict):
+    def __init__(__self__, *,
+                 name: _builtins.str,
+                 values: Sequence[_builtins.str]):
+        """
+        :param _builtins.str name: Name of the filter.
+        :param Sequence[_builtins.str] values: List of one or more values for the filter.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "values", values)
+
+    @_builtins.property
+    @pulumi.getter
+    def name(self) -> _builtins.str:
+        """
+        Name of the filter.
+        """
+        return pulumi.get(self, "name")
+
+    @_builtins.property
+    @pulumi.getter
+    def values(self) -> Sequence[_builtins.str]:
+        """
+        List of one or more values for the filter.
+        """
+        return pulumi.get(self, "values")
+
+
+@pulumi.output_type
+class GetServiceLinkVirtualInterfacesFilterResult(dict):
+    def __init__(__self__, *,
+                 name: _builtins.str,
+                 values: Sequence[_builtins.str]):
+        """
+        :param _builtins.str name: Name of the filter.
+        :param Sequence[_builtins.str] values: List of one or more values for the filter.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "values", values)
+
+    @_builtins.property
+    @pulumi.getter
+    def name(self) -> _builtins.str:
+        """
+        Name of the filter.
+        """
+        return pulumi.get(self, "name")
+
+    @_builtins.property
+    @pulumi.getter
+    def values(self) -> Sequence[_builtins.str]:
+        """
+        List of one or more values for the filter.
+        """
         return pulumi.get(self, "values")
 
 
@@ -26352,9 +28185,8 @@ class GetVpcCidrBlockAssociationResult(dict):
                  state: _builtins.str):
         """
         :param _builtins.str association_id: Association ID for the IPv4 CIDR block.
-        :param _builtins.str cidr_block: Cidr block of the desired VPC.
-        :param _builtins.str state: Current state of the desired VPC.
-               Can be either `"pending"` or `"available"`.
+        :param _builtins.str cidr_block: CIDR block of the desired VPC.
+        :param _builtins.str state: Current state of the desired VPC. Can be either `"pending"` or `"available"`.
         """
         pulumi.set(__self__, "association_id", association_id)
         pulumi.set(__self__, "cidr_block", cidr_block)
@@ -26372,7 +28204,7 @@ class GetVpcCidrBlockAssociationResult(dict):
     @pulumi.getter(name="cidrBlock")
     def cidr_block(self) -> _builtins.str:
         """
-        Cidr block of the desired VPC.
+        CIDR block of the desired VPC.
         """
         return pulumi.get(self, "cidr_block")
 
@@ -26380,8 +28212,7 @@ class GetVpcCidrBlockAssociationResult(dict):
     @pulumi.getter
     def state(self) -> _builtins.str:
         """
-        Current state of the desired VPC.
-        Can be either `"pending"` or `"available"`.
+        Current state of the desired VPC. Can be either `"pending"` or `"available"`.
         """
         return pulumi.get(self, "state")
 
@@ -26567,10 +28398,8 @@ class GetVpcFilterResult(dict):
                  name: _builtins.str,
                  values: Sequence[_builtins.str]):
         """
-        :param _builtins.str name: Name of the field to filter by, as defined by
-               [the underlying AWS API](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpcs.html).
-        :param Sequence[_builtins.str] values: Set of values that are accepted for the given field.
-               A VPC will be selected if any one of the given values matches.
+        :param _builtins.str name: Name of the field to filter by, as defined by [the underlying AWS API](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpcs.html).
+        :param Sequence[_builtins.str] values: Set of values that are accepted for the given field. A VPC will be selected if any one of the given values matches.
         """
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "values", values)
@@ -26579,8 +28408,7 @@ class GetVpcFilterResult(dict):
     @pulumi.getter
     def name(self) -> _builtins.str:
         """
-        Name of the field to filter by, as defined by
-        [the underlying AWS API](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpcs.html).
+        Name of the field to filter by, as defined by [the underlying AWS API](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpcs.html).
         """
         return pulumi.get(self, "name")
 
@@ -26588,8 +28416,7 @@ class GetVpcFilterResult(dict):
     @pulumi.getter
     def values(self) -> Sequence[_builtins.str]:
         """
-        Set of values that are accepted for the given field.
-        A VPC will be selected if any one of the given values matches.
+        Set of values that are accepted for the given field. A VPC will be selected if any one of the given values matches.
         """
         return pulumi.get(self, "values")
 
@@ -27201,6 +29028,90 @@ class GetVpcIpamsIpamOperatingRegionResult(dict):
     @pulumi.getter(name="regionName")
     def region_name(self) -> _builtins.str:
         return pulumi.get(self, "region_name")
+
+
+@pulumi.output_type
+class GetVpcIpv6CidrBlockAssociationResult(dict):
+    def __init__(__self__, *,
+                 association_id: _builtins.str,
+                 ip_source: _builtins.str,
+                 ipv6_address_attribute: _builtins.str,
+                 ipv6_cidr_block: _builtins.str,
+                 ipv6_pool: _builtins.str,
+                 network_border_group: _builtins.str,
+                 state: _builtins.str):
+        """
+        :param _builtins.str association_id: Association ID for the IPv4 CIDR block.
+        :param _builtins.str ip_source: Source that allocated the IP address space. Values: `amazon`, `byoip`, `none`.
+        :param _builtins.str ipv6_address_attribute: Whether the address is `public` or `private`.
+        :param _builtins.str ipv6_cidr_block: IPv6 CIDR block for the association.
+        :param _builtins.str ipv6_pool: Name of IPv6 address pool from which the IPv6 CIDR block is allocated.
+        :param _builtins.str network_border_group: Name of association's network border group.
+        :param _builtins.str state: Current state of the desired VPC. Can be either `"pending"` or `"available"`.
+        """
+        pulumi.set(__self__, "association_id", association_id)
+        pulumi.set(__self__, "ip_source", ip_source)
+        pulumi.set(__self__, "ipv6_address_attribute", ipv6_address_attribute)
+        pulumi.set(__self__, "ipv6_cidr_block", ipv6_cidr_block)
+        pulumi.set(__self__, "ipv6_pool", ipv6_pool)
+        pulumi.set(__self__, "network_border_group", network_border_group)
+        pulumi.set(__self__, "state", state)
+
+    @_builtins.property
+    @pulumi.getter(name="associationId")
+    def association_id(self) -> _builtins.str:
+        """
+        Association ID for the IPv4 CIDR block.
+        """
+        return pulumi.get(self, "association_id")
+
+    @_builtins.property
+    @pulumi.getter(name="ipSource")
+    def ip_source(self) -> _builtins.str:
+        """
+        Source that allocated the IP address space. Values: `amazon`, `byoip`, `none`.
+        """
+        return pulumi.get(self, "ip_source")
+
+    @_builtins.property
+    @pulumi.getter(name="ipv6AddressAttribute")
+    def ipv6_address_attribute(self) -> _builtins.str:
+        """
+        Whether the address is `public` or `private`.
+        """
+        return pulumi.get(self, "ipv6_address_attribute")
+
+    @_builtins.property
+    @pulumi.getter(name="ipv6CidrBlock")
+    def ipv6_cidr_block(self) -> _builtins.str:
+        """
+        IPv6 CIDR block for the association.
+        """
+        return pulumi.get(self, "ipv6_cidr_block")
+
+    @_builtins.property
+    @pulumi.getter(name="ipv6Pool")
+    def ipv6_pool(self) -> _builtins.str:
+        """
+        Name of IPv6 address pool from which the IPv6 CIDR block is allocated.
+        """
+        return pulumi.get(self, "ipv6_pool")
+
+    @_builtins.property
+    @pulumi.getter(name="networkBorderGroup")
+    def network_border_group(self) -> _builtins.str:
+        """
+        Name of association's network border group.
+        """
+        return pulumi.get(self, "network_border_group")
+
+    @_builtins.property
+    @pulumi.getter
+    def state(self) -> _builtins.str:
+        """
+        Current state of the desired VPC. Can be either `"pending"` or `"available"`.
+        """
+        return pulumi.get(self, "state")
 
 
 @pulumi.output_type

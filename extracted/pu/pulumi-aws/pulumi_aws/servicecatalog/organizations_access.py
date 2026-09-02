@@ -22,6 +22,7 @@ class OrganizationsAccessArgs:
                  enabled: pulumi.Input[_builtins.bool]):
         """
         The set of arguments for constructing a OrganizationsAccess resource.
+
         :param pulumi.Input[_builtins.bool] enabled: Whether to enable AWS Organizations access.
         """
         pulumi.set(__self__, "enabled", enabled)
@@ -42,9 +43,10 @@ class OrganizationsAccessArgs:
 @pulumi.input_type
 class _OrganizationsAccessState:
     def __init__(__self__, *,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None):
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None):
         """
         Input properties used for looking up and filtering OrganizationsAccess resources.
+
         :param pulumi.Input[_builtins.bool] enabled: Whether to enable AWS Organizations access.
         """
         if enabled is not None:
@@ -52,14 +54,14 @@ class _OrganizationsAccessState:
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to enable AWS Organizations access.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
 
@@ -69,7 +71,7 @@ class OrganizationsAccess(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
                  __props__=None):
         """
         Manages Service Catalog AWS Organizations Access, a portfolio sharing feature through AWS Organizations. This allows Service Catalog to receive updates on your organization in order to sync your shares with the current structure. This resource will prompt AWS to set `organizations:EnableAWSServiceAccess` on your behalf so that your shares can be in sync with any changes in your AWS Organizations structure.
@@ -86,6 +88,7 @@ class OrganizationsAccess(pulumi.CustomResource):
 
         example = aws.servicecatalog.OrganizationsAccess("example", enabled=True)
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -113,6 +116,7 @@ class OrganizationsAccess(pulumi.CustomResource):
         example = aws.servicecatalog.OrganizationsAccess("example", enabled=True)
         ```
 
+
         :param str resource_name: The name of the resource.
         :param OrganizationsAccessArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -128,7 +132,7 @@ class OrganizationsAccess(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -151,7 +155,7 @@ class OrganizationsAccess(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            enabled: Optional[pulumi.Input[_builtins.bool]] = None) -> 'OrganizationsAccess':
+            enabled: pulumi.Input[Optional[_builtins.bool]] = None) -> 'OrganizationsAccess':
         """
         Get an existing OrganizationsAccess resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

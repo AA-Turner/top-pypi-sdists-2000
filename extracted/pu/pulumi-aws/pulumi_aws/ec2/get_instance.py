@@ -638,8 +638,7 @@ def get_instance(filters: Optional[Sequence[Union['GetInstanceFilterArgs', 'GetI
     import pulumi
     import pulumi_aws as aws
 
-    foo = aws.ec2.get_instance(instance_id="i-instanceid",
-        filters=[
+    foo = aws.ec2.get_instance(filters=[
             {
                 "name": "image-id",
                 "values": ["ami-xxxxxxxx"],
@@ -648,13 +647,14 @@ def get_instance(filters: Optional[Sequence[Union['GetInstanceFilterArgs', 'GetI
                 "name": "tag:Name",
                 "values": ["instance-name-tag"],
             },
-        ])
+        ],
+        instance_id="i-instanceid")
     ```
 
 
     :param Sequence[Union['GetInstanceFilterArgs', 'GetInstanceFilterArgsDict']] filters: One or more filters to apply to the search.
            If multiple `filter` blocks are provided, they all must be true.
-           For a full reference of filter names, see [describe-instances in the AWS CLI reference][1].
+           For a full reference of filter names, see [describe-instances in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html).
            See `filter` Block below.
     :param _builtins.bool get_password_data: If true, wait for password data to become available and retrieve it. Useful for getting the administrator password for instances running Microsoft Windows. The password data is exported to the `password_data` attribute. See [GetPasswordData](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetPasswordData.html) for more information.
     :param _builtins.bool get_user_data: Retrieve Base64 encoded User Data contents into the `user_data_base64` attribute. A SHA-1 hash of the User Data contents will always be present in the `user_data` attribute. Defaults to `false`.
@@ -732,13 +732,13 @@ def get_instance(filters: Optional[Sequence[Union['GetInstanceFilterArgs', 'GetI
         user_data=pulumi.get(__ret__, 'user_data'),
         user_data_base64=pulumi.get(__ret__, 'user_data_base64'),
         vpc_security_group_ids=pulumi.get(__ret__, 'vpc_security_group_ids'))
-def get_instance_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['GetInstanceFilterArgs', 'GetInstanceFilterArgsDict']]]]] = None,
-                        get_password_data: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                        get_user_data: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                        instance_id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                        instance_tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
-                        region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                        tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_instance_output(filters: pulumi.Input[Optional[Optional[Sequence[Union['GetInstanceFilterArgs', 'GetInstanceFilterArgsDict']]]]] = None,
+                        get_password_data: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                        get_user_data: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                        instance_id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                        instance_tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
+                        region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                        tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                         opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetInstanceResult]:
     """
     Use this data source to get the ID of an Amazon EC2 Instance for use in other resources.
@@ -749,8 +749,7 @@ def get_instance_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['
     import pulumi
     import pulumi_aws as aws
 
-    foo = aws.ec2.get_instance(instance_id="i-instanceid",
-        filters=[
+    foo = aws.ec2.get_instance(filters=[
             {
                 "name": "image-id",
                 "values": ["ami-xxxxxxxx"],
@@ -759,13 +758,14 @@ def get_instance_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['
                 "name": "tag:Name",
                 "values": ["instance-name-tag"],
             },
-        ])
+        ],
+        instance_id="i-instanceid")
     ```
 
 
     :param Sequence[Union['GetInstanceFilterArgs', 'GetInstanceFilterArgsDict']] filters: One or more filters to apply to the search.
            If multiple `filter` blocks are provided, they all must be true.
-           For a full reference of filter names, see [describe-instances in the AWS CLI reference][1].
+           For a full reference of filter names, see [describe-instances in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html).
            See `filter` Block below.
     :param _builtins.bool get_password_data: If true, wait for password data to become available and retrieve it. Useful for getting the administrator password for instances running Microsoft Windows. The password data is exported to the `password_data` attribute. See [GetPasswordData](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetPasswordData.html) for more information.
     :param _builtins.bool get_user_data: Retrieve Base64 encoded User Data contents into the `user_data_base64` attribute. A SHA-1 hash of the User Data contents will always be present in the `user_data` attribute. Defaults to `false`.

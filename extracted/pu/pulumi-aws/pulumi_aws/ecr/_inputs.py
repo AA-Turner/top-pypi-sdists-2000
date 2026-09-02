@@ -59,31 +59,51 @@ __all__ = [
 ]
 
 class LifecyclePolicyActionArgsDict(TypedDict):
-    type: pulumi.Input['LifecyclePolicyActionType']
+    type: pulumi.Input[Union[_builtins.str, 'LifecyclePolicyActionType']]
     """
-    The type of action to take. Currently only 'expire' is supported.
+    The type of action to take. Either 'expire' or 'transition'.
+    """
+    target_storage_class: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    The storage class to transition the image to. Required when 'type' is 'transition'. 'archive' is the only supported value.
     """
 
 @pulumi.input_type
 class LifecyclePolicyActionArgs:
     def __init__(__self__, *,
-                 type: pulumi.Input['LifecyclePolicyActionType']):
+                 type: pulumi.Input[Union[_builtins.str, 'LifecyclePolicyActionType']],
+                 target_storage_class: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input['LifecyclePolicyActionType'] type: The type of action to take. Currently only 'expire' is supported.
+        :param pulumi.Input[Union[_builtins.str, 'LifecyclePolicyActionType']] type: The type of action to take. Either 'expire' or 'transition'.
+        :param pulumi.Input[_builtins.str] target_storage_class: The storage class to transition the image to. Required when 'type' is 'transition'. 'archive' is the only supported value.
         """
         pulumi.set(__self__, "type", type)
+        if target_storage_class is not None:
+            pulumi.set(__self__, "target_storage_class", target_storage_class)
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> pulumi.Input['LifecyclePolicyActionType']:
+    def type(self) -> pulumi.Input[Union[_builtins.str, 'LifecyclePolicyActionType']]:
         """
-        The type of action to take. Currently only 'expire' is supported.
+        The type of action to take. Either 'expire' or 'transition'.
         """
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: pulumi.Input['LifecyclePolicyActionType']):
+    def type(self, value: pulumi.Input[Union[_builtins.str, 'LifecyclePolicyActionType']]):
         pulumi.set(self, "type", value)
+
+    @_builtins.property
+    @pulumi.getter(name="targetStorageClass")
+    def target_storage_class(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        The storage class to transition the image to. Required when 'type' is 'transition'. 'archive' is the only supported value.
+        """
+        return pulumi.get(self, "target_storage_class")
+
+    @target_storage_class.setter
+    def target_storage_class(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "target_storage_class", value)
 
 
 class LifecyclePolicyDocumentArgsDict(TypedDict):
@@ -101,6 +121,7 @@ class LifecyclePolicyDocumentArgs:
                  rules: pulumi.Input[Sequence[pulumi.Input['LifecyclePolicyRuleArgs']]]):
         """
         Represents an ECR lifecycle policy document.
+
         :param pulumi.Input[Sequence[pulumi.Input['LifecyclePolicyRuleArgs']]] rules: The rules that comprise the lifecycle policy.
         """
         pulumi.set(__self__, "rules", rules)
@@ -134,7 +155,7 @@ class LifecyclePolicyRuleArgsDict(TypedDict):
     """
     The selection criteria for the rule.
     """
-    description: NotRequired[pulumi.Input[_builtins.str]]
+    description: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A description of the rule.
     """
@@ -145,9 +166,10 @@ class LifecyclePolicyRuleArgs:
                  action: pulumi.Input['LifecyclePolicyActionArgs'],
                  rule_priority: pulumi.Input[_builtins.int],
                  selection: pulumi.Input['LifecyclePolicySelectionArgs'],
-                 description: Optional[pulumi.Input[_builtins.str]] = None):
+                 description: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Represents a rule in an ECR lifecycle policy.
+
         :param pulumi.Input['LifecyclePolicyActionArgs'] action: The action to take when the rule is triggered.
         :param pulumi.Input[_builtins.int] rule_priority: The priority of the rule, must be unique within the policy.
         :param pulumi.Input['LifecyclePolicySelectionArgs'] selection: The selection criteria for the rule.
@@ -197,14 +219,14 @@ class LifecyclePolicyRuleArgs:
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A description of the rule.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
 
@@ -216,19 +238,23 @@ class LifecyclePolicySelectionArgsDict(TypedDict):
     """
     The count number to use with the count type.
     """
-    count_type: pulumi.Input['LifecyclePolicyCountType']
+    count_type: pulumi.Input[Union[_builtins.str, 'LifecyclePolicyCountType']]
     """
-    The type of count to perform. Either 'imageCountMoreThan' or 'sinceImagePushed'.
+    The type of count to perform. Either 'imageCountMoreThan', 'sinceImagePushed', 'sinceImagePulled', or 'sinceImageTransitioned'.
     """
-    tag_status: pulumi.Input['LifecyclePolicyTagStatus']
+    tag_status: pulumi.Input[Union[_builtins.str, 'LifecyclePolicyTagStatus']]
     """
     The tag status of the image. Either 'tagged', 'untagged', or 'any'.
     """
-    count_unit: NotRequired[pulumi.Input[_builtins.str]]
+    count_unit: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The unit of time for sinceImagePushed. Either 'days'.
+    The unit of time for count types based on image age. Required when 'countType' is 'sinceImagePushed', 'sinceImagePulled', or 'sinceImageTransitioned'. The only supported value is 'days'.
     """
-    tag_prefix_list: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    storage_class: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    The image storage class to select. Required when 'countType' is 'sinceImageTransitioned' (must be 'archive'). For 'imageCountMoreThan', 'sinceImagePushed', and 'sinceImagePulled', the only supported value is 'standard'. If omitted, ECR uses 'standard'.
+    """
+    tag_prefix_list: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of image tag prefixes on which to take action.
     """
@@ -237,16 +263,19 @@ class LifecyclePolicySelectionArgsDict(TypedDict):
 class LifecyclePolicySelectionArgs:
     def __init__(__self__, *,
                  count_number: pulumi.Input[_builtins.int],
-                 count_type: pulumi.Input['LifecyclePolicyCountType'],
-                 tag_status: pulumi.Input['LifecyclePolicyTagStatus'],
-                 count_unit: Optional[pulumi.Input[_builtins.str]] = None,
-                 tag_prefix_list: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 count_type: pulumi.Input[Union[_builtins.str, 'LifecyclePolicyCountType']],
+                 tag_status: pulumi.Input[Union[_builtins.str, 'LifecyclePolicyTagStatus']],
+                 count_unit: pulumi.Input[Optional[_builtins.str]] = None,
+                 storage_class: pulumi.Input[Optional[_builtins.str]] = None,
+                 tag_prefix_list: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         Represents selection criteria for an ECR lifecycle policy rule.
+
         :param pulumi.Input[_builtins.int] count_number: The count number to use with the count type.
-        :param pulumi.Input['LifecyclePolicyCountType'] count_type: The type of count to perform. Either 'imageCountMoreThan' or 'sinceImagePushed'.
-        :param pulumi.Input['LifecyclePolicyTagStatus'] tag_status: The tag status of the image. Either 'tagged', 'untagged', or 'any'.
-        :param pulumi.Input[_builtins.str] count_unit: The unit of time for sinceImagePushed. Either 'days'.
+        :param pulumi.Input[Union[_builtins.str, 'LifecyclePolicyCountType']] count_type: The type of count to perform. Either 'imageCountMoreThan', 'sinceImagePushed', 'sinceImagePulled', or 'sinceImageTransitioned'.
+        :param pulumi.Input[Union[_builtins.str, 'LifecyclePolicyTagStatus']] tag_status: The tag status of the image. Either 'tagged', 'untagged', or 'any'.
+        :param pulumi.Input[_builtins.str] count_unit: The unit of time for count types based on image age. Required when 'countType' is 'sinceImagePushed', 'sinceImagePulled', or 'sinceImageTransitioned'. The only supported value is 'days'.
+        :param pulumi.Input[_builtins.str] storage_class: The image storage class to select. Required when 'countType' is 'sinceImageTransitioned' (must be 'archive'). For 'imageCountMoreThan', 'sinceImagePushed', and 'sinceImagePulled', the only supported value is 'standard'. If omitted, ECR uses 'standard'.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] tag_prefix_list: A list of image tag prefixes on which to take action.
         """
         pulumi.set(__self__, "count_number", count_number)
@@ -254,6 +283,8 @@ class LifecyclePolicySelectionArgs:
         pulumi.set(__self__, "tag_status", tag_status)
         if count_unit is not None:
             pulumi.set(__self__, "count_unit", count_unit)
+        if storage_class is not None:
+            pulumi.set(__self__, "storage_class", storage_class)
         if tag_prefix_list is not None:
             pulumi.set(__self__, "tag_prefix_list", tag_prefix_list)
 
@@ -271,50 +302,62 @@ class LifecyclePolicySelectionArgs:
 
     @_builtins.property
     @pulumi.getter(name="countType")
-    def count_type(self) -> pulumi.Input['LifecyclePolicyCountType']:
+    def count_type(self) -> pulumi.Input[Union[_builtins.str, 'LifecyclePolicyCountType']]:
         """
-        The type of count to perform. Either 'imageCountMoreThan' or 'sinceImagePushed'.
+        The type of count to perform. Either 'imageCountMoreThan', 'sinceImagePushed', 'sinceImagePulled', or 'sinceImageTransitioned'.
         """
         return pulumi.get(self, "count_type")
 
     @count_type.setter
-    def count_type(self, value: pulumi.Input['LifecyclePolicyCountType']):
+    def count_type(self, value: pulumi.Input[Union[_builtins.str, 'LifecyclePolicyCountType']]):
         pulumi.set(self, "count_type", value)
 
     @_builtins.property
     @pulumi.getter(name="tagStatus")
-    def tag_status(self) -> pulumi.Input['LifecyclePolicyTagStatus']:
+    def tag_status(self) -> pulumi.Input[Union[_builtins.str, 'LifecyclePolicyTagStatus']]:
         """
         The tag status of the image. Either 'tagged', 'untagged', or 'any'.
         """
         return pulumi.get(self, "tag_status")
 
     @tag_status.setter
-    def tag_status(self, value: pulumi.Input['LifecyclePolicyTagStatus']):
+    def tag_status(self, value: pulumi.Input[Union[_builtins.str, 'LifecyclePolicyTagStatus']]):
         pulumi.set(self, "tag_status", value)
 
     @_builtins.property
     @pulumi.getter(name="countUnit")
-    def count_unit(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def count_unit(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The unit of time for sinceImagePushed. Either 'days'.
+        The unit of time for count types based on image age. Required when 'countType' is 'sinceImagePushed', 'sinceImagePulled', or 'sinceImageTransitioned'. The only supported value is 'days'.
         """
         return pulumi.get(self, "count_unit")
 
     @count_unit.setter
-    def count_unit(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def count_unit(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "count_unit", value)
 
     @_builtins.property
+    @pulumi.getter(name="storageClass")
+    def storage_class(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        The image storage class to select. Required when 'countType' is 'sinceImageTransitioned' (must be 'archive'). For 'imageCountMoreThan', 'sinceImagePushed', and 'sinceImagePulled', the only supported value is 'standard'. If omitted, ECR uses 'standard'.
+        """
+        return pulumi.get(self, "storage_class")
+
+    @storage_class.setter
+    def storage_class(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "storage_class", value)
+
+    @_builtins.property
     @pulumi.getter(name="tagPrefixList")
-    def tag_prefix_list(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def tag_prefix_list(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of image tag prefixes on which to take action.
         """
         return pulumi.get(self, "tag_prefix_list")
 
     @tag_prefix_list.setter
-    def tag_prefix_list(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def tag_prefix_list(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tag_prefix_list", value)
 
 
@@ -324,14 +367,14 @@ class PolicyDocumentArgsDict(TypedDict):
     """
     statement: pulumi.Input[Sequence[pulumi.Input['_iam.PolicyStatementArgsDict']]]
     version: pulumi.Input['iam.PolicyDocumentVersion']
-    id: NotRequired[pulumi.Input[_builtins.str]]
+    id: NotRequired[pulumi.Input[Optional[_builtins.str]]]
 
 @pulumi.input_type
 class PolicyDocumentArgs:
     def __init__(__self__, *,
                  statement: pulumi.Input[Sequence[pulumi.Input['_iam.PolicyStatementArgs']]],
                  version: pulumi.Input['iam.PolicyDocumentVersion'],
-                 id: Optional[pulumi.Input[_builtins.str]] = None):
+                 id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Represents an AWS IAM policy document that defines permissions for AWS resources and actions.
         """
@@ -360,11 +403,11 @@ class PolicyDocumentArgs:
 
     @_builtins.property
     @pulumi.getter(name="Id")
-    def id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def id(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "id")
 
     @id.setter
-    def id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "id", value)
 
 
@@ -479,7 +522,7 @@ class ReplicationConfigurationReplicationConfigurationRuleArgsDict(TypedDict):
     """
     the details of a replication destination. A maximum of 25 are allowed per `rule`. See Destination.
     """
-    repository_filters: NotRequired[pulumi.Input[Sequence[pulumi.Input['ReplicationConfigurationReplicationConfigurationRuleRepositoryFilterArgsDict']]]]
+    repository_filters: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['ReplicationConfigurationReplicationConfigurationRuleRepositoryFilterArgsDict']]]]]
     """
     filters for a replication rule. See Repository Filter.
     """
@@ -488,7 +531,7 @@ class ReplicationConfigurationReplicationConfigurationRuleArgsDict(TypedDict):
 class ReplicationConfigurationReplicationConfigurationRuleArgs:
     def __init__(__self__, *,
                  destinations: pulumi.Input[Sequence[pulumi.Input['ReplicationConfigurationReplicationConfigurationRuleDestinationArgs']]],
-                 repository_filters: Optional[pulumi.Input[Sequence[pulumi.Input['ReplicationConfigurationReplicationConfigurationRuleRepositoryFilterArgs']]]] = None):
+                 repository_filters: pulumi.Input[Optional[Sequence[pulumi.Input['ReplicationConfigurationReplicationConfigurationRuleRepositoryFilterArgs']]]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input['ReplicationConfigurationReplicationConfigurationRuleDestinationArgs']]] destinations: the details of a replication destination. A maximum of 25 are allowed per `rule`. See Destination.
         :param pulumi.Input[Sequence[pulumi.Input['ReplicationConfigurationReplicationConfigurationRuleRepositoryFilterArgs']]] repository_filters: filters for a replication rule. See Repository Filter.
@@ -511,14 +554,14 @@ class ReplicationConfigurationReplicationConfigurationRuleArgs:
 
     @_builtins.property
     @pulumi.getter(name="repositoryFilters")
-    def repository_filters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReplicationConfigurationReplicationConfigurationRuleRepositoryFilterArgs']]]]:
+    def repository_filters(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ReplicationConfigurationReplicationConfigurationRuleRepositoryFilterArgs']]]]:
         """
         filters for a replication rule. See Repository Filter.
         """
         return pulumi.get(self, "repository_filters")
 
     @repository_filters.setter
-    def repository_filters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReplicationConfigurationReplicationConfigurationRuleRepositoryFilterArgs']]]]):
+    def repository_filters(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ReplicationConfigurationReplicationConfigurationRuleRepositoryFilterArgs']]]]):
         pulumi.set(self, "repository_filters", value)
 
 
@@ -617,11 +660,11 @@ class ReplicationConfigurationReplicationConfigurationRuleRepositoryFilterArgs:
 
 
 class RepositoryCreationTemplateEncryptionConfigurationArgsDict(TypedDict):
-    encryption_type: NotRequired[pulumi.Input[_builtins.str]]
+    encryption_type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The encryption type to use for any created repositories. Valid values are `AES256` or `KMS`. Defaults to `AES256`.
     """
-    kms_key: NotRequired[pulumi.Input[_builtins.str]]
+    kms_key: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The ARN of the KMS key to use when `encryption_type` is `KMS`. If not specified, uses the default AWS managed key for ECR.
     """
@@ -629,8 +672,8 @@ class RepositoryCreationTemplateEncryptionConfigurationArgsDict(TypedDict):
 @pulumi.input_type
 class RepositoryCreationTemplateEncryptionConfigurationArgs:
     def __init__(__self__, *,
-                 encryption_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 kms_key: Optional[pulumi.Input[_builtins.str]] = None):
+                 encryption_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 kms_key: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] encryption_type: The encryption type to use for any created repositories. Valid values are `AES256` or `KMS`. Defaults to `AES256`.
         :param pulumi.Input[_builtins.str] kms_key: The ARN of the KMS key to use when `encryption_type` is `KMS`. If not specified, uses the default AWS managed key for ECR.
@@ -642,26 +685,26 @@ class RepositoryCreationTemplateEncryptionConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="encryptionType")
-    def encryption_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def encryption_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The encryption type to use for any created repositories. Valid values are `AES256` or `KMS`. Defaults to `AES256`.
         """
         return pulumi.get(self, "encryption_type")
 
     @encryption_type.setter
-    def encryption_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def encryption_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "encryption_type", value)
 
     @_builtins.property
     @pulumi.getter(name="kmsKey")
-    def kms_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of the KMS key to use when `encryption_type` is `KMS`. If not specified, uses the default AWS managed key for ECR.
         """
         return pulumi.get(self, "kms_key")
 
     @kms_key.setter
-    def kms_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key", value)
 
 
@@ -713,11 +756,11 @@ class RepositoryCreationTemplateImageTagMutabilityExclusionFilterArgs:
 
 
 class RepositoryEncryptionConfigurationArgsDict(TypedDict):
-    encryption_type: NotRequired[pulumi.Input[_builtins.str]]
+    encryption_type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The encryption type to use for the repository. Valid values are `AES256` or `KMS`. Defaults to `AES256`.
     """
-    kms_key: NotRequired[pulumi.Input[_builtins.str]]
+    kms_key: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The ARN of the KMS key to use when `encryption_type` is `KMS`. If not specified, uses the default AWS managed key for ECR.
     """
@@ -725,8 +768,8 @@ class RepositoryEncryptionConfigurationArgsDict(TypedDict):
 @pulumi.input_type
 class RepositoryEncryptionConfigurationArgs:
     def __init__(__self__, *,
-                 encryption_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 kms_key: Optional[pulumi.Input[_builtins.str]] = None):
+                 encryption_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 kms_key: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] encryption_type: The encryption type to use for the repository. Valid values are `AES256` or `KMS`. Defaults to `AES256`.
         :param pulumi.Input[_builtins.str] kms_key: The ARN of the KMS key to use when `encryption_type` is `KMS`. If not specified, uses the default AWS managed key for ECR.
@@ -738,26 +781,26 @@ class RepositoryEncryptionConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="encryptionType")
-    def encryption_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def encryption_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The encryption type to use for the repository. Valid values are `AES256` or `KMS`. Defaults to `AES256`.
         """
         return pulumi.get(self, "encryption_type")
 
     @encryption_type.setter
-    def encryption_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def encryption_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "encryption_type", value)
 
     @_builtins.property
     @pulumi.getter(name="kmsKey")
-    def kms_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of the KMS key to use when `encryption_type` is `KMS`. If not specified, uses the default AWS managed key for ECR.
         """
         return pulumi.get(self, "kms_key")
 
     @kms_key.setter
-    def kms_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key", value)
 
 

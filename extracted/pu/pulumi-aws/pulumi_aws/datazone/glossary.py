@@ -21,12 +21,13 @@ class GlossaryArgs:
     def __init__(__self__, *,
                  domain_identifier: pulumi.Input[_builtins.str],
                  owning_project_identifier: pulumi.Input[_builtins.str],
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None):
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a Glossary resource.
+
         :param pulumi.Input[_builtins.str] owning_project_identifier: ID of the project that owns business glossary. Must follow regex of ^[a-zA-Z0-9_-]{1,36}$.
                
                The following arguments are optional:
@@ -71,64 +72,65 @@ class GlossaryArgs:
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the glossary. Must have a length between 0 and 4096.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the glossary. Must have length between 1 and 256.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Status of business glossary. Valid values are DISABLED and ENABLED.
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
 
 @pulumi.input_type
 class _GlossaryState:
     def __init__(__self__, *,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 owning_project_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None):
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 owning_project_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering Glossary resources.
+
         :param pulumi.Input[_builtins.str] description: Description of the glossary. Must have a length between 0 and 4096.
         :param pulumi.Input[_builtins.str] name: Name of the glossary. Must have length between 1 and 256.
         :param pulumi.Input[_builtins.str] owning_project_identifier: ID of the project that owns business glossary. Must follow regex of ^[a-zA-Z0-9_-]{1,36}$.
@@ -152,40 +154,40 @@ class _GlossaryState:
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the glossary. Must have a length between 0 and 4096.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="domainIdentifier")
-    def domain_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def domain_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "domain_identifier")
 
     @domain_identifier.setter
-    def domain_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def domain_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "domain_identifier", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the glossary. Must have length between 1 and 256.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="owningProjectIdentifier")
-    def owning_project_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def owning_project_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ID of the project that owns business glossary. Must follow regex of ^[a-zA-Z0-9_-]{1,36}$.
 
@@ -194,31 +196,31 @@ class _GlossaryState:
         return pulumi.get(self, "owning_project_identifier")
 
     @owning_project_identifier.setter
-    def owning_project_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def owning_project_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "owning_project_identifier", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Status of business glossary. Valid values are DISABLED and ENABLED.
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
 
@@ -228,12 +230,12 @@ class Glossary(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 owning_project_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 owning_project_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing an AWS DataZone Glossary.
@@ -246,6 +248,22 @@ class Glossary(pulumi.CustomResource):
         import pulumi_aws as aws
 
         domain_execution_role = aws.iam.Role("domain_execution_role",
+            inline_policies=[{
+                "name": "example_name",
+                "policy": json.dumps({
+                    "Version": "2012-10-17",
+                    "Statement": [{
+                        "Action": [
+                            "datazone:*",
+                            "ram:*",
+                            "sso:*",
+                            "kms:*",
+                        ],
+                        "Effect": "Allow",
+                        "Resource": "*",
+                    }],
+                }),
+            }],
             name="example_name",
             assume_role_policy=json.dumps({
                 "Version": "2012-10-17",
@@ -271,23 +289,7 @@ class Glossary(pulumi.CustomResource):
                         },
                     },
                 ],
-            }),
-            inline_policies=[{
-                "name": "example_name",
-                "policy": json.dumps({
-                    "Version": "2012-10-17",
-                    "Statement": [{
-                        "Action": [
-                            "datazone:*",
-                            "ram:*",
-                            "sso:*",
-                            "kms:*",
-                        ],
-                        "Effect": "Allow",
-                        "Resource": "*",
-                    }],
-                }),
-            }])
+            }))
         test = aws.datazone.Domain("test",
             name="example_name",
             domain_execution_role=domain_execution_role.arn)
@@ -322,11 +324,24 @@ class Glossary(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `domain_identifier` - (String) Identifier of the DataZone domain.
+        * `id` - (String) ID of the glossary.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
         Using `pulumi import`, import DataZone Glossary using the import Datazone Glossary using a comma-delimited string combining the domain id, glossary id, and the id of the project it's under. For example:
 
         ```sh
         $ pulumi import aws:datazone/glossary:Glossary example domain-id,glossary-id,owning-project-identifier
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -355,6 +370,22 @@ class Glossary(pulumi.CustomResource):
         import pulumi_aws as aws
 
         domain_execution_role = aws.iam.Role("domain_execution_role",
+            inline_policies=[{
+                "name": "example_name",
+                "policy": json.dumps({
+                    "Version": "2012-10-17",
+                    "Statement": [{
+                        "Action": [
+                            "datazone:*",
+                            "ram:*",
+                            "sso:*",
+                            "kms:*",
+                        ],
+                        "Effect": "Allow",
+                        "Resource": "*",
+                    }],
+                }),
+            }],
             name="example_name",
             assume_role_policy=json.dumps({
                 "Version": "2012-10-17",
@@ -380,23 +411,7 @@ class Glossary(pulumi.CustomResource):
                         },
                     },
                 ],
-            }),
-            inline_policies=[{
-                "name": "example_name",
-                "policy": json.dumps({
-                    "Version": "2012-10-17",
-                    "Statement": [{
-                        "Action": [
-                            "datazone:*",
-                            "ram:*",
-                            "sso:*",
-                            "kms:*",
-                        ],
-                        "Effect": "Allow",
-                        "Resource": "*",
-                    }],
-                }),
-            }])
+            }))
         test = aws.datazone.Domain("test",
             name="example_name",
             domain_execution_role=domain_execution_role.arn)
@@ -431,11 +446,24 @@ class Glossary(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `domain_identifier` - (String) Identifier of the DataZone domain.
+        * `id` - (String) ID of the glossary.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
         Using `pulumi import`, import DataZone Glossary using the import Datazone Glossary using a comma-delimited string combining the domain id, glossary id, and the id of the project it's under. For example:
 
         ```sh
         $ pulumi import aws:datazone/glossary:Glossary example domain-id,glossary-id,owning-project-identifier
         ```
+
 
         :param str resource_name: The name of the resource.
         :param GlossaryArgs args: The arguments to use to populate this resource's properties.
@@ -452,12 +480,12 @@ class Glossary(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 owning_project_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 owning_project_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -487,12 +515,12 @@ class Glossary(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            domain_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            owning_project_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            status: Optional[pulumi.Input[_builtins.str]] = None) -> 'Glossary':
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            domain_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            owning_project_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            status: pulumi.Input[Optional[_builtins.str]] = None) -> 'Glossary':
         """
         Get an existing Glossary resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

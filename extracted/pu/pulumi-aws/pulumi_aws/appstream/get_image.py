@@ -27,7 +27,7 @@ class GetImageResult:
     """
     A collection of values returned by getImage.
     """
-    def __init__(__self__, applications=None, appstream_agent_version=None, arn=None, base_image_arn=None, created_time=None, description=None, display_name=None, id=None, image_builder_name=None, image_builder_supported=None, image_permissions=None, most_recent=None, name=None, name_regex=None, platform=None, public_base_image_released_date=None, region=None, state=None, state_change_reasons=None, type=None):
+    def __init__(__self__, applications=None, appstream_agent_version=None, arn=None, base_image_arn=None, created_time=None, description=None, display_name=None, image_builder_name=None, image_builder_supported=None, image_permissions=None, most_recent=None, name=None, name_regex=None, platform=None, public_base_image_released_date=None, region=None, state=None, state_change_reasons=None, type=None):
         if applications and not isinstance(applications, list):
             raise TypeError("Expected argument 'applications' to be a list")
         pulumi.set(__self__, "applications", applications)
@@ -49,9 +49,6 @@ class GetImageResult:
         if display_name and not isinstance(display_name, str):
             raise TypeError("Expected argument 'display_name' to be a str")
         pulumi.set(__self__, "display_name", display_name)
-        if id and not isinstance(id, str):
-            raise TypeError("Expected argument 'id' to be a str")
-        pulumi.set(__self__, "id", id)
         if image_builder_name and not isinstance(image_builder_name, str):
             raise TypeError("Expected argument 'image_builder_name' to be a str")
         pulumi.set(__self__, "image_builder_name", image_builder_name)
@@ -92,6 +89,9 @@ class GetImageResult:
     @_builtins.property
     @pulumi.getter
     def applications(self) -> Sequence['outputs.GetImageApplicationResult']:
+        """
+        Application object that contains the following:
+        """
         return pulumi.get(self, "applications")
 
     @_builtins.property
@@ -143,18 +143,10 @@ class GetImageResult:
         return pulumi.get(self, "display_name")
 
     @_builtins.property
-    @pulumi.getter
-    def id(self) -> _builtins.str:
-        """
-        The provider-assigned unique ID for this managed resource.
-        """
-        return pulumi.get(self, "id")
-
-    @_builtins.property
     @pulumi.getter(name="imageBuilderName")
     def image_builder_name(self) -> _builtins.str:
         """
-        The name of the image builder that was used to created the private image. If the image is sharedthen the value is null.
+        Name of the image builder that was used to created the private image. If the image is shared then the value is null.
         """
         return pulumi.get(self, "image_builder_name")
 
@@ -162,8 +154,7 @@ class GetImageResult:
     @pulumi.getter(name="imageBuilderSupported")
     def image_builder_supported(self) -> _builtins.bool:
         """
-        Boolean to indicate whether an image builder can be launched from this image.
-        * `image error` - Resource error object that describes the error containing the following:
+        Whether an image builder can be launched from this image.
         """
         return pulumi.get(self, "image_builder_supported")
 
@@ -171,7 +162,7 @@ class GetImageResult:
     @pulumi.getter(name="imagePermissions")
     def image_permissions(self) -> Sequence['outputs.GetImageImagePermissionResult']:
         """
-        List of strings describing the image permissions containing the following:
+        List of objects describing the image permissions containing the following:
         """
         return pulumi.get(self, "image_permissions")
 
@@ -183,6 +174,9 @@ class GetImageResult:
     @_builtins.property
     @pulumi.getter
     def name(self) -> _builtins.str:
+        """
+        Name of the application.
+        """
         return pulumi.get(self, "name")
 
     @_builtins.property
@@ -201,6 +195,9 @@ class GetImageResult:
     @_builtins.property
     @pulumi.getter(name="publicBaseImageReleasedDate")
     def public_base_image_released_date(self) -> _builtins.str:
+        """
+        Release date of base image if public. For private images, it is the release date of the base image that it was created from.
+        """
         return pulumi.get(self, "public_base_image_released_date")
 
     @_builtins.property
@@ -219,6 +216,9 @@ class GetImageResult:
     @_builtins.property
     @pulumi.getter(name="stateChangeReasons")
     def state_change_reasons(self) -> Sequence['outputs.GetImageStateChangeReasonResult']:
+        """
+        Reason for the last state change.
+        """
         return pulumi.get(self, "state_change_reasons")
 
     @_builtins.property
@@ -240,7 +240,6 @@ class AwaitableGetImageResult(GetImageResult):
             created_time=self.created_time,
             description=self.description,
             display_name=self.display_name,
-            id=self.id,
             image_builder_name=self.image_builder_name,
             image_builder_supported=self.image_builder_supported,
             image_permissions=self.image_permissions,
@@ -282,7 +281,7 @@ def get_image(arn: Optional[_builtins.str] = None,
     :param _builtins.str name: Name of the image being searched for. Cannot be used with `name_regex` or `arn`.
     :param _builtins.str name_regex: Regular expression name of the image being searched for. Cannot be used with `arn` or `name`.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param _builtins.str type: The type of image which must be (`PUBLIC`, `PRIVATE`, or `SHARED`).
+    :param _builtins.str type: Type of image which must be (`PUBLIC`, `PRIVATE`, or `SHARED`).
     """
     __args__ = dict()
     __args__['arn'] = arn
@@ -302,7 +301,6 @@ def get_image(arn: Optional[_builtins.str] = None,
         created_time=pulumi.get(__ret__, 'created_time'),
         description=pulumi.get(__ret__, 'description'),
         display_name=pulumi.get(__ret__, 'display_name'),
-        id=pulumi.get(__ret__, 'id'),
         image_builder_name=pulumi.get(__ret__, 'image_builder_name'),
         image_builder_supported=pulumi.get(__ret__, 'image_builder_supported'),
         image_permissions=pulumi.get(__ret__, 'image_permissions'),
@@ -315,12 +313,12 @@ def get_image(arn: Optional[_builtins.str] = None,
         state=pulumi.get(__ret__, 'state'),
         state_change_reasons=pulumi.get(__ret__, 'state_change_reasons'),
         type=pulumi.get(__ret__, 'type'))
-def get_image_output(arn: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                     most_recent: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                     name: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                     name_regex: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                     region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                     type: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_image_output(arn: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                     most_recent: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                     name: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                     name_regex: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                     region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                     type: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                      opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetImageResult]:
     """
     Data source for managing an AWS AppStream 2.0 Image.
@@ -342,7 +340,7 @@ def get_image_output(arn: Optional[pulumi.Input[Optional[_builtins.str]]] = None
     :param _builtins.str name: Name of the image being searched for. Cannot be used with `name_regex` or `arn`.
     :param _builtins.str name_regex: Regular expression name of the image being searched for. Cannot be used with `arn` or `name`.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param _builtins.str type: The type of image which must be (`PUBLIC`, `PRIVATE`, or `SHARED`).
+    :param _builtins.str type: Type of image which must be (`PUBLIC`, `PRIVATE`, or `SHARED`).
     """
     __args__ = dict()
     __args__['arn'] = arn
@@ -361,7 +359,6 @@ def get_image_output(arn: Optional[pulumi.Input[Optional[_builtins.str]]] = None
         created_time=pulumi.get(__response__, 'created_time'),
         description=pulumi.get(__response__, 'description'),
         display_name=pulumi.get(__response__, 'display_name'),
-        id=pulumi.get(__response__, 'id'),
         image_builder_name=pulumi.get(__response__, 'image_builder_name'),
         image_builder_supported=pulumi.get(__response__, 'image_builder_supported'),
         image_permissions=pulumi.get(__response__, 'image_permissions'),

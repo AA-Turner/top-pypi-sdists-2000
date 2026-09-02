@@ -106,7 +106,7 @@ class GetResourceShareResult:
     @pulumi.getter(name="resourceArns")
     def resource_arns(self) -> Sequence[_builtins.str]:
         """
-        A list of resource ARNs associated with the resource share.
+        List of resource ARNs associated with the resource share.
         """
         return pulumi.get(self, "resource_arns")
 
@@ -176,25 +176,25 @@ def get_resource_share(filters: Optional[Sequence[Union['GetResourceShareFilterA
         resource_owner="SELF")
     ```
 
-    ## Search by filters
+    ### Search by filters
 
     ```python
     import pulumi
     import pulumi_aws as aws
 
-    tag_filter = aws.ram.get_resource_share(resource_owner="SELF",
-        filters=[{
+    tag_filter = aws.ram.get_resource_share(filters=[{
             "name": "NameOfTag",
             "values": ["exampleNameTagValue"],
-        }])
+        }],
+        resource_owner="SELF")
     ```
 
 
-    :param Sequence[Union['GetResourceShareFilterArgs', 'GetResourceShareFilterArgsDict']] filters: Filter used to scope the list of owned shares e.g., by tags. See [related docs] (https://docs.aws.amazon.com/ram/latest/APIReference/API_TagFilter.html).
+    :param Sequence[Union['GetResourceShareFilterArgs', 'GetResourceShareFilterArgsDict']] filters: Filter used to scope the list e.g., by tags. See `filter` Block below.
     :param _builtins.str name: Name of the resource share to retrieve.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     :param _builtins.str resource_owner: Owner of the resource share. Valid values are `SELF` or `OTHER-ACCOUNTS`.
-    :param _builtins.str resource_share_status: Specifies that you want to retrieve details of only those resource shares that have this status. Valid values are `PENDING`, `ACTIVE`, `FAILED`, `DELETING`, and `DELETED`.
+    :param _builtins.str resource_share_status: Status of resource shares to retrieve. Valid values are `PENDING`, `ACTIVE`, `FAILED`, `DELETING`, and `DELETED`.
     :param Mapping[str, _builtins.str] tags: Tags attached to the resource share.
     """
     __args__ = dict()
@@ -219,12 +219,12 @@ def get_resource_share(filters: Optional[Sequence[Union['GetResourceShareFilterA
         resource_share_status=pulumi.get(__ret__, 'resource_share_status'),
         status=pulumi.get(__ret__, 'status'),
         tags=pulumi.get(__ret__, 'tags'))
-def get_resource_share_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['GetResourceShareFilterArgs', 'GetResourceShareFilterArgsDict']]]]] = None,
-                              name: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              resource_owner: Optional[pulumi.Input[_builtins.str]] = None,
-                              resource_share_status: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_resource_share_output(filters: pulumi.Input[Optional[Optional[Sequence[Union['GetResourceShareFilterArgs', 'GetResourceShareFilterArgsDict']]]]] = None,
+                              name: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              resource_owner: pulumi.Input[Optional[_builtins.str]] = None,
+                              resource_share_status: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                               opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetResourceShareResult]:
     """
     `ram.ResourceShare` Retrieve information about a RAM Resource Share.
@@ -239,25 +239,25 @@ def get_resource_share_output(filters: Optional[pulumi.Input[Optional[Sequence[U
         resource_owner="SELF")
     ```
 
-    ## Search by filters
+    ### Search by filters
 
     ```python
     import pulumi
     import pulumi_aws as aws
 
-    tag_filter = aws.ram.get_resource_share(resource_owner="SELF",
-        filters=[{
+    tag_filter = aws.ram.get_resource_share(filters=[{
             "name": "NameOfTag",
             "values": ["exampleNameTagValue"],
-        }])
+        }],
+        resource_owner="SELF")
     ```
 
 
-    :param Sequence[Union['GetResourceShareFilterArgs', 'GetResourceShareFilterArgsDict']] filters: Filter used to scope the list of owned shares e.g., by tags. See [related docs] (https://docs.aws.amazon.com/ram/latest/APIReference/API_TagFilter.html).
+    :param Sequence[Union['GetResourceShareFilterArgs', 'GetResourceShareFilterArgsDict']] filters: Filter used to scope the list e.g., by tags. See `filter` Block below.
     :param _builtins.str name: Name of the resource share to retrieve.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     :param _builtins.str resource_owner: Owner of the resource share. Valid values are `SELF` or `OTHER-ACCOUNTS`.
-    :param _builtins.str resource_share_status: Specifies that you want to retrieve details of only those resource shares that have this status. Valid values are `PENDING`, `ACTIVE`, `FAILED`, `DELETING`, and `DELETED`.
+    :param _builtins.str resource_share_status: Status of resource shares to retrieve. Valid values are `PENDING`, `ACTIVE`, `FAILED`, `DELETING`, and `DELETED`.
     :param Mapping[str, _builtins.str] tags: Tags attached to the resource share.
     """
     __args__ = dict()

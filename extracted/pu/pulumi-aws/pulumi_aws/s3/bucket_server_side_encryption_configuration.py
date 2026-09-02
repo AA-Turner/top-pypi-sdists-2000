@@ -23,10 +23,11 @@ class BucketServerSideEncryptionConfigurationInitArgs:
     def __init__(__self__, *,
                  bucket: pulumi.Input[_builtins.str],
                  rules: pulumi.Input[Sequence[pulumi.Input['BucketServerSideEncryptionConfigurationRuleArgs']]],
-                 expected_bucket_owner: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 expected_bucket_owner: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a BucketServerSideEncryptionConfiguration resource.
+
         :param pulumi.Input[_builtins.str] bucket: ID (name) of the bucket.
         :param pulumi.Input[Sequence[pulumi.Input['BucketServerSideEncryptionConfigurationRuleArgs']]] rules: Set of server-side encryption configuration rules. See below. Currently, only a single rule is supported.
         :param pulumi.Input[_builtins.str] expected_bucket_owner: Account ID of the expected bucket owner.
@@ -69,38 +70,39 @@ class BucketServerSideEncryptionConfigurationInitArgs:
     @_builtins.property
     @pulumi.getter(name="expectedBucketOwner")
     @_utilities.deprecated("""expected_bucket_owner is deprecated. It will be removed in a future verion of the provider.""")
-    def expected_bucket_owner(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def expected_bucket_owner(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Account ID of the expected bucket owner.
         """
         return pulumi.get(self, "expected_bucket_owner")
 
     @expected_bucket_owner.setter
-    def expected_bucket_owner(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def expected_bucket_owner(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "expected_bucket_owner", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _BucketServerSideEncryptionConfigurationState:
     def __init__(__self__, *,
-                 bucket: Optional[pulumi.Input[_builtins.str]] = None,
-                 expected_bucket_owner: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rules: Optional[pulumi.Input[Sequence[pulumi.Input['BucketServerSideEncryptionConfigurationRuleArgs']]]] = None):
+                 bucket: pulumi.Input[Optional[_builtins.str]] = None,
+                 expected_bucket_owner: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rules: pulumi.Input[Optional[Sequence[pulumi.Input['BucketServerSideEncryptionConfigurationRuleArgs']]]] = None):
         """
         Input properties used for looking up and filtering BucketServerSideEncryptionConfiguration resources.
+
         :param pulumi.Input[_builtins.str] bucket: ID (name) of the bucket.
         :param pulumi.Input[_builtins.str] expected_bucket_owner: Account ID of the expected bucket owner.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -120,51 +122,51 @@ class _BucketServerSideEncryptionConfigurationState:
 
     @_builtins.property
     @pulumi.getter
-    def bucket(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def bucket(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ID (name) of the bucket.
         """
         return pulumi.get(self, "bucket")
 
     @bucket.setter
-    def bucket(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def bucket(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "bucket", value)
 
     @_builtins.property
     @pulumi.getter(name="expectedBucketOwner")
     @_utilities.deprecated("""expected_bucket_owner is deprecated. It will be removed in a future verion of the provider.""")
-    def expected_bucket_owner(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def expected_bucket_owner(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Account ID of the expected bucket owner.
         """
         return pulumi.get(self, "expected_bucket_owner")
 
     @expected_bucket_owner.setter
-    def expected_bucket_owner(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def expected_bucket_owner(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "expected_bucket_owner", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def rules(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['BucketServerSideEncryptionConfigurationRuleArgs']]]]:
+    def rules(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['BucketServerSideEncryptionConfigurationRuleArgs']]]]:
         """
         Set of server-side encryption configuration rules. See below. Currently, only a single rule is supported.
         """
         return pulumi.get(self, "rules")
 
     @rules.setter
-    def rules(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['BucketServerSideEncryptionConfigurationRuleArgs']]]]):
+    def rules(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['BucketServerSideEncryptionConfigurationRuleArgs']]]]):
         pulumi.set(self, "rules", value)
 
 
@@ -174,17 +176,17 @@ class BucketServerSideEncryptionConfiguration(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 bucket: Optional[pulumi.Input[_builtins.str]] = None,
-                 expected_bucket_owner: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rules: Optional[pulumi.Input[Sequence[pulumi.Input[Union['BucketServerSideEncryptionConfigurationRuleArgs', 'BucketServerSideEncryptionConfigurationRuleArgsDict']]]]] = None,
+                 bucket: pulumi.Input[Optional[_builtins.str]] = None,
+                 expected_bucket_owner: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rules: pulumi.Input[Optional[Sequence[pulumi.Input[Union['BucketServerSideEncryptionConfigurationRuleArgs', 'BucketServerSideEncryptionConfigurationRuleArgsDict']]]]] = None,
                  __props__=None):
         """
         Provides a S3 bucket server-side encryption configuration resource.
 
         > **NOTE:** Destroying an `s3.BucketServerSideEncryptionConfiguration` resource resets the bucket to [Amazon S3 bucket default encryption](https://docs.aws.amazon.com/AmazonS3/latest/userguide/default-encryption-faq.html).
 
-        > **NOTE:** Starting in March 2026, Amazon S3 will automatically block server-side encryption with customer-provided keys (SSE-C) for all new buckets. Use the `blocked_encryption_types` argument to manage this behavior. For more information, see the [SSE-C changes FAQ](https://docs.aws.amazon.com/AmazonS3/latest/userguide/default-s3-c-encryption-setting-faq.html).
+        > **NOTE:** Starting in April 2026, Amazon S3 will automatically block server-side encryption with customer-provided keys (SSE-C) for all new buckets. Use the `blocked_encryption_types` argument to manage this behavior. For more information, see the [SSE-C changes FAQ](https://docs.aws.amazon.com/AmazonS3/latest/userguide/default-s3-c-encryption-setting-faq.html).
 
         ## Example Usage
 
@@ -197,13 +199,13 @@ class BucketServerSideEncryptionConfiguration(pulumi.CustomResource):
             deletion_window_in_days=10)
         mybucket = aws.s3.Bucket("mybucket", bucket="mybucket")
         example = aws.s3.BucketServerSideEncryptionConfiguration("example",
-            bucket=mybucket.id,
             rules=[{
                 "apply_server_side_encryption_by_default": {
                     "kms_master_key_id": mykey.arn,
                     "sse_algorithm": "aws:kms",
                 },
-            }])
+            }],
+            bucket=mybucket.id)
         ```
 
         ### Blocking SSE-C Uploads
@@ -217,7 +219,6 @@ class BucketServerSideEncryptionConfiguration(pulumi.CustomResource):
             deletion_window_in_days=10)
         mybucket = aws.s3.Bucket("mybucket", bucket="mybucket")
         example = aws.s3.BucketServerSideEncryptionConfiguration("example",
-            bucket=mybucket.id,
             rules=[{
                 "apply_server_side_encryption_by_default": {
                     "kms_master_key_id": mykey.arn,
@@ -225,7 +226,8 @@ class BucketServerSideEncryptionConfiguration(pulumi.CustomResource):
                 },
                 "bucket_key_enabled": True,
                 "blocked_encryption_types": ["SSE-C"],
-            }])
+            }],
+            bucket=mybucket.id)
         ```
 
         ## Import
@@ -256,6 +258,7 @@ class BucketServerSideEncryptionConfiguration(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:s3/bucketServerSideEncryptionConfiguration:BucketServerSideEncryptionConfiguration example bucket-name,123456789012
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -275,7 +278,7 @@ class BucketServerSideEncryptionConfiguration(pulumi.CustomResource):
 
         > **NOTE:** Destroying an `s3.BucketServerSideEncryptionConfiguration` resource resets the bucket to [Amazon S3 bucket default encryption](https://docs.aws.amazon.com/AmazonS3/latest/userguide/default-encryption-faq.html).
 
-        > **NOTE:** Starting in March 2026, Amazon S3 will automatically block server-side encryption with customer-provided keys (SSE-C) for all new buckets. Use the `blocked_encryption_types` argument to manage this behavior. For more information, see the [SSE-C changes FAQ](https://docs.aws.amazon.com/AmazonS3/latest/userguide/default-s3-c-encryption-setting-faq.html).
+        > **NOTE:** Starting in April 2026, Amazon S3 will automatically block server-side encryption with customer-provided keys (SSE-C) for all new buckets. Use the `blocked_encryption_types` argument to manage this behavior. For more information, see the [SSE-C changes FAQ](https://docs.aws.amazon.com/AmazonS3/latest/userguide/default-s3-c-encryption-setting-faq.html).
 
         ## Example Usage
 
@@ -288,13 +291,13 @@ class BucketServerSideEncryptionConfiguration(pulumi.CustomResource):
             deletion_window_in_days=10)
         mybucket = aws.s3.Bucket("mybucket", bucket="mybucket")
         example = aws.s3.BucketServerSideEncryptionConfiguration("example",
-            bucket=mybucket.id,
             rules=[{
                 "apply_server_side_encryption_by_default": {
                     "kms_master_key_id": mykey.arn,
                     "sse_algorithm": "aws:kms",
                 },
-            }])
+            }],
+            bucket=mybucket.id)
         ```
 
         ### Blocking SSE-C Uploads
@@ -308,7 +311,6 @@ class BucketServerSideEncryptionConfiguration(pulumi.CustomResource):
             deletion_window_in_days=10)
         mybucket = aws.s3.Bucket("mybucket", bucket="mybucket")
         example = aws.s3.BucketServerSideEncryptionConfiguration("example",
-            bucket=mybucket.id,
             rules=[{
                 "apply_server_side_encryption_by_default": {
                     "kms_master_key_id": mykey.arn,
@@ -316,7 +318,8 @@ class BucketServerSideEncryptionConfiguration(pulumi.CustomResource):
                 },
                 "bucket_key_enabled": True,
                 "blocked_encryption_types": ["SSE-C"],
-            }])
+            }],
+            bucket=mybucket.id)
         ```
 
         ## Import
@@ -348,6 +351,7 @@ class BucketServerSideEncryptionConfiguration(pulumi.CustomResource):
         $ pulumi import aws:s3/bucketServerSideEncryptionConfiguration:BucketServerSideEncryptionConfiguration example bucket-name,123456789012
         ```
 
+
         :param str resource_name: The name of the resource.
         :param BucketServerSideEncryptionConfigurationInitArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -363,10 +367,10 @@ class BucketServerSideEncryptionConfiguration(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 bucket: Optional[pulumi.Input[_builtins.str]] = None,
-                 expected_bucket_owner: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rules: Optional[pulumi.Input[Sequence[pulumi.Input[Union['BucketServerSideEncryptionConfigurationRuleArgs', 'BucketServerSideEncryptionConfigurationRuleArgsDict']]]]] = None,
+                 bucket: pulumi.Input[Optional[_builtins.str]] = None,
+                 expected_bucket_owner: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rules: pulumi.Input[Optional[Sequence[pulumi.Input[Union['BucketServerSideEncryptionConfigurationRuleArgs', 'BucketServerSideEncryptionConfigurationRuleArgsDict']]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -396,10 +400,10 @@ class BucketServerSideEncryptionConfiguration(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            bucket: Optional[pulumi.Input[_builtins.str]] = None,
-            expected_bucket_owner: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            rules: Optional[pulumi.Input[Sequence[pulumi.Input[Union['BucketServerSideEncryptionConfigurationRuleArgs', 'BucketServerSideEncryptionConfigurationRuleArgsDict']]]]] = None) -> 'BucketServerSideEncryptionConfiguration':
+            bucket: pulumi.Input[Optional[_builtins.str]] = None,
+            expected_bucket_owner: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            rules: pulumi.Input[Optional[Sequence[pulumi.Input[Union['BucketServerSideEncryptionConfigurationRuleArgs', 'BucketServerSideEncryptionConfigurationRuleArgsDict']]]]] = None) -> 'BucketServerSideEncryptionConfiguration':
         """
         Get an existing BucketServerSideEncryptionConfiguration resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

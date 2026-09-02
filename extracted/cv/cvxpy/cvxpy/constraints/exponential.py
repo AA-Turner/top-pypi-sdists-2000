@@ -15,14 +15,14 @@ limitations under the License.
 """
 from __future__ import annotations
 
-import warnings
-from typing import List, Tuple, TypeVar
+from typing import TypeVar
 
 import numpy as np
 
 from cvxpy.constraints.cones import Cone
 from cvxpy.expressions import cvxtypes
 from cvxpy.utilities import scopes
+from cvxpy.utilities.warn import warn
 
 Expression = TypeVar('Expression')
 
@@ -58,9 +58,9 @@ class ExpCone(Cone):
 
     def __init__(self, x: Expression, y: Expression, z: Expression, constr_id=None) -> None:
         Expression = cvxtypes.expression()
-        self.x = Expression.cast_to_const(x)
-        self.y = Expression.cast_to_const(y)
-        self.z = Expression.cast_to_const(z)
+        self.x = Expression.cast(x)
+        self.y = Expression.cast(y)
+        self.z = Expression.cast(z)
         args = [self.x, self.y, self.z]
         for val in args:
             if not (val.is_affine() and val.is_real()):
@@ -107,7 +107,7 @@ class ExpCone(Cone):
     def as_quad_approx(self, m: int, k: int) -> RelEntrConeQuad:
         return RelEntrConeQuad(self.y, self.z, -self.x, m, k)
 
-    def cone_sizes(self) -> List[int]:
+    def cone_sizes(self) -> list[int]:
         """The dimensions of the exponential cones.
 
         Returns
@@ -132,16 +132,19 @@ class ExpCone(Cone):
         return self.is_dcp()
 
     @property
-    def shape(self) -> Tuple[int, ...]:
+    def shape(self) -> tuple[int, ...]:
         s = (3,) + self.x.shape
         return s
 
     def save_dual_value(self, value) -> None:
-        # TODO(akshaya,SteveDiamond): verify that reshaping below works correctly
+        # Each row of the reshaped value holds the dual of one elementwise
+        # (x_i, y_i, z_i) cone. ConeMatrixStuffing flattens multidimensional
+        # args in Fortran order, so the rows enumerate elements in Fortran
+        # order and each column must be reshaped accordingly.
         value = np.reshape(value, (-1, 3))
-        dv0 = np.reshape(value[:, 0], self.x.shape)
-        dv1 = np.reshape(value[:, 1], self.y.shape)
-        dv2 = np.reshape(value[:, 2], self.z.shape)
+        dv0 = np.reshape(value[:, 0], self.x.shape, order='F')
+        dv1 = np.reshape(value[:, 1], self.y.shape, order='F')
+        dv2 = np.reshape(value[:, 2], self.z.shape, order='F')
         self.dual_variables[0].save_value(dv0)
         self.dual_variables[1].save_value(dv1)
         self.dual_variables[2].save_value(dv2)
@@ -163,19 +166,15 @@ class ExpCone(Cone):
 
 
 class RelEntrConeQuad(Cone):
-    """An approximate construction of the scalar relative entropy cone
-
-    Definition:
+    """An approximation of the scalar relative entropy cone,
 
     .. math::
 
         K_{re}=\\text{cl}\\{(x,y,z)\\in\\mathbb{R}_{++}\\times
-                \\mathbb{R}_{++}\\times\\mathbb{R}_{++}\\:x\\log(x/y)\\leq z\\}
+                \\mathbb{R}_{++}\\times\\mathbb{R}_{++}\\:x\\log(x/y)\\leq z\\},
 
-    Since the above definition is very similar to the ExpCone, we provide a conversion method.
-
-    More details on the approximation can be found in Theorem-3 on page-10 in the paper:
-    Semidefinite Approximations of the Matrix Logarithm.
+    in terms of second order cones. The approximation uses a numerical quadrature scheme
+    described in https://arxiv.org/abs/1705.00812.
 
     Parameters
     ----------
@@ -185,17 +184,18 @@ class RelEntrConeQuad(Cone):
         y in the (approximate) scalar relative entropy cone
     z : Expression
         z in the (approximate) scalar relative entropy cone
-    m: Parameter directly related to the number of generated nodes for the quadrature
-    approximation used in the algorithm
-    k: Another parameter controlling the approximation
+    m : int
+        Number of quadrature points in the approximation.
+    k: int
+        Number of scaling points in the approximation.
     """
 
     def __init__(self, x: Expression, y: Expression, z: Expression,
                  m: int, k: int, constr_id=None) -> None:
         Expression = cvxtypes.expression()
-        self.x = Expression.cast_to_const(x)
-        self.y = Expression.cast_to_const(y)
-        self.z = Expression.cast_to_const(z)
+        self.x = Expression.cast(x)
+        self.y = Expression.cast(y)
+        self.z = Expression.cast(z)
         args = [self.x, self.y, self.z]
         for val in args:
             if not (val.is_affine() and val.is_real()):
@@ -246,7 +246,7 @@ class RelEntrConeQuad(Cone):
         """
         return self.x.size
 
-    def cone_sizes(self) -> List[int]:
+    def cone_sizes(self) -> list[int]:
         """The dimensions of the exponential cones.
 
         Returns
@@ -271,7 +271,7 @@ class RelEntrConeQuad(Cone):
         return self.is_dcp()
 
     @property
-    def shape(self) -> Tuple[int, ...]:
+    def shape(self) -> tuple[int, ...]:
         s = (3,) + self.x.shape
         return s
 
@@ -281,17 +281,15 @@ class RelEntrConeQuad(Cone):
 
 
 class OpRelEntrConeQuad(Cone):
-    """An approximate construction of the operator relative entropy cone
-
-    Definition:
+    """An approximate construction of the operator relative entropy cone,
 
     .. math::
 
-        K_{re}^n=\\text{cl}\\{(X,Y,T)\\in\\mathbb{H}^n_{++}\\times
-                \\mathbb{H}^n_{++}\\times\\mathbb{H}^n_{++}\\:D_{\\text{op}}\\succeq T\\}
+        K_{re}^n = \\text{cl}\\{(X,Y,T)\\in\\mathbb{H}^n_{++}\\times
+                \\mathbb{H}^n_{++}\\times\\mathbb{H}^n_{++}\\:D_{\\text{op}}(X,Y) \\succeq T\\}.
 
-    More details on the approximation can be found in Theorem-3 on page-10 in the paper:
-    Semidefinite Approximations of the Matrix Logarithm.
+    Details on the approximation can be found in Theorem-3 on page-10 of
+    https://arxiv.org/abs/1705.00812.
 
     Parameters
     ----------
@@ -317,9 +315,9 @@ class OpRelEntrConeQuad(Cone):
     def __init__(self, X: Expression, Y: Expression, Z: Expression,
                  m: int, k: int, constr_id=None) -> None:
         Expression = cvxtypes.expression()
-        self.X = Expression.cast_to_const(X)
-        self.Y = Expression.cast_to_const(Y)
-        self.Z = Expression.cast_to_const(Z)
+        self.X = Expression.cast(X)
+        self.Y = Expression.cast(Y)
+        self.Z = Expression.cast(Z)
         if (not X.is_hermitian()) or (not Y.is_hermitian()) or (not Z.is_hermitian()):
             msg = ("One of the input matrices has not explicitly been declared as symmetric or"
                    "Hermitian. If the inputs are Variable objects, try declaring them with the"
@@ -329,7 +327,7 @@ class OpRelEntrConeQuad(Cone):
                    "do one of these things will cause this function to impose a symmetry or"
                    "conjugate-symmetry constraint internally, in a way that is very"
                    "inefficient.")
-            warnings.warn(msg)
+            warn(msg)
         self.m = m
         self.k = k
         Xs, Ys, Zs = self.X.shape, self.Y.shape, self.Z.shape
@@ -365,7 +363,7 @@ class OpRelEntrConeQuad(Cone):
         """
         return self.X.size
 
-    def cone_sizes(self) -> List[int]:
+    def cone_sizes(self) -> list[int]:
         """The dimensions of the exponential cones.
 
         Returns
@@ -390,7 +388,7 @@ class OpRelEntrConeQuad(Cone):
         return self.is_dcp()
 
     @property
-    def shape(self) -> Tuple[int, ...]:
+    def shape(self) -> tuple[int, ...]:
         s = (3,) + self.X.shape
         return s
 

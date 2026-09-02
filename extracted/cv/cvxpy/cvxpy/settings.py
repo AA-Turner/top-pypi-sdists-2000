@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 import logging
+import os
 import sys
 
 LOGGER = logging.getLogger("__cvxpy__")
@@ -74,6 +75,7 @@ GLPK_MI = "GLPK_MI"
 GLOP = "GLOP"
 CBC = "CBC"
 COPT = "COPT"
+CUOPT = "CUOPT"
 ECOS = "ECOS"
 ECOS_BB = "ECOS_BB"
 SCS = "SCS"
@@ -84,20 +86,41 @@ OSQP = "OSQP"
 PIQP = "PIQP"
 PROXQP = "PROXQP"
 QOCO = "QOCO"
+QPALM = "QPALM"
 CPLEX = "CPLEX"
 MOSEK = "MOSEK"
+MOREAU = "MOREAU"
 XPRESS = "XPRESS"
 NAG = "NAG"
 PDLP = "PDLP"
 SCIP = "SCIP"
 SCIPY = "SCIPY"
 CLARABEL = "CLARABEL"
+CUCLARABEL = "CUCLARABEL"
+PDCS = "PDCS"
 DAQP = "DAQP"
 HIGHS = "HIGHS"
+MPAX = "MPAX"
+IPOPT = "IPOPT"
+KNITRO = "KNITRO"
+UNO = "UNO"
+COSMO = "COSMO"
 SOLVERS = [CLARABEL, ECOS, CVXOPT, GLOP, GLPK, GLPK_MI,
            SCS, SDPA, GUROBI, OSQP, CPLEX,
-           MOSEK, CBC, COPT, XPRESS, PIQP, PROXQP, QOCO,
-           NAG, PDLP, SCIP, SCIPY, DAQP, HIGHS]
+           MOSEK, MOREAU, CBC, COPT, XPRESS, PIQP, PROXQP, QOCO, QPALM,
+           NAG, PDLP, SCIP, SCIPY, DAQP, HIGHS, MPAX,
+           CUCLARABEL, CUOPT, KNITRO, COSMO, PDCS, IPOPT, UNO]
+
+
+def _env_var_to_bool(name: str, default: bool) -> bool:
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return value.strip().lower() not in {"0", "false", "no", "off"}
+
+# Internal-only feature flag. This may be removed in a future version without warning.
+DEFAULT_TO_COMMERCIAL_SOLVERS = _env_var_to_bool(
+    "CVXPY_DEFAULT_TO_COMMERCIAL_SOLVERS", True)
 
 # Xpress-specific items
 XPRESS_IIS = "XPRESS_IIS"
@@ -179,13 +202,17 @@ NONPOS = "NONPOSITIVE"
 UNKNOWN = "UNKNOWN"
 
 # Canonicalization backends
-NUMPY_CANON_BACKEND = "NUMPY"
 SCIPY_CANON_BACKEND = "SCIPY"
 RUST_CANON_BACKEND = "RUST"
 CPP_CANON_BACKEND = "CPP"
+COO_CANON_BACKEND = "COO"  # 3D COO sparse tensor backend: O(nnz) operations for large parameters
 
 # Default canonicalization backend, pyodide uses SciPy
 DEFAULT_CANON_BACKEND = CPP_CANON_BACKEND if sys.platform != "emscripten" else SCIPY_CANON_BACKEND
+
+# DPP parameter threshold for auto-selecting COO backend
+# When problem is DPP and total parameter size >= this threshold, use COO backend
+DPP_PARAM_THRESHOLD = 1000
 
 # Numerical tolerances
 EIGVAL_TOL = 1e-10
@@ -194,10 +221,13 @@ GENERAL_PROJECTION_TOL = 1e-10
 SPARSE_PROJECTION_TOL = 1e-10
 ATOM_EVAL_TOL = 1e-4
 CHOL_SYM_TOL = 1e-14
+CHOL_ZERO_PIVOT_TOL = 2.2e-10
 
-# DPP is slow when total size of parameters
-# exceed this threshold.
-PARAM_THRESHOLD = 1e4
+# Thresholds for warning about SOC approximation of power cones
+# Warning is triggered when approx_error > threshold OR num_soc > threshold
+POWERCONE_APPROX_ERROR_THRESHOLD = 1e-6
+POWERCONE_APPROX_SOC_THRESHOLD = 4
+
 
 # threads to use during compilation
 # -1 defaults to system default (configurable via the OMP_NUM_THREADS

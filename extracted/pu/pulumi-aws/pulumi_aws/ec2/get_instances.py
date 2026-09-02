@@ -153,23 +153,24 @@ def get_instances(filters: Optional[Sequence[Union['GetInstancesFilterArgs', 'Ge
 
     ```python
     import pulumi
+    from typing import Any
     import pulumi_aws as aws
 
-    test = aws.ec2.get_instances(instance_tags={
-            "Role": "HardWorker",
-        },
-        filters=[{
+    test = aws.ec2.get_instances(filters=[{
             "name": "instance.group-id",
             "values": ["sg-12345678"],
         }],
+        instance_tags={
+            "Role": "HardWorker",
+        },
         instance_state_names=[
             "running",
             "stopped",
         ])
-    test_eip = []
+    test_eip: list[aws.ec2.Eip] = []
     def create_test(range_body):
-        for range in [{"value": i} for i in range(0, range_body)]:
-            test_eip.append(aws.ec2.Eip(f"test-{range['value']}", instance=test.ids[range["value"]]))
+        for test_eip_range in [{"value": i} for i in range(0, range_body)]:
+            test_eip.append(aws.ec2.Eip(f"test-{test_eip_range['value']}", instance=test.ids[test_eip_range["value"]]))
 
     (len(test.ids)).apply(create_test)
     ```
@@ -177,7 +178,7 @@ def get_instances(filters: Optional[Sequence[Union['GetInstancesFilterArgs', 'Ge
 
     :param Sequence[Union['GetInstancesFilterArgs', 'GetInstancesFilterArgsDict']] filters: One or more filters to apply to the search.
            If multiple `filter` blocks are provided, they all must be true.
-           For a full reference of filter names, see [describe-instances in the AWS CLI reference][1].
+           For a full reference of filter names, see [describe-instances in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html).
            See `filter` Block below.
     :param Sequence[_builtins.str] instance_state_names: List of instance states that should be applicable to the desired instances. The permitted values are: `pending, running, shutting-down, stopped, stopping, terminated`. The default value is `running`.
     :param Mapping[str, _builtins.str] instance_tags: Map of tags, each pair of which must
@@ -202,10 +203,10 @@ def get_instances(filters: Optional[Sequence[Union['GetInstancesFilterArgs', 'Ge
         private_ips=pulumi.get(__ret__, 'private_ips'),
         public_ips=pulumi.get(__ret__, 'public_ips'),
         region=pulumi.get(__ret__, 'region'))
-def get_instances_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['GetInstancesFilterArgs', 'GetInstancesFilterArgsDict']]]]] = None,
-                         instance_state_names: Optional[pulumi.Input[Optional[Sequence[_builtins.str]]]] = None,
-                         instance_tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
-                         region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_instances_output(filters: pulumi.Input[Optional[Optional[Sequence[Union['GetInstancesFilterArgs', 'GetInstancesFilterArgsDict']]]]] = None,
+                         instance_state_names: pulumi.Input[Optional[Optional[Sequence[_builtins.str]]]] = None,
+                         instance_tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
+                         region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                          opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetInstancesResult]:
     """
     Use this data source to get IDs or IPs of Amazon EC2 instances to be referenced elsewhere,
@@ -220,23 +221,24 @@ def get_instances_output(filters: Optional[pulumi.Input[Optional[Sequence[Union[
 
     ```python
     import pulumi
+    from typing import Any
     import pulumi_aws as aws
 
-    test = aws.ec2.get_instances(instance_tags={
-            "Role": "HardWorker",
-        },
-        filters=[{
+    test = aws.ec2.get_instances(filters=[{
             "name": "instance.group-id",
             "values": ["sg-12345678"],
         }],
+        instance_tags={
+            "Role": "HardWorker",
+        },
         instance_state_names=[
             "running",
             "stopped",
         ])
-    test_eip = []
+    test_eip: list[aws.ec2.Eip] = []
     def create_test(range_body):
-        for range in [{"value": i} for i in range(0, range_body)]:
-            test_eip.append(aws.ec2.Eip(f"test-{range['value']}", instance=test.ids[range["value"]]))
+        for test_eip_range in [{"value": i} for i in range(0, range_body)]:
+            test_eip.append(aws.ec2.Eip(f"test-{test_eip_range['value']}", instance=test.ids[test_eip_range["value"]]))
 
     (len(test.ids)).apply(create_test)
     ```
@@ -244,7 +246,7 @@ def get_instances_output(filters: Optional[pulumi.Input[Optional[Sequence[Union[
 
     :param Sequence[Union['GetInstancesFilterArgs', 'GetInstancesFilterArgsDict']] filters: One or more filters to apply to the search.
            If multiple `filter` blocks are provided, they all must be true.
-           For a full reference of filter names, see [describe-instances in the AWS CLI reference][1].
+           For a full reference of filter names, see [describe-instances in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html).
            See `filter` Block below.
     :param Sequence[_builtins.str] instance_state_names: List of instance states that should be applicable to the desired instances. The permitted values are: `pending, running, shutting-down, stopped, stopping, terminated`. The default value is `running`.
     :param Mapping[str, _builtins.str] instance_tags: Map of tags, each pair of which must

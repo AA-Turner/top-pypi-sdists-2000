@@ -24,10 +24,11 @@ class RefreshScheduleArgs:
                  data_set_id: pulumi.Input[_builtins.str],
                  schedule: pulumi.Input['RefreshScheduleScheduleArgs'],
                  schedule_id: pulumi.Input[_builtins.str],
-                 aws_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 aws_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a RefreshSchedule resource.
+
         :param pulumi.Input[_builtins.str] data_set_id: The ID of the dataset.
         :param pulumi.Input['RefreshScheduleScheduleArgs'] schedule: The [refresh schedule](https://docs.aws.amazon.com/quicksight/latest/APIReference/API_RefreshSchedule.html). See schedule
                
@@ -84,41 +85,42 @@ class RefreshScheduleArgs:
 
     @_builtins.property
     @pulumi.getter(name="awsAccountId")
-    def aws_account_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def aws_account_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         AWS account ID. Defaults to automatically determined account ID of the Terraform AWS provider.
         """
         return pulumi.get(self, "aws_account_id")
 
     @aws_account_id.setter
-    def aws_account_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def aws_account_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "aws_account_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _RefreshScheduleState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 aws_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 data_set_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 schedule: Optional[pulumi.Input['RefreshScheduleScheduleArgs']] = None,
-                 schedule_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 aws_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 data_set_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 schedule: pulumi.Input[Optional['RefreshScheduleScheduleArgs']] = None,
+                 schedule_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering RefreshSchedule resources.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name (ARN) of the refresh schedule.
+
+        :param pulumi.Input[_builtins.str] arn: ARN of the refresh schedule.
         :param pulumi.Input[_builtins.str] aws_account_id: AWS account ID. Defaults to automatically determined account ID of the Terraform AWS provider.
         :param pulumi.Input[_builtins.str] data_set_id: The ID of the dataset.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -142,55 +144,55 @@ class _RefreshScheduleState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Amazon Resource Name (ARN) of the refresh schedule.
+        ARN of the refresh schedule.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="awsAccountId")
-    def aws_account_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def aws_account_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         AWS account ID. Defaults to automatically determined account ID of the Terraform AWS provider.
         """
         return pulumi.get(self, "aws_account_id")
 
     @aws_account_id.setter
-    def aws_account_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def aws_account_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "aws_account_id", value)
 
     @_builtins.property
     @pulumi.getter(name="dataSetId")
-    def data_set_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def data_set_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the dataset.
         """
         return pulumi.get(self, "data_set_id")
 
     @data_set_id.setter
-    def data_set_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def data_set_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "data_set_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def schedule(self) -> Optional[pulumi.Input['RefreshScheduleScheduleArgs']]:
+    def schedule(self) -> pulumi.Input[Optional['RefreshScheduleScheduleArgs']]:
         """
         The [refresh schedule](https://docs.aws.amazon.com/quicksight/latest/APIReference/API_RefreshSchedule.html). See schedule
 
@@ -199,19 +201,19 @@ class _RefreshScheduleState:
         return pulumi.get(self, "schedule")
 
     @schedule.setter
-    def schedule(self, value: Optional[pulumi.Input['RefreshScheduleScheduleArgs']]):
+    def schedule(self, value: pulumi.Input[Optional['RefreshScheduleScheduleArgs']]):
         pulumi.set(self, "schedule", value)
 
     @_builtins.property
     @pulumi.getter(name="scheduleId")
-    def schedule_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def schedule_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the refresh schedule.
         """
         return pulumi.get(self, "schedule_id")
 
     @schedule_id.setter
-    def schedule_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def schedule_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "schedule_id", value)
 
 
@@ -221,11 +223,11 @@ class RefreshSchedule(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 aws_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 data_set_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 schedule: Optional[pulumi.Input[Union['RefreshScheduleScheduleArgs', 'RefreshScheduleScheduleArgsDict']]] = None,
-                 schedule_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 aws_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 data_set_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 schedule: pulumi.Input[Optional[Union['RefreshScheduleScheduleArgs', 'RefreshScheduleScheduleArgsDict']]] = None,
+                 schedule_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing a QuickSight Refresh Schedule.
@@ -239,14 +241,14 @@ class RefreshSchedule(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.quicksight.RefreshSchedule("example",
-            data_set_id="dataset-id",
-            schedule_id="schedule-id",
             schedule={
-                "refresh_type": "FULL_REFRESH",
                 "schedule_frequency": {
                     "interval": "HOURLY",
                 },
-            })
+                "refresh_type": "FULL_REFRESH",
+            },
+            data_set_id="dataset-id",
+            schedule_id="schedule-id")
         ```
 
         ### With Weekly Refresh
@@ -256,19 +258,19 @@ class RefreshSchedule(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.quicksight.RefreshSchedule("example",
-            data_set_id="dataset-id",
-            schedule_id="schedule-id",
             schedule={
-                "refresh_type": "INCREMENTAL_REFRESH",
                 "schedule_frequency": {
-                    "interval": "WEEKLY",
-                    "time_of_the_day": "01:00",
-                    "timezone": "Europe/London",
                     "refresh_on_day": {
                         "day_of_week": "MONDAY",
                     },
+                    "interval": "WEEKLY",
+                    "time_of_the_day": "01:00",
+                    "timezone": "Europe/London",
                 },
-            })
+                "refresh_type": "INCREMENTAL_REFRESH",
+            },
+            data_set_id="dataset-id",
+            schedule_id="schedule-id")
         ```
 
         ### With Monthly Refresh
@@ -278,19 +280,19 @@ class RefreshSchedule(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.quicksight.RefreshSchedule("example",
-            data_set_id="dataset-id",
-            schedule_id="schedule-id",
             schedule={
-                "refresh_type": "INCREMENTAL_REFRESH",
                 "schedule_frequency": {
-                    "interval": "MONTHLY",
-                    "time_of_the_day": "01:00",
-                    "timezone": "Europe/London",
                     "refresh_on_day": {
                         "day_of_month": "1",
                     },
+                    "interval": "MONTHLY",
+                    "time_of_the_day": "01:00",
+                    "timezone": "Europe/London",
                 },
-            })
+                "refresh_type": "INCREMENTAL_REFRESH",
+            },
+            data_set_id="dataset-id",
+            schedule_id="schedule-id")
         ```
 
         ## Import
@@ -300,6 +302,7 @@ class RefreshSchedule(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:quicksight/refreshSchedule:RefreshSchedule example 123456789012,dataset-id,schedule-id
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -329,14 +332,14 @@ class RefreshSchedule(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.quicksight.RefreshSchedule("example",
-            data_set_id="dataset-id",
-            schedule_id="schedule-id",
             schedule={
-                "refresh_type": "FULL_REFRESH",
                 "schedule_frequency": {
                     "interval": "HOURLY",
                 },
-            })
+                "refresh_type": "FULL_REFRESH",
+            },
+            data_set_id="dataset-id",
+            schedule_id="schedule-id")
         ```
 
         ### With Weekly Refresh
@@ -346,19 +349,19 @@ class RefreshSchedule(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.quicksight.RefreshSchedule("example",
-            data_set_id="dataset-id",
-            schedule_id="schedule-id",
             schedule={
-                "refresh_type": "INCREMENTAL_REFRESH",
                 "schedule_frequency": {
-                    "interval": "WEEKLY",
-                    "time_of_the_day": "01:00",
-                    "timezone": "Europe/London",
                     "refresh_on_day": {
                         "day_of_week": "MONDAY",
                     },
+                    "interval": "WEEKLY",
+                    "time_of_the_day": "01:00",
+                    "timezone": "Europe/London",
                 },
-            })
+                "refresh_type": "INCREMENTAL_REFRESH",
+            },
+            data_set_id="dataset-id",
+            schedule_id="schedule-id")
         ```
 
         ### With Monthly Refresh
@@ -368,19 +371,19 @@ class RefreshSchedule(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.quicksight.RefreshSchedule("example",
-            data_set_id="dataset-id",
-            schedule_id="schedule-id",
             schedule={
-                "refresh_type": "INCREMENTAL_REFRESH",
                 "schedule_frequency": {
-                    "interval": "MONTHLY",
-                    "time_of_the_day": "01:00",
-                    "timezone": "Europe/London",
                     "refresh_on_day": {
                         "day_of_month": "1",
                     },
+                    "interval": "MONTHLY",
+                    "time_of_the_day": "01:00",
+                    "timezone": "Europe/London",
                 },
-            })
+                "refresh_type": "INCREMENTAL_REFRESH",
+            },
+            data_set_id="dataset-id",
+            schedule_id="schedule-id")
         ```
 
         ## Import
@@ -390,6 +393,7 @@ class RefreshSchedule(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:quicksight/refreshSchedule:RefreshSchedule example 123456789012,dataset-id,schedule-id
         ```
+
 
         :param str resource_name: The name of the resource.
         :param RefreshScheduleArgs args: The arguments to use to populate this resource's properties.
@@ -406,11 +410,11 @@ class RefreshSchedule(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 aws_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 data_set_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 schedule: Optional[pulumi.Input[Union['RefreshScheduleScheduleArgs', 'RefreshScheduleScheduleArgsDict']]] = None,
-                 schedule_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 aws_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 data_set_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 schedule: pulumi.Input[Optional[Union['RefreshScheduleScheduleArgs', 'RefreshScheduleScheduleArgsDict']]] = None,
+                 schedule_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -442,12 +446,12 @@ class RefreshSchedule(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            aws_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-            data_set_id: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            schedule: Optional[pulumi.Input[Union['RefreshScheduleScheduleArgs', 'RefreshScheduleScheduleArgsDict']]] = None,
-            schedule_id: Optional[pulumi.Input[_builtins.str]] = None) -> 'RefreshSchedule':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            aws_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+            data_set_id: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            schedule: pulumi.Input[Optional[Union['RefreshScheduleScheduleArgs', 'RefreshScheduleScheduleArgsDict']]] = None,
+            schedule_id: pulumi.Input[Optional[_builtins.str]] = None) -> 'RefreshSchedule':
         """
         Get an existing RefreshSchedule resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -455,7 +459,7 @@ class RefreshSchedule(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name (ARN) of the refresh schedule.
+        :param pulumi.Input[_builtins.str] arn: ARN of the refresh schedule.
         :param pulumi.Input[_builtins.str] aws_account_id: AWS account ID. Defaults to automatically determined account ID of the Terraform AWS provider.
         :param pulumi.Input[_builtins.str] data_set_id: The ID of the dataset.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -480,7 +484,7 @@ class RefreshSchedule(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the refresh schedule.
+        ARN of the refresh schedule.
         """
         return pulumi.get(self, "arn")
 

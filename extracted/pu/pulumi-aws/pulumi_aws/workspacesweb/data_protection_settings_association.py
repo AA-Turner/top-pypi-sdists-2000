@@ -21,9 +21,10 @@ class DataProtectionSettingsAssociationArgs:
     def __init__(__self__, *,
                  data_protection_settings_arn: pulumi.Input[_builtins.str],
                  portal_arn: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a DataProtectionSettingsAssociation resource.
+
         :param pulumi.Input[_builtins.str] data_protection_settings_arn: ARN of the data protection settings to associate with the portal. Forces replacement if changed.
         :param pulumi.Input[_builtins.str] portal_arn: ARN of the portal to associate with the data protection settings. Forces replacement if changed.
                
@@ -63,25 +64,26 @@ class DataProtectionSettingsAssociationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _DataProtectionSettingsAssociationState:
     def __init__(__self__, *,
-                 data_protection_settings_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 portal_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 data_protection_settings_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 portal_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering DataProtectionSettingsAssociation resources.
+
         :param pulumi.Input[_builtins.str] data_protection_settings_arn: ARN of the data protection settings to associate with the portal. Forces replacement if changed.
         :param pulumi.Input[_builtins.str] portal_arn: ARN of the portal to associate with the data protection settings. Forces replacement if changed.
                
@@ -97,19 +99,19 @@ class _DataProtectionSettingsAssociationState:
 
     @_builtins.property
     @pulumi.getter(name="dataProtectionSettingsArn")
-    def data_protection_settings_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def data_protection_settings_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the data protection settings to associate with the portal. Forces replacement if changed.
         """
         return pulumi.get(self, "data_protection_settings_arn")
 
     @data_protection_settings_arn.setter
-    def data_protection_settings_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def data_protection_settings_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "data_protection_settings_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="portalArn")
-    def portal_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def portal_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the portal to associate with the data protection settings. Forces replacement if changed.
 
@@ -118,19 +120,19 @@ class _DataProtectionSettingsAssociationState:
         return pulumi.get(self, "portal_arn")
 
     @portal_arn.setter
-    def portal_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def portal_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "portal_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -140,9 +142,9 @@ class DataProtectionSettingsAssociation(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 data_protection_settings_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 portal_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 data_protection_settings_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 portal_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing an AWS WorkSpaces Web Data Protection Settings Association.
@@ -161,6 +163,7 @@ class DataProtectionSettingsAssociation(pulumi.CustomResource):
             data_protection_settings_arn=example_data_protection_settings.data_protection_settings_arn,
             portal_arn=example.portal_arn)
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -194,6 +197,7 @@ class DataProtectionSettingsAssociation(pulumi.CustomResource):
             portal_arn=example.portal_arn)
         ```
 
+
         :param str resource_name: The name of the resource.
         :param DataProtectionSettingsAssociationArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -209,9 +213,9 @@ class DataProtectionSettingsAssociation(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 data_protection_settings_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 portal_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 data_protection_settings_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 portal_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -238,9 +242,9 @@ class DataProtectionSettingsAssociation(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            data_protection_settings_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            portal_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'DataProtectionSettingsAssociation':
+            data_protection_settings_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            portal_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'DataProtectionSettingsAssociation':
         """
         Get an existing DataProtectionSettingsAssociation resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

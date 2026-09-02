@@ -21,24 +21,25 @@ __all__ = ['ResourceConfigurationArgs', 'ResourceConfiguration']
 @pulumi.input_type
 class ResourceConfigurationArgs:
     def __init__(__self__, *,
-                 allow_association_to_shareable_service_network: Optional[pulumi.Input[_builtins.bool]] = None,
-                 custom_domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_verification_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 port_ranges: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 protocol: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_configuration_definition: Optional[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionArgs']] = None,
-                 resource_configuration_group_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_gateway_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['ResourceConfigurationTimeoutsArgs']] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None):
+                 allow_association_to_shareable_service_network: pulumi.Input[Optional[_builtins.bool]] = None,
+                 custom_domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_verification_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 port_ranges: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 protocol: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_configuration_definition: pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionArgs']] = None,
+                 resource_configuration_group_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_gateway_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['ResourceConfigurationTimeoutsArgs']] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a ResourceConfiguration resource.
+
         :param pulumi.Input[_builtins.bool] allow_association_to_shareable_service_network: Allow or Deny the association of this resource to a shareable service network.
         :param pulumi.Input[_builtins.str] custom_domain_name: Custom domain name for your resource configuration. Additionally, provide a `domain_verification_id` to prove your ownership of a domain.
-        :param pulumi.Input[_builtins.str] domain_verification_id: The domain verification ID of your verified custom domain name. If you don't provide an ID, you must configure the DNS settings yourself.
+        :param pulumi.Input[_builtins.str] domain_verification_id: Domain verification ID of your verified custom domain name. If you don't provide an ID, you must configure the DNS settings yourself.
         :param pulumi.Input[_builtins.str] name: Name for the Resource Configuration.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] port_ranges: Port ranges to access the Resource either single port `80` or range `80-81` range.
         :param pulumi.Input[_builtins.str] protocol: Protocol for the Resource `TCP` is currently the only supported value.  MUST be specified if `resource_configuration_group_id` is not.
@@ -80,91 +81,91 @@ class ResourceConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="allowAssociationToShareableServiceNetwork")
-    def allow_association_to_shareable_service_network(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def allow_association_to_shareable_service_network(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Allow or Deny the association of this resource to a shareable service network.
         """
         return pulumi.get(self, "allow_association_to_shareable_service_network")
 
     @allow_association_to_shareable_service_network.setter
-    def allow_association_to_shareable_service_network(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def allow_association_to_shareable_service_network(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "allow_association_to_shareable_service_network", value)
 
     @_builtins.property
     @pulumi.getter(name="customDomainName")
-    def custom_domain_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def custom_domain_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Custom domain name for your resource configuration. Additionally, provide a `domain_verification_id` to prove your ownership of a domain.
         """
         return pulumi.get(self, "custom_domain_name")
 
     @custom_domain_name.setter
-    def custom_domain_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def custom_domain_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "custom_domain_name", value)
 
     @_builtins.property
     @pulumi.getter(name="domainVerificationId")
-    def domain_verification_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def domain_verification_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The domain verification ID of your verified custom domain name. If you don't provide an ID, you must configure the DNS settings yourself.
+        Domain verification ID of your verified custom domain name. If you don't provide an ID, you must configure the DNS settings yourself.
         """
         return pulumi.get(self, "domain_verification_id")
 
     @domain_verification_id.setter
-    def domain_verification_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def domain_verification_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "domain_verification_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name for the Resource Configuration.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="portRanges")
-    def port_ranges(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def port_ranges(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         Port ranges to access the Resource either single port `80` or range `80-81` range.
         """
         return pulumi.get(self, "port_ranges")
 
     @port_ranges.setter
-    def port_ranges(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def port_ranges(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "port_ranges", value)
 
     @_builtins.property
     @pulumi.getter
-    def protocol(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def protocol(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Protocol for the Resource `TCP` is currently the only supported value.  MUST be specified if `resource_configuration_group_id` is not.
         """
         return pulumi.get(self, "protocol")
 
     @protocol.setter
-    def protocol(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def protocol(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "protocol", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceConfigurationDefinition")
-    def resource_configuration_definition(self) -> Optional[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionArgs']]:
+    def resource_configuration_definition(self) -> pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionArgs']]:
         """
         Details of the Resource Configuration. See `resource_configuration_definition` Block for details.
 
@@ -173,94 +174,95 @@ class ResourceConfigurationArgs:
         return pulumi.get(self, "resource_configuration_definition")
 
     @resource_configuration_definition.setter
-    def resource_configuration_definition(self, value: Optional[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionArgs']]):
+    def resource_configuration_definition(self, value: pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionArgs']]):
         pulumi.set(self, "resource_configuration_definition", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceConfigurationGroupId")
-    def resource_configuration_group_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def resource_configuration_group_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ID of Resource Configuration where `type` is `CHILD`.
         """
         return pulumi.get(self, "resource_configuration_group_id")
 
     @resource_configuration_group_id.setter
-    def resource_configuration_group_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def resource_configuration_group_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "resource_configuration_group_id", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceGatewayIdentifier")
-    def resource_gateway_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def resource_gateway_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ID of the Resource Gateway used to access the resource. MUST be specified if `resource_configuration_group_id` is not.
         """
         return pulumi.get(self, "resource_gateway_identifier")
 
     @resource_gateway_identifier.setter
-    def resource_gateway_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def resource_gateway_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "resource_gateway_identifier", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value mapping of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['ResourceConfigurationTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['ResourceConfigurationTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['ResourceConfigurationTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['ResourceConfigurationTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Type of Resource Configuration. Must be one of `GROUP`, `CHILD`, `SINGLE`, `ARN`.
         """
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
 
 @pulumi.input_type
 class _ResourceConfigurationState:
     def __init__(__self__, *,
-                 allow_association_to_shareable_service_network: Optional[pulumi.Input[_builtins.bool]] = None,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 custom_domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_verification_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_verification_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_verification_status: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 port_ranges: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 protocol: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_configuration_definition: Optional[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionArgs']] = None,
-                 resource_configuration_group_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_gateway_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['ResourceConfigurationTimeoutsArgs']] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None):
+                 allow_association_to_shareable_service_network: pulumi.Input[Optional[_builtins.bool]] = None,
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 custom_domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_verification_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_verification_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_verification_status: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 port_ranges: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 protocol: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_configuration_definition: pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionArgs']] = None,
+                 resource_configuration_group_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_gateway_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['ResourceConfigurationTimeoutsArgs']] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering ResourceConfiguration resources.
+
         :param pulumi.Input[_builtins.bool] allow_association_to_shareable_service_network: Allow or Deny the association of this resource to a shareable service network.
         :param pulumi.Input[_builtins.str] arn: ARN of the resource gateway.
         :param pulumi.Input[_builtins.str] custom_domain_name: Custom domain name for your resource configuration. Additionally, provide a `domain_verification_id` to prove your ownership of a domain.
         :param pulumi.Input[_builtins.str] domain_verification_arn: ARN of the domain verification.
-        :param pulumi.Input[_builtins.str] domain_verification_id: The domain verification ID of your verified custom domain name. If you don't provide an ID, you must configure the DNS settings yourself.
+        :param pulumi.Input[_builtins.str] domain_verification_id: Domain verification ID of your verified custom domain name. If you don't provide an ID, you must configure the DNS settings yourself.
         :param pulumi.Input[_builtins.str] domain_verification_status: Domain verification status.
         :param pulumi.Input[_builtins.str] name: Name for the Resource Configuration.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] port_ranges: Port ranges to access the Resource either single port `80` or range `80-81` range.
@@ -312,127 +314,127 @@ class _ResourceConfigurationState:
 
     @_builtins.property
     @pulumi.getter(name="allowAssociationToShareableServiceNetwork")
-    def allow_association_to_shareable_service_network(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def allow_association_to_shareable_service_network(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Allow or Deny the association of this resource to a shareable service network.
         """
         return pulumi.get(self, "allow_association_to_shareable_service_network")
 
     @allow_association_to_shareable_service_network.setter
-    def allow_association_to_shareable_service_network(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def allow_association_to_shareable_service_network(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "allow_association_to_shareable_service_network", value)
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the resource gateway.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="customDomainName")
-    def custom_domain_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def custom_domain_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Custom domain name for your resource configuration. Additionally, provide a `domain_verification_id` to prove your ownership of a domain.
         """
         return pulumi.get(self, "custom_domain_name")
 
     @custom_domain_name.setter
-    def custom_domain_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def custom_domain_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "custom_domain_name", value)
 
     @_builtins.property
     @pulumi.getter(name="domainVerificationArn")
-    def domain_verification_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def domain_verification_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the domain verification.
         """
         return pulumi.get(self, "domain_verification_arn")
 
     @domain_verification_arn.setter
-    def domain_verification_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def domain_verification_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "domain_verification_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="domainVerificationId")
-    def domain_verification_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def domain_verification_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The domain verification ID of your verified custom domain name. If you don't provide an ID, you must configure the DNS settings yourself.
+        Domain verification ID of your verified custom domain name. If you don't provide an ID, you must configure the DNS settings yourself.
         """
         return pulumi.get(self, "domain_verification_id")
 
     @domain_verification_id.setter
-    def domain_verification_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def domain_verification_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "domain_verification_id", value)
 
     @_builtins.property
     @pulumi.getter(name="domainVerificationStatus")
-    def domain_verification_status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def domain_verification_status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Domain verification status.
         """
         return pulumi.get(self, "domain_verification_status")
 
     @domain_verification_status.setter
-    def domain_verification_status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def domain_verification_status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "domain_verification_status", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name for the Resource Configuration.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="portRanges")
-    def port_ranges(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def port_ranges(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         Port ranges to access the Resource either single port `80` or range `80-81` range.
         """
         return pulumi.get(self, "port_ranges")
 
     @port_ranges.setter
-    def port_ranges(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def port_ranges(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "port_ranges", value)
 
     @_builtins.property
     @pulumi.getter
-    def protocol(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def protocol(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Protocol for the Resource `TCP` is currently the only supported value.  MUST be specified if `resource_configuration_group_id` is not.
         """
         return pulumi.get(self, "protocol")
 
     @protocol.setter
-    def protocol(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def protocol(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "protocol", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceConfigurationDefinition")
-    def resource_configuration_definition(self) -> Optional[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionArgs']]:
+    def resource_configuration_definition(self) -> pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionArgs']]:
         """
         Details of the Resource Configuration. See `resource_configuration_definition` Block for details.
 
@@ -441,76 +443,76 @@ class _ResourceConfigurationState:
         return pulumi.get(self, "resource_configuration_definition")
 
     @resource_configuration_definition.setter
-    def resource_configuration_definition(self, value: Optional[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionArgs']]):
+    def resource_configuration_definition(self, value: pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionArgs']]):
         pulumi.set(self, "resource_configuration_definition", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceConfigurationGroupId")
-    def resource_configuration_group_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def resource_configuration_group_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ID of Resource Configuration where `type` is `CHILD`.
         """
         return pulumi.get(self, "resource_configuration_group_id")
 
     @resource_configuration_group_id.setter
-    def resource_configuration_group_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def resource_configuration_group_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "resource_configuration_group_id", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceGatewayIdentifier")
-    def resource_gateway_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def resource_gateway_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ID of the Resource Gateway used to access the resource. MUST be specified if `resource_configuration_group_id` is not.
         """
         return pulumi.get(self, "resource_gateway_identifier")
 
     @resource_gateway_identifier.setter
-    def resource_gateway_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def resource_gateway_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "resource_gateway_identifier", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value mapping of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['ResourceConfigurationTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['ResourceConfigurationTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['ResourceConfigurationTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['ResourceConfigurationTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Type of Resource Configuration. Must be one of `GROUP`, `CHILD`, `SINGLE`, `ARN`.
         """
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
 
@@ -520,19 +522,19 @@ class ResourceConfiguration(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 allow_association_to_shareable_service_network: Optional[pulumi.Input[_builtins.bool]] = None,
-                 custom_domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_verification_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 port_ranges: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 protocol: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_configuration_definition: Optional[pulumi.Input[Union['ResourceConfigurationResourceConfigurationDefinitionArgs', 'ResourceConfigurationResourceConfigurationDefinitionArgsDict']]] = None,
-                 resource_configuration_group_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_gateway_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['ResourceConfigurationTimeoutsArgs', 'ResourceConfigurationTimeoutsArgsDict']]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None,
+                 allow_association_to_shareable_service_network: pulumi.Input[Optional[_builtins.bool]] = None,
+                 custom_domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_verification_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 port_ranges: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 protocol: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_configuration_definition: pulumi.Input[Optional[Union['ResourceConfigurationResourceConfigurationDefinitionArgs', 'ResourceConfigurationResourceConfigurationDefinitionArgsDict']]] = None,
+                 resource_configuration_group_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_gateway_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['ResourceConfigurationTimeoutsArgs', 'ResourceConfigurationTimeoutsArgsDict']]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing an AWS VPC Lattice Resource Configuration.
@@ -546,16 +548,16 @@ class ResourceConfiguration(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.vpclattice.ResourceConfiguration("example",
-            name="Example",
-            resource_gateway_identifier=example_aws_vpclattice_resource_gateway["id"],
-            port_ranges=["80"],
-            protocol="TCP",
             resource_configuration_definition={
                 "dns_resource": {
                     "domain_name": "example.com",
                     "ip_address_type": "IPV4",
                 },
             },
+            name="Example",
+            resource_gateway_identifier=example_aws_vpclattice_resource_gateway["id"],
+            port_ranges=["80"],
+            protocol="TCP",
             tags={
                 "Environment": "Example",
             })
@@ -568,15 +570,15 @@ class ResourceConfiguration(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.vpclattice.ResourceConfiguration("example",
-            name="Example",
-            resource_gateway_identifier=example_aws_vpclattice_resource_gateway["id"],
-            port_ranges=["80"],
-            protocol="TCP",
             resource_configuration_definition={
                 "ip_resource": {
                     "ip_address": "10.0.0.1",
                 },
             },
+            name="Example",
+            resource_gateway_identifier=example_aws_vpclattice_resource_gateway["id"],
+            port_ranges=["80"],
+            protocol="TCP",
             tags={
                 "Environment": "Example",
             })
@@ -590,18 +592,18 @@ class ResourceConfiguration(pulumi.CustomResource):
 
         example = aws.vpclattice.DomainVerification("example", domain_name="example.com")
         example_resource_configuration = aws.vpclattice.ResourceConfiguration("example",
-            name="Example",
-            resource_gateway_identifier=example_aws_vpclattice_resource_gateway["id"],
-            custom_domain_name="custom.example.com",
-            domain_verification_id=example.id,
-            port_ranges=["443"],
-            protocol="TCP",
             resource_configuration_definition={
                 "dns_resource": {
                     "domain_name": "test.example.com",
                     "ip_address_type": "IPV4",
                 },
             },
+            name="Example",
+            resource_gateway_identifier=example_aws_vpclattice_resource_gateway["id"],
+            custom_domain_name="custom.example.com",
+            domain_verification_id=example.id,
+            port_ranges=["443"],
+            protocol="TCP",
             tags={
                 "Environment": "Example",
             })
@@ -614,14 +616,14 @@ class ResourceConfiguration(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.vpclattice.ResourceConfiguration("test",
-            name="Example",
-            resource_gateway_identifier=test_aws_vpclattice_resource_gateway["id"],
-            type="ARN",
             resource_configuration_definition={
                 "arn_resource": {
                     "arn": example["arn"],
                 },
-            })
+            },
+            name="Example",
+            resource_gateway_identifier=test_aws_vpclattice_resource_gateway["id"],
+            type="ARN")
         ```
 
         ## Import
@@ -632,11 +634,12 @@ class ResourceConfiguration(pulumi.CustomResource):
         $ pulumi import aws:vpclattice/resourceConfiguration:ResourceConfiguration example rcfg-1234567890abcdef1
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.bool] allow_association_to_shareable_service_network: Allow or Deny the association of this resource to a shareable service network.
         :param pulumi.Input[_builtins.str] custom_domain_name: Custom domain name for your resource configuration. Additionally, provide a `domain_verification_id` to prove your ownership of a domain.
-        :param pulumi.Input[_builtins.str] domain_verification_id: The domain verification ID of your verified custom domain name. If you don't provide an ID, you must configure the DNS settings yourself.
+        :param pulumi.Input[_builtins.str] domain_verification_id: Domain verification ID of your verified custom domain name. If you don't provide an ID, you must configure the DNS settings yourself.
         :param pulumi.Input[_builtins.str] name: Name for the Resource Configuration.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] port_ranges: Port ranges to access the Resource either single port `80` or range `80-81` range.
         :param pulumi.Input[_builtins.str] protocol: Protocol for the Resource `TCP` is currently the only supported value.  MUST be specified if `resource_configuration_group_id` is not.
@@ -667,16 +670,16 @@ class ResourceConfiguration(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.vpclattice.ResourceConfiguration("example",
-            name="Example",
-            resource_gateway_identifier=example_aws_vpclattice_resource_gateway["id"],
-            port_ranges=["80"],
-            protocol="TCP",
             resource_configuration_definition={
                 "dns_resource": {
                     "domain_name": "example.com",
                     "ip_address_type": "IPV4",
                 },
             },
+            name="Example",
+            resource_gateway_identifier=example_aws_vpclattice_resource_gateway["id"],
+            port_ranges=["80"],
+            protocol="TCP",
             tags={
                 "Environment": "Example",
             })
@@ -689,15 +692,15 @@ class ResourceConfiguration(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.vpclattice.ResourceConfiguration("example",
-            name="Example",
-            resource_gateway_identifier=example_aws_vpclattice_resource_gateway["id"],
-            port_ranges=["80"],
-            protocol="TCP",
             resource_configuration_definition={
                 "ip_resource": {
                     "ip_address": "10.0.0.1",
                 },
             },
+            name="Example",
+            resource_gateway_identifier=example_aws_vpclattice_resource_gateway["id"],
+            port_ranges=["80"],
+            protocol="TCP",
             tags={
                 "Environment": "Example",
             })
@@ -711,18 +714,18 @@ class ResourceConfiguration(pulumi.CustomResource):
 
         example = aws.vpclattice.DomainVerification("example", domain_name="example.com")
         example_resource_configuration = aws.vpclattice.ResourceConfiguration("example",
-            name="Example",
-            resource_gateway_identifier=example_aws_vpclattice_resource_gateway["id"],
-            custom_domain_name="custom.example.com",
-            domain_verification_id=example.id,
-            port_ranges=["443"],
-            protocol="TCP",
             resource_configuration_definition={
                 "dns_resource": {
                     "domain_name": "test.example.com",
                     "ip_address_type": "IPV4",
                 },
             },
+            name="Example",
+            resource_gateway_identifier=example_aws_vpclattice_resource_gateway["id"],
+            custom_domain_name="custom.example.com",
+            domain_verification_id=example.id,
+            port_ranges=["443"],
+            protocol="TCP",
             tags={
                 "Environment": "Example",
             })
@@ -735,14 +738,14 @@ class ResourceConfiguration(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.vpclattice.ResourceConfiguration("test",
-            name="Example",
-            resource_gateway_identifier=test_aws_vpclattice_resource_gateway["id"],
-            type="ARN",
             resource_configuration_definition={
                 "arn_resource": {
                     "arn": example["arn"],
                 },
-            })
+            },
+            name="Example",
+            resource_gateway_identifier=test_aws_vpclattice_resource_gateway["id"],
+            type="ARN")
         ```
 
         ## Import
@@ -752,6 +755,7 @@ class ResourceConfiguration(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:vpclattice/resourceConfiguration:ResourceConfiguration example rcfg-1234567890abcdef1
         ```
+
 
         :param str resource_name: The name of the resource.
         :param ResourceConfigurationArgs args: The arguments to use to populate this resource's properties.
@@ -768,19 +772,19 @@ class ResourceConfiguration(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 allow_association_to_shareable_service_network: Optional[pulumi.Input[_builtins.bool]] = None,
-                 custom_domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_verification_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 port_ranges: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 protocol: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_configuration_definition: Optional[pulumi.Input[Union['ResourceConfigurationResourceConfigurationDefinitionArgs', 'ResourceConfigurationResourceConfigurationDefinitionArgsDict']]] = None,
-                 resource_configuration_group_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_gateway_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['ResourceConfigurationTimeoutsArgs', 'ResourceConfigurationTimeoutsArgsDict']]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None,
+                 allow_association_to_shareable_service_network: pulumi.Input[Optional[_builtins.bool]] = None,
+                 custom_domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_verification_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 port_ranges: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 protocol: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_configuration_definition: pulumi.Input[Optional[Union['ResourceConfigurationResourceConfigurationDefinitionArgs', 'ResourceConfigurationResourceConfigurationDefinitionArgsDict']]] = None,
+                 resource_configuration_group_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_gateway_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['ResourceConfigurationTimeoutsArgs', 'ResourceConfigurationTimeoutsArgsDict']]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -817,23 +821,23 @@ class ResourceConfiguration(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            allow_association_to_shareable_service_network: Optional[pulumi.Input[_builtins.bool]] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            custom_domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-            domain_verification_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            domain_verification_id: Optional[pulumi.Input[_builtins.str]] = None,
-            domain_verification_status: Optional[pulumi.Input[_builtins.str]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            port_ranges: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            protocol: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            resource_configuration_definition: Optional[pulumi.Input[Union['ResourceConfigurationResourceConfigurationDefinitionArgs', 'ResourceConfigurationResourceConfigurationDefinitionArgsDict']]] = None,
-            resource_configuration_group_id: Optional[pulumi.Input[_builtins.str]] = None,
-            resource_gateway_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            timeouts: Optional[pulumi.Input[Union['ResourceConfigurationTimeoutsArgs', 'ResourceConfigurationTimeoutsArgsDict']]] = None,
-            type: Optional[pulumi.Input[_builtins.str]] = None) -> 'ResourceConfiguration':
+            allow_association_to_shareable_service_network: pulumi.Input[Optional[_builtins.bool]] = None,
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            custom_domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+            domain_verification_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            domain_verification_id: pulumi.Input[Optional[_builtins.str]] = None,
+            domain_verification_status: pulumi.Input[Optional[_builtins.str]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            port_ranges: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            protocol: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            resource_configuration_definition: pulumi.Input[Optional[Union['ResourceConfigurationResourceConfigurationDefinitionArgs', 'ResourceConfigurationResourceConfigurationDefinitionArgsDict']]] = None,
+            resource_configuration_group_id: pulumi.Input[Optional[_builtins.str]] = None,
+            resource_gateway_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            timeouts: pulumi.Input[Optional[Union['ResourceConfigurationTimeoutsArgs', 'ResourceConfigurationTimeoutsArgsDict']]] = None,
+            type: pulumi.Input[Optional[_builtins.str]] = None) -> 'ResourceConfiguration':
         """
         Get an existing ResourceConfiguration resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -845,7 +849,7 @@ class ResourceConfiguration(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] arn: ARN of the resource gateway.
         :param pulumi.Input[_builtins.str] custom_domain_name: Custom domain name for your resource configuration. Additionally, provide a `domain_verification_id` to prove your ownership of a domain.
         :param pulumi.Input[_builtins.str] domain_verification_arn: ARN of the domain verification.
-        :param pulumi.Input[_builtins.str] domain_verification_id: The domain verification ID of your verified custom domain name. If you don't provide an ID, you must configure the DNS settings yourself.
+        :param pulumi.Input[_builtins.str] domain_verification_id: Domain verification ID of your verified custom domain name. If you don't provide an ID, you must configure the DNS settings yourself.
         :param pulumi.Input[_builtins.str] domain_verification_status: Domain verification status.
         :param pulumi.Input[_builtins.str] name: Name for the Resource Configuration.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] port_ranges: Port ranges to access the Resource either single port `80` or range `80-81` range.
@@ -919,7 +923,7 @@ class ResourceConfiguration(pulumi.CustomResource):
     @pulumi.getter(name="domainVerificationId")
     def domain_verification_id(self) -> pulumi.Output[_builtins.str]:
         """
-        The domain verification ID of your verified custom domain name. If you don't provide an ID, you must configure the DNS settings yourself.
+        Domain verification ID of your verified custom domain name. If you don't provide an ID, you must configure the DNS settings yourself.
         """
         return pulumi.get(self, "domain_verification_id")
 

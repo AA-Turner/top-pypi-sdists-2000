@@ -22,17 +22,20 @@ class EnvironmentBlueprintConfigurationArgs:
                  domain_id: pulumi.Input[_builtins.str],
                  enabled_regions: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
                  environment_blueprint_id: pulumi.Input[_builtins.str],
-                 manage_access_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 provisioning_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 regional_parameters: Optional[pulumi.Input[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]] = None):
+                 global_parameters: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 manage_access_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 provisioning_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 regional_parameters: pulumi.Input[Optional[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]] = None):
         """
         The set of arguments for constructing a EnvironmentBlueprintConfiguration resource.
+
         :param pulumi.Input[_builtins.str] domain_id: ID of the Domain.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] enabled_regions: Regions in which the blueprint is enabled
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] environment_blueprint_id: ID of the Environment Blueprint
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] global_parameters: A map of global parameters to configure for the blueprint across all regions.
         :param pulumi.Input[_builtins.str] manage_access_role_arn: ARN of the manage access role with which this blueprint is created.
         :param pulumi.Input[_builtins.str] provisioning_role_arn: ARN of the provisioning role with which this blueprint is created.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -41,6 +44,8 @@ class EnvironmentBlueprintConfigurationArgs:
         pulumi.set(__self__, "domain_id", domain_id)
         pulumi.set(__self__, "enabled_regions", enabled_regions)
         pulumi.set(__self__, "environment_blueprint_id", environment_blueprint_id)
+        if global_parameters is not None:
+            pulumi.set(__self__, "global_parameters", global_parameters)
         if manage_access_role_arn is not None:
             pulumi.set(__self__, "manage_access_role_arn", manage_access_role_arn)
         if provisioning_role_arn is not None:
@@ -89,71 +94,86 @@ class EnvironmentBlueprintConfigurationArgs:
         pulumi.set(self, "environment_blueprint_id", value)
 
     @_builtins.property
+    @pulumi.getter(name="globalParameters")
+    def global_parameters(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
+        """
+        A map of global parameters to configure for the blueprint across all regions.
+        """
+        return pulumi.get(self, "global_parameters")
+
+    @global_parameters.setter
+    def global_parameters(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "global_parameters", value)
+
+    @_builtins.property
     @pulumi.getter(name="manageAccessRoleArn")
-    def manage_access_role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def manage_access_role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the manage access role with which this blueprint is created.
         """
         return pulumi.get(self, "manage_access_role_arn")
 
     @manage_access_role_arn.setter
-    def manage_access_role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def manage_access_role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "manage_access_role_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="provisioningRoleArn")
-    def provisioning_role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def provisioning_role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the provisioning role with which this blueprint is created.
         """
         return pulumi.get(self, "provisioning_role_arn")
 
     @provisioning_role_arn.setter
-    def provisioning_role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def provisioning_role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "provisioning_role_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="regionalParameters")
-    def regional_parameters(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]]:
+    def regional_parameters(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]]:
         """
         Parameters for each region in which the blueprint is enabled
         """
         return pulumi.get(self, "regional_parameters")
 
     @regional_parameters.setter
-    def regional_parameters(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]]):
+    def regional_parameters(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]]):
         pulumi.set(self, "regional_parameters", value)
 
 
 @pulumi.input_type
 class _EnvironmentBlueprintConfigurationState:
     def __init__(__self__, *,
-                 domain_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 enabled_regions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 environment_blueprint_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 manage_access_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 provisioning_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 regional_parameters: Optional[pulumi.Input[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]] = None):
+                 domain_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 enabled_regions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 environment_blueprint_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 global_parameters: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 manage_access_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 provisioning_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 regional_parameters: pulumi.Input[Optional[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]] = None):
         """
         Input properties used for looking up and filtering EnvironmentBlueprintConfiguration resources.
+
         :param pulumi.Input[_builtins.str] domain_id: ID of the Domain.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] enabled_regions: Regions in which the blueprint is enabled
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] environment_blueprint_id: ID of the Environment Blueprint
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] global_parameters: A map of global parameters to configure for the blueprint across all regions.
         :param pulumi.Input[_builtins.str] manage_access_role_arn: ARN of the manage access role with which this blueprint is created.
         :param pulumi.Input[_builtins.str] provisioning_role_arn: ARN of the provisioning role with which this blueprint is created.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -165,6 +185,8 @@ class _EnvironmentBlueprintConfigurationState:
             pulumi.set(__self__, "enabled_regions", enabled_regions)
         if environment_blueprint_id is not None:
             pulumi.set(__self__, "environment_blueprint_id", environment_blueprint_id)
+        if global_parameters is not None:
+            pulumi.set(__self__, "global_parameters", global_parameters)
         if manage_access_role_arn is not None:
             pulumi.set(__self__, "manage_access_role_arn", manage_access_role_arn)
         if provisioning_role_arn is not None:
@@ -176,19 +198,19 @@ class _EnvironmentBlueprintConfigurationState:
 
     @_builtins.property
     @pulumi.getter(name="domainId")
-    def domain_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def domain_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ID of the Domain.
         """
         return pulumi.get(self, "domain_id")
 
     @domain_id.setter
-    def domain_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def domain_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "domain_id", value)
 
     @_builtins.property
     @pulumi.getter(name="enabledRegions")
-    def enabled_regions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def enabled_regions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         Regions in which the blueprint is enabled
 
@@ -197,67 +219,79 @@ class _EnvironmentBlueprintConfigurationState:
         return pulumi.get(self, "enabled_regions")
 
     @enabled_regions.setter
-    def enabled_regions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def enabled_regions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "enabled_regions", value)
 
     @_builtins.property
     @pulumi.getter(name="environmentBlueprintId")
-    def environment_blueprint_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def environment_blueprint_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ID of the Environment Blueprint
         """
         return pulumi.get(self, "environment_blueprint_id")
 
     @environment_blueprint_id.setter
-    def environment_blueprint_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def environment_blueprint_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "environment_blueprint_id", value)
 
     @_builtins.property
+    @pulumi.getter(name="globalParameters")
+    def global_parameters(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
+        """
+        A map of global parameters to configure for the blueprint across all regions.
+        """
+        return pulumi.get(self, "global_parameters")
+
+    @global_parameters.setter
+    def global_parameters(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "global_parameters", value)
+
+    @_builtins.property
     @pulumi.getter(name="manageAccessRoleArn")
-    def manage_access_role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def manage_access_role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the manage access role with which this blueprint is created.
         """
         return pulumi.get(self, "manage_access_role_arn")
 
     @manage_access_role_arn.setter
-    def manage_access_role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def manage_access_role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "manage_access_role_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="provisioningRoleArn")
-    def provisioning_role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def provisioning_role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the provisioning role with which this blueprint is created.
         """
         return pulumi.get(self, "provisioning_role_arn")
 
     @provisioning_role_arn.setter
-    def provisioning_role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def provisioning_role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "provisioning_role_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="regionalParameters")
-    def regional_parameters(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]]:
+    def regional_parameters(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]]:
         """
         Parameters for each region in which the blueprint is enabled
         """
         return pulumi.get(self, "regional_parameters")
 
     @regional_parameters.setter
-    def regional_parameters(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]]):
+    def regional_parameters(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]]):
         pulumi.set(self, "regional_parameters", value)
 
 
@@ -267,13 +301,14 @@ class EnvironmentBlueprintConfiguration(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 domain_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 enabled_regions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 environment_blueprint_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 manage_access_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 provisioning_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 regional_parameters: Optional[pulumi.Input[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]] = None,
+                 domain_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 enabled_regions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 environment_blueprint_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 global_parameters: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 manage_access_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 provisioning_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 regional_parameters: pulumi.Input[Optional[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]] = None,
                  __props__=None):
         """
         Resource for managing an AWS DataZone Environment Blueprint Configuration.
@@ -305,11 +340,24 @@ class EnvironmentBlueprintConfiguration(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `domain_id` - (String) ID of the DataZone domain.
+        * `environment_blueprint_id` - (String) ID of the environment blueprint.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
         Using `pulumi import`, import DataZone Environment Blueprint Configuration using the `domain_id` and `environment_blueprint_id`, separated by a `/`. For example:
 
         ```sh
         $ pulumi import aws:datazone/environmentBlueprintConfiguration:EnvironmentBlueprintConfiguration example domain-id-12345/environment-blueprint-id-54321
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -318,6 +366,7 @@ class EnvironmentBlueprintConfiguration(pulumi.CustomResource):
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] environment_blueprint_id: ID of the Environment Blueprint
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] global_parameters: A map of global parameters to configure for the blueprint across all regions.
         :param pulumi.Input[_builtins.str] manage_access_role_arn: ARN of the manage access role with which this blueprint is created.
         :param pulumi.Input[_builtins.str] provisioning_role_arn: ARN of the provisioning role with which this blueprint is created.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -359,11 +408,24 @@ class EnvironmentBlueprintConfiguration(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `domain_id` - (String) ID of the DataZone domain.
+        * `environment_blueprint_id` - (String) ID of the environment blueprint.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
         Using `pulumi import`, import DataZone Environment Blueprint Configuration using the `domain_id` and `environment_blueprint_id`, separated by a `/`. For example:
 
         ```sh
         $ pulumi import aws:datazone/environmentBlueprintConfiguration:EnvironmentBlueprintConfiguration example domain-id-12345/environment-blueprint-id-54321
         ```
+
 
         :param str resource_name: The name of the resource.
         :param EnvironmentBlueprintConfigurationArgs args: The arguments to use to populate this resource's properties.
@@ -380,13 +442,14 @@ class EnvironmentBlueprintConfiguration(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 domain_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 enabled_regions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 environment_blueprint_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 manage_access_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 provisioning_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 regional_parameters: Optional[pulumi.Input[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]] = None,
+                 domain_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 enabled_regions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 environment_blueprint_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 global_parameters: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 manage_access_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 provisioning_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 regional_parameters: pulumi.Input[Optional[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -405,6 +468,7 @@ class EnvironmentBlueprintConfiguration(pulumi.CustomResource):
             if environment_blueprint_id is None and not opts.urn:
                 raise TypeError("Missing required property 'environment_blueprint_id'")
             __props__.__dict__["environment_blueprint_id"] = environment_blueprint_id
+            __props__.__dict__["global_parameters"] = global_parameters
             __props__.__dict__["manage_access_role_arn"] = manage_access_role_arn
             __props__.__dict__["provisioning_role_arn"] = provisioning_role_arn
             __props__.__dict__["region"] = region
@@ -419,13 +483,14 @@ class EnvironmentBlueprintConfiguration(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            domain_id: Optional[pulumi.Input[_builtins.str]] = None,
-            enabled_regions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            environment_blueprint_id: Optional[pulumi.Input[_builtins.str]] = None,
-            manage_access_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            provisioning_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            regional_parameters: Optional[pulumi.Input[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]] = None) -> 'EnvironmentBlueprintConfiguration':
+            domain_id: pulumi.Input[Optional[_builtins.str]] = None,
+            enabled_regions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            environment_blueprint_id: pulumi.Input[Optional[_builtins.str]] = None,
+            global_parameters: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            manage_access_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            provisioning_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            regional_parameters: pulumi.Input[Optional[Mapping[str, pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]]] = None) -> 'EnvironmentBlueprintConfiguration':
         """
         Get an existing EnvironmentBlueprintConfiguration resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -438,6 +503,7 @@ class EnvironmentBlueprintConfiguration(pulumi.CustomResource):
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] environment_blueprint_id: ID of the Environment Blueprint
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] global_parameters: A map of global parameters to configure for the blueprint across all regions.
         :param pulumi.Input[_builtins.str] manage_access_role_arn: ARN of the manage access role with which this blueprint is created.
         :param pulumi.Input[_builtins.str] provisioning_role_arn: ARN of the provisioning role with which this blueprint is created.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -450,6 +516,7 @@ class EnvironmentBlueprintConfiguration(pulumi.CustomResource):
         __props__.__dict__["domain_id"] = domain_id
         __props__.__dict__["enabled_regions"] = enabled_regions
         __props__.__dict__["environment_blueprint_id"] = environment_blueprint_id
+        __props__.__dict__["global_parameters"] = global_parameters
         __props__.__dict__["manage_access_role_arn"] = manage_access_role_arn
         __props__.__dict__["provisioning_role_arn"] = provisioning_role_arn
         __props__.__dict__["region"] = region
@@ -481,6 +548,14 @@ class EnvironmentBlueprintConfiguration(pulumi.CustomResource):
         ID of the Environment Blueprint
         """
         return pulumi.get(self, "environment_blueprint_id")
+
+    @_builtins.property
+    @pulumi.getter(name="globalParameters")
+    def global_parameters(self) -> pulumi.Output[Optional[Mapping[str, _builtins.str]]]:
+        """
+        A map of global parameters to configure for the blueprint across all regions.
+        """
+        return pulumi.get(self, "global_parameters")
 
     @_builtins.property
     @pulumi.getter(name="manageAccessRoleArn")

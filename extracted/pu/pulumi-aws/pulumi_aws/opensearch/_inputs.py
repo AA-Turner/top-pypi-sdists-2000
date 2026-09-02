@@ -27,6 +27,8 @@ __all__ = [
     'AuthorizeVpcEndpointAccessAuthorizedPrincipalArgsDict',
     'DomainAdvancedSecurityOptionsArgs',
     'DomainAdvancedSecurityOptionsArgsDict',
+    'DomainAdvancedSecurityOptionsJwtOptionsArgs',
+    'DomainAdvancedSecurityOptionsJwtOptionsArgsDict',
     'DomainAdvancedSecurityOptionsMasterUserOptionsArgs',
     'DomainAdvancedSecurityOptionsMasterUserOptionsArgsDict',
     'DomainAimlOptionsArgs',
@@ -55,6 +57,8 @@ __all__ = [
     'DomainClusterConfigZoneAwarenessConfigArgsDict',
     'DomainCognitoOptionsArgs',
     'DomainCognitoOptionsArgsDict',
+    'DomainDeploymentStrategyOptionsArgs',
+    'DomainDeploymentStrategyOptionsArgsDict',
     'DomainDomainEndpointOptionsArgs',
     'DomainDomainEndpointOptionsArgsDict',
     'DomainEbsOptionsArgs',
@@ -93,24 +97,38 @@ __all__ = [
     'OutboundConnectionRemoteDomainInfoArgsDict',
     'PackagePackageSourceArgs',
     'PackagePackageSourceArgsDict',
+    'ServerlessCollectionEncryptionConfigArgs',
+    'ServerlessCollectionEncryptionConfigArgsDict',
+    'ServerlessCollectionGroupCapacityLimitArgs',
+    'ServerlessCollectionGroupCapacityLimitArgsDict',
     'ServerlessCollectionTimeoutsArgs',
     'ServerlessCollectionTimeoutsArgsDict',
+    'ServerlessCollectionVectorOptionArgs',
+    'ServerlessCollectionVectorOptionArgsDict',
+    'ServerlessSecurityConfigIamFederationOptionsArgs',
+    'ServerlessSecurityConfigIamFederationOptionsArgsDict',
+    'ServerlessSecurityConfigIamIdentityCenterOptionsArgs',
+    'ServerlessSecurityConfigIamIdentityCenterOptionsArgsDict',
     'ServerlessSecurityConfigSamlOptionsArgs',
     'ServerlessSecurityConfigSamlOptionsArgsDict',
     'ServerlessVpcEndpointTimeoutsArgs',
     'ServerlessVpcEndpointTimeoutsArgsDict',
     'VpcEndpointVpcOptionsArgs',
     'VpcEndpointVpcOptionsArgsDict',
+    'GetServerlessSecurityConfigIamFederationOptionArgs',
+    'GetServerlessSecurityConfigIamFederationOptionArgsDict',
+    'GetServerlessSecurityConfigIamIdentityCenterOptionArgs',
+    'GetServerlessSecurityConfigIamIdentityCenterOptionArgsDict',
     'GetServerlessSecurityConfigSamlOptionArgs',
     'GetServerlessSecurityConfigSamlOptionArgsDict',
 ]
 
 class ApplicationAppConfigArgsDict(TypedDict):
-    key: NotRequired[pulumi.Input[_builtins.str]]
+    key: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The configuration item to set. Valid values are `opensearchDashboards.dashboardAdmin.users` and `opensearchDashboards.dashboardAdmin.groups`.
     """
-    value: NotRequired[pulumi.Input[_builtins.str]]
+    value: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The value assigned to the configuration key, such as an IAM user ARN or group name. Must be between 1 and 4096 characters.
     """
@@ -118,8 +136,8 @@ class ApplicationAppConfigArgsDict(TypedDict):
 @pulumi.input_type
 class ApplicationAppConfigArgs:
     def __init__(__self__, *,
-                 key: Optional[pulumi.Input[_builtins.str]] = None,
-                 value: Optional[pulumi.Input[_builtins.str]] = None):
+                 key: pulumi.Input[Optional[_builtins.str]] = None,
+                 value: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] key: The configuration item to set. Valid values are `opensearchDashboards.dashboardAdmin.users` and `opensearchDashboards.dashboardAdmin.groups`.
         :param pulumi.Input[_builtins.str] value: The value assigned to the configuration key, such as an IAM user ARN or group name. Must be between 1 and 4096 characters.
@@ -131,35 +149,35 @@ class ApplicationAppConfigArgs:
 
     @_builtins.property
     @pulumi.getter
-    def key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def key(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The configuration item to set. Valid values are `opensearchDashboards.dashboardAdmin.users` and `opensearchDashboards.dashboardAdmin.groups`.
         """
         return pulumi.get(self, "key")
 
     @key.setter
-    def key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "key", value)
 
     @_builtins.property
     @pulumi.getter
-    def value(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def value(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The value assigned to the configuration key, such as an IAM user ARN or group name. Must be between 1 and 4096 characters.
         """
         return pulumi.get(self, "value")
 
     @value.setter
-    def value(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def value(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "value", value)
 
 
 class ApplicationDataSourceArgsDict(TypedDict):
-    data_source_arn: NotRequired[pulumi.Input[_builtins.str]]
+    data_source_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The Amazon Resource Name (ARN) of the OpenSearch domain or collection. Must be between 20 and 2048 characters.
+    ARN of the OpenSearch domain or collection. Must be between 20 and 2048 characters.
     """
-    data_source_description: NotRequired[pulumi.Input[_builtins.str]]
+    data_source_description: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A detailed description of the data source. Must be at most 1000 characters and contain only alphanumeric characters, underscores, spaces, and the following special characters: `@#%*+=:?./!-`.
     """
@@ -167,10 +185,10 @@ class ApplicationDataSourceArgsDict(TypedDict):
 @pulumi.input_type
 class ApplicationDataSourceArgs:
     def __init__(__self__, *,
-                 data_source_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 data_source_description: Optional[pulumi.Input[_builtins.str]] = None):
+                 data_source_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 data_source_description: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] data_source_arn: The Amazon Resource Name (ARN) of the OpenSearch domain or collection. Must be between 20 and 2048 characters.
+        :param pulumi.Input[_builtins.str] data_source_arn: ARN of the OpenSearch domain or collection. Must be between 20 and 2048 characters.
         :param pulumi.Input[_builtins.str] data_source_description: A detailed description of the data source. Must be at most 1000 characters and contain only alphanumeric characters, underscores, spaces, and the following special characters: `@#%*+=:?./!-`.
         """
         if data_source_arn is not None:
@@ -180,40 +198,40 @@ class ApplicationDataSourceArgs:
 
     @_builtins.property
     @pulumi.getter(name="dataSourceArn")
-    def data_source_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def data_source_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the OpenSearch domain or collection. Must be between 20 and 2048 characters.
+        ARN of the OpenSearch domain or collection. Must be between 20 and 2048 characters.
         """
         return pulumi.get(self, "data_source_arn")
 
     @data_source_arn.setter
-    def data_source_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def data_source_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "data_source_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="dataSourceDescription")
-    def data_source_description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def data_source_description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A detailed description of the data source. Must be at most 1000 characters and contain only alphanumeric characters, underscores, spaces, and the following special characters: `@#%*+=:?./!-`.
         """
         return pulumi.get(self, "data_source_description")
 
     @data_source_description.setter
-    def data_source_description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def data_source_description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "data_source_description", value)
 
 
 class ApplicationIamIdentityCenterOptionsArgsDict(TypedDict):
-    enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Specifies whether IAM Identity Center is enabled or disabled.
     """
-    iam_identity_center_application_arn: NotRequired[pulumi.Input[_builtins.str]]
-    iam_identity_center_instance_arn: NotRequired[pulumi.Input[_builtins.str]]
+    iam_identity_center_application_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    iam_identity_center_instance_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The Amazon Resource Name (ARN) of the IAM Identity Center instance. Must be between 20 and 2048 characters.
+    ARN of the IAM Identity Center instance. Must be between 20 and 2048 characters.
     """
-    iam_role_for_identity_center_application_arn: NotRequired[pulumi.Input[_builtins.str]]
+    iam_role_for_identity_center_application_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The ARN of the IAM role associated with the IAM Identity Center application. Must be between 20 and 2048 characters and match the pattern for IAM role ARNs.
     """
@@ -221,13 +239,13 @@ class ApplicationIamIdentityCenterOptionsArgsDict(TypedDict):
 @pulumi.input_type
 class ApplicationIamIdentityCenterOptionsArgs:
     def __init__(__self__, *,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 iam_identity_center_application_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 iam_identity_center_instance_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 iam_role_for_identity_center_application_arn: Optional[pulumi.Input[_builtins.str]] = None):
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 iam_identity_center_application_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 iam_identity_center_instance_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 iam_role_for_identity_center_application_arn: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.bool] enabled: Specifies whether IAM Identity Center is enabled or disabled.
-        :param pulumi.Input[_builtins.str] iam_identity_center_instance_arn: The Amazon Resource Name (ARN) of the IAM Identity Center instance. Must be between 20 and 2048 characters.
+        :param pulumi.Input[_builtins.str] iam_identity_center_instance_arn: ARN of the IAM Identity Center instance. Must be between 20 and 2048 characters.
         :param pulumi.Input[_builtins.str] iam_role_for_identity_center_application_arn: The ARN of the IAM role associated with the IAM Identity Center application. Must be between 20 and 2048 characters and match the pattern for IAM role ARNs.
         """
         if enabled is not None:
@@ -241,60 +259,60 @@ class ApplicationIamIdentityCenterOptionsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Specifies whether IAM Identity Center is enabled or disabled.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="iamIdentityCenterApplicationArn")
-    def iam_identity_center_application_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def iam_identity_center_application_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "iam_identity_center_application_arn")
 
     @iam_identity_center_application_arn.setter
-    def iam_identity_center_application_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def iam_identity_center_application_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "iam_identity_center_application_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="iamIdentityCenterInstanceArn")
-    def iam_identity_center_instance_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def iam_identity_center_instance_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the IAM Identity Center instance. Must be between 20 and 2048 characters.
+        ARN of the IAM Identity Center instance. Must be between 20 and 2048 characters.
         """
         return pulumi.get(self, "iam_identity_center_instance_arn")
 
     @iam_identity_center_instance_arn.setter
-    def iam_identity_center_instance_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def iam_identity_center_instance_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "iam_identity_center_instance_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="iamRoleForIdentityCenterApplicationArn")
-    def iam_role_for_identity_center_application_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def iam_role_for_identity_center_application_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of the IAM role associated with the IAM Identity Center application. Must be between 20 and 2048 characters and match the pattern for IAM role ARNs.
         """
         return pulumi.get(self, "iam_role_for_identity_center_application_arn")
 
     @iam_role_for_identity_center_application_arn.setter
-    def iam_role_for_identity_center_application_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def iam_role_for_identity_center_application_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "iam_role_for_identity_center_application_arn", value)
 
 
 class ApplicationTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
-    update: NotRequired[pulumi.Input[_builtins.str]]
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -302,9 +320,9 @@ class ApplicationTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class ApplicationTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None,
-                 update: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -319,38 +337,38 @@ class ApplicationTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def update(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "update")
 
     @update.setter
-    def update(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update", value)
 
 
@@ -406,15 +424,19 @@ class DomainAdvancedSecurityOptionsArgsDict(TypedDict):
     """
     Whether advanced security is enabled.
     """
-    anonymous_auth_enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    anonymous_auth_enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether Anonymous auth is enabled. Enables fine-grained access control on an existing domain. Ignored unless `advanced_security_options` are enabled. _Can only be enabled on an existing domain._
     """
-    internal_user_database_enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    internal_user_database_enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether the internal user database is enabled. Default is `false`.
     """
-    master_user_options: NotRequired[pulumi.Input['DomainAdvancedSecurityOptionsMasterUserOptionsArgsDict']]
+    jwt_options: NotRequired[pulumi.Input[Optional['DomainAdvancedSecurityOptionsJwtOptionsArgsDict']]]
+    """
+    Configuration block for JWT authentication. Requires OpenSearch 2.11 or later. Detailed below.
+    """
+    master_user_options: NotRequired[pulumi.Input[Optional['DomainAdvancedSecurityOptionsMasterUserOptionsArgsDict']]]
     """
     Configuration block for the main user. Detailed below.
     """
@@ -423,13 +445,15 @@ class DomainAdvancedSecurityOptionsArgsDict(TypedDict):
 class DomainAdvancedSecurityOptionsArgs:
     def __init__(__self__, *,
                  enabled: pulumi.Input[_builtins.bool],
-                 anonymous_auth_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 internal_user_database_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 master_user_options: Optional[pulumi.Input['DomainAdvancedSecurityOptionsMasterUserOptionsArgs']] = None):
+                 anonymous_auth_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 internal_user_database_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 jwt_options: pulumi.Input[Optional['DomainAdvancedSecurityOptionsJwtOptionsArgs']] = None,
+                 master_user_options: pulumi.Input[Optional['DomainAdvancedSecurityOptionsMasterUserOptionsArgs']] = None):
         """
         :param pulumi.Input[_builtins.bool] enabled: Whether advanced security is enabled.
         :param pulumi.Input[_builtins.bool] anonymous_auth_enabled: Whether Anonymous auth is enabled. Enables fine-grained access control on an existing domain. Ignored unless `advanced_security_options` are enabled. _Can only be enabled on an existing domain._
         :param pulumi.Input[_builtins.bool] internal_user_database_enabled: Whether the internal user database is enabled. Default is `false`.
+        :param pulumi.Input['DomainAdvancedSecurityOptionsJwtOptionsArgs'] jwt_options: Configuration block for JWT authentication. Requires OpenSearch 2.11 or later. Detailed below.
         :param pulumi.Input['DomainAdvancedSecurityOptionsMasterUserOptionsArgs'] master_user_options: Configuration block for the main user. Detailed below.
         """
         pulumi.set(__self__, "enabled", enabled)
@@ -437,6 +461,8 @@ class DomainAdvancedSecurityOptionsArgs:
             pulumi.set(__self__, "anonymous_auth_enabled", anonymous_auth_enabled)
         if internal_user_database_enabled is not None:
             pulumi.set(__self__, "internal_user_database_enabled", internal_user_database_enabled)
+        if jwt_options is not None:
+            pulumi.set(__self__, "jwt_options", jwt_options)
         if master_user_options is not None:
             pulumi.set(__self__, "master_user_options", master_user_options)
 
@@ -454,51 +480,172 @@ class DomainAdvancedSecurityOptionsArgs:
 
     @_builtins.property
     @pulumi.getter(name="anonymousAuthEnabled")
-    def anonymous_auth_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def anonymous_auth_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether Anonymous auth is enabled. Enables fine-grained access control on an existing domain. Ignored unless `advanced_security_options` are enabled. _Can only be enabled on an existing domain._
         """
         return pulumi.get(self, "anonymous_auth_enabled")
 
     @anonymous_auth_enabled.setter
-    def anonymous_auth_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def anonymous_auth_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "anonymous_auth_enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="internalUserDatabaseEnabled")
-    def internal_user_database_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def internal_user_database_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the internal user database is enabled. Default is `false`.
         """
         return pulumi.get(self, "internal_user_database_enabled")
 
     @internal_user_database_enabled.setter
-    def internal_user_database_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def internal_user_database_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "internal_user_database_enabled", value)
 
     @_builtins.property
+    @pulumi.getter(name="jwtOptions")
+    def jwt_options(self) -> pulumi.Input[Optional['DomainAdvancedSecurityOptionsJwtOptionsArgs']]:
+        """
+        Configuration block for JWT authentication. Requires OpenSearch 2.11 or later. Detailed below.
+        """
+        return pulumi.get(self, "jwt_options")
+
+    @jwt_options.setter
+    def jwt_options(self, value: pulumi.Input[Optional['DomainAdvancedSecurityOptionsJwtOptionsArgs']]):
+        pulumi.set(self, "jwt_options", value)
+
+    @_builtins.property
     @pulumi.getter(name="masterUserOptions")
-    def master_user_options(self) -> Optional[pulumi.Input['DomainAdvancedSecurityOptionsMasterUserOptionsArgs']]:
+    def master_user_options(self) -> pulumi.Input[Optional['DomainAdvancedSecurityOptionsMasterUserOptionsArgs']]:
         """
         Configuration block for the main user. Detailed below.
         """
         return pulumi.get(self, "master_user_options")
 
     @master_user_options.setter
-    def master_user_options(self, value: Optional[pulumi.Input['DomainAdvancedSecurityOptionsMasterUserOptionsArgs']]):
+    def master_user_options(self, value: pulumi.Input[Optional['DomainAdvancedSecurityOptionsMasterUserOptionsArgs']]):
         pulumi.set(self, "master_user_options", value)
 
 
+class DomainAdvancedSecurityOptionsJwtOptionsArgsDict(TypedDict):
+    enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
+    """
+    Whether JWT authentication is enabled.
+    """
+    jwks_url: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    URL endpoint that hosts the JSON Web Key Set (JWKS) containing public keys used to verify JWT signatures. This argument can be specified only with OpenSearch versions 3.3 and later. At least one of `jwks_url` or `public_key` must be specified when `enabled` is set to `true`.
+    """
+    public_key: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    PEM-encoded public key used to verify JWT signatures. At least one of `jwks_url` or `public_key` must be specified when `enabled` is set to `true`. If both `jwks_url` and `public_key` are specified, `public_key` is ignored.
+    """
+    roles_key: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Element of the JWT assertion to use for roles. Default is `roles`.
+    """
+    subject_key: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Element of the JWT assertion to use for the user name. Default is `sub`.
+    """
+
+@pulumi.input_type
+class DomainAdvancedSecurityOptionsJwtOptionsArgs:
+    def __init__(__self__, *,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 jwks_url: pulumi.Input[Optional[_builtins.str]] = None,
+                 public_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 roles_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 subject_key: pulumi.Input[Optional[_builtins.str]] = None):
+        """
+        :param pulumi.Input[_builtins.bool] enabled: Whether JWT authentication is enabled.
+        :param pulumi.Input[_builtins.str] jwks_url: URL endpoint that hosts the JSON Web Key Set (JWKS) containing public keys used to verify JWT signatures. This argument can be specified only with OpenSearch versions 3.3 and later. At least one of `jwks_url` or `public_key` must be specified when `enabled` is set to `true`.
+        :param pulumi.Input[_builtins.str] public_key: PEM-encoded public key used to verify JWT signatures. At least one of `jwks_url` or `public_key` must be specified when `enabled` is set to `true`. If both `jwks_url` and `public_key` are specified, `public_key` is ignored.
+        :param pulumi.Input[_builtins.str] roles_key: Element of the JWT assertion to use for roles. Default is `roles`.
+        :param pulumi.Input[_builtins.str] subject_key: Element of the JWT assertion to use for the user name. Default is `sub`.
+        """
+        if enabled is not None:
+            pulumi.set(__self__, "enabled", enabled)
+        if jwks_url is not None:
+            pulumi.set(__self__, "jwks_url", jwks_url)
+        if public_key is not None:
+            pulumi.set(__self__, "public_key", public_key)
+        if roles_key is not None:
+            pulumi.set(__self__, "roles_key", roles_key)
+        if subject_key is not None:
+            pulumi.set(__self__, "subject_key", subject_key)
+
+    @_builtins.property
+    @pulumi.getter
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        Whether JWT authentication is enabled.
+        """
+        return pulumi.get(self, "enabled")
+
+    @enabled.setter
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "enabled", value)
+
+    @_builtins.property
+    @pulumi.getter(name="jwksUrl")
+    def jwks_url(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        URL endpoint that hosts the JSON Web Key Set (JWKS) containing public keys used to verify JWT signatures. This argument can be specified only with OpenSearch versions 3.3 and later. At least one of `jwks_url` or `public_key` must be specified when `enabled` is set to `true`.
+        """
+        return pulumi.get(self, "jwks_url")
+
+    @jwks_url.setter
+    def jwks_url(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "jwks_url", value)
+
+    @_builtins.property
+    @pulumi.getter(name="publicKey")
+    def public_key(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        PEM-encoded public key used to verify JWT signatures. At least one of `jwks_url` or `public_key` must be specified when `enabled` is set to `true`. If both `jwks_url` and `public_key` are specified, `public_key` is ignored.
+        """
+        return pulumi.get(self, "public_key")
+
+    @public_key.setter
+    def public_key(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "public_key", value)
+
+    @_builtins.property
+    @pulumi.getter(name="rolesKey")
+    def roles_key(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Element of the JWT assertion to use for roles. Default is `roles`.
+        """
+        return pulumi.get(self, "roles_key")
+
+    @roles_key.setter
+    def roles_key(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "roles_key", value)
+
+    @_builtins.property
+    @pulumi.getter(name="subjectKey")
+    def subject_key(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Element of the JWT assertion to use for the user name. Default is `sub`.
+        """
+        return pulumi.get(self, "subject_key")
+
+    @subject_key.setter
+    def subject_key(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "subject_key", value)
+
+
 class DomainAdvancedSecurityOptionsMasterUserOptionsArgsDict(TypedDict):
-    master_user_arn: NotRequired[pulumi.Input[_builtins.str]]
+    master_user_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     ARN for the main user. Only specify if `internal_user_database_enabled` is not set or set to `false`.
     """
-    master_user_name: NotRequired[pulumi.Input[_builtins.str]]
+    master_user_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Main user's username, which is stored in the Amazon OpenSearch Service domain's internal database. Only specify if `internal_user_database_enabled` is set to `true`.
     """
-    master_user_password: NotRequired[pulumi.Input[_builtins.str]]
+    master_user_password: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Main user's password, which is stored in the Amazon OpenSearch Service domain's internal database. Only specify if `internal_user_database_enabled` is set to `true`.
     """
@@ -506,9 +653,9 @@ class DomainAdvancedSecurityOptionsMasterUserOptionsArgsDict(TypedDict):
 @pulumi.input_type
 class DomainAdvancedSecurityOptionsMasterUserOptionsArgs:
     def __init__(__self__, *,
-                 master_user_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 master_user_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 master_user_password: Optional[pulumi.Input[_builtins.str]] = None):
+                 master_user_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 master_user_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 master_user_password: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] master_user_arn: ARN for the main user. Only specify if `internal_user_database_enabled` is not set or set to `false`.
         :param pulumi.Input[_builtins.str] master_user_name: Main user's username, which is stored in the Amazon OpenSearch Service domain's internal database. Only specify if `internal_user_database_enabled` is set to `true`.
@@ -523,51 +670,51 @@ class DomainAdvancedSecurityOptionsMasterUserOptionsArgs:
 
     @_builtins.property
     @pulumi.getter(name="masterUserArn")
-    def master_user_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def master_user_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN for the main user. Only specify if `internal_user_database_enabled` is not set or set to `false`.
         """
         return pulumi.get(self, "master_user_arn")
 
     @master_user_arn.setter
-    def master_user_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def master_user_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "master_user_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="masterUserName")
-    def master_user_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def master_user_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Main user's username, which is stored in the Amazon OpenSearch Service domain's internal database. Only specify if `internal_user_database_enabled` is set to `true`.
         """
         return pulumi.get(self, "master_user_name")
 
     @master_user_name.setter
-    def master_user_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def master_user_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "master_user_name", value)
 
     @_builtins.property
     @pulumi.getter(name="masterUserPassword")
-    def master_user_password(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def master_user_password(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Main user's password, which is stored in the Amazon OpenSearch Service domain's internal database. Only specify if `internal_user_database_enabled` is set to `true`.
         """
         return pulumi.get(self, "master_user_password")
 
     @master_user_password.setter
-    def master_user_password(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def master_user_password(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "master_user_password", value)
 
 
 class DomainAimlOptionsArgsDict(TypedDict):
-    natural_language_query_generation_options: NotRequired[pulumi.Input['DomainAimlOptionsNaturalLanguageQueryGenerationOptionsArgsDict']]
+    natural_language_query_generation_options: NotRequired[pulumi.Input[Optional['DomainAimlOptionsNaturalLanguageQueryGenerationOptionsArgsDict']]]
     """
     Configuration block for parameters required for natural language query generation on the specified domain.
     """
-    s3_vectors_engine: NotRequired[pulumi.Input['DomainAimlOptionsS3VectorsEngineArgsDict']]
+    s3_vectors_engine: NotRequired[pulumi.Input[Optional['DomainAimlOptionsS3VectorsEngineArgsDict']]]
     """
     Configuration block for parameters required to enable S3 vectors engine features on the specified domain.
     """
-    serverless_vector_acceleration: NotRequired[pulumi.Input['DomainAimlOptionsServerlessVectorAccelerationArgsDict']]
+    serverless_vector_acceleration: NotRequired[pulumi.Input[Optional['DomainAimlOptionsServerlessVectorAccelerationArgsDict']]]
     """
     Configuration block for parameters required to enable GPU-accelerated vector search on the specified domain.
     """
@@ -575,9 +722,9 @@ class DomainAimlOptionsArgsDict(TypedDict):
 @pulumi.input_type
 class DomainAimlOptionsArgs:
     def __init__(__self__, *,
-                 natural_language_query_generation_options: Optional[pulumi.Input['DomainAimlOptionsNaturalLanguageQueryGenerationOptionsArgs']] = None,
-                 s3_vectors_engine: Optional[pulumi.Input['DomainAimlOptionsS3VectorsEngineArgs']] = None,
-                 serverless_vector_acceleration: Optional[pulumi.Input['DomainAimlOptionsServerlessVectorAccelerationArgs']] = None):
+                 natural_language_query_generation_options: pulumi.Input[Optional['DomainAimlOptionsNaturalLanguageQueryGenerationOptionsArgs']] = None,
+                 s3_vectors_engine: pulumi.Input[Optional['DomainAimlOptionsS3VectorsEngineArgs']] = None,
+                 serverless_vector_acceleration: pulumi.Input[Optional['DomainAimlOptionsServerlessVectorAccelerationArgs']] = None):
         """
         :param pulumi.Input['DomainAimlOptionsNaturalLanguageQueryGenerationOptionsArgs'] natural_language_query_generation_options: Configuration block for parameters required for natural language query generation on the specified domain.
         :param pulumi.Input['DomainAimlOptionsS3VectorsEngineArgs'] s3_vectors_engine: Configuration block for parameters required to enable S3 vectors engine features on the specified domain.
@@ -592,43 +739,43 @@ class DomainAimlOptionsArgs:
 
     @_builtins.property
     @pulumi.getter(name="naturalLanguageQueryGenerationOptions")
-    def natural_language_query_generation_options(self) -> Optional[pulumi.Input['DomainAimlOptionsNaturalLanguageQueryGenerationOptionsArgs']]:
+    def natural_language_query_generation_options(self) -> pulumi.Input[Optional['DomainAimlOptionsNaturalLanguageQueryGenerationOptionsArgs']]:
         """
         Configuration block for parameters required for natural language query generation on the specified domain.
         """
         return pulumi.get(self, "natural_language_query_generation_options")
 
     @natural_language_query_generation_options.setter
-    def natural_language_query_generation_options(self, value: Optional[pulumi.Input['DomainAimlOptionsNaturalLanguageQueryGenerationOptionsArgs']]):
+    def natural_language_query_generation_options(self, value: pulumi.Input[Optional['DomainAimlOptionsNaturalLanguageQueryGenerationOptionsArgs']]):
         pulumi.set(self, "natural_language_query_generation_options", value)
 
     @_builtins.property
     @pulumi.getter(name="s3VectorsEngine")
-    def s3_vectors_engine(self) -> Optional[pulumi.Input['DomainAimlOptionsS3VectorsEngineArgs']]:
+    def s3_vectors_engine(self) -> pulumi.Input[Optional['DomainAimlOptionsS3VectorsEngineArgs']]:
         """
         Configuration block for parameters required to enable S3 vectors engine features on the specified domain.
         """
         return pulumi.get(self, "s3_vectors_engine")
 
     @s3_vectors_engine.setter
-    def s3_vectors_engine(self, value: Optional[pulumi.Input['DomainAimlOptionsS3VectorsEngineArgs']]):
+    def s3_vectors_engine(self, value: pulumi.Input[Optional['DomainAimlOptionsS3VectorsEngineArgs']]):
         pulumi.set(self, "s3_vectors_engine", value)
 
     @_builtins.property
     @pulumi.getter(name="serverlessVectorAcceleration")
-    def serverless_vector_acceleration(self) -> Optional[pulumi.Input['DomainAimlOptionsServerlessVectorAccelerationArgs']]:
+    def serverless_vector_acceleration(self) -> pulumi.Input[Optional['DomainAimlOptionsServerlessVectorAccelerationArgs']]:
         """
         Configuration block for parameters required to enable GPU-accelerated vector search on the specified domain.
         """
         return pulumi.get(self, "serverless_vector_acceleration")
 
     @serverless_vector_acceleration.setter
-    def serverless_vector_acceleration(self, value: Optional[pulumi.Input['DomainAimlOptionsServerlessVectorAccelerationArgs']]):
+    def serverless_vector_acceleration(self, value: pulumi.Input[Optional['DomainAimlOptionsServerlessVectorAccelerationArgs']]):
         pulumi.set(self, "serverless_vector_acceleration", value)
 
 
 class DomainAimlOptionsNaturalLanguageQueryGenerationOptionsArgsDict(TypedDict):
-    desired_state: NotRequired[pulumi.Input[_builtins.str]]
+    desired_state: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The desired state of the natural language query generation feature. Valid values are `ENABLED` and `DISABLED`.
     """
@@ -636,7 +783,7 @@ class DomainAimlOptionsNaturalLanguageQueryGenerationOptionsArgsDict(TypedDict):
 @pulumi.input_type
 class DomainAimlOptionsNaturalLanguageQueryGenerationOptionsArgs:
     def __init__(__self__, *,
-                 desired_state: Optional[pulumi.Input[_builtins.str]] = None):
+                 desired_state: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] desired_state: The desired state of the natural language query generation feature. Valid values are `ENABLED` and `DISABLED`.
         """
@@ -645,19 +792,19 @@ class DomainAimlOptionsNaturalLanguageQueryGenerationOptionsArgs:
 
     @_builtins.property
     @pulumi.getter(name="desiredState")
-    def desired_state(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def desired_state(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The desired state of the natural language query generation feature. Valid values are `ENABLED` and `DISABLED`.
         """
         return pulumi.get(self, "desired_state")
 
     @desired_state.setter
-    def desired_state(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def desired_state(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "desired_state", value)
 
 
 class DomainAimlOptionsS3VectorsEngineArgsDict(TypedDict):
-    enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Enables S3 vectors engine features.
     """
@@ -665,7 +812,7 @@ class DomainAimlOptionsS3VectorsEngineArgsDict(TypedDict):
 @pulumi.input_type
 class DomainAimlOptionsS3VectorsEngineArgs:
     def __init__(__self__, *,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None):
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None):
         """
         :param pulumi.Input[_builtins.bool] enabled: Enables S3 vectors engine features.
         """
@@ -674,19 +821,19 @@ class DomainAimlOptionsS3VectorsEngineArgs:
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Enables S3 vectors engine features.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
 
 class DomainAimlOptionsServerlessVectorAccelerationArgsDict(TypedDict):
-    enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Enables GPU-accelerated vector search for improved performance on vector workloads.
     """
@@ -694,7 +841,7 @@ class DomainAimlOptionsServerlessVectorAccelerationArgsDict(TypedDict):
 @pulumi.input_type
 class DomainAimlOptionsServerlessVectorAccelerationArgs:
     def __init__(__self__, *,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None):
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None):
         """
         :param pulumi.Input[_builtins.bool] enabled: Enables GPU-accelerated vector search for improved performance on vector workloads.
         """
@@ -703,14 +850,14 @@ class DomainAimlOptionsServerlessVectorAccelerationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Enables GPU-accelerated vector search for improved performance on vector workloads.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
 
@@ -719,17 +866,17 @@ class DomainAutoTuneOptionsArgsDict(TypedDict):
     """
     Auto-Tune desired state for the domain. Valid values: `ENABLED` or `DISABLED`.
     """
-    maintenance_schedules: NotRequired[pulumi.Input[Sequence[pulumi.Input['DomainAutoTuneOptionsMaintenanceScheduleArgsDict']]]]
+    maintenance_schedules: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['DomainAutoTuneOptionsMaintenanceScheduleArgsDict']]]]]
     """
     Configuration block for Auto-Tune maintenance windows. Can be specified multiple times for each maintenance window. Detailed below.
 
     **NOTE:** Maintenance windows are deprecated and have been replaced with [off-peak windows](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/off-peak.html). Consequently, `maintenance_schedule` configuration blocks cannot be specified when `use_off_peak_window` is set to `true`.
     """
-    rollback_on_disable: NotRequired[pulumi.Input[_builtins.str]]
+    rollback_on_disable: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Whether to roll back to default Auto-Tune settings when disabling Auto-Tune. Valid values: `DEFAULT_ROLLBACK` or `NO_ROLLBACK`.
     """
-    use_off_peak_window: NotRequired[pulumi.Input[_builtins.bool]]
+    use_off_peak_window: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether to schedule Auto-Tune optimizations that require blue/green deployments during the domain's configured daily off-peak window. Defaults to `false`.
     """
@@ -738,9 +885,9 @@ class DomainAutoTuneOptionsArgsDict(TypedDict):
 class DomainAutoTuneOptionsArgs:
     def __init__(__self__, *,
                  desired_state: pulumi.Input[_builtins.str],
-                 maintenance_schedules: Optional[pulumi.Input[Sequence[pulumi.Input['DomainAutoTuneOptionsMaintenanceScheduleArgs']]]] = None,
-                 rollback_on_disable: Optional[pulumi.Input[_builtins.str]] = None,
-                 use_off_peak_window: Optional[pulumi.Input[_builtins.bool]] = None):
+                 maintenance_schedules: pulumi.Input[Optional[Sequence[pulumi.Input['DomainAutoTuneOptionsMaintenanceScheduleArgs']]]] = None,
+                 rollback_on_disable: pulumi.Input[Optional[_builtins.str]] = None,
+                 use_off_peak_window: pulumi.Input[Optional[_builtins.bool]] = None):
         """
         :param pulumi.Input[_builtins.str] desired_state: Auto-Tune desired state for the domain. Valid values: `ENABLED` or `DISABLED`.
         :param pulumi.Input[Sequence[pulumi.Input['DomainAutoTuneOptionsMaintenanceScheduleArgs']]] maintenance_schedules: Configuration block for Auto-Tune maintenance windows. Can be specified multiple times for each maintenance window. Detailed below.
@@ -771,7 +918,7 @@ class DomainAutoTuneOptionsArgs:
 
     @_builtins.property
     @pulumi.getter(name="maintenanceSchedules")
-    def maintenance_schedules(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DomainAutoTuneOptionsMaintenanceScheduleArgs']]]]:
+    def maintenance_schedules(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['DomainAutoTuneOptionsMaintenanceScheduleArgs']]]]:
         """
         Configuration block for Auto-Tune maintenance windows. Can be specified multiple times for each maintenance window. Detailed below.
 
@@ -780,31 +927,31 @@ class DomainAutoTuneOptionsArgs:
         return pulumi.get(self, "maintenance_schedules")
 
     @maintenance_schedules.setter
-    def maintenance_schedules(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DomainAutoTuneOptionsMaintenanceScheduleArgs']]]]):
+    def maintenance_schedules(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['DomainAutoTuneOptionsMaintenanceScheduleArgs']]]]):
         pulumi.set(self, "maintenance_schedules", value)
 
     @_builtins.property
     @pulumi.getter(name="rollbackOnDisable")
-    def rollback_on_disable(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def rollback_on_disable(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Whether to roll back to default Auto-Tune settings when disabling Auto-Tune. Valid values: `DEFAULT_ROLLBACK` or `NO_ROLLBACK`.
         """
         return pulumi.get(self, "rollback_on_disable")
 
     @rollback_on_disable.setter
-    def rollback_on_disable(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def rollback_on_disable(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "rollback_on_disable", value)
 
     @_builtins.property
     @pulumi.getter(name="useOffPeakWindow")
-    def use_off_peak_window(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def use_off_peak_window(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to schedule Auto-Tune optimizations that require blue/green deployments during the domain's configured daily off-peak window. Defaults to `false`.
         """
         return pulumi.get(self, "use_off_peak_window")
 
     @use_off_peak_window.setter
-    def use_off_peak_window(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def use_off_peak_window(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "use_off_peak_window", value)
 
 
@@ -922,55 +1069,55 @@ class DomainAutoTuneOptionsMaintenanceScheduleDurationArgs:
 
 
 class DomainClusterConfigArgsDict(TypedDict):
-    cold_storage_options: NotRequired[pulumi.Input['DomainClusterConfigColdStorageOptionsArgsDict']]
+    cold_storage_options: NotRequired[pulumi.Input[Optional['DomainClusterConfigColdStorageOptionsArgsDict']]]
     """
     Configuration block containing cold storage configuration. Detailed below.
     """
-    dedicated_master_count: NotRequired[pulumi.Input[_builtins.int]]
+    dedicated_master_count: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Number of dedicated main nodes in the cluster.
     """
-    dedicated_master_enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    dedicated_master_enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether dedicated main nodes are enabled for the cluster.
     """
-    dedicated_master_type: NotRequired[pulumi.Input[_builtins.str]]
+    dedicated_master_type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Instance type of the dedicated main nodes in the cluster.
     """
-    instance_count: NotRequired[pulumi.Input[_builtins.int]]
+    instance_count: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Number of instances in the cluster.
     """
-    instance_type: NotRequired[pulumi.Input[_builtins.str]]
+    instance_type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Instance type of data nodes in the cluster.
     """
-    multi_az_with_standby_enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    multi_az_with_standby_enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether a multi-AZ domain is turned on with a standby AZ. For more information, see [Configuring a multi-AZ domain in Amazon OpenSearch Service](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-multiaz.html).
     """
-    node_options: NotRequired[pulumi.Input[Sequence[pulumi.Input['DomainClusterConfigNodeOptionArgsDict']]]]
+    node_options: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['DomainClusterConfigNodeOptionArgsDict']]]]]
     """
     List of node options for the domain.
     """
-    warm_count: NotRequired[pulumi.Input[_builtins.int]]
+    warm_count: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Number of warm nodes in the cluster. Valid values are between `2` and `150`. `warm_count` can be only and must be set when `warm_enabled` is set to `true`.
     """
-    warm_enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    warm_enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether to enable warm storage.
     """
-    warm_type: NotRequired[pulumi.Input[_builtins.str]]
+    warm_type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Instance type for the OpenSearch cluster's warm nodes. Valid values are `ultrawarm1.medium.search`, `ultrawarm1.large.search` and `ultrawarm1.xlarge.search`. `warm_type` can be only and must be set when `warm_enabled` is set to `true`.
     """
-    zone_awareness_config: NotRequired[pulumi.Input['DomainClusterConfigZoneAwarenessConfigArgsDict']]
+    zone_awareness_config: NotRequired[pulumi.Input[Optional['DomainClusterConfigZoneAwarenessConfigArgsDict']]]
     """
     Configuration block containing zone awareness settings. Detailed below.
     """
-    zone_awareness_enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    zone_awareness_enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether zone awareness is enabled, set to `true` for multi-az deployment. To enable awareness with three Availability Zones, the `availability_zone_count` within the `zone_awareness_config` must be set to `3`.
     """
@@ -978,19 +1125,19 @@ class DomainClusterConfigArgsDict(TypedDict):
 @pulumi.input_type
 class DomainClusterConfigArgs:
     def __init__(__self__, *,
-                 cold_storage_options: Optional[pulumi.Input['DomainClusterConfigColdStorageOptionsArgs']] = None,
-                 dedicated_master_count: Optional[pulumi.Input[_builtins.int]] = None,
-                 dedicated_master_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 dedicated_master_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 instance_count: Optional[pulumi.Input[_builtins.int]] = None,
-                 instance_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 multi_az_with_standby_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 node_options: Optional[pulumi.Input[Sequence[pulumi.Input['DomainClusterConfigNodeOptionArgs']]]] = None,
-                 warm_count: Optional[pulumi.Input[_builtins.int]] = None,
-                 warm_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 warm_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 zone_awareness_config: Optional[pulumi.Input['DomainClusterConfigZoneAwarenessConfigArgs']] = None,
-                 zone_awareness_enabled: Optional[pulumi.Input[_builtins.bool]] = None):
+                 cold_storage_options: pulumi.Input[Optional['DomainClusterConfigColdStorageOptionsArgs']] = None,
+                 dedicated_master_count: pulumi.Input[Optional[_builtins.int]] = None,
+                 dedicated_master_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 dedicated_master_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 instance_count: pulumi.Input[Optional[_builtins.int]] = None,
+                 instance_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 multi_az_with_standby_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 node_options: pulumi.Input[Optional[Sequence[pulumi.Input['DomainClusterConfigNodeOptionArgs']]]] = None,
+                 warm_count: pulumi.Input[Optional[_builtins.int]] = None,
+                 warm_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 warm_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 zone_awareness_config: pulumi.Input[Optional['DomainClusterConfigZoneAwarenessConfigArgs']] = None,
+                 zone_awareness_enabled: pulumi.Input[Optional[_builtins.bool]] = None):
         """
         :param pulumi.Input['DomainClusterConfigColdStorageOptionsArgs'] cold_storage_options: Configuration block containing cold storage configuration. Detailed below.
         :param pulumi.Input[_builtins.int] dedicated_master_count: Number of dedicated main nodes in the cluster.
@@ -1035,163 +1182,163 @@ class DomainClusterConfigArgs:
 
     @_builtins.property
     @pulumi.getter(name="coldStorageOptions")
-    def cold_storage_options(self) -> Optional[pulumi.Input['DomainClusterConfigColdStorageOptionsArgs']]:
+    def cold_storage_options(self) -> pulumi.Input[Optional['DomainClusterConfigColdStorageOptionsArgs']]:
         """
         Configuration block containing cold storage configuration. Detailed below.
         """
         return pulumi.get(self, "cold_storage_options")
 
     @cold_storage_options.setter
-    def cold_storage_options(self, value: Optional[pulumi.Input['DomainClusterConfigColdStorageOptionsArgs']]):
+    def cold_storage_options(self, value: pulumi.Input[Optional['DomainClusterConfigColdStorageOptionsArgs']]):
         pulumi.set(self, "cold_storage_options", value)
 
     @_builtins.property
     @pulumi.getter(name="dedicatedMasterCount")
-    def dedicated_master_count(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def dedicated_master_count(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Number of dedicated main nodes in the cluster.
         """
         return pulumi.get(self, "dedicated_master_count")
 
     @dedicated_master_count.setter
-    def dedicated_master_count(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def dedicated_master_count(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "dedicated_master_count", value)
 
     @_builtins.property
     @pulumi.getter(name="dedicatedMasterEnabled")
-    def dedicated_master_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def dedicated_master_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether dedicated main nodes are enabled for the cluster.
         """
         return pulumi.get(self, "dedicated_master_enabled")
 
     @dedicated_master_enabled.setter
-    def dedicated_master_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def dedicated_master_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "dedicated_master_enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="dedicatedMasterType")
-    def dedicated_master_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def dedicated_master_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Instance type of the dedicated main nodes in the cluster.
         """
         return pulumi.get(self, "dedicated_master_type")
 
     @dedicated_master_type.setter
-    def dedicated_master_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def dedicated_master_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "dedicated_master_type", value)
 
     @_builtins.property
     @pulumi.getter(name="instanceCount")
-    def instance_count(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def instance_count(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Number of instances in the cluster.
         """
         return pulumi.get(self, "instance_count")
 
     @instance_count.setter
-    def instance_count(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def instance_count(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "instance_count", value)
 
     @_builtins.property
     @pulumi.getter(name="instanceType")
-    def instance_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def instance_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Instance type of data nodes in the cluster.
         """
         return pulumi.get(self, "instance_type")
 
     @instance_type.setter
-    def instance_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def instance_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "instance_type", value)
 
     @_builtins.property
     @pulumi.getter(name="multiAzWithStandbyEnabled")
-    def multi_az_with_standby_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def multi_az_with_standby_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether a multi-AZ domain is turned on with a standby AZ. For more information, see [Configuring a multi-AZ domain in Amazon OpenSearch Service](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-multiaz.html).
         """
         return pulumi.get(self, "multi_az_with_standby_enabled")
 
     @multi_az_with_standby_enabled.setter
-    def multi_az_with_standby_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def multi_az_with_standby_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "multi_az_with_standby_enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="nodeOptions")
-    def node_options(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DomainClusterConfigNodeOptionArgs']]]]:
+    def node_options(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['DomainClusterConfigNodeOptionArgs']]]]:
         """
         List of node options for the domain.
         """
         return pulumi.get(self, "node_options")
 
     @node_options.setter
-    def node_options(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DomainClusterConfigNodeOptionArgs']]]]):
+    def node_options(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['DomainClusterConfigNodeOptionArgs']]]]):
         pulumi.set(self, "node_options", value)
 
     @_builtins.property
     @pulumi.getter(name="warmCount")
-    def warm_count(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def warm_count(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Number of warm nodes in the cluster. Valid values are between `2` and `150`. `warm_count` can be only and must be set when `warm_enabled` is set to `true`.
         """
         return pulumi.get(self, "warm_count")
 
     @warm_count.setter
-    def warm_count(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def warm_count(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "warm_count", value)
 
     @_builtins.property
     @pulumi.getter(name="warmEnabled")
-    def warm_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def warm_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to enable warm storage.
         """
         return pulumi.get(self, "warm_enabled")
 
     @warm_enabled.setter
-    def warm_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def warm_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "warm_enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="warmType")
-    def warm_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def warm_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Instance type for the OpenSearch cluster's warm nodes. Valid values are `ultrawarm1.medium.search`, `ultrawarm1.large.search` and `ultrawarm1.xlarge.search`. `warm_type` can be only and must be set when `warm_enabled` is set to `true`.
         """
         return pulumi.get(self, "warm_type")
 
     @warm_type.setter
-    def warm_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def warm_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "warm_type", value)
 
     @_builtins.property
     @pulumi.getter(name="zoneAwarenessConfig")
-    def zone_awareness_config(self) -> Optional[pulumi.Input['DomainClusterConfigZoneAwarenessConfigArgs']]:
+    def zone_awareness_config(self) -> pulumi.Input[Optional['DomainClusterConfigZoneAwarenessConfigArgs']]:
         """
         Configuration block containing zone awareness settings. Detailed below.
         """
         return pulumi.get(self, "zone_awareness_config")
 
     @zone_awareness_config.setter
-    def zone_awareness_config(self, value: Optional[pulumi.Input['DomainClusterConfigZoneAwarenessConfigArgs']]):
+    def zone_awareness_config(self, value: pulumi.Input[Optional['DomainClusterConfigZoneAwarenessConfigArgs']]):
         pulumi.set(self, "zone_awareness_config", value)
 
     @_builtins.property
     @pulumi.getter(name="zoneAwarenessEnabled")
-    def zone_awareness_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def zone_awareness_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether zone awareness is enabled, set to `true` for multi-az deployment. To enable awareness with three Availability Zones, the `availability_zone_count` within the `zone_awareness_config` must be set to `3`.
         """
         return pulumi.get(self, "zone_awareness_enabled")
 
     @zone_awareness_enabled.setter
-    def zone_awareness_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def zone_awareness_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "zone_awareness_enabled", value)
 
 
 class DomainClusterConfigColdStorageOptionsArgsDict(TypedDict):
-    enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Boolean to enable cold storage for an OpenSearch domain. Defaults to `false`. Master and ultrawarm nodes must be enabled for cold storage.
     """
@@ -1199,7 +1346,7 @@ class DomainClusterConfigColdStorageOptionsArgsDict(TypedDict):
 @pulumi.input_type
 class DomainClusterConfigColdStorageOptionsArgs:
     def __init__(__self__, *,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None):
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None):
         """
         :param pulumi.Input[_builtins.bool] enabled: Boolean to enable cold storage for an OpenSearch domain. Defaults to `false`. Master and ultrawarm nodes must be enabled for cold storage.
         """
@@ -1208,23 +1355,23 @@ class DomainClusterConfigColdStorageOptionsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Boolean to enable cold storage for an OpenSearch domain. Defaults to `false`. Master and ultrawarm nodes must be enabled for cold storage.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
 
 class DomainClusterConfigNodeOptionArgsDict(TypedDict):
-    node_config: NotRequired[pulumi.Input['DomainClusterConfigNodeOptionNodeConfigArgsDict']]
+    node_config: NotRequired[pulumi.Input[Optional['DomainClusterConfigNodeOptionNodeConfigArgsDict']]]
     """
     Container to specify sizing of a node type.
     """
-    node_type: NotRequired[pulumi.Input[_builtins.str]]
+    node_type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Type of node this configuration describes. Valid values: `coordinator`.
     """
@@ -1232,8 +1379,8 @@ class DomainClusterConfigNodeOptionArgsDict(TypedDict):
 @pulumi.input_type
 class DomainClusterConfigNodeOptionArgs:
     def __init__(__self__, *,
-                 node_config: Optional[pulumi.Input['DomainClusterConfigNodeOptionNodeConfigArgs']] = None,
-                 node_type: Optional[pulumi.Input[_builtins.str]] = None):
+                 node_config: pulumi.Input[Optional['DomainClusterConfigNodeOptionNodeConfigArgs']] = None,
+                 node_type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input['DomainClusterConfigNodeOptionNodeConfigArgs'] node_config: Container to specify sizing of a node type.
         :param pulumi.Input[_builtins.str] node_type: Type of node this configuration describes. Valid values: `coordinator`.
@@ -1245,39 +1392,39 @@ class DomainClusterConfigNodeOptionArgs:
 
     @_builtins.property
     @pulumi.getter(name="nodeConfig")
-    def node_config(self) -> Optional[pulumi.Input['DomainClusterConfigNodeOptionNodeConfigArgs']]:
+    def node_config(self) -> pulumi.Input[Optional['DomainClusterConfigNodeOptionNodeConfigArgs']]:
         """
         Container to specify sizing of a node type.
         """
         return pulumi.get(self, "node_config")
 
     @node_config.setter
-    def node_config(self, value: Optional[pulumi.Input['DomainClusterConfigNodeOptionNodeConfigArgs']]):
+    def node_config(self, value: pulumi.Input[Optional['DomainClusterConfigNodeOptionNodeConfigArgs']]):
         pulumi.set(self, "node_config", value)
 
     @_builtins.property
     @pulumi.getter(name="nodeType")
-    def node_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def node_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Type of node this configuration describes. Valid values: `coordinator`.
         """
         return pulumi.get(self, "node_type")
 
     @node_type.setter
-    def node_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def node_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "node_type", value)
 
 
 class DomainClusterConfigNodeOptionNodeConfigArgsDict(TypedDict):
-    count: NotRequired[pulumi.Input[_builtins.int]]
+    count: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Number of nodes of a particular node type in the cluster.
     """
-    enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether a particular node type is enabled.
     """
-    type: NotRequired[pulumi.Input[_builtins.str]]
+    type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The instance type of a particular node type in the cluster.
     """
@@ -1285,9 +1432,9 @@ class DomainClusterConfigNodeOptionNodeConfigArgsDict(TypedDict):
 @pulumi.input_type
 class DomainClusterConfigNodeOptionNodeConfigArgs:
     def __init__(__self__, *,
-                 count: Optional[pulumi.Input[_builtins.int]] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None):
+                 count: pulumi.Input[Optional[_builtins.int]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.int] count: Number of nodes of a particular node type in the cluster.
         :param pulumi.Input[_builtins.bool] enabled: Whether a particular node type is enabled.
@@ -1302,43 +1449,43 @@ class DomainClusterConfigNodeOptionNodeConfigArgs:
 
     @_builtins.property
     @pulumi.getter
-    def count(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def count(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Number of nodes of a particular node type in the cluster.
         """
         return pulumi.get(self, "count")
 
     @count.setter
-    def count(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def count(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "count", value)
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether a particular node type is enabled.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The instance type of a particular node type in the cluster.
         """
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
 
 class DomainClusterConfigZoneAwarenessConfigArgsDict(TypedDict):
-    availability_zone_count: NotRequired[pulumi.Input[_builtins.int]]
+    availability_zone_count: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Number of Availability Zones for the domain to use with `zone_awareness_enabled`. Defaults to `2`. Valid values: `2` or `3`.
     """
@@ -1346,7 +1493,7 @@ class DomainClusterConfigZoneAwarenessConfigArgsDict(TypedDict):
 @pulumi.input_type
 class DomainClusterConfigZoneAwarenessConfigArgs:
     def __init__(__self__, *,
-                 availability_zone_count: Optional[pulumi.Input[_builtins.int]] = None):
+                 availability_zone_count: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.int] availability_zone_count: Number of Availability Zones for the domain to use with `zone_awareness_enabled`. Defaults to `2`. Valid values: `2` or `3`.
         """
@@ -1355,14 +1502,14 @@ class DomainClusterConfigZoneAwarenessConfigArgs:
 
     @_builtins.property
     @pulumi.getter(name="availabilityZoneCount")
-    def availability_zone_count(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def availability_zone_count(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Number of Availability Zones for the domain to use with `zone_awareness_enabled`. Defaults to `2`. Valid values: `2` or `3`.
         """
         return pulumi.get(self, "availability_zone_count")
 
     @availability_zone_count.setter
-    def availability_zone_count(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def availability_zone_count(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "availability_zone_count", value)
 
 
@@ -1379,7 +1526,7 @@ class DomainCognitoOptionsArgsDict(TypedDict):
     """
     ID of the Cognito User Pool to use.
     """
-    enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether Amazon Cognito authentication with Dashboard is enabled or not. Default is `false`.
     """
@@ -1390,7 +1537,7 @@ class DomainCognitoOptionsArgs:
                  identity_pool_id: pulumi.Input[_builtins.str],
                  role_arn: pulumi.Input[_builtins.str],
                  user_pool_id: pulumi.Input[_builtins.str],
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None):
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None):
         """
         :param pulumi.Input[_builtins.str] identity_pool_id: ID of the Cognito Identity Pool to use.
         :param pulumi.Input[_builtins.str] role_arn: ARN of the IAM role that has the AmazonOpenSearchServiceCognitoAccess policy attached.
@@ -1441,35 +1588,63 @@ class DomainCognitoOptionsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether Amazon Cognito authentication with Dashboard is enabled or not. Default is `false`.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
 
+class DomainDeploymentStrategyOptionsArgsDict(TypedDict):
+    deployment_strategy: pulumi.Input[_builtins.str]
+    """
+    Deployment strategy for the domain. Valid values: `Default` and `CapacityOptimized`.
+    """
+
+@pulumi.input_type
+class DomainDeploymentStrategyOptionsArgs:
+    def __init__(__self__, *,
+                 deployment_strategy: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] deployment_strategy: Deployment strategy for the domain. Valid values: `Default` and `CapacityOptimized`.
+        """
+        pulumi.set(__self__, "deployment_strategy", deployment_strategy)
+
+    @_builtins.property
+    @pulumi.getter(name="deploymentStrategy")
+    def deployment_strategy(self) -> pulumi.Input[_builtins.str]:
+        """
+        Deployment strategy for the domain. Valid values: `Default` and `CapacityOptimized`.
+        """
+        return pulumi.get(self, "deployment_strategy")
+
+    @deployment_strategy.setter
+    def deployment_strategy(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "deployment_strategy", value)
+
+
 class DomainDomainEndpointOptionsArgsDict(TypedDict):
-    custom_endpoint: NotRequired[pulumi.Input[_builtins.str]]
+    custom_endpoint: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Fully qualified domain for your custom endpoint.
     """
-    custom_endpoint_certificate_arn: NotRequired[pulumi.Input[_builtins.str]]
+    custom_endpoint_certificate_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     ACM certificate ARN for your custom endpoint.
     """
-    custom_endpoint_enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    custom_endpoint_enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether to enable custom endpoint for the OpenSearch domain.
     """
-    enforce_https: NotRequired[pulumi.Input[_builtins.bool]]
+    enforce_https: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether or not to require HTTPS. Defaults to `true`.
     """
-    tls_security_policy: NotRequired[pulumi.Input[_builtins.str]]
+    tls_security_policy: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Name of the TLS security policy that needs to be applied to the HTTPS endpoint. For valid values, refer to the [AWS documentation](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_DomainEndpointOptions.html#opensearchservice-Type-DomainEndpointOptions-TLSSecurityPolicy). Pulumi will only perform drift detection if a configuration value is provided.
     """
@@ -1477,11 +1652,11 @@ class DomainDomainEndpointOptionsArgsDict(TypedDict):
 @pulumi.input_type
 class DomainDomainEndpointOptionsArgs:
     def __init__(__self__, *,
-                 custom_endpoint: Optional[pulumi.Input[_builtins.str]] = None,
-                 custom_endpoint_certificate_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 custom_endpoint_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 enforce_https: Optional[pulumi.Input[_builtins.bool]] = None,
-                 tls_security_policy: Optional[pulumi.Input[_builtins.str]] = None):
+                 custom_endpoint: pulumi.Input[Optional[_builtins.str]] = None,
+                 custom_endpoint_certificate_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 custom_endpoint_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 enforce_https: pulumi.Input[Optional[_builtins.bool]] = None,
+                 tls_security_policy: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] custom_endpoint: Fully qualified domain for your custom endpoint.
         :param pulumi.Input[_builtins.str] custom_endpoint_certificate_arn: ACM certificate ARN for your custom endpoint.
@@ -1502,62 +1677,62 @@ class DomainDomainEndpointOptionsArgs:
 
     @_builtins.property
     @pulumi.getter(name="customEndpoint")
-    def custom_endpoint(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def custom_endpoint(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Fully qualified domain for your custom endpoint.
         """
         return pulumi.get(self, "custom_endpoint")
 
     @custom_endpoint.setter
-    def custom_endpoint(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def custom_endpoint(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "custom_endpoint", value)
 
     @_builtins.property
     @pulumi.getter(name="customEndpointCertificateArn")
-    def custom_endpoint_certificate_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def custom_endpoint_certificate_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ACM certificate ARN for your custom endpoint.
         """
         return pulumi.get(self, "custom_endpoint_certificate_arn")
 
     @custom_endpoint_certificate_arn.setter
-    def custom_endpoint_certificate_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def custom_endpoint_certificate_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "custom_endpoint_certificate_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="customEndpointEnabled")
-    def custom_endpoint_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def custom_endpoint_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to enable custom endpoint for the OpenSearch domain.
         """
         return pulumi.get(self, "custom_endpoint_enabled")
 
     @custom_endpoint_enabled.setter
-    def custom_endpoint_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def custom_endpoint_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "custom_endpoint_enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="enforceHttps")
-    def enforce_https(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enforce_https(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether or not to require HTTPS. Defaults to `true`.
         """
         return pulumi.get(self, "enforce_https")
 
     @enforce_https.setter
-    def enforce_https(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enforce_https(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enforce_https", value)
 
     @_builtins.property
     @pulumi.getter(name="tlsSecurityPolicy")
-    def tls_security_policy(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def tls_security_policy(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the TLS security policy that needs to be applied to the HTTPS endpoint. For valid values, refer to the [AWS documentation](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_DomainEndpointOptions.html#opensearchservice-Type-DomainEndpointOptions-TLSSecurityPolicy). Pulumi will only perform drift detection if a configuration value is provided.
         """
         return pulumi.get(self, "tls_security_policy")
 
     @tls_security_policy.setter
-    def tls_security_policy(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def tls_security_policy(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "tls_security_policy", value)
 
 
@@ -1566,19 +1741,19 @@ class DomainEbsOptionsArgsDict(TypedDict):
     """
     Whether EBS volumes are attached to data nodes in the domain.
     """
-    iops: NotRequired[pulumi.Input[_builtins.int]]
+    iops: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Baseline input/output (I/O) performance of EBS volumes attached to data nodes. Applicable only for the GP3 and Provisioned IOPS EBS volume types.
     """
-    throughput: NotRequired[pulumi.Input[_builtins.int]]
+    throughput: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Specifies the throughput (in MiB/s) of the EBS volumes attached to data nodes. Applicable only for the gp3 volume type.
     """
-    volume_size: NotRequired[pulumi.Input[_builtins.int]]
+    volume_size: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Size of EBS volumes attached to data nodes (in GiB).
     """
-    volume_type: NotRequired[pulumi.Input[_builtins.str]]
+    volume_type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Type of EBS volumes attached to data nodes.
     """
@@ -1587,10 +1762,10 @@ class DomainEbsOptionsArgsDict(TypedDict):
 class DomainEbsOptionsArgs:
     def __init__(__self__, *,
                  ebs_enabled: pulumi.Input[_builtins.bool],
-                 iops: Optional[pulumi.Input[_builtins.int]] = None,
-                 throughput: Optional[pulumi.Input[_builtins.int]] = None,
-                 volume_size: Optional[pulumi.Input[_builtins.int]] = None,
-                 volume_type: Optional[pulumi.Input[_builtins.str]] = None):
+                 iops: pulumi.Input[Optional[_builtins.int]] = None,
+                 throughput: pulumi.Input[Optional[_builtins.int]] = None,
+                 volume_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 volume_type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.bool] ebs_enabled: Whether EBS volumes are attached to data nodes in the domain.
         :param pulumi.Input[_builtins.int] iops: Baseline input/output (I/O) performance of EBS volumes attached to data nodes. Applicable only for the GP3 and Provisioned IOPS EBS volume types.
@@ -1622,50 +1797,50 @@ class DomainEbsOptionsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def iops(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def iops(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Baseline input/output (I/O) performance of EBS volumes attached to data nodes. Applicable only for the GP3 and Provisioned IOPS EBS volume types.
         """
         return pulumi.get(self, "iops")
 
     @iops.setter
-    def iops(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def iops(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "iops", value)
 
     @_builtins.property
     @pulumi.getter
-    def throughput(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def throughput(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Specifies the throughput (in MiB/s) of the EBS volumes attached to data nodes. Applicable only for the gp3 volume type.
         """
         return pulumi.get(self, "throughput")
 
     @throughput.setter
-    def throughput(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def throughput(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "throughput", value)
 
     @_builtins.property
     @pulumi.getter(name="volumeSize")
-    def volume_size(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def volume_size(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Size of EBS volumes attached to data nodes (in GiB).
         """
         return pulumi.get(self, "volume_size")
 
     @volume_size.setter
-    def volume_size(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def volume_size(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "volume_size", value)
 
     @_builtins.property
     @pulumi.getter(name="volumeType")
-    def volume_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def volume_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Type of EBS volumes attached to data nodes.
         """
         return pulumi.get(self, "volume_type")
 
     @volume_type.setter
-    def volume_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def volume_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "volume_type", value)
 
 
@@ -1674,7 +1849,7 @@ class DomainEncryptAtRestArgsDict(TypedDict):
     """
     Whether to enable encryption at rest. If the `encrypt_at_rest` block is not provided then this defaults to `false`. Enabling encryption on new domains requires an `engine_version` of `OpenSearch_X.Y` or `Elasticsearch_5.1` or greater.
     """
-    kms_key_id: NotRequired[pulumi.Input[_builtins.str]]
+    kms_key_id: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     KMS key ARN to encrypt the Elasticsearch domain with. If not specified then it defaults to using the `aws/es` service KMS key. Note that KMS will accept a KMS key ID but will return the key ARN. To prevent the provider detecting unwanted changes, use the key ARN instead.
     """
@@ -1683,7 +1858,7 @@ class DomainEncryptAtRestArgsDict(TypedDict):
 class DomainEncryptAtRestArgs:
     def __init__(__self__, *,
                  enabled: pulumi.Input[_builtins.bool],
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.bool] enabled: Whether to enable encryption at rest. If the `encrypt_at_rest` block is not provided then this defaults to `false`. Enabling encryption on new domains requires an `engine_version` of `OpenSearch_X.Y` or `Elasticsearch_5.1` or greater.
         :param pulumi.Input[_builtins.str] kms_key_id: KMS key ARN to encrypt the Elasticsearch domain with. If not specified then it defaults to using the `aws/es` service KMS key. Note that KMS will accept a KMS key ID but will return the key ARN. To prevent the provider detecting unwanted changes, use the key ARN instead.
@@ -1706,30 +1881,40 @@ class DomainEncryptAtRestArgs:
 
     @_builtins.property
     @pulumi.getter(name="kmsKeyId")
-    def kms_key_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         KMS key ARN to encrypt the Elasticsearch domain with. If not specified then it defaults to using the `aws/es` service KMS key. Note that KMS will accept a KMS key ID but will return the key ARN. To prevent the provider detecting unwanted changes, use the key ARN instead.
         """
         return pulumi.get(self, "kms_key_id")
 
     @kms_key_id.setter
-    def kms_key_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key_id", value)
 
 
 class DomainIdentityCenterOptionsArgsDict(TypedDict):
-    enabled_api_access: NotRequired[pulumi.Input[_builtins.bool]]
-    identity_center_instance_arn: NotRequired[pulumi.Input[_builtins.str]]
-    roles_key: NotRequired[pulumi.Input[_builtins.str]]
-    subject_key: NotRequired[pulumi.Input[_builtins.str]]
+    enabled_api_access: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
+    identity_center_instance_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    roles_key: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Element of the JWT assertion to use for roles. Default is `roles`.
+    """
+    subject_key: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Element of the JWT assertion to use for the user name. Default is `sub`.
+    """
 
 @pulumi.input_type
 class DomainIdentityCenterOptionsArgs:
     def __init__(__self__, *,
-                 enabled_api_access: Optional[pulumi.Input[_builtins.bool]] = None,
-                 identity_center_instance_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 roles_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 subject_key: Optional[pulumi.Input[_builtins.str]] = None):
+                 enabled_api_access: pulumi.Input[Optional[_builtins.bool]] = None,
+                 identity_center_instance_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 roles_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 subject_key: pulumi.Input[Optional[_builtins.str]] = None):
+        """
+        :param pulumi.Input[_builtins.str] roles_key: Element of the JWT assertion to use for roles. Default is `roles`.
+        :param pulumi.Input[_builtins.str] subject_key: Element of the JWT assertion to use for the user name. Default is `sub`.
+        """
         if enabled_api_access is not None:
             pulumi.set(__self__, "enabled_api_access", enabled_api_access)
         if identity_center_instance_arn is not None:
@@ -1741,38 +1926,44 @@ class DomainIdentityCenterOptionsArgs:
 
     @_builtins.property
     @pulumi.getter(name="enabledApiAccess")
-    def enabled_api_access(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled_api_access(self) -> pulumi.Input[Optional[_builtins.bool]]:
         return pulumi.get(self, "enabled_api_access")
 
     @enabled_api_access.setter
-    def enabled_api_access(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled_api_access(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled_api_access", value)
 
     @_builtins.property
     @pulumi.getter(name="identityCenterInstanceArn")
-    def identity_center_instance_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def identity_center_instance_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "identity_center_instance_arn")
 
     @identity_center_instance_arn.setter
-    def identity_center_instance_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def identity_center_instance_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "identity_center_instance_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="rolesKey")
-    def roles_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def roles_key(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Element of the JWT assertion to use for roles. Default is `roles`.
+        """
         return pulumi.get(self, "roles_key")
 
     @roles_key.setter
-    def roles_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def roles_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "roles_key", value)
 
     @_builtins.property
     @pulumi.getter(name="subjectKey")
-    def subject_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def subject_key(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Element of the JWT assertion to use for the user name. Default is `sub`.
+        """
         return pulumi.get(self, "subject_key")
 
     @subject_key.setter
-    def subject_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def subject_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "subject_key", value)
 
 
@@ -1785,7 +1976,7 @@ class DomainLogPublishingOptionArgsDict(TypedDict):
     """
     Type of OpenSearch log. Valid values: `INDEX_SLOW_LOGS`, `SEARCH_SLOW_LOGS`, `ES_APPLICATION_LOGS`, `AUDIT_LOGS`.
     """
-    enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether given log publishing option is enabled or not.
     """
@@ -1795,7 +1986,7 @@ class DomainLogPublishingOptionArgs:
     def __init__(__self__, *,
                  cloudwatch_log_group_arn: pulumi.Input[_builtins.str],
                  log_type: pulumi.Input[_builtins.str],
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None):
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None):
         """
         :param pulumi.Input[_builtins.str] cloudwatch_log_group_arn: ARN of the Cloudwatch log group to which log needs to be published.
         :param pulumi.Input[_builtins.str] log_type: Type of OpenSearch log. Valid values: `INDEX_SLOW_LOGS`, `SEARCH_SLOW_LOGS`, `ES_APPLICATION_LOGS`, `AUDIT_LOGS`.
@@ -1832,14 +2023,14 @@ class DomainLogPublishingOptionArgs:
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether given log publishing option is enabled or not.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
 
@@ -1872,17 +2063,17 @@ class DomainNodeToNodeEncryptionArgs:
 
 
 class DomainOffPeakWindowOptionsArgsDict(TypedDict):
-    enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Enabled disabled toggle for off-peak update window.
     """
-    off_peak_window: NotRequired[pulumi.Input['DomainOffPeakWindowOptionsOffPeakWindowArgsDict']]
+    off_peak_window: NotRequired[pulumi.Input[Optional['DomainOffPeakWindowOptionsOffPeakWindowArgsDict']]]
 
 @pulumi.input_type
 class DomainOffPeakWindowOptionsArgs:
     def __init__(__self__, *,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 off_peak_window: Optional[pulumi.Input['DomainOffPeakWindowOptionsOffPeakWindowArgs']] = None):
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 off_peak_window: pulumi.Input[Optional['DomainOffPeakWindowOptionsOffPeakWindowArgs']] = None):
         """
         :param pulumi.Input[_builtins.bool] enabled: Enabled disabled toggle for off-peak update window.
         """
@@ -1893,28 +2084,28 @@ class DomainOffPeakWindowOptionsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Enabled disabled toggle for off-peak update window.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="offPeakWindow")
-    def off_peak_window(self) -> Optional[pulumi.Input['DomainOffPeakWindowOptionsOffPeakWindowArgs']]:
+    def off_peak_window(self) -> pulumi.Input[Optional['DomainOffPeakWindowOptionsOffPeakWindowArgs']]:
         return pulumi.get(self, "off_peak_window")
 
     @off_peak_window.setter
-    def off_peak_window(self, value: Optional[pulumi.Input['DomainOffPeakWindowOptionsOffPeakWindowArgs']]):
+    def off_peak_window(self, value: pulumi.Input[Optional['DomainOffPeakWindowOptionsOffPeakWindowArgs']]):
         pulumi.set(self, "off_peak_window", value)
 
 
 class DomainOffPeakWindowOptionsOffPeakWindowArgsDict(TypedDict):
-    window_start_time: NotRequired[pulumi.Input['DomainOffPeakWindowOptionsOffPeakWindowWindowStartTimeArgsDict']]
+    window_start_time: NotRequired[pulumi.Input[Optional['DomainOffPeakWindowOptionsOffPeakWindowWindowStartTimeArgsDict']]]
     """
     10h window for updates
     """
@@ -1922,7 +2113,7 @@ class DomainOffPeakWindowOptionsOffPeakWindowArgsDict(TypedDict):
 @pulumi.input_type
 class DomainOffPeakWindowOptionsOffPeakWindowArgs:
     def __init__(__self__, *,
-                 window_start_time: Optional[pulumi.Input['DomainOffPeakWindowOptionsOffPeakWindowWindowStartTimeArgs']] = None):
+                 window_start_time: pulumi.Input[Optional['DomainOffPeakWindowOptionsOffPeakWindowWindowStartTimeArgs']] = None):
         """
         :param pulumi.Input['DomainOffPeakWindowOptionsOffPeakWindowWindowStartTimeArgs'] window_start_time: 10h window for updates
         """
@@ -1931,23 +2122,23 @@ class DomainOffPeakWindowOptionsOffPeakWindowArgs:
 
     @_builtins.property
     @pulumi.getter(name="windowStartTime")
-    def window_start_time(self) -> Optional[pulumi.Input['DomainOffPeakWindowOptionsOffPeakWindowWindowStartTimeArgs']]:
+    def window_start_time(self) -> pulumi.Input[Optional['DomainOffPeakWindowOptionsOffPeakWindowWindowStartTimeArgs']]:
         """
         10h window for updates
         """
         return pulumi.get(self, "window_start_time")
 
     @window_start_time.setter
-    def window_start_time(self, value: Optional[pulumi.Input['DomainOffPeakWindowOptionsOffPeakWindowWindowStartTimeArgs']]):
+    def window_start_time(self, value: pulumi.Input[Optional['DomainOffPeakWindowOptionsOffPeakWindowWindowStartTimeArgs']]):
         pulumi.set(self, "window_start_time", value)
 
 
 class DomainOffPeakWindowOptionsOffPeakWindowWindowStartTimeArgsDict(TypedDict):
-    hours: NotRequired[pulumi.Input[_builtins.int]]
+    hours: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Starting hour of the 10-hour window for updates
     """
-    minutes: NotRequired[pulumi.Input[_builtins.int]]
+    minutes: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Starting minute of the 10-hour window for updates
     """
@@ -1955,8 +2146,8 @@ class DomainOffPeakWindowOptionsOffPeakWindowWindowStartTimeArgsDict(TypedDict):
 @pulumi.input_type
 class DomainOffPeakWindowOptionsOffPeakWindowWindowStartTimeArgs:
     def __init__(__self__, *,
-                 hours: Optional[pulumi.Input[_builtins.int]] = None,
-                 minutes: Optional[pulumi.Input[_builtins.int]] = None):
+                 hours: pulumi.Input[Optional[_builtins.int]] = None,
+                 minutes: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.int] hours: Starting hour of the 10-hour window for updates
         :param pulumi.Input[_builtins.int] minutes: Starting minute of the 10-hour window for updates
@@ -1968,55 +2159,55 @@ class DomainOffPeakWindowOptionsOffPeakWindowWindowStartTimeArgs:
 
     @_builtins.property
     @pulumi.getter
-    def hours(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def hours(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Starting hour of the 10-hour window for updates
         """
         return pulumi.get(self, "hours")
 
     @hours.setter
-    def hours(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def hours(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "hours", value)
 
     @_builtins.property
     @pulumi.getter
-    def minutes(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def minutes(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Starting minute of the 10-hour window for updates
         """
         return pulumi.get(self, "minutes")
 
     @minutes.setter
-    def minutes(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def minutes(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "minutes", value)
 
 
 class DomainSamlOptionsSamlOptionsArgsDict(TypedDict):
-    enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether SAML authentication is enabled.
     """
-    idp: NotRequired[pulumi.Input['DomainSamlOptionsSamlOptionsIdpArgsDict']]
+    idp: NotRequired[pulumi.Input[Optional['DomainSamlOptionsSamlOptionsIdpArgsDict']]]
     """
     Information from your identity provider.
     """
-    master_backend_role: NotRequired[pulumi.Input[_builtins.str]]
+    master_backend_role: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     This backend role from the SAML IdP receives full permissions to the cluster, equivalent to a new master user.
     """
-    master_user_name: NotRequired[pulumi.Input[_builtins.str]]
+    master_user_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     This username from the SAML IdP receives full permissions to the cluster, equivalent to a new master user.
     """
-    roles_key: NotRequired[pulumi.Input[_builtins.str]]
+    roles_key: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Element of the SAML assertion to use for backend roles. Default is roles.
     """
-    session_timeout_minutes: NotRequired[pulumi.Input[_builtins.int]]
+    session_timeout_minutes: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Duration of a session in minutes after a user logs in. Default is 60. Maximum value is 1,440.
     """
-    subject_key: NotRequired[pulumi.Input[_builtins.str]]
+    subject_key: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Element of the SAML assertion to use for username. Default is NameID.
     """
@@ -2024,13 +2215,13 @@ class DomainSamlOptionsSamlOptionsArgsDict(TypedDict):
 @pulumi.input_type
 class DomainSamlOptionsSamlOptionsArgs:
     def __init__(__self__, *,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 idp: Optional[pulumi.Input['DomainSamlOptionsSamlOptionsIdpArgs']] = None,
-                 master_backend_role: Optional[pulumi.Input[_builtins.str]] = None,
-                 master_user_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 roles_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 session_timeout_minutes: Optional[pulumi.Input[_builtins.int]] = None,
-                 subject_key: Optional[pulumi.Input[_builtins.str]] = None):
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 idp: pulumi.Input[Optional['DomainSamlOptionsSamlOptionsIdpArgs']] = None,
+                 master_backend_role: pulumi.Input[Optional[_builtins.str]] = None,
+                 master_user_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 roles_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 session_timeout_minutes: pulumi.Input[Optional[_builtins.int]] = None,
+                 subject_key: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.bool] enabled: Whether SAML authentication is enabled.
         :param pulumi.Input['DomainSamlOptionsSamlOptionsIdpArgs'] idp: Information from your identity provider.
@@ -2057,86 +2248,86 @@ class DomainSamlOptionsSamlOptionsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether SAML authentication is enabled.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def idp(self) -> Optional[pulumi.Input['DomainSamlOptionsSamlOptionsIdpArgs']]:
+    def idp(self) -> pulumi.Input[Optional['DomainSamlOptionsSamlOptionsIdpArgs']]:
         """
         Information from your identity provider.
         """
         return pulumi.get(self, "idp")
 
     @idp.setter
-    def idp(self, value: Optional[pulumi.Input['DomainSamlOptionsSamlOptionsIdpArgs']]):
+    def idp(self, value: pulumi.Input[Optional['DomainSamlOptionsSamlOptionsIdpArgs']]):
         pulumi.set(self, "idp", value)
 
     @_builtins.property
     @pulumi.getter(name="masterBackendRole")
-    def master_backend_role(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def master_backend_role(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         This backend role from the SAML IdP receives full permissions to the cluster, equivalent to a new master user.
         """
         return pulumi.get(self, "master_backend_role")
 
     @master_backend_role.setter
-    def master_backend_role(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def master_backend_role(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "master_backend_role", value)
 
     @_builtins.property
     @pulumi.getter(name="masterUserName")
-    def master_user_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def master_user_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         This username from the SAML IdP receives full permissions to the cluster, equivalent to a new master user.
         """
         return pulumi.get(self, "master_user_name")
 
     @master_user_name.setter
-    def master_user_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def master_user_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "master_user_name", value)
 
     @_builtins.property
     @pulumi.getter(name="rolesKey")
-    def roles_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def roles_key(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Element of the SAML assertion to use for backend roles. Default is roles.
         """
         return pulumi.get(self, "roles_key")
 
     @roles_key.setter
-    def roles_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def roles_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "roles_key", value)
 
     @_builtins.property
     @pulumi.getter(name="sessionTimeoutMinutes")
-    def session_timeout_minutes(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def session_timeout_minutes(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Duration of a session in minutes after a user logs in. Default is 60. Maximum value is 1,440.
         """
         return pulumi.get(self, "session_timeout_minutes")
 
     @session_timeout_minutes.setter
-    def session_timeout_minutes(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def session_timeout_minutes(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "session_timeout_minutes", value)
 
     @_builtins.property
     @pulumi.getter(name="subjectKey")
-    def subject_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def subject_key(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Element of the SAML assertion to use for username. Default is NameID.
         """
         return pulumi.get(self, "subject_key")
 
     @subject_key.setter
-    def subject_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def subject_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "subject_key", value)
 
 
@@ -2216,7 +2407,7 @@ class DomainSnapshotOptionsArgs:
 
 
 class DomainSoftwareUpdateOptionsArgsDict(TypedDict):
-    auto_software_update_enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    auto_software_update_enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether automatic service software updates are enabled for the domain. Defaults to `false`.
     """
@@ -2224,7 +2415,7 @@ class DomainSoftwareUpdateOptionsArgsDict(TypedDict):
 @pulumi.input_type
 class DomainSoftwareUpdateOptionsArgs:
     def __init__(__self__, *,
-                 auto_software_update_enabled: Optional[pulumi.Input[_builtins.bool]] = None):
+                 auto_software_update_enabled: pulumi.Input[Optional[_builtins.bool]] = None):
         """
         :param pulumi.Input[_builtins.bool] auto_software_update_enabled: Whether automatic service software updates are enabled for the domain. Defaults to `false`.
         """
@@ -2233,31 +2424,31 @@ class DomainSoftwareUpdateOptionsArgs:
 
     @_builtins.property
     @pulumi.getter(name="autoSoftwareUpdateEnabled")
-    def auto_software_update_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def auto_software_update_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether automatic service software updates are enabled for the domain. Defaults to `false`.
         """
         return pulumi.get(self, "auto_software_update_enabled")
 
     @auto_software_update_enabled.setter
-    def auto_software_update_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def auto_software_update_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "auto_software_update_enabled", value)
 
 
 class DomainVpcOptionsArgsDict(TypedDict):
-    availability_zones: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    availability_zones: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     If the domain was created inside a VPC, the names of the availability zones the configured `subnet_ids` were created inside.
     """
-    security_group_ids: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    security_group_ids: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     List of VPC Security Group IDs to be applied to the OpenSearch domain endpoints. If omitted, the default Security Group for the VPC will be used.
     """
-    subnet_ids: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    subnet_ids: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     List of VPC Subnet IDs for the OpenSearch domain endpoints to be created in.
     """
-    vpc_id: NotRequired[pulumi.Input[_builtins.str]]
+    vpc_id: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     If the domain was created inside a VPC, the ID of the VPC.
     """
@@ -2265,10 +2456,10 @@ class DomainVpcOptionsArgsDict(TypedDict):
 @pulumi.input_type
 class DomainVpcOptionsArgs:
     def __init__(__self__, *,
-                 availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 subnet_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 vpc_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 availability_zones: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 subnet_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 vpc_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] availability_zones: If the domain was created inside a VPC, the names of the availability zones the configured `subnet_ids` were created inside.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_group_ids: List of VPC Security Group IDs to be applied to the OpenSearch domain endpoints. If omitted, the default Security Group for the VPC will be used.
@@ -2286,59 +2477,59 @@ class DomainVpcOptionsArgs:
 
     @_builtins.property
     @pulumi.getter(name="availabilityZones")
-    def availability_zones(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def availability_zones(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         If the domain was created inside a VPC, the names of the availability zones the configured `subnet_ids` were created inside.
         """
         return pulumi.get(self, "availability_zones")
 
     @availability_zones.setter
-    def availability_zones(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def availability_zones(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "availability_zones", value)
 
     @_builtins.property
     @pulumi.getter(name="securityGroupIds")
-    def security_group_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def security_group_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of VPC Security Group IDs to be applied to the OpenSearch domain endpoints. If omitted, the default Security Group for the VPC will be used.
         """
         return pulumi.get(self, "security_group_ids")
 
     @security_group_ids.setter
-    def security_group_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def security_group_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "security_group_ids", value)
 
     @_builtins.property
     @pulumi.getter(name="subnetIds")
-    def subnet_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def subnet_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of VPC Subnet IDs for the OpenSearch domain endpoints to be created in.
         """
         return pulumi.get(self, "subnet_ids")
 
     @subnet_ids.setter
-    def subnet_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def subnet_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "subnet_ids", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcId")
-    def vpc_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def vpc_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         If the domain was created inside a VPC, the ID of the VPC.
         """
         return pulumi.get(self, "vpc_id")
 
     @vpc_id.setter
-    def vpc_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def vpc_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "vpc_id", value)
 
 
 class OutboundConnectionConnectionPropertiesArgsDict(TypedDict):
-    cross_cluster_search: NotRequired[pulumi.Input['OutboundConnectionConnectionPropertiesCrossClusterSearchArgsDict']]
+    cross_cluster_search: NotRequired[pulumi.Input[Optional['OutboundConnectionConnectionPropertiesCrossClusterSearchArgsDict']]]
     """
     Configuration block for cross cluster search.
     """
-    endpoint: NotRequired[pulumi.Input[_builtins.str]]
+    endpoint: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The endpoint of the remote domain, is only set when `connection_mode` is `VPC_ENDPOINT` and `accept_connection` is `TRUE`.
     """
@@ -2346,8 +2537,8 @@ class OutboundConnectionConnectionPropertiesArgsDict(TypedDict):
 @pulumi.input_type
 class OutboundConnectionConnectionPropertiesArgs:
     def __init__(__self__, *,
-                 cross_cluster_search: Optional[pulumi.Input['OutboundConnectionConnectionPropertiesCrossClusterSearchArgs']] = None,
-                 endpoint: Optional[pulumi.Input[_builtins.str]] = None):
+                 cross_cluster_search: pulumi.Input[Optional['OutboundConnectionConnectionPropertiesCrossClusterSearchArgs']] = None,
+                 endpoint: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input['OutboundConnectionConnectionPropertiesCrossClusterSearchArgs'] cross_cluster_search: Configuration block for cross cluster search.
         :param pulumi.Input[_builtins.str] endpoint: The endpoint of the remote domain, is only set when `connection_mode` is `VPC_ENDPOINT` and `accept_connection` is `TRUE`.
@@ -2359,31 +2550,31 @@ class OutboundConnectionConnectionPropertiesArgs:
 
     @_builtins.property
     @pulumi.getter(name="crossClusterSearch")
-    def cross_cluster_search(self) -> Optional[pulumi.Input['OutboundConnectionConnectionPropertiesCrossClusterSearchArgs']]:
+    def cross_cluster_search(self) -> pulumi.Input[Optional['OutboundConnectionConnectionPropertiesCrossClusterSearchArgs']]:
         """
         Configuration block for cross cluster search.
         """
         return pulumi.get(self, "cross_cluster_search")
 
     @cross_cluster_search.setter
-    def cross_cluster_search(self, value: Optional[pulumi.Input['OutboundConnectionConnectionPropertiesCrossClusterSearchArgs']]):
+    def cross_cluster_search(self, value: pulumi.Input[Optional['OutboundConnectionConnectionPropertiesCrossClusterSearchArgs']]):
         pulumi.set(self, "cross_cluster_search", value)
 
     @_builtins.property
     @pulumi.getter
-    def endpoint(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def endpoint(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The endpoint of the remote domain, is only set when `connection_mode` is `VPC_ENDPOINT` and `accept_connection` is `TRUE`.
         """
         return pulumi.get(self, "endpoint")
 
     @endpoint.setter
-    def endpoint(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def endpoint(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "endpoint", value)
 
 
 class OutboundConnectionConnectionPropertiesCrossClusterSearchArgsDict(TypedDict):
-    skip_unavailable: NotRequired[pulumi.Input[_builtins.str]]
+    skip_unavailable: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Skips unavailable clusters and can only be used for cross-cluster searches. Accepted values are `ENABLED` or `DISABLED`.
     """
@@ -2391,7 +2582,7 @@ class OutboundConnectionConnectionPropertiesCrossClusterSearchArgsDict(TypedDict
 @pulumi.input_type
 class OutboundConnectionConnectionPropertiesCrossClusterSearchArgs:
     def __init__(__self__, *,
-                 skip_unavailable: Optional[pulumi.Input[_builtins.str]] = None):
+                 skip_unavailable: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] skip_unavailable: Skips unavailable clusters and can only be used for cross-cluster searches. Accepted values are `ENABLED` or `DISABLED`.
         """
@@ -2400,14 +2591,14 @@ class OutboundConnectionConnectionPropertiesCrossClusterSearchArgs:
 
     @_builtins.property
     @pulumi.getter(name="skipUnavailable")
-    def skip_unavailable(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def skip_unavailable(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Skips unavailable clusters and can only be used for cross-cluster searches. Accepted values are `ENABLED` or `DISABLED`.
         """
         return pulumi.get(self, "skip_unavailable")
 
     @skip_unavailable.setter
-    def skip_unavailable(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def skip_unavailable(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "skip_unavailable", value)
 
 
@@ -2590,12 +2781,144 @@ class PackagePackageSourceArgs:
         pulumi.set(self, "s3_key", value)
 
 
+class ServerlessCollectionEncryptionConfigArgsDict(TypedDict):
+    aws_owned_key: pulumi.Input[_builtins.bool]
+    """
+    Whether to use an AWS owned key for collection encryption.
+    """
+    kms_key_arn: pulumi.Input[_builtins.str]
+    """
+    ARN of the AWS KMS key to use for collection encryption.
+    """
+
+@pulumi.input_type
+class ServerlessCollectionEncryptionConfigArgs:
+    def __init__(__self__, *,
+                 aws_owned_key: pulumi.Input[_builtins.bool],
+                 kms_key_arn: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.bool] aws_owned_key: Whether to use an AWS owned key for collection encryption.
+        :param pulumi.Input[_builtins.str] kms_key_arn: ARN of the AWS KMS key to use for collection encryption.
+        """
+        pulumi.set(__self__, "aws_owned_key", aws_owned_key)
+        pulumi.set(__self__, "kms_key_arn", kms_key_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="awsOwnedKey")
+    def aws_owned_key(self) -> pulumi.Input[_builtins.bool]:
+        """
+        Whether to use an AWS owned key for collection encryption.
+        """
+        return pulumi.get(self, "aws_owned_key")
+
+    @aws_owned_key.setter
+    def aws_owned_key(self, value: pulumi.Input[_builtins.bool]):
+        pulumi.set(self, "aws_owned_key", value)
+
+    @_builtins.property
+    @pulumi.getter(name="kmsKeyArn")
+    def kms_key_arn(self) -> pulumi.Input[_builtins.str]:
+        """
+        ARN of the AWS KMS key to use for collection encryption.
+        """
+        return pulumi.get(self, "kms_key_arn")
+
+    @kms_key_arn.setter
+    def kms_key_arn(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "kms_key_arn", value)
+
+
+class ServerlessCollectionGroupCapacityLimitArgsDict(TypedDict):
+    max_indexing_capacity_in_ocu: pulumi.Input[_builtins.float]
+    """
+    Maximum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+    """
+    max_search_capacity_in_ocu: pulumi.Input[_builtins.float]
+    """
+    Maximum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+    """
+    min_indexing_capacity_in_ocu: pulumi.Input[_builtins.float]
+    """
+    Minimum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+    """
+    min_search_capacity_in_ocu: pulumi.Input[_builtins.float]
+    """
+    Minimum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+    """
+
+@pulumi.input_type
+class ServerlessCollectionGroupCapacityLimitArgs:
+    def __init__(__self__, *,
+                 max_indexing_capacity_in_ocu: pulumi.Input[_builtins.float],
+                 max_search_capacity_in_ocu: pulumi.Input[_builtins.float],
+                 min_indexing_capacity_in_ocu: pulumi.Input[_builtins.float],
+                 min_search_capacity_in_ocu: pulumi.Input[_builtins.float]):
+        """
+        :param pulumi.Input[_builtins.float] max_indexing_capacity_in_ocu: Maximum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        :param pulumi.Input[_builtins.float] max_search_capacity_in_ocu: Maximum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        :param pulumi.Input[_builtins.float] min_indexing_capacity_in_ocu: Minimum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        :param pulumi.Input[_builtins.float] min_search_capacity_in_ocu: Minimum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        pulumi.set(__self__, "max_indexing_capacity_in_ocu", max_indexing_capacity_in_ocu)
+        pulumi.set(__self__, "max_search_capacity_in_ocu", max_search_capacity_in_ocu)
+        pulumi.set(__self__, "min_indexing_capacity_in_ocu", min_indexing_capacity_in_ocu)
+        pulumi.set(__self__, "min_search_capacity_in_ocu", min_search_capacity_in_ocu)
+
+    @_builtins.property
+    @pulumi.getter(name="maxIndexingCapacityInOcu")
+    def max_indexing_capacity_in_ocu(self) -> pulumi.Input[_builtins.float]:
+        """
+        Maximum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        return pulumi.get(self, "max_indexing_capacity_in_ocu")
+
+    @max_indexing_capacity_in_ocu.setter
+    def max_indexing_capacity_in_ocu(self, value: pulumi.Input[_builtins.float]):
+        pulumi.set(self, "max_indexing_capacity_in_ocu", value)
+
+    @_builtins.property
+    @pulumi.getter(name="maxSearchCapacityInOcu")
+    def max_search_capacity_in_ocu(self) -> pulumi.Input[_builtins.float]:
+        """
+        Maximum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        return pulumi.get(self, "max_search_capacity_in_ocu")
+
+    @max_search_capacity_in_ocu.setter
+    def max_search_capacity_in_ocu(self, value: pulumi.Input[_builtins.float]):
+        pulumi.set(self, "max_search_capacity_in_ocu", value)
+
+    @_builtins.property
+    @pulumi.getter(name="minIndexingCapacityInOcu")
+    def min_indexing_capacity_in_ocu(self) -> pulumi.Input[_builtins.float]:
+        """
+        Minimum indexing capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        return pulumi.get(self, "min_indexing_capacity_in_ocu")
+
+    @min_indexing_capacity_in_ocu.setter
+    def min_indexing_capacity_in_ocu(self, value: pulumi.Input[_builtins.float]):
+        pulumi.set(self, "min_indexing_capacity_in_ocu", value)
+
+    @_builtins.property
+    @pulumi.getter(name="minSearchCapacityInOcu")
+    def min_search_capacity_in_ocu(self) -> pulumi.Input[_builtins.float]:
+        """
+        Minimum search capacity, in OpenSearch Compute Units (OCUs), for the collection group.
+        """
+        return pulumi.get(self, "min_search_capacity_in_ocu")
+
+    @min_search_capacity_in_ocu.setter
+    def min_search_capacity_in_ocu(self, value: pulumi.Input[_builtins.float]):
+        pulumi.set(self, "min_search_capacity_in_ocu", value)
+
+
 class ServerlessCollectionTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
@@ -2603,8 +2926,8 @@ class ServerlessCollectionTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class ServerlessCollectionTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -2616,43 +2939,188 @@ class ServerlessCollectionTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
+
+
+class ServerlessCollectionVectorOptionArgsDict(TypedDict):
+    serverless_vector_acceleration: pulumi.Input[_builtins.str]
+    """
+    Status of serverless vector acceleration for the collection. One of `ENABLED`, `DISABLED`, or `ALLOWED`.
+    """
+
+@pulumi.input_type
+class ServerlessCollectionVectorOptionArgs:
+    def __init__(__self__, *,
+                 serverless_vector_acceleration: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] serverless_vector_acceleration: Status of serverless vector acceleration for the collection. One of `ENABLED`, `DISABLED`, or `ALLOWED`.
+        """
+        pulumi.set(__self__, "serverless_vector_acceleration", serverless_vector_acceleration)
+
+    @_builtins.property
+    @pulumi.getter(name="serverlessVectorAcceleration")
+    def serverless_vector_acceleration(self) -> pulumi.Input[_builtins.str]:
+        """
+        Status of serverless vector acceleration for the collection. One of `ENABLED`, `DISABLED`, or `ALLOWED`.
+        """
+        return pulumi.get(self, "serverless_vector_acceleration")
+
+    @serverless_vector_acceleration.setter
+    def serverless_vector_acceleration(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "serverless_vector_acceleration", value)
+
+
+class ServerlessSecurityConfigIamFederationOptionsArgsDict(TypedDict):
+    group_attribute: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Group attribute for this IAM federation integration. At least one of `group_attribute` or `user_attribute` must be specified.
+    """
+    user_attribute: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    User attribute for this IAM federation integration. At least one of `group_attribute` or `user_attribute` must be specified.
+    """
+
+@pulumi.input_type
+class ServerlessSecurityConfigIamFederationOptionsArgs:
+    def __init__(__self__, *,
+                 group_attribute: pulumi.Input[Optional[_builtins.str]] = None,
+                 user_attribute: pulumi.Input[Optional[_builtins.str]] = None):
+        """
+        :param pulumi.Input[_builtins.str] group_attribute: Group attribute for this IAM federation integration. At least one of `group_attribute` or `user_attribute` must be specified.
+        :param pulumi.Input[_builtins.str] user_attribute: User attribute for this IAM federation integration. At least one of `group_attribute` or `user_attribute` must be specified.
+        """
+        if group_attribute is not None:
+            pulumi.set(__self__, "group_attribute", group_attribute)
+        if user_attribute is not None:
+            pulumi.set(__self__, "user_attribute", user_attribute)
+
+    @_builtins.property
+    @pulumi.getter(name="groupAttribute")
+    def group_attribute(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Group attribute for this IAM federation integration. At least one of `group_attribute` or `user_attribute` must be specified.
+        """
+        return pulumi.get(self, "group_attribute")
+
+    @group_attribute.setter
+    def group_attribute(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "group_attribute", value)
+
+    @_builtins.property
+    @pulumi.getter(name="userAttribute")
+    def user_attribute(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        User attribute for this IAM federation integration. At least one of `group_attribute` or `user_attribute` must be specified.
+        """
+        return pulumi.get(self, "user_attribute")
+
+    @user_attribute.setter
+    def user_attribute(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "user_attribute", value)
+
+
+class ServerlessSecurityConfigIamIdentityCenterOptionsArgsDict(TypedDict):
+    instance_arn: pulumi.Input[_builtins.str]
+    """
+    ARN of the IAM Identity Center instance used to integrate with OpenSearch Serverless.
+    """
+    group_attribute: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Group attribute for this IAM Identity Center integration. Valid values are `GroupId` and `GroupName`. Defaults to `GroupId`.
+    """
+    user_attribute: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    User attribute for this IAM Identity Center integration. Valid values are `UserId`, `UserName` and `Email`. Defaults to `UserId`.
+    """
+
+@pulumi.input_type
+class ServerlessSecurityConfigIamIdentityCenterOptionsArgs:
+    def __init__(__self__, *,
+                 instance_arn: pulumi.Input[_builtins.str],
+                 group_attribute: pulumi.Input[Optional[_builtins.str]] = None,
+                 user_attribute: pulumi.Input[Optional[_builtins.str]] = None):
+        """
+        :param pulumi.Input[_builtins.str] instance_arn: ARN of the IAM Identity Center instance used to integrate with OpenSearch Serverless.
+        :param pulumi.Input[_builtins.str] group_attribute: Group attribute for this IAM Identity Center integration. Valid values are `GroupId` and `GroupName`. Defaults to `GroupId`.
+        :param pulumi.Input[_builtins.str] user_attribute: User attribute for this IAM Identity Center integration. Valid values are `UserId`, `UserName` and `Email`. Defaults to `UserId`.
+        """
+        pulumi.set(__self__, "instance_arn", instance_arn)
+        if group_attribute is not None:
+            pulumi.set(__self__, "group_attribute", group_attribute)
+        if user_attribute is not None:
+            pulumi.set(__self__, "user_attribute", user_attribute)
+
+    @_builtins.property
+    @pulumi.getter(name="instanceArn")
+    def instance_arn(self) -> pulumi.Input[_builtins.str]:
+        """
+        ARN of the IAM Identity Center instance used to integrate with OpenSearch Serverless.
+        """
+        return pulumi.get(self, "instance_arn")
+
+    @instance_arn.setter
+    def instance_arn(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "instance_arn", value)
+
+    @_builtins.property
+    @pulumi.getter(name="groupAttribute")
+    def group_attribute(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Group attribute for this IAM Identity Center integration. Valid values are `GroupId` and `GroupName`. Defaults to `GroupId`.
+        """
+        return pulumi.get(self, "group_attribute")
+
+    @group_attribute.setter
+    def group_attribute(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "group_attribute", value)
+
+    @_builtins.property
+    @pulumi.getter(name="userAttribute")
+    def user_attribute(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        User attribute for this IAM Identity Center integration. Valid values are `UserId`, `UserName` and `Email`. Defaults to `UserId`.
+        """
+        return pulumi.get(self, "user_attribute")
+
+    @user_attribute.setter
+    def user_attribute(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "user_attribute", value)
 
 
 class ServerlessSecurityConfigSamlOptionsArgsDict(TypedDict):
     metadata: pulumi.Input[_builtins.str]
     """
-    The XML IdP metadata file generated from your identity provider.
+    XML IdP metadata file generated from your identity provider.
     """
-    group_attribute: NotRequired[pulumi.Input[_builtins.str]]
+    group_attribute: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Group attribute for this SAML integration.
     """
-    session_timeout: NotRequired[pulumi.Input[_builtins.int]]
+    session_timeout: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Session timeout, in minutes. Minimum is 5 minutes and maximum is 720 minutes (12 hours). Default is 60 minutes.
     """
-    user_attribute: NotRequired[pulumi.Input[_builtins.str]]
+    user_attribute: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     User attribute for this SAML integration.
     """
@@ -2661,11 +3129,11 @@ class ServerlessSecurityConfigSamlOptionsArgsDict(TypedDict):
 class ServerlessSecurityConfigSamlOptionsArgs:
     def __init__(__self__, *,
                  metadata: pulumi.Input[_builtins.str],
-                 group_attribute: Optional[pulumi.Input[_builtins.str]] = None,
-                 session_timeout: Optional[pulumi.Input[_builtins.int]] = None,
-                 user_attribute: Optional[pulumi.Input[_builtins.str]] = None):
+                 group_attribute: pulumi.Input[Optional[_builtins.str]] = None,
+                 session_timeout: pulumi.Input[Optional[_builtins.int]] = None,
+                 user_attribute: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] metadata: The XML IdP metadata file generated from your identity provider.
+        :param pulumi.Input[_builtins.str] metadata: XML IdP metadata file generated from your identity provider.
         :param pulumi.Input[_builtins.str] group_attribute: Group attribute for this SAML integration.
         :param pulumi.Input[_builtins.int] session_timeout: Session timeout, in minutes. Minimum is 5 minutes and maximum is 720 minutes (12 hours). Default is 60 minutes.
         :param pulumi.Input[_builtins.str] user_attribute: User attribute for this SAML integration.
@@ -2682,7 +3150,7 @@ class ServerlessSecurityConfigSamlOptionsArgs:
     @pulumi.getter
     def metadata(self) -> pulumi.Input[_builtins.str]:
         """
-        The XML IdP metadata file generated from your identity provider.
+        XML IdP metadata file generated from your identity provider.
         """
         return pulumi.get(self, "metadata")
 
@@ -2692,51 +3160,51 @@ class ServerlessSecurityConfigSamlOptionsArgs:
 
     @_builtins.property
     @pulumi.getter(name="groupAttribute")
-    def group_attribute(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def group_attribute(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Group attribute for this SAML integration.
         """
         return pulumi.get(self, "group_attribute")
 
     @group_attribute.setter
-    def group_attribute(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def group_attribute(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "group_attribute", value)
 
     @_builtins.property
     @pulumi.getter(name="sessionTimeout")
-    def session_timeout(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def session_timeout(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Session timeout, in minutes. Minimum is 5 minutes and maximum is 720 minutes (12 hours). Default is 60 minutes.
         """
         return pulumi.get(self, "session_timeout")
 
     @session_timeout.setter
-    def session_timeout(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def session_timeout(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "session_timeout", value)
 
     @_builtins.property
     @pulumi.getter(name="userAttribute")
-    def user_attribute(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def user_attribute(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         User attribute for this SAML integration.
         """
         return pulumi.get(self, "user_attribute")
 
     @user_attribute.setter
-    def user_attribute(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def user_attribute(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "user_attribute", value)
 
 
 class ServerlessVpcEndpointTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
-    update: NotRequired[pulumi.Input[_builtins.str]]
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -2744,9 +3212,9 @@ class ServerlessVpcEndpointTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class ServerlessVpcEndpointTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None,
-                 update: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -2761,38 +3229,38 @@ class ServerlessVpcEndpointTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def update(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "update")
 
     @update.setter
-    def update(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update", value)
 
 
@@ -2801,20 +3269,20 @@ class VpcEndpointVpcOptionsArgsDict(TypedDict):
     """
     A list of subnet IDs associated with the VPC endpoints for the domain. If your domain uses multiple Availability Zones, you need to provide two subnet IDs, one per zone. Otherwise, provide only one.
     """
-    availability_zones: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
-    security_group_ids: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    availability_zones: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
+    security_group_ids: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     The list of security group IDs associated with the VPC endpoints for the domain. If you do not provide a security group ID, OpenSearch Service uses the default security group for the VPC.
     """
-    vpc_id: NotRequired[pulumi.Input[_builtins.str]]
+    vpc_id: NotRequired[pulumi.Input[Optional[_builtins.str]]]
 
 @pulumi.input_type
 class VpcEndpointVpcOptionsArgs:
     def __init__(__self__, *,
                  subnet_ids: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
-                 availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 vpc_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 availability_zones: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 vpc_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnet_ids: A list of subnet IDs associated with the VPC endpoints for the domain. If your domain uses multiple Availability Zones, you need to provide two subnet IDs, one per zone. Otherwise, provide only one.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_group_ids: The list of security group IDs associated with the VPC endpoints for the domain. If you do not provide a security group ID, OpenSearch Service uses the default security group for the VPC.
@@ -2841,33 +3309,146 @@ class VpcEndpointVpcOptionsArgs:
 
     @_builtins.property
     @pulumi.getter(name="availabilityZones")
-    def availability_zones(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def availability_zones(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         return pulumi.get(self, "availability_zones")
 
     @availability_zones.setter
-    def availability_zones(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def availability_zones(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "availability_zones", value)
 
     @_builtins.property
     @pulumi.getter(name="securityGroupIds")
-    def security_group_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def security_group_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         The list of security group IDs associated with the VPC endpoints for the domain. If you do not provide a security group ID, OpenSearch Service uses the default security group for the VPC.
         """
         return pulumi.get(self, "security_group_ids")
 
     @security_group_ids.setter
-    def security_group_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def security_group_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "security_group_ids", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcId")
-    def vpc_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def vpc_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "vpc_id")
 
     @vpc_id.setter
-    def vpc_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def vpc_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "vpc_id", value)
+
+
+class GetServerlessSecurityConfigIamFederationOptionArgsDict(TypedDict):
+    group_attribute: _builtins.str
+    """
+    Group attribute for this SAML integration.
+    """
+    user_attribute: _builtins.str
+    """
+    User attribute for this SAML integration.
+    """
+
+@pulumi.input_type
+class GetServerlessSecurityConfigIamFederationOptionArgs:
+    def __init__(__self__, *,
+                 group_attribute: _builtins.str,
+                 user_attribute: _builtins.str):
+        """
+        :param _builtins.str group_attribute: Group attribute for this SAML integration.
+        :param _builtins.str user_attribute: User attribute for this SAML integration.
+        """
+        pulumi.set(__self__, "group_attribute", group_attribute)
+        pulumi.set(__self__, "user_attribute", user_attribute)
+
+    @_builtins.property
+    @pulumi.getter(name="groupAttribute")
+    def group_attribute(self) -> _builtins.str:
+        """
+        Group attribute for this SAML integration.
+        """
+        return pulumi.get(self, "group_attribute")
+
+    @group_attribute.setter
+    def group_attribute(self, value: _builtins.str):
+        pulumi.set(self, "group_attribute", value)
+
+    @_builtins.property
+    @pulumi.getter(name="userAttribute")
+    def user_attribute(self) -> _builtins.str:
+        """
+        User attribute for this SAML integration.
+        """
+        return pulumi.get(self, "user_attribute")
+
+    @user_attribute.setter
+    def user_attribute(self, value: _builtins.str):
+        pulumi.set(self, "user_attribute", value)
+
+
+class GetServerlessSecurityConfigIamIdentityCenterOptionArgsDict(TypedDict):
+    group_attribute: _builtins.str
+    """
+    Group attribute for this SAML integration.
+    """
+    instance_arn: _builtins.str
+    """
+    ARN of the IAM Identity Center instance used to integrate with OpenSearch Serverless.
+    """
+    user_attribute: _builtins.str
+    """
+    User attribute for this SAML integration.
+    """
+
+@pulumi.input_type
+class GetServerlessSecurityConfigIamIdentityCenterOptionArgs:
+    def __init__(__self__, *,
+                 group_attribute: _builtins.str,
+                 instance_arn: _builtins.str,
+                 user_attribute: _builtins.str):
+        """
+        :param _builtins.str group_attribute: Group attribute for this SAML integration.
+        :param _builtins.str instance_arn: ARN of the IAM Identity Center instance used to integrate with OpenSearch Serverless.
+        :param _builtins.str user_attribute: User attribute for this SAML integration.
+        """
+        pulumi.set(__self__, "group_attribute", group_attribute)
+        pulumi.set(__self__, "instance_arn", instance_arn)
+        pulumi.set(__self__, "user_attribute", user_attribute)
+
+    @_builtins.property
+    @pulumi.getter(name="groupAttribute")
+    def group_attribute(self) -> _builtins.str:
+        """
+        Group attribute for this SAML integration.
+        """
+        return pulumi.get(self, "group_attribute")
+
+    @group_attribute.setter
+    def group_attribute(self, value: _builtins.str):
+        pulumi.set(self, "group_attribute", value)
+
+    @_builtins.property
+    @pulumi.getter(name="instanceArn")
+    def instance_arn(self) -> _builtins.str:
+        """
+        ARN of the IAM Identity Center instance used to integrate with OpenSearch Serverless.
+        """
+        return pulumi.get(self, "instance_arn")
+
+    @instance_arn.setter
+    def instance_arn(self, value: _builtins.str):
+        pulumi.set(self, "instance_arn", value)
+
+    @_builtins.property
+    @pulumi.getter(name="userAttribute")
+    def user_attribute(self) -> _builtins.str:
+        """
+        User attribute for this SAML integration.
+        """
+        return pulumi.get(self, "user_attribute")
+
+    @user_attribute.setter
+    def user_attribute(self, value: _builtins.str):
+        pulumi.set(self, "user_attribute", value)
 
 
 class GetServerlessSecurityConfigSamlOptionArgsDict(TypedDict):
@@ -2877,7 +3458,7 @@ class GetServerlessSecurityConfigSamlOptionArgsDict(TypedDict):
     """
     metadata: _builtins.str
     """
-    The XML IdP metadata file generated from your identity provider.
+    XML IdP metadata file generated from your identity provider.
     """
     session_timeout: _builtins.int
     """
@@ -2897,7 +3478,7 @@ class GetServerlessSecurityConfigSamlOptionArgs:
                  user_attribute: _builtins.str):
         """
         :param _builtins.str group_attribute: Group attribute for this SAML integration.
-        :param _builtins.str metadata: The XML IdP metadata file generated from your identity provider.
+        :param _builtins.str metadata: XML IdP metadata file generated from your identity provider.
         :param _builtins.int session_timeout: Session timeout, in minutes. Minimum is 5 minutes and maximum is 720 minutes (12 hours). Default is 60 minutes.
         :param _builtins.str user_attribute: User attribute for this SAML integration.
         """
@@ -2922,7 +3503,7 @@ class GetServerlessSecurityConfigSamlOptionArgs:
     @pulumi.getter
     def metadata(self) -> _builtins.str:
         """
-        The XML IdP metadata file generated from your identity provider.
+        XML IdP metadata file generated from your identity provider.
         """
         return pulumi.get(self, "metadata")
 

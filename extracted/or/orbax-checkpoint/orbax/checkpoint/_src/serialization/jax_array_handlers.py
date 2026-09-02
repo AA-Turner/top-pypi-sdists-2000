@@ -197,7 +197,8 @@ async def _async_serialize_shardings(
             serialized_sharding
         )
 
-  await sharding_metadata_txn.commit_async()
+  commit_future = sharding_metadata_txn.commit_async()
+  await asyncio_utils.cancellable(commit_future)
 
 
 def _get_replica_slices(
@@ -242,35 +243,40 @@ def _record_logical_metrics(
     logical_bytes: int,
     duration: float,
     storage_type: str,
+    custom_prefix: str = '',
 ):
   """Records logical bytes, throughput, and duration to JAX monitoring."""
   logical_throughput = logical_bytes / duration if duration > 0 else 0
 
   logging.info(
       '[process=%d] %s throughput: %s/s (total gbytes: %s) (time elapsed: %s s)'
-      ' (per-host)',
+      ' (per-host)%s',
       multihost.process_index(),
       f'/jax/orbax/{direction.value}/worker/io/requested',
       humanize.naturalsize(logical_throughput, binary=True, format='%.3f'),
       humanize.naturalsize(logical_bytes, binary=True),
       duration,
+      f' (prefix: {custom_prefix})' if custom_prefix else '',
   )
 
   jax.monitoring.record_event_duration_secs(
       f'/jax/orbax/{direction.value}/worker/total_duration_secs',
       duration,
       storage_type=storage_type,
+      custom_prefix=custom_prefix,
   )
 
   jax.monitoring.record_scalar(
       f'/jax/orbax/{direction.value}/worker/io/requested/gbytes',
       logical_bytes / (1024**3),
       storage_type=storage_type,
+      custom_prefix=custom_prefix,
   )
   jax.monitoring.record_scalar(
       f'/jax/orbax/{direction.value}/worker/io/requested/throughput/gbytes_per_sec',
       logical_throughput / (1024**3),
       storage_type=storage_type,
+      custom_prefix=custom_prefix,
   )
 
 
@@ -280,6 +286,7 @@ def _record_raw_metrics(
     duration: float,
     storage_type: str,
     initial_ts_metrics: Sequence[dict[str, Any]] | None = None,
+    custom_prefix: str = '',
 ):
   """Records raw metrics collected from TensorStore."""
   if initial_ts_metrics is None:
@@ -307,22 +314,25 @@ def _record_raw_metrics(
   raw_throughput = raw_bytes / duration if duration > 0 else 0
   logging.info(
       '[process=%d] Raw %s throughput: %s/s (total gbytes: %s) (time elapsed:'
-      ' %s s) (per-host)',
+      ' %s s) (per-host)%s',
       multihost.process_index(),
       f'/jax/orbax/{direction.value}/worker/io/raw',
       humanize.naturalsize(raw_throughput, binary=True, format='%.3f'),
       humanize.naturalsize(raw_bytes, binary=True),
       duration,
+      f' (prefix: {custom_prefix})' if custom_prefix else '',
   )
   jax.monitoring.record_scalar(
       f'/jax/orbax/{direction.value}/worker/io/raw/gbytes',
       raw_bytes / (1024**3),
       storage_type=storage_type,
+      custom_prefix=custom_prefix,
   )
   jax.monitoring.record_scalar(
       f'/jax/orbax/{direction.value}/worker/io/raw/throughput/gbytes_per_sec',
       raw_throughput / (1024**3),
       storage_type=storage_type,
+      custom_prefix=custom_prefix,
   )
 
   if logical_bytes > 0:
@@ -339,12 +349,14 @@ def _record_raw_metrics(
         f'/jax/orbax/{direction.value}/worker/io/compression_ratio',
         ratio,
         storage_type=storage_type,
+        custom_prefix=custom_prefix,
     )
     if direction == types.IoDirection.WRITE:
       jax.monitoring.record_scalar(
           '/jax/orbax/write/worker/io/compressed_gbytes',
           raw_bytes / (1024**3),
           storage_type=storage_type,
+          custom_prefix=custom_prefix,
       )
 
 
@@ -354,6 +366,7 @@ def _log_io_metrics(
     start_time: float,
     parent_dir: epath.Path,
     initial_ts_metrics: Sequence[dict[str, Any]] | None = None,
+    custom_prefix: str = '',
 ):
   """Logs and records IO telemetry metrics for array serialization/deserialization."""
   duration = time.time() - start_time
@@ -364,6 +377,7 @@ def _log_io_metrics(
       logical_bytes,
       duration,
       storage_type,
+      custom_prefix=custom_prefix,
   )
   _record_raw_metrics(
       direction,
@@ -371,6 +385,7 @@ def _log_io_metrics(
       duration,
       storage_type,
       initial_ts_metrics=initial_ts_metrics,
+      custom_prefix=custom_prefix,
   )
 
 
@@ -627,7 +642,7 @@ def _serialize_arrays(
       prioritized.append((value, info, arg))
   else:
     for info, arg, value in zip(infos, args, arrays):
-      prioritization = callback.key_priority(info.keypath)
+      prioritization = callback.key_priority(info.keypath)  # pyrefly: ignore[bad-argument-type]
       if prioritization == types.TransferPriority.SYNCHRONOUS:
         prioritized.append((value, info, arg))
       elif prioritization == types.TransferPriority.ASYNCHRONOUS_PRIORITIZED:
@@ -660,10 +675,11 @@ def _serialize_arrays(
     )
   else:
 
-    def _serialize_batch(
+    async def _serialize_batch(
         batch_infos: Sequence[types.ParamInfo],
         batch_args: Sequence[types.SaveArgs],
         batch_arrays: Sequence[jax.Array],
+        d2h_start_time: float | None = None,
     ):
       ret = dispatcher.dispatch(
           _worker_serialize_arrays,
@@ -688,6 +704,16 @@ def _serialize_arrays(
               'ext_metadata': ext_metadata,
           },
       )
+      if d2h_start_time is not None:
+        jax.block_until_ready(batch_arrays)
+        _log_io_metrics(
+            direction=types.IoDirection.WRITE,
+            logical_bytes=sum(v.nbytes for v in batch_arrays),
+            start_time=d2h_start_time,
+            parent_dir=batch_infos[0].parent_dir,
+            custom_prefix='d2h',
+        )
+
       _on_batch_callback(batch_infos, callback.on_transfer_end)
 
       jax.block_until_ready(ret)
@@ -695,6 +721,7 @@ def _serialize_arrays(
       _on_batch_callback(batch_infos, callback.on_write_end)
 
     # Enqueue D2H operation for prioritized values.
+    d2h_start_time = None
     if prioritized:
       logging.info(
           'Scheduling D2H of %d prioritized jax.Array.',
@@ -703,6 +730,7 @@ def _serialize_arrays(
       prioritized_arrays, prioritized_infos, prioritized_args = zip(
           *prioritized
       )
+      d2h_start_time = time.time()
       prioritized_arrays = dispatcher.device_to_host(prioritized_arrays)
       prioritized = [
           (v, i, a)
@@ -723,7 +751,7 @@ def _serialize_arrays(
         await info.await_path_creation()
       if prioritized:
         arrays, infos, args = zip(*prioritized)
-        _serialize_batch(infos, args, arrays)
+        await _serialize_batch(infos, args, arrays, d2h_start_time)
       if deprioritized:
         assert device_host_max_bytes is not None
         for (
@@ -736,7 +764,7 @@ def _serialize_arrays(
             replica_id=replica_id,
             dispatcher=dispatcher,
         ):
-          _serialize_batch(b_infos, b_args, b_arrays)
+          await _serialize_batch(b_infos, b_args, b_arrays)
 
     return future.CommitFutureAwaitingContractedSignals(
         _serialize(),
@@ -787,9 +815,9 @@ async def _async_serialize_replica_slices(
         global_shape=value.global_shape,
         local_shape=value.local_shape,
         dtype=value.dtype,
-        use_ocdbt=info.is_ocdbt_checkpoint,
+        use_ocdbt=info.is_ocdbt_checkpoint,  # pyrefly: ignore[bad-argument-type]
         process_index=ocdbt_utils.get_process_index_for_subdir(
-            info.is_ocdbt_checkpoint
+            info.is_ocdbt_checkpoint  # pyrefly: ignore[bad-argument-type]
         ),
         replica_separate_folder=replica_separate_folder,
         metadata_key=metadata_key,
@@ -829,9 +857,32 @@ async def _async_serialize_replica_slices(
         )
     )
 
-  await asyncio.gather(*write_coros)
+  gather_future = asyncio.gather(*write_coros)
+  try:
+    await asyncio_utils.cancellable(
+        gather_future,
+        message='[process=%s] Array handler gather was cancelled.',
+        process_index=multihost.process_index(),
+    )
+  except asyncio.CancelledError:
+    if ocdbt_transaction is not None:
+      logging.info(
+          '[process=%s] Aborting OCDBT transaction', multihost.process_index()
+      )
+      ocdbt_transaction.abort()
+    raise
+
   if ocdbt_transaction is not None:
-    await ocdbt_transaction.commit_async()
+    commit_future = ocdbt_transaction.commit_async()
+    try:
+      await asyncio_utils.cancellable(
+          commit_future,
+          message='[process=%s] OCDBT transaction commit was cancelled.',
+          process_index=multihost.process_index(),
+      )
+    except asyncio.CancelledError:
+      ocdbt_transaction.abort()
+      raise
 
 
 def _wrap_random_key_data(
@@ -895,7 +946,7 @@ async def _validate_non_ocdbt_files(
 ):
   await asyncio.gather(*[
       ts_utils.assert_parameter_files_exist(  # pylint: disable=protected-access
-          info.parent_dir / info.name, metadata_key, info.use_zarr3
+          info.parent_dir / info.name, metadata_key, info.use_zarr3  # pyrefly: ignore[bad-argument-type]
       )
       for info in infos
   ])
@@ -981,7 +1032,7 @@ async def _deserialize_arrays(
     """This function contains the core TensorStore read logic from ArrayHandler.deserialize."""
     use_ocdbt = _validate_ocdbt_settings(infos)
     if not use_ocdbt:
-      await _validate_non_ocdbt_files(infos, metadata_key)
+      await _validate_non_ocdbt_files(infos, metadata_key)  # pyrefly: ignore[bad-argument-type]
     deserialize_ops = []
     for info, arg, sharding in zip(infos, args, shardings):
       array_read_spec = ts_utils.build_array_read_spec(
@@ -1315,7 +1366,7 @@ class ArrayHandler(types.TypeHandler):
       use_ocdbt = info.is_ocdbt_checkpoint
       array_read_spec = ts_utils.build_array_read_spec(
           info,
-          use_ocdbt=use_ocdbt,
+          use_ocdbt=use_ocdbt,  # pyrefly: ignore[bad-argument-type]
           metadata_key=self._metadata_key,
           raise_array_data_missing_error=info.raise_array_data_missing_error,
       )
@@ -1441,10 +1492,18 @@ class ArrayHandler(types.TypeHandler):
     if self._enable_write_sharding_file:
       future_list.append(
           future.CommitFutureAwaitingContractedSignals(
-              _async_serialize_shardings(
-                  shardings=[arr.sharding for arr in arrays],
-                  infos=infos,
-                  primary_host=self._primary_host,
+              asyncio_utils.cancellable(
+                  _async_serialize_shardings(
+                      shardings=[arr.sharding for arr in arrays],
+                      infos=infos,
+                      primary_host=self._primary_host,
+                  ),
+                  message=(
+                      '[process=%s] Sharding metadata commit was safely'
+                      ' cancelled.'
+                  ),
+                  process_index=multihost.process_index(),
+                  reraise=False,
               ),
               name='serialize_shardings',
           )
@@ -1603,7 +1662,7 @@ def _validate_sharding_and_get_primary_replica_processes(
   primary_replica_device_ids, primary_replica_pids = (
       multislice.get_primary_replica_ids_and_pids(
           replica_axis_idx=replica_axis_index,
-          mesh=sharding.mesh,
+          mesh=sharding.mesh,  # pyrefly: ignore[bad-argument-type]
           primary_replica_id=primary_replica_id,
       )
   )
@@ -1684,7 +1743,7 @@ async def _single_replica_deserialize_and_broadcast(
         jax.sharding.NamedSharding, single_replica_shardings[0]
     ).mesh
     if hasattr(jax, 'set_mesh'):
-      with jax.set_mesh(local_mesh):
+      with jax.set_mesh(local_mesh):  # pyrefly: ignore[bad-argument-type]
         deserialized = create_zeros(tuple(shape_dtype))
     else:
       with local_mesh:
@@ -1695,7 +1754,7 @@ async def _single_replica_deserialize_and_broadcast(
   global_mesh = cast(jax.sharding.NamedSharding, shardings[0]).mesh
   shared_state, _ = multislice.broadcast_one_replica_to_all(
       deserialized,
-      global_mesh,
+      global_mesh,  # pyrefly: ignore[bad-argument-type]
       replica_axis_index,
       _is_host_for_primary_replica(primary_replica_pids),
       memory_limit_bytes=broadcast_memory_limit_bytes,
@@ -1801,9 +1860,9 @@ class SingleReplicaArrayHandler(ArrayHandler):
     """Constructs a single replica sharding."""
     assert isinstance(sharding, jax.sharding.NamedSharding)
     local_replica_devices = multislice.local_replica_devices(
-        sharding.mesh, replica_axis_index=self.replica_axis_index
+        sharding.mesh, replica_axis_index=self.replica_axis_index  # pyrefly: ignore[bad-argument-type]
     )
-    local_replica_devices = np.expand_dims(
+    local_replica_devices = np.expand_dims(  # pyrefly: ignore[no-matching-overload]
         local_replica_devices, axis=self.replica_axis_index
     )
     replica_mesh = jax.sharding.Mesh(
@@ -1812,7 +1871,7 @@ class SingleReplicaArrayHandler(ArrayHandler):
     )
     return jax.sharding.NamedSharding(replica_mesh, sharding.spec)
 
-  async def deserialize(
+  async def deserialize(  # pyrefly: ignore[bad-override]
       self,
       infos: Sequence[types.ParamInfo],
       args: Sequence[SingleReplicaArrayRestoreArgs] | None = None,  # pytype: disable=signature-mismatch
@@ -1852,7 +1911,7 @@ class SingleReplicaArrayHandler(ArrayHandler):
     single_replica_shardings = [
         arg.single_replica_sharding
         if arg.single_replica_sharding
-        else self._construct_single_replica_sharding(arg.sharding)
+        else self._construct_single_replica_sharding(arg.sharding)  # pyrefly: ignore[bad-argument-type]
         for arg in args
     ]
     shardings = [arg.sharding for arg in args]
@@ -1861,22 +1920,22 @@ class SingleReplicaArrayHandler(ArrayHandler):
       ret = await _single_replica_deserialize_and_broadcast(
           infos,
           args,
-          shardings,
+          shardings,  # pyrefly: ignore[bad-argument-type]
           single_replica_shardings,
-          self.replica_axis_index,
-          self.primary_replica_id,
+          self.replica_axis_index,  # pyrefly: ignore[bad-argument-type]
+          self.primary_replica_id,  # pyrefly: ignore[bad-argument-type]
           self._metadata_key,
           self.broadcast_memory_limit_bytes,
           self.broadcast_memory_scaling_factor,
       )
     else:
       primary_replica_devices = multislice.replica_devices(
-          shardings[0].mesh,
-          replica_id=self.primary_replica_id,
-          replica_axis_index=self.replica_axis_index,
+          shardings[0].mesh,  # pyrefly: ignore[missing-attribute]
+          replica_id=self.primary_replica_id,  # pyrefly: ignore[bad-argument-type]
+          replica_axis_index=self.replica_axis_index,  # pyrefly: ignore[bad-argument-type]
       ).flatten()
       dummy_input_array = dispatchers.get_dummy_input_array(
-          primary_replica_devices
+          primary_replica_devices  # pyrefly: ignore[bad-argument-type]
       )
       # Step 1: Deserialize arrays on a single replica.
       ret = self._dispatcher.dispatch(

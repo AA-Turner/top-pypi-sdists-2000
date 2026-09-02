@@ -22,18 +22,19 @@ __all__ = ['DomainArgs', 'Domain']
 class DomainArgs:
     def __init__(__self__, *,
                  domain_execution_role: pulumi.Input[_builtins.str],
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_version: Optional[pulumi.Input[_builtins.str]] = None,
-                 kms_key_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 service_role: Optional[pulumi.Input[_builtins.str]] = None,
-                 single_sign_on: Optional[pulumi.Input['DomainSingleSignOnArgs']] = None,
-                 skip_deletion_check: Optional[pulumi.Input[_builtins.bool]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['DomainTimeoutsArgs']] = None):
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_version: pulumi.Input[Optional[_builtins.str]] = None,
+                 kms_key_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 service_role: pulumi.Input[Optional[_builtins.str]] = None,
+                 single_sign_on: pulumi.Input[Optional['DomainSingleSignOnArgs']] = None,
+                 skip_deletion_check: pulumi.Input[Optional[_builtins.bool]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['DomainTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a Domain resource.
+
         :param pulumi.Input[_builtins.str] domain_execution_role: ARN of the role used by DataZone to configure the Domain.
                
                The following arguments are optional:
@@ -84,139 +85,140 @@ class DomainArgs:
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the Domain.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="domainVersion")
-    def domain_version(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def domain_version(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Version of the Domain. Valid values are `V1` and `V2`. Defaults to `V1`.
         """
         return pulumi.get(self, "domain_version")
 
     @domain_version.setter
-    def domain_version(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def domain_version(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "domain_version", value)
 
     @_builtins.property
     @pulumi.getter(name="kmsKeyIdentifier")
-    def kms_key_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the KMS key used to encrypt the Amazon DataZone domain, metadata and reporting data.
         """
         return pulumi.get(self, "kms_key_identifier")
 
     @kms_key_identifier.setter
-    def kms_key_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key_identifier", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the Domain.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="serviceRole")
-    def service_role(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def service_role(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the service role used by DataZone. Required when `domain_version` is set to `V2`.
         """
         return pulumi.get(self, "service_role")
 
     @service_role.setter
-    def service_role(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def service_role(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "service_role", value)
 
     @_builtins.property
     @pulumi.getter(name="singleSignOn")
-    def single_sign_on(self) -> Optional[pulumi.Input['DomainSingleSignOnArgs']]:
+    def single_sign_on(self) -> pulumi.Input[Optional['DomainSingleSignOnArgs']]:
         """
         Single sign on options, used to [enable AWS IAM Identity Center](https://docs.aws.amazon.com/datazone/latest/userguide/enable-IAM-identity-center-for-datazone.html) for DataZone.
         """
         return pulumi.get(self, "single_sign_on")
 
     @single_sign_on.setter
-    def single_sign_on(self, value: Optional[pulumi.Input['DomainSingleSignOnArgs']]):
+    def single_sign_on(self, value: pulumi.Input[Optional['DomainSingleSignOnArgs']]):
         pulumi.set(self, "single_sign_on", value)
 
     @_builtins.property
     @pulumi.getter(name="skipDeletionCheck")
-    def skip_deletion_check(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def skip_deletion_check(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to skip the deletion check for the Domain.
         """
         return pulumi.get(self, "skip_deletion_check")
 
     @skip_deletion_check.setter
-    def skip_deletion_check(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def skip_deletion_check(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "skip_deletion_check", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['DomainTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['DomainTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['DomainTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['DomainTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _DomainState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_execution_role: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_version: Optional[pulumi.Input[_builtins.str]] = None,
-                 kms_key_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 portal_url: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 root_domain_unit_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 service_role: Optional[pulumi.Input[_builtins.str]] = None,
-                 single_sign_on: Optional[pulumi.Input['DomainSingleSignOnArgs']] = None,
-                 skip_deletion_check: Optional[pulumi.Input[_builtins.bool]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['DomainTimeoutsArgs']] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_execution_role: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_version: pulumi.Input[Optional[_builtins.str]] = None,
+                 kms_key_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 portal_url: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 root_domain_unit_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 service_role: pulumi.Input[Optional[_builtins.str]] = None,
+                 single_sign_on: pulumi.Input[Optional['DomainSingleSignOnArgs']] = None,
+                 skip_deletion_check: pulumi.Input[Optional[_builtins.bool]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['DomainTimeoutsArgs']] = None):
         """
         Input properties used for looking up and filtering Domain resources.
+
         :param pulumi.Input[_builtins.str] arn: ARN of the Domain.
         :param pulumi.Input[_builtins.str] description: Description of the Domain.
         :param pulumi.Input[_builtins.str] domain_execution_role: ARN of the role used by DataZone to configure the Domain.
@@ -266,31 +268,31 @@ class _DomainState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the Domain.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the Domain.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="domainExecutionRole")
-    def domain_execution_role(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def domain_execution_role(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the role used by DataZone to configure the Domain.
 
@@ -299,145 +301,145 @@ class _DomainState:
         return pulumi.get(self, "domain_execution_role")
 
     @domain_execution_role.setter
-    def domain_execution_role(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def domain_execution_role(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "domain_execution_role", value)
 
     @_builtins.property
     @pulumi.getter(name="domainVersion")
-    def domain_version(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def domain_version(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Version of the Domain. Valid values are `V1` and `V2`. Defaults to `V1`.
         """
         return pulumi.get(self, "domain_version")
 
     @domain_version.setter
-    def domain_version(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def domain_version(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "domain_version", value)
 
     @_builtins.property
     @pulumi.getter(name="kmsKeyIdentifier")
-    def kms_key_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the KMS key used to encrypt the Amazon DataZone domain, metadata and reporting data.
         """
         return pulumi.get(self, "kms_key_identifier")
 
     @kms_key_identifier.setter
-    def kms_key_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key_identifier", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the Domain.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="portalUrl")
-    def portal_url(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def portal_url(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         URL of the data portal for the Domain.
         """
         return pulumi.get(self, "portal_url")
 
     @portal_url.setter
-    def portal_url(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def portal_url(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "portal_url", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="rootDomainUnitId")
-    def root_domain_unit_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def root_domain_unit_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ID of the root domain unit.
         """
         return pulumi.get(self, "root_domain_unit_id")
 
     @root_domain_unit_id.setter
-    def root_domain_unit_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def root_domain_unit_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "root_domain_unit_id", value)
 
     @_builtins.property
     @pulumi.getter(name="serviceRole")
-    def service_role(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def service_role(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the service role used by DataZone. Required when `domain_version` is set to `V2`.
         """
         return pulumi.get(self, "service_role")
 
     @service_role.setter
-    def service_role(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def service_role(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "service_role", value)
 
     @_builtins.property
     @pulumi.getter(name="singleSignOn")
-    def single_sign_on(self) -> Optional[pulumi.Input['DomainSingleSignOnArgs']]:
+    def single_sign_on(self) -> pulumi.Input[Optional['DomainSingleSignOnArgs']]:
         """
         Single sign on options, used to [enable AWS IAM Identity Center](https://docs.aws.amazon.com/datazone/latest/userguide/enable-IAM-identity-center-for-datazone.html) for DataZone.
         """
         return pulumi.get(self, "single_sign_on")
 
     @single_sign_on.setter
-    def single_sign_on(self, value: Optional[pulumi.Input['DomainSingleSignOnArgs']]):
+    def single_sign_on(self, value: pulumi.Input[Optional['DomainSingleSignOnArgs']]):
         pulumi.set(self, "single_sign_on", value)
 
     @_builtins.property
     @pulumi.getter(name="skipDeletionCheck")
-    def skip_deletion_check(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def skip_deletion_check(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to skip the deletion check for the Domain.
         """
         return pulumi.get(self, "skip_deletion_check")
 
     @skip_deletion_check.setter
-    def skip_deletion_check(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def skip_deletion_check(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "skip_deletion_check", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['DomainTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['DomainTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['DomainTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['DomainTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
@@ -447,17 +449,17 @@ class Domain(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_execution_role: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_version: Optional[pulumi.Input[_builtins.str]] = None,
-                 kms_key_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 service_role: Optional[pulumi.Input[_builtins.str]] = None,
-                 single_sign_on: Optional[pulumi.Input[Union['DomainSingleSignOnArgs', 'DomainSingleSignOnArgsDict']]] = None,
-                 skip_deletion_check: Optional[pulumi.Input[_builtins.bool]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['DomainTimeoutsArgs', 'DomainTimeoutsArgsDict']]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_execution_role: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_version: pulumi.Input[Optional[_builtins.str]] = None,
+                 kms_key_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 service_role: pulumi.Input[Optional[_builtins.str]] = None,
+                 single_sign_on: pulumi.Input[Optional[Union['DomainSingleSignOnArgs', 'DomainSingleSignOnArgsDict']]] = None,
+                 skip_deletion_check: pulumi.Input[Optional[_builtins.bool]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['DomainTimeoutsArgs', 'DomainTimeoutsArgsDict']]] = None,
                  __props__=None):
         """
         Resource for managing an AWS DataZone Domain.
@@ -527,15 +529,6 @@ class Domain(pulumi.CustomResource):
         current = aws.get_caller_identity()
         # IAM role for Domain Execution
         assume_role_domain_execution = aws.iam.get_policy_document(statements=[{
-            "actions": [
-                "sts:AssumeRole",
-                "sts:TagSession",
-                "sts:SetContext",
-            ],
-            "principals": [{
-                "type": "Service",
-                "identifiers": ["datazone.amazonaws.com"],
-            }],
             "conditions": [
                 {
                     "test": "StringEquals",
@@ -548,6 +541,15 @@ class Domain(pulumi.CustomResource):
                     "variable": "aws:TagKeys",
                 },
             ],
+            "principals": [{
+                "type": "Service",
+                "identifiers": ["datazone.amazonaws.com"],
+            }],
+            "actions": [
+                "sts:AssumeRole",
+                "sts:TagSession",
+                "sts:SetContext",
+            ],
         }])
         domain_execution = aws.iam.Role("domain_execution",
             assume_role_policy=assume_role_domain_execution.json,
@@ -558,16 +560,16 @@ class Domain(pulumi.CustomResource):
             role=domain_execution.name)
         # IAM role for Domain Service
         assume_role_domain_service = aws.iam.get_policy_document(statements=[{
-            "actions": ["sts:AssumeRole"],
-            "principals": [{
-                "type": "Service",
-                "identifiers": ["datazone.amazonaws.com"],
-            }],
             "conditions": [{
                 "test": "StringEquals",
                 "values": [current.account_id],
                 "variable": "aws:SourceAccount",
             }],
+            "principals": [{
+                "type": "Service",
+                "identifiers": ["datazone.amazonaws.com"],
+            }],
+            "actions": ["sts:AssumeRole"],
         }])
         domain_service = aws.iam.Role("domain_service",
             assume_role_policy=assume_role_domain_service.json,
@@ -586,11 +588,23 @@ class Domain(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `id` - (String) ID of the DataZone domain.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
         Using `pulumi import`, import DataZone Domain using the `domain_id`. For example:
 
         ```sh
         $ pulumi import aws:datazone/domain:Domain example domain-id-12345678
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -680,15 +694,6 @@ class Domain(pulumi.CustomResource):
         current = aws.get_caller_identity()
         # IAM role for Domain Execution
         assume_role_domain_execution = aws.iam.get_policy_document(statements=[{
-            "actions": [
-                "sts:AssumeRole",
-                "sts:TagSession",
-                "sts:SetContext",
-            ],
-            "principals": [{
-                "type": "Service",
-                "identifiers": ["datazone.amazonaws.com"],
-            }],
             "conditions": [
                 {
                     "test": "StringEquals",
@@ -701,6 +706,15 @@ class Domain(pulumi.CustomResource):
                     "variable": "aws:TagKeys",
                 },
             ],
+            "principals": [{
+                "type": "Service",
+                "identifiers": ["datazone.amazonaws.com"],
+            }],
+            "actions": [
+                "sts:AssumeRole",
+                "sts:TagSession",
+                "sts:SetContext",
+            ],
         }])
         domain_execution = aws.iam.Role("domain_execution",
             assume_role_policy=assume_role_domain_execution.json,
@@ -711,16 +725,16 @@ class Domain(pulumi.CustomResource):
             role=domain_execution.name)
         # IAM role for Domain Service
         assume_role_domain_service = aws.iam.get_policy_document(statements=[{
-            "actions": ["sts:AssumeRole"],
-            "principals": [{
-                "type": "Service",
-                "identifiers": ["datazone.amazonaws.com"],
-            }],
             "conditions": [{
                 "test": "StringEquals",
                 "values": [current.account_id],
                 "variable": "aws:SourceAccount",
             }],
+            "principals": [{
+                "type": "Service",
+                "identifiers": ["datazone.amazonaws.com"],
+            }],
+            "actions": ["sts:AssumeRole"],
         }])
         domain_service = aws.iam.Role("domain_service",
             assume_role_policy=assume_role_domain_service.json,
@@ -739,11 +753,23 @@ class Domain(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `id` - (String) ID of the DataZone domain.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
         Using `pulumi import`, import DataZone Domain using the `domain_id`. For example:
 
         ```sh
         $ pulumi import aws:datazone/domain:Domain example domain-id-12345678
         ```
+
 
         :param str resource_name: The name of the resource.
         :param DomainArgs args: The arguments to use to populate this resource's properties.
@@ -760,17 +786,17 @@ class Domain(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_execution_role: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_version: Optional[pulumi.Input[_builtins.str]] = None,
-                 kms_key_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 service_role: Optional[pulumi.Input[_builtins.str]] = None,
-                 single_sign_on: Optional[pulumi.Input[Union['DomainSingleSignOnArgs', 'DomainSingleSignOnArgsDict']]] = None,
-                 skip_deletion_check: Optional[pulumi.Input[_builtins.bool]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['DomainTimeoutsArgs', 'DomainTimeoutsArgsDict']]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_execution_role: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_version: pulumi.Input[Optional[_builtins.str]] = None,
+                 kms_key_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 service_role: pulumi.Input[Optional[_builtins.str]] = None,
+                 single_sign_on: pulumi.Input[Optional[Union['DomainSingleSignOnArgs', 'DomainSingleSignOnArgsDict']]] = None,
+                 skip_deletion_check: pulumi.Input[Optional[_builtins.bool]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['DomainTimeoutsArgs', 'DomainTimeoutsArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -807,21 +833,21 @@ class Domain(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            domain_execution_role: Optional[pulumi.Input[_builtins.str]] = None,
-            domain_version: Optional[pulumi.Input[_builtins.str]] = None,
-            kms_key_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            portal_url: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            root_domain_unit_id: Optional[pulumi.Input[_builtins.str]] = None,
-            service_role: Optional[pulumi.Input[_builtins.str]] = None,
-            single_sign_on: Optional[pulumi.Input[Union['DomainSingleSignOnArgs', 'DomainSingleSignOnArgsDict']]] = None,
-            skip_deletion_check: Optional[pulumi.Input[_builtins.bool]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            timeouts: Optional[pulumi.Input[Union['DomainTimeoutsArgs', 'DomainTimeoutsArgsDict']]] = None) -> 'Domain':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            domain_execution_role: pulumi.Input[Optional[_builtins.str]] = None,
+            domain_version: pulumi.Input[Optional[_builtins.str]] = None,
+            kms_key_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            portal_url: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            root_domain_unit_id: pulumi.Input[Optional[_builtins.str]] = None,
+            service_role: pulumi.Input[Optional[_builtins.str]] = None,
+            single_sign_on: pulumi.Input[Optional[Union['DomainSingleSignOnArgs', 'DomainSingleSignOnArgsDict']]] = None,
+            skip_deletion_check: pulumi.Input[Optional[_builtins.bool]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            timeouts: pulumi.Input[Optional[Union['DomainTimeoutsArgs', 'DomainTimeoutsArgsDict']]] = None) -> 'Domain':
         """
         Get an existing Domain resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

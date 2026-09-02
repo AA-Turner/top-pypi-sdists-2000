@@ -3,12 +3,14 @@ import numpy as np
 import cvxpy.interface as intf
 import cvxpy.settings as s
 from cvxpy.reductions.solution import Solution, failure_solution
+from cvxpy.reductions.solvers import utilities
 from cvxpy.reductions.solvers.conic_solvers.cplex_conif import (
     get_status,
     hide_solver_output,
     set_parameters,
 )
 from cvxpy.reductions.solvers.qp_solvers.qp_solver import QpSolver
+from cvxpy.utilities.citations import CITATION_DICT
 
 
 def constrain_cplex_infty(v) -> None:
@@ -30,13 +32,13 @@ class CPLEX(QpSolver):
     """QP interface for the CPLEX solver"""
 
     MIP_CAPABLE = True
+    BOUNDED_VARIABLES = True
 
     def name(self):
         return s.CPLEX
 
     def import_solver(self) -> None:
-        import cplex
-        cplex
+        import cplex  # noqa: F401
 
     def invert(self, results, inverse_data):
         model = results["model"]
@@ -65,8 +67,21 @@ class CPLEX(QpSolver):
             # Only add duals if not a MIP.
             dual_vars = None
             if not inverse_data[CPLEX.IS_MIP]:
+                # Build dual vars dict keyed by constraint IDs
+                # CPLEX returns duals for [eq_constrs; ineq_constrs]
                 y = -np.array(model.solution.get_dual_values())
-                dual_vars = {CPLEX.DUAL_VAR_ID: y}
+                n_eq = inverse_data[self.DIMS].zero
+                eq_dual = utilities.get_dual_values(
+                    y[:n_eq],
+                    utilities.extract_dual_value,
+                    inverse_data[self.EQ_CONSTR])
+                ineq_dual = utilities.get_dual_values(
+                    y[n_eq:],
+                    utilities.extract_dual_value,
+                    inverse_data[self.NEQ_CONSTR])
+                dual_vars = {}
+                dual_vars.update(eq_dual)
+                dual_vars.update(ineq_dual)
 
             sol = Solution(status, opt_val, primal_vars, dual_vars, attr)
         else:
@@ -96,9 +111,19 @@ class CPLEX(QpSolver):
         model.objective.set_sense(model.objective.sense.minimize)
 
         # Add variables and linear objective
+        lb = data[s.LOWER_BOUNDS]
+        ub = data[s.UPPER_BOUNDS]
+        if lb is None:
+            lb = -cpx.infinity*np.ones(n_var)
+        else:
+            lb = np.clip(lb, -cpx.infinity, cpx.infinity)
+        if ub is None:
+            ub = cpx.infinity*np.ones(n_var)
+        else:
+            ub = np.clip(ub, -cpx.infinity, cpx.infinity)
         var_idx = list(model.variables.add(obj=q,
-                                           lb=-cpx.infinity*np.ones(n_var),
-                                           ub=cpx.infinity*np.ones(n_var)))
+                                           lb=lb,
+                                           ub=ub))
 
         # Constrain binary/integer variables if present
         for i in data[s.BOOL_IDX]:
@@ -172,3 +197,13 @@ class CPLEX(QpSolver):
         results_dict["model"] = model
 
         return results_dict
+
+    def cite(self, data):
+        """Returns bibtex citation for the solver.
+
+        Parameters
+        ----------
+        data : dict
+            Data generated via an apply call.
+        """
+        return CITATION_DICT["CPLEX"]

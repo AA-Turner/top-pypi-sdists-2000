@@ -114,7 +114,7 @@ class GetReplicationTaskResult:
     @pulumi.getter(name="replicationInstanceArn")
     def replication_instance_arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) of the replication instance.
+        ARN of the replication instance.
         """
         return pulumi.get(self, "replication_instance_arn")
 
@@ -122,7 +122,7 @@ class GetReplicationTaskResult:
     @pulumi.getter(name="replicationTaskArn")
     def replication_task_arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) for the replication task.
+        ARN for the replication task.
         """
         return pulumi.get(self, "replication_task_arn")
 
@@ -143,7 +143,7 @@ class GetReplicationTaskResult:
     @pulumi.getter(name="sourceEndpointArn")
     def source_endpoint_arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) string that uniquely identifies the source endpoint.
+        ARN string that uniquely identifies the source endpoint.
         """
         return pulumi.get(self, "source_endpoint_arn")
 
@@ -180,7 +180,7 @@ class GetReplicationTaskResult:
     @pulumi.getter(name="targetEndpointArn")
     def target_endpoint_arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) string that uniquely identifies the target endpoint.
+        ARN string that uniquely identifies the target endpoint.
         """
         return pulumi.get(self, "target_endpoint_arn")
 
@@ -253,9 +253,9 @@ def get_replication_task(region: Optional[_builtins.str] = None,
         table_mappings=pulumi.get(__ret__, 'table_mappings'),
         tags=pulumi.get(__ret__, 'tags'),
         target_endpoint_arn=pulumi.get(__ret__, 'target_endpoint_arn'))
-def get_replication_task_output(region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                replication_task_id: Optional[pulumi.Input[_builtins.str]] = None,
-                                tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_replication_task_output(region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                replication_task_id: pulumi.Input[Optional[_builtins.str]] = None,
+                                tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                                 opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetReplicationTaskResult]:
     """
     Data source for managing an AWS DMS (Database Migration) Replication Task.

@@ -25,13 +25,16 @@ class UserArgs:
                  engine: pulumi.Input[_builtins.str],
                  user_id: pulumi.Input[_builtins.str],
                  user_name: pulumi.Input[_builtins.str],
-                 authentication_mode: Optional[pulumi.Input['UserAuthenticationModeArgs']] = None,
-                 no_password_required: Optional[pulumi.Input[_builtins.bool]] = None,
-                 passwords: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 authentication_mode: pulumi.Input[Optional['UserAuthenticationModeArgs']] = None,
+                 no_password_required: pulumi.Input[Optional[_builtins.bool]] = None,
+                 passwords: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 passwords_wo: pulumi.Input[Optional[_builtins.str]] = None,
+                 passwords_wo_version: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a User resource.
+
         :param pulumi.Input[_builtins.str] access_string: Access permissions string used for this user. See [Specifying Permissions Using an Access String](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Clusters.RBAC.html#Access-string) for more details.
         :param pulumi.Input[_builtins.str] engine: The current supported values are `redis`, `valkey` (case insensitive).
         :param pulumi.Input[_builtins.str] user_id: The ID of the user.
@@ -41,6 +44,9 @@ class UserArgs:
         :param pulumi.Input['UserAuthenticationModeArgs'] authentication_mode: Denotes the user's authentication properties. Detailed below.
         :param pulumi.Input[_builtins.bool] no_password_required: Indicates a password is not required for this user.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] passwords: Passwords used for this user. You can create up to two passwords for each user.
+        :param pulumi.Input[_builtins.str] passwords_wo: **NOTE:** This field is write-only and its value will not be updated in state as part of read operations.
+               Write-only password for this user. This argument is not stored in state. Conflicts with `passwords` and `authentication_mode`. See Write-Only Arguments for more information. Requires Terraform 1.11+.
+        :param pulumi.Input[_builtins.int] passwords_wo_version: Version number for `passwords_wo`. Increment this value to trigger a password update. Required when using `passwords_wo`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A list of tags to be added to this resource. A tag is a key-value pair.
         """
@@ -54,6 +60,10 @@ class UserArgs:
             pulumi.set(__self__, "no_password_required", no_password_required)
         if passwords is not None:
             pulumi.set(__self__, "passwords", passwords)
+        if passwords_wo is not None:
+            pulumi.set(__self__, "passwords_wo", passwords_wo)
+        if passwords_wo_version is not None:
+            pulumi.set(__self__, "passwords_wo_version", passwords_wo_version)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if tags is not None:
@@ -111,87 +121,118 @@ class UserArgs:
 
     @_builtins.property
     @pulumi.getter(name="authenticationMode")
-    def authentication_mode(self) -> Optional[pulumi.Input['UserAuthenticationModeArgs']]:
+    def authentication_mode(self) -> pulumi.Input[Optional['UserAuthenticationModeArgs']]:
         """
         Denotes the user's authentication properties. Detailed below.
         """
         return pulumi.get(self, "authentication_mode")
 
     @authentication_mode.setter
-    def authentication_mode(self, value: Optional[pulumi.Input['UserAuthenticationModeArgs']]):
+    def authentication_mode(self, value: pulumi.Input[Optional['UserAuthenticationModeArgs']]):
         pulumi.set(self, "authentication_mode", value)
 
     @_builtins.property
     @pulumi.getter(name="noPasswordRequired")
-    def no_password_required(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def no_password_required(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Indicates a password is not required for this user.
         """
         return pulumi.get(self, "no_password_required")
 
     @no_password_required.setter
-    def no_password_required(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def no_password_required(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "no_password_required", value)
 
     @_builtins.property
     @pulumi.getter
-    def passwords(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def passwords(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         Passwords used for this user. You can create up to two passwords for each user.
         """
         return pulumi.get(self, "passwords")
 
     @passwords.setter
-    def passwords(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def passwords(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "passwords", value)
 
     @_builtins.property
+    @pulumi.getter(name="passwordsWo")
+    def passwords_wo(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        **NOTE:** This field is write-only and its value will not be updated in state as part of read operations.
+        Write-only password for this user. This argument is not stored in state. Conflicts with `passwords` and `authentication_mode`. See Write-Only Arguments for more information. Requires Terraform 1.11+.
+        """
+        return pulumi.get(self, "passwords_wo")
+
+    @passwords_wo.setter
+    def passwords_wo(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "passwords_wo", value)
+
+    @_builtins.property
+    @pulumi.getter(name="passwordsWoVersion")
+    def passwords_wo_version(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Version number for `passwords_wo`. Increment this value to trigger a password update. Required when using `passwords_wo`.
+        """
+        return pulumi.get(self, "passwords_wo_version")
+
+    @passwords_wo_version.setter
+    def passwords_wo_version(self, value: pulumi.Input[Optional[_builtins.int]]):
+        pulumi.set(self, "passwords_wo_version", value)
+
+    @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A list of tags to be added to this resource. A tag is a key-value pair.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _UserState:
     def __init__(__self__, *,
-                 access_string: Optional[pulumi.Input[_builtins.str]] = None,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 authentication_mode: Optional[pulumi.Input['UserAuthenticationModeArgs']] = None,
-                 engine: Optional[pulumi.Input[_builtins.str]] = None,
-                 no_password_required: Optional[pulumi.Input[_builtins.bool]] = None,
-                 passwords: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 user_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 user_name: Optional[pulumi.Input[_builtins.str]] = None):
+                 access_string: pulumi.Input[Optional[_builtins.str]] = None,
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 authentication_mode: pulumi.Input[Optional['UserAuthenticationModeArgs']] = None,
+                 engine: pulumi.Input[Optional[_builtins.str]] = None,
+                 no_password_required: pulumi.Input[Optional[_builtins.bool]] = None,
+                 passwords: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 passwords_wo: pulumi.Input[Optional[_builtins.str]] = None,
+                 passwords_wo_version: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 user_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 user_name: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering User resources.
+
         :param pulumi.Input[_builtins.str] access_string: Access permissions string used for this user. See [Specifying Permissions Using an Access String](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Clusters.RBAC.html#Access-string) for more details.
         :param pulumi.Input[_builtins.str] arn: The ARN of the created ElastiCache User.
         :param pulumi.Input['UserAuthenticationModeArgs'] authentication_mode: Denotes the user's authentication properties. Detailed below.
         :param pulumi.Input[_builtins.str] engine: The current supported values are `redis`, `valkey` (case insensitive).
         :param pulumi.Input[_builtins.bool] no_password_required: Indicates a password is not required for this user.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] passwords: Passwords used for this user. You can create up to two passwords for each user.
+        :param pulumi.Input[_builtins.str] passwords_wo: **NOTE:** This field is write-only and its value will not be updated in state as part of read operations.
+               Write-only password for this user. This argument is not stored in state. Conflicts with `passwords` and `authentication_mode`. See Write-Only Arguments for more information. Requires Terraform 1.11+.
+        :param pulumi.Input[_builtins.int] passwords_wo_version: Version number for `passwords_wo`. Increment this value to trigger a password update. Required when using `passwords_wo`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A list of tags to be added to this resource. A tag is a key-value pair.
         :param pulumi.Input[_builtins.str] user_id: The ID of the user.
@@ -211,6 +252,10 @@ class _UserState:
             pulumi.set(__self__, "no_password_required", no_password_required)
         if passwords is not None:
             pulumi.set(__self__, "passwords", passwords)
+        if passwords_wo is not None:
+            pulumi.set(__self__, "passwords_wo", passwords_wo)
+        if passwords_wo_version is not None:
+            pulumi.set(__self__, "passwords_wo_version", passwords_wo_version)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if tags is not None:
@@ -224,124 +269,149 @@ class _UserState:
 
     @_builtins.property
     @pulumi.getter(name="accessString")
-    def access_string(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def access_string(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Access permissions string used for this user. See [Specifying Permissions Using an Access String](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Clusters.RBAC.html#Access-string) for more details.
         """
         return pulumi.get(self, "access_string")
 
     @access_string.setter
-    def access_string(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def access_string(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "access_string", value)
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of the created ElastiCache User.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="authenticationMode")
-    def authentication_mode(self) -> Optional[pulumi.Input['UserAuthenticationModeArgs']]:
+    def authentication_mode(self) -> pulumi.Input[Optional['UserAuthenticationModeArgs']]:
         """
         Denotes the user's authentication properties. Detailed below.
         """
         return pulumi.get(self, "authentication_mode")
 
     @authentication_mode.setter
-    def authentication_mode(self, value: Optional[pulumi.Input['UserAuthenticationModeArgs']]):
+    def authentication_mode(self, value: pulumi.Input[Optional['UserAuthenticationModeArgs']]):
         pulumi.set(self, "authentication_mode", value)
 
     @_builtins.property
     @pulumi.getter
-    def engine(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def engine(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The current supported values are `redis`, `valkey` (case insensitive).
         """
         return pulumi.get(self, "engine")
 
     @engine.setter
-    def engine(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def engine(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "engine", value)
 
     @_builtins.property
     @pulumi.getter(name="noPasswordRequired")
-    def no_password_required(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def no_password_required(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Indicates a password is not required for this user.
         """
         return pulumi.get(self, "no_password_required")
 
     @no_password_required.setter
-    def no_password_required(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def no_password_required(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "no_password_required", value)
 
     @_builtins.property
     @pulumi.getter
-    def passwords(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def passwords(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         Passwords used for this user. You can create up to two passwords for each user.
         """
         return pulumi.get(self, "passwords")
 
     @passwords.setter
-    def passwords(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def passwords(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "passwords", value)
 
     @_builtins.property
+    @pulumi.getter(name="passwordsWo")
+    def passwords_wo(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        **NOTE:** This field is write-only and its value will not be updated in state as part of read operations.
+        Write-only password for this user. This argument is not stored in state. Conflicts with `passwords` and `authentication_mode`. See Write-Only Arguments for more information. Requires Terraform 1.11+.
+        """
+        return pulumi.get(self, "passwords_wo")
+
+    @passwords_wo.setter
+    def passwords_wo(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "passwords_wo", value)
+
+    @_builtins.property
+    @pulumi.getter(name="passwordsWoVersion")
+    def passwords_wo_version(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Version number for `passwords_wo`. Increment this value to trigger a password update. Required when using `passwords_wo`.
+        """
+        return pulumi.get(self, "passwords_wo_version")
+
+    @passwords_wo_version.setter
+    def passwords_wo_version(self, value: pulumi.Input[Optional[_builtins.int]]):
+        pulumi.set(self, "passwords_wo_version", value)
+
+    @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A list of tags to be added to this resource. A tag is a key-value pair.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter(name="userId")
-    def user_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def user_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the user.
         """
         return pulumi.get(self, "user_id")
 
     @user_id.setter
-    def user_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def user_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "user_id", value)
 
     @_builtins.property
     @pulumi.getter(name="userName")
-    def user_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def user_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The username of the user.
 
@@ -350,7 +420,7 @@ class _UserState:
         return pulumi.get(self, "user_name")
 
     @user_name.setter
-    def user_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def user_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "user_name", value)
 
 
@@ -360,20 +430,22 @@ class User(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 access_string: Optional[pulumi.Input[_builtins.str]] = None,
-                 authentication_mode: Optional[pulumi.Input[Union['UserAuthenticationModeArgs', 'UserAuthenticationModeArgsDict']]] = None,
-                 engine: Optional[pulumi.Input[_builtins.str]] = None,
-                 no_password_required: Optional[pulumi.Input[_builtins.bool]] = None,
-                 passwords: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 user_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 user_name: Optional[pulumi.Input[_builtins.str]] = None,
+                 access_string: pulumi.Input[Optional[_builtins.str]] = None,
+                 authentication_mode: pulumi.Input[Optional[Union['UserAuthenticationModeArgs', 'UserAuthenticationModeArgsDict']]] = None,
+                 engine: pulumi.Input[Optional[_builtins.str]] = None,
+                 no_password_required: pulumi.Input[Optional[_builtins.bool]] = None,
+                 passwords: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 passwords_wo: pulumi.Input[Optional[_builtins.str]] = None,
+                 passwords_wo_version: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 user_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 user_name: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides an ElastiCache user resource.
 
-        > **Note:** All arguments including the username and passwords will be stored in the raw state as plain-text.
+        > **Note:** All arguments including the username and passwords will be stored in the raw state as plain-text unless you use the write-only `passwords_wo` argument.
         ## Example Usage
 
         ```python
@@ -393,14 +465,34 @@ class User(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.elasticache.User("test",
+            authentication_mode={
+                "type": "iam",
+            },
             user_id="testUserId",
             user_name="testUserName",
             access_string="on ~* +@all",
-            engine="redis",
-            authentication_mode={
-                "type": "iam",
-            })
+            engine="redis")
         ```
+
+        ```python
+        import pulumi
+        import pulumi_aws as aws
+
+        test = aws.elasticache.User("test",
+            authentication_mode={
+                "type": "password",
+                "passwords": [
+                    "password1",
+                    "password2",
+                ],
+            },
+            user_id="testUserId",
+            user_name="testUserName",
+            access_string="on ~* +@all",
+            engine="redis")
+        ```
+
+        ### Using Write-Only Password (Terraform 1.11+)
 
         ```python
         import pulumi
@@ -411,13 +503,8 @@ class User(pulumi.CustomResource):
             user_name="testUserName",
             access_string="on ~* +@all",
             engine="redis",
-            authentication_mode={
-                "type": "password",
-                "passwords": [
-                    "password1",
-                    "password2",
-                ],
-            })
+            passwords_wo=elasticache_password,
+            passwords_wo_version=1)
         ```
 
         ## Import
@@ -428,6 +515,7 @@ class User(pulumi.CustomResource):
         $ pulumi import aws:elasticache/user:User my_user userId1
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.str] access_string: Access permissions string used for this user. See [Specifying Permissions Using an Access String](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Clusters.RBAC.html#Access-string) for more details.
@@ -435,6 +523,9 @@ class User(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] engine: The current supported values are `redis`, `valkey` (case insensitive).
         :param pulumi.Input[_builtins.bool] no_password_required: Indicates a password is not required for this user.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] passwords: Passwords used for this user. You can create up to two passwords for each user.
+        :param pulumi.Input[_builtins.str] passwords_wo: **NOTE:** This field is write-only and its value will not be updated in state as part of read operations.
+               Write-only password for this user. This argument is not stored in state. Conflicts with `passwords` and `authentication_mode`. See Write-Only Arguments for more information. Requires Terraform 1.11+.
+        :param pulumi.Input[_builtins.int] passwords_wo_version: Version number for `passwords_wo`. Increment this value to trigger a password update. Required when using `passwords_wo`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A list of tags to be added to this resource. A tag is a key-value pair.
         :param pulumi.Input[_builtins.str] user_id: The ID of the user.
@@ -451,7 +542,7 @@ class User(pulumi.CustomResource):
         """
         Provides an ElastiCache user resource.
 
-        > **Note:** All arguments including the username and passwords will be stored in the raw state as plain-text.
+        > **Note:** All arguments including the username and passwords will be stored in the raw state as plain-text unless you use the write-only `passwords_wo` argument.
         ## Example Usage
 
         ```python
@@ -471,14 +562,34 @@ class User(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.elasticache.User("test",
+            authentication_mode={
+                "type": "iam",
+            },
             user_id="testUserId",
             user_name="testUserName",
             access_string="on ~* +@all",
-            engine="redis",
-            authentication_mode={
-                "type": "iam",
-            })
+            engine="redis")
         ```
+
+        ```python
+        import pulumi
+        import pulumi_aws as aws
+
+        test = aws.elasticache.User("test",
+            authentication_mode={
+                "type": "password",
+                "passwords": [
+                    "password1",
+                    "password2",
+                ],
+            },
+            user_id="testUserId",
+            user_name="testUserName",
+            access_string="on ~* +@all",
+            engine="redis")
+        ```
+
+        ### Using Write-Only Password (Terraform 1.11+)
 
         ```python
         import pulumi
@@ -489,13 +600,8 @@ class User(pulumi.CustomResource):
             user_name="testUserName",
             access_string="on ~* +@all",
             engine="redis",
-            authentication_mode={
-                "type": "password",
-                "passwords": [
-                    "password1",
-                    "password2",
-                ],
-            })
+            passwords_wo=elasticache_password,
+            passwords_wo_version=1)
         ```
 
         ## Import
@@ -505,6 +611,7 @@ class User(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:elasticache/user:User my_user userId1
         ```
+
 
         :param str resource_name: The name of the resource.
         :param UserArgs args: The arguments to use to populate this resource's properties.
@@ -521,15 +628,17 @@ class User(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 access_string: Optional[pulumi.Input[_builtins.str]] = None,
-                 authentication_mode: Optional[pulumi.Input[Union['UserAuthenticationModeArgs', 'UserAuthenticationModeArgsDict']]] = None,
-                 engine: Optional[pulumi.Input[_builtins.str]] = None,
-                 no_password_required: Optional[pulumi.Input[_builtins.bool]] = None,
-                 passwords: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 user_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 user_name: Optional[pulumi.Input[_builtins.str]] = None,
+                 access_string: pulumi.Input[Optional[_builtins.str]] = None,
+                 authentication_mode: pulumi.Input[Optional[Union['UserAuthenticationModeArgs', 'UserAuthenticationModeArgsDict']]] = None,
+                 engine: pulumi.Input[Optional[_builtins.str]] = None,
+                 no_password_required: pulumi.Input[Optional[_builtins.bool]] = None,
+                 passwords: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 passwords_wo: pulumi.Input[Optional[_builtins.str]] = None,
+                 passwords_wo_version: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 user_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 user_name: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -548,6 +657,8 @@ class User(pulumi.CustomResource):
             __props__.__dict__["engine"] = engine
             __props__.__dict__["no_password_required"] = no_password_required
             __props__.__dict__["passwords"] = None if passwords is None else pulumi.Output.secret(passwords)
+            __props__.__dict__["passwords_wo"] = None if passwords_wo is None else pulumi.Output.secret(passwords_wo)
+            __props__.__dict__["passwords_wo_version"] = passwords_wo_version
             __props__.__dict__["region"] = region
             __props__.__dict__["tags"] = tags
             if user_id is None and not opts.urn:
@@ -558,7 +669,7 @@ class User(pulumi.CustomResource):
             __props__.__dict__["user_name"] = user_name
             __props__.__dict__["arn"] = None
             __props__.__dict__["tags_all"] = None
-        secret_opts = pulumi.ResourceOptions(additional_secret_outputs=["passwords"])
+        secret_opts = pulumi.ResourceOptions(additional_secret_outputs=["passwords", "passwordsWo"])
         opts = pulumi.ResourceOptions.merge(opts, secret_opts)
         super(User, __self__).__init__(
             'aws:elasticache/user:User',
@@ -570,17 +681,19 @@ class User(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            access_string: Optional[pulumi.Input[_builtins.str]] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            authentication_mode: Optional[pulumi.Input[Union['UserAuthenticationModeArgs', 'UserAuthenticationModeArgsDict']]] = None,
-            engine: Optional[pulumi.Input[_builtins.str]] = None,
-            no_password_required: Optional[pulumi.Input[_builtins.bool]] = None,
-            passwords: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            user_id: Optional[pulumi.Input[_builtins.str]] = None,
-            user_name: Optional[pulumi.Input[_builtins.str]] = None) -> 'User':
+            access_string: pulumi.Input[Optional[_builtins.str]] = None,
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            authentication_mode: pulumi.Input[Optional[Union['UserAuthenticationModeArgs', 'UserAuthenticationModeArgsDict']]] = None,
+            engine: pulumi.Input[Optional[_builtins.str]] = None,
+            no_password_required: pulumi.Input[Optional[_builtins.bool]] = None,
+            passwords: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            passwords_wo: pulumi.Input[Optional[_builtins.str]] = None,
+            passwords_wo_version: pulumi.Input[Optional[_builtins.int]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            user_id: pulumi.Input[Optional[_builtins.str]] = None,
+            user_name: pulumi.Input[Optional[_builtins.str]] = None) -> 'User':
         """
         Get an existing User resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -594,6 +707,9 @@ class User(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] engine: The current supported values are `redis`, `valkey` (case insensitive).
         :param pulumi.Input[_builtins.bool] no_password_required: Indicates a password is not required for this user.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] passwords: Passwords used for this user. You can create up to two passwords for each user.
+        :param pulumi.Input[_builtins.str] passwords_wo: **NOTE:** This field is write-only and its value will not be updated in state as part of read operations.
+               Write-only password for this user. This argument is not stored in state. Conflicts with `passwords` and `authentication_mode`. See Write-Only Arguments for more information. Requires Terraform 1.11+.
+        :param pulumi.Input[_builtins.int] passwords_wo_version: Version number for `passwords_wo`. Increment this value to trigger a password update. Required when using `passwords_wo`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A list of tags to be added to this resource. A tag is a key-value pair.
         :param pulumi.Input[_builtins.str] user_id: The ID of the user.
@@ -611,6 +727,8 @@ class User(pulumi.CustomResource):
         __props__.__dict__["engine"] = engine
         __props__.__dict__["no_password_required"] = no_password_required
         __props__.__dict__["passwords"] = passwords
+        __props__.__dict__["passwords_wo"] = passwords_wo
+        __props__.__dict__["passwords_wo_version"] = passwords_wo_version
         __props__.__dict__["region"] = region
         __props__.__dict__["tags"] = tags
         __props__.__dict__["tags_all"] = tags_all
@@ -665,6 +783,23 @@ class User(pulumi.CustomResource):
         Passwords used for this user. You can create up to two passwords for each user.
         """
         return pulumi.get(self, "passwords")
+
+    @_builtins.property
+    @pulumi.getter(name="passwordsWo")
+    def passwords_wo(self) -> pulumi.Output[Optional[_builtins.str]]:
+        """
+        **NOTE:** This field is write-only and its value will not be updated in state as part of read operations.
+        Write-only password for this user. This argument is not stored in state. Conflicts with `passwords` and `authentication_mode`. See Write-Only Arguments for more information. Requires Terraform 1.11+.
+        """
+        return pulumi.get(self, "passwords_wo")
+
+    @_builtins.property
+    @pulumi.getter(name="passwordsWoVersion")
+    def passwords_wo_version(self) -> pulumi.Output[Optional[_builtins.int]]:
+        """
+        Version number for `passwords_wo`. Increment this value to trigger a password update. Required when using `passwords_wo`.
+        """
+        return pulumi.get(self, "passwords_wo_version")
 
     @_builtins.property
     @pulumi.getter

@@ -32,9 +32,9 @@ class HostVpcConfigurationArgsDict(TypedDict):
     """
     The ID of the Amazon VPC connected to the infrastructure where your provider type is installed.
     """
-    tls_certificate: NotRequired[pulumi.Input[_builtins.str]]
+    tls_certificate: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The value of the Transport Layer Security (TLS) certificate associated with the infrastructure where your provider type is installed.
+    Value of the TLS certificate associated with the infrastructure where your provider type is installed.
     """
 
 @pulumi.input_type
@@ -43,12 +43,12 @@ class HostVpcConfigurationArgs:
                  security_group_ids: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
                  subnet_ids: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
                  vpc_id: pulumi.Input[_builtins.str],
-                 tls_certificate: Optional[pulumi.Input[_builtins.str]] = None):
+                 tls_certificate: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_group_ids: ID of the security group or security groups associated with the Amazon VPC connected to the infrastructure where your provider type is installed.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnet_ids: The ID of the subnet or subnets associated with the Amazon VPC connected to the infrastructure where your provider type is installed.
         :param pulumi.Input[_builtins.str] vpc_id: The ID of the Amazon VPC connected to the infrastructure where your provider type is installed.
-        :param pulumi.Input[_builtins.str] tls_certificate: The value of the Transport Layer Security (TLS) certificate associated with the infrastructure where your provider type is installed.
+        :param pulumi.Input[_builtins.str] tls_certificate: Value of the TLS certificate associated with the infrastructure where your provider type is installed.
         """
         pulumi.set(__self__, "security_group_ids", security_group_ids)
         pulumi.set(__self__, "subnet_ids", subnet_ids)
@@ -94,14 +94,14 @@ class HostVpcConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="tlsCertificate")
-    def tls_certificate(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def tls_certificate(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The value of the Transport Layer Security (TLS) certificate associated with the infrastructure where your provider type is installed.
+        Value of the TLS certificate associated with the infrastructure where your provider type is installed.
         """
         return pulumi.get(self, "tls_certificate")
 
     @tls_certificate.setter
-    def tls_certificate(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def tls_certificate(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "tls_certificate", value)
 
 

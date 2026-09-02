@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-from typing import Tuple
 
 import numpy as np
 
@@ -27,12 +26,12 @@ class real(AffAtom):
         super(real, self).__init__(expr)
 
     def numeric(self, values):
-        """Convert the vector constant into a diagonal matrix.
         """
-        # Convert values to 1D.
+        Return the real part of a complex array.
+        """
         return np.real(values[0])
 
-    def shape_from_args(self) -> Tuple[int, ...]:
+    def shape_from_args(self) -> tuple[int, ...]:
         """Returns the shape of the expression.
         """
         return self.args[0].shape
@@ -50,4 +49,4 @@ class real(AffAtom):
     def is_symmetric(self) -> bool:
         """Is the expression symmetric?
         """
-        return self.args[0].is_hermitian()
+        return self.args[0].is_symmetric() or self.args[0].is_hermitian()

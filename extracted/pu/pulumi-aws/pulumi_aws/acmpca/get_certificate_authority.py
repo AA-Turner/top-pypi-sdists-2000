@@ -114,6 +114,9 @@ class GetCertificateAuthorityResult:
     @_builtins.property
     @pulumi.getter(name="keyStorageSecurityStandard")
     def key_storage_security_standard(self) -> _builtins.str:
+        """
+        Level of security of the key storage endpoint of the certificate authority.
+        """
         return pulumi.get(self, "key_storage_security_standard")
 
     @_builtins.property
@@ -141,7 +144,7 @@ class GetCertificateAuthorityResult:
     @pulumi.getter(name="revocationConfigurations")
     def revocation_configurations(self) -> Sequence['outputs.GetCertificateAuthorityRevocationConfigurationResult']:
         """
-        Nested attribute containing revocation configuration.
+        Nested attribute containing revocation configuration. See `revocation_configuration` below.
         """
         return pulumi.get(self, "revocation_configurations")
 
@@ -253,9 +256,9 @@ def get_certificate_authority(arn: Optional[_builtins.str] = None,
         tags=pulumi.get(__ret__, 'tags'),
         type=pulumi.get(__ret__, 'type'),
         usage_mode=pulumi.get(__ret__, 'usage_mode'))
-def get_certificate_authority_output(arn: Optional[pulumi.Input[_builtins.str]] = None,
-                                     region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                     tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_certificate_authority_output(arn: pulumi.Input[Optional[_builtins.str]] = None,
+                                     region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                     tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                                      opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetCertificateAuthorityResult]:
     """
     Get information on a AWS Certificate Manager Private Certificate Authority (ACM PCA Certificate Authority).

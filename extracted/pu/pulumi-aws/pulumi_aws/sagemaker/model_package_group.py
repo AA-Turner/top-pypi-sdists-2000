@@ -20,11 +20,12 @@ __all__ = ['ModelPackageGroupArgs', 'ModelPackageGroup']
 class ModelPackageGroupArgs:
     def __init__(__self__, *,
                  model_package_group_name: pulumi.Input[_builtins.str],
-                 model_package_group_description: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 model_package_group_description: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a ModelPackageGroup resource.
+
         :param pulumi.Input[_builtins.str] model_package_group_name: The name of the model group.
         :param pulumi.Input[_builtins.str] model_package_group_description: A description for the model group.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -52,53 +53,54 @@ class ModelPackageGroupArgs:
 
     @_builtins.property
     @pulumi.getter(name="modelPackageGroupDescription")
-    def model_package_group_description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def model_package_group_description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A description for the model group.
         """
         return pulumi.get(self, "model_package_group_description")
 
     @model_package_group_description.setter
-    def model_package_group_description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def model_package_group_description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "model_package_group_description", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags to assign to the resource. .If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _ModelPackageGroupState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 model_package_group_description: Optional[pulumi.Input[_builtins.str]] = None,
-                 model_package_group_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 model_package_group_description: pulumi.Input[Optional[_builtins.str]] = None,
+                 model_package_group_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         Input properties used for looking up and filtering ModelPackageGroup resources.
-        :param pulumi.Input[_builtins.str] arn: The Amazon Resource Name (ARN) assigned by AWS to this Model Package Group.
+
+        :param pulumi.Input[_builtins.str] arn: ARN assigned by AWS to this Model Package Group.
         :param pulumi.Input[_builtins.str] model_package_group_description: A description for the model group.
         :param pulumi.Input[_builtins.str] model_package_group_name: The name of the model group.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -120,74 +122,74 @@ class _ModelPackageGroupState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) assigned by AWS to this Model Package Group.
+        ARN assigned by AWS to this Model Package Group.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="modelPackageGroupDescription")
-    def model_package_group_description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def model_package_group_description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A description for the model group.
         """
         return pulumi.get(self, "model_package_group_description")
 
     @model_package_group_description.setter
-    def model_package_group_description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def model_package_group_description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "model_package_group_description", value)
 
     @_builtins.property
     @pulumi.getter(name="modelPackageGroupName")
-    def model_package_group_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def model_package_group_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the model group.
         """
         return pulumi.get(self, "model_package_group_name")
 
     @model_package_group_name.setter
-    def model_package_group_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def model_package_group_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "model_package_group_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags to assign to the resource. .If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
 
@@ -197,10 +199,10 @@ class ModelPackageGroup(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 model_package_group_description: Optional[pulumi.Input[_builtins.str]] = None,
-                 model_package_group_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 model_package_group_description: pulumi.Input[Optional[_builtins.str]] = None,
+                 model_package_group_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Provides a SageMaker AI Model Package Group resource.
@@ -223,6 +225,7 @@ class ModelPackageGroup(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:sagemaker/modelPackageGroup:ModelPackageGroup test_model_package_group my-code-repo
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -259,6 +262,7 @@ class ModelPackageGroup(pulumi.CustomResource):
         $ pulumi import aws:sagemaker/modelPackageGroup:ModelPackageGroup test_model_package_group my-code-repo
         ```
 
+
         :param str resource_name: The name of the resource.
         :param ModelPackageGroupArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -274,10 +278,10 @@ class ModelPackageGroup(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 model_package_group_description: Optional[pulumi.Input[_builtins.str]] = None,
-                 model_package_group_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 model_package_group_description: pulumi.Input[Optional[_builtins.str]] = None,
+                 model_package_group_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -305,12 +309,12 @@ class ModelPackageGroup(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            model_package_group_description: Optional[pulumi.Input[_builtins.str]] = None,
-            model_package_group_name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'ModelPackageGroup':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            model_package_group_description: pulumi.Input[Optional[_builtins.str]] = None,
+            model_package_group_name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'ModelPackageGroup':
         """
         Get an existing ModelPackageGroup resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -318,7 +322,7 @@ class ModelPackageGroup(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] arn: The Amazon Resource Name (ARN) assigned by AWS to this Model Package Group.
+        :param pulumi.Input[_builtins.str] arn: ARN assigned by AWS to this Model Package Group.
         :param pulumi.Input[_builtins.str] model_package_group_description: A description for the model group.
         :param pulumi.Input[_builtins.str] model_package_group_name: The name of the model group.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -341,7 +345,7 @@ class ModelPackageGroup(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) assigned by AWS to this Model Package Group.
+        ARN assigned by AWS to this Model Package Group.
         """
         return pulumi.get(self, "arn")
 

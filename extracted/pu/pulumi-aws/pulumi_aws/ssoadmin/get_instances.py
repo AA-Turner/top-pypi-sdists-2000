@@ -44,7 +44,7 @@ class GetInstancesResult:
     @pulumi.getter
     def arns(self) -> Sequence[_builtins.str]:
         """
-        Set of Amazon Resource Names (ARNs) of the SSO Instances.
+        Set of ARNs of the SSO Instances.
         """
         return pulumi.get(self, "arns")
 
@@ -111,7 +111,7 @@ def get_instances(region: Optional[_builtins.str] = None,
         id=pulumi.get(__ret__, 'id'),
         identity_store_ids=pulumi.get(__ret__, 'identity_store_ids'),
         region=pulumi.get(__ret__, 'region'))
-def get_instances_output(region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_instances_output(region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                          opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetInstancesResult]:
     """
     Use this data source to get ARNs and Identity Store IDs of Single Sign-On (SSO) Instances.

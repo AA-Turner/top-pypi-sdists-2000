@@ -26,7 +26,7 @@ class GetSecretResult:
     """
     A collection of values returned by getSecret.
     """
-    def __init__(__self__, arn=None, created_date=None, description=None, id=None, kms_key_id=None, last_changed_date=None, name=None, policy=None, region=None, tags=None):
+    def __init__(__self__, arn=None, created_date=None, description=None, id=None, kms_key_id=None, last_changed_date=None, name=None, policy=None, region=None, tags=None, type=None):
         if arn and not isinstance(arn, str):
             raise TypeError("Expected argument 'arn' to be a str")
         pulumi.set(__self__, "arn", arn)
@@ -57,6 +57,9 @@ class GetSecretResult:
         if tags and not isinstance(tags, dict):
             raise TypeError("Expected argument 'tags' to be a dict")
         pulumi.set(__self__, "tags", tags)
+        if type and not isinstance(type, str):
+            raise TypeError("Expected argument 'type' to be a str")
+        pulumi.set(__self__, "type", type)
 
     @_builtins.property
     @pulumi.getter
@@ -94,7 +97,7 @@ class GetSecretResult:
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> _builtins.str:
         """
-        Key Management Service (KMS) Customer Master Key (CMK) associated with the secret.
+        KMS Customer Master Key (CMK) associated with the secret.
         """
         return pulumi.get(self, "kms_key_id")
 
@@ -132,6 +135,14 @@ class GetSecretResult:
         """
         return pulumi.get(self, "tags")
 
+    @_builtins.property
+    @pulumi.getter
+    def type(self) -> _builtins.str:
+        """
+        Type of secret for managed external secrets.
+        """
+        return pulumi.get(self, "type")
+
 
 class AwaitableGetSecretResult(GetSecretResult):
     # pylint: disable=using-constant-test
@@ -148,7 +159,8 @@ class AwaitableGetSecretResult(GetSecretResult):
             name=self.name,
             policy=self.policy,
             region=self.region,
-            tags=self.tags)
+            tags=self.tags,
+            type=self.type)
 
 
 def get_secret(arn: Optional[_builtins.str] = None,
@@ -203,11 +215,12 @@ def get_secret(arn: Optional[_builtins.str] = None,
         name=pulumi.get(__ret__, 'name'),
         policy=pulumi.get(__ret__, 'policy'),
         region=pulumi.get(__ret__, 'region'),
-        tags=pulumi.get(__ret__, 'tags'))
-def get_secret_output(arn: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                      name: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                      region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                      tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+        tags=pulumi.get(__ret__, 'tags'),
+        type=pulumi.get(__ret__, 'type'))
+def get_secret_output(arn: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                      name: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                      region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                      tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                       opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetSecretResult]:
     """
     Retrieve metadata information about a Secrets Manager secret. To retrieve a secret value, see the `secretsmanager.SecretVersion` data source.
@@ -255,4 +268,5 @@ def get_secret_output(arn: Optional[pulumi.Input[Optional[_builtins.str]]] = Non
         name=pulumi.get(__response__, 'name'),
         policy=pulumi.get(__response__, 'policy'),
         region=pulumi.get(__response__, 'region'),
-        tags=pulumi.get(__response__, 'tags')))
+        tags=pulumi.get(__response__, 'tags'),
+        type=pulumi.get(__response__, 'type')))

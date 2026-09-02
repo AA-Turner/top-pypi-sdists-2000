@@ -116,7 +116,7 @@ def get_protection(protection_id: Optional[_builtins.str] = None,
 
 
     :param _builtins.str protection_id: Unique identifier for the protection.
-    :param _builtins.str resource_arn: ARN (Amazon Resource Name) of the resource being protected.
+    :param _builtins.str resource_arn: ARN of the resource being protected.
            
            > Exactly one of `protection_id` or `resource_arn` is required.
     """
@@ -132,8 +132,8 @@ def get_protection(protection_id: Optional[_builtins.str] = None,
         protection_arn=pulumi.get(__ret__, 'protection_arn'),
         protection_id=pulumi.get(__ret__, 'protection_id'),
         resource_arn=pulumi.get(__ret__, 'resource_arn'))
-def get_protection_output(protection_id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                          resource_arn: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_protection_output(protection_id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                          resource_arn: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                           opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetProtectionResult]:
     """
     Data source for managing an AWS Shield Protection.
@@ -160,7 +160,7 @@ def get_protection_output(protection_id: Optional[pulumi.Input[Optional[_builtin
 
 
     :param _builtins.str protection_id: Unique identifier for the protection.
-    :param _builtins.str resource_arn: ARN (Amazon Resource Name) of the resource being protected.
+    :param _builtins.str resource_arn: ARN of the resource being protected.
            
            > Exactly one of `protection_id` or `resource_arn` is required.
     """

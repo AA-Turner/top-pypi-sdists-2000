@@ -16,6 +16,7 @@ from .. import _utilities
 from . import outputs
 
 __all__ = [
+    'AccountSettingsMinimumThroughputBillingCommitment',
     'AnalyticsApplicationCloudwatchLoggingOptions',
     'AnalyticsApplicationInputs',
     'AnalyticsApplicationInputsKinesisFirehose',
@@ -138,7 +139,81 @@ __all__ = [
     'FirehoseDeliveryStreamSplunkConfigurationSecretsManagerConfiguration',
     'StreamStreamModeDetails',
     'GetStreamStreamModeDetailResult',
+    'GetStreamWarmThroughputResult',
 ]
+
+@pulumi.output_type
+class AccountSettingsMinimumThroughputBillingCommitment(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "earliestAllowedEndAt":
+            suggest = "earliest_allowed_end_at"
+        elif key == "endedAt":
+            suggest = "ended_at"
+        elif key == "startedAt":
+            suggest = "started_at"
+        elif key == "statusActual":
+            suggest = "status_actual"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in AccountSettingsMinimumThroughputBillingCommitment. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        AccountSettingsMinimumThroughputBillingCommitment.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        AccountSettingsMinimumThroughputBillingCommitment.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 status: _builtins.str,
+                 earliest_allowed_end_at: Optional[_builtins.str] = None,
+                 ended_at: Optional[_builtins.str] = None,
+                 started_at: Optional[_builtins.str] = None,
+                 status_actual: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str status: Desired status of the minimum throughput billing commitment. Valid values: `ENABLED`, `DISABLED`.
+        """
+        pulumi.set(__self__, "status", status)
+        if earliest_allowed_end_at is not None:
+            pulumi.set(__self__, "earliest_allowed_end_at", earliest_allowed_end_at)
+        if ended_at is not None:
+            pulumi.set(__self__, "ended_at", ended_at)
+        if started_at is not None:
+            pulumi.set(__self__, "started_at", started_at)
+        if status_actual is not None:
+            pulumi.set(__self__, "status_actual", status_actual)
+
+    @_builtins.property
+    @pulumi.getter
+    def status(self) -> _builtins.str:
+        """
+        Desired status of the minimum throughput billing commitment. Valid values: `ENABLED`, `DISABLED`.
+        """
+        return pulumi.get(self, "status")
+
+    @_builtins.property
+    @pulumi.getter(name="earliestAllowedEndAt")
+    def earliest_allowed_end_at(self) -> Optional[_builtins.str]:
+        return pulumi.get(self, "earliest_allowed_end_at")
+
+    @_builtins.property
+    @pulumi.getter(name="endedAt")
+    def ended_at(self) -> Optional[_builtins.str]:
+        return pulumi.get(self, "ended_at")
+
+    @_builtins.property
+    @pulumi.getter(name="startedAt")
+    def started_at(self) -> Optional[_builtins.str]:
+        return pulumi.get(self, "started_at")
+
+    @_builtins.property
+    @pulumi.getter(name="statusActual")
+    def status_actual(self) -> Optional[_builtins.str]:
+        return pulumi.get(self, "status_actual")
+
 
 @pulumi.output_type
 class AnalyticsApplicationCloudwatchLoggingOptions(dict):
@@ -3626,7 +3701,7 @@ class FirehoseDeliveryStreamHttpEndpointConfiguration(dict):
                  secrets_manager_configuration: Optional['outputs.FirehoseDeliveryStreamHttpEndpointConfigurationSecretsManagerConfiguration'] = None):
         """
         :param 'FirehoseDeliveryStreamHttpEndpointConfigurationS3ConfigurationArgs' s3_configuration: The S3 Configuration. See `s3_configuration` block below for details.
-        :param _builtins.str url: The HTTP endpoint URL to which Kinesis Firehose sends your data.
+        :param _builtins.str url: The HTTP endpoint URL to which Kinesis Firehose sends your data. Refer to the target vendor's documentation for the correct intake URL (for example, [New Relic](https://docs.newrelic.com/docs/infrastructure/amazon-integrations/connect/aws-firehose/) or [Datadog](https://docs.datadoghq.com/integrations/amazon_kinesis_data_firehose/)).
         :param _builtins.str access_key: The access key required for Kinesis Firehose to authenticate with the HTTP endpoint selected as the destination.
         :param _builtins.int buffering_interval: Buffer incoming data for the specified period of time, in seconds, before delivering it to the destination. The default value is 300 (5 minutes).
         :param _builtins.int buffering_size: Buffer incoming data to the specified size, in MBs, before delivering it to the destination. The default value is 5.
@@ -3676,7 +3751,7 @@ class FirehoseDeliveryStreamHttpEndpointConfiguration(dict):
     @pulumi.getter
     def url(self) -> _builtins.str:
         """
-        The HTTP endpoint URL to which Kinesis Firehose sends your data.
+        The HTTP endpoint URL to which Kinesis Firehose sends your data. Refer to the target vendor's documentation for the correct intake URL (for example, [New Relic](https://docs.newrelic.com/docs/infrastructure/amazon-integrations/connect/aws-firehose/) or [Datadog](https://docs.datadoghq.com/integrations/amazon_kinesis_data_firehose/)).
         """
         return pulumi.get(self, "url")
 
@@ -5864,7 +5939,7 @@ class FirehoseDeliveryStreamOpensearchserverlessConfiguration(dict):
         """
         :param _builtins.str collection_endpoint: The endpoint to use when communicating with the collection in the Serverless offering for Amazon OpenSearch Service.
         :param _builtins.str index_name: The Serverless offering for Amazon OpenSearch Service index name.
-        :param _builtins.str role_arn: The Amazon Resource Name (ARN) of the IAM role to be assumed by Kinesis Data Firehose for calling the Serverless offering for Amazon OpenSearch Service Configuration API and for indexing documents.  The pattern needs to be `arn:.*`.
+        :param _builtins.str role_arn: ARN of the IAM role to be assumed by Kinesis Data Firehose for calling the Serverless offering for Amazon OpenSearch Service Configuration API and for indexing documents.  The pattern needs to be `arn:.*`.
         :param 'FirehoseDeliveryStreamOpensearchserverlessConfigurationS3ConfigurationArgs' s3_configuration: The S3 Configuration. See `s3_configuration` block below for details.
         :param _builtins.int buffering_interval: Buffer incoming data for the specified period of time, in seconds between 0 to 900, before delivering it to the destination.  The default value is 300s.
         :param _builtins.int buffering_size: Buffer incoming data to the specified size, in MBs between 1 to 100, before delivering it to the destination.  The default value is 5MB.
@@ -5913,7 +5988,7 @@ class FirehoseDeliveryStreamOpensearchserverlessConfiguration(dict):
     @pulumi.getter(name="roleArn")
     def role_arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) of the IAM role to be assumed by Kinesis Data Firehose for calling the Serverless offering for Amazon OpenSearch Service Configuration API and for indexing documents.  The pattern needs to be `arn:.*`.
+        ARN of the IAM role to be assumed by Kinesis Data Firehose for calling the Serverless offering for Amazon OpenSearch Service Configuration API and for indexing documents.  The pattern needs to be `arn:.*`.
         """
         return pulumi.get(self, "role_arn")
 
@@ -7312,7 +7387,7 @@ class FirehoseDeliveryStreamServerSideEncryption(dict):
                  key_type: Optional[_builtins.str] = None):
         """
         :param _builtins.bool enabled: Whether to enable encryption at rest. Default is `false`.
-        :param _builtins.str key_arn: Amazon Resource Name (ARN) of the encryption key. Required when `key_type` is `CUSTOMER_MANAGED_CMK`.
+        :param _builtins.str key_arn: ARN of the encryption key. Required when `key_type` is `CUSTOMER_MANAGED_CMK`.
         :param _builtins.str key_type: Type of encryption key. Default is `AWS_OWNED_CMK`. Valid values are `AWS_OWNED_CMK` and `CUSTOMER_MANAGED_CMK`
         """
         if enabled is not None:
@@ -7334,7 +7409,7 @@ class FirehoseDeliveryStreamServerSideEncryption(dict):
     @pulumi.getter(name="keyArn")
     def key_arn(self) -> Optional[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the encryption key. Required when `key_type` is `CUSTOMER_MANAGED_CMK`.
+        ARN of the encryption key. Required when `key_type` is `CUSTOMER_MANAGED_CMK`.
         """
         return pulumi.get(self, "key_arn")
 
@@ -8863,5 +8938,34 @@ class GetStreamStreamModeDetailResult(dict):
         Capacity mode of the stream. Either `ON_DEMAND` or `PROVISIONED`.
         """
         return pulumi.get(self, "stream_mode")
+
+
+@pulumi.output_type
+class GetStreamWarmThroughputResult(dict):
+    def __init__(__self__, *,
+                 current_mib_ps: _builtins.int,
+                 target_mib_ps: _builtins.int):
+        """
+        :param _builtins.int current_mib_ps: Current warm throughput value on the stream.
+        :param _builtins.int target_mib_ps: Target warm throughput value on the stream.
+        """
+        pulumi.set(__self__, "current_mib_ps", current_mib_ps)
+        pulumi.set(__self__, "target_mib_ps", target_mib_ps)
+
+    @_builtins.property
+    @pulumi.getter(name="currentMibPs")
+    def current_mib_ps(self) -> _builtins.int:
+        """
+        Current warm throughput value on the stream.
+        """
+        return pulumi.get(self, "current_mib_ps")
+
+    @_builtins.property
+    @pulumi.getter(name="targetMibPs")
+    def target_mib_ps(self) -> _builtins.int:
+        """
+        Target warm throughput value on the stream.
+        """
+        return pulumi.get(self, "target_mib_ps")
 
 

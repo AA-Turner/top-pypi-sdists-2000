@@ -22,37 +22,40 @@ __all__ = ['ReceiptRuleArgs', 'ReceiptRule']
 class ReceiptRuleArgs:
     def __init__(__self__, *,
                  rule_set_name: pulumi.Input[_builtins.str],
-                 add_header_actions: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleAddHeaderActionArgs']]]] = None,
-                 after: Optional[pulumi.Input[_builtins.str]] = None,
-                 bounce_actions: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleBounceActionArgs']]]] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 lambda_actions: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleLambdaActionArgs']]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 recipients: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_actions: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleS3ActionArgs']]]] = None,
-                 scan_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 sns_actions: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleSnsActionArgs']]]] = None,
-                 stop_actions: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleStopActionArgs']]]] = None,
-                 tls_policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 workmail_actions: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleWorkmailActionArgs']]]] = None):
+                 add_header_actions: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleAddHeaderActionArgs']]]] = None,
+                 after: pulumi.Input[Optional[_builtins.str]] = None,
+                 bounce_actions: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleBounceActionArgs']]]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 lambda_actions: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleLambdaActionArgs']]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 recipients: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_actions: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleS3ActionArgs']]]] = None,
+                 scan_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 sns_actions: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleSnsActionArgs']]]] = None,
+                 stop_actions: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleStopActionArgs']]]] = None,
+                 tls_policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 workmail_actions: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleWorkmailActionArgs']]]] = None):
         """
         The set of arguments for constructing a ReceiptRule resource.
-        :param pulumi.Input[_builtins.str] rule_set_name: The name of the rule set
-        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleAddHeaderActionArgs']]] add_header_actions: A list of Add Header Action blocks. Documented below.
-        :param pulumi.Input[_builtins.str] after: The name of the rule to place this rule after
-        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleBounceActionArgs']]] bounce_actions: A list of Bounce Action blocks. Documented below.
-        :param pulumi.Input[_builtins.bool] enabled: If true, the rule will be enabled
-        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleLambdaActionArgs']]] lambda_actions: A list of Lambda Action blocks. Documented below.
-        :param pulumi.Input[_builtins.str] name: The name of the rule
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] recipients: A list of email addresses
+
+        :param pulumi.Input[_builtins.str] rule_set_name: Name of the rule set.
+               
+               The following arguments are optional:
+        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleAddHeaderActionArgs']]] add_header_actions: Configuration block for adding a header to received emails. Detailed below.
+        :param pulumi.Input[_builtins.str] after: Name of the rule to place this rule after.
+        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleBounceActionArgs']]] bounce_actions: Configuration block for rejecting received emails. Detailed below.
+        :param pulumi.Input[_builtins.bool] enabled: If true, the rule will be enabled.
+        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleLambdaActionArgs']]] lambda_actions: Configuration block for calling an AWS Lambda function. Detailed below.
+        :param pulumi.Input[_builtins.str] name: Name of the rule.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] recipients: List of email addresses.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleS3ActionArgs']]] s3_actions: A list of S3 Action blocks. Documented below.
-        :param pulumi.Input[_builtins.bool] scan_enabled: If true, incoming emails will be scanned for spam and viruses
-        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleSnsActionArgs']]] sns_actions: A list of SNS Action blocks. Documented below.
-        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleStopActionArgs']]] stop_actions: A list of Stop Action blocks. Documented below.
-        :param pulumi.Input[_builtins.str] tls_policy: `Require` or `Optional`
-        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleWorkmailActionArgs']]] workmail_actions: A list of WorkMail Action blocks. Documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleS3ActionArgs']]] s3_actions: Configuration block for storing received emails in an S3 bucket. Detailed below.
+        :param pulumi.Input[_builtins.bool] scan_enabled: If true, incoming emails will be scanned for spam and viruses.
+        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleSnsActionArgs']]] sns_actions: Configuration block for publishing to an SNS topic. Detailed below.
+        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleStopActionArgs']]] stop_actions: Configuration block for terminating the evaluation of the receipt rule set. Detailed below.
+        :param pulumi.Input[_builtins.str] tls_policy: `Require` or `Optional`.
+        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleWorkmailActionArgs']]] workmail_actions: Configuration block for calling Amazon WorkMail. Detailed below.
         """
         pulumi.set(__self__, "rule_set_name", rule_set_name)
         if add_header_actions is not None:
@@ -88,7 +91,9 @@ class ReceiptRuleArgs:
     @pulumi.getter(name="ruleSetName")
     def rule_set_name(self) -> pulumi.Input[_builtins.str]:
         """
-        The name of the rule set
+        Name of the rule set.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "rule_set_name")
 
@@ -98,210 +103,213 @@ class ReceiptRuleArgs:
 
     @_builtins.property
     @pulumi.getter(name="addHeaderActions")
-    def add_header_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleAddHeaderActionArgs']]]]:
+    def add_header_actions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleAddHeaderActionArgs']]]]:
         """
-        A list of Add Header Action blocks. Documented below.
+        Configuration block for adding a header to received emails. Detailed below.
         """
         return pulumi.get(self, "add_header_actions")
 
     @add_header_actions.setter
-    def add_header_actions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleAddHeaderActionArgs']]]]):
+    def add_header_actions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleAddHeaderActionArgs']]]]):
         pulumi.set(self, "add_header_actions", value)
 
     @_builtins.property
     @pulumi.getter
-    def after(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def after(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The name of the rule to place this rule after
+        Name of the rule to place this rule after.
         """
         return pulumi.get(self, "after")
 
     @after.setter
-    def after(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def after(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "after", value)
 
     @_builtins.property
     @pulumi.getter(name="bounceActions")
-    def bounce_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleBounceActionArgs']]]]:
+    def bounce_actions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleBounceActionArgs']]]]:
         """
-        A list of Bounce Action blocks. Documented below.
+        Configuration block for rejecting received emails. Detailed below.
         """
         return pulumi.get(self, "bounce_actions")
 
     @bounce_actions.setter
-    def bounce_actions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleBounceActionArgs']]]]):
+    def bounce_actions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleBounceActionArgs']]]]):
         pulumi.set(self, "bounce_actions", value)
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        If true, the rule will be enabled
+        If true, the rule will be enabled.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="lambdaActions")
-    def lambda_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleLambdaActionArgs']]]]:
+    def lambda_actions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleLambdaActionArgs']]]]:
         """
-        A list of Lambda Action blocks. Documented below.
+        Configuration block for calling an AWS Lambda function. Detailed below.
         """
         return pulumi.get(self, "lambda_actions")
 
     @lambda_actions.setter
-    def lambda_actions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleLambdaActionArgs']]]]):
+    def lambda_actions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleLambdaActionArgs']]]]):
         pulumi.set(self, "lambda_actions", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The name of the rule
+        Name of the rule.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def recipients(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def recipients(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        A list of email addresses
+        List of email addresses.
         """
         return pulumi.get(self, "recipients")
 
     @recipients.setter
-    def recipients(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def recipients(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "recipients", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="s3Actions")
-    def s3_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleS3ActionArgs']]]]:
+    def s3_actions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleS3ActionArgs']]]]:
         """
-        A list of S3 Action blocks. Documented below.
+        Configuration block for storing received emails in an S3 bucket. Detailed below.
         """
         return pulumi.get(self, "s3_actions")
 
     @s3_actions.setter
-    def s3_actions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleS3ActionArgs']]]]):
+    def s3_actions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleS3ActionArgs']]]]):
         pulumi.set(self, "s3_actions", value)
 
     @_builtins.property
     @pulumi.getter(name="scanEnabled")
-    def scan_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def scan_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        If true, incoming emails will be scanned for spam and viruses
+        If true, incoming emails will be scanned for spam and viruses.
         """
         return pulumi.get(self, "scan_enabled")
 
     @scan_enabled.setter
-    def scan_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def scan_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "scan_enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="snsActions")
-    def sns_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleSnsActionArgs']]]]:
+    def sns_actions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleSnsActionArgs']]]]:
         """
-        A list of SNS Action blocks. Documented below.
+        Configuration block for publishing to an SNS topic. Detailed below.
         """
         return pulumi.get(self, "sns_actions")
 
     @sns_actions.setter
-    def sns_actions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleSnsActionArgs']]]]):
+    def sns_actions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleSnsActionArgs']]]]):
         pulumi.set(self, "sns_actions", value)
 
     @_builtins.property
     @pulumi.getter(name="stopActions")
-    def stop_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleStopActionArgs']]]]:
+    def stop_actions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleStopActionArgs']]]]:
         """
-        A list of Stop Action blocks. Documented below.
+        Configuration block for terminating the evaluation of the receipt rule set. Detailed below.
         """
         return pulumi.get(self, "stop_actions")
 
     @stop_actions.setter
-    def stop_actions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleStopActionArgs']]]]):
+    def stop_actions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleStopActionArgs']]]]):
         pulumi.set(self, "stop_actions", value)
 
     @_builtins.property
     @pulumi.getter(name="tlsPolicy")
-    def tls_policy(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def tls_policy(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        `Require` or `Optional`
+        `Require` or `Optional`.
         """
         return pulumi.get(self, "tls_policy")
 
     @tls_policy.setter
-    def tls_policy(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def tls_policy(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "tls_policy", value)
 
     @_builtins.property
     @pulumi.getter(name="workmailActions")
-    def workmail_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleWorkmailActionArgs']]]]:
+    def workmail_actions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleWorkmailActionArgs']]]]:
         """
-        A list of WorkMail Action blocks. Documented below.
+        Configuration block for calling Amazon WorkMail. Detailed below.
         """
         return pulumi.get(self, "workmail_actions")
 
     @workmail_actions.setter
-    def workmail_actions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleWorkmailActionArgs']]]]):
+    def workmail_actions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleWorkmailActionArgs']]]]):
         pulumi.set(self, "workmail_actions", value)
 
 
 @pulumi.input_type
 class _ReceiptRuleState:
     def __init__(__self__, *,
-                 add_header_actions: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleAddHeaderActionArgs']]]] = None,
-                 after: Optional[pulumi.Input[_builtins.str]] = None,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 bounce_actions: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleBounceActionArgs']]]] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 lambda_actions: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleLambdaActionArgs']]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 recipients: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rule_set_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_actions: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleS3ActionArgs']]]] = None,
-                 scan_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 sns_actions: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleSnsActionArgs']]]] = None,
-                 stop_actions: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleStopActionArgs']]]] = None,
-                 tls_policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 workmail_actions: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleWorkmailActionArgs']]]] = None):
+                 add_header_actions: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleAddHeaderActionArgs']]]] = None,
+                 after: pulumi.Input[Optional[_builtins.str]] = None,
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 bounce_actions: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleBounceActionArgs']]]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 lambda_actions: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleLambdaActionArgs']]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 recipients: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rule_set_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_actions: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleS3ActionArgs']]]] = None,
+                 scan_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 sns_actions: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleSnsActionArgs']]]] = None,
+                 stop_actions: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleStopActionArgs']]]] = None,
+                 tls_policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 workmail_actions: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleWorkmailActionArgs']]]] = None):
         """
         Input properties used for looking up and filtering ReceiptRule resources.
-        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleAddHeaderActionArgs']]] add_header_actions: A list of Add Header Action blocks. Documented below.
-        :param pulumi.Input[_builtins.str] after: The name of the rule to place this rule after
-        :param pulumi.Input[_builtins.str] arn: The SES receipt rule ARN.
-        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleBounceActionArgs']]] bounce_actions: A list of Bounce Action blocks. Documented below.
-        :param pulumi.Input[_builtins.bool] enabled: If true, the rule will be enabled
-        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleLambdaActionArgs']]] lambda_actions: A list of Lambda Action blocks. Documented below.
-        :param pulumi.Input[_builtins.str] name: The name of the rule
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] recipients: A list of email addresses
+
+        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleAddHeaderActionArgs']]] add_header_actions: Configuration block for adding a header to received emails. Detailed below.
+        :param pulumi.Input[_builtins.str] after: Name of the rule to place this rule after.
+        :param pulumi.Input[_builtins.str] arn: SES receipt rule ARN.
+        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleBounceActionArgs']]] bounce_actions: Configuration block for rejecting received emails. Detailed below.
+        :param pulumi.Input[_builtins.bool] enabled: If true, the rule will be enabled.
+        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleLambdaActionArgs']]] lambda_actions: Configuration block for calling an AWS Lambda function. Detailed below.
+        :param pulumi.Input[_builtins.str] name: Name of the rule.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] recipients: List of email addresses.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] rule_set_name: The name of the rule set
-        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleS3ActionArgs']]] s3_actions: A list of S3 Action blocks. Documented below.
-        :param pulumi.Input[_builtins.bool] scan_enabled: If true, incoming emails will be scanned for spam and viruses
-        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleSnsActionArgs']]] sns_actions: A list of SNS Action blocks. Documented below.
-        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleStopActionArgs']]] stop_actions: A list of Stop Action blocks. Documented below.
-        :param pulumi.Input[_builtins.str] tls_policy: `Require` or `Optional`
-        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleWorkmailActionArgs']]] workmail_actions: A list of WorkMail Action blocks. Documented below.
+        :param pulumi.Input[_builtins.str] rule_set_name: Name of the rule set.
+               
+               The following arguments are optional:
+        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleS3ActionArgs']]] s3_actions: Configuration block for storing received emails in an S3 bucket. Detailed below.
+        :param pulumi.Input[_builtins.bool] scan_enabled: If true, incoming emails will be scanned for spam and viruses.
+        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleSnsActionArgs']]] sns_actions: Configuration block for publishing to an SNS topic. Detailed below.
+        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleStopActionArgs']]] stop_actions: Configuration block for terminating the evaluation of the receipt rule set. Detailed below.
+        :param pulumi.Input[_builtins.str] tls_policy: `Require` or `Optional`.
+        :param pulumi.Input[Sequence[pulumi.Input['ReceiptRuleWorkmailActionArgs']]] workmail_actions: Configuration block for calling Amazon WorkMail. Detailed below.
         """
         if add_header_actions is not None:
             pulumi.set(__self__, "add_header_actions", add_header_actions)
@@ -338,194 +346,196 @@ class _ReceiptRuleState:
 
     @_builtins.property
     @pulumi.getter(name="addHeaderActions")
-    def add_header_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleAddHeaderActionArgs']]]]:
+    def add_header_actions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleAddHeaderActionArgs']]]]:
         """
-        A list of Add Header Action blocks. Documented below.
+        Configuration block for adding a header to received emails. Detailed below.
         """
         return pulumi.get(self, "add_header_actions")
 
     @add_header_actions.setter
-    def add_header_actions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleAddHeaderActionArgs']]]]):
+    def add_header_actions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleAddHeaderActionArgs']]]]):
         pulumi.set(self, "add_header_actions", value)
 
     @_builtins.property
     @pulumi.getter
-    def after(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def after(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The name of the rule to place this rule after
+        Name of the rule to place this rule after.
         """
         return pulumi.get(self, "after")
 
     @after.setter
-    def after(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def after(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "after", value)
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The SES receipt rule ARN.
+        SES receipt rule ARN.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="bounceActions")
-    def bounce_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleBounceActionArgs']]]]:
+    def bounce_actions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleBounceActionArgs']]]]:
         """
-        A list of Bounce Action blocks. Documented below.
+        Configuration block for rejecting received emails. Detailed below.
         """
         return pulumi.get(self, "bounce_actions")
 
     @bounce_actions.setter
-    def bounce_actions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleBounceActionArgs']]]]):
+    def bounce_actions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleBounceActionArgs']]]]):
         pulumi.set(self, "bounce_actions", value)
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        If true, the rule will be enabled
+        If true, the rule will be enabled.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="lambdaActions")
-    def lambda_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleLambdaActionArgs']]]]:
+    def lambda_actions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleLambdaActionArgs']]]]:
         """
-        A list of Lambda Action blocks. Documented below.
+        Configuration block for calling an AWS Lambda function. Detailed below.
         """
         return pulumi.get(self, "lambda_actions")
 
     @lambda_actions.setter
-    def lambda_actions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleLambdaActionArgs']]]]):
+    def lambda_actions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleLambdaActionArgs']]]]):
         pulumi.set(self, "lambda_actions", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The name of the rule
+        Name of the rule.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def recipients(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def recipients(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        A list of email addresses
+        List of email addresses.
         """
         return pulumi.get(self, "recipients")
 
     @recipients.setter
-    def recipients(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def recipients(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "recipients", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="ruleSetName")
-    def rule_set_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def rule_set_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The name of the rule set
+        Name of the rule set.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "rule_set_name")
 
     @rule_set_name.setter
-    def rule_set_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def rule_set_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "rule_set_name", value)
 
     @_builtins.property
     @pulumi.getter(name="s3Actions")
-    def s3_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleS3ActionArgs']]]]:
+    def s3_actions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleS3ActionArgs']]]]:
         """
-        A list of S3 Action blocks. Documented below.
+        Configuration block for storing received emails in an S3 bucket. Detailed below.
         """
         return pulumi.get(self, "s3_actions")
 
     @s3_actions.setter
-    def s3_actions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleS3ActionArgs']]]]):
+    def s3_actions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleS3ActionArgs']]]]):
         pulumi.set(self, "s3_actions", value)
 
     @_builtins.property
     @pulumi.getter(name="scanEnabled")
-    def scan_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def scan_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        If true, incoming emails will be scanned for spam and viruses
+        If true, incoming emails will be scanned for spam and viruses.
         """
         return pulumi.get(self, "scan_enabled")
 
     @scan_enabled.setter
-    def scan_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def scan_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "scan_enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="snsActions")
-    def sns_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleSnsActionArgs']]]]:
+    def sns_actions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleSnsActionArgs']]]]:
         """
-        A list of SNS Action blocks. Documented below.
+        Configuration block for publishing to an SNS topic. Detailed below.
         """
         return pulumi.get(self, "sns_actions")
 
     @sns_actions.setter
-    def sns_actions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleSnsActionArgs']]]]):
+    def sns_actions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleSnsActionArgs']]]]):
         pulumi.set(self, "sns_actions", value)
 
     @_builtins.property
     @pulumi.getter(name="stopActions")
-    def stop_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleStopActionArgs']]]]:
+    def stop_actions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleStopActionArgs']]]]:
         """
-        A list of Stop Action blocks. Documented below.
+        Configuration block for terminating the evaluation of the receipt rule set. Detailed below.
         """
         return pulumi.get(self, "stop_actions")
 
     @stop_actions.setter
-    def stop_actions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleStopActionArgs']]]]):
+    def stop_actions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleStopActionArgs']]]]):
         pulumi.set(self, "stop_actions", value)
 
     @_builtins.property
     @pulumi.getter(name="tlsPolicy")
-    def tls_policy(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def tls_policy(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        `Require` or `Optional`
+        `Require` or `Optional`.
         """
         return pulumi.get(self, "tls_policy")
 
     @tls_policy.setter
-    def tls_policy(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def tls_policy(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "tls_policy", value)
 
     @_builtins.property
     @pulumi.getter(name="workmailActions")
-    def workmail_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleWorkmailActionArgs']]]]:
+    def workmail_actions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleWorkmailActionArgs']]]]:
         """
-        A list of WorkMail Action blocks. Documented below.
+        Configuration block for calling Amazon WorkMail. Detailed below.
         """
         return pulumi.get(self, "workmail_actions")
 
     @workmail_actions.setter
-    def workmail_actions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReceiptRuleWorkmailActionArgs']]]]):
+    def workmail_actions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ReceiptRuleWorkmailActionArgs']]]]):
         pulumi.set(self, "workmail_actions", value)
 
 
@@ -535,21 +545,21 @@ class ReceiptRule(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 add_header_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleAddHeaderActionArgs', 'ReceiptRuleAddHeaderActionArgsDict']]]]] = None,
-                 after: Optional[pulumi.Input[_builtins.str]] = None,
-                 bounce_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleBounceActionArgs', 'ReceiptRuleBounceActionArgsDict']]]]] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 lambda_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleLambdaActionArgs', 'ReceiptRuleLambdaActionArgsDict']]]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 recipients: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rule_set_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleS3ActionArgs', 'ReceiptRuleS3ActionArgsDict']]]]] = None,
-                 scan_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 sns_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleSnsActionArgs', 'ReceiptRuleSnsActionArgsDict']]]]] = None,
-                 stop_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleStopActionArgs', 'ReceiptRuleStopActionArgsDict']]]]] = None,
-                 tls_policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 workmail_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleWorkmailActionArgs', 'ReceiptRuleWorkmailActionArgsDict']]]]] = None,
+                 add_header_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleAddHeaderActionArgs', 'ReceiptRuleAddHeaderActionArgsDict']]]]] = None,
+                 after: pulumi.Input[Optional[_builtins.str]] = None,
+                 bounce_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleBounceActionArgs', 'ReceiptRuleBounceActionArgsDict']]]]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 lambda_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleLambdaActionArgs', 'ReceiptRuleLambdaActionArgsDict']]]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 recipients: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rule_set_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleS3ActionArgs', 'ReceiptRuleS3ActionArgsDict']]]]] = None,
+                 scan_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 sns_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleSnsActionArgs', 'ReceiptRuleSnsActionArgsDict']]]]] = None,
+                 stop_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleStopActionArgs', 'ReceiptRuleStopActionArgsDict']]]]] = None,
+                 tls_policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 workmail_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleWorkmailActionArgs', 'ReceiptRuleWorkmailActionArgsDict']]]]] = None,
                  __props__=None):
         """
         Provides an SES receipt rule resource
@@ -562,11 +572,6 @@ class ReceiptRule(pulumi.CustomResource):
 
         # Add a header to the email and store it in S3
         store = aws.ses.ReceiptRule("store",
-            name="store",
-            rule_set_name="default-rule-set",
-            recipients=["karen@example.com"],
-            enabled=True,
-            scan_enabled=True,
             add_header_actions=[{
                 "header_name": "Custom-Header",
                 "header_value": "Added by SES",
@@ -575,7 +580,12 @@ class ReceiptRule(pulumi.CustomResource):
             s3_actions=[{
                 "bucket_name": "emails",
                 "position": 2,
-            }])
+            }],
+            name="store",
+            rule_set_name="default-rule-set",
+            recipients=["karen@example.com"],
+            enabled=True,
+            scan_enabled=True)
         ```
 
         ## Import
@@ -586,23 +596,26 @@ class ReceiptRule(pulumi.CustomResource):
         $ pulumi import aws:ses/receiptRule:ReceiptRule my_rule my_rule_set:my_rule
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleAddHeaderActionArgs', 'ReceiptRuleAddHeaderActionArgsDict']]]] add_header_actions: A list of Add Header Action blocks. Documented below.
-        :param pulumi.Input[_builtins.str] after: The name of the rule to place this rule after
-        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleBounceActionArgs', 'ReceiptRuleBounceActionArgsDict']]]] bounce_actions: A list of Bounce Action blocks. Documented below.
-        :param pulumi.Input[_builtins.bool] enabled: If true, the rule will be enabled
-        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleLambdaActionArgs', 'ReceiptRuleLambdaActionArgsDict']]]] lambda_actions: A list of Lambda Action blocks. Documented below.
-        :param pulumi.Input[_builtins.str] name: The name of the rule
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] recipients: A list of email addresses
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleAddHeaderActionArgs', 'ReceiptRuleAddHeaderActionArgsDict']]]] add_header_actions: Configuration block for adding a header to received emails. Detailed below.
+        :param pulumi.Input[_builtins.str] after: Name of the rule to place this rule after.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleBounceActionArgs', 'ReceiptRuleBounceActionArgsDict']]]] bounce_actions: Configuration block for rejecting received emails. Detailed below.
+        :param pulumi.Input[_builtins.bool] enabled: If true, the rule will be enabled.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleLambdaActionArgs', 'ReceiptRuleLambdaActionArgsDict']]]] lambda_actions: Configuration block for calling an AWS Lambda function. Detailed below.
+        :param pulumi.Input[_builtins.str] name: Name of the rule.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] recipients: List of email addresses.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] rule_set_name: The name of the rule set
-        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleS3ActionArgs', 'ReceiptRuleS3ActionArgsDict']]]] s3_actions: A list of S3 Action blocks. Documented below.
-        :param pulumi.Input[_builtins.bool] scan_enabled: If true, incoming emails will be scanned for spam and viruses
-        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleSnsActionArgs', 'ReceiptRuleSnsActionArgsDict']]]] sns_actions: A list of SNS Action blocks. Documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleStopActionArgs', 'ReceiptRuleStopActionArgsDict']]]] stop_actions: A list of Stop Action blocks. Documented below.
-        :param pulumi.Input[_builtins.str] tls_policy: `Require` or `Optional`
-        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleWorkmailActionArgs', 'ReceiptRuleWorkmailActionArgsDict']]]] workmail_actions: A list of WorkMail Action blocks. Documented below.
+        :param pulumi.Input[_builtins.str] rule_set_name: Name of the rule set.
+               
+               The following arguments are optional:
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleS3ActionArgs', 'ReceiptRuleS3ActionArgsDict']]]] s3_actions: Configuration block for storing received emails in an S3 bucket. Detailed below.
+        :param pulumi.Input[_builtins.bool] scan_enabled: If true, incoming emails will be scanned for spam and viruses.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleSnsActionArgs', 'ReceiptRuleSnsActionArgsDict']]]] sns_actions: Configuration block for publishing to an SNS topic. Detailed below.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleStopActionArgs', 'ReceiptRuleStopActionArgsDict']]]] stop_actions: Configuration block for terminating the evaluation of the receipt rule set. Detailed below.
+        :param pulumi.Input[_builtins.str] tls_policy: `Require` or `Optional`.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleWorkmailActionArgs', 'ReceiptRuleWorkmailActionArgsDict']]]] workmail_actions: Configuration block for calling Amazon WorkMail. Detailed below.
         """
         ...
     @overload
@@ -621,11 +634,6 @@ class ReceiptRule(pulumi.CustomResource):
 
         # Add a header to the email and store it in S3
         store = aws.ses.ReceiptRule("store",
-            name="store",
-            rule_set_name="default-rule-set",
-            recipients=["karen@example.com"],
-            enabled=True,
-            scan_enabled=True,
             add_header_actions=[{
                 "header_name": "Custom-Header",
                 "header_value": "Added by SES",
@@ -634,7 +642,12 @@ class ReceiptRule(pulumi.CustomResource):
             s3_actions=[{
                 "bucket_name": "emails",
                 "position": 2,
-            }])
+            }],
+            name="store",
+            rule_set_name="default-rule-set",
+            recipients=["karen@example.com"],
+            enabled=True,
+            scan_enabled=True)
         ```
 
         ## Import
@@ -644,6 +657,7 @@ class ReceiptRule(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:ses/receiptRule:ReceiptRule my_rule my_rule_set:my_rule
         ```
+
 
         :param str resource_name: The name of the resource.
         :param ReceiptRuleArgs args: The arguments to use to populate this resource's properties.
@@ -660,21 +674,21 @@ class ReceiptRule(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 add_header_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleAddHeaderActionArgs', 'ReceiptRuleAddHeaderActionArgsDict']]]]] = None,
-                 after: Optional[pulumi.Input[_builtins.str]] = None,
-                 bounce_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleBounceActionArgs', 'ReceiptRuleBounceActionArgsDict']]]]] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 lambda_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleLambdaActionArgs', 'ReceiptRuleLambdaActionArgsDict']]]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 recipients: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rule_set_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleS3ActionArgs', 'ReceiptRuleS3ActionArgsDict']]]]] = None,
-                 scan_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 sns_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleSnsActionArgs', 'ReceiptRuleSnsActionArgsDict']]]]] = None,
-                 stop_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleStopActionArgs', 'ReceiptRuleStopActionArgsDict']]]]] = None,
-                 tls_policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 workmail_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleWorkmailActionArgs', 'ReceiptRuleWorkmailActionArgsDict']]]]] = None,
+                 add_header_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleAddHeaderActionArgs', 'ReceiptRuleAddHeaderActionArgsDict']]]]] = None,
+                 after: pulumi.Input[Optional[_builtins.str]] = None,
+                 bounce_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleBounceActionArgs', 'ReceiptRuleBounceActionArgsDict']]]]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 lambda_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleLambdaActionArgs', 'ReceiptRuleLambdaActionArgsDict']]]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 recipients: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rule_set_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleS3ActionArgs', 'ReceiptRuleS3ActionArgsDict']]]]] = None,
+                 scan_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 sns_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleSnsActionArgs', 'ReceiptRuleSnsActionArgsDict']]]]] = None,
+                 stop_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleStopActionArgs', 'ReceiptRuleStopActionArgsDict']]]]] = None,
+                 tls_policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 workmail_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleWorkmailActionArgs', 'ReceiptRuleWorkmailActionArgsDict']]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -712,22 +726,22 @@ class ReceiptRule(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            add_header_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleAddHeaderActionArgs', 'ReceiptRuleAddHeaderActionArgsDict']]]]] = None,
-            after: Optional[pulumi.Input[_builtins.str]] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            bounce_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleBounceActionArgs', 'ReceiptRuleBounceActionArgsDict']]]]] = None,
-            enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-            lambda_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleLambdaActionArgs', 'ReceiptRuleLambdaActionArgsDict']]]]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            recipients: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            rule_set_name: Optional[pulumi.Input[_builtins.str]] = None,
-            s3_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleS3ActionArgs', 'ReceiptRuleS3ActionArgsDict']]]]] = None,
-            scan_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-            sns_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleSnsActionArgs', 'ReceiptRuleSnsActionArgsDict']]]]] = None,
-            stop_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleStopActionArgs', 'ReceiptRuleStopActionArgsDict']]]]] = None,
-            tls_policy: Optional[pulumi.Input[_builtins.str]] = None,
-            workmail_actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleWorkmailActionArgs', 'ReceiptRuleWorkmailActionArgsDict']]]]] = None) -> 'ReceiptRule':
+            add_header_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleAddHeaderActionArgs', 'ReceiptRuleAddHeaderActionArgsDict']]]]] = None,
+            after: pulumi.Input[Optional[_builtins.str]] = None,
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            bounce_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleBounceActionArgs', 'ReceiptRuleBounceActionArgsDict']]]]] = None,
+            enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+            lambda_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleLambdaActionArgs', 'ReceiptRuleLambdaActionArgsDict']]]]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            recipients: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            rule_set_name: pulumi.Input[Optional[_builtins.str]] = None,
+            s3_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleS3ActionArgs', 'ReceiptRuleS3ActionArgsDict']]]]] = None,
+            scan_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+            sns_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleSnsActionArgs', 'ReceiptRuleSnsActionArgsDict']]]]] = None,
+            stop_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleStopActionArgs', 'ReceiptRuleStopActionArgsDict']]]]] = None,
+            tls_policy: pulumi.Input[Optional[_builtins.str]] = None,
+            workmail_actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ReceiptRuleWorkmailActionArgs', 'ReceiptRuleWorkmailActionArgsDict']]]]] = None) -> 'ReceiptRule':
         """
         Get an existing ReceiptRule resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -735,22 +749,24 @@ class ReceiptRule(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleAddHeaderActionArgs', 'ReceiptRuleAddHeaderActionArgsDict']]]] add_header_actions: A list of Add Header Action blocks. Documented below.
-        :param pulumi.Input[_builtins.str] after: The name of the rule to place this rule after
-        :param pulumi.Input[_builtins.str] arn: The SES receipt rule ARN.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleBounceActionArgs', 'ReceiptRuleBounceActionArgsDict']]]] bounce_actions: A list of Bounce Action blocks. Documented below.
-        :param pulumi.Input[_builtins.bool] enabled: If true, the rule will be enabled
-        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleLambdaActionArgs', 'ReceiptRuleLambdaActionArgsDict']]]] lambda_actions: A list of Lambda Action blocks. Documented below.
-        :param pulumi.Input[_builtins.str] name: The name of the rule
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] recipients: A list of email addresses
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleAddHeaderActionArgs', 'ReceiptRuleAddHeaderActionArgsDict']]]] add_header_actions: Configuration block for adding a header to received emails. Detailed below.
+        :param pulumi.Input[_builtins.str] after: Name of the rule to place this rule after.
+        :param pulumi.Input[_builtins.str] arn: SES receipt rule ARN.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleBounceActionArgs', 'ReceiptRuleBounceActionArgsDict']]]] bounce_actions: Configuration block for rejecting received emails. Detailed below.
+        :param pulumi.Input[_builtins.bool] enabled: If true, the rule will be enabled.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleLambdaActionArgs', 'ReceiptRuleLambdaActionArgsDict']]]] lambda_actions: Configuration block for calling an AWS Lambda function. Detailed below.
+        :param pulumi.Input[_builtins.str] name: Name of the rule.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] recipients: List of email addresses.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] rule_set_name: The name of the rule set
-        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleS3ActionArgs', 'ReceiptRuleS3ActionArgsDict']]]] s3_actions: A list of S3 Action blocks. Documented below.
-        :param pulumi.Input[_builtins.bool] scan_enabled: If true, incoming emails will be scanned for spam and viruses
-        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleSnsActionArgs', 'ReceiptRuleSnsActionArgsDict']]]] sns_actions: A list of SNS Action blocks. Documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleStopActionArgs', 'ReceiptRuleStopActionArgsDict']]]] stop_actions: A list of Stop Action blocks. Documented below.
-        :param pulumi.Input[_builtins.str] tls_policy: `Require` or `Optional`
-        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleWorkmailActionArgs', 'ReceiptRuleWorkmailActionArgsDict']]]] workmail_actions: A list of WorkMail Action blocks. Documented below.
+        :param pulumi.Input[_builtins.str] rule_set_name: Name of the rule set.
+               
+               The following arguments are optional:
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleS3ActionArgs', 'ReceiptRuleS3ActionArgsDict']]]] s3_actions: Configuration block for storing received emails in an S3 bucket. Detailed below.
+        :param pulumi.Input[_builtins.bool] scan_enabled: If true, incoming emails will be scanned for spam and viruses.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleSnsActionArgs', 'ReceiptRuleSnsActionArgsDict']]]] sns_actions: Configuration block for publishing to an SNS topic. Detailed below.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleStopActionArgs', 'ReceiptRuleStopActionArgsDict']]]] stop_actions: Configuration block for terminating the evaluation of the receipt rule set. Detailed below.
+        :param pulumi.Input[_builtins.str] tls_policy: `Require` or `Optional`.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['ReceiptRuleWorkmailActionArgs', 'ReceiptRuleWorkmailActionArgsDict']]]] workmail_actions: Configuration block for calling Amazon WorkMail. Detailed below.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -778,7 +794,7 @@ class ReceiptRule(pulumi.CustomResource):
     @pulumi.getter(name="addHeaderActions")
     def add_header_actions(self) -> pulumi.Output[Optional[Sequence['outputs.ReceiptRuleAddHeaderAction']]]:
         """
-        A list of Add Header Action blocks. Documented below.
+        Configuration block for adding a header to received emails. Detailed below.
         """
         return pulumi.get(self, "add_header_actions")
 
@@ -786,7 +802,7 @@ class ReceiptRule(pulumi.CustomResource):
     @pulumi.getter
     def after(self) -> pulumi.Output[Optional[_builtins.str]]:
         """
-        The name of the rule to place this rule after
+        Name of the rule to place this rule after.
         """
         return pulumi.get(self, "after")
 
@@ -794,7 +810,7 @@ class ReceiptRule(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The SES receipt rule ARN.
+        SES receipt rule ARN.
         """
         return pulumi.get(self, "arn")
 
@@ -802,7 +818,7 @@ class ReceiptRule(pulumi.CustomResource):
     @pulumi.getter(name="bounceActions")
     def bounce_actions(self) -> pulumi.Output[Optional[Sequence['outputs.ReceiptRuleBounceAction']]]:
         """
-        A list of Bounce Action blocks. Documented below.
+        Configuration block for rejecting received emails. Detailed below.
         """
         return pulumi.get(self, "bounce_actions")
 
@@ -810,7 +826,7 @@ class ReceiptRule(pulumi.CustomResource):
     @pulumi.getter
     def enabled(self) -> pulumi.Output[Optional[_builtins.bool]]:
         """
-        If true, the rule will be enabled
+        If true, the rule will be enabled.
         """
         return pulumi.get(self, "enabled")
 
@@ -818,7 +834,7 @@ class ReceiptRule(pulumi.CustomResource):
     @pulumi.getter(name="lambdaActions")
     def lambda_actions(self) -> pulumi.Output[Optional[Sequence['outputs.ReceiptRuleLambdaAction']]]:
         """
-        A list of Lambda Action blocks. Documented below.
+        Configuration block for calling an AWS Lambda function. Detailed below.
         """
         return pulumi.get(self, "lambda_actions")
 
@@ -826,7 +842,7 @@ class ReceiptRule(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[_builtins.str]:
         """
-        The name of the rule
+        Name of the rule.
         """
         return pulumi.get(self, "name")
 
@@ -834,7 +850,7 @@ class ReceiptRule(pulumi.CustomResource):
     @pulumi.getter
     def recipients(self) -> pulumi.Output[Optional[Sequence[_builtins.str]]]:
         """
-        A list of email addresses
+        List of email addresses.
         """
         return pulumi.get(self, "recipients")
 
@@ -850,7 +866,9 @@ class ReceiptRule(pulumi.CustomResource):
     @pulumi.getter(name="ruleSetName")
     def rule_set_name(self) -> pulumi.Output[_builtins.str]:
         """
-        The name of the rule set
+        Name of the rule set.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "rule_set_name")
 
@@ -858,7 +876,7 @@ class ReceiptRule(pulumi.CustomResource):
     @pulumi.getter(name="s3Actions")
     def s3_actions(self) -> pulumi.Output[Optional[Sequence['outputs.ReceiptRuleS3Action']]]:
         """
-        A list of S3 Action blocks. Documented below.
+        Configuration block for storing received emails in an S3 bucket. Detailed below.
         """
         return pulumi.get(self, "s3_actions")
 
@@ -866,7 +884,7 @@ class ReceiptRule(pulumi.CustomResource):
     @pulumi.getter(name="scanEnabled")
     def scan_enabled(self) -> pulumi.Output[Optional[_builtins.bool]]:
         """
-        If true, incoming emails will be scanned for spam and viruses
+        If true, incoming emails will be scanned for spam and viruses.
         """
         return pulumi.get(self, "scan_enabled")
 
@@ -874,7 +892,7 @@ class ReceiptRule(pulumi.CustomResource):
     @pulumi.getter(name="snsActions")
     def sns_actions(self) -> pulumi.Output[Optional[Sequence['outputs.ReceiptRuleSnsAction']]]:
         """
-        A list of SNS Action blocks. Documented below.
+        Configuration block for publishing to an SNS topic. Detailed below.
         """
         return pulumi.get(self, "sns_actions")
 
@@ -882,7 +900,7 @@ class ReceiptRule(pulumi.CustomResource):
     @pulumi.getter(name="stopActions")
     def stop_actions(self) -> pulumi.Output[Optional[Sequence['outputs.ReceiptRuleStopAction']]]:
         """
-        A list of Stop Action blocks. Documented below.
+        Configuration block for terminating the evaluation of the receipt rule set. Detailed below.
         """
         return pulumi.get(self, "stop_actions")
 
@@ -890,7 +908,7 @@ class ReceiptRule(pulumi.CustomResource):
     @pulumi.getter(name="tlsPolicy")
     def tls_policy(self) -> pulumi.Output[_builtins.str]:
         """
-        `Require` or `Optional`
+        `Require` or `Optional`.
         """
         return pulumi.get(self, "tls_policy")
 
@@ -898,7 +916,7 @@ class ReceiptRule(pulumi.CustomResource):
     @pulumi.getter(name="workmailActions")
     def workmail_actions(self) -> pulumi.Output[Optional[Sequence['outputs.ReceiptRuleWorkmailAction']]]:
         """
-        A list of WorkMail Action blocks. Documented below.
+        Configuration block for calling Amazon WorkMail. Detailed below.
         """
         return pulumi.get(self, "workmail_actions")
 

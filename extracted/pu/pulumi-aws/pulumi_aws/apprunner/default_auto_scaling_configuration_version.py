@@ -20,10 +20,11 @@ __all__ = ['DefaultAutoScalingConfigurationVersionArgs', 'DefaultAutoScalingConf
 class DefaultAutoScalingConfigurationVersionArgs:
     def __init__(__self__, *,
                  auto_scaling_configuration_arn: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a DefaultAutoScalingConfigurationVersion resource.
-        :param pulumi.Input[_builtins.str] auto_scaling_configuration_arn: The ARN of the App Runner auto scaling configuration that you want to set as the default.
+
+        :param pulumi.Input[_builtins.str] auto_scaling_configuration_arn: ARN of the App Runner auto scaling configuration that you want to set as the default.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         pulumi.set(__self__, "auto_scaling_configuration_arn", auto_scaling_configuration_arn)
@@ -34,7 +35,7 @@ class DefaultAutoScalingConfigurationVersionArgs:
     @pulumi.getter(name="autoScalingConfigurationArn")
     def auto_scaling_configuration_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The ARN of the App Runner auto scaling configuration that you want to set as the default.
+        ARN of the App Runner auto scaling configuration that you want to set as the default.
         """
         return pulumi.get(self, "auto_scaling_configuration_arn")
 
@@ -44,25 +45,26 @@ class DefaultAutoScalingConfigurationVersionArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _DefaultAutoScalingConfigurationVersionState:
     def __init__(__self__, *,
-                 auto_scaling_configuration_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 auto_scaling_configuration_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering DefaultAutoScalingConfigurationVersion resources.
-        :param pulumi.Input[_builtins.str] auto_scaling_configuration_arn: The ARN of the App Runner auto scaling configuration that you want to set as the default.
+
+        :param pulumi.Input[_builtins.str] auto_scaling_configuration_arn: ARN of the App Runner auto scaling configuration that you want to set as the default.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         if auto_scaling_configuration_arn is not None:
@@ -72,26 +74,26 @@ class _DefaultAutoScalingConfigurationVersionState:
 
     @_builtins.property
     @pulumi.getter(name="autoScalingConfigurationArn")
-    def auto_scaling_configuration_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def auto_scaling_configuration_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The ARN of the App Runner auto scaling configuration that you want to set as the default.
+        ARN of the App Runner auto scaling configuration that you want to set as the default.
         """
         return pulumi.get(self, "auto_scaling_configuration_arn")
 
     @auto_scaling_configuration_arn.setter
-    def auto_scaling_configuration_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def auto_scaling_configuration_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "auto_scaling_configuration_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -101,8 +103,8 @@ class DefaultAutoScalingConfigurationVersion(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 auto_scaling_configuration_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 auto_scaling_configuration_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Manages the default App Runner auto scaling configuration.
@@ -132,9 +134,10 @@ class DefaultAutoScalingConfigurationVersion(pulumi.CustomResource):
         $ pulumi import aws:apprunner/defaultAutoScalingConfigurationVersion:DefaultAutoScalingConfigurationVersion example us-west-2
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] auto_scaling_configuration_arn: The ARN of the App Runner auto scaling configuration that you want to set as the default.
+        :param pulumi.Input[_builtins.str] auto_scaling_configuration_arn: ARN of the App Runner auto scaling configuration that you want to set as the default.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         ...
@@ -171,6 +174,7 @@ class DefaultAutoScalingConfigurationVersion(pulumi.CustomResource):
         $ pulumi import aws:apprunner/defaultAutoScalingConfigurationVersion:DefaultAutoScalingConfigurationVersion example us-west-2
         ```
 
+
         :param str resource_name: The name of the resource.
         :param DefaultAutoScalingConfigurationVersionArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -186,8 +190,8 @@ class DefaultAutoScalingConfigurationVersion(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 auto_scaling_configuration_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 auto_scaling_configuration_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -211,8 +215,8 @@ class DefaultAutoScalingConfigurationVersion(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            auto_scaling_configuration_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'DefaultAutoScalingConfigurationVersion':
+            auto_scaling_configuration_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'DefaultAutoScalingConfigurationVersion':
         """
         Get an existing DefaultAutoScalingConfigurationVersion resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -220,7 +224,7 @@ class DefaultAutoScalingConfigurationVersion(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] auto_scaling_configuration_arn: The ARN of the App Runner auto scaling configuration that you want to set as the default.
+        :param pulumi.Input[_builtins.str] auto_scaling_configuration_arn: ARN of the App Runner auto scaling configuration that you want to set as the default.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -235,7 +239,7 @@ class DefaultAutoScalingConfigurationVersion(pulumi.CustomResource):
     @pulumi.getter(name="autoScalingConfigurationArn")
     def auto_scaling_configuration_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The ARN of the App Runner auto scaling configuration that you want to set as the default.
+        ARN of the App Runner auto scaling configuration that you want to set as the default.
         """
         return pulumi.get(self, "auto_scaling_configuration_arn")
 

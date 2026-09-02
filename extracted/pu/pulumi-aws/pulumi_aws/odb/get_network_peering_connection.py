@@ -26,7 +26,7 @@ class GetNetworkPeeringConnectionResult:
     """
     A collection of values returned by getNetworkPeeringConnection.
     """
-    def __init__(__self__, arn=None, created_at=None, display_name=None, id=None, odb_network_arn=None, odb_peering_connection_type=None, peer_network_arn=None, percent_progress=None, region=None, status=None, status_reason=None, tags=None):
+    def __init__(__self__, arn=None, created_at=None, display_name=None, id=None, odb_network_arn=None, odb_peering_connection_type=None, peer_network_arn=None, peer_network_cidrs=None, percent_progress=None, region=None, status=None, status_reason=None, tags=None):
         if arn and not isinstance(arn, str):
             raise TypeError("Expected argument 'arn' to be a str")
         pulumi.set(__self__, "arn", arn)
@@ -48,6 +48,9 @@ class GetNetworkPeeringConnectionResult:
         if peer_network_arn and not isinstance(peer_network_arn, str):
             raise TypeError("Expected argument 'peer_network_arn' to be a str")
         pulumi.set(__self__, "peer_network_arn", peer_network_arn)
+        if peer_network_cidrs and not isinstance(peer_network_cidrs, list):
+            raise TypeError("Expected argument 'peer_network_cidrs' to be a list")
+        pulumi.set(__self__, "peer_network_cidrs", peer_network_cidrs)
         if percent_progress and not isinstance(percent_progress, float):
             raise TypeError("Expected argument 'percent_progress' to be a float")
         pulumi.set(__self__, "percent_progress", percent_progress)
@@ -68,7 +71,7 @@ class GetNetworkPeeringConnectionResult:
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) for the  ODB network peering connection.
+        ARN for the  ODB network peering connection.
         """
         return pulumi.get(self, "arn")
 
@@ -116,6 +119,14 @@ class GetNetworkPeeringConnectionResult:
         ARN of the peer network peering connection.
         """
         return pulumi.get(self, "peer_network_arn")
+
+    @_builtins.property
+    @pulumi.getter(name="peerNetworkCidrs")
+    def peer_network_cidrs(self) -> Sequence[_builtins.str]:
+        """
+        Set of peer network cidrs.
+        """
+        return pulumi.get(self, "peer_network_cidrs")
 
     @_builtins.property
     @pulumi.getter(name="percentProgress")
@@ -168,6 +179,7 @@ class AwaitableGetNetworkPeeringConnectionResult(GetNetworkPeeringConnectionResu
             odb_network_arn=self.odb_network_arn,
             odb_peering_connection_type=self.odb_peering_connection_type,
             peer_network_arn=self.peer_network_arn,
+            peer_network_cidrs=self.peer_network_cidrs,
             percent_progress=self.percent_progress,
             region=self.region,
             status=self.status,
@@ -195,7 +207,7 @@ def get_network_peering_connection(id: Optional[_builtins.str] = None,
     ```
 
 
-    :param _builtins.str id: The unique identifier of the ODB network peering connection.
+    :param _builtins.str id: Unique identifier of the ODB network peering connection.
            
            The following arguments are optional:
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -214,13 +226,14 @@ def get_network_peering_connection(id: Optional[_builtins.str] = None,
         odb_network_arn=pulumi.get(__ret__, 'odb_network_arn'),
         odb_peering_connection_type=pulumi.get(__ret__, 'odb_peering_connection_type'),
         peer_network_arn=pulumi.get(__ret__, 'peer_network_arn'),
+        peer_network_cidrs=pulumi.get(__ret__, 'peer_network_cidrs'),
         percent_progress=pulumi.get(__ret__, 'percent_progress'),
         region=pulumi.get(__ret__, 'region'),
         status=pulumi.get(__ret__, 'status'),
         status_reason=pulumi.get(__ret__, 'status_reason'),
         tags=pulumi.get(__ret__, 'tags'))
-def get_network_peering_connection_output(id: Optional[pulumi.Input[_builtins.str]] = None,
-                                          region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_network_peering_connection_output(id: pulumi.Input[Optional[_builtins.str]] = None,
+                                          region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                           opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetNetworkPeeringConnectionResult]:
     """
     Data source for managing oracle database network peering resource in AWS.
@@ -239,7 +252,7 @@ def get_network_peering_connection_output(id: Optional[pulumi.Input[_builtins.st
     ```
 
 
-    :param _builtins.str id: The unique identifier of the ODB network peering connection.
+    :param _builtins.str id: Unique identifier of the ODB network peering connection.
            
            The following arguments are optional:
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -257,6 +270,7 @@ def get_network_peering_connection_output(id: Optional[pulumi.Input[_builtins.st
         odb_network_arn=pulumi.get(__response__, 'odb_network_arn'),
         odb_peering_connection_type=pulumi.get(__response__, 'odb_peering_connection_type'),
         peer_network_arn=pulumi.get(__response__, 'peer_network_arn'),
+        peer_network_cidrs=pulumi.get(__response__, 'peer_network_cidrs'),
         percent_progress=pulumi.get(__response__, 'percent_progress'),
         region=pulumi.get(__response__, 'region'),
         status=pulumi.get(__response__, 'status'),

@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import List, Tuple
 
 import numpy as np
 import scipy.sparse as sp
@@ -49,18 +48,19 @@ class tr_inv(Atom):
             return np.inf
         return np.sum(eigVal**-1)
 
-    # The shape of argument must be square.
     def validate_arguments(self) -> None:
-        X = self.args[0]
-        if len(X.shape) == 1 or X.shape[0] != X.shape[1]:
-            raise TypeError("The argument to tr_inv must be a square matrix.")
+        """Verify that the argument is a square matrix."""
+        if not self.args[0].ndim == 2 or self.args[0].shape[0] != self.args[0].shape[1]:
+            raise ValueError(
+                f"The argument {self.args[0].name()} to tr_inv must be a 2-d square array."
+            )
 
-    def shape_from_args(self) -> Tuple[int, ...]:
+    def shape_from_args(self) -> tuple[int, ...]:
         """Returns the (row, col) shape of the expression.
         """
         return tuple()
 
-    def sign_from_args(self) -> Tuple[bool, bool]:
+    def sign_from_args(self) -> tuple[bool, bool]:
         """Returns sign (is positive, is negative) of the expression.
         """
         return (True, False)
@@ -102,23 +102,23 @@ class tr_inv(Atom):
             # Grad: -X^{-2}.T
             D = np.linalg.inv(X).T
             D = - D @ D
-            return [sp.csc_matrix(D.ravel(order='F')).T]
+            return [sp.csc_array([D.ravel(order='F')]).T]
         # Outside domain.
         else:
             return [None]
 
-    def _domain(self) -> List[Constraint]:
+    def _domain(self) -> list[Constraint]:
         """Returns constraints describing the domain of the node.
         """
         return [self.args[0] >> 0]
 
     @property
     def value(self) -> float:
+        if self.args[0].value is None:
+            return None
         if not np.allclose(self.args[0].value,
                            self.args[0].value.T.conj(),
                            rtol=s.ATOM_EVAL_TOL,
                            atol=s.ATOM_EVAL_TOL):
-            raise ValueError("Input matrix was not Hermitian/symmetric.")
-        if any([p.value is None for p in self.parameters()]):
-            return None
+            raise ValueError("Input array to tr_inv was not Hermitian/symmetric.")
         return self._value_impl()

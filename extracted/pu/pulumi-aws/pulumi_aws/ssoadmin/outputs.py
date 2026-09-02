@@ -26,6 +26,7 @@ __all__ = [
     'ManagedPolicyAttachmentsExclusiveTimeouts',
     'PermissionsBoundaryAttachmentPermissionsBoundary',
     'PermissionsBoundaryAttachmentPermissionsBoundaryCustomerManagedPolicyReference',
+    'RegionTimeouts',
     'TrustedTokenIssuerTrustedTokenIssuerConfiguration',
     'TrustedTokenIssuerTrustedTokenIssuerConfigurationOidcJwtConfiguration',
     'GetApplicationAssignmentsApplicationAssignmentResult',
@@ -387,6 +388,37 @@ class PermissionsBoundaryAttachmentPermissionsBoundaryCustomerManagedPolicyRefer
 
 
 @pulumi.output_type
+class RegionTimeouts(dict):
+    def __init__(__self__, *,
+                 create: Optional[_builtins.str] = None,
+                 delete: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        :param _builtins.str delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        if create is not None:
+            pulumi.set(__self__, "create", create)
+        if delete is not None:
+            pulumi.set(__self__, "delete", delete)
+
+    @_builtins.property
+    @pulumi.getter
+    def create(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "create")
+
+    @_builtins.property
+    @pulumi.getter
+    def delete(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        return pulumi.get(self, "delete")
+
+
+@pulumi.output_type
 class TrustedTokenIssuerTrustedTokenIssuerConfiguration(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -540,17 +572,27 @@ class GetApplicationPortalOptionResult(dict):
     def __init__(__self__, *,
                  sign_in_options: Sequence['outputs.GetApplicationPortalOptionSignInOptionResult'],
                  visibility: _builtins.str):
+        """
+        :param Sequence['GetApplicationPortalOptionSignInOptionArgs'] sign_in_options: Sign-in options for the access portal. See `sign_in_options` Block below.
+        :param _builtins.str visibility: Whether the application is visible in the access portal.
+        """
         pulumi.set(__self__, "sign_in_options", sign_in_options)
         pulumi.set(__self__, "visibility", visibility)
 
     @_builtins.property
     @pulumi.getter(name="signInOptions")
     def sign_in_options(self) -> Sequence['outputs.GetApplicationPortalOptionSignInOptionResult']:
+        """
+        Sign-in options for the access portal. See `sign_in_options` Block below.
+        """
         return pulumi.get(self, "sign_in_options")
 
     @_builtins.property
     @pulumi.getter
     def visibility(self) -> _builtins.str:
+        """
+        Whether the application is visible in the access portal.
+        """
         return pulumi.get(self, "visibility")
 
 
@@ -559,17 +601,27 @@ class GetApplicationPortalOptionSignInOptionResult(dict):
     def __init__(__self__, *,
                  application_url: _builtins.str,
                  origin: _builtins.str):
+        """
+        :param _builtins.str application_url: URL that accepts authentication requests for an application.
+        :param _builtins.str origin: How IAM Identity Center navigates the user to the target application.
+        """
         pulumi.set(__self__, "application_url", application_url)
         pulumi.set(__self__, "origin", origin)
 
     @_builtins.property
     @pulumi.getter(name="applicationUrl")
     def application_url(self) -> _builtins.str:
+        """
+        URL that accepts authentication requests for an application.
+        """
         return pulumi.get(self, "application_url")
 
     @_builtins.property
     @pulumi.getter
     def origin(self) -> _builtins.str:
+        """
+        How IAM Identity Center navigates the user to the target application.
+        """
         return pulumi.get(self, "origin")
 
 

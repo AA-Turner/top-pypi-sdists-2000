@@ -24,13 +24,15 @@ class WebAclRuleGroupAssociationArgs:
                  priority: pulumi.Input[_builtins.int],
                  rule_name: pulumi.Input[_builtins.str],
                  web_acl_arn: pulumi.Input[_builtins.str],
-                 managed_rule_group: Optional[pulumi.Input['WebAclRuleGroupAssociationManagedRuleGroupArgs']] = None,
-                 override_action: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rule_group_reference: Optional[pulumi.Input['WebAclRuleGroupAssociationRuleGroupReferenceArgs']] = None,
-                 timeouts: Optional[pulumi.Input['WebAclRuleGroupAssociationTimeoutsArgs']] = None):
+                 managed_rule_group: pulumi.Input[Optional['WebAclRuleGroupAssociationManagedRuleGroupArgs']] = None,
+                 override_action: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rule_group_reference: pulumi.Input[Optional['WebAclRuleGroupAssociationRuleGroupReferenceArgs']] = None,
+                 timeouts: pulumi.Input[Optional['WebAclRuleGroupAssociationTimeoutsArgs']] = None,
+                 visibility_config: pulumi.Input[Optional['WebAclRuleGroupAssociationVisibilityConfigArgs']] = None):
         """
         The set of arguments for constructing a WebAclRuleGroupAssociation resource.
+
         :param pulumi.Input[_builtins.int] priority: Priority of the rule within the Web ACL. Rules are evaluated in order of priority, with lower numbers evaluated first.
         :param pulumi.Input[_builtins.str] rule_name: Name of the rule to create in the Web ACL that references the rule group. Must be between 1 and 128 characters.
         :param pulumi.Input[_builtins.str] web_acl_arn: ARN of the Web ACL to associate the Rule Group with.
@@ -40,6 +42,7 @@ class WebAclRuleGroupAssociationArgs:
         :param pulumi.Input[_builtins.str] override_action: Override action for the rule group. Valid values are `none` and `count`. Defaults to `none`. When set to `count`, the actions defined in the rule group rules are overridden to count matches instead of blocking or allowing requests.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input['WebAclRuleGroupAssociationRuleGroupReferenceArgs'] rule_group_reference: Custom Rule Group reference configuration. One of `rule_group_reference` or `managed_rule_group` is required. Conflicts with `managed_rule_group`. See below.
+        :param pulumi.Input['WebAclRuleGroupAssociationVisibilityConfigArgs'] visibility_config: Defines and enables Amazon CloudWatch metrics and web request sample collection. See below.
         """
         pulumi.set(__self__, "priority", priority)
         pulumi.set(__self__, "rule_name", rule_name)
@@ -54,6 +57,8 @@ class WebAclRuleGroupAssociationArgs:
             pulumi.set(__self__, "rule_group_reference", rule_group_reference)
         if timeouts is not None:
             pulumi.set(__self__, "timeouts", timeouts)
+        if visibility_config is not None:
+            pulumi.set(__self__, "visibility_config", visibility_config)
 
     @_builtins.property
     @pulumi.getter
@@ -95,81 +100,96 @@ class WebAclRuleGroupAssociationArgs:
 
     @_builtins.property
     @pulumi.getter(name="managedRuleGroup")
-    def managed_rule_group(self) -> Optional[pulumi.Input['WebAclRuleGroupAssociationManagedRuleGroupArgs']]:
+    def managed_rule_group(self) -> pulumi.Input[Optional['WebAclRuleGroupAssociationManagedRuleGroupArgs']]:
         """
         Managed Rule Group configuration. One of `rule_group_reference` or `managed_rule_group` is required. Conflicts with `rule_group_reference`. See below.
         """
         return pulumi.get(self, "managed_rule_group")
 
     @managed_rule_group.setter
-    def managed_rule_group(self, value: Optional[pulumi.Input['WebAclRuleGroupAssociationManagedRuleGroupArgs']]):
+    def managed_rule_group(self, value: pulumi.Input[Optional['WebAclRuleGroupAssociationManagedRuleGroupArgs']]):
         pulumi.set(self, "managed_rule_group", value)
 
     @_builtins.property
     @pulumi.getter(name="overrideAction")
-    def override_action(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def override_action(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Override action for the rule group. Valid values are `none` and `count`. Defaults to `none`. When set to `count`, the actions defined in the rule group rules are overridden to count matches instead of blocking or allowing requests.
         """
         return pulumi.get(self, "override_action")
 
     @override_action.setter
-    def override_action(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def override_action(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "override_action", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="ruleGroupReference")
-    def rule_group_reference(self) -> Optional[pulumi.Input['WebAclRuleGroupAssociationRuleGroupReferenceArgs']]:
+    def rule_group_reference(self) -> pulumi.Input[Optional['WebAclRuleGroupAssociationRuleGroupReferenceArgs']]:
         """
         Custom Rule Group reference configuration. One of `rule_group_reference` or `managed_rule_group` is required. Conflicts with `managed_rule_group`. See below.
         """
         return pulumi.get(self, "rule_group_reference")
 
     @rule_group_reference.setter
-    def rule_group_reference(self, value: Optional[pulumi.Input['WebAclRuleGroupAssociationRuleGroupReferenceArgs']]):
+    def rule_group_reference(self, value: pulumi.Input[Optional['WebAclRuleGroupAssociationRuleGroupReferenceArgs']]):
         pulumi.set(self, "rule_group_reference", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['WebAclRuleGroupAssociationTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['WebAclRuleGroupAssociationTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['WebAclRuleGroupAssociationTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['WebAclRuleGroupAssociationTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
+
+    @_builtins.property
+    @pulumi.getter(name="visibilityConfig")
+    def visibility_config(self) -> pulumi.Input[Optional['WebAclRuleGroupAssociationVisibilityConfigArgs']]:
+        """
+        Defines and enables Amazon CloudWatch metrics and web request sample collection. See below.
+        """
+        return pulumi.get(self, "visibility_config")
+
+    @visibility_config.setter
+    def visibility_config(self, value: pulumi.Input[Optional['WebAclRuleGroupAssociationVisibilityConfigArgs']]):
+        pulumi.set(self, "visibility_config", value)
 
 
 @pulumi.input_type
 class _WebAclRuleGroupAssociationState:
     def __init__(__self__, *,
-                 managed_rule_group: Optional[pulumi.Input['WebAclRuleGroupAssociationManagedRuleGroupArgs']] = None,
-                 override_action: Optional[pulumi.Input[_builtins.str]] = None,
-                 priority: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rule_group_reference: Optional[pulumi.Input['WebAclRuleGroupAssociationRuleGroupReferenceArgs']] = None,
-                 rule_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['WebAclRuleGroupAssociationTimeoutsArgs']] = None,
-                 web_acl_arn: Optional[pulumi.Input[_builtins.str]] = None):
+                 managed_rule_group: pulumi.Input[Optional['WebAclRuleGroupAssociationManagedRuleGroupArgs']] = None,
+                 override_action: pulumi.Input[Optional[_builtins.str]] = None,
+                 priority: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rule_group_reference: pulumi.Input[Optional['WebAclRuleGroupAssociationRuleGroupReferenceArgs']] = None,
+                 rule_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['WebAclRuleGroupAssociationTimeoutsArgs']] = None,
+                 visibility_config: pulumi.Input[Optional['WebAclRuleGroupAssociationVisibilityConfigArgs']] = None,
+                 web_acl_arn: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering WebAclRuleGroupAssociation resources.
+
         :param pulumi.Input['WebAclRuleGroupAssociationManagedRuleGroupArgs'] managed_rule_group: Managed Rule Group configuration. One of `rule_group_reference` or `managed_rule_group` is required. Conflicts with `rule_group_reference`. See below.
         :param pulumi.Input[_builtins.str] override_action: Override action for the rule group. Valid values are `none` and `count`. Defaults to `none`. When set to `count`, the actions defined in the rule group rules are overridden to count matches instead of blocking or allowing requests.
         :param pulumi.Input[_builtins.int] priority: Priority of the rule within the Web ACL. Rules are evaluated in order of priority, with lower numbers evaluated first.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input['WebAclRuleGroupAssociationRuleGroupReferenceArgs'] rule_group_reference: Custom Rule Group reference configuration. One of `rule_group_reference` or `managed_rule_group` is required. Conflicts with `managed_rule_group`. See below.
         :param pulumi.Input[_builtins.str] rule_name: Name of the rule to create in the Web ACL that references the rule group. Must be between 1 and 128 characters.
+        :param pulumi.Input['WebAclRuleGroupAssociationVisibilityConfigArgs'] visibility_config: Defines and enables Amazon CloudWatch metrics and web request sample collection. See below.
         :param pulumi.Input[_builtins.str] web_acl_arn: ARN of the Web ACL to associate the Rule Group with.
                
                The following arguments are optional:
@@ -188,93 +208,107 @@ class _WebAclRuleGroupAssociationState:
             pulumi.set(__self__, "rule_name", rule_name)
         if timeouts is not None:
             pulumi.set(__self__, "timeouts", timeouts)
+        if visibility_config is not None:
+            pulumi.set(__self__, "visibility_config", visibility_config)
         if web_acl_arn is not None:
             pulumi.set(__self__, "web_acl_arn", web_acl_arn)
 
     @_builtins.property
     @pulumi.getter(name="managedRuleGroup")
-    def managed_rule_group(self) -> Optional[pulumi.Input['WebAclRuleGroupAssociationManagedRuleGroupArgs']]:
+    def managed_rule_group(self) -> pulumi.Input[Optional['WebAclRuleGroupAssociationManagedRuleGroupArgs']]:
         """
         Managed Rule Group configuration. One of `rule_group_reference` or `managed_rule_group` is required. Conflicts with `rule_group_reference`. See below.
         """
         return pulumi.get(self, "managed_rule_group")
 
     @managed_rule_group.setter
-    def managed_rule_group(self, value: Optional[pulumi.Input['WebAclRuleGroupAssociationManagedRuleGroupArgs']]):
+    def managed_rule_group(self, value: pulumi.Input[Optional['WebAclRuleGroupAssociationManagedRuleGroupArgs']]):
         pulumi.set(self, "managed_rule_group", value)
 
     @_builtins.property
     @pulumi.getter(name="overrideAction")
-    def override_action(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def override_action(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Override action for the rule group. Valid values are `none` and `count`. Defaults to `none`. When set to `count`, the actions defined in the rule group rules are overridden to count matches instead of blocking or allowing requests.
         """
         return pulumi.get(self, "override_action")
 
     @override_action.setter
-    def override_action(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def override_action(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "override_action", value)
 
     @_builtins.property
     @pulumi.getter
-    def priority(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def priority(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Priority of the rule within the Web ACL. Rules are evaluated in order of priority, with lower numbers evaluated first.
         """
         return pulumi.get(self, "priority")
 
     @priority.setter
-    def priority(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def priority(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "priority", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="ruleGroupReference")
-    def rule_group_reference(self) -> Optional[pulumi.Input['WebAclRuleGroupAssociationRuleGroupReferenceArgs']]:
+    def rule_group_reference(self) -> pulumi.Input[Optional['WebAclRuleGroupAssociationRuleGroupReferenceArgs']]:
         """
         Custom Rule Group reference configuration. One of `rule_group_reference` or `managed_rule_group` is required. Conflicts with `managed_rule_group`. See below.
         """
         return pulumi.get(self, "rule_group_reference")
 
     @rule_group_reference.setter
-    def rule_group_reference(self, value: Optional[pulumi.Input['WebAclRuleGroupAssociationRuleGroupReferenceArgs']]):
+    def rule_group_reference(self, value: pulumi.Input[Optional['WebAclRuleGroupAssociationRuleGroupReferenceArgs']]):
         pulumi.set(self, "rule_group_reference", value)
 
     @_builtins.property
     @pulumi.getter(name="ruleName")
-    def rule_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def rule_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the rule to create in the Web ACL that references the rule group. Must be between 1 and 128 characters.
         """
         return pulumi.get(self, "rule_name")
 
     @rule_name.setter
-    def rule_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def rule_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "rule_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['WebAclRuleGroupAssociationTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['WebAclRuleGroupAssociationTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['WebAclRuleGroupAssociationTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['WebAclRuleGroupAssociationTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
+    @pulumi.getter(name="visibilityConfig")
+    def visibility_config(self) -> pulumi.Input[Optional['WebAclRuleGroupAssociationVisibilityConfigArgs']]:
+        """
+        Defines and enables Amazon CloudWatch metrics and web request sample collection. See below.
+        """
+        return pulumi.get(self, "visibility_config")
+
+    @visibility_config.setter
+    def visibility_config(self, value: pulumi.Input[Optional['WebAclRuleGroupAssociationVisibilityConfigArgs']]):
+        pulumi.set(self, "visibility_config", value)
+
+    @_builtins.property
     @pulumi.getter(name="webAclArn")
-    def web_acl_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def web_acl_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the Web ACL to associate the Rule Group with.
 
@@ -283,7 +317,7 @@ class _WebAclRuleGroupAssociationState:
         return pulumi.get(self, "web_acl_arn")
 
     @web_acl_arn.setter
-    def web_acl_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def web_acl_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "web_acl_arn", value)
 
 
@@ -293,14 +327,15 @@ class WebAclRuleGroupAssociation(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 managed_rule_group: Optional[pulumi.Input[Union['WebAclRuleGroupAssociationManagedRuleGroupArgs', 'WebAclRuleGroupAssociationManagedRuleGroupArgsDict']]] = None,
-                 override_action: Optional[pulumi.Input[_builtins.str]] = None,
-                 priority: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rule_group_reference: Optional[pulumi.Input[Union['WebAclRuleGroupAssociationRuleGroupReferenceArgs', 'WebAclRuleGroupAssociationRuleGroupReferenceArgsDict']]] = None,
-                 rule_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['WebAclRuleGroupAssociationTimeoutsArgs', 'WebAclRuleGroupAssociationTimeoutsArgsDict']]] = None,
-                 web_acl_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 managed_rule_group: pulumi.Input[Optional[Union['WebAclRuleGroupAssociationManagedRuleGroupArgs', 'WebAclRuleGroupAssociationManagedRuleGroupArgsDict']]] = None,
+                 override_action: pulumi.Input[Optional[_builtins.str]] = None,
+                 priority: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rule_group_reference: pulumi.Input[Optional[Union['WebAclRuleGroupAssociationRuleGroupReferenceArgs', 'WebAclRuleGroupAssociationRuleGroupReferenceArgsDict']]] = None,
+                 rule_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['WebAclRuleGroupAssociationTimeoutsArgs', 'WebAclRuleGroupAssociationTimeoutsArgsDict']]] = None,
+                 visibility_config: pulumi.Input[Optional[Union['WebAclRuleGroupAssociationVisibilityConfigArgs', 'WebAclRuleGroupAssociationVisibilityConfigArgsDict']]] = None,
+                 web_acl_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Associates a WAFv2 Rule Group (custom or managed) with a Web ACL by adding a rule that references the Rule Group. Use this resource to apply the rules defined in a Rule Group to a Web ACL without duplicating rule definitions.
@@ -310,51 +345,21 @@ class WebAclRuleGroupAssociation(pulumi.CustomResource):
         - **Custom Rule Groups**: User-created rule groups that you manage within your AWS account
         - **Managed Rule Groups**: Pre-configured rule groups provided by AWS or third-party vendors
 
-        !> **Warning:** Verify the rule names in your `rule_action_override`s carefully. With managed rule groups, WAF silently ignores any override that uses an invalid rule name. With customer-owned rule groups, invalid rule names in your overrides will cause web ACL updates to fail. An invalid rule name is any name that doesn't exactly match the case-sensitive name of an existing rule in the rule group.
+        > **Warning:** Verify the rule names in your `rule_action_override`s carefully. With managed rule groups, WAF silently ignores any override that uses an invalid rule name. With customer-owned rule groups, invalid rule names in your overrides will cause web ACL updates to fail. An invalid rule name is any name that doesn't exactly match the case-sensitive name of an existing rule in the rule group.
 
-        !> **Warning:** Using this resource will cause the associated Web ACL resource to show configuration drift in the `rule` argument unless you add `lifecycle { ignore_changes = [rule] }` to the Web ACL resource configuration. This is because this resource modifies the Web ACL's rules outside of the Web ACL resource's direct management.
+        > **Warning:** Using this resource will cause the associated Web ACL resource to show configuration drift in the `rule` argument unless you add `lifecycle { ignore_changes = [rule] }` to the Web ACL resource configuration. This is because this resource modifies the Web ACL's rules outside of the Web ACL resource's direct management.
 
         > **Note:** This resource creates a rule within the Web ACL that references the entire Rule Group. The rule group's individual rules are evaluated as a unit when requests are processed by the Web ACL.
         ## Example Usage
 
-        ### Custom Rule Group - Basic Usage
+        ### Basic Usage
 
         ```python
         import pulumi
         import pulumi_aws as aws
 
-        example = aws.wafv2.RuleGroup("example",
-            name="example-rule-group",
-            scope="REGIONAL",
-            capacity=10,
-            rules=[{
-                "name": "block-suspicious-requests",
-                "priority": 1,
-                "action": {
-                    "block": {},
-                },
-                "statement": {
-                    "geo_match_statement": {
-                        "country_codes": [
-                            "CN",
-                            "RU",
-                        ],
-                    },
-                },
-                "visibility_config": {
-                    "cloudwatch_metrics_enabled": True,
-                    "metric_name": "block-suspicious-requests",
-                    "sampled_requests_enabled": True,
-                },
-            }],
-            visibility_config={
-                "cloudwatch_metrics_enabled": True,
-                "metric_name": "example-rule-group",
-                "sampled_requests_enabled": True,
-            })
-        example_web_acl = aws.wafv2.WebAcl("example",
-            name="example-web-acl",
-            scope="REGIONAL",
+        # Web ACL must use lifecycle.ignore_changes to prevent drift from this resource
+        example = aws.wafv2.WebAcl("example",
             default_action={
                 "allow": {},
             },
@@ -362,73 +367,60 @@ class WebAclRuleGroupAssociation(pulumi.CustomResource):
                 "cloudwatch_metrics_enabled": True,
                 "metric_name": "example-web-acl",
                 "sampled_requests_enabled": True,
-            })
+            },
+            name="example-web-acl",
+            scope="REGIONAL",
+            opts = pulumi.ResourceOptions(ignore_changes=["rules"]))
+        # Associate a custom rule group
         example_web_acl_rule_group_association = aws.wafv2.WebAclRuleGroupAssociation("example",
+            rule_group_reference={
+                "arn": example_aws_wafv2_rule_group["arn"],
+            },
             rule_name="example-rule-group-rule",
             priority=100,
-            web_acl_arn=example_web_acl.arn,
-            rule_group_reference={
-                "arn": example.arn,
-            })
+            web_acl_arn=example.arn)
         ```
-        ### Managed Rule Group - Basic Usage
+        ### Managed Rule Group
 
         ```python
         import pulumi
         import pulumi_aws as aws
 
-        example = aws.wafv2.WebAcl("example",
-            name="example-web-acl",
-            scope="REGIONAL",
-            default_action={
-                "allow": {},
-            },
-            visibility_config={
-                "cloudwatch_metrics_enabled": True,
-                "metric_name": "example-web-acl",
-                "sampled_requests_enabled": True,
-            })
-        managed_example = aws.wafv2.WebAclRuleGroupAssociation("managed_example",
-            rule_name="aws-common-rule-set",
-            priority=50,
-            web_acl_arn=example.arn,
+        example = aws.wafv2.WebAclRuleGroupAssociation("example",
             managed_rule_group={
                 "name": "AWSManagedRulesCommonRuleSet",
                 "vendor_name": "AWS",
-            })
+            },
+            rule_name="aws-common-rule-set",
+            priority=50,
+            web_acl_arn=example_aws_wafv2_web_acl["arn"])
         ```
-        ### Managed Rule Group - With Version
+        ### Managed Rule Group With Version
 
         ```python
         import pulumi
         import pulumi_aws as aws
 
-        managed_versioned = aws.wafv2.WebAclRuleGroupAssociation("managed_versioned",
-            rule_name="aws-common-rule-set-versioned",
-            priority=60,
-            web_acl_arn=example["arn"],
+        example = aws.wafv2.WebAclRuleGroupAssociation("example",
             managed_rule_group={
                 "name": "AWSManagedRulesCommonRuleSet",
                 "vendor_name": "AWS",
                 "version": "Version_1.0",
-            })
+            },
+            rule_name="aws-common-rule-set-versioned",
+            priority=60,
+            web_acl_arn=example_aws_wafv2_web_acl["arn"])
         ```
-        ### Managed Rule Group - With Rule Action Overrides
+        ### Managed Rule Group With Rule Action Overrides
 
         ```python
         import pulumi
         import pulumi_aws as aws
 
-        managed_with_overrides = aws.wafv2.WebAclRuleGroupAssociation("managed_with_overrides",
-            rule_name="aws-common-rule-set-with-overrides",
-            priority=70,
-            web_acl_arn=example["arn"],
+        example = aws.wafv2.WebAclRuleGroupAssociation("example",
             managed_rule_group={
-                "name": "AWSManagedRulesCommonRuleSet",
-                "vendor_name": "AWS",
                 "rule_action_overrides": [
                     {
-                        "name": "GenericRFI_BODY",
                         "action_to_use": {
                             "count": {
                                 "custom_request_handling": {
@@ -439,45 +431,158 @@ class WebAclRuleGroupAssociation(pulumi.CustomResource):
                                 },
                             },
                         },
+                        "name": "GenericRFI_BODY",
                     },
                     {
-                        "name": "SizeRestrictions_BODY",
                         "action_to_use": {
                             "captcha": {},
                         },
+                        "name": "SizeRestrictions_BODY",
                     },
                 ],
-            })
+                "name": "AWSManagedRulesCommonRuleSet",
+                "vendor_name": "AWS",
+            },
+            rule_name="aws-common-rule-set-with-overrides",
+            priority=70,
+            web_acl_arn=example_aws_wafv2_web_acl["arn"])
         ```
-        ### Custom Rule Group - With Override Action
+        ### Managed Rule Group With Managed Rule Group Configs
 
         ```python
         import pulumi
         import pulumi_aws as aws
 
         example = aws.wafv2.WebAclRuleGroupAssociation("example",
+            managed_rule_group={
+                "managed_rule_group_configs": {
+                    "aws_managed_rules_acfp_rule_set": {
+                        "request_inspection": {
+                            "email_field": {
+                                "identifier": "/email",
+                            },
+                            "password_field": {
+                                "identifier": "/password",
+                            },
+                            "phone_number_fields": {
+                                "identifiers": [
+                                    "/phone1",
+                                    "/phone2",
+                                ],
+                            },
+                            "address_fields": {
+                                "identifiers": [
+                                    "home",
+                                    "work",
+                                ],
+                            },
+                            "username_field": {
+                                "identifier": "/username",
+                            },
+                            "payload_type": "JSON",
+                        },
+                        "creation_path": "/creation",
+                        "registration_page_path": "/registration",
+                    },
+                },
+                "name": "AWSManagedRulesACFPRuleSet",
+                "vendor_name": "AWS",
+            },
+            visibility_config={
+                "cloudwatch_metrics_enabled": True,
+                "metric_name": "friendly-metric-name",
+                "sampled_requests_enabled": True,
+            },
+            rule_name="acfp-ruleset-with-rule-config",
+            priority=70,
+            web_acl_arn=example_aws_wafv2_web_acl["arn"])
+        ```
+        ### Custom Rule Group With Override Action
+
+        ```python
+        import pulumi
+        import pulumi_aws as aws
+
+        example = aws.wafv2.WebAclRuleGroupAssociation("example",
+            rule_group_reference={
+                "arn": example_aws_wafv2_rule_group["arn"],
+            },
             rule_name="example-rule-group-rule",
             priority=100,
             web_acl_arn=example_aws_wafv2_web_acl["arn"],
-            override_action="count",
+            override_action="count")
+        ```
+        ### Custom Rule Group With Rule Action Overrides
+
+        ```python
+        import pulumi
+        import pulumi_aws as aws
+
+        example = aws.wafv2.WebAclRuleGroupAssociation("example",
+            rule_group_reference={
+                "rule_action_overrides": [
+                    {
+                        "action_to_use": {
+                            "count": {
+                                "custom_request_handling": {
+                                    "insert_headers": [{
+                                        "name": "X-Geo-Block-Override",
+                                        "value": "counted",
+                                    }],
+                                },
+                            },
+                        },
+                        "name": "geo-block-rule",
+                    },
+                    {
+                        "action_to_use": {
+                            "captcha": {
+                                "custom_request_handling": {
+                                    "insert_headers": [{
+                                        "name": "X-Rate-Limit-Override",
+                                        "value": "captcha-required",
+                                    }],
+                                },
+                            },
+                        },
+                        "name": "rate-limit-rule",
+                    },
+                ],
+                "arn": example_aws_wafv2_rule_group["arn"],
+            },
+            rule_name="example-rule-group-rule",
+            priority=100,
+            web_acl_arn=example_aws_wafv2_web_acl["arn"])
+        ```
+        ### CloudFront Web ACL
+
+        ```python
+        import pulumi
+        import pulumi_aws as aws
+
+        example = aws.wafv2.WebAclRuleGroupAssociation("example",
             rule_group_reference={
                 "arn": example_aws_wafv2_rule_group["arn"],
-            })
+            },
+            rule_name="cloudfront-rule-group-rule",
+            priority=50,
+            web_acl_arn=example_aws_wafv2_web_acl["arn"])
         ```
 
         ## Import
 
-        Using `pulumi import`, import WAFv2 web ACL custom rule group associations using `WebACLARN,RuleGroupARN,RuleName`. For example:
+        Using `pulumi import`, import WAFv2 web ACL custom rule group associations using `WebACLARN,RuleName,RuleGroupType,RuleGroupARN`, where `RuleGroupType` is `custom`. For example:
 
         ```sh
-        $ pulumi import aws:wafv2/webAclRuleGroupAssociation:WebAclRuleGroupAssociation example "arn:aws:wafv2:us-east-1:123456789012:regional/webacl/example-web-acl/12345678-1234-1234-1234-123456789012,arn:aws:wafv2:us-east-1:123456789012:regional/rulegroup/example-rule-group/87654321-4321-4321-4321-210987654321,example-rule-group-rule"
+        $ pulumi import aws:wafv2/webAclRuleGroupAssociation:WebAclRuleGroupAssociation example "arn:aws:wafv2:us-east-1:123456789012:regional/webacl/example-web-acl/12345678-1234-1234-1234-123456789012,example-rule-group-rule,custom,arn:aws:wafv2:us-east-1:123456789012:regional/rulegroup/example-rule-group/87654321-4321-4321-4321-210987654321"
         ```
 
-        Using `pulumi import`, import WAFv2 web ACL managed rule group associations using `WebACLARN,VendorName:RuleGroupName[:Version],RuleName`. For example:
+        Using `pulumi import`, import WAFv2 web ACL managed rule group associations using `WebACLARN,RuleName,RuleGroupType,VendorName:RuleGroupName[:Version]`, where `RuleGroupType` is `managed`. For example:
 
         ```sh
-        $ pulumi import aws:wafv2/webAclRuleGroupAssociation:WebAclRuleGroupAssociation managed_example "arn:aws:wafv2:us-east-1:123456789012:regional/webacl/example-web-acl/12345678-1234-1234-1234-123456789012,AWS:AWSManagedRulesCommonRuleSet,aws-common-rule-set"
+        $ pulumi import aws:wafv2/webAclRuleGroupAssociation:WebAclRuleGroupAssociation managed_example "arn:aws:wafv2:us-east-1:123456789012:regional/webacl/example-web-acl/12345678-1234-1234-1234-123456789012,aws-common-rule-set,managed,AWS:AWSManagedRulesCommonRuleSet"
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -487,6 +592,7 @@ class WebAclRuleGroupAssociation(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Union['WebAclRuleGroupAssociationRuleGroupReferenceArgs', 'WebAclRuleGroupAssociationRuleGroupReferenceArgsDict']] rule_group_reference: Custom Rule Group reference configuration. One of `rule_group_reference` or `managed_rule_group` is required. Conflicts with `managed_rule_group`. See below.
         :param pulumi.Input[_builtins.str] rule_name: Name of the rule to create in the Web ACL that references the rule group. Must be between 1 and 128 characters.
+        :param pulumi.Input[Union['WebAclRuleGroupAssociationVisibilityConfigArgs', 'WebAclRuleGroupAssociationVisibilityConfigArgsDict']] visibility_config: Defines and enables Amazon CloudWatch metrics and web request sample collection. See below.
         :param pulumi.Input[_builtins.str] web_acl_arn: ARN of the Web ACL to associate the Rule Group with.
                
                The following arguments are optional:
@@ -505,51 +611,21 @@ class WebAclRuleGroupAssociation(pulumi.CustomResource):
         - **Custom Rule Groups**: User-created rule groups that you manage within your AWS account
         - **Managed Rule Groups**: Pre-configured rule groups provided by AWS or third-party vendors
 
-        !> **Warning:** Verify the rule names in your `rule_action_override`s carefully. With managed rule groups, WAF silently ignores any override that uses an invalid rule name. With customer-owned rule groups, invalid rule names in your overrides will cause web ACL updates to fail. An invalid rule name is any name that doesn't exactly match the case-sensitive name of an existing rule in the rule group.
+        > **Warning:** Verify the rule names in your `rule_action_override`s carefully. With managed rule groups, WAF silently ignores any override that uses an invalid rule name. With customer-owned rule groups, invalid rule names in your overrides will cause web ACL updates to fail. An invalid rule name is any name that doesn't exactly match the case-sensitive name of an existing rule in the rule group.
 
-        !> **Warning:** Using this resource will cause the associated Web ACL resource to show configuration drift in the `rule` argument unless you add `lifecycle { ignore_changes = [rule] }` to the Web ACL resource configuration. This is because this resource modifies the Web ACL's rules outside of the Web ACL resource's direct management.
+        > **Warning:** Using this resource will cause the associated Web ACL resource to show configuration drift in the `rule` argument unless you add `lifecycle { ignore_changes = [rule] }` to the Web ACL resource configuration. This is because this resource modifies the Web ACL's rules outside of the Web ACL resource's direct management.
 
         > **Note:** This resource creates a rule within the Web ACL that references the entire Rule Group. The rule group's individual rules are evaluated as a unit when requests are processed by the Web ACL.
         ## Example Usage
 
-        ### Custom Rule Group - Basic Usage
+        ### Basic Usage
 
         ```python
         import pulumi
         import pulumi_aws as aws
 
-        example = aws.wafv2.RuleGroup("example",
-            name="example-rule-group",
-            scope="REGIONAL",
-            capacity=10,
-            rules=[{
-                "name": "block-suspicious-requests",
-                "priority": 1,
-                "action": {
-                    "block": {},
-                },
-                "statement": {
-                    "geo_match_statement": {
-                        "country_codes": [
-                            "CN",
-                            "RU",
-                        ],
-                    },
-                },
-                "visibility_config": {
-                    "cloudwatch_metrics_enabled": True,
-                    "metric_name": "block-suspicious-requests",
-                    "sampled_requests_enabled": True,
-                },
-            }],
-            visibility_config={
-                "cloudwatch_metrics_enabled": True,
-                "metric_name": "example-rule-group",
-                "sampled_requests_enabled": True,
-            })
-        example_web_acl = aws.wafv2.WebAcl("example",
-            name="example-web-acl",
-            scope="REGIONAL",
+        # Web ACL must use lifecycle.ignore_changes to prevent drift from this resource
+        example = aws.wafv2.WebAcl("example",
             default_action={
                 "allow": {},
             },
@@ -557,73 +633,60 @@ class WebAclRuleGroupAssociation(pulumi.CustomResource):
                 "cloudwatch_metrics_enabled": True,
                 "metric_name": "example-web-acl",
                 "sampled_requests_enabled": True,
-            })
+            },
+            name="example-web-acl",
+            scope="REGIONAL",
+            opts = pulumi.ResourceOptions(ignore_changes=["rules"]))
+        # Associate a custom rule group
         example_web_acl_rule_group_association = aws.wafv2.WebAclRuleGroupAssociation("example",
+            rule_group_reference={
+                "arn": example_aws_wafv2_rule_group["arn"],
+            },
             rule_name="example-rule-group-rule",
             priority=100,
-            web_acl_arn=example_web_acl.arn,
-            rule_group_reference={
-                "arn": example.arn,
-            })
+            web_acl_arn=example.arn)
         ```
-        ### Managed Rule Group - Basic Usage
+        ### Managed Rule Group
 
         ```python
         import pulumi
         import pulumi_aws as aws
 
-        example = aws.wafv2.WebAcl("example",
-            name="example-web-acl",
-            scope="REGIONAL",
-            default_action={
-                "allow": {},
-            },
-            visibility_config={
-                "cloudwatch_metrics_enabled": True,
-                "metric_name": "example-web-acl",
-                "sampled_requests_enabled": True,
-            })
-        managed_example = aws.wafv2.WebAclRuleGroupAssociation("managed_example",
-            rule_name="aws-common-rule-set",
-            priority=50,
-            web_acl_arn=example.arn,
+        example = aws.wafv2.WebAclRuleGroupAssociation("example",
             managed_rule_group={
                 "name": "AWSManagedRulesCommonRuleSet",
                 "vendor_name": "AWS",
-            })
+            },
+            rule_name="aws-common-rule-set",
+            priority=50,
+            web_acl_arn=example_aws_wafv2_web_acl["arn"])
         ```
-        ### Managed Rule Group - With Version
+        ### Managed Rule Group With Version
 
         ```python
         import pulumi
         import pulumi_aws as aws
 
-        managed_versioned = aws.wafv2.WebAclRuleGroupAssociation("managed_versioned",
-            rule_name="aws-common-rule-set-versioned",
-            priority=60,
-            web_acl_arn=example["arn"],
+        example = aws.wafv2.WebAclRuleGroupAssociation("example",
             managed_rule_group={
                 "name": "AWSManagedRulesCommonRuleSet",
                 "vendor_name": "AWS",
                 "version": "Version_1.0",
-            })
+            },
+            rule_name="aws-common-rule-set-versioned",
+            priority=60,
+            web_acl_arn=example_aws_wafv2_web_acl["arn"])
         ```
-        ### Managed Rule Group - With Rule Action Overrides
+        ### Managed Rule Group With Rule Action Overrides
 
         ```python
         import pulumi
         import pulumi_aws as aws
 
-        managed_with_overrides = aws.wafv2.WebAclRuleGroupAssociation("managed_with_overrides",
-            rule_name="aws-common-rule-set-with-overrides",
-            priority=70,
-            web_acl_arn=example["arn"],
+        example = aws.wafv2.WebAclRuleGroupAssociation("example",
             managed_rule_group={
-                "name": "AWSManagedRulesCommonRuleSet",
-                "vendor_name": "AWS",
                 "rule_action_overrides": [
                     {
-                        "name": "GenericRFI_BODY",
                         "action_to_use": {
                             "count": {
                                 "custom_request_handling": {
@@ -634,45 +697,158 @@ class WebAclRuleGroupAssociation(pulumi.CustomResource):
                                 },
                             },
                         },
+                        "name": "GenericRFI_BODY",
                     },
                     {
-                        "name": "SizeRestrictions_BODY",
                         "action_to_use": {
                             "captcha": {},
                         },
+                        "name": "SizeRestrictions_BODY",
                     },
                 ],
-            })
+                "name": "AWSManagedRulesCommonRuleSet",
+                "vendor_name": "AWS",
+            },
+            rule_name="aws-common-rule-set-with-overrides",
+            priority=70,
+            web_acl_arn=example_aws_wafv2_web_acl["arn"])
         ```
-        ### Custom Rule Group - With Override Action
+        ### Managed Rule Group With Managed Rule Group Configs
 
         ```python
         import pulumi
         import pulumi_aws as aws
 
         example = aws.wafv2.WebAclRuleGroupAssociation("example",
+            managed_rule_group={
+                "managed_rule_group_configs": {
+                    "aws_managed_rules_acfp_rule_set": {
+                        "request_inspection": {
+                            "email_field": {
+                                "identifier": "/email",
+                            },
+                            "password_field": {
+                                "identifier": "/password",
+                            },
+                            "phone_number_fields": {
+                                "identifiers": [
+                                    "/phone1",
+                                    "/phone2",
+                                ],
+                            },
+                            "address_fields": {
+                                "identifiers": [
+                                    "home",
+                                    "work",
+                                ],
+                            },
+                            "username_field": {
+                                "identifier": "/username",
+                            },
+                            "payload_type": "JSON",
+                        },
+                        "creation_path": "/creation",
+                        "registration_page_path": "/registration",
+                    },
+                },
+                "name": "AWSManagedRulesACFPRuleSet",
+                "vendor_name": "AWS",
+            },
+            visibility_config={
+                "cloudwatch_metrics_enabled": True,
+                "metric_name": "friendly-metric-name",
+                "sampled_requests_enabled": True,
+            },
+            rule_name="acfp-ruleset-with-rule-config",
+            priority=70,
+            web_acl_arn=example_aws_wafv2_web_acl["arn"])
+        ```
+        ### Custom Rule Group With Override Action
+
+        ```python
+        import pulumi
+        import pulumi_aws as aws
+
+        example = aws.wafv2.WebAclRuleGroupAssociation("example",
+            rule_group_reference={
+                "arn": example_aws_wafv2_rule_group["arn"],
+            },
             rule_name="example-rule-group-rule",
             priority=100,
             web_acl_arn=example_aws_wafv2_web_acl["arn"],
-            override_action="count",
+            override_action="count")
+        ```
+        ### Custom Rule Group With Rule Action Overrides
+
+        ```python
+        import pulumi
+        import pulumi_aws as aws
+
+        example = aws.wafv2.WebAclRuleGroupAssociation("example",
+            rule_group_reference={
+                "rule_action_overrides": [
+                    {
+                        "action_to_use": {
+                            "count": {
+                                "custom_request_handling": {
+                                    "insert_headers": [{
+                                        "name": "X-Geo-Block-Override",
+                                        "value": "counted",
+                                    }],
+                                },
+                            },
+                        },
+                        "name": "geo-block-rule",
+                    },
+                    {
+                        "action_to_use": {
+                            "captcha": {
+                                "custom_request_handling": {
+                                    "insert_headers": [{
+                                        "name": "X-Rate-Limit-Override",
+                                        "value": "captcha-required",
+                                    }],
+                                },
+                            },
+                        },
+                        "name": "rate-limit-rule",
+                    },
+                ],
+                "arn": example_aws_wafv2_rule_group["arn"],
+            },
+            rule_name="example-rule-group-rule",
+            priority=100,
+            web_acl_arn=example_aws_wafv2_web_acl["arn"])
+        ```
+        ### CloudFront Web ACL
+
+        ```python
+        import pulumi
+        import pulumi_aws as aws
+
+        example = aws.wafv2.WebAclRuleGroupAssociation("example",
             rule_group_reference={
                 "arn": example_aws_wafv2_rule_group["arn"],
-            })
+            },
+            rule_name="cloudfront-rule-group-rule",
+            priority=50,
+            web_acl_arn=example_aws_wafv2_web_acl["arn"])
         ```
 
         ## Import
 
-        Using `pulumi import`, import WAFv2 web ACL custom rule group associations using `WebACLARN,RuleGroupARN,RuleName`. For example:
+        Using `pulumi import`, import WAFv2 web ACL custom rule group associations using `WebACLARN,RuleName,RuleGroupType,RuleGroupARN`, where `RuleGroupType` is `custom`. For example:
 
         ```sh
-        $ pulumi import aws:wafv2/webAclRuleGroupAssociation:WebAclRuleGroupAssociation example "arn:aws:wafv2:us-east-1:123456789012:regional/webacl/example-web-acl/12345678-1234-1234-1234-123456789012,arn:aws:wafv2:us-east-1:123456789012:regional/rulegroup/example-rule-group/87654321-4321-4321-4321-210987654321,example-rule-group-rule"
+        $ pulumi import aws:wafv2/webAclRuleGroupAssociation:WebAclRuleGroupAssociation example "arn:aws:wafv2:us-east-1:123456789012:regional/webacl/example-web-acl/12345678-1234-1234-1234-123456789012,example-rule-group-rule,custom,arn:aws:wafv2:us-east-1:123456789012:regional/rulegroup/example-rule-group/87654321-4321-4321-4321-210987654321"
         ```
 
-        Using `pulumi import`, import WAFv2 web ACL managed rule group associations using `WebACLARN,VendorName:RuleGroupName[:Version],RuleName`. For example:
+        Using `pulumi import`, import WAFv2 web ACL managed rule group associations using `WebACLARN,RuleName,RuleGroupType,VendorName:RuleGroupName[:Version]`, where `RuleGroupType` is `managed`. For example:
 
         ```sh
-        $ pulumi import aws:wafv2/webAclRuleGroupAssociation:WebAclRuleGroupAssociation managed_example "arn:aws:wafv2:us-east-1:123456789012:regional/webacl/example-web-acl/12345678-1234-1234-1234-123456789012,AWS:AWSManagedRulesCommonRuleSet,aws-common-rule-set"
+        $ pulumi import aws:wafv2/webAclRuleGroupAssociation:WebAclRuleGroupAssociation managed_example "arn:aws:wafv2:us-east-1:123456789012:regional/webacl/example-web-acl/12345678-1234-1234-1234-123456789012,aws-common-rule-set,managed,AWS:AWSManagedRulesCommonRuleSet"
         ```
+
 
         :param str resource_name: The name of the resource.
         :param WebAclRuleGroupAssociationArgs args: The arguments to use to populate this resource's properties.
@@ -689,14 +865,15 @@ class WebAclRuleGroupAssociation(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 managed_rule_group: Optional[pulumi.Input[Union['WebAclRuleGroupAssociationManagedRuleGroupArgs', 'WebAclRuleGroupAssociationManagedRuleGroupArgsDict']]] = None,
-                 override_action: Optional[pulumi.Input[_builtins.str]] = None,
-                 priority: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rule_group_reference: Optional[pulumi.Input[Union['WebAclRuleGroupAssociationRuleGroupReferenceArgs', 'WebAclRuleGroupAssociationRuleGroupReferenceArgsDict']]] = None,
-                 rule_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['WebAclRuleGroupAssociationTimeoutsArgs', 'WebAclRuleGroupAssociationTimeoutsArgsDict']]] = None,
-                 web_acl_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 managed_rule_group: pulumi.Input[Optional[Union['WebAclRuleGroupAssociationManagedRuleGroupArgs', 'WebAclRuleGroupAssociationManagedRuleGroupArgsDict']]] = None,
+                 override_action: pulumi.Input[Optional[_builtins.str]] = None,
+                 priority: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rule_group_reference: pulumi.Input[Optional[Union['WebAclRuleGroupAssociationRuleGroupReferenceArgs', 'WebAclRuleGroupAssociationRuleGroupReferenceArgsDict']]] = None,
+                 rule_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['WebAclRuleGroupAssociationTimeoutsArgs', 'WebAclRuleGroupAssociationTimeoutsArgsDict']]] = None,
+                 visibility_config: pulumi.Input[Optional[Union['WebAclRuleGroupAssociationVisibilityConfigArgs', 'WebAclRuleGroupAssociationVisibilityConfigArgsDict']]] = None,
+                 web_acl_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -717,6 +894,7 @@ class WebAclRuleGroupAssociation(pulumi.CustomResource):
                 raise TypeError("Missing required property 'rule_name'")
             __props__.__dict__["rule_name"] = rule_name
             __props__.__dict__["timeouts"] = timeouts
+            __props__.__dict__["visibility_config"] = visibility_config
             if web_acl_arn is None and not opts.urn:
                 raise TypeError("Missing required property 'web_acl_arn'")
             __props__.__dict__["web_acl_arn"] = web_acl_arn
@@ -730,14 +908,15 @@ class WebAclRuleGroupAssociation(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            managed_rule_group: Optional[pulumi.Input[Union['WebAclRuleGroupAssociationManagedRuleGroupArgs', 'WebAclRuleGroupAssociationManagedRuleGroupArgsDict']]] = None,
-            override_action: Optional[pulumi.Input[_builtins.str]] = None,
-            priority: Optional[pulumi.Input[_builtins.int]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            rule_group_reference: Optional[pulumi.Input[Union['WebAclRuleGroupAssociationRuleGroupReferenceArgs', 'WebAclRuleGroupAssociationRuleGroupReferenceArgsDict']]] = None,
-            rule_name: Optional[pulumi.Input[_builtins.str]] = None,
-            timeouts: Optional[pulumi.Input[Union['WebAclRuleGroupAssociationTimeoutsArgs', 'WebAclRuleGroupAssociationTimeoutsArgsDict']]] = None,
-            web_acl_arn: Optional[pulumi.Input[_builtins.str]] = None) -> 'WebAclRuleGroupAssociation':
+            managed_rule_group: pulumi.Input[Optional[Union['WebAclRuleGroupAssociationManagedRuleGroupArgs', 'WebAclRuleGroupAssociationManagedRuleGroupArgsDict']]] = None,
+            override_action: pulumi.Input[Optional[_builtins.str]] = None,
+            priority: pulumi.Input[Optional[_builtins.int]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            rule_group_reference: pulumi.Input[Optional[Union['WebAclRuleGroupAssociationRuleGroupReferenceArgs', 'WebAclRuleGroupAssociationRuleGroupReferenceArgsDict']]] = None,
+            rule_name: pulumi.Input[Optional[_builtins.str]] = None,
+            timeouts: pulumi.Input[Optional[Union['WebAclRuleGroupAssociationTimeoutsArgs', 'WebAclRuleGroupAssociationTimeoutsArgsDict']]] = None,
+            visibility_config: pulumi.Input[Optional[Union['WebAclRuleGroupAssociationVisibilityConfigArgs', 'WebAclRuleGroupAssociationVisibilityConfigArgsDict']]] = None,
+            web_acl_arn: pulumi.Input[Optional[_builtins.str]] = None) -> 'WebAclRuleGroupAssociation':
         """
         Get an existing WebAclRuleGroupAssociation resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -751,6 +930,7 @@ class WebAclRuleGroupAssociation(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Union['WebAclRuleGroupAssociationRuleGroupReferenceArgs', 'WebAclRuleGroupAssociationRuleGroupReferenceArgsDict']] rule_group_reference: Custom Rule Group reference configuration. One of `rule_group_reference` or `managed_rule_group` is required. Conflicts with `managed_rule_group`. See below.
         :param pulumi.Input[_builtins.str] rule_name: Name of the rule to create in the Web ACL that references the rule group. Must be between 1 and 128 characters.
+        :param pulumi.Input[Union['WebAclRuleGroupAssociationVisibilityConfigArgs', 'WebAclRuleGroupAssociationVisibilityConfigArgsDict']] visibility_config: Defines and enables Amazon CloudWatch metrics and web request sample collection. See below.
         :param pulumi.Input[_builtins.str] web_acl_arn: ARN of the Web ACL to associate the Rule Group with.
                
                The following arguments are optional:
@@ -766,6 +946,7 @@ class WebAclRuleGroupAssociation(pulumi.CustomResource):
         __props__.__dict__["rule_group_reference"] = rule_group_reference
         __props__.__dict__["rule_name"] = rule_name
         __props__.__dict__["timeouts"] = timeouts
+        __props__.__dict__["visibility_config"] = visibility_config
         __props__.__dict__["web_acl_arn"] = web_acl_arn
         return WebAclRuleGroupAssociation(resource_name, opts=opts, __props__=__props__)
 
@@ -821,6 +1002,14 @@ class WebAclRuleGroupAssociation(pulumi.CustomResource):
     @pulumi.getter
     def timeouts(self) -> pulumi.Output[Optional['outputs.WebAclRuleGroupAssociationTimeouts']]:
         return pulumi.get(self, "timeouts")
+
+    @_builtins.property
+    @pulumi.getter(name="visibilityConfig")
+    def visibility_config(self) -> pulumi.Output[Optional['outputs.WebAclRuleGroupAssociationVisibilityConfig']]:
+        """
+        Defines and enables Amazon CloudWatch metrics and web request sample collection. See below.
+        """
+        return pulumi.get(self, "visibility_config")
 
     @_builtins.property
     @pulumi.getter(name="webAclArn")

@@ -25,25 +25,25 @@ class KxVolumeArgs:
                  az_mode: pulumi.Input[_builtins.str],
                  environment_id: pulumi.Input[_builtins.str],
                  type: pulumi.Input[_builtins.str],
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 nas1_configurations: Optional[pulumi.Input[Sequence[pulumi.Input['KxVolumeNas1ConfigurationArgs']]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 nas1_configurations: pulumi.Input[Optional[Sequence[pulumi.Input['KxVolumeNas1ConfigurationArgs']]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a KxVolume resource.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] availability_zones: The identifier of the AWS Availability Zone IDs.
+
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] availability_zones: Identifier of the AWS Availability Zone IDs.
+        :param pulumi.Input[_builtins.str] az_mode: Number of availability zones you want to assign per volume. Currently, FinSpace only supports `SINGLE` for volumes, which assigns one availability zone per volume.
+        :param pulumi.Input[_builtins.str] environment_id: Unique identifier for the kdb environment, whose clusters can attach to the volume.
+        :param pulumi.Input[_builtins.str] type: Type of file system volume. Currently, FinSpace only supports the `NAS_1` volume type. When you select the `NAS_1` volume type, you must also provide `nas1_configuration`.
                
                The following arguments are optional:
-        :param pulumi.Input[_builtins.str] az_mode: The number of availability zones you want to assign per volume. Currently, Finspace only support SINGLE for volumes.
-               * `SINGLE` - Assigns one availability zone per volume.
-        :param pulumi.Input[_builtins.str] environment_id: A unique identifier for the kdb environment, whose clusters can attach to the volume.
-        :param pulumi.Input[_builtins.str] type: The type of file system volume. Currently, FinSpace only supports the `NAS_1` volume type. When you select the `NAS_1` volume type, you must also provide `nas1_configuration`.
         :param pulumi.Input[_builtins.str] description: Description of the volume.
-        :param pulumi.Input[_builtins.str] name: Unique name for the volumr that you want to create.
-        :param pulumi.Input[Sequence[pulumi.Input['KxVolumeNas1ConfigurationArgs']]] nas1_configurations: Specifies the configuration for the Network attached storage (`NAS_1`) file system volume. This parameter is required when `volume_type` is `NAS_1`. See `nas1_configuration` Argument Reference below.
+        :param pulumi.Input[_builtins.str] name: Unique name for the volume that you want to create.
+        :param pulumi.Input[Sequence[pulumi.Input['KxVolumeNas1ConfigurationArgs']]] nas1_configurations: Configuration for the Network attached storage (`NAS_1`) file system volume. This parameter is required when `volume_type` is `NAS_1`. See `nas1_configuration` Block below.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A list of key-value pairs to label the volume. You can add up to 50 tags to a volume
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value pairs to label the volume. You can add up to 50 tags to a volume.
         """
         pulumi.set(__self__, "availability_zones", availability_zones)
         pulumi.set(__self__, "az_mode", az_mode)
@@ -64,9 +64,7 @@ class KxVolumeArgs:
     @pulumi.getter(name="availabilityZones")
     def availability_zones(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
         """
-        The identifier of the AWS Availability Zone IDs.
-
-        The following arguments are optional:
+        Identifier of the AWS Availability Zone IDs.
         """
         return pulumi.get(self, "availability_zones")
 
@@ -78,8 +76,7 @@ class KxVolumeArgs:
     @pulumi.getter(name="azMode")
     def az_mode(self) -> pulumi.Input[_builtins.str]:
         """
-        The number of availability zones you want to assign per volume. Currently, Finspace only support SINGLE for volumes.
-        * `SINGLE` - Assigns one availability zone per volume.
+        Number of availability zones you want to assign per volume. Currently, FinSpace only supports `SINGLE` for volumes, which assigns one availability zone per volume.
         """
         return pulumi.get(self, "az_mode")
 
@@ -91,7 +88,7 @@ class KxVolumeArgs:
     @pulumi.getter(name="environmentId")
     def environment_id(self) -> pulumi.Input[_builtins.str]:
         """
-        A unique identifier for the kdb environment, whose clusters can attach to the volume.
+        Unique identifier for the kdb environment, whose clusters can attach to the volume.
         """
         return pulumi.get(self, "environment_id")
 
@@ -103,7 +100,9 @@ class KxVolumeArgs:
     @pulumi.getter
     def type(self) -> pulumi.Input[_builtins.str]:
         """
-        The type of file system volume. Currently, FinSpace only supports the `NAS_1` volume type. When you select the `NAS_1` volume type, you must also provide `nas1_configuration`.
+        Type of file system volume. Currently, FinSpace only supports the `NAS_1` volume type. When you select the `NAS_1` volume type, you must also provide `nas1_configuration`.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "type")
 
@@ -113,112 +112,104 @@ class KxVolumeArgs:
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the volume.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Unique name for the volumr that you want to create.
+        Unique name for the volume that you want to create.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="nas1Configurations")
-    def nas1_configurations(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['KxVolumeNas1ConfigurationArgs']]]]:
+    def nas1_configurations(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['KxVolumeNas1ConfigurationArgs']]]]:
         """
-        Specifies the configuration for the Network attached storage (`NAS_1`) file system volume. This parameter is required when `volume_type` is `NAS_1`. See `nas1_configuration` Argument Reference below.
+        Configuration for the Network attached storage (`NAS_1`) file system volume. This parameter is required when `volume_type` is `NAS_1`. See `nas1_configuration` Block below.
         """
         return pulumi.get(self, "nas1_configurations")
 
     @nas1_configurations.setter
-    def nas1_configurations(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['KxVolumeNas1ConfigurationArgs']]]]):
+    def nas1_configurations(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['KxVolumeNas1ConfigurationArgs']]]]):
         pulumi.set(self, "nas1_configurations", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A list of key-value pairs to label the volume. You can add up to 50 tags to a volume
+        Key-value pairs to label the volume. You can add up to 50 tags to a volume.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _KxVolumeState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 attached_clusters: Optional[pulumi.Input[Sequence[pulumi.Input['KxVolumeAttachedClusterArgs']]]] = None,
-                 availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 az_mode: Optional[pulumi.Input[_builtins.str]] = None,
-                 created_timestamp: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 environment_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 last_modified_timestamp: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 nas1_configurations: Optional[pulumi.Input[Sequence[pulumi.Input['KxVolumeNas1ConfigurationArgs']]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 status_reason: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 attached_clusters: pulumi.Input[Optional[Sequence[pulumi.Input['KxVolumeAttachedClusterArgs']]]] = None,
+                 availability_zones: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 az_mode: pulumi.Input[Optional[_builtins.str]] = None,
+                 created_timestamp: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 environment_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 last_modified_timestamp: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 nas1_configurations: pulumi.Input[Optional[Sequence[pulumi.Input['KxVolumeNas1ConfigurationArgs']]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 status_reason: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering KxVolume resources.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name (ARN) identifier of the KX volume.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] availability_zones: The identifier of the AWS Availability Zone IDs.
+
+        :param pulumi.Input[_builtins.str] arn: ARN identifier of the KX volume.
+        :param pulumi.Input[Sequence[pulumi.Input['KxVolumeAttachedClusterArgs']]] attached_clusters: Clusters attached to the volume. See `attached_clusters` Block below.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] availability_zones: Identifier of the AWS Availability Zone IDs.
+        :param pulumi.Input[_builtins.str] az_mode: Number of availability zones you want to assign per volume. Currently, FinSpace only supports `SINGLE` for volumes, which assigns one availability zone per volume.
+        :param pulumi.Input[_builtins.str] created_timestamp: Timestamp at which the volume was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.
+        :param pulumi.Input[_builtins.str] description: Description of the volume.
+        :param pulumi.Input[_builtins.str] environment_id: Unique identifier for the kdb environment, whose clusters can attach to the volume.
+        :param pulumi.Input[_builtins.str] last_modified_timestamp: Last timestamp at which the volume was updated in FinSpace. Value determined as epoch time in seconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000.
+        :param pulumi.Input[_builtins.str] name: Unique name for the volume that you want to create.
+        :param pulumi.Input[Sequence[pulumi.Input['KxVolumeNas1ConfigurationArgs']]] nas1_configurations: Configuration for the Network attached storage (`NAS_1`) file system volume. This parameter is required when `volume_type` is `NAS_1`. See `nas1_configuration` Block below.
+        :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[_builtins.str] status: Status of volume creation. Values are `CREATING` (volume creation is in progress), `CREATE_FAILED` (volume creation has failed), `ACTIVE` (volume is active), `UPDATING` (volume is in the process of being updated), `UPDATE_FAILED` (update action failed), `UPDATED` (volume is successfully updated), `DELETING` (volume is in the process of being deleted), `DELETE_FAILED` (system failed to delete the volume), and `DELETED` (volume is successfully deleted).
+        :param pulumi.Input[_builtins.str] status_reason: Error message when a failed state occurs.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value pairs to label the volume. You can add up to 50 tags to a volume.
+        :param pulumi.Input[_builtins.str] type: Type of file system volume. Currently, FinSpace only supports the `NAS_1` volume type. When you select the `NAS_1` volume type, you must also provide `nas1_configuration`.
                
                The following arguments are optional:
-        :param pulumi.Input[_builtins.str] az_mode: The number of availability zones you want to assign per volume. Currently, Finspace only support SINGLE for volumes.
-               * `SINGLE` - Assigns one availability zone per volume.
-        :param pulumi.Input[_builtins.str] created_timestamp: The timestamp at which the volume was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.
-        :param pulumi.Input[_builtins.str] description: Description of the volume.
-        :param pulumi.Input[_builtins.str] environment_id: A unique identifier for the kdb environment, whose clusters can attach to the volume.
-        :param pulumi.Input[_builtins.str] last_modified_timestamp: Last timestamp at which the volume was updated in FinSpace. Value determined as epoch time in seconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000.
-        :param pulumi.Input[_builtins.str] name: Unique name for the volumr that you want to create.
-        :param pulumi.Input[Sequence[pulumi.Input['KxVolumeNas1ConfigurationArgs']]] nas1_configurations: Specifies the configuration for the Network attached storage (`NAS_1`) file system volume. This parameter is required when `volume_type` is `NAS_1`. See `nas1_configuration` Argument Reference below.
-        :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] status: The status of volume creation.
-               * `CREATING` - The volume creation is in progress.
-               * `CREATE_FAILED` - The volume creation has failed.
-               * `ACTIVE` - The volume is active.
-               * `UPDATING` - The volume is in the process of being updated.
-               * `UPDATE_FAILED` - The update action failed.
-               * `UPDATED` - The volume is successfully updated.
-               * `DELETING` - The volume is in the process of being deleted.
-               * `DELETE_FAILED` - The system failed to delete the volume.
-               * `DELETED` - The volume is successfully deleted.
-        :param pulumi.Input[_builtins.str] status_reason: The error message when a failed state occurs.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A list of key-value pairs to label the volume. You can add up to 50 tags to a volume
-        :param pulumi.Input[_builtins.str] type: The type of file system volume. Currently, FinSpace only supports the `NAS_1` volume type. When you select the `NAS_1` volume type, you must also provide `nas1_configuration`.
         """
         if arn is not None:
             pulumi.set(__self__, "arn", arn)
@@ -255,200 +246,193 @@ class _KxVolumeState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Amazon Resource Name (ARN) identifier of the KX volume.
+        ARN identifier of the KX volume.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="attachedClusters")
-    def attached_clusters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['KxVolumeAttachedClusterArgs']]]]:
+    def attached_clusters(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['KxVolumeAttachedClusterArgs']]]]:
+        """
+        Clusters attached to the volume. See `attached_clusters` Block below.
+        """
         return pulumi.get(self, "attached_clusters")
 
     @attached_clusters.setter
-    def attached_clusters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['KxVolumeAttachedClusterArgs']]]]):
+    def attached_clusters(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['KxVolumeAttachedClusterArgs']]]]):
         pulumi.set(self, "attached_clusters", value)
 
     @_builtins.property
     @pulumi.getter(name="availabilityZones")
-    def availability_zones(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def availability_zones(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        The identifier of the AWS Availability Zone IDs.
-
-        The following arguments are optional:
+        Identifier of the AWS Availability Zone IDs.
         """
         return pulumi.get(self, "availability_zones")
 
     @availability_zones.setter
-    def availability_zones(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def availability_zones(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "availability_zones", value)
 
     @_builtins.property
     @pulumi.getter(name="azMode")
-    def az_mode(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def az_mode(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The number of availability zones you want to assign per volume. Currently, Finspace only support SINGLE for volumes.
-        * `SINGLE` - Assigns one availability zone per volume.
+        Number of availability zones you want to assign per volume. Currently, FinSpace only supports `SINGLE` for volumes, which assigns one availability zone per volume.
         """
         return pulumi.get(self, "az_mode")
 
     @az_mode.setter
-    def az_mode(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def az_mode(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "az_mode", value)
 
     @_builtins.property
     @pulumi.getter(name="createdTimestamp")
-    def created_timestamp(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def created_timestamp(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The timestamp at which the volume was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.
+        Timestamp at which the volume was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.
         """
         return pulumi.get(self, "created_timestamp")
 
     @created_timestamp.setter
-    def created_timestamp(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def created_timestamp(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "created_timestamp", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the volume.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="environmentId")
-    def environment_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def environment_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        A unique identifier for the kdb environment, whose clusters can attach to the volume.
+        Unique identifier for the kdb environment, whose clusters can attach to the volume.
         """
         return pulumi.get(self, "environment_id")
 
     @environment_id.setter
-    def environment_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def environment_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "environment_id", value)
 
     @_builtins.property
     @pulumi.getter(name="lastModifiedTimestamp")
-    def last_modified_timestamp(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def last_modified_timestamp(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Last timestamp at which the volume was updated in FinSpace. Value determined as epoch time in seconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000.
         """
         return pulumi.get(self, "last_modified_timestamp")
 
     @last_modified_timestamp.setter
-    def last_modified_timestamp(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def last_modified_timestamp(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "last_modified_timestamp", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Unique name for the volumr that you want to create.
+        Unique name for the volume that you want to create.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="nas1Configurations")
-    def nas1_configurations(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['KxVolumeNas1ConfigurationArgs']]]]:
+    def nas1_configurations(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['KxVolumeNas1ConfigurationArgs']]]]:
         """
-        Specifies the configuration for the Network attached storage (`NAS_1`) file system volume. This parameter is required when `volume_type` is `NAS_1`. See `nas1_configuration` Argument Reference below.
+        Configuration for the Network attached storage (`NAS_1`) file system volume. This parameter is required when `volume_type` is `NAS_1`. See `nas1_configuration` Block below.
         """
         return pulumi.get(self, "nas1_configurations")
 
     @nas1_configurations.setter
-    def nas1_configurations(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['KxVolumeNas1ConfigurationArgs']]]]):
+    def nas1_configurations(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['KxVolumeNas1ConfigurationArgs']]]]):
         pulumi.set(self, "nas1_configurations", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The status of volume creation.
-        * `CREATING` - The volume creation is in progress.
-        * `CREATE_FAILED` - The volume creation has failed.
-        * `ACTIVE` - The volume is active.
-        * `UPDATING` - The volume is in the process of being updated.
-        * `UPDATE_FAILED` - The update action failed.
-        * `UPDATED` - The volume is successfully updated.
-        * `DELETING` - The volume is in the process of being deleted.
-        * `DELETE_FAILED` - The system failed to delete the volume.
-        * `DELETED` - The volume is successfully deleted.
+        Status of volume creation. Values are `CREATING` (volume creation is in progress), `CREATE_FAILED` (volume creation has failed), `ACTIVE` (volume is active), `UPDATING` (volume is in the process of being updated), `UPDATE_FAILED` (update action failed), `UPDATED` (volume is successfully updated), `DELETING` (volume is in the process of being deleted), `DELETE_FAILED` (system failed to delete the volume), and `DELETED` (volume is successfully deleted).
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
     @_builtins.property
     @pulumi.getter(name="statusReason")
-    def status_reason(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status_reason(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The error message when a failed state occurs.
+        Error message when a failed state occurs.
         """
         return pulumi.get(self, "status_reason")
 
     @status_reason.setter
-    def status_reason(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status_reason(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status_reason", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A list of key-value pairs to label the volume. You can add up to 50 tags to a volume
+        Key-value pairs to label the volume. You can add up to 50 tags to a volume.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The type of file system volume. Currently, FinSpace only supports the `NAS_1` volume type. When you select the `NAS_1` volume type, you must also provide `nas1_configuration`.
+        Type of file system volume. Currently, FinSpace only supports the `NAS_1` volume type. When you select the `NAS_1` volume type, you must also provide `nas1_configuration`.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
 
@@ -458,15 +442,15 @@ class KxVolume(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 az_mode: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 environment_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 nas1_configurations: Optional[pulumi.Input[Sequence[pulumi.Input[Union['KxVolumeNas1ConfigurationArgs', 'KxVolumeNas1ConfigurationArgsDict']]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None,
+                 availability_zones: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 az_mode: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 environment_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 nas1_configurations: pulumi.Input[Optional[Sequence[pulumi.Input[Union['KxVolumeNas1ConfigurationArgs', 'KxVolumeNas1ConfigurationArgsDict']]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing an AWS FinSpace Kx Volume.
@@ -480,15 +464,15 @@ class KxVolume(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.finspace.KxVolume("example",
+            nas1_configurations=[{
+                "size": 1200,
+                "type": "SSD_250",
+            }],
             name="my-tf-kx-volume",
             environment_id=example_aws_finspace_kx_environment["id"],
             availability_zones=["use1-az2"],
             az_mode="SINGLE",
-            type="NAS_1",
-            nas1_configurations=[{
-                "size": 1200,
-                "type": "SSD_250",
-            }])
+            type="NAS_1")
         ```
 
         ## Import
@@ -499,20 +483,20 @@ class KxVolume(pulumi.CustomResource):
         $ pulumi import aws:finspace/kxVolume:KxVolume example n3ceo7wqxoxcti5tujqwzs,my-tf-kx-volume
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] availability_zones: The identifier of the AWS Availability Zone IDs.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] availability_zones: Identifier of the AWS Availability Zone IDs.
+        :param pulumi.Input[_builtins.str] az_mode: Number of availability zones you want to assign per volume. Currently, FinSpace only supports `SINGLE` for volumes, which assigns one availability zone per volume.
+        :param pulumi.Input[_builtins.str] description: Description of the volume.
+        :param pulumi.Input[_builtins.str] environment_id: Unique identifier for the kdb environment, whose clusters can attach to the volume.
+        :param pulumi.Input[_builtins.str] name: Unique name for the volume that you want to create.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['KxVolumeNas1ConfigurationArgs', 'KxVolumeNas1ConfigurationArgsDict']]]] nas1_configurations: Configuration for the Network attached storage (`NAS_1`) file system volume. This parameter is required when `volume_type` is `NAS_1`. See `nas1_configuration` Block below.
+        :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value pairs to label the volume. You can add up to 50 tags to a volume.
+        :param pulumi.Input[_builtins.str] type: Type of file system volume. Currently, FinSpace only supports the `NAS_1` volume type. When you select the `NAS_1` volume type, you must also provide `nas1_configuration`.
                
                The following arguments are optional:
-        :param pulumi.Input[_builtins.str] az_mode: The number of availability zones you want to assign per volume. Currently, Finspace only support SINGLE for volumes.
-               * `SINGLE` - Assigns one availability zone per volume.
-        :param pulumi.Input[_builtins.str] description: Description of the volume.
-        :param pulumi.Input[_builtins.str] environment_id: A unique identifier for the kdb environment, whose clusters can attach to the volume.
-        :param pulumi.Input[_builtins.str] name: Unique name for the volumr that you want to create.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['KxVolumeNas1ConfigurationArgs', 'KxVolumeNas1ConfigurationArgsDict']]]] nas1_configurations: Specifies the configuration for the Network attached storage (`NAS_1`) file system volume. This parameter is required when `volume_type` is `NAS_1`. See `nas1_configuration` Argument Reference below.
-        :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A list of key-value pairs to label the volume. You can add up to 50 tags to a volume
-        :param pulumi.Input[_builtins.str] type: The type of file system volume. Currently, FinSpace only supports the `NAS_1` volume type. When you select the `NAS_1` volume type, you must also provide `nas1_configuration`.
         """
         ...
     @overload
@@ -532,15 +516,15 @@ class KxVolume(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.finspace.KxVolume("example",
+            nas1_configurations=[{
+                "size": 1200,
+                "type": "SSD_250",
+            }],
             name="my-tf-kx-volume",
             environment_id=example_aws_finspace_kx_environment["id"],
             availability_zones=["use1-az2"],
             az_mode="SINGLE",
-            type="NAS_1",
-            nas1_configurations=[{
-                "size": 1200,
-                "type": "SSD_250",
-            }])
+            type="NAS_1")
         ```
 
         ## Import
@@ -550,6 +534,7 @@ class KxVolume(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:finspace/kxVolume:KxVolume example n3ceo7wqxoxcti5tujqwzs,my-tf-kx-volume
         ```
+
 
         :param str resource_name: The name of the resource.
         :param KxVolumeArgs args: The arguments to use to populate this resource's properties.
@@ -566,15 +551,15 @@ class KxVolume(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 az_mode: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 environment_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 nas1_configurations: Optional[pulumi.Input[Sequence[pulumi.Input[Union['KxVolumeNas1ConfigurationArgs', 'KxVolumeNas1ConfigurationArgsDict']]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None,
+                 availability_zones: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 az_mode: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 environment_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 nas1_configurations: pulumi.Input[Optional[Sequence[pulumi.Input[Union['KxVolumeNas1ConfigurationArgs', 'KxVolumeNas1ConfigurationArgsDict']]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -618,22 +603,22 @@ class KxVolume(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            attached_clusters: Optional[pulumi.Input[Sequence[pulumi.Input[Union['KxVolumeAttachedClusterArgs', 'KxVolumeAttachedClusterArgsDict']]]]] = None,
-            availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            az_mode: Optional[pulumi.Input[_builtins.str]] = None,
-            created_timestamp: Optional[pulumi.Input[_builtins.str]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            environment_id: Optional[pulumi.Input[_builtins.str]] = None,
-            last_modified_timestamp: Optional[pulumi.Input[_builtins.str]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            nas1_configurations: Optional[pulumi.Input[Sequence[pulumi.Input[Union['KxVolumeNas1ConfigurationArgs', 'KxVolumeNas1ConfigurationArgsDict']]]]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            status: Optional[pulumi.Input[_builtins.str]] = None,
-            status_reason: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            type: Optional[pulumi.Input[_builtins.str]] = None) -> 'KxVolume':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            attached_clusters: pulumi.Input[Optional[Sequence[pulumi.Input[Union['KxVolumeAttachedClusterArgs', 'KxVolumeAttachedClusterArgsDict']]]]] = None,
+            availability_zones: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            az_mode: pulumi.Input[Optional[_builtins.str]] = None,
+            created_timestamp: pulumi.Input[Optional[_builtins.str]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            environment_id: pulumi.Input[Optional[_builtins.str]] = None,
+            last_modified_timestamp: pulumi.Input[Optional[_builtins.str]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            nas1_configurations: pulumi.Input[Optional[Sequence[pulumi.Input[Union['KxVolumeNas1ConfigurationArgs', 'KxVolumeNas1ConfigurationArgsDict']]]]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            status: pulumi.Input[Optional[_builtins.str]] = None,
+            status_reason: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            type: pulumi.Input[Optional[_builtins.str]] = None) -> 'KxVolume':
         """
         Get an existing KxVolume resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -641,32 +626,23 @@ class KxVolume(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name (ARN) identifier of the KX volume.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] availability_zones: The identifier of the AWS Availability Zone IDs.
+        :param pulumi.Input[_builtins.str] arn: ARN identifier of the KX volume.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['KxVolumeAttachedClusterArgs', 'KxVolumeAttachedClusterArgsDict']]]] attached_clusters: Clusters attached to the volume. See `attached_clusters` Block below.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] availability_zones: Identifier of the AWS Availability Zone IDs.
+        :param pulumi.Input[_builtins.str] az_mode: Number of availability zones you want to assign per volume. Currently, FinSpace only supports `SINGLE` for volumes, which assigns one availability zone per volume.
+        :param pulumi.Input[_builtins.str] created_timestamp: Timestamp at which the volume was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.
+        :param pulumi.Input[_builtins.str] description: Description of the volume.
+        :param pulumi.Input[_builtins.str] environment_id: Unique identifier for the kdb environment, whose clusters can attach to the volume.
+        :param pulumi.Input[_builtins.str] last_modified_timestamp: Last timestamp at which the volume was updated in FinSpace. Value determined as epoch time in seconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000.
+        :param pulumi.Input[_builtins.str] name: Unique name for the volume that you want to create.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['KxVolumeNas1ConfigurationArgs', 'KxVolumeNas1ConfigurationArgsDict']]]] nas1_configurations: Configuration for the Network attached storage (`NAS_1`) file system volume. This parameter is required when `volume_type` is `NAS_1`. See `nas1_configuration` Block below.
+        :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[_builtins.str] status: Status of volume creation. Values are `CREATING` (volume creation is in progress), `CREATE_FAILED` (volume creation has failed), `ACTIVE` (volume is active), `UPDATING` (volume is in the process of being updated), `UPDATE_FAILED` (update action failed), `UPDATED` (volume is successfully updated), `DELETING` (volume is in the process of being deleted), `DELETE_FAILED` (system failed to delete the volume), and `DELETED` (volume is successfully deleted).
+        :param pulumi.Input[_builtins.str] status_reason: Error message when a failed state occurs.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value pairs to label the volume. You can add up to 50 tags to a volume.
+        :param pulumi.Input[_builtins.str] type: Type of file system volume. Currently, FinSpace only supports the `NAS_1` volume type. When you select the `NAS_1` volume type, you must also provide `nas1_configuration`.
                
                The following arguments are optional:
-        :param pulumi.Input[_builtins.str] az_mode: The number of availability zones you want to assign per volume. Currently, Finspace only support SINGLE for volumes.
-               * `SINGLE` - Assigns one availability zone per volume.
-        :param pulumi.Input[_builtins.str] created_timestamp: The timestamp at which the volume was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.
-        :param pulumi.Input[_builtins.str] description: Description of the volume.
-        :param pulumi.Input[_builtins.str] environment_id: A unique identifier for the kdb environment, whose clusters can attach to the volume.
-        :param pulumi.Input[_builtins.str] last_modified_timestamp: Last timestamp at which the volume was updated in FinSpace. Value determined as epoch time in seconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000.
-        :param pulumi.Input[_builtins.str] name: Unique name for the volumr that you want to create.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['KxVolumeNas1ConfigurationArgs', 'KxVolumeNas1ConfigurationArgsDict']]]] nas1_configurations: Specifies the configuration for the Network attached storage (`NAS_1`) file system volume. This parameter is required when `volume_type` is `NAS_1`. See `nas1_configuration` Argument Reference below.
-        :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] status: The status of volume creation.
-               * `CREATING` - The volume creation is in progress.
-               * `CREATE_FAILED` - The volume creation has failed.
-               * `ACTIVE` - The volume is active.
-               * `UPDATING` - The volume is in the process of being updated.
-               * `UPDATE_FAILED` - The update action failed.
-               * `UPDATED` - The volume is successfully updated.
-               * `DELETING` - The volume is in the process of being deleted.
-               * `DELETE_FAILED` - The system failed to delete the volume.
-               * `DELETED` - The volume is successfully deleted.
-        :param pulumi.Input[_builtins.str] status_reason: The error message when a failed state occurs.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A list of key-value pairs to label the volume. You can add up to 50 tags to a volume
-        :param pulumi.Input[_builtins.str] type: The type of file system volume. Currently, FinSpace only supports the `NAS_1` volume type. When you select the `NAS_1` volume type, you must also provide `nas1_configuration`.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -694,22 +670,23 @@ class KxVolume(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        Amazon Resource Name (ARN) identifier of the KX volume.
+        ARN identifier of the KX volume.
         """
         return pulumi.get(self, "arn")
 
     @_builtins.property
     @pulumi.getter(name="attachedClusters")
     def attached_clusters(self) -> pulumi.Output[Sequence['outputs.KxVolumeAttachedCluster']]:
+        """
+        Clusters attached to the volume. See `attached_clusters` Block below.
+        """
         return pulumi.get(self, "attached_clusters")
 
     @_builtins.property
     @pulumi.getter(name="availabilityZones")
     def availability_zones(self) -> pulumi.Output[Sequence[_builtins.str]]:
         """
-        The identifier of the AWS Availability Zone IDs.
-
-        The following arguments are optional:
+        Identifier of the AWS Availability Zone IDs.
         """
         return pulumi.get(self, "availability_zones")
 
@@ -717,8 +694,7 @@ class KxVolume(pulumi.CustomResource):
     @pulumi.getter(name="azMode")
     def az_mode(self) -> pulumi.Output[_builtins.str]:
         """
-        The number of availability zones you want to assign per volume. Currently, Finspace only support SINGLE for volumes.
-        * `SINGLE` - Assigns one availability zone per volume.
+        Number of availability zones you want to assign per volume. Currently, FinSpace only supports `SINGLE` for volumes, which assigns one availability zone per volume.
         """
         return pulumi.get(self, "az_mode")
 
@@ -726,7 +702,7 @@ class KxVolume(pulumi.CustomResource):
     @pulumi.getter(name="createdTimestamp")
     def created_timestamp(self) -> pulumi.Output[_builtins.str]:
         """
-        The timestamp at which the volume was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.
+        Timestamp at which the volume was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.
         """
         return pulumi.get(self, "created_timestamp")
 
@@ -742,7 +718,7 @@ class KxVolume(pulumi.CustomResource):
     @pulumi.getter(name="environmentId")
     def environment_id(self) -> pulumi.Output[_builtins.str]:
         """
-        A unique identifier for the kdb environment, whose clusters can attach to the volume.
+        Unique identifier for the kdb environment, whose clusters can attach to the volume.
         """
         return pulumi.get(self, "environment_id")
 
@@ -758,7 +734,7 @@ class KxVolume(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[_builtins.str]:
         """
-        Unique name for the volumr that you want to create.
+        Unique name for the volume that you want to create.
         """
         return pulumi.get(self, "name")
 
@@ -766,7 +742,7 @@ class KxVolume(pulumi.CustomResource):
     @pulumi.getter(name="nas1Configurations")
     def nas1_configurations(self) -> pulumi.Output[Optional[Sequence['outputs.KxVolumeNas1Configuration']]]:
         """
-        Specifies the configuration for the Network attached storage (`NAS_1`) file system volume. This parameter is required when `volume_type` is `NAS_1`. See `nas1_configuration` Argument Reference below.
+        Configuration for the Network attached storage (`NAS_1`) file system volume. This parameter is required when `volume_type` is `NAS_1`. See `nas1_configuration` Block below.
         """
         return pulumi.get(self, "nas1_configurations")
 
@@ -782,16 +758,7 @@ class KxVolume(pulumi.CustomResource):
     @pulumi.getter
     def status(self) -> pulumi.Output[_builtins.str]:
         """
-        The status of volume creation.
-        * `CREATING` - The volume creation is in progress.
-        * `CREATE_FAILED` - The volume creation has failed.
-        * `ACTIVE` - The volume is active.
-        * `UPDATING` - The volume is in the process of being updated.
-        * `UPDATE_FAILED` - The update action failed.
-        * `UPDATED` - The volume is successfully updated.
-        * `DELETING` - The volume is in the process of being deleted.
-        * `DELETE_FAILED` - The system failed to delete the volume.
-        * `DELETED` - The volume is successfully deleted.
+        Status of volume creation. Values are `CREATING` (volume creation is in progress), `CREATE_FAILED` (volume creation has failed), `ACTIVE` (volume is active), `UPDATING` (volume is in the process of being updated), `UPDATE_FAILED` (update action failed), `UPDATED` (volume is successfully updated), `DELETING` (volume is in the process of being deleted), `DELETE_FAILED` (system failed to delete the volume), and `DELETED` (volume is successfully deleted).
         """
         return pulumi.get(self, "status")
 
@@ -799,7 +766,7 @@ class KxVolume(pulumi.CustomResource):
     @pulumi.getter(name="statusReason")
     def status_reason(self) -> pulumi.Output[_builtins.str]:
         """
-        The error message when a failed state occurs.
+        Error message when a failed state occurs.
         """
         return pulumi.get(self, "status_reason")
 
@@ -807,7 +774,7 @@ class KxVolume(pulumi.CustomResource):
     @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, _builtins.str]]]:
         """
-        A list of key-value pairs to label the volume. You can add up to 50 tags to a volume
+        Key-value pairs to label the volume. You can add up to 50 tags to a volume.
         """
         return pulumi.get(self, "tags")
 
@@ -820,7 +787,9 @@ class KxVolume(pulumi.CustomResource):
     @pulumi.getter
     def type(self) -> pulumi.Output[_builtins.str]:
         """
-        The type of file system volume. Currently, FinSpace only supports the `NAS_1` volume type. When you select the `NAS_1` volume type, you must also provide `nas1_configuration`.
+        Type of file system volume. Currently, FinSpace only supports the `NAS_1` volume type. When you select the `NAS_1` volume type, you must also provide `nas1_configuration`.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "type")
 

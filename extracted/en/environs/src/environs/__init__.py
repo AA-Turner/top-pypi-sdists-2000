@@ -17,6 +17,7 @@ from dotenv.main import _walk_to_root, dotenv_values
 from . import fields
 from .exceptions import (
     EnvError,
+    EnvNotSetError,
     EnvSealedError,
     EnvValidationError,
     ParserConflictError,
@@ -45,7 +46,17 @@ if typing.TYPE_CHECKING:
     except ImportError:
         pass
 
-__all__ = ["Env", "EnvError", "FileAwareEnv", "ValidationError", "env"]
+__all__ = [
+    "Env",
+    "EnvError",
+    "EnvNotSetError",
+    "EnvSealedError",
+    "EnvValidationError",
+    "FileAwareEnv",
+    "ParserConflictError",
+    "ValidationError",
+    "env",
+]
 
 _T = typing.TypeVar("_T")
 # Aliases for built-in types that are shadowed by Env class attributes
@@ -118,7 +129,7 @@ def _field2method(
                 self._values[parsed_key] = default
                 return default
             if self.eager:
-                raise EnvError(
+                raise EnvNotSetError(
                     f'Environment variable "{proxied_key or parsed_key}" not set',
                 )
             self._errors[parsed_key].append("Environment variable not set.")
@@ -134,6 +145,7 @@ def _field2method(
                     error.messages,
                 ) from error
             self._errors[parsed_key].extend(error.messages)
+            return None
         else:
             self._values[parsed_key] = value
         return typing.cast("_T | None", value)
@@ -158,15 +170,11 @@ def _func2method(func: typing.Callable[..., _T], method_name: str) -> typing.Any
         source_key = proxied_key or parsed_key
         if raw_value is Ellipsis:
             if self.eager:
-                raise EnvError(
+                raise EnvNotSetError(
                     f'Environment variable "{proxied_key or parsed_key}" not set',
                 )
             self._errors[parsed_key].append("Environment variable not set.")
             return None
-        if raw_value or raw_value == "":  # noqa: SIM108
-            value = raw_value
-        else:
-            value = None
         try:
             value = func(raw_value, **kwargs)
         except (EnvError, ma.ValidationError) as error:
@@ -181,6 +189,7 @@ def _func2method(func: typing.Callable[..., _T], method_name: str) -> typing.Any
                     messages,
                 ) from error
             self._errors[parsed_key].extend(messages)
+            return None
         else:
             self._values[parsed_key] = value
         return typing.cast("_T | None", value)

@@ -89,21 +89,19 @@ def get_service_account(region: Optional[_builtins.str] = None,
     elb_logs_acl = aws.s3.BucketAcl("elb_logs_acl",
         bucket=elb_logs.id,
         acl="private")
-    allow_elb_logging = elb_logs.arn.apply(lambda arn: aws.iam.get_policy_document(statements=[{
-        "effect": "Allow",
+    allow_elb_logging = aws.iam.get_policy_document_output(statements=[{
         "principals": [{
             "type": "AWS",
             "identifiers": [main.arn],
         }],
+        "effect": "Allow",
         "actions": ["s3:PutObject"],
-        "resources": [f"{arn}/AWSLogs/*"],
-    }]))
+        "resources": [elb_logs.arn.apply(lambda arn: f"{arn}/AWSLogs/*")],
+    }])
     allow_elb_logging_bucket_policy = aws.s3.BucketPolicy("allow_elb_logging",
         bucket=elb_logs.id,
         policy=allow_elb_logging.json)
     bar = aws.elb.LoadBalancer("bar",
-        name="my-foobar-elb",
-        availability_zones=["us-west-2a"],
         access_logs={
             "bucket": elb_logs.id,
             "interval": 5,
@@ -113,7 +111,9 @@ def get_service_account(region: Optional[_builtins.str] = None,
             "instance_protocol": "http",
             "lb_port": 80,
             "lb_protocol": "http",
-        }])
+        }],
+        name="my-foobar-elb",
+        availability_zones=["us-west-2a"])
     ```
 
 
@@ -128,7 +128,7 @@ def get_service_account(region: Optional[_builtins.str] = None,
         arn=pulumi.get(__ret__, 'arn'),
         id=pulumi.get(__ret__, 'id'),
         region=pulumi.get(__ret__, 'region'))
-def get_service_account_output(region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_service_account_output(region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetServiceAccountResult]:
     """
     Use this data source to get the Account ID of the [AWS Elastic Load Balancing Service Account](http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-access-logs.html#attach-bucket-policy)
@@ -147,21 +147,19 @@ def get_service_account_output(region: Optional[pulumi.Input[Optional[_builtins.
     elb_logs_acl = aws.s3.BucketAcl("elb_logs_acl",
         bucket=elb_logs.id,
         acl="private")
-    allow_elb_logging = elb_logs.arn.apply(lambda arn: aws.iam.get_policy_document(statements=[{
-        "effect": "Allow",
+    allow_elb_logging = aws.iam.get_policy_document_output(statements=[{
         "principals": [{
             "type": "AWS",
             "identifiers": [main.arn],
         }],
+        "effect": "Allow",
         "actions": ["s3:PutObject"],
-        "resources": [f"{arn}/AWSLogs/*"],
-    }]))
+        "resources": [elb_logs.arn.apply(lambda arn: f"{arn}/AWSLogs/*")],
+    }])
     allow_elb_logging_bucket_policy = aws.s3.BucketPolicy("allow_elb_logging",
         bucket=elb_logs.id,
         policy=allow_elb_logging.json)
     bar = aws.elb.LoadBalancer("bar",
-        name="my-foobar-elb",
-        availability_zones=["us-west-2a"],
         access_logs={
             "bucket": elb_logs.id,
             "interval": 5,
@@ -171,7 +169,9 @@ def get_service_account_output(region: Optional[pulumi.Input[Optional[_builtins.
             "instance_protocol": "http",
             "lb_port": 80,
             "lb_protocol": "http",
-        }])
+        }],
+        name="my-foobar-elb",
+        availability_zones=["us-west-2a"])
     ```
 
 

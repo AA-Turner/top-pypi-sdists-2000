@@ -26,16 +26,13 @@ class GetEntityPathResult:
     """
     A collection of values returned by getEntityPath.
     """
-    def __init__(__self__, entity_id=None, entity_path=None, id=None):
+    def __init__(__self__, entity_id=None, entity_path=None):
         if entity_id and not isinstance(entity_id, str):
             raise TypeError("Expected argument 'entity_id' to be a str")
         pulumi.set(__self__, "entity_id", entity_id)
         if entity_path and not isinstance(entity_path, str):
             raise TypeError("Expected argument 'entity_path' to be a str")
         pulumi.set(__self__, "entity_path", entity_path)
-        if id and not isinstance(id, str):
-            raise TypeError("Expected argument 'id' to be a str")
-        pulumi.set(__self__, "id", id)
 
     @_builtins.property
     @pulumi.getter(name="entityId")
@@ -50,14 +47,6 @@ class GetEntityPathResult:
         """
         return pulumi.get(self, "entity_path")
 
-    @_builtins.property
-    @pulumi.getter
-    def id(self) -> _builtins.str:
-        """
-        The provider-assigned unique ID for this managed resource.
-        """
-        return pulumi.get(self, "id")
-
 
 class AwaitableGetEntityPathResult(GetEntityPathResult):
     # pylint: disable=using-constant-test
@@ -66,8 +55,7 @@ class AwaitableGetEntityPathResult(GetEntityPathResult):
             yield self
         return GetEntityPathResult(
             entity_id=self.entity_id,
-            entity_path=self.entity_path,
-            id=self.id)
+            entity_path=self.entity_path)
 
 
 def get_entity_path(entity_id: Optional[_builtins.str] = None,
@@ -94,9 +82,8 @@ def get_entity_path(entity_id: Optional[_builtins.str] = None,
 
     return AwaitableGetEntityPathResult(
         entity_id=pulumi.get(__ret__, 'entity_id'),
-        entity_path=pulumi.get(__ret__, 'entity_path'),
-        id=pulumi.get(__ret__, 'id'))
-def get_entity_path_output(entity_id: Optional[pulumi.Input[_builtins.str]] = None,
+        entity_path=pulumi.get(__ret__, 'entity_path'))
+def get_entity_path_output(entity_id: pulumi.Input[Optional[_builtins.str]] = None,
                            opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetEntityPathResult]:
     """
     Get the [entity path](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_last-accessed-view-data-orgs.html#access_policies_last-accessed-viewing-orgs-entity-path) for an entity. An entity's path is the text representation of the structure of that AWS Organizations entity.
@@ -119,5 +106,4 @@ def get_entity_path_output(entity_id: Optional[pulumi.Input[_builtins.str]] = No
     __ret__ = pulumi.runtime.invoke_output('aws:organizations/getEntityPath:getEntityPath', __args__, opts=opts, typ=GetEntityPathResult)
     return __ret__.apply(lambda __response__: GetEntityPathResult(
         entity_id=pulumi.get(__response__, 'entity_id'),
-        entity_path=pulumi.get(__response__, 'entity_path'),
-        id=pulumi.get(__response__, 'id')))
+        entity_path=pulumi.get(__response__, 'entity_path')))

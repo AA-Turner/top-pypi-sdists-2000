@@ -174,14 +174,14 @@ def get_server_certificate(latest: Optional[_builtins.bool] = None,
     my_domain = aws.iam.get_server_certificate(name_prefix="my-domain.org",
         latest=True)
     elb = aws.elb.LoadBalancer("elb",
-        name="my-domain-elb",
         listeners=[{
             "instance_port": 8000,
             "instance_protocol": "https",
             "lb_port": 443,
             "lb_protocol": "https",
             "ssl_certificate_id": my_domain.arn,
-        }])
+        }],
+        name="my-domain-elb")
     ```
 
 
@@ -210,10 +210,10 @@ def get_server_certificate(latest: Optional[_builtins.bool] = None,
         path=pulumi.get(__ret__, 'path'),
         path_prefix=pulumi.get(__ret__, 'path_prefix'),
         upload_date=pulumi.get(__ret__, 'upload_date'))
-def get_server_certificate_output(latest: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                                  name: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                  name_prefix: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                  path_prefix: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_server_certificate_output(latest: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                                  name: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                  name_prefix: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                  path_prefix: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                   opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetServerCertificateResult]:
     """
     Use this data source to lookup information about IAM Server Certificates.
@@ -227,14 +227,14 @@ def get_server_certificate_output(latest: Optional[pulumi.Input[Optional[_builti
     my_domain = aws.iam.get_server_certificate(name_prefix="my-domain.org",
         latest=True)
     elb = aws.elb.LoadBalancer("elb",
-        name="my-domain-elb",
         listeners=[{
             "instance_port": 8000,
             "instance_protocol": "https",
             "lb_port": 443,
             "lb_protocol": "https",
             "ssl_certificate_id": my_domain.arn,
-        }])
+        }],
+        name="my-domain-elb")
     ```
 
 

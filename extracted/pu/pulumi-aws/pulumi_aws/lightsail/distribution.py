@@ -24,16 +24,17 @@ class DistributionArgs:
                  bundle_id: pulumi.Input[_builtins.str],
                  default_cache_behavior: pulumi.Input['DistributionDefaultCacheBehaviorArgs'],
                  origin: pulumi.Input['DistributionOriginArgs'],
-                 cache_behavior_settings: Optional[pulumi.Input['DistributionCacheBehaviorSettingsArgs']] = None,
-                 cache_behaviors: Optional[pulumi.Input[Sequence[pulumi.Input['DistributionCacheBehaviorArgs']]]] = None,
-                 certificate_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 ip_address_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 is_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 cache_behavior_settings: pulumi.Input[Optional['DistributionCacheBehaviorSettingsArgs']] = None,
+                 cache_behaviors: pulumi.Input[Optional[Sequence[pulumi.Input['DistributionCacheBehaviorArgs']]]] = None,
+                 certificate_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 ip_address_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 is_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a Distribution resource.
+
         :param pulumi.Input[_builtins.str] bundle_id: Bundle ID to use for the distribution.
         :param pulumi.Input['DistributionDefaultCacheBehaviorArgs'] default_cache_behavior: Default cache behavior of the distribution. See below.
         :param pulumi.Input['DistributionOriginArgs'] origin: Origin resource of the distribution, such as a Lightsail instance, bucket, or load balancer. See below.
@@ -108,127 +109,128 @@ class DistributionArgs:
 
     @_builtins.property
     @pulumi.getter(name="cacheBehaviorSettings")
-    def cache_behavior_settings(self) -> Optional[pulumi.Input['DistributionCacheBehaviorSettingsArgs']]:
+    def cache_behavior_settings(self) -> pulumi.Input[Optional['DistributionCacheBehaviorSettingsArgs']]:
         """
         Cache behavior settings of the distribution. See below.
         """
         return pulumi.get(self, "cache_behavior_settings")
 
     @cache_behavior_settings.setter
-    def cache_behavior_settings(self, value: Optional[pulumi.Input['DistributionCacheBehaviorSettingsArgs']]):
+    def cache_behavior_settings(self, value: pulumi.Input[Optional['DistributionCacheBehaviorSettingsArgs']]):
         pulumi.set(self, "cache_behavior_settings", value)
 
     @_builtins.property
     @pulumi.getter(name="cacheBehaviors")
-    def cache_behaviors(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DistributionCacheBehaviorArgs']]]]:
+    def cache_behaviors(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['DistributionCacheBehaviorArgs']]]]:
         """
         Per-path cache behavior of the distribution. See below.
         """
         return pulumi.get(self, "cache_behaviors")
 
     @cache_behaviors.setter
-    def cache_behaviors(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DistributionCacheBehaviorArgs']]]]):
+    def cache_behaviors(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['DistributionCacheBehaviorArgs']]]]):
         pulumi.set(self, "cache_behaviors", value)
 
     @_builtins.property
     @pulumi.getter(name="certificateName")
-    def certificate_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def certificate_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the SSL/TLS certificate attached to the distribution.
         """
         return pulumi.get(self, "certificate_name")
 
     @certificate_name.setter
-    def certificate_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def certificate_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "certificate_name", value)
 
     @_builtins.property
     @pulumi.getter(name="ipAddressType")
-    def ip_address_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def ip_address_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         IP address type of the distribution. Valid values: `dualstack`, `ipv4`. Default: `dualstack`.
         """
         return pulumi.get(self, "ip_address_type")
 
     @ip_address_type.setter
-    def ip_address_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def ip_address_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "ip_address_type", value)
 
     @_builtins.property
     @pulumi.getter(name="isEnabled")
-    def is_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def is_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the distribution is enabled. Default: `true`.
         """
         return pulumi.get(self, "is_enabled")
 
     @is_enabled.setter
-    def is_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def is_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "is_enabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the distribution.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags for the Lightsail Distribution. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _DistributionState:
     def __init__(__self__, *,
-                 alternative_domain_names: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 bundle_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 cache_behavior_settings: Optional[pulumi.Input['DistributionCacheBehaviorSettingsArgs']] = None,
-                 cache_behaviors: Optional[pulumi.Input[Sequence[pulumi.Input['DistributionCacheBehaviorArgs']]]] = None,
-                 certificate_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 created_at: Optional[pulumi.Input[_builtins.str]] = None,
-                 default_cache_behavior: Optional[pulumi.Input['DistributionDefaultCacheBehaviorArgs']] = None,
-                 domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 ip_address_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 is_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 locations: Optional[pulumi.Input[Sequence[pulumi.Input['DistributionLocationArgs']]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 origin: Optional[pulumi.Input['DistributionOriginArgs']] = None,
-                 origin_public_dns: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 support_code: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 alternative_domain_names: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 bundle_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 cache_behavior_settings: pulumi.Input[Optional['DistributionCacheBehaviorSettingsArgs']] = None,
+                 cache_behaviors: pulumi.Input[Optional[Sequence[pulumi.Input['DistributionCacheBehaviorArgs']]]] = None,
+                 certificate_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 created_at: pulumi.Input[Optional[_builtins.str]] = None,
+                 default_cache_behavior: pulumi.Input[Optional['DistributionDefaultCacheBehaviorArgs']] = None,
+                 domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 ip_address_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 is_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 locations: pulumi.Input[Optional[Sequence[pulumi.Input['DistributionLocationArgs']]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 origin: pulumi.Input[Optional['DistributionOriginArgs']] = None,
+                 origin_public_dns: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 support_code: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         Input properties used for looking up and filtering Distribution resources.
+
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] alternative_domain_names: Alternate domain names of the distribution.
         :param pulumi.Input[_builtins.str] arn: ARN of the distribution.
         :param pulumi.Input[_builtins.str] bundle_id: Bundle ID to use for the distribution.
@@ -299,163 +301,163 @@ class _DistributionState:
 
     @_builtins.property
     @pulumi.getter(name="alternativeDomainNames")
-    def alternative_domain_names(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def alternative_domain_names(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         Alternate domain names of the distribution.
         """
         return pulumi.get(self, "alternative_domain_names")
 
     @alternative_domain_names.setter
-    def alternative_domain_names(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def alternative_domain_names(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "alternative_domain_names", value)
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the distribution.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="bundleId")
-    def bundle_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def bundle_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Bundle ID to use for the distribution.
         """
         return pulumi.get(self, "bundle_id")
 
     @bundle_id.setter
-    def bundle_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def bundle_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "bundle_id", value)
 
     @_builtins.property
     @pulumi.getter(name="cacheBehaviorSettings")
-    def cache_behavior_settings(self) -> Optional[pulumi.Input['DistributionCacheBehaviorSettingsArgs']]:
+    def cache_behavior_settings(self) -> pulumi.Input[Optional['DistributionCacheBehaviorSettingsArgs']]:
         """
         Cache behavior settings of the distribution. See below.
         """
         return pulumi.get(self, "cache_behavior_settings")
 
     @cache_behavior_settings.setter
-    def cache_behavior_settings(self, value: Optional[pulumi.Input['DistributionCacheBehaviorSettingsArgs']]):
+    def cache_behavior_settings(self, value: pulumi.Input[Optional['DistributionCacheBehaviorSettingsArgs']]):
         pulumi.set(self, "cache_behavior_settings", value)
 
     @_builtins.property
     @pulumi.getter(name="cacheBehaviors")
-    def cache_behaviors(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DistributionCacheBehaviorArgs']]]]:
+    def cache_behaviors(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['DistributionCacheBehaviorArgs']]]]:
         """
         Per-path cache behavior of the distribution. See below.
         """
         return pulumi.get(self, "cache_behaviors")
 
     @cache_behaviors.setter
-    def cache_behaviors(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DistributionCacheBehaviorArgs']]]]):
+    def cache_behaviors(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['DistributionCacheBehaviorArgs']]]]):
         pulumi.set(self, "cache_behaviors", value)
 
     @_builtins.property
     @pulumi.getter(name="certificateName")
-    def certificate_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def certificate_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the SSL/TLS certificate attached to the distribution.
         """
         return pulumi.get(self, "certificate_name")
 
     @certificate_name.setter
-    def certificate_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def certificate_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "certificate_name", value)
 
     @_builtins.property
     @pulumi.getter(name="createdAt")
-    def created_at(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def created_at(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Timestamp when the distribution was created.
         """
         return pulumi.get(self, "created_at")
 
     @created_at.setter
-    def created_at(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def created_at(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "created_at", value)
 
     @_builtins.property
     @pulumi.getter(name="defaultCacheBehavior")
-    def default_cache_behavior(self) -> Optional[pulumi.Input['DistributionDefaultCacheBehaviorArgs']]:
+    def default_cache_behavior(self) -> pulumi.Input[Optional['DistributionDefaultCacheBehaviorArgs']]:
         """
         Default cache behavior of the distribution. See below.
         """
         return pulumi.get(self, "default_cache_behavior")
 
     @default_cache_behavior.setter
-    def default_cache_behavior(self, value: Optional[pulumi.Input['DistributionDefaultCacheBehaviorArgs']]):
+    def default_cache_behavior(self, value: pulumi.Input[Optional['DistributionDefaultCacheBehaviorArgs']]):
         pulumi.set(self, "default_cache_behavior", value)
 
     @_builtins.property
     @pulumi.getter(name="domainName")
-    def domain_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def domain_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Domain name of the distribution.
         """
         return pulumi.get(self, "domain_name")
 
     @domain_name.setter
-    def domain_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def domain_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "domain_name", value)
 
     @_builtins.property
     @pulumi.getter(name="ipAddressType")
-    def ip_address_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def ip_address_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         IP address type of the distribution. Valid values: `dualstack`, `ipv4`. Default: `dualstack`.
         """
         return pulumi.get(self, "ip_address_type")
 
     @ip_address_type.setter
-    def ip_address_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def ip_address_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "ip_address_type", value)
 
     @_builtins.property
     @pulumi.getter(name="isEnabled")
-    def is_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def is_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the distribution is enabled. Default: `true`.
         """
         return pulumi.get(self, "is_enabled")
 
     @is_enabled.setter
-    def is_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def is_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "is_enabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def locations(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DistributionLocationArgs']]]]:
+    def locations(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['DistributionLocationArgs']]]]:
         """
         Location of the distribution, such as the AWS Region and Availability Zone. See below.
         """
         return pulumi.get(self, "locations")
 
     @locations.setter
-    def locations(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DistributionLocationArgs']]]]):
+    def locations(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['DistributionLocationArgs']]]]):
         pulumi.set(self, "locations", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the distribution.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def origin(self) -> Optional[pulumi.Input['DistributionOriginArgs']]:
+    def origin(self) -> pulumi.Input[Optional['DistributionOriginArgs']]:
         """
         Origin resource of the distribution, such as a Lightsail instance, bucket, or load balancer. See below.
 
@@ -464,12 +466,12 @@ class _DistributionState:
         return pulumi.get(self, "origin")
 
     @origin.setter
-    def origin(self, value: Optional[pulumi.Input['DistributionOriginArgs']]):
+    def origin(self, value: pulumi.Input[Optional['DistributionOriginArgs']]):
         pulumi.set(self, "origin", value)
 
     @_builtins.property
     @pulumi.getter(name="originPublicDns")
-    def origin_public_dns(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def origin_public_dns(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Public DNS of the origin.
         * `origin[0].resource_type` - Resource type of the origin resource (e.g., Instance).
@@ -477,79 +479,79 @@ class _DistributionState:
         return pulumi.get(self, "origin_public_dns")
 
     @origin_public_dns.setter
-    def origin_public_dns(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def origin_public_dns(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "origin_public_dns", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceType")
-    def resource_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def resource_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Lightsail resource type (e.g., Distribution).
         """
         return pulumi.get(self, "resource_type")
 
     @resource_type.setter
-    def resource_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def resource_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "resource_type", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Status of the distribution.
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
     @_builtins.property
     @pulumi.getter(name="supportCode")
-    def support_code(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def support_code(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Support code. Include this code in your email to support when you have questions about your Lightsail distribution. This code enables our support team to look up your Lightsail information more easily.
         """
         return pulumi.get(self, "support_code")
 
     @support_code.setter
-    def support_code(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def support_code(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "support_code", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags for the Lightsail Distribution. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
 
@@ -559,17 +561,17 @@ class Distribution(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 bundle_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 cache_behavior_settings: Optional[pulumi.Input[Union['DistributionCacheBehaviorSettingsArgs', 'DistributionCacheBehaviorSettingsArgsDict']]] = None,
-                 cache_behaviors: Optional[pulumi.Input[Sequence[pulumi.Input[Union['DistributionCacheBehaviorArgs', 'DistributionCacheBehaviorArgsDict']]]]] = None,
-                 certificate_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 default_cache_behavior: Optional[pulumi.Input[Union['DistributionDefaultCacheBehaviorArgs', 'DistributionDefaultCacheBehaviorArgsDict']]] = None,
-                 ip_address_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 is_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 origin: Optional[pulumi.Input[Union['DistributionOriginArgs', 'DistributionOriginArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 bundle_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 cache_behavior_settings: pulumi.Input[Optional[Union['DistributionCacheBehaviorSettingsArgs', 'DistributionCacheBehaviorSettingsArgsDict']]] = None,
+                 cache_behaviors: pulumi.Input[Optional[Sequence[pulumi.Input[Union['DistributionCacheBehaviorArgs', 'DistributionCacheBehaviorArgsDict']]]]] = None,
+                 certificate_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 default_cache_behavior: pulumi.Input[Optional[Union['DistributionDefaultCacheBehaviorArgs', 'DistributionDefaultCacheBehaviorArgsDict']]] = None,
+                 ip_address_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 is_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 origin: pulumi.Input[Optional[Union['DistributionOriginArgs', 'DistributionOriginArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Manages a Lightsail content delivery network (CDN) distribution. Use this resource to cache content at edge locations and reduce latency for users accessing your content.
@@ -586,8 +588,6 @@ class Distribution(pulumi.CustomResource):
             name="example-bucket",
             bundle_id="small_1_0")
         example_distribution = aws.lightsail.Distribution("example",
-            name="example-distribution",
-            bundle_id="small_1_0",
             origin={
                 "name": example.name,
                 "region_name": example.region,
@@ -596,11 +596,6 @@ class Distribution(pulumi.CustomResource):
                 "behavior": "cache",
             },
             cache_behavior_settings={
-                "allowed_http_methods": "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
-                "cached_http_methods": "GET,HEAD",
-                "default_ttl": 86400,
-                "maximum_ttl": 31536000,
-                "minimum_ttl": 0,
                 "forwarded_cookies": {
                     "option": "none",
                 },
@@ -610,7 +605,14 @@ class Distribution(pulumi.CustomResource):
                 "forwarded_query_strings": {
                     "option": False,
                 },
-            })
+                "allowed_http_methods": "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+                "cached_http_methods": "GET,HEAD",
+                "default_ttl": 86400,
+                "maximum_ttl": 31536000,
+                "minimum_ttl": 0,
+            },
+            name="example-distribution",
+            bundle_id="small_1_0")
         ```
 
         ### Instance Origin
@@ -619,11 +621,11 @@ class Distribution(pulumi.CustomResource):
         import pulumi
         import pulumi_aws as aws
 
-        available = aws.get_availability_zones(state="available",
-            filters=[{
+        available = aws.get_availability_zones(filters=[{
                 "name": "opt-in-status",
                 "values": ["opt-in-not-required"],
-            }])
+            }],
+            state="available")
         example_static_ip = aws.lightsail.StaticIp("example", name="example-static-ip")
         example_instance = aws.lightsail.Instance("example",
             name="example-instance",
@@ -634,8 +636,6 @@ class Distribution(pulumi.CustomResource):
             static_ip_name=example_static_ip.name,
             instance_name=example_instance.name)
         example_distribution = aws.lightsail.Distribution("example",
-            name="example-distribution",
-            bundle_id="small_1_0",
             origin={
                 "name": example_instance.name,
                 "region_name": available.id,
@@ -643,6 +643,8 @@ class Distribution(pulumi.CustomResource):
             default_cache_behavior={
                 "behavior": "cache",
             },
+            name="example-distribution",
+            bundle_id="small_1_0",
             opts = pulumi.ResourceOptions(depends_on=[example]))
         ```
 
@@ -652,11 +654,11 @@ class Distribution(pulumi.CustomResource):
         import pulumi
         import pulumi_aws as aws
 
-        available = aws.get_availability_zones(state="available",
-            filters=[{
+        available = aws.get_availability_zones(filters=[{
                 "name": "opt-in-status",
                 "values": ["opt-in-not-required"],
-            }])
+            }],
+            state="available")
         example = aws.lightsail.Lb("example",
             name="example-load-balancer",
             health_check_path="/",
@@ -673,8 +675,6 @@ class Distribution(pulumi.CustomResource):
             lb_name=example.name,
             instance_name=example_instance.name)
         example_distribution = aws.lightsail.Distribution("example",
-            name="example-distribution",
-            bundle_id="small_1_0",
             origin={
                 "name": example.name,
                 "region_name": available.id,
@@ -682,6 +682,8 @@ class Distribution(pulumi.CustomResource):
             default_cache_behavior={
                 "behavior": "cache",
             },
+            name="example-distribution",
+            bundle_id="small_1_0",
             opts = pulumi.ResourceOptions(depends_on=[example_lb_attachment]))
         ```
 
@@ -692,6 +694,7 @@ class Distribution(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:lightsail/distribution:Distribution example example-distribution
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -730,8 +733,6 @@ class Distribution(pulumi.CustomResource):
             name="example-bucket",
             bundle_id="small_1_0")
         example_distribution = aws.lightsail.Distribution("example",
-            name="example-distribution",
-            bundle_id="small_1_0",
             origin={
                 "name": example.name,
                 "region_name": example.region,
@@ -740,11 +741,6 @@ class Distribution(pulumi.CustomResource):
                 "behavior": "cache",
             },
             cache_behavior_settings={
-                "allowed_http_methods": "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
-                "cached_http_methods": "GET,HEAD",
-                "default_ttl": 86400,
-                "maximum_ttl": 31536000,
-                "minimum_ttl": 0,
                 "forwarded_cookies": {
                     "option": "none",
                 },
@@ -754,7 +750,14 @@ class Distribution(pulumi.CustomResource):
                 "forwarded_query_strings": {
                     "option": False,
                 },
-            })
+                "allowed_http_methods": "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+                "cached_http_methods": "GET,HEAD",
+                "default_ttl": 86400,
+                "maximum_ttl": 31536000,
+                "minimum_ttl": 0,
+            },
+            name="example-distribution",
+            bundle_id="small_1_0")
         ```
 
         ### Instance Origin
@@ -763,11 +766,11 @@ class Distribution(pulumi.CustomResource):
         import pulumi
         import pulumi_aws as aws
 
-        available = aws.get_availability_zones(state="available",
-            filters=[{
+        available = aws.get_availability_zones(filters=[{
                 "name": "opt-in-status",
                 "values": ["opt-in-not-required"],
-            }])
+            }],
+            state="available")
         example_static_ip = aws.lightsail.StaticIp("example", name="example-static-ip")
         example_instance = aws.lightsail.Instance("example",
             name="example-instance",
@@ -778,8 +781,6 @@ class Distribution(pulumi.CustomResource):
             static_ip_name=example_static_ip.name,
             instance_name=example_instance.name)
         example_distribution = aws.lightsail.Distribution("example",
-            name="example-distribution",
-            bundle_id="small_1_0",
             origin={
                 "name": example_instance.name,
                 "region_name": available.id,
@@ -787,6 +788,8 @@ class Distribution(pulumi.CustomResource):
             default_cache_behavior={
                 "behavior": "cache",
             },
+            name="example-distribution",
+            bundle_id="small_1_0",
             opts = pulumi.ResourceOptions(depends_on=[example]))
         ```
 
@@ -796,11 +799,11 @@ class Distribution(pulumi.CustomResource):
         import pulumi
         import pulumi_aws as aws
 
-        available = aws.get_availability_zones(state="available",
-            filters=[{
+        available = aws.get_availability_zones(filters=[{
                 "name": "opt-in-status",
                 "values": ["opt-in-not-required"],
-            }])
+            }],
+            state="available")
         example = aws.lightsail.Lb("example",
             name="example-load-balancer",
             health_check_path="/",
@@ -817,8 +820,6 @@ class Distribution(pulumi.CustomResource):
             lb_name=example.name,
             instance_name=example_instance.name)
         example_distribution = aws.lightsail.Distribution("example",
-            name="example-distribution",
-            bundle_id="small_1_0",
             origin={
                 "name": example.name,
                 "region_name": available.id,
@@ -826,6 +827,8 @@ class Distribution(pulumi.CustomResource):
             default_cache_behavior={
                 "behavior": "cache",
             },
+            name="example-distribution",
+            bundle_id="small_1_0",
             opts = pulumi.ResourceOptions(depends_on=[example_lb_attachment]))
         ```
 
@@ -836,6 +839,7 @@ class Distribution(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:lightsail/distribution:Distribution example example-distribution
         ```
+
 
         :param str resource_name: The name of the resource.
         :param DistributionArgs args: The arguments to use to populate this resource's properties.
@@ -852,17 +856,17 @@ class Distribution(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 bundle_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 cache_behavior_settings: Optional[pulumi.Input[Union['DistributionCacheBehaviorSettingsArgs', 'DistributionCacheBehaviorSettingsArgsDict']]] = None,
-                 cache_behaviors: Optional[pulumi.Input[Sequence[pulumi.Input[Union['DistributionCacheBehaviorArgs', 'DistributionCacheBehaviorArgsDict']]]]] = None,
-                 certificate_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 default_cache_behavior: Optional[pulumi.Input[Union['DistributionDefaultCacheBehaviorArgs', 'DistributionDefaultCacheBehaviorArgsDict']]] = None,
-                 ip_address_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 is_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 origin: Optional[pulumi.Input[Union['DistributionOriginArgs', 'DistributionOriginArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 bundle_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 cache_behavior_settings: pulumi.Input[Optional[Union['DistributionCacheBehaviorSettingsArgs', 'DistributionCacheBehaviorSettingsArgsDict']]] = None,
+                 cache_behaviors: pulumi.Input[Optional[Sequence[pulumi.Input[Union['DistributionCacheBehaviorArgs', 'DistributionCacheBehaviorArgsDict']]]]] = None,
+                 certificate_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 default_cache_behavior: pulumi.Input[Optional[Union['DistributionDefaultCacheBehaviorArgs', 'DistributionDefaultCacheBehaviorArgsDict']]] = None,
+                 ip_address_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 is_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 origin: pulumi.Input[Optional[Union['DistributionOriginArgs', 'DistributionOriginArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -909,27 +913,27 @@ class Distribution(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            alternative_domain_names: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            bundle_id: Optional[pulumi.Input[_builtins.str]] = None,
-            cache_behavior_settings: Optional[pulumi.Input[Union['DistributionCacheBehaviorSettingsArgs', 'DistributionCacheBehaviorSettingsArgsDict']]] = None,
-            cache_behaviors: Optional[pulumi.Input[Sequence[pulumi.Input[Union['DistributionCacheBehaviorArgs', 'DistributionCacheBehaviorArgsDict']]]]] = None,
-            certificate_name: Optional[pulumi.Input[_builtins.str]] = None,
-            created_at: Optional[pulumi.Input[_builtins.str]] = None,
-            default_cache_behavior: Optional[pulumi.Input[Union['DistributionDefaultCacheBehaviorArgs', 'DistributionDefaultCacheBehaviorArgsDict']]] = None,
-            domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-            ip_address_type: Optional[pulumi.Input[_builtins.str]] = None,
-            is_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-            locations: Optional[pulumi.Input[Sequence[pulumi.Input[Union['DistributionLocationArgs', 'DistributionLocationArgsDict']]]]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            origin: Optional[pulumi.Input[Union['DistributionOriginArgs', 'DistributionOriginArgsDict']]] = None,
-            origin_public_dns: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            resource_type: Optional[pulumi.Input[_builtins.str]] = None,
-            status: Optional[pulumi.Input[_builtins.str]] = None,
-            support_code: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'Distribution':
+            alternative_domain_names: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            bundle_id: pulumi.Input[Optional[_builtins.str]] = None,
+            cache_behavior_settings: pulumi.Input[Optional[Union['DistributionCacheBehaviorSettingsArgs', 'DistributionCacheBehaviorSettingsArgsDict']]] = None,
+            cache_behaviors: pulumi.Input[Optional[Sequence[pulumi.Input[Union['DistributionCacheBehaviorArgs', 'DistributionCacheBehaviorArgsDict']]]]] = None,
+            certificate_name: pulumi.Input[Optional[_builtins.str]] = None,
+            created_at: pulumi.Input[Optional[_builtins.str]] = None,
+            default_cache_behavior: pulumi.Input[Optional[Union['DistributionDefaultCacheBehaviorArgs', 'DistributionDefaultCacheBehaviorArgsDict']]] = None,
+            domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+            ip_address_type: pulumi.Input[Optional[_builtins.str]] = None,
+            is_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+            locations: pulumi.Input[Optional[Sequence[pulumi.Input[Union['DistributionLocationArgs', 'DistributionLocationArgsDict']]]]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            origin: pulumi.Input[Optional[Union['DistributionOriginArgs', 'DistributionOriginArgsDict']]] = None,
+            origin_public_dns: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            resource_type: pulumi.Input[Optional[_builtins.str]] = None,
+            status: pulumi.Input[Optional[_builtins.str]] = None,
+            support_code: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'Distribution':
         """
         Get an existing Distribution resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

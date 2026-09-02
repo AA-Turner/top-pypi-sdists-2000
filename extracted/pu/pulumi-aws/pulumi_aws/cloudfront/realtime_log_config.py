@@ -24,11 +24,12 @@ class RealtimeLogConfigArgs:
                  endpoint: pulumi.Input['RealtimeLogConfigEndpointArgs'],
                  fields: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
                  sampling_rate: pulumi.Input[_builtins.int],
-                 name: Optional[pulumi.Input[_builtins.str]] = None):
+                 name: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a RealtimeLogConfig resource.
+
         :param pulumi.Input['RealtimeLogConfigEndpointArgs'] endpoint: The Amazon Kinesis data streams where real-time log data is sent.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] fields: The fields that are included in each real-time log record. See the [AWS documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields) for supported values.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] fields: The fields that are included in each real-time log record. See the [AWS documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields) for supported values. This includes `viewer-request-log-data` and `viewer-response-log-data`, which carry the custom data that a CloudFront Function logs with `cf.logCustomData()`.
         :param pulumi.Input[_builtins.int] sampling_rate: The sampling rate for this real-time log configuration. The sampling rate determines the percentage of viewer requests that are represented in the real-time log data. An integer between `1` and `100`, inclusive.
         :param pulumi.Input[_builtins.str] name: The unique name to identify this real-time log configuration.
         """
@@ -54,7 +55,7 @@ class RealtimeLogConfigArgs:
     @pulumi.getter
     def fields(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
         """
-        The fields that are included in each real-time log record. See the [AWS documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields) for supported values.
+        The fields that are included in each real-time log record. See the [AWS documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields) for supported values. This includes `viewer-request-log-data` and `viewer-response-log-data`, which carry the custom data that a CloudFront Function logs with `cf.logCustomData()`.
         """
         return pulumi.get(self, "fields")
 
@@ -76,30 +77,31 @@ class RealtimeLogConfigArgs:
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The unique name to identify this real-time log configuration.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
 
 @pulumi.input_type
 class _RealtimeLogConfigState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 endpoint: Optional[pulumi.Input['RealtimeLogConfigEndpointArgs']] = None,
-                 fields: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 sampling_rate: Optional[pulumi.Input[_builtins.int]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 endpoint: pulumi.Input[Optional['RealtimeLogConfigEndpointArgs']] = None,
+                 fields: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 sampling_rate: pulumi.Input[Optional[_builtins.int]] = None):
         """
         Input properties used for looking up and filtering RealtimeLogConfig resources.
-        :param pulumi.Input[_builtins.str] arn: The ARN (Amazon Resource Name) of the CloudFront real-time log configuration.
+
+        :param pulumi.Input[_builtins.str] arn: ARN of the CloudFront real-time log configuration.
         :param pulumi.Input['RealtimeLogConfigEndpointArgs'] endpoint: The Amazon Kinesis data streams where real-time log data is sent.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] fields: The fields that are included in each real-time log record. See the [AWS documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields) for supported values.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] fields: The fields that are included in each real-time log record. See the [AWS documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields) for supported values. This includes `viewer-request-log-data` and `viewer-response-log-data`, which carry the custom data that a CloudFront Function logs with `cf.logCustomData()`.
         :param pulumi.Input[_builtins.str] name: The unique name to identify this real-time log configuration.
         :param pulumi.Input[_builtins.int] sampling_rate: The sampling rate for this real-time log configuration. The sampling rate determines the percentage of viewer requests that are represented in the real-time log data. An integer between `1` and `100`, inclusive.
         """
@@ -116,62 +118,62 @@ class _RealtimeLogConfigState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The ARN (Amazon Resource Name) of the CloudFront real-time log configuration.
+        ARN of the CloudFront real-time log configuration.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def endpoint(self) -> Optional[pulumi.Input['RealtimeLogConfigEndpointArgs']]:
+    def endpoint(self) -> pulumi.Input[Optional['RealtimeLogConfigEndpointArgs']]:
         """
         The Amazon Kinesis data streams where real-time log data is sent.
         """
         return pulumi.get(self, "endpoint")
 
     @endpoint.setter
-    def endpoint(self, value: Optional[pulumi.Input['RealtimeLogConfigEndpointArgs']]):
+    def endpoint(self, value: pulumi.Input[Optional['RealtimeLogConfigEndpointArgs']]):
         pulumi.set(self, "endpoint", value)
 
     @_builtins.property
     @pulumi.getter
-    def fields(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def fields(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        The fields that are included in each real-time log record. See the [AWS documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields) for supported values.
+        The fields that are included in each real-time log record. See the [AWS documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields) for supported values. This includes `viewer-request-log-data` and `viewer-response-log-data`, which carry the custom data that a CloudFront Function logs with `cf.logCustomData()`.
         """
         return pulumi.get(self, "fields")
 
     @fields.setter
-    def fields(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def fields(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "fields", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The unique name to identify this real-time log configuration.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="samplingRate")
-    def sampling_rate(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def sampling_rate(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         The sampling rate for this real-time log configuration. The sampling rate determines the percentage of viewer requests that are represented in the real-time log data. An integer between `1` and `100`, inclusive.
         """
         return pulumi.get(self, "sampling_rate")
 
     @sampling_rate.setter
-    def sampling_rate(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def sampling_rate(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "sampling_rate", value)
 
 
@@ -181,26 +183,28 @@ class RealtimeLogConfig(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 endpoint: Optional[pulumi.Input[Union['RealtimeLogConfigEndpointArgs', 'RealtimeLogConfigEndpointArgsDict']]] = None,
-                 fields: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 sampling_rate: Optional[pulumi.Input[_builtins.int]] = None,
+                 endpoint: pulumi.Input[Optional[Union['RealtimeLogConfigEndpointArgs', 'RealtimeLogConfigEndpointArgsDict']]] = None,
+                 fields: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 sampling_rate: pulumi.Input[Optional[_builtins.int]] = None,
                  __props__=None):
         """
         Provides a CloudFront real-time log configuration resource.
 
         ## Example Usage
 
+        ### Basic Usage
+
         ```python
         import pulumi
         import pulumi_aws as aws
 
         assume_role = aws.iam.get_policy_document(statements=[{
-            "effect": "Allow",
             "principals": [{
                 "type": "Service",
                 "identifiers": ["cloudfront.amazonaws.com"],
             }],
+            "effect": "Allow",
             "actions": ["sts:AssumeRole"],
         }])
         example_role = aws.iam.Role("example",
@@ -221,21 +225,63 @@ class RealtimeLogConfig(pulumi.CustomResource):
             role=example_role.id,
             policy=example.json)
         example_realtime_log_config = aws.cloudfront.RealtimeLogConfig("example",
+            endpoint={
+                "kinesis_stream_config": {
+                    "role_arn": example_role.arn,
+                    "stream_arn": example_aws_kinesis_stream["arn"],
+                },
+                "stream_type": "Kinesis",
+            },
             name="example",
             sampling_rate=75,
             fields=[
                 "timestamp",
                 "c-ip",
             ],
-            endpoint={
-                "stream_type": "Kinesis",
-                "kinesis_stream_config": {
-                    "role_arn": example_role.arn,
-                    "stream_arn": example_aws_kinesis_stream["arn"],
-                },
-            },
             opts = pulumi.ResourceOptions(depends_on=[example_role_policy]))
         ```
+
+        ### Logging Custom Data From a CloudFront Function
+
+        A viewer request or viewer response CloudFront Function can write arbitrary data into the log record for the request by calling the `cf.logCustomData()` helper method, which requires JavaScript runtime 2.0 (`cloudfront-js-2.0`) and the `cloudfront` module. The data is surfaced in the `viewer-request-log-data` and `viewer-response-log-data` fields, which must be selected in the real-time log configuration for them to be delivered.
+
+        ```python
+        import pulumi
+        import pulumi_aws as aws
+
+        example = aws.cloudfront.Function("example",
+            name="tag-request",
+            runtime="cloudfront-js-2.0",
+            publish=True,
+            code=\"\"\"import cf from 'cloudfront';
+
+        function handler(event) {
+          var variant = event.request.uri.indexOf(\\"/beta\\") === 0 ? \\"b\\" : \\"a\\";
+          cf.logCustomData(\\"variant=\\" + variant);
+          return event.request;
+        }
+        \"\"\")
+        example_realtime_log_config = aws.cloudfront.RealtimeLogConfig("example",
+            endpoint={
+                "kinesis_stream_config": {
+                    "role_arn": example_aws_iam_role["arn"],
+                    "stream_arn": example_aws_kinesis_stream["arn"],
+                },
+                "stream_type": "Kinesis",
+            },
+            name="example",
+            sampling_rate=100,
+            fields=[
+                "timestamp",
+                "c-ip",
+                "sc-status",
+                "viewer-request-log-data",
+                "viewer-response-log-data",
+            ],
+            opts = pulumi.ResourceOptions(depends_on=[example_aws_iam_role_policy]))
+        ```
+
+        Associate the function with a cache behavior on the distribution (`function_association` with `event_type = "viewer-request"`) and attach the real-time log configuration to the same cache behavior via `realtime_log_config_arn`. The field is `-` for any request whose viewer request or viewer response function did not call `cf.logCustomData()`.
 
         ## Import
 
@@ -243,7 +289,7 @@ class RealtimeLogConfig(pulumi.CustomResource):
 
         #### Required
 
-        - `arn` (String) Amazon Resource Name (ARN) of the CloudFront real-time log configuration.
+        - `arn` (String) ARN of the CloudFront real-time log configuration.
 
         Using `pulumi import`, import CloudFront real-time log configurations using the ARN. For example:
 
@@ -251,10 +297,11 @@ class RealtimeLogConfig(pulumi.CustomResource):
         $ pulumi import aws:cloudfront/realtimeLogConfig:RealtimeLogConfig example arn:aws:cloudfront::111122223333:realtime-log-config/ExampleNameForRealtimeLogConfig
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Union['RealtimeLogConfigEndpointArgs', 'RealtimeLogConfigEndpointArgsDict']] endpoint: The Amazon Kinesis data streams where real-time log data is sent.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] fields: The fields that are included in each real-time log record. See the [AWS documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields) for supported values.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] fields: The fields that are included in each real-time log record. See the [AWS documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields) for supported values. This includes `viewer-request-log-data` and `viewer-response-log-data`, which carry the custom data that a CloudFront Function logs with `cf.logCustomData()`.
         :param pulumi.Input[_builtins.str] name: The unique name to identify this real-time log configuration.
         :param pulumi.Input[_builtins.int] sampling_rate: The sampling rate for this real-time log configuration. The sampling rate determines the percentage of viewer requests that are represented in the real-time log data. An integer between `1` and `100`, inclusive.
         """
@@ -269,16 +316,18 @@ class RealtimeLogConfig(pulumi.CustomResource):
 
         ## Example Usage
 
+        ### Basic Usage
+
         ```python
         import pulumi
         import pulumi_aws as aws
 
         assume_role = aws.iam.get_policy_document(statements=[{
-            "effect": "Allow",
             "principals": [{
                 "type": "Service",
                 "identifiers": ["cloudfront.amazonaws.com"],
             }],
+            "effect": "Allow",
             "actions": ["sts:AssumeRole"],
         }])
         example_role = aws.iam.Role("example",
@@ -299,21 +348,63 @@ class RealtimeLogConfig(pulumi.CustomResource):
             role=example_role.id,
             policy=example.json)
         example_realtime_log_config = aws.cloudfront.RealtimeLogConfig("example",
+            endpoint={
+                "kinesis_stream_config": {
+                    "role_arn": example_role.arn,
+                    "stream_arn": example_aws_kinesis_stream["arn"],
+                },
+                "stream_type": "Kinesis",
+            },
             name="example",
             sampling_rate=75,
             fields=[
                 "timestamp",
                 "c-ip",
             ],
-            endpoint={
-                "stream_type": "Kinesis",
-                "kinesis_stream_config": {
-                    "role_arn": example_role.arn,
-                    "stream_arn": example_aws_kinesis_stream["arn"],
-                },
-            },
             opts = pulumi.ResourceOptions(depends_on=[example_role_policy]))
         ```
+
+        ### Logging Custom Data From a CloudFront Function
+
+        A viewer request or viewer response CloudFront Function can write arbitrary data into the log record for the request by calling the `cf.logCustomData()` helper method, which requires JavaScript runtime 2.0 (`cloudfront-js-2.0`) and the `cloudfront` module. The data is surfaced in the `viewer-request-log-data` and `viewer-response-log-data` fields, which must be selected in the real-time log configuration for them to be delivered.
+
+        ```python
+        import pulumi
+        import pulumi_aws as aws
+
+        example = aws.cloudfront.Function("example",
+            name="tag-request",
+            runtime="cloudfront-js-2.0",
+            publish=True,
+            code=\"\"\"import cf from 'cloudfront';
+
+        function handler(event) {
+          var variant = event.request.uri.indexOf(\\"/beta\\") === 0 ? \\"b\\" : \\"a\\";
+          cf.logCustomData(\\"variant=\\" + variant);
+          return event.request;
+        }
+        \"\"\")
+        example_realtime_log_config = aws.cloudfront.RealtimeLogConfig("example",
+            endpoint={
+                "kinesis_stream_config": {
+                    "role_arn": example_aws_iam_role["arn"],
+                    "stream_arn": example_aws_kinesis_stream["arn"],
+                },
+                "stream_type": "Kinesis",
+            },
+            name="example",
+            sampling_rate=100,
+            fields=[
+                "timestamp",
+                "c-ip",
+                "sc-status",
+                "viewer-request-log-data",
+                "viewer-response-log-data",
+            ],
+            opts = pulumi.ResourceOptions(depends_on=[example_aws_iam_role_policy]))
+        ```
+
+        Associate the function with a cache behavior on the distribution (`function_association` with `event_type = "viewer-request"`) and attach the real-time log configuration to the same cache behavior via `realtime_log_config_arn`. The field is `-` for any request whose viewer request or viewer response function did not call `cf.logCustomData()`.
 
         ## Import
 
@@ -321,13 +412,14 @@ class RealtimeLogConfig(pulumi.CustomResource):
 
         #### Required
 
-        - `arn` (String) Amazon Resource Name (ARN) of the CloudFront real-time log configuration.
+        - `arn` (String) ARN of the CloudFront real-time log configuration.
 
         Using `pulumi import`, import CloudFront real-time log configurations using the ARN. For example:
 
         ```sh
         $ pulumi import aws:cloudfront/realtimeLogConfig:RealtimeLogConfig example arn:aws:cloudfront::111122223333:realtime-log-config/ExampleNameForRealtimeLogConfig
         ```
+
 
         :param str resource_name: The name of the resource.
         :param RealtimeLogConfigArgs args: The arguments to use to populate this resource's properties.
@@ -344,10 +436,10 @@ class RealtimeLogConfig(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 endpoint: Optional[pulumi.Input[Union['RealtimeLogConfigEndpointArgs', 'RealtimeLogConfigEndpointArgsDict']]] = None,
-                 fields: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 sampling_rate: Optional[pulumi.Input[_builtins.int]] = None,
+                 endpoint: pulumi.Input[Optional[Union['RealtimeLogConfigEndpointArgs', 'RealtimeLogConfigEndpointArgsDict']]] = None,
+                 fields: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 sampling_rate: pulumi.Input[Optional[_builtins.int]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -378,11 +470,11 @@ class RealtimeLogConfig(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            endpoint: Optional[pulumi.Input[Union['RealtimeLogConfigEndpointArgs', 'RealtimeLogConfigEndpointArgsDict']]] = None,
-            fields: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            sampling_rate: Optional[pulumi.Input[_builtins.int]] = None) -> 'RealtimeLogConfig':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            endpoint: pulumi.Input[Optional[Union['RealtimeLogConfigEndpointArgs', 'RealtimeLogConfigEndpointArgsDict']]] = None,
+            fields: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            sampling_rate: pulumi.Input[Optional[_builtins.int]] = None) -> 'RealtimeLogConfig':
         """
         Get an existing RealtimeLogConfig resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -390,9 +482,9 @@ class RealtimeLogConfig(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] arn: The ARN (Amazon Resource Name) of the CloudFront real-time log configuration.
+        :param pulumi.Input[_builtins.str] arn: ARN of the CloudFront real-time log configuration.
         :param pulumi.Input[Union['RealtimeLogConfigEndpointArgs', 'RealtimeLogConfigEndpointArgsDict']] endpoint: The Amazon Kinesis data streams where real-time log data is sent.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] fields: The fields that are included in each real-time log record. See the [AWS documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields) for supported values.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] fields: The fields that are included in each real-time log record. See the [AWS documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields) for supported values. This includes `viewer-request-log-data` and `viewer-response-log-data`, which carry the custom data that a CloudFront Function logs with `cf.logCustomData()`.
         :param pulumi.Input[_builtins.str] name: The unique name to identify this real-time log configuration.
         :param pulumi.Input[_builtins.int] sampling_rate: The sampling rate for this real-time log configuration. The sampling rate determines the percentage of viewer requests that are represented in the real-time log data. An integer between `1` and `100`, inclusive.
         """
@@ -411,7 +503,7 @@ class RealtimeLogConfig(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The ARN (Amazon Resource Name) of the CloudFront real-time log configuration.
+        ARN of the CloudFront real-time log configuration.
         """
         return pulumi.get(self, "arn")
 
@@ -427,7 +519,7 @@ class RealtimeLogConfig(pulumi.CustomResource):
     @pulumi.getter
     def fields(self) -> pulumi.Output[Sequence[_builtins.str]]:
         """
-        The fields that are included in each real-time log record. See the [AWS documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields) for supported values.
+        The fields that are included in each real-time log record. See the [AWS documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields) for supported values. This includes `viewer-request-log-data` and `viewer-response-log-data`, which carry the custom data that a CloudFront Function logs with `cf.logCustomData()`.
         """
         return pulumi.get(self, "fields")
 

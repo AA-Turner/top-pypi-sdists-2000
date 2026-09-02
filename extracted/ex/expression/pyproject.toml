@@ -1,0 +1,82 @@
+[project]
+name = "Expression"
+dynamic = ["version"]
+description = "Practical functional programming for Python 3.10+"
+readme = "README.md"
+requires-python = ">=3.10,<4"
+authors = [
+    { name = "Dag Brattli", email = "dag.brattli@cognite.com" },
+]
+license = "MIT"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Other Environment",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "typing-extensions>=4.6.0",
+]
+
+[project.optional-dependencies]
+pydantic = ["pydantic>=2.6.2,<3.0.0"]
+all = ["pydantic>=2.6.2,<3.0.0"]
+
+[project.urls]
+Homepage = "https://github.com/cognitedata/Expression"
+
+[tool.hatch.version]
+path = "expression/_version.py"
+
+[dependency-groups]
+dev = [
+    "pytest-asyncio>=1.4.0,<2",
+    "pytest>=9.1.1,<10",
+    "coverage>=7.15.4,<8",
+    "coveralls>=4.1.0,<5",
+    "pre-commit>=4.6.2,<5",
+    "dunamai>=1.26.2,<2",
+    "hypothesis>=6.165.9,<7",
+    "ruff>=0.16.3,<0.17",
+    "jupytext>=1.19.5,<2",
+]
+
+
+[tool.ruff]
+# Keep in sync with .pre-commit-config.yaml
+line-length = 120
+target-version = "py310"
+# D100: Missing docstring in public module
+# D104: Missing docstring in public package
+# D105: Missing docstring in magic method
+lint.ignore = ["D100", "D101", "D102", "D103", "D105", "D107"]
+lint.select = ["D", "E", "W",  "F", "I", "T", "RUF", "TID", "UP"]
+exclude = ["tests", "docs"]
+
+[tool.ruff.lint.per-file-ignores]
+"docs/guides/*.py" = ["D212", "D415", "E402", "E501", "I001"]
+"docs/tutorial/*.py" = ["D212", "D415", "E402", "E501", "I001"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+lines-after-imports = 2
+known-third-party = ["pytest"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
+
+[build-system]
+requires = ["hatchling>=1.27.0,<2"]
+build-backend = "hatchling.build"

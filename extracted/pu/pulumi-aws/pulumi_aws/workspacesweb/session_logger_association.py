@@ -21,9 +21,10 @@ class SessionLoggerAssociationArgs:
     def __init__(__self__, *,
                  portal_arn: pulumi.Input[_builtins.str],
                  session_logger_arn: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a SessionLoggerAssociation resource.
+
         :param pulumi.Input[_builtins.str] portal_arn: ARN of the web portal.
         :param pulumi.Input[_builtins.str] session_logger_arn: ARN of the session logger.
                
@@ -63,25 +64,26 @@ class SessionLoggerAssociationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _SessionLoggerAssociationState:
     def __init__(__self__, *,
-                 portal_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 session_logger_arn: Optional[pulumi.Input[_builtins.str]] = None):
+                 portal_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 session_logger_arn: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering SessionLoggerAssociation resources.
+
         :param pulumi.Input[_builtins.str] portal_arn: ARN of the web portal.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[_builtins.str] session_logger_arn: ARN of the session logger.
@@ -97,31 +99,31 @@ class _SessionLoggerAssociationState:
 
     @_builtins.property
     @pulumi.getter(name="portalArn")
-    def portal_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def portal_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the web portal.
         """
         return pulumi.get(self, "portal_arn")
 
     @portal_arn.setter
-    def portal_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def portal_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "portal_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="sessionLoggerArn")
-    def session_logger_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def session_logger_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the session logger.
 
@@ -130,7 +132,7 @@ class _SessionLoggerAssociationState:
         return pulumi.get(self, "session_logger_arn")
 
     @session_logger_arn.setter
-    def session_logger_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def session_logger_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "session_logger_arn", value)
 
 
@@ -140,9 +142,9 @@ class SessionLoggerAssociation(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 portal_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 session_logger_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 portal_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 session_logger_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing an AWS WorkSpaces Web Session Logger Association.
@@ -160,11 +162,11 @@ class SessionLoggerAssociation(pulumi.CustomResource):
             bucket="example-session-logs",
             force_destroy=True)
         example = aws.iam.get_policy_document_output(statements=[{
-            "effect": "Allow",
             "principals": [{
                 "type": "Service",
                 "identifiers": ["workspaces-web.amazonaws.com"],
             }],
+            "effect": "Allow",
             "actions": ["s3:PutObject"],
             "resources": [example_bucket.arn.apply(lambda arn: f"{arn}/*")],
         }])
@@ -172,7 +174,6 @@ class SessionLoggerAssociation(pulumi.CustomResource):
             bucket=example_bucket.id,
             policy=example.json)
         example_session_logger = aws.workspacesweb.SessionLogger("example",
-            display_name="example",
             event_filter={
                 "all": {}[0],
             },
@@ -183,6 +184,7 @@ class SessionLoggerAssociation(pulumi.CustomResource):
                     "log_file_format": "Json",
                 },
             },
+            display_name="example",
             opts = pulumi.ResourceOptions(depends_on=[example_bucket_policy]))
         example_session_logger_association = aws.workspacesweb.SessionLoggerAssociation("example",
             portal_arn=example_portal.portal_arn,
@@ -196,6 +198,7 @@ class SessionLoggerAssociation(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:workspacesweb/sessionLoggerAssociation:SessionLoggerAssociation example arn:aws:workspaces-web:us-west-2:123456789012:sessionLogger/session_logger-id-12345678,arn:aws:workspaces-web:us-west-2:123456789012:portal/portal-id-12345678
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -227,11 +230,11 @@ class SessionLoggerAssociation(pulumi.CustomResource):
             bucket="example-session-logs",
             force_destroy=True)
         example = aws.iam.get_policy_document_output(statements=[{
-            "effect": "Allow",
             "principals": [{
                 "type": "Service",
                 "identifiers": ["workspaces-web.amazonaws.com"],
             }],
+            "effect": "Allow",
             "actions": ["s3:PutObject"],
             "resources": [example_bucket.arn.apply(lambda arn: f"{arn}/*")],
         }])
@@ -239,7 +242,6 @@ class SessionLoggerAssociation(pulumi.CustomResource):
             bucket=example_bucket.id,
             policy=example.json)
         example_session_logger = aws.workspacesweb.SessionLogger("example",
-            display_name="example",
             event_filter={
                 "all": {}[0],
             },
@@ -250,6 +252,7 @@ class SessionLoggerAssociation(pulumi.CustomResource):
                     "log_file_format": "Json",
                 },
             },
+            display_name="example",
             opts = pulumi.ResourceOptions(depends_on=[example_bucket_policy]))
         example_session_logger_association = aws.workspacesweb.SessionLoggerAssociation("example",
             portal_arn=example_portal.portal_arn,
@@ -263,6 +266,7 @@ class SessionLoggerAssociation(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:workspacesweb/sessionLoggerAssociation:SessionLoggerAssociation example arn:aws:workspaces-web:us-west-2:123456789012:sessionLogger/session_logger-id-12345678,arn:aws:workspaces-web:us-west-2:123456789012:portal/portal-id-12345678
         ```
+
 
         :param str resource_name: The name of the resource.
         :param SessionLoggerAssociationArgs args: The arguments to use to populate this resource's properties.
@@ -279,9 +283,9 @@ class SessionLoggerAssociation(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 portal_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 session_logger_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 portal_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 session_logger_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -308,9 +312,9 @@ class SessionLoggerAssociation(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            portal_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            session_logger_arn: Optional[pulumi.Input[_builtins.str]] = None) -> 'SessionLoggerAssociation':
+            portal_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            session_logger_arn: pulumi.Input[Optional[_builtins.str]] = None) -> 'SessionLoggerAssociation':
         """
         Get an existing SessionLoggerAssociation resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

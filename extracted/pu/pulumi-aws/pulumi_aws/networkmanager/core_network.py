@@ -22,44 +22,20 @@ __all__ = ['CoreNetworkArgs', 'CoreNetwork']
 class CoreNetworkArgs:
     def __init__(__self__, *,
                  global_network_id: pulumi.Input[_builtins.str],
-                 base_policy_document: Optional[pulumi.Input[_builtins.str]] = None,
-                 base_policy_regions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 create_base_policy: Optional[pulumi.Input[_builtins.bool]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 base_policy_document: pulumi.Input[Optional[_builtins.str]] = None,
+                 base_policy_regions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 create_base_policy: pulumi.Input[Optional[_builtins.bool]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a CoreNetwork resource.
+
         :param pulumi.Input[_builtins.str] global_network_id: ID of the global network that a core network will be a part of.
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] base_policy_document: Sets the base policy document for the core network. Refer to the [Core network policies documentation](https://docs.aws.amazon.com/network-manager/latest/cloudwan/cloudwan-policy-change-sets.html) for more information.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] base_policy_regions: List of regions to add to the base policy. The base policy created by setting the `create_base_policy` argument to `true` requires one or more regions to be set in the `edge-locations`, `location` key. If `base_policy_regions` is not specified, the region used in the base policy defaults to the region specified in the `provider` block.
-        :param pulumi.Input[_builtins.bool] create_base_policy: Whether to create a base policy when a core network is created or updated. A base policy is created and set to `LIVE` to allow attachments to the core network (e.g. VPC Attachments) before applying a policy document provided using the `networkmanager.CoreNetworkPolicyAttachment` resource. This base policy is needed if your core network does not have any `LIVE` policies and your policy document has static routes pointing to VPC attachments and you want to attach your VPCs to the core network before applying the desired policy document. Valid values are `true` or `false`. An example of this Pulumi snippet can be found above for VPC Attachment in a single region and for VPC Attachment multi-region. An example base policy is shown below. This base policy is overridden with the policy that you specify in the `networkmanager.CoreNetworkPolicyAttachment` resource.
-               
-               ```json
-               {
-               "version": "2021.12",
-               "core-network-configuration": {
-               "asn-ranges": [
-               "64512-65534"
-               ],
-               "vpn-ecmp-support": false,
-               "edge-locations": [
-               {
-               "location": "us-east-1"
-               }
-               ]
-               },
-               "segments": [
-               {
-               "name": "segment",
-               "description": "base-policy",
-               "isolate-attachments": false,
-               "require-attachment-acceptance": false
-               }
-               ]
-               }
-               ```
+        :param pulumi.Input[_builtins.bool] create_base_policy: Whether to create a base policy when a core network is created or updated. A base policy is created and set to `LIVE` to allow attachments to the core network (e.g. VPC Attachments) before applying a policy document provided using the `networkmanager.CoreNetworkPolicyAttachment` resource. This base policy is needed if your core network does not have any `LIVE` policies and your policy document has static routes pointing to VPC attachments and you want to attach your VPCs to the core network before applying the desired policy document. Valid values are `true` or `false`. An example of this Pulumi snippet can be found above for VPC Attachment in a single region and for VPC Attachment multi-region. An example base policy is shown in the Base Policy Example section. This base policy is overridden with the policy that you specify in the `networkmanager.CoreNetworkPolicyAttachment` resource.
         :param pulumi.Input[_builtins.str] description: Description of the Core Network.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value tags for the Core Network. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
@@ -91,136 +67,87 @@ class CoreNetworkArgs:
 
     @_builtins.property
     @pulumi.getter(name="basePolicyDocument")
-    def base_policy_document(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def base_policy_document(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Sets the base policy document for the core network. Refer to the [Core network policies documentation](https://docs.aws.amazon.com/network-manager/latest/cloudwan/cloudwan-policy-change-sets.html) for more information.
         """
         return pulumi.get(self, "base_policy_document")
 
     @base_policy_document.setter
-    def base_policy_document(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def base_policy_document(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "base_policy_document", value)
 
     @_builtins.property
     @pulumi.getter(name="basePolicyRegions")
-    def base_policy_regions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def base_policy_regions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of regions to add to the base policy. The base policy created by setting the `create_base_policy` argument to `true` requires one or more regions to be set in the `edge-locations`, `location` key. If `base_policy_regions` is not specified, the region used in the base policy defaults to the region specified in the `provider` block.
         """
         return pulumi.get(self, "base_policy_regions")
 
     @base_policy_regions.setter
-    def base_policy_regions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def base_policy_regions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "base_policy_regions", value)
 
     @_builtins.property
     @pulumi.getter(name="createBasePolicy")
-    def create_base_policy(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def create_base_policy(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        Whether to create a base policy when a core network is created or updated. A base policy is created and set to `LIVE` to allow attachments to the core network (e.g. VPC Attachments) before applying a policy document provided using the `networkmanager.CoreNetworkPolicyAttachment` resource. This base policy is needed if your core network does not have any `LIVE` policies and your policy document has static routes pointing to VPC attachments and you want to attach your VPCs to the core network before applying the desired policy document. Valid values are `true` or `false`. An example of this Pulumi snippet can be found above for VPC Attachment in a single region and for VPC Attachment multi-region. An example base policy is shown below. This base policy is overridden with the policy that you specify in the `networkmanager.CoreNetworkPolicyAttachment` resource.
-
-        ```json
-        {
-        "version": "2021.12",
-        "core-network-configuration": {
-        "asn-ranges": [
-        "64512-65534"
-        ],
-        "vpn-ecmp-support": false,
-        "edge-locations": [
-        {
-        "location": "us-east-1"
-        }
-        ]
-        },
-        "segments": [
-        {
-        "name": "segment",
-        "description": "base-policy",
-        "isolate-attachments": false,
-        "require-attachment-acceptance": false
-        }
-        ]
-        }
-        ```
+        Whether to create a base policy when a core network is created or updated. A base policy is created and set to `LIVE` to allow attachments to the core network (e.g. VPC Attachments) before applying a policy document provided using the `networkmanager.CoreNetworkPolicyAttachment` resource. This base policy is needed if your core network does not have any `LIVE` policies and your policy document has static routes pointing to VPC attachments and you want to attach your VPCs to the core network before applying the desired policy document. Valid values are `true` or `false`. An example of this Pulumi snippet can be found above for VPC Attachment in a single region and for VPC Attachment multi-region. An example base policy is shown in the Base Policy Example section. This base policy is overridden with the policy that you specify in the `networkmanager.CoreNetworkPolicyAttachment` resource.
         """
         return pulumi.get(self, "create_base_policy")
 
     @create_base_policy.setter
-    def create_base_policy(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def create_base_policy(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "create_base_policy", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the Core Network.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value tags for the Core Network. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _CoreNetworkState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 base_policy_document: Optional[pulumi.Input[_builtins.str]] = None,
-                 base_policy_regions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 create_base_policy: Optional[pulumi.Input[_builtins.bool]] = None,
-                 created_at: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 edges: Optional[pulumi.Input[Sequence[pulumi.Input['CoreNetworkEdgeArgs']]]] = None,
-                 global_network_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 segments: Optional[pulumi.Input[Sequence[pulumi.Input['CoreNetworkSegmentArgs']]]] = None,
-                 state: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 base_policy_document: pulumi.Input[Optional[_builtins.str]] = None,
+                 base_policy_regions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 create_base_policy: pulumi.Input[Optional[_builtins.bool]] = None,
+                 created_at: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 edges: pulumi.Input[Optional[Sequence[pulumi.Input['CoreNetworkEdgeArgs']]]] = None,
+                 global_network_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 segments: pulumi.Input[Optional[Sequence[pulumi.Input['CoreNetworkSegmentArgs']]]] = None,
+                 state: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         Input properties used for looking up and filtering CoreNetwork resources.
+
         :param pulumi.Input[_builtins.str] arn: Core Network ARN.
         :param pulumi.Input[_builtins.str] base_policy_document: Sets the base policy document for the core network. Refer to the [Core network policies documentation](https://docs.aws.amazon.com/network-manager/latest/cloudwan/cloudwan-policy-change-sets.html) for more information.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] base_policy_regions: List of regions to add to the base policy. The base policy created by setting the `create_base_policy` argument to `true` requires one or more regions to be set in the `edge-locations`, `location` key. If `base_policy_regions` is not specified, the region used in the base policy defaults to the region specified in the `provider` block.
-        :param pulumi.Input[_builtins.bool] create_base_policy: Whether to create a base policy when a core network is created or updated. A base policy is created and set to `LIVE` to allow attachments to the core network (e.g. VPC Attachments) before applying a policy document provided using the `networkmanager.CoreNetworkPolicyAttachment` resource. This base policy is needed if your core network does not have any `LIVE` policies and your policy document has static routes pointing to VPC attachments and you want to attach your VPCs to the core network before applying the desired policy document. Valid values are `true` or `false`. An example of this Pulumi snippet can be found above for VPC Attachment in a single region and for VPC Attachment multi-region. An example base policy is shown below. This base policy is overridden with the policy that you specify in the `networkmanager.CoreNetworkPolicyAttachment` resource.
-               
-               ```json
-               {
-               "version": "2021.12",
-               "core-network-configuration": {
-               "asn-ranges": [
-               "64512-65534"
-               ],
-               "vpn-ecmp-support": false,
-               "edge-locations": [
-               {
-               "location": "us-east-1"
-               }
-               ]
-               },
-               "segments": [
-               {
-               "name": "segment",
-               "description": "base-policy",
-               "isolate-attachments": false,
-               "require-attachment-acceptance": false
-               }
-               ]
-               }
-               ```
+        :param pulumi.Input[_builtins.bool] create_base_policy: Whether to create a base policy when a core network is created or updated. A base policy is created and set to `LIVE` to allow attachments to the core network (e.g. VPC Attachments) before applying a policy document provided using the `networkmanager.CoreNetworkPolicyAttachment` resource. This base policy is needed if your core network does not have any `LIVE` policies and your policy document has static routes pointing to VPC attachments and you want to attach your VPCs to the core network before applying the desired policy document. Valid values are `true` or `false`. An example of this Pulumi snippet can be found above for VPC Attachment in a single region and for VPC Attachment multi-region. An example base policy is shown in the Base Policy Example section. This base policy is overridden with the policy that you specify in the `networkmanager.CoreNetworkPolicyAttachment` resource.
         :param pulumi.Input[_builtins.str] created_at: Timestamp when a core network was created.
         :param pulumi.Input[_builtins.str] description: Description of the Core Network.
         :param pulumi.Input[Sequence[pulumi.Input['CoreNetworkEdgeArgs']]] edges: One or more blocks detailing the edges within a core network. Detailed below.
@@ -259,116 +186,91 @@ class _CoreNetworkState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Core Network ARN.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="basePolicyDocument")
-    def base_policy_document(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def base_policy_document(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Sets the base policy document for the core network. Refer to the [Core network policies documentation](https://docs.aws.amazon.com/network-manager/latest/cloudwan/cloudwan-policy-change-sets.html) for more information.
         """
         return pulumi.get(self, "base_policy_document")
 
     @base_policy_document.setter
-    def base_policy_document(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def base_policy_document(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "base_policy_document", value)
 
     @_builtins.property
     @pulumi.getter(name="basePolicyRegions")
-    def base_policy_regions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def base_policy_regions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of regions to add to the base policy. The base policy created by setting the `create_base_policy` argument to `true` requires one or more regions to be set in the `edge-locations`, `location` key. If `base_policy_regions` is not specified, the region used in the base policy defaults to the region specified in the `provider` block.
         """
         return pulumi.get(self, "base_policy_regions")
 
     @base_policy_regions.setter
-    def base_policy_regions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def base_policy_regions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "base_policy_regions", value)
 
     @_builtins.property
     @pulumi.getter(name="createBasePolicy")
-    def create_base_policy(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def create_base_policy(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        Whether to create a base policy when a core network is created or updated. A base policy is created and set to `LIVE` to allow attachments to the core network (e.g. VPC Attachments) before applying a policy document provided using the `networkmanager.CoreNetworkPolicyAttachment` resource. This base policy is needed if your core network does not have any `LIVE` policies and your policy document has static routes pointing to VPC attachments and you want to attach your VPCs to the core network before applying the desired policy document. Valid values are `true` or `false`. An example of this Pulumi snippet can be found above for VPC Attachment in a single region and for VPC Attachment multi-region. An example base policy is shown below. This base policy is overridden with the policy that you specify in the `networkmanager.CoreNetworkPolicyAttachment` resource.
-
-        ```json
-        {
-        "version": "2021.12",
-        "core-network-configuration": {
-        "asn-ranges": [
-        "64512-65534"
-        ],
-        "vpn-ecmp-support": false,
-        "edge-locations": [
-        {
-        "location": "us-east-1"
-        }
-        ]
-        },
-        "segments": [
-        {
-        "name": "segment",
-        "description": "base-policy",
-        "isolate-attachments": false,
-        "require-attachment-acceptance": false
-        }
-        ]
-        }
-        ```
+        Whether to create a base policy when a core network is created or updated. A base policy is created and set to `LIVE` to allow attachments to the core network (e.g. VPC Attachments) before applying a policy document provided using the `networkmanager.CoreNetworkPolicyAttachment` resource. This base policy is needed if your core network does not have any `LIVE` policies and your policy document has static routes pointing to VPC attachments and you want to attach your VPCs to the core network before applying the desired policy document. Valid values are `true` or `false`. An example of this Pulumi snippet can be found above for VPC Attachment in a single region and for VPC Attachment multi-region. An example base policy is shown in the Base Policy Example section. This base policy is overridden with the policy that you specify in the `networkmanager.CoreNetworkPolicyAttachment` resource.
         """
         return pulumi.get(self, "create_base_policy")
 
     @create_base_policy.setter
-    def create_base_policy(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def create_base_policy(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "create_base_policy", value)
 
     @_builtins.property
     @pulumi.getter(name="createdAt")
-    def created_at(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def created_at(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Timestamp when a core network was created.
         """
         return pulumi.get(self, "created_at")
 
     @created_at.setter
-    def created_at(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def created_at(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "created_at", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the Core Network.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def edges(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['CoreNetworkEdgeArgs']]]]:
+    def edges(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['CoreNetworkEdgeArgs']]]]:
         """
         One or more blocks detailing the edges within a core network. Detailed below.
         """
         return pulumi.get(self, "edges")
 
     @edges.setter
-    def edges(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['CoreNetworkEdgeArgs']]]]):
+    def edges(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['CoreNetworkEdgeArgs']]]]):
         pulumi.set(self, "edges", value)
 
     @_builtins.property
     @pulumi.getter(name="globalNetworkId")
-    def global_network_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def global_network_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ID of the global network that a core network will be a part of.
 
@@ -377,55 +279,55 @@ class _CoreNetworkState:
         return pulumi.get(self, "global_network_id")
 
     @global_network_id.setter
-    def global_network_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def global_network_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "global_network_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def segments(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['CoreNetworkSegmentArgs']]]]:
+    def segments(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['CoreNetworkSegmentArgs']]]]:
         """
         One or more blocks detailing the segments within a core network. Detailed below.
         """
         return pulumi.get(self, "segments")
 
     @segments.setter
-    def segments(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['CoreNetworkSegmentArgs']]]]):
+    def segments(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['CoreNetworkSegmentArgs']]]]):
         pulumi.set(self, "segments", value)
 
     @_builtins.property
     @pulumi.getter
-    def state(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def state(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Current state of a core network.
         """
         return pulumi.get(self, "state")
 
     @state.setter
-    def state(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def state(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "state", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value tags for the Core Network. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
 
@@ -435,12 +337,12 @@ class CoreNetwork(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 base_policy_document: Optional[pulumi.Input[_builtins.str]] = None,
-                 base_policy_regions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 create_base_policy: Optional[pulumi.Input[_builtins.bool]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 global_network_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 base_policy_document: pulumi.Input[Optional[_builtins.str]] = None,
+                 base_policy_regions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 create_base_policy: pulumi.Input[Optional[_builtins.bool]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 global_network_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Manages a Network Manager Core Network.
@@ -499,11 +401,11 @@ class CoreNetwork(pulumi.CustomResource):
 
         example_global_network = aws.networkmanager.GlobalNetwork("example")
         base = aws.networkmanager.get_core_network_policy_document(core_network_configurations=[{
-                "asn_ranges": ["65022-65534"],
                 "edge_locations": [{
                     "location": "us-west-2",
                     "asn": "65500",
                 }],
+                "asn_ranges": ["65022-65534"],
             }],
             segments=[{
                 "name": "segment",
@@ -517,20 +419,20 @@ class CoreNetwork(pulumi.CustomResource):
             subnet_arns=[__item["arn"] for __item in example_aws_subnet],
             vpc_arn=example_aws_vpc["arn"])
         example = aws.networkmanager.get_core_network_policy_document_output(core_network_configurations=[{
-                "asn_ranges": ["65022-65534"],
                 "edge_locations": [{
                     "location": "us-west-2",
                     "asn": "65500",
                 }],
-            }],
-            segments=[{
-                "name": "segment",
+                "asn_ranges": ["65022-65534"],
             }],
             segment_actions=[{
                 "action": "create-route",
                 "segment": "segment",
                 "destination_cidr_blocks": ["0.0.0.0/0"],
                 "destinations": [example_vpc_attachment.id],
+            }],
+            segments=[{
+                "name": "segment",
             }])
         example_core_network_policy_attachment = aws.networkmanager.CoreNetworkPolicyAttachment("example",
             core_network_id=example_core_network.id,
@@ -552,19 +454,19 @@ class CoreNetwork(pulumi.CustomResource):
             subnet_arns=[__item["arn"] for __item in example_aws_subnet],
             vpc_arn=example_aws_vpc["arn"])
         example = aws.networkmanager.get_core_network_policy_document_output(core_network_configurations=[{
-                "asn_ranges": ["65022-65534"],
                 "edge_locations": [{
                     "location": "us-west-2",
                 }],
-            }],
-            segments=[{
-                "name": "segment",
+                "asn_ranges": ["65022-65534"],
             }],
             segment_actions=[{
                 "action": "create-route",
                 "segment": "segment",
                 "destination_cidr_blocks": ["0.0.0.0/0"],
                 "destinations": [example_vpc_attachment.id],
+            }],
+            segments=[{
+                "name": "segment",
             }])
         example_core_network_policy_attachment = aws.networkmanager.CoreNetworkPolicyAttachment("example",
             core_network_id=example_core_network.id,
@@ -586,7 +488,6 @@ class CoreNetwork(pulumi.CustomResource):
 
         example_global_network = aws.networkmanager.GlobalNetwork("example")
         base = aws.networkmanager.get_core_network_policy_document(core_network_configurations=[{
-                "asn_ranges": ["65022-65534"],
                 "edge_locations": [
                     {
                         "location": "us-west-2",
@@ -597,6 +498,7 @@ class CoreNetwork(pulumi.CustomResource):
                         "asn": "65501",
                     },
                 ],
+                "asn_ranges": ["65022-65534"],
             }],
             segments=[{
                 "name": "segment",
@@ -614,7 +516,6 @@ class CoreNetwork(pulumi.CustomResource):
             subnet_arns=[__item["arn"] for __item in example_us_east1_aws_subnet],
             vpc_arn=example_us_east1_aws_vpc["arn"])
         example = aws.networkmanager.get_core_network_policy_document_output(core_network_configurations=[{
-                "asn_ranges": ["65022-65534"],
                 "edge_locations": [
                     {
                         "location": "us-west-2",
@@ -625,15 +526,8 @@ class CoreNetwork(pulumi.CustomResource):
                         "asn": "65501",
                     },
                 ],
+                "asn_ranges": ["65022-65534"],
             }],
-            segments=[
-                {
-                    "name": "segment",
-                },
-                {
-                    "name": "segment2",
-                },
-            ],
             segment_actions=[
                 {
                     "action": "create-route",
@@ -646,6 +540,14 @@ class CoreNetwork(pulumi.CustomResource):
                     "segment": "segment",
                     "destination_cidr_blocks": ["10.1.0.0/16"],
                     "destinations": [example_us_east1.id],
+                },
+            ],
+            segments=[
+                {
+                    "name": "segment",
+                },
+                {
+                    "name": "segment2",
                 },
             ])
         example_core_network_policy_attachment = aws.networkmanager.CoreNetworkPolicyAttachment("example",
@@ -676,7 +578,6 @@ class CoreNetwork(pulumi.CustomResource):
             subnet_arns=[__item["arn"] for __item in example_us_east1_aws_subnet],
             vpc_arn=example_us_east1_aws_vpc["arn"])
         example = aws.networkmanager.get_core_network_policy_document_output(core_network_configurations=[{
-                "asn_ranges": ["65022-65534"],
                 "edge_locations": [
                     {
                         "location": "us-west-2",
@@ -685,15 +586,8 @@ class CoreNetwork(pulumi.CustomResource):
                         "location": "us-east-1",
                     },
                 ],
+                "asn_ranges": ["65022-65534"],
             }],
-            segments=[
-                {
-                    "name": "segment",
-                },
-                {
-                    "name": "segment2",
-                },
-            ],
             segment_actions=[
                 {
                     "action": "create-route",
@@ -707,11 +601,23 @@ class CoreNetwork(pulumi.CustomResource):
                     "destination_cidr_blocks": ["10.1.0.0/16"],
                     "destinations": [example_us_east1.id],
                 },
+            ],
+            segments=[
+                {
+                    "name": "segment",
+                },
+                {
+                    "name": "segment2",
+                },
             ])
         example_core_network_policy_attachment = aws.networkmanager.CoreNetworkPolicyAttachment("example",
             core_network_id=example_core_network.id,
             policy_document=example.json)
         ```
+
+        ### Base Policy Example
+
+        The base policy created by `create_base_policy` looks like the following. This base policy is overridden by the policy you specify in the `networkmanager.CoreNetworkPolicyAttachment` resource.
 
         ## Import
 
@@ -721,36 +627,12 @@ class CoreNetwork(pulumi.CustomResource):
         $ pulumi import aws:networkmanager/coreNetwork:CoreNetwork example core-network-0d47f6t230mz46dy4
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.str] base_policy_document: Sets the base policy document for the core network. Refer to the [Core network policies documentation](https://docs.aws.amazon.com/network-manager/latest/cloudwan/cloudwan-policy-change-sets.html) for more information.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] base_policy_regions: List of regions to add to the base policy. The base policy created by setting the `create_base_policy` argument to `true` requires one or more regions to be set in the `edge-locations`, `location` key. If `base_policy_regions` is not specified, the region used in the base policy defaults to the region specified in the `provider` block.
-        :param pulumi.Input[_builtins.bool] create_base_policy: Whether to create a base policy when a core network is created or updated. A base policy is created and set to `LIVE` to allow attachments to the core network (e.g. VPC Attachments) before applying a policy document provided using the `networkmanager.CoreNetworkPolicyAttachment` resource. This base policy is needed if your core network does not have any `LIVE` policies and your policy document has static routes pointing to VPC attachments and you want to attach your VPCs to the core network before applying the desired policy document. Valid values are `true` or `false`. An example of this Pulumi snippet can be found above for VPC Attachment in a single region and for VPC Attachment multi-region. An example base policy is shown below. This base policy is overridden with the policy that you specify in the `networkmanager.CoreNetworkPolicyAttachment` resource.
-               
-               ```json
-               {
-               "version": "2021.12",
-               "core-network-configuration": {
-               "asn-ranges": [
-               "64512-65534"
-               ],
-               "vpn-ecmp-support": false,
-               "edge-locations": [
-               {
-               "location": "us-east-1"
-               }
-               ]
-               },
-               "segments": [
-               {
-               "name": "segment",
-               "description": "base-policy",
-               "isolate-attachments": false,
-               "require-attachment-acceptance": false
-               }
-               ]
-               }
-               ```
+        :param pulumi.Input[_builtins.bool] create_base_policy: Whether to create a base policy when a core network is created or updated. A base policy is created and set to `LIVE` to allow attachments to the core network (e.g. VPC Attachments) before applying a policy document provided using the `networkmanager.CoreNetworkPolicyAttachment` resource. This base policy is needed if your core network does not have any `LIVE` policies and your policy document has static routes pointing to VPC attachments and you want to attach your VPCs to the core network before applying the desired policy document. Valid values are `true` or `false`. An example of this Pulumi snippet can be found above for VPC Attachment in a single region and for VPC Attachment multi-region. An example base policy is shown in the Base Policy Example section. This base policy is overridden with the policy that you specify in the `networkmanager.CoreNetworkPolicyAttachment` resource.
         :param pulumi.Input[_builtins.str] description: Description of the Core Network.
         :param pulumi.Input[_builtins.str] global_network_id: ID of the global network that a core network will be a part of.
                
@@ -820,11 +702,11 @@ class CoreNetwork(pulumi.CustomResource):
 
         example_global_network = aws.networkmanager.GlobalNetwork("example")
         base = aws.networkmanager.get_core_network_policy_document(core_network_configurations=[{
-                "asn_ranges": ["65022-65534"],
                 "edge_locations": [{
                     "location": "us-west-2",
                     "asn": "65500",
                 }],
+                "asn_ranges": ["65022-65534"],
             }],
             segments=[{
                 "name": "segment",
@@ -838,20 +720,20 @@ class CoreNetwork(pulumi.CustomResource):
             subnet_arns=[__item["arn"] for __item in example_aws_subnet],
             vpc_arn=example_aws_vpc["arn"])
         example = aws.networkmanager.get_core_network_policy_document_output(core_network_configurations=[{
-                "asn_ranges": ["65022-65534"],
                 "edge_locations": [{
                     "location": "us-west-2",
                     "asn": "65500",
                 }],
-            }],
-            segments=[{
-                "name": "segment",
+                "asn_ranges": ["65022-65534"],
             }],
             segment_actions=[{
                 "action": "create-route",
                 "segment": "segment",
                 "destination_cidr_blocks": ["0.0.0.0/0"],
                 "destinations": [example_vpc_attachment.id],
+            }],
+            segments=[{
+                "name": "segment",
             }])
         example_core_network_policy_attachment = aws.networkmanager.CoreNetworkPolicyAttachment("example",
             core_network_id=example_core_network.id,
@@ -873,19 +755,19 @@ class CoreNetwork(pulumi.CustomResource):
             subnet_arns=[__item["arn"] for __item in example_aws_subnet],
             vpc_arn=example_aws_vpc["arn"])
         example = aws.networkmanager.get_core_network_policy_document_output(core_network_configurations=[{
-                "asn_ranges": ["65022-65534"],
                 "edge_locations": [{
                     "location": "us-west-2",
                 }],
-            }],
-            segments=[{
-                "name": "segment",
+                "asn_ranges": ["65022-65534"],
             }],
             segment_actions=[{
                 "action": "create-route",
                 "segment": "segment",
                 "destination_cidr_blocks": ["0.0.0.0/0"],
                 "destinations": [example_vpc_attachment.id],
+            }],
+            segments=[{
+                "name": "segment",
             }])
         example_core_network_policy_attachment = aws.networkmanager.CoreNetworkPolicyAttachment("example",
             core_network_id=example_core_network.id,
@@ -907,7 +789,6 @@ class CoreNetwork(pulumi.CustomResource):
 
         example_global_network = aws.networkmanager.GlobalNetwork("example")
         base = aws.networkmanager.get_core_network_policy_document(core_network_configurations=[{
-                "asn_ranges": ["65022-65534"],
                 "edge_locations": [
                     {
                         "location": "us-west-2",
@@ -918,6 +799,7 @@ class CoreNetwork(pulumi.CustomResource):
                         "asn": "65501",
                     },
                 ],
+                "asn_ranges": ["65022-65534"],
             }],
             segments=[{
                 "name": "segment",
@@ -935,7 +817,6 @@ class CoreNetwork(pulumi.CustomResource):
             subnet_arns=[__item["arn"] for __item in example_us_east1_aws_subnet],
             vpc_arn=example_us_east1_aws_vpc["arn"])
         example = aws.networkmanager.get_core_network_policy_document_output(core_network_configurations=[{
-                "asn_ranges": ["65022-65534"],
                 "edge_locations": [
                     {
                         "location": "us-west-2",
@@ -946,15 +827,8 @@ class CoreNetwork(pulumi.CustomResource):
                         "asn": "65501",
                     },
                 ],
+                "asn_ranges": ["65022-65534"],
             }],
-            segments=[
-                {
-                    "name": "segment",
-                },
-                {
-                    "name": "segment2",
-                },
-            ],
             segment_actions=[
                 {
                     "action": "create-route",
@@ -967,6 +841,14 @@ class CoreNetwork(pulumi.CustomResource):
                     "segment": "segment",
                     "destination_cidr_blocks": ["10.1.0.0/16"],
                     "destinations": [example_us_east1.id],
+                },
+            ],
+            segments=[
+                {
+                    "name": "segment",
+                },
+                {
+                    "name": "segment2",
                 },
             ])
         example_core_network_policy_attachment = aws.networkmanager.CoreNetworkPolicyAttachment("example",
@@ -997,7 +879,6 @@ class CoreNetwork(pulumi.CustomResource):
             subnet_arns=[__item["arn"] for __item in example_us_east1_aws_subnet],
             vpc_arn=example_us_east1_aws_vpc["arn"])
         example = aws.networkmanager.get_core_network_policy_document_output(core_network_configurations=[{
-                "asn_ranges": ["65022-65534"],
                 "edge_locations": [
                     {
                         "location": "us-west-2",
@@ -1006,15 +887,8 @@ class CoreNetwork(pulumi.CustomResource):
                         "location": "us-east-1",
                     },
                 ],
+                "asn_ranges": ["65022-65534"],
             }],
-            segments=[
-                {
-                    "name": "segment",
-                },
-                {
-                    "name": "segment2",
-                },
-            ],
             segment_actions=[
                 {
                     "action": "create-route",
@@ -1028,11 +902,23 @@ class CoreNetwork(pulumi.CustomResource):
                     "destination_cidr_blocks": ["10.1.0.0/16"],
                     "destinations": [example_us_east1.id],
                 },
+            ],
+            segments=[
+                {
+                    "name": "segment",
+                },
+                {
+                    "name": "segment2",
+                },
             ])
         example_core_network_policy_attachment = aws.networkmanager.CoreNetworkPolicyAttachment("example",
             core_network_id=example_core_network.id,
             policy_document=example.json)
         ```
+
+        ### Base Policy Example
+
+        The base policy created by `create_base_policy` looks like the following. This base policy is overridden by the policy you specify in the `networkmanager.CoreNetworkPolicyAttachment` resource.
 
         ## Import
 
@@ -1041,6 +927,7 @@ class CoreNetwork(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:networkmanager/coreNetwork:CoreNetwork example core-network-0d47f6t230mz46dy4
         ```
+
 
         :param str resource_name: The name of the resource.
         :param CoreNetworkArgs args: The arguments to use to populate this resource's properties.
@@ -1057,12 +944,12 @@ class CoreNetwork(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 base_policy_document: Optional[pulumi.Input[_builtins.str]] = None,
-                 base_policy_regions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 create_base_policy: Optional[pulumi.Input[_builtins.bool]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 global_network_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 base_policy_document: pulumi.Input[Optional[_builtins.str]] = None,
+                 base_policy_regions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 create_base_policy: pulumi.Input[Optional[_builtins.bool]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 global_network_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -1096,18 +983,18 @@ class CoreNetwork(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            base_policy_document: Optional[pulumi.Input[_builtins.str]] = None,
-            base_policy_regions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            create_base_policy: Optional[pulumi.Input[_builtins.bool]] = None,
-            created_at: Optional[pulumi.Input[_builtins.str]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            edges: Optional[pulumi.Input[Sequence[pulumi.Input[Union['CoreNetworkEdgeArgs', 'CoreNetworkEdgeArgsDict']]]]] = None,
-            global_network_id: Optional[pulumi.Input[_builtins.str]] = None,
-            segments: Optional[pulumi.Input[Sequence[pulumi.Input[Union['CoreNetworkSegmentArgs', 'CoreNetworkSegmentArgsDict']]]]] = None,
-            state: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'CoreNetwork':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            base_policy_document: pulumi.Input[Optional[_builtins.str]] = None,
+            base_policy_regions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            create_base_policy: pulumi.Input[Optional[_builtins.bool]] = None,
+            created_at: pulumi.Input[Optional[_builtins.str]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            edges: pulumi.Input[Optional[Sequence[pulumi.Input[Union['CoreNetworkEdgeArgs', 'CoreNetworkEdgeArgsDict']]]]] = None,
+            global_network_id: pulumi.Input[Optional[_builtins.str]] = None,
+            segments: pulumi.Input[Optional[Sequence[pulumi.Input[Union['CoreNetworkSegmentArgs', 'CoreNetworkSegmentArgsDict']]]]] = None,
+            state: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'CoreNetwork':
         """
         Get an existing CoreNetwork resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -1118,32 +1005,7 @@ class CoreNetwork(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] arn: Core Network ARN.
         :param pulumi.Input[_builtins.str] base_policy_document: Sets the base policy document for the core network. Refer to the [Core network policies documentation](https://docs.aws.amazon.com/network-manager/latest/cloudwan/cloudwan-policy-change-sets.html) for more information.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] base_policy_regions: List of regions to add to the base policy. The base policy created by setting the `create_base_policy` argument to `true` requires one or more regions to be set in the `edge-locations`, `location` key. If `base_policy_regions` is not specified, the region used in the base policy defaults to the region specified in the `provider` block.
-        :param pulumi.Input[_builtins.bool] create_base_policy: Whether to create a base policy when a core network is created or updated. A base policy is created and set to `LIVE` to allow attachments to the core network (e.g. VPC Attachments) before applying a policy document provided using the `networkmanager.CoreNetworkPolicyAttachment` resource. This base policy is needed if your core network does not have any `LIVE` policies and your policy document has static routes pointing to VPC attachments and you want to attach your VPCs to the core network before applying the desired policy document. Valid values are `true` or `false`. An example of this Pulumi snippet can be found above for VPC Attachment in a single region and for VPC Attachment multi-region. An example base policy is shown below. This base policy is overridden with the policy that you specify in the `networkmanager.CoreNetworkPolicyAttachment` resource.
-               
-               ```json
-               {
-               "version": "2021.12",
-               "core-network-configuration": {
-               "asn-ranges": [
-               "64512-65534"
-               ],
-               "vpn-ecmp-support": false,
-               "edge-locations": [
-               {
-               "location": "us-east-1"
-               }
-               ]
-               },
-               "segments": [
-               {
-               "name": "segment",
-               "description": "base-policy",
-               "isolate-attachments": false,
-               "require-attachment-acceptance": false
-               }
-               ]
-               }
-               ```
+        :param pulumi.Input[_builtins.bool] create_base_policy: Whether to create a base policy when a core network is created or updated. A base policy is created and set to `LIVE` to allow attachments to the core network (e.g. VPC Attachments) before applying a policy document provided using the `networkmanager.CoreNetworkPolicyAttachment` resource. This base policy is needed if your core network does not have any `LIVE` policies and your policy document has static routes pointing to VPC attachments and you want to attach your VPCs to the core network before applying the desired policy document. Valid values are `true` or `false`. An example of this Pulumi snippet can be found above for VPC Attachment in a single region and for VPC Attachment multi-region. An example base policy is shown in the Base Policy Example section. This base policy is overridden with the policy that you specify in the `networkmanager.CoreNetworkPolicyAttachment` resource.
         :param pulumi.Input[_builtins.str] created_at: Timestamp when a core network was created.
         :param pulumi.Input[_builtins.str] description: Description of the Core Network.
         :param pulumi.Input[Sequence[pulumi.Input[Union['CoreNetworkEdgeArgs', 'CoreNetworkEdgeArgsDict']]]] edges: One or more blocks detailing the edges within a core network. Detailed below.
@@ -1201,32 +1063,7 @@ class CoreNetwork(pulumi.CustomResource):
     @pulumi.getter(name="createBasePolicy")
     def create_base_policy(self) -> pulumi.Output[Optional[_builtins.bool]]:
         """
-        Whether to create a base policy when a core network is created or updated. A base policy is created and set to `LIVE` to allow attachments to the core network (e.g. VPC Attachments) before applying a policy document provided using the `networkmanager.CoreNetworkPolicyAttachment` resource. This base policy is needed if your core network does not have any `LIVE` policies and your policy document has static routes pointing to VPC attachments and you want to attach your VPCs to the core network before applying the desired policy document. Valid values are `true` or `false`. An example of this Pulumi snippet can be found above for VPC Attachment in a single region and for VPC Attachment multi-region. An example base policy is shown below. This base policy is overridden with the policy that you specify in the `networkmanager.CoreNetworkPolicyAttachment` resource.
-
-        ```json
-        {
-        "version": "2021.12",
-        "core-network-configuration": {
-        "asn-ranges": [
-        "64512-65534"
-        ],
-        "vpn-ecmp-support": false,
-        "edge-locations": [
-        {
-        "location": "us-east-1"
-        }
-        ]
-        },
-        "segments": [
-        {
-        "name": "segment",
-        "description": "base-policy",
-        "isolate-attachments": false,
-        "require-attachment-acceptance": false
-        }
-        ]
-        }
-        ```
+        Whether to create a base policy when a core network is created or updated. A base policy is created and set to `LIVE` to allow attachments to the core network (e.g. VPC Attachments) before applying a policy document provided using the `networkmanager.CoreNetworkPolicyAttachment` resource. This base policy is needed if your core network does not have any `LIVE` policies and your policy document has static routes pointing to VPC attachments and you want to attach your VPCs to the core network before applying the desired policy document. Valid values are `true` or `false`. An example of this Pulumi snippet can be found above for VPC Attachment in a single region and for VPC Attachment multi-region. An example base policy is shown in the Base Policy Example section. This base policy is overridden with the policy that you specify in the `networkmanager.CoreNetworkPolicyAttachment` resource.
         """
         return pulumi.get(self, "create_base_policy")
 

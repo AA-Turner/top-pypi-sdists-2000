@@ -23,6 +23,7 @@ import cvxpy.settings as s
 from cvxpy.constraints import SOC, NonNeg, Zero
 from cvxpy.reductions.solution import Solution, failure_solution
 from cvxpy.reductions.solvers.conic_solvers.conic_solver import ConicSolver
+from cvxpy.utilities.citations import CITATION_DICT
 
 
 class NAG(ConicSolver):
@@ -51,7 +52,7 @@ class NAG(ConicSolver):
         """The name of the solver.
         """
         return s.NAG
-    
+
     def supports_quad_obj(self) -> bool:
         """NAG supports quadratic objective.
         """
@@ -93,7 +94,7 @@ class NAG(ConicSolver):
             c, d, A, b = problem.apply_parameters()
         else:
             P, c, d, A, b = problem.apply_parameters(quad_obj=True)
-            data[s.P] = P 
+            data[s.P] = P
 
         A = -A
         data[s.C] = c.ravel()
@@ -137,7 +138,7 @@ class NAG(ConicSolver):
         if Gs:
             data[s.G] = sp.sparse.vstack(tuple(Gs))
         else:
-            data[s.G] = sp.sparse.csc_matrix((0, 0))
+            data[s.G] = sp.sparse.csc_array((0, 0))
         if hs:
             data[s.H] = np.hstack(tuple(hs))
         else:
@@ -209,7 +210,7 @@ class NAG(ConicSolver):
         # Define quadratic objective if it exists
         if s.P in data:
             P = data[s.P]
-            Put = sp.sparse.triu(P, format='csc')
+            Put = sp.sparse.csc_array(sp.sparse.triu(P, format='csc'))
             Prows, Pcols, Pvals = sp.sparse.find(Put)
             Prows = Prows + 1
             Pcols = Pcols + 1
@@ -253,9 +254,9 @@ class NAG(ConicSolver):
             opt.handle_opt_set(handle, "Monitoring File = 6")
             opt.handle_opt_set(handle, "Monitoring Level = 2")
 
-        
+
         # use_quad_obj is only for canonicalization
-        if "use_quad_obj" in solver_opts: 
+        if "use_quad_obj" in solver_opts:
             del solver_opts["use_quad_obj"]
         # Set the optional parameters
         kwargs = sorted(solver_opts.keys())
@@ -292,3 +293,13 @@ class NAG(ConicSolver):
         opt.handle_free(handle)
 
         return {'status': status, 'sln': sln}
+
+    def cite(self, data):
+        """Returns bibtex citation for the solver.
+
+        Parameters
+        ----------
+        data : dict
+            Data generated via an apply call.
+        """
+        return CITATION_DICT["NAG"]

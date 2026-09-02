@@ -21,6 +21,7 @@ from cvxpy.reductions.solution import Solution, failure_solution
 from cvxpy.reductions.solvers import utilities
 from cvxpy.reductions.solvers.conic_solvers import scs_conif
 from cvxpy.reductions.solvers.conic_solvers.conic_solver import ConicSolver
+from cvxpy.utilities.citations import CITATION_DICT
 from cvxpy.utilities.versioning import Version
 
 
@@ -93,6 +94,9 @@ class DIFFCP(scs_conif.SCS):
             status = self.STATUS_MAP[solution["info"]["status"]]
             attr[s.SOLVE_TIME] = solution["info"]["solveTime"]
             attr[s.SETUP_TIME] = solution["info"]["setupTime"]
+        elif solution["solve_method"] == s.CLARABEL:
+            status = self.STATUS_MAP[solution["info"]["status"]]
+            attr[s.SOLVE_TIME] = solution["info"]["solveTime"]
 
         attr[s.NUM_ITERS] = solution["info"]["iter"]
         attr[s.EXTRA_STATS] = solution
@@ -107,12 +111,12 @@ class DIFFCP(scs_conif.SCS):
             }
             eq_dual_vars = utilities.get_dual_values(
                 solution["y"][:inverse_data[ConicSolver.DIMS].zero],
-                self.extract_dual_value,
+                utilities.extract_dual_value,
                 inverse_data[DIFFCP.EQ_CONSTR]
             )
             ineq_dual_vars = utilities.get_dual_values(
                 solution["y"][inverse_data[ConicSolver.DIMS].zero:],
-                self.extract_dual_value,
+                utilities.extract_dual_value,
                 inverse_data[DIFFCP.NEQ_CONSTR]
             )
             dual_vars = {}
@@ -178,3 +182,13 @@ class DIFFCP(scs_conif.SCS):
         if solver_cache is not None:
             solver_cache[self.name()] = results
         return results
+
+    def cite(self, data):
+        """Returns bibtex citation for the solver.
+
+        Parameters
+        ----------
+        data : dict
+            Data generated via an apply call.
+        """
+        return CITATION_DICT["DIFFCP"]

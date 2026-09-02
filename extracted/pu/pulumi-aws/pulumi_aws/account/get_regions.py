@@ -27,13 +27,10 @@ class GetRegionsResult:
     """
     A collection of values returned by getRegions.
     """
-    def __init__(__self__, account_id=None, id=None, region_opt_status_contains=None, regions=None):
+    def __init__(__self__, account_id=None, region_opt_status_contains=None, regions=None):
         if account_id and not isinstance(account_id, str):
             raise TypeError("Expected argument 'account_id' to be a str")
         pulumi.set(__self__, "account_id", account_id)
-        if id and not isinstance(id, str):
-            raise TypeError("Expected argument 'id' to be a str")
-        pulumi.set(__self__, "id", id)
         if region_opt_status_contains and not isinstance(region_opt_status_contains, list):
             raise TypeError("Expected argument 'region_opt_status_contains' to be a list")
         pulumi.set(__self__, "region_opt_status_contains", region_opt_status_contains)
@@ -45,14 +42,6 @@ class GetRegionsResult:
     @pulumi.getter(name="accountId")
     def account_id(self) -> _builtins.str:
         return pulumi.get(self, "account_id")
-
-    @_builtins.property
-    @pulumi.getter
-    def id(self) -> _builtins.str:
-        """
-        The provider-assigned unique ID for this managed resource.
-        """
-        return pulumi.get(self, "id")
 
     @_builtins.property
     @pulumi.getter(name="regionOptStatusContains")
@@ -75,7 +64,6 @@ class AwaitableGetRegionsResult(GetRegionsResult):
             yield self
         return GetRegionsResult(
             account_id=self.account_id,
-            id=self.id,
             region_opt_status_contains=self.region_opt_status_contains,
             regions=self.regions)
 
@@ -111,11 +99,10 @@ def get_regions(account_id: Optional[_builtins.str] = None,
 
     return AwaitableGetRegionsResult(
         account_id=pulumi.get(__ret__, 'account_id'),
-        id=pulumi.get(__ret__, 'id'),
         region_opt_status_contains=pulumi.get(__ret__, 'region_opt_status_contains'),
         regions=pulumi.get(__ret__, 'regions'))
-def get_regions_output(account_id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                       region_opt_status_contains: Optional[pulumi.Input[Optional[Sequence[_builtins.str]]]] = None,
+def get_regions_output(account_id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                       region_opt_status_contains: pulumi.Input[Optional[Optional[Sequence[_builtins.str]]]] = None,
                        opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetRegionsResult]:
     """
     The `account_get_regions` data source lets you query AWS region information for any account in your AWS Organization. It uses the AWS Account REST Service to show all regions, including those that are enabled, disabled, or in the process of being enabled or disabled. You can list regions for any organization account, see all possible region opt-in statuses (`ENABLED`, `ENABLING`, `DISABLING`, `DISABLED`, `ENABLED_BY_DEFAULT`), and check which regions are being enabled or disabled.
@@ -144,6 +131,5 @@ def get_regions_output(account_id: Optional[pulumi.Input[Optional[_builtins.str]
     __ret__ = pulumi.runtime.invoke_output('aws:account/getRegions:getRegions', __args__, opts=opts, typ=GetRegionsResult)
     return __ret__.apply(lambda __response__: GetRegionsResult(
         account_id=pulumi.get(__response__, 'account_id'),
-        id=pulumi.get(__response__, 'id'),
         region_opt_status_contains=pulumi.get(__response__, 'region_opt_status_contains'),
         regions=pulumi.get(__response__, 'regions')))

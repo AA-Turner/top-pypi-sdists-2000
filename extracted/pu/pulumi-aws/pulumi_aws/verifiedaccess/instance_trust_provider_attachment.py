@@ -21,9 +21,10 @@ class InstanceTrustProviderAttachmentArgs:
     def __init__(__self__, *,
                  verifiedaccess_instance_id: pulumi.Input[_builtins.str],
                  verifiedaccess_trust_provider_id: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a InstanceTrustProviderAttachment resource.
+
         :param pulumi.Input[_builtins.str] verifiedaccess_instance_id: The ID of the Verified Access instance to attach the Trust Provider to.
         :param pulumi.Input[_builtins.str] verifiedaccess_trust_provider_id: The ID of the Verified Access trust provider.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -59,25 +60,26 @@ class InstanceTrustProviderAttachmentArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _InstanceTrustProviderAttachmentState:
     def __init__(__self__, *,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 verifiedaccess_instance_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 verifiedaccess_trust_provider_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 verifiedaccess_instance_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 verifiedaccess_trust_provider_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering InstanceTrustProviderAttachment resources.
+
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[_builtins.str] verifiedaccess_instance_id: The ID of the Verified Access instance to attach the Trust Provider to.
         :param pulumi.Input[_builtins.str] verifiedaccess_trust_provider_id: The ID of the Verified Access trust provider.
@@ -91,38 +93,38 @@ class _InstanceTrustProviderAttachmentState:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="verifiedaccessInstanceId")
-    def verifiedaccess_instance_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def verifiedaccess_instance_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the Verified Access instance to attach the Trust Provider to.
         """
         return pulumi.get(self, "verifiedaccess_instance_id")
 
     @verifiedaccess_instance_id.setter
-    def verifiedaccess_instance_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def verifiedaccess_instance_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "verifiedaccess_instance_id", value)
 
     @_builtins.property
     @pulumi.getter(name="verifiedaccessTrustProviderId")
-    def verifiedaccess_trust_provider_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def verifiedaccess_trust_provider_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the Verified Access trust provider.
         """
         return pulumi.get(self, "verifiedaccess_trust_provider_id")
 
     @verifiedaccess_trust_provider_id.setter
-    def verifiedaccess_trust_provider_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def verifiedaccess_trust_provider_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "verifiedaccess_trust_provider_id", value)
 
 
@@ -132,9 +134,9 @@ class InstanceTrustProviderAttachment(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 verifiedaccess_instance_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 verifiedaccess_trust_provider_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 verifiedaccess_instance_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 verifiedaccess_trust_provider_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing a Verified Access Instance Trust Provider Attachment.
@@ -147,12 +149,12 @@ class InstanceTrustProviderAttachment(pulumi.CustomResource):
 
         example = aws.verifiedaccess.Instance("example")
         example_trust_provider = aws.verifiedaccess.TrustProvider("example",
-            device_trust_provider_type="jamf",
-            policy_reference_name="example",
-            trust_provider_type="device",
             device_options={
                 "tenant_id": "example",
-            })
+            },
+            device_trust_provider_type="jamf",
+            policy_reference_name="example",
+            trust_provider_type="device")
         example_instance_trust_provider_attachment = aws.verifiedaccess.InstanceTrustProviderAttachment("example",
             verifiedaccess_instance_id=example.id,
             verifiedaccess_trust_provider_id=example_trust_provider.id)
@@ -165,6 +167,7 @@ class InstanceTrustProviderAttachment(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:verifiedaccess/instanceTrustProviderAttachment:InstanceTrustProviderAttachment example vai-1234567890abcdef0/vatp-8012925589
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -189,12 +192,12 @@ class InstanceTrustProviderAttachment(pulumi.CustomResource):
 
         example = aws.verifiedaccess.Instance("example")
         example_trust_provider = aws.verifiedaccess.TrustProvider("example",
-            device_trust_provider_type="jamf",
-            policy_reference_name="example",
-            trust_provider_type="device",
             device_options={
                 "tenant_id": "example",
-            })
+            },
+            device_trust_provider_type="jamf",
+            policy_reference_name="example",
+            trust_provider_type="device")
         example_instance_trust_provider_attachment = aws.verifiedaccess.InstanceTrustProviderAttachment("example",
             verifiedaccess_instance_id=example.id,
             verifiedaccess_trust_provider_id=example_trust_provider.id)
@@ -207,6 +210,7 @@ class InstanceTrustProviderAttachment(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:verifiedaccess/instanceTrustProviderAttachment:InstanceTrustProviderAttachment example vai-1234567890abcdef0/vatp-8012925589
         ```
+
 
         :param str resource_name: The name of the resource.
         :param InstanceTrustProviderAttachmentArgs args: The arguments to use to populate this resource's properties.
@@ -223,9 +227,9 @@ class InstanceTrustProviderAttachment(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 verifiedaccess_instance_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 verifiedaccess_trust_provider_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 verifiedaccess_instance_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 verifiedaccess_trust_provider_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -252,9 +256,9 @@ class InstanceTrustProviderAttachment(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            verifiedaccess_instance_id: Optional[pulumi.Input[_builtins.str]] = None,
-            verifiedaccess_trust_provider_id: Optional[pulumi.Input[_builtins.str]] = None) -> 'InstanceTrustProviderAttachment':
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            verifiedaccess_instance_id: pulumi.Input[Optional[_builtins.str]] = None,
+            verifiedaccess_trust_provider_id: pulumi.Input[Optional[_builtins.str]] = None) -> 'InstanceTrustProviderAttachment':
         """
         Get an existing InstanceTrustProviderAttachment resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

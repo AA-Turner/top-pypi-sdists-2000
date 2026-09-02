@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, Literal, Optional
+from typing import Any, Literal
+
 from workos._types import _raise_deserialize_error
 
 
@@ -13,17 +14,19 @@ class AuthenticationOAuthSucceededData:
 
     type: Literal["oauth"]
     status: Literal["succeeded"]
-    ip_address: Optional[str]
+    ip_address: str | None
     """The IP address of the request."""
-    user_agent: Optional[str]
+    user_agent: str | None
     """The user agent of the request."""
-    user_id: Optional[str]
+    user_id: str | None
     """The ID of the user."""
     email: str
     """The email address of the user."""
+    provider: str | None = None
+    """The OAuth provider used for authentication."""
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "AuthenticationOAuthSucceededData":
+    def from_dict(cls, data: dict[str, Any]) -> AuthenticationOAuthSucceededData:
         """Deserialize from a dictionary."""
         try:
             return cls(
@@ -33,13 +36,14 @@ class AuthenticationOAuthSucceededData:
                 user_agent=data["user_agent"],
                 user_id=data["user_id"],
                 email=data["email"],
+                provider=data.get("provider"),
             )
         except (KeyError, ValueError) as e:
             _raise_deserialize_error("AuthenticationOAuthSucceededData", e)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize to a dictionary."""
-        result: Dict[str, Any] = {}
+        result: dict[str, Any] = {}
         result["type"] = self.type
         result["status"] = self.status
         if self.ip_address is not None:
@@ -55,4 +59,6 @@ class AuthenticationOAuthSucceededData:
         else:
             result["user_id"] = None
         result["email"] = self.email
+        if self.provider is not None:
+            result["provider"] = self.provider
         return result

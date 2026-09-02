@@ -22,9 +22,10 @@ __all__ = ['OrganizationsAccessArgs', 'OrganizationsAccess']
 class OrganizationsAccessArgs:
     def __init__(__self__, *,
                  enabled: pulumi.Input[_builtins.bool],
-                 timeouts: Optional[pulumi.Input['OrganizationsAccessTimeoutsArgs']] = None):
+                 timeouts: pulumi.Input[Optional['OrganizationsAccessTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a OrganizationsAccess resource.
+
         :param pulumi.Input[_builtins.bool] enabled: Whether to enable organizations access for AWS User Notifications in AWS Organizations. When set to `true`, enables organizations access. When set to `false`, disables organizations access.
         """
         pulumi.set(__self__, "enabled", enabled)
@@ -45,21 +46,22 @@ class OrganizationsAccessArgs:
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['OrganizationsAccessTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['OrganizationsAccessTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['OrganizationsAccessTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['OrganizationsAccessTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _OrganizationsAccessState:
     def __init__(__self__, *,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 timeouts: Optional[pulumi.Input['OrganizationsAccessTimeoutsArgs']] = None):
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 timeouts: pulumi.Input[Optional['OrganizationsAccessTimeoutsArgs']] = None):
         """
         Input properties used for looking up and filtering OrganizationsAccess resources.
+
         :param pulumi.Input[_builtins.bool] enabled: Whether to enable organizations access for AWS User Notifications in AWS Organizations. When set to `true`, enables organizations access. When set to `false`, disables organizations access.
         """
         if enabled is not None:
@@ -69,23 +71,23 @@ class _OrganizationsAccessState:
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to enable organizations access for AWS User Notifications in AWS Organizations. When set to `true`, enables organizations access. When set to `false`, disables organizations access.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['OrganizationsAccessTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['OrganizationsAccessTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['OrganizationsAccessTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['OrganizationsAccessTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
@@ -95,8 +97,8 @@ class OrganizationsAccess(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 timeouts: Optional[pulumi.Input[Union['OrganizationsAccessTimeoutsArgs', 'OrganizationsAccessTimeoutsArgsDict']]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 timeouts: pulumi.Input[Optional[Union['OrganizationsAccessTimeoutsArgs', 'OrganizationsAccessTimeoutsArgsDict']]] = None,
                  __props__=None):
         """
         Resource for managing AWS User Notifications Organizations Access. This resource enables or disables organizations access for AWS User Notifications in AWS Organizations, allowing the service to access organization information.
@@ -123,6 +125,7 @@ class OrganizationsAccess(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:notifications/organizationsAccess:OrganizationsAccess example 123456789012
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -160,6 +163,7 @@ class OrganizationsAccess(pulumi.CustomResource):
         $ pulumi import aws:notifications/organizationsAccess:OrganizationsAccess example 123456789012
         ```
 
+
         :param str resource_name: The name of the resource.
         :param OrganizationsAccessArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -175,8 +179,8 @@ class OrganizationsAccess(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 timeouts: Optional[pulumi.Input[Union['OrganizationsAccessTimeoutsArgs', 'OrganizationsAccessTimeoutsArgsDict']]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 timeouts: pulumi.Input[Optional[Union['OrganizationsAccessTimeoutsArgs', 'OrganizationsAccessTimeoutsArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -200,8 +204,8 @@ class OrganizationsAccess(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-            timeouts: Optional[pulumi.Input[Union['OrganizationsAccessTimeoutsArgs', 'OrganizationsAccessTimeoutsArgsDict']]] = None) -> 'OrganizationsAccess':
+            enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+            timeouts: pulumi.Input[Optional[Union['OrganizationsAccessTimeoutsArgs', 'OrganizationsAccessTimeoutsArgsDict']]] = None) -> 'OrganizationsAccess':
         """
         Get an existing OrganizationsAccess resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

@@ -95,7 +95,7 @@ class GetResponsePlanResult:
     @pulumi.getter
     def engagements(self) -> Sequence[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) for the contacts and escalation plans that the response plan engages during an incident.
+        ARN for the contacts and escalation plans that the response plan engages during an incident.
         """
         return pulumi.get(self, "engagements")
 
@@ -180,7 +180,7 @@ def get_response_plan(arn: Optional[_builtins.str] = None,
     ```
 
 
-    :param _builtins.str arn: The Amazon Resource Name (ARN) of the response plan.
+    :param _builtins.str arn: ARN of the response plan.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     :param Mapping[str, _builtins.str] tags: The tags applied to the response plan.
     """
@@ -203,9 +203,9 @@ def get_response_plan(arn: Optional[_builtins.str] = None,
         name=pulumi.get(__ret__, 'name'),
         region=pulumi.get(__ret__, 'region'),
         tags=pulumi.get(__ret__, 'tags'))
-def get_response_plan_output(arn: Optional[pulumi.Input[_builtins.str]] = None,
-                             region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                             tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_response_plan_output(arn: pulumi.Input[Optional[_builtins.str]] = None,
+                             region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                             tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                              opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetResponsePlanResult]:
     """
     Use this data source to manage a response plan in AWS Systems Manager Incident Manager.
@@ -222,7 +222,7 @@ def get_response_plan_output(arn: Optional[pulumi.Input[_builtins.str]] = None,
     ```
 
 
-    :param _builtins.str arn: The Amazon Resource Name (ARN) of the response plan.
+    :param _builtins.str arn: ARN of the response plan.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     :param Mapping[str, _builtins.str] tags: The tags applied to the response plan.
     """

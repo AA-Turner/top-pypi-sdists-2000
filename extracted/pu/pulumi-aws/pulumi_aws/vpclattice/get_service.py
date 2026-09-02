@@ -27,7 +27,7 @@ class GetServiceResult:
     """
     A collection of values returned by getService.
     """
-    def __init__(__self__, arn=None, auth_type=None, certificate_arn=None, custom_domain_name=None, dns_entries=None, id=None, name=None, region=None, service_identifier=None, status=None, tags=None):
+    def __init__(__self__, arn=None, auth_type=None, certificate_arn=None, custom_domain_name=None, dns_entries=None, id=None, idle_timeout_seconds=None, name=None, region=None, service_identifier=None, status=None, tags=None):
         if arn and not isinstance(arn, str):
             raise TypeError("Expected argument 'arn' to be a str")
         pulumi.set(__self__, "arn", arn)
@@ -46,6 +46,9 @@ class GetServiceResult:
         if id and not isinstance(id, str):
             raise TypeError("Expected argument 'id' to be a str")
         pulumi.set(__self__, "id", id)
+        if idle_timeout_seconds and not isinstance(idle_timeout_seconds, int):
+            raise TypeError("Expected argument 'idle_timeout_seconds' to be a int")
+        pulumi.set(__self__, "idle_timeout_seconds", idle_timeout_seconds)
         if name and not isinstance(name, str):
             raise TypeError("Expected argument 'name' to be a str")
         pulumi.set(__self__, "name", name)
@@ -82,7 +85,7 @@ class GetServiceResult:
     @pulumi.getter(name="certificateArn")
     def certificate_arn(self) -> _builtins.str:
         """
-        Amazon Resource Name (ARN) of the certificate.
+        ARN of the certificate.
         """
         return pulumi.get(self, "certificate_arn")
 
@@ -109,6 +112,14 @@ class GetServiceResult:
         The provider-assigned unique ID for this managed resource.
         """
         return pulumi.get(self, "id")
+
+    @_builtins.property
+    @pulumi.getter(name="idleTimeoutSeconds")
+    def idle_timeout_seconds(self) -> _builtins.int:
+        """
+        Amount of time, in seconds, that a connection can remain idle (no data sent) before VPC Lattice closes it.
+        """
+        return pulumi.get(self, "idle_timeout_seconds")
 
     @_builtins.property
     @pulumi.getter
@@ -154,6 +165,7 @@ class AwaitableGetServiceResult(GetServiceResult):
             custom_domain_name=self.custom_domain_name,
             dns_entries=self.dns_entries,
             id=self.id,
+            idle_timeout_seconds=self.idle_timeout_seconds,
             name=self.name,
             region=self.region,
             service_identifier=self.service_identifier,
@@ -183,7 +195,7 @@ def get_service(name: Optional[_builtins.str] = None,
 
     :param _builtins.str name: Service name.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param _builtins.str service_identifier: ID or Amazon Resource Name (ARN) of the service.
+    :param _builtins.str service_identifier: ID or ARN of the service.
     :param Mapping[str, _builtins.str] tags: List of tags associated with the service.
     """
     __args__ = dict()
@@ -201,15 +213,16 @@ def get_service(name: Optional[_builtins.str] = None,
         custom_domain_name=pulumi.get(__ret__, 'custom_domain_name'),
         dns_entries=pulumi.get(__ret__, 'dns_entries'),
         id=pulumi.get(__ret__, 'id'),
+        idle_timeout_seconds=pulumi.get(__ret__, 'idle_timeout_seconds'),
         name=pulumi.get(__ret__, 'name'),
         region=pulumi.get(__ret__, 'region'),
         service_identifier=pulumi.get(__ret__, 'service_identifier'),
         status=pulumi.get(__ret__, 'status'),
         tags=pulumi.get(__ret__, 'tags'))
-def get_service_output(name: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                       region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                       service_identifier: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                       tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_service_output(name: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                       region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                       service_identifier: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                       tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                        opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetServiceResult]:
     """
     Data source for managing an AWS VPC Lattice Service.
@@ -228,7 +241,7 @@ def get_service_output(name: Optional[pulumi.Input[Optional[_builtins.str]]] = N
 
     :param _builtins.str name: Service name.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param _builtins.str service_identifier: ID or Amazon Resource Name (ARN) of the service.
+    :param _builtins.str service_identifier: ID or ARN of the service.
     :param Mapping[str, _builtins.str] tags: List of tags associated with the service.
     """
     __args__ = dict()
@@ -245,6 +258,7 @@ def get_service_output(name: Optional[pulumi.Input[Optional[_builtins.str]]] = N
         custom_domain_name=pulumi.get(__response__, 'custom_domain_name'),
         dns_entries=pulumi.get(__response__, 'dns_entries'),
         id=pulumi.get(__response__, 'id'),
+        idle_timeout_seconds=pulumi.get(__response__, 'idle_timeout_seconds'),
         name=pulumi.get(__response__, 'name'),
         region=pulumi.get(__response__, 'region'),
         service_identifier=pulumi.get(__response__, 'service_identifier'),

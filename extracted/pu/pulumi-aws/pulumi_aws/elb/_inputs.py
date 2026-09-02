@@ -32,15 +32,15 @@ class LoadBalancerAccessLogsArgsDict(TypedDict):
     """
     The S3 bucket name to store the logs in.
     """
-    bucket_prefix: NotRequired[pulumi.Input[_builtins.str]]
+    bucket_prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The S3 bucket prefix. Logs are stored in the root if not configured.
     """
-    enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Boolean to enable / disable `access_logs`. Default is `true`
     """
-    interval: NotRequired[pulumi.Input[_builtins.int]]
+    interval: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     The publishing interval in minutes. Valid values: `5` and `60`. Default: `60`
     """
@@ -49,9 +49,9 @@ class LoadBalancerAccessLogsArgsDict(TypedDict):
 class LoadBalancerAccessLogsArgs:
     def __init__(__self__, *,
                  bucket: pulumi.Input[_builtins.str],
-                 bucket_prefix: Optional[pulumi.Input[_builtins.str]] = None,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 interval: Optional[pulumi.Input[_builtins.int]] = None):
+                 bucket_prefix: pulumi.Input[Optional[_builtins.str]] = None,
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 interval: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.str] bucket: The S3 bucket name to store the logs in.
         :param pulumi.Input[_builtins.str] bucket_prefix: The S3 bucket prefix. Logs are stored in the root if not configured.
@@ -80,38 +80,38 @@ class LoadBalancerAccessLogsArgs:
 
     @_builtins.property
     @pulumi.getter(name="bucketPrefix")
-    def bucket_prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def bucket_prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The S3 bucket prefix. Logs are stored in the root if not configured.
         """
         return pulumi.get(self, "bucket_prefix")
 
     @bucket_prefix.setter
-    def bucket_prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def bucket_prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "bucket_prefix", value)
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Boolean to enable / disable `access_logs`. Default is `true`
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def interval(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def interval(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         The publishing interval in minutes. Valid values: `5` and `60`. Default: `60`
         """
         return pulumi.get(self, "interval")
 
     @interval.setter
-    def interval(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def interval(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "interval", value)
 
 
@@ -134,6 +134,8 @@ class LoadBalancerHealthCheckArgsDict(TypedDict):
     timeout: pulumi.Input[_builtins.int]
     """
     The length of time before the check times out.
+
+    > **Note:** If the ARN of the `ssl_certificate_id` references a certificate signed by an ECDSA key, ELB only supports the P256 and P384 curves. Using a certificate signed by a different curve could produce `ERR_SSL_VERSION_OR_CIPHER_MISMATCH` in your browser.
     """
     unhealthy_threshold: pulumi.Input[_builtins.int]
     """
@@ -156,6 +158,8 @@ class LoadBalancerHealthCheckArgs:
                * `HTTP`, `HTTPS` - PORT and PATH are required
                * `TCP`, `SSL` - PORT is required, PATH is not supported
         :param pulumi.Input[_builtins.int] timeout: The length of time before the check times out.
+               
+               > **Note:** If the ARN of the `ssl_certificate_id` references a certificate signed by an ECDSA key, ELB only supports the P256 and P384 curves. Using a certificate signed by a different curve could produce `ERR_SSL_VERSION_OR_CIPHER_MISMATCH` in your browser.
         :param pulumi.Input[_builtins.int] unhealthy_threshold: The number of checks before the instance is declared unhealthy.
         """
         pulumi.set(__self__, "healthy_threshold", healthy_threshold)
@@ -208,6 +212,8 @@ class LoadBalancerHealthCheckArgs:
     def timeout(self) -> pulumi.Input[_builtins.int]:
         """
         The length of time before the check times out.
+
+        > **Note:** If the ARN of the `ssl_certificate_id` references a certificate signed by an ECDSA key, ELB only supports the P256 and P384 curves. Using a certificate signed by a different curve could produce `ERR_SSL_VERSION_OR_CIPHER_MISMATCH` in your browser.
         """
         return pulumi.get(self, "timeout")
 
@@ -247,7 +253,7 @@ class LoadBalancerListenerArgsDict(TypedDict):
     The protocol to listen on. Valid values are `HTTP`,
     `HTTPS`, `TCP`, or `SSL`
     """
-    ssl_certificate_id: NotRequired[pulumi.Input[_builtins.str]]
+    ssl_certificate_id: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The ARN of an SSL certificate you have
     uploaded to AWS IAM. **Note ECDSA-specific restrictions below.  Only valid when `lb_protocol` is either HTTPS or SSL**
@@ -260,7 +266,7 @@ class LoadBalancerListenerArgs:
                  instance_protocol: pulumi.Input[_builtins.str],
                  lb_port: pulumi.Input[_builtins.int],
                  lb_protocol: pulumi.Input[_builtins.str],
-                 ssl_certificate_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 ssl_certificate_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.int] instance_port: The port on the instance to route to
         :param pulumi.Input[_builtins.str] instance_protocol: The protocol to use to the instance. Valid
@@ -330,7 +336,7 @@ class LoadBalancerListenerArgs:
 
     @_builtins.property
     @pulumi.getter(name="sslCertificateId")
-    def ssl_certificate_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def ssl_certificate_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of an SSL certificate you have
         uploaded to AWS IAM. **Note ECDSA-specific restrictions below.  Only valid when `lb_protocol` is either HTTPS or SSL**
@@ -338,19 +344,19 @@ class LoadBalancerListenerArgs:
         return pulumi.get(self, "ssl_certificate_id")
 
     @ssl_certificate_id.setter
-    def ssl_certificate_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def ssl_certificate_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "ssl_certificate_id", value)
 
 
 class LoadBalancerPolicyPolicyAttributeArgsDict(TypedDict):
-    name: NotRequired[pulumi.Input[_builtins.str]]
-    value: NotRequired[pulumi.Input[_builtins.str]]
+    name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    value: NotRequired[pulumi.Input[Optional[_builtins.str]]]
 
 @pulumi.input_type
 class LoadBalancerPolicyPolicyAttributeArgs:
     def __init__(__self__, *,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 value: Optional[pulumi.Input[_builtins.str]] = None):
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 value: pulumi.Input[Optional[_builtins.str]] = None):
         if name is not None:
             pulumi.set(__self__, "name", name)
         if value is not None:
@@ -358,20 +364,20 @@ class LoadBalancerPolicyPolicyAttributeArgs:
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def value(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def value(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "value")
 
     @value.setter
-    def value(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def value(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "value", value)
 
 

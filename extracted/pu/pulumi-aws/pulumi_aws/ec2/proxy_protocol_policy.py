@@ -21,9 +21,10 @@ class ProxyProtocolPolicyArgs:
     def __init__(__self__, *,
                  instance_ports: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
                  load_balancer: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a ProxyProtocolPolicy resource.
+
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] instance_ports: List of instance ports to which the policy
                should be applied. This can be specified if the protocol is SSL or TCP.
         :param pulumi.Input[_builtins.str] load_balancer: The load balancer to which the policy
@@ -63,25 +64,26 @@ class ProxyProtocolPolicyArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _ProxyProtocolPolicyState:
     def __init__(__self__, *,
-                 instance_ports: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 load_balancer: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 instance_ports: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 load_balancer: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering ProxyProtocolPolicy resources.
+
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] instance_ports: List of instance ports to which the policy
                should be applied. This can be specified if the protocol is SSL or TCP.
         :param pulumi.Input[_builtins.str] load_balancer: The load balancer to which the policy
@@ -97,7 +99,7 @@ class _ProxyProtocolPolicyState:
 
     @_builtins.property
     @pulumi.getter(name="instancePorts")
-    def instance_ports(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def instance_ports(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of instance ports to which the policy
         should be applied. This can be specified if the protocol is SSL or TCP.
@@ -105,12 +107,12 @@ class _ProxyProtocolPolicyState:
         return pulumi.get(self, "instance_ports")
 
     @instance_ports.setter
-    def instance_ports(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def instance_ports(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "instance_ports", value)
 
     @_builtins.property
     @pulumi.getter(name="loadBalancer")
-    def load_balancer(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def load_balancer(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The load balancer to which the policy
         should be attached.
@@ -118,19 +120,19 @@ class _ProxyProtocolPolicyState:
         return pulumi.get(self, "load_balancer")
 
     @load_balancer.setter
-    def load_balancer(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def load_balancer(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "load_balancer", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -140,9 +142,9 @@ class ProxyProtocolPolicy(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 instance_ports: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 load_balancer: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 instance_ports: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 load_balancer: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides a proxy protocol policy, which allows an ELB to carry a client connection information to a backend.
@@ -154,8 +156,6 @@ class ProxyProtocolPolicy(pulumi.CustomResource):
         import pulumi_aws as aws
 
         lb = aws.elb.LoadBalancer("lb",
-            name="test-lb",
-            availability_zones=["us-east-1a"],
             listeners=[
                 {
                     "instance_port": 25,
@@ -169,7 +169,9 @@ class ProxyProtocolPolicy(pulumi.CustomResource):
                     "lb_port": 587,
                     "lb_protocol": "tcp",
                 },
-            ])
+            ],
+            name="test-lb",
+            availability_zones=["us-east-1a"])
         smtp = aws.ec2.ProxyProtocolPolicy("smtp",
             load_balancer=lb.name,
             instance_ports=[
@@ -177,6 +179,7 @@ class ProxyProtocolPolicy(pulumi.CustomResource):
                 "587",
             ])
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -202,8 +205,6 @@ class ProxyProtocolPolicy(pulumi.CustomResource):
         import pulumi_aws as aws
 
         lb = aws.elb.LoadBalancer("lb",
-            name="test-lb",
-            availability_zones=["us-east-1a"],
             listeners=[
                 {
                     "instance_port": 25,
@@ -217,7 +218,9 @@ class ProxyProtocolPolicy(pulumi.CustomResource):
                     "lb_port": 587,
                     "lb_protocol": "tcp",
                 },
-            ])
+            ],
+            name="test-lb",
+            availability_zones=["us-east-1a"])
         smtp = aws.ec2.ProxyProtocolPolicy("smtp",
             load_balancer=lb.name,
             instance_ports=[
@@ -225,6 +228,7 @@ class ProxyProtocolPolicy(pulumi.CustomResource):
                 "587",
             ])
         ```
+
 
         :param str resource_name: The name of the resource.
         :param ProxyProtocolPolicyArgs args: The arguments to use to populate this resource's properties.
@@ -241,9 +245,9 @@ class ProxyProtocolPolicy(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 instance_ports: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 load_balancer: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 instance_ports: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 load_balancer: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -270,9 +274,9 @@ class ProxyProtocolPolicy(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            instance_ports: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            load_balancer: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'ProxyProtocolPolicy':
+            instance_ports: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            load_balancer: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'ProxyProtocolPolicy':
         """
         Get an existing ProxyProtocolPolicy resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

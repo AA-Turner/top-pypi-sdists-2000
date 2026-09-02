@@ -44,6 +44,11 @@ __all__ = [
     'ReplicatorKafkaCluster',
     'ReplicatorKafkaClusterAmazonMskCluster',
     'ReplicatorKafkaClusterVpcConfig',
+    'ReplicatorLogDelivery',
+    'ReplicatorLogDeliveryReplicatorLogDelivery',
+    'ReplicatorLogDeliveryReplicatorLogDeliveryCloudwatchLogs',
+    'ReplicatorLogDeliveryReplicatorLogDeliveryFirehose',
+    'ReplicatorLogDeliveryReplicatorLogDeliveryS3',
     'ReplicatorReplicationInfoList',
     'ReplicatorReplicationInfoListConsumerGroupReplication',
     'ReplicatorReplicationInfoListTopicReplication',
@@ -53,6 +58,7 @@ __all__ = [
     'ServerlessClusterClientAuthenticationSasl',
     'ServerlessClusterClientAuthenticationSaslIam',
     'ServerlessClusterVpcConfig',
+    'TopicTimeouts',
     'GetBrokerNodesNodeInfoListResult',
     'GetClusterBrokerNodeGroupInfoResult',
     'GetClusterBrokerNodeGroupInfoConnectivityInfoResult',
@@ -107,7 +113,7 @@ class ClusterBrokerNodeGroupInfo(dict):
         :param Sequence[_builtins.str] security_groups: A list of the security groups to associate with the elastic network interfaces to control who can communicate with the cluster.
         :param _builtins.str az_distribution: The distribution of broker nodes across availability zones ([documentation](https://docs.aws.amazon.com/msk/1.0/apireference/clusters.html#clusters-model-brokerazdistribution)). Currently, the only valid value is `DEFAULT`.
         :param 'ClusterBrokerNodeGroupInfoConnectivityInfoArgs' connectivity_info: Information about the cluster access configuration. See broker_node_group_info connectivity_info Argument Reference below. For security reasons, you can't turn on public access while creating an MSK cluster. However, you can update an existing cluster to make it publicly accessible. You can also create a new cluster and then update it to make it publicly accessible ([documentation](https://docs.aws.amazon.com/msk/latest/developerguide/public-access.html)).
-        :param 'ClusterBrokerNodeGroupInfoStorageInfoArgs' storage_info: A block that contains information about storage volumes attached to MSK broker nodes. See broker_node_group_info storage_info Argument Reference below.
+        :param 'ClusterBrokerNodeGroupInfoStorageInfoArgs' storage_info: A block that contains information about storage volumes attached to MSK broker nodes. See broker_node_group_info storage_info Argument Reference below. This block must not be specified when an Express instance type is specified for `instance_type`.
         """
         pulumi.set(__self__, "client_subnets", client_subnets)
         pulumi.set(__self__, "instance_type", instance_type)
@@ -163,7 +169,7 @@ class ClusterBrokerNodeGroupInfo(dict):
     @pulumi.getter(name="storageInfo")
     def storage_info(self) -> Optional['outputs.ClusterBrokerNodeGroupInfoStorageInfo']:
         """
-        A block that contains information about storage volumes attached to MSK broker nodes. See broker_node_group_info storage_info Argument Reference below.
+        A block that contains information about storage volumes attached to MSK broker nodes. See broker_node_group_info storage_info Argument Reference below. This block must not be specified when an Express instance type is specified for `instance_type`.
         """
         return pulumi.get(self, "storage_info")
 
@@ -173,7 +179,9 @@ class ClusterBrokerNodeGroupInfoConnectivityInfo(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "publicAccess":
+        if key == "networkType":
+            suggest = "network_type"
+        elif key == "publicAccess":
             suggest = "public_access"
         elif key == "vpcConnectivity":
             suggest = "vpc_connectivity"
@@ -190,16 +198,28 @@ class ClusterBrokerNodeGroupInfoConnectivityInfo(dict):
         return super().get(key, default)
 
     def __init__(__self__, *,
+                 network_type: Optional[_builtins.str] = None,
                  public_access: Optional['outputs.ClusterBrokerNodeGroupInfoConnectivityInfoPublicAccess'] = None,
                  vpc_connectivity: Optional['outputs.ClusterBrokerNodeGroupInfoConnectivityInfoVpcConnectivity'] = None):
         """
+        :param _builtins.str network_type: Network type of the cluster. Valid values are: `IPV4` or `DUAL`. Default value: `IPV4`. Only updating from `IPV4` to `DUAL` is allowed.
         :param 'ClusterBrokerNodeGroupInfoConnectivityInfoPublicAccessArgs' public_access: Access control settings for brokers. See connectivity_info public_access Argument Reference below.
         :param 'ClusterBrokerNodeGroupInfoConnectivityInfoVpcConnectivityArgs' vpc_connectivity: VPC connectivity access control for brokers. See connectivity_info vpc_connectivity Argument Reference below.
         """
+        if network_type is not None:
+            pulumi.set(__self__, "network_type", network_type)
         if public_access is not None:
             pulumi.set(__self__, "public_access", public_access)
         if vpc_connectivity is not None:
             pulumi.set(__self__, "vpc_connectivity", vpc_connectivity)
+
+    @_builtins.property
+    @pulumi.getter(name="networkType")
+    def network_type(self) -> Optional[_builtins.str]:
+        """
+        Network type of the cluster. Valid values are: `IPV4` or `DUAL`. Default value: `IPV4`. Only updating from `IPV4` to `DUAL` is allowed.
+        """
+        return pulumi.get(self, "network_type")
 
     @_builtins.property
     @pulumi.getter(name="publicAccess")
@@ -541,7 +561,7 @@ class ClusterClientAuthenticationTls(dict):
     def __init__(__self__, *,
                  certificate_authority_arns: Optional[Sequence[_builtins.str]] = None):
         """
-        :param Sequence[_builtins.str] certificate_authority_arns: List of ACM Certificate Authority Amazon Resource Names (ARNs).
+        :param Sequence[_builtins.str] certificate_authority_arns: List of ACM Certificate Authority ARNs.
         """
         if certificate_authority_arns is not None:
             pulumi.set(__self__, "certificate_authority_arns", certificate_authority_arns)
@@ -550,7 +570,7 @@ class ClusterClientAuthenticationTls(dict):
     @pulumi.getter(name="certificateAuthorityArns")
     def certificate_authority_arns(self) -> Optional[Sequence[_builtins.str]]:
         """
-        List of ACM Certificate Authority Amazon Resource Names (ARNs).
+        List of ACM Certificate Authority ARNs.
         """
         return pulumi.get(self, "certificate_authority_arns")
 
@@ -561,7 +581,7 @@ class ClusterConfigurationInfo(dict):
                  arn: _builtins.str,
                  revision: _builtins.int):
         """
-        :param _builtins.str arn: Amazon Resource Name (ARN) of the MSK Configuration to use in the cluster.
+        :param _builtins.str arn: ARN of the MSK Configuration to use in the cluster.
         :param _builtins.int revision: Revision of the MSK Configuration to use in the cluster.
         """
         pulumi.set(__self__, "arn", arn)
@@ -571,7 +591,7 @@ class ClusterConfigurationInfo(dict):
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        Amazon Resource Name (ARN) of the MSK Configuration to use in the cluster.
+        ARN of the MSK Configuration to use in the cluster.
         """
         return pulumi.get(self, "arn")
 
@@ -1171,7 +1191,7 @@ class ReplicatorKafkaClusterVpcConfig(dict):
                  subnet_ids: Sequence[_builtins.str],
                  security_groups_ids: Optional[Sequence[_builtins.str]] = None):
         """
-        :param Sequence[_builtins.str] subnet_ids: The list of subnets to connect to in the virtual private cloud (VPC). AWS creates elastic network interfaces inside these subnets to allow communication between your Kafka Cluster and the replicator.
+        :param Sequence[_builtins.str] subnet_ids: List of subnets to connect to in the VPC. AWS creates elastic network interfaces inside these subnets to allow communication between your Kafka Cluster and the replicator.
         :param Sequence[_builtins.str] security_groups_ids: The AWS security groups to associate with the ENIs used by the replicator. If a security group is not specified, the default security group associated with the VPC is used.
         """
         pulumi.set(__self__, "subnet_ids", subnet_ids)
@@ -1182,7 +1202,7 @@ class ReplicatorKafkaClusterVpcConfig(dict):
     @pulumi.getter(name="subnetIds")
     def subnet_ids(self) -> Sequence[_builtins.str]:
         """
-        The list of subnets to connect to in the virtual private cloud (VPC). AWS creates elastic network interfaces inside these subnets to allow communication between your Kafka Cluster and the replicator.
+        List of subnets to connect to in the VPC. AWS creates elastic network interfaces inside these subnets to allow communication between your Kafka Cluster and the replicator.
         """
         return pulumi.get(self, "subnet_ids")
 
@@ -1193,6 +1213,238 @@ class ReplicatorKafkaClusterVpcConfig(dict):
         The AWS security groups to associate with the ENIs used by the replicator. If a security group is not specified, the default security group associated with the VPC is used.
         """
         return pulumi.get(self, "security_groups_ids")
+
+
+@pulumi.output_type
+class ReplicatorLogDelivery(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "replicatorLogDelivery":
+            suggest = "replicator_log_delivery"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ReplicatorLogDelivery. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ReplicatorLogDelivery.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ReplicatorLogDelivery.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 replicator_log_delivery: Optional['outputs.ReplicatorLogDeliveryReplicatorLogDelivery'] = None):
+        """
+        :param 'ReplicatorLogDeliveryReplicatorLogDeliveryArgs' replicator_log_delivery: Configuration block for replicator log delivery. Detailed below.
+        """
+        if replicator_log_delivery is not None:
+            pulumi.set(__self__, "replicator_log_delivery", replicator_log_delivery)
+
+    @_builtins.property
+    @pulumi.getter(name="replicatorLogDelivery")
+    def replicator_log_delivery(self) -> Optional['outputs.ReplicatorLogDeliveryReplicatorLogDelivery']:
+        """
+        Configuration block for replicator log delivery. Detailed below.
+        """
+        return pulumi.get(self, "replicator_log_delivery")
+
+
+@pulumi.output_type
+class ReplicatorLogDeliveryReplicatorLogDelivery(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "cloudwatchLogs":
+            suggest = "cloudwatch_logs"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ReplicatorLogDeliveryReplicatorLogDelivery. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ReplicatorLogDeliveryReplicatorLogDelivery.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ReplicatorLogDeliveryReplicatorLogDelivery.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 cloudwatch_logs: Optional['outputs.ReplicatorLogDeliveryReplicatorLogDeliveryCloudwatchLogs'] = None,
+                 firehose: Optional['outputs.ReplicatorLogDeliveryReplicatorLogDeliveryFirehose'] = None,
+                 s3: Optional['outputs.ReplicatorLogDeliveryReplicatorLogDeliveryS3'] = None):
+        """
+        :param 'ReplicatorLogDeliveryReplicatorLogDeliveryCloudwatchLogsArgs' cloudwatch_logs: Configuration block for replicator log delivery to Amazon CloudWatch Logs. Detailed below.
+        :param 'ReplicatorLogDeliveryReplicatorLogDeliveryFirehoseArgs' firehose: Configuration block for replicator log delivery to Amazon Data Firehose. Detailed below.
+        :param 'ReplicatorLogDeliveryReplicatorLogDeliveryS3Args' s3: Configuration block for replicator log delivery to Amazon S3. Detailed below.
+        """
+        if cloudwatch_logs is not None:
+            pulumi.set(__self__, "cloudwatch_logs", cloudwatch_logs)
+        if firehose is not None:
+            pulumi.set(__self__, "firehose", firehose)
+        if s3 is not None:
+            pulumi.set(__self__, "s3", s3)
+
+    @_builtins.property
+    @pulumi.getter(name="cloudwatchLogs")
+    def cloudwatch_logs(self) -> Optional['outputs.ReplicatorLogDeliveryReplicatorLogDeliveryCloudwatchLogs']:
+        """
+        Configuration block for replicator log delivery to Amazon CloudWatch Logs. Detailed below.
+        """
+        return pulumi.get(self, "cloudwatch_logs")
+
+    @_builtins.property
+    @pulumi.getter
+    def firehose(self) -> Optional['outputs.ReplicatorLogDeliveryReplicatorLogDeliveryFirehose']:
+        """
+        Configuration block for replicator log delivery to Amazon Data Firehose. Detailed below.
+        """
+        return pulumi.get(self, "firehose")
+
+    @_builtins.property
+    @pulumi.getter
+    def s3(self) -> Optional['outputs.ReplicatorLogDeliveryReplicatorLogDeliveryS3']:
+        """
+        Configuration block for replicator log delivery to Amazon S3. Detailed below.
+        """
+        return pulumi.get(self, "s3")
+
+
+@pulumi.output_type
+class ReplicatorLogDeliveryReplicatorLogDeliveryCloudwatchLogs(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "logGroup":
+            suggest = "log_group"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ReplicatorLogDeliveryReplicatorLogDeliveryCloudwatchLogs. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ReplicatorLogDeliveryReplicatorLogDeliveryCloudwatchLogs.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ReplicatorLogDeliveryReplicatorLogDeliveryCloudwatchLogs.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 enabled: _builtins.bool,
+                 log_group: Optional[_builtins.str] = None):
+        """
+        :param _builtins.bool enabled: Boolean whether to enable log delivery to CloudWatch Logs.
+        :param _builtins.str log_group: Name of CloudWatch Logs log group. Required if `enabled` is `true`. If `enabled` is `false`, this value must not be set.
+        """
+        pulumi.set(__self__, "enabled", enabled)
+        if log_group is not None:
+            pulumi.set(__self__, "log_group", log_group)
+
+    @_builtins.property
+    @pulumi.getter
+    def enabled(self) -> _builtins.bool:
+        """
+        Boolean whether to enable log delivery to CloudWatch Logs.
+        """
+        return pulumi.get(self, "enabled")
+
+    @_builtins.property
+    @pulumi.getter(name="logGroup")
+    def log_group(self) -> Optional[_builtins.str]:
+        """
+        Name of CloudWatch Logs log group. Required if `enabled` is `true`. If `enabled` is `false`, this value must not be set.
+        """
+        return pulumi.get(self, "log_group")
+
+
+@pulumi.output_type
+class ReplicatorLogDeliveryReplicatorLogDeliveryFirehose(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "deliveryStream":
+            suggest = "delivery_stream"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ReplicatorLogDeliveryReplicatorLogDeliveryFirehose. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ReplicatorLogDeliveryReplicatorLogDeliveryFirehose.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ReplicatorLogDeliveryReplicatorLogDeliveryFirehose.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 enabled: _builtins.bool,
+                 delivery_stream: Optional[_builtins.str] = None):
+        """
+        :param _builtins.bool enabled: Boolean whether to enable log delivery to Firehose.
+        :param _builtins.str delivery_stream: Name of the Firehose delivery stream. Required if `enabled` is `true`. If `enabled` is `false`, this value must not be set.
+        """
+        pulumi.set(__self__, "enabled", enabled)
+        if delivery_stream is not None:
+            pulumi.set(__self__, "delivery_stream", delivery_stream)
+
+    @_builtins.property
+    @pulumi.getter
+    def enabled(self) -> _builtins.bool:
+        """
+        Boolean whether to enable log delivery to Firehose.
+        """
+        return pulumi.get(self, "enabled")
+
+    @_builtins.property
+    @pulumi.getter(name="deliveryStream")
+    def delivery_stream(self) -> Optional[_builtins.str]:
+        """
+        Name of the Firehose delivery stream. Required if `enabled` is `true`. If `enabled` is `false`, this value must not be set.
+        """
+        return pulumi.get(self, "delivery_stream")
+
+
+@pulumi.output_type
+class ReplicatorLogDeliveryReplicatorLogDeliveryS3(dict):
+    def __init__(__self__, *,
+                 enabled: _builtins.bool,
+                 bucket: Optional[_builtins.str] = None,
+                 prefix: Optional[_builtins.str] = None):
+        """
+        :param _builtins.bool enabled: Boolean whether to enable log delivery to S3.
+        :param _builtins.str bucket: Name of the S3 bucket. Required if `enabled` is `true`. If `enabled` is `false`, this value must not be set.
+        :param _builtins.str prefix: Prefix to use when storing replicator logs in S3. If `enabled` is `false`, this value must not be set.
+        """
+        pulumi.set(__self__, "enabled", enabled)
+        if bucket is not None:
+            pulumi.set(__self__, "bucket", bucket)
+        if prefix is not None:
+            pulumi.set(__self__, "prefix", prefix)
+
+    @_builtins.property
+    @pulumi.getter
+    def enabled(self) -> _builtins.bool:
+        """
+        Boolean whether to enable log delivery to S3.
+        """
+        return pulumi.get(self, "enabled")
+
+    @_builtins.property
+    @pulumi.getter
+    def bucket(self) -> Optional[_builtins.str]:
+        """
+        Name of the S3 bucket. Required if `enabled` is `true`. If `enabled` is `false`, this value must not be set.
+        """
+        return pulumi.get(self, "bucket")
+
+    @_builtins.property
+    @pulumi.getter
+    def prefix(self) -> Optional[_builtins.str]:
+        """
+        Prefix to use when storing replicator logs in S3. If `enabled` is `false`, this value must not be set.
+        """
+        return pulumi.get(self, "prefix")
 
 
 @pulumi.output_type
@@ -1309,6 +1561,8 @@ class ReplicatorReplicationInfoListConsumerGroupReplication(dict):
         suggest = None
         if key == "consumerGroupsToReplicates":
             suggest = "consumer_groups_to_replicates"
+        elif key == "consumerGroupOffsetSyncMode":
+            suggest = "consumer_group_offset_sync_mode"
         elif key == "consumerGroupsToExcludes":
             suggest = "consumer_groups_to_excludes"
         elif key == "detectAndCopyNewConsumerGroups":
@@ -1329,16 +1583,20 @@ class ReplicatorReplicationInfoListConsumerGroupReplication(dict):
 
     def __init__(__self__, *,
                  consumer_groups_to_replicates: Sequence[_builtins.str],
+                 consumer_group_offset_sync_mode: Optional[_builtins.str] = None,
                  consumer_groups_to_excludes: Optional[Sequence[_builtins.str]] = None,
                  detect_and_copy_new_consumer_groups: Optional[_builtins.bool] = None,
                  synchronise_consumer_group_offsets: Optional[_builtins.bool] = None):
         """
         :param Sequence[_builtins.str] consumer_groups_to_replicates: List of regular expression patterns indicating the consumer groups to copy.
+        :param _builtins.str consumer_group_offset_sync_mode: Consumer group offset synchronization mode. Valid values are `LEGACY` and `ENHANCED`. With `LEGACY`, offsets are synchronized when producers write to the source cluster. With `ENHANCED`, consumer offsets are synchronized regardless of producer location. `ENHANCED` requires a corresponding replicator that replicates data from the target cluster to the source cluster and requires `topic_name_configuration.type` to be set to `IDENTICAL`. Defaults to `LEGACY`. Changing this value will force a new resource.
         :param Sequence[_builtins.str] consumer_groups_to_excludes: List of regular expression patterns indicating the consumer groups that should not be replicated.
         :param _builtins.bool detect_and_copy_new_consumer_groups: Whether to periodically check for new consumer groups.
         :param _builtins.bool synchronise_consumer_group_offsets: Whether to periodically write the translated offsets to __consumer_offsets topic in target cluster.
         """
         pulumi.set(__self__, "consumer_groups_to_replicates", consumer_groups_to_replicates)
+        if consumer_group_offset_sync_mode is not None:
+            pulumi.set(__self__, "consumer_group_offset_sync_mode", consumer_group_offset_sync_mode)
         if consumer_groups_to_excludes is not None:
             pulumi.set(__self__, "consumer_groups_to_excludes", consumer_groups_to_excludes)
         if detect_and_copy_new_consumer_groups is not None:
@@ -1353,6 +1611,14 @@ class ReplicatorReplicationInfoListConsumerGroupReplication(dict):
         List of regular expression patterns indicating the consumer groups to copy.
         """
         return pulumi.get(self, "consumer_groups_to_replicates")
+
+    @_builtins.property
+    @pulumi.getter(name="consumerGroupOffsetSyncMode")
+    def consumer_group_offset_sync_mode(self) -> Optional[_builtins.str]:
+        """
+        Consumer group offset synchronization mode. Valid values are `LEGACY` and `ENHANCED`. With `LEGACY`, offsets are synchronized when producers write to the source cluster. With `ENHANCED`, consumer offsets are synchronized regardless of producer location. `ENHANCED` requires a corresponding replicator that replicates data from the target cluster to the source cluster and requires `topic_name_configuration.type` to be set to `IDENTICAL`. Defaults to `LEGACY`. Changing this value will force a new resource.
+        """
+        return pulumi.get(self, "consumer_group_offset_sync_mode")
 
     @_builtins.property
     @pulumi.getter(name="consumerGroupsToExcludes")
@@ -1640,6 +1906,49 @@ class ServerlessClusterVpcConfig(dict):
 
 
 @pulumi.output_type
+class TopicTimeouts(dict):
+    def __init__(__self__, *,
+                 create: Optional[_builtins.str] = None,
+                 delete: Optional[_builtins.str] = None,
+                 update: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        :param _builtins.str delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        :param _builtins.str update: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        if create is not None:
+            pulumi.set(__self__, "create", create)
+        if delete is not None:
+            pulumi.set(__self__, "delete", delete)
+        if update is not None:
+            pulumi.set(__self__, "update", update)
+
+    @_builtins.property
+    @pulumi.getter
+    def create(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "create")
+
+    @_builtins.property
+    @pulumi.getter
+    def delete(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        return pulumi.get(self, "delete")
+
+    @_builtins.property
+    @pulumi.getter
+    def update(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "update")
+
+
+@pulumi.output_type
 class GetBrokerNodesNodeInfoListResult(dict):
     def __init__(__self__, *,
                  attached_eni_id: _builtins.str,
@@ -1652,7 +1961,7 @@ class GetBrokerNodesNodeInfoListResult(dict):
         :param _builtins.str attached_eni_id: Attached elastic network interface of the broker
         :param _builtins.float broker_id: ID of the broker
         :param _builtins.str client_subnet: Client subnet to which this broker node belongs
-        :param _builtins.str client_vpc_ip_address: The client virtual private cloud (VPC) IP address
+        :param _builtins.str client_vpc_ip_address: Client VPC IP address
         :param Sequence[_builtins.str] endpoints: Set of endpoints for accessing the broker. This does not include ports
         :param _builtins.str node_arn: ARN of the node
         """
@@ -1691,7 +2000,7 @@ class GetBrokerNodesNodeInfoListResult(dict):
     @pulumi.getter(name="clientVpcIpAddress")
     def client_vpc_ip_address(self) -> _builtins.str:
         """
-        The client virtual private cloud (VPC) IP address
+        Client VPC IP address
         """
         return pulumi.get(self, "client_vpc_ip_address")
 
@@ -1762,10 +2071,17 @@ class GetClusterBrokerNodeGroupInfoResult(dict):
 @pulumi.output_type
 class GetClusterBrokerNodeGroupInfoConnectivityInfoResult(dict):
     def __init__(__self__, *,
+                 network_type: _builtins.str,
                  public_accesses: Sequence['outputs.GetClusterBrokerNodeGroupInfoConnectivityInfoPublicAccessResult'],
                  vpc_connectivities: Sequence['outputs.GetClusterBrokerNodeGroupInfoConnectivityInfoVpcConnectivityResult']):
+        pulumi.set(__self__, "network_type", network_type)
         pulumi.set(__self__, "public_accesses", public_accesses)
         pulumi.set(__self__, "vpc_connectivities", vpc_connectivities)
+
+    @_builtins.property
+    @pulumi.getter(name="networkType")
+    def network_type(self) -> _builtins.str:
+        return pulumi.get(self, "network_type")
 
     @_builtins.property
     @pulumi.getter(name="publicAccesses")

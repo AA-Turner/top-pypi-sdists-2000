@@ -24,11 +24,12 @@ class ServiceRegionArgs:
                  directory_id: pulumi.Input[_builtins.str],
                  region_name: pulumi.Input[_builtins.str],
                  vpc_settings: pulumi.Input['ServiceRegionVpcSettingsArgs'],
-                 desired_number_of_domain_controllers: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 desired_number_of_domain_controllers: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a ServiceRegion resource.
+
         :param pulumi.Input[_builtins.str] directory_id: The identifier of the directory to which you want to add Region replication.
         :param pulumi.Input[_builtins.str] region_name: The name of the Region where you want to add domain controllers for replication.
         :param pulumi.Input['ServiceRegionVpcSettingsArgs'] vpc_settings: VPC information in the replicated Region. Detailed below.
@@ -84,53 +85,54 @@ class ServiceRegionArgs:
 
     @_builtins.property
     @pulumi.getter(name="desiredNumberOfDomainControllers")
-    def desired_number_of_domain_controllers(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def desired_number_of_domain_controllers(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         The number of domain controllers desired in the replicated directory. Minimum value of `2`.
         """
         return pulumi.get(self, "desired_number_of_domain_controllers")
 
     @desired_number_of_domain_controllers.setter
-    def desired_number_of_domain_controllers(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def desired_number_of_domain_controllers(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "desired_number_of_domain_controllers", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags to assign to this resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _ServiceRegionState:
     def __init__(__self__, *,
-                 desired_number_of_domain_controllers: Optional[pulumi.Input[_builtins.int]] = None,
-                 directory_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 region_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 vpc_settings: Optional[pulumi.Input['ServiceRegionVpcSettingsArgs']] = None):
+                 desired_number_of_domain_controllers: pulumi.Input[Optional[_builtins.int]] = None,
+                 directory_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 region_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 vpc_settings: pulumi.Input[Optional['ServiceRegionVpcSettingsArgs']] = None):
         """
         Input properties used for looking up and filtering ServiceRegion resources.
+
         :param pulumi.Input[_builtins.int] desired_number_of_domain_controllers: The number of domain controllers desired in the replicated directory. Minimum value of `2`.
         :param pulumi.Input[_builtins.str] directory_id: The identifier of the directory to which you want to add Region replication.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -156,86 +158,86 @@ class _ServiceRegionState:
 
     @_builtins.property
     @pulumi.getter(name="desiredNumberOfDomainControllers")
-    def desired_number_of_domain_controllers(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def desired_number_of_domain_controllers(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         The number of domain controllers desired in the replicated directory. Minimum value of `2`.
         """
         return pulumi.get(self, "desired_number_of_domain_controllers")
 
     @desired_number_of_domain_controllers.setter
-    def desired_number_of_domain_controllers(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def desired_number_of_domain_controllers(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "desired_number_of_domain_controllers", value)
 
     @_builtins.property
     @pulumi.getter(name="directoryId")
-    def directory_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def directory_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The identifier of the directory to which you want to add Region replication.
         """
         return pulumi.get(self, "directory_id")
 
     @directory_id.setter
-    def directory_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def directory_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "directory_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="regionName")
-    def region_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the Region where you want to add domain controllers for replication.
         """
         return pulumi.get(self, "region_name")
 
     @region_name.setter
-    def region_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags to assign to this resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcSettings")
-    def vpc_settings(self) -> Optional[pulumi.Input['ServiceRegionVpcSettingsArgs']]:
+    def vpc_settings(self) -> pulumi.Input[Optional['ServiceRegionVpcSettingsArgs']]:
         """
         VPC information in the replicated Region. Detailed below.
         """
         return pulumi.get(self, "vpc_settings")
 
     @vpc_settings.setter
-    def vpc_settings(self, value: Optional[pulumi.Input['ServiceRegionVpcSettingsArgs']]):
+    def vpc_settings(self, value: pulumi.Input[Optional['ServiceRegionVpcSettingsArgs']]):
         pulumi.set(self, "vpc_settings", value)
 
 
@@ -245,12 +247,12 @@ class ServiceRegion(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 desired_number_of_domain_controllers: Optional[pulumi.Input[_builtins.int]] = None,
-                 directory_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 region_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 vpc_settings: Optional[pulumi.Input[Union['ServiceRegionVpcSettingsArgs', 'ServiceRegionVpcSettingsArgsDict']]] = None,
+                 desired_number_of_domain_controllers: pulumi.Input[Optional[_builtins.int]] = None,
+                 directory_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 region_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 vpc_settings: pulumi.Input[Optional[Union['ServiceRegionVpcSettingsArgs', 'ServiceRegionVpcSettingsArgsDict']]] = None,
                  __props__=None):
         """
         Manages a replicated Region and directory for Multi-Region replication.
@@ -260,67 +262,68 @@ class ServiceRegion(pulumi.CustomResource):
 
         ```python
         import pulumi
+        from typing import Any
         import pulumi_aws as aws
         import pulumi_std as std
 
         example = aws.get_region()
-        available = aws.get_availability_zones(state="available",
-            filters=[{
+        available = aws.get_availability_zones(filters=[{
                 "name": "opt-in-status",
                 "values": ["opt-in-not-required"],
-            }])
+            }],
+            state="available")
         example_vpc = aws.ec2.Vpc("example",
             cidr_block="10.0.0.0/16",
             tags={
                 "Name": "Primary",
             })
-        example_subnet = []
-        for range in [{"value": i} for i in range(0, 2)]:
-            example_subnet.append(aws.ec2.Subnet(f"example-{range['value']}",
+        example_subnet: list[aws.ec2.Subnet] = []
+        for example_subnet_range in [{"value": i} for i in range(0, 2)]:
+            example_subnet.append(aws.ec2.Subnet(f"example-{example_subnet_range['value']}",
                 vpc_id=example_vpc.id,
-                availability_zone=available.names[range["value"]],
-                cidr_block=example_vpc.cidr_block.apply(lambda cidr_block: std.cidrsubnet_output(input=cidr_block,
+                availability_zone=available.names[example_subnet_range["value"]],
+                cidr_block=std.cidrsubnet_output(input=example_vpc.cidr_block,
                     newbits=8,
-                    netnum=range["value"])).apply(lambda invoke: invoke.result),
+                    netnum=example_subnet_range["value"]).result,
                 tags={
                     "Name": "Primary",
                 }))
         example_directory = aws.directoryservice.Directory("example",
-            name="example.com",
-            password="SuperSecretPassw0rd",
-            type="MicrosoftAD",
             vpc_settings={
                 "vpc_id": example_vpc.id,
                 "subnet_ids": [__item.id for __item in example_subnet],
-            })
-        available_secondary = aws.get_availability_zones(state="available",
-            filters=[{
+            },
+            name="example.com",
+            password="SuperSecretPassw0rd",
+            type="MicrosoftAD")
+        available_secondary = aws.get_availability_zones(filters=[{
                 "name": "opt-in-status",
                 "values": ["opt-in-not-required"],
-            }])
+            }],
+            state="available")
         example_secondary = aws.ec2.Vpc("example-secondary",
             cidr_block="10.1.0.0/16",
             tags={
                 "Name": "Secondary",
             })
-        example_secondary_subnet = []
-        for range in [{"value": i} for i in range(0, 2)]:
-            example_secondary_subnet.append(aws.ec2.Subnet(f"example-secondary-{range['value']}",
+        example_secondary_subnet: list[aws.ec2.Subnet] = []
+        for example_secondary_subnet_range in [{"value": i} for i in range(0, 2)]:
+            example_secondary_subnet.append(aws.ec2.Subnet(f"example-secondary-{example_secondary_subnet_range['value']}",
                 vpc_id=example_secondary.id,
-                availability_zone=available_secondary.names[range["value"]],
-                cidr_block=example_secondary.cidr_block.apply(lambda cidr_block: std.cidrsubnet_output(input=cidr_block,
+                availability_zone=available_secondary.names[example_secondary_subnet_range["value"]],
+                cidr_block=std.cidrsubnet_output(input=example_secondary.cidr_block,
                     newbits=8,
-                    netnum=range["value"])).apply(lambda invoke: invoke.result),
+                    netnum=example_secondary_subnet_range["value"]).result,
                 tags={
                     "Name": "Secondary",
                 }))
         example_service_region = aws.directoryservice.ServiceRegion("example",
-            directory_id=example_directory.id,
-            region_name=example.name,
             vpc_settings={
                 "vpc_id": example_secondary.id,
                 "subnet_ids": [__item.id for __item in example_secondary_subnet],
             },
+            directory_id=example_directory.id,
+            region_name=example.region,
             tags={
                 "Name": "Secondary",
             })
@@ -333,6 +336,7 @@ class ServiceRegion(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:directoryservice/serviceRegion:ServiceRegion example d-9267651497,us-east-2
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -357,67 +361,68 @@ class ServiceRegion(pulumi.CustomResource):
 
         ```python
         import pulumi
+        from typing import Any
         import pulumi_aws as aws
         import pulumi_std as std
 
         example = aws.get_region()
-        available = aws.get_availability_zones(state="available",
-            filters=[{
+        available = aws.get_availability_zones(filters=[{
                 "name": "opt-in-status",
                 "values": ["opt-in-not-required"],
-            }])
+            }],
+            state="available")
         example_vpc = aws.ec2.Vpc("example",
             cidr_block="10.0.0.0/16",
             tags={
                 "Name": "Primary",
             })
-        example_subnet = []
-        for range in [{"value": i} for i in range(0, 2)]:
-            example_subnet.append(aws.ec2.Subnet(f"example-{range['value']}",
+        example_subnet: list[aws.ec2.Subnet] = []
+        for example_subnet_range in [{"value": i} for i in range(0, 2)]:
+            example_subnet.append(aws.ec2.Subnet(f"example-{example_subnet_range['value']}",
                 vpc_id=example_vpc.id,
-                availability_zone=available.names[range["value"]],
-                cidr_block=example_vpc.cidr_block.apply(lambda cidr_block: std.cidrsubnet_output(input=cidr_block,
+                availability_zone=available.names[example_subnet_range["value"]],
+                cidr_block=std.cidrsubnet_output(input=example_vpc.cidr_block,
                     newbits=8,
-                    netnum=range["value"])).apply(lambda invoke: invoke.result),
+                    netnum=example_subnet_range["value"]).result,
                 tags={
                     "Name": "Primary",
                 }))
         example_directory = aws.directoryservice.Directory("example",
-            name="example.com",
-            password="SuperSecretPassw0rd",
-            type="MicrosoftAD",
             vpc_settings={
                 "vpc_id": example_vpc.id,
                 "subnet_ids": [__item.id for __item in example_subnet],
-            })
-        available_secondary = aws.get_availability_zones(state="available",
-            filters=[{
+            },
+            name="example.com",
+            password="SuperSecretPassw0rd",
+            type="MicrosoftAD")
+        available_secondary = aws.get_availability_zones(filters=[{
                 "name": "opt-in-status",
                 "values": ["opt-in-not-required"],
-            }])
+            }],
+            state="available")
         example_secondary = aws.ec2.Vpc("example-secondary",
             cidr_block="10.1.0.0/16",
             tags={
                 "Name": "Secondary",
             })
-        example_secondary_subnet = []
-        for range in [{"value": i} for i in range(0, 2)]:
-            example_secondary_subnet.append(aws.ec2.Subnet(f"example-secondary-{range['value']}",
+        example_secondary_subnet: list[aws.ec2.Subnet] = []
+        for example_secondary_subnet_range in [{"value": i} for i in range(0, 2)]:
+            example_secondary_subnet.append(aws.ec2.Subnet(f"example-secondary-{example_secondary_subnet_range['value']}",
                 vpc_id=example_secondary.id,
-                availability_zone=available_secondary.names[range["value"]],
-                cidr_block=example_secondary.cidr_block.apply(lambda cidr_block: std.cidrsubnet_output(input=cidr_block,
+                availability_zone=available_secondary.names[example_secondary_subnet_range["value"]],
+                cidr_block=std.cidrsubnet_output(input=example_secondary.cidr_block,
                     newbits=8,
-                    netnum=range["value"])).apply(lambda invoke: invoke.result),
+                    netnum=example_secondary_subnet_range["value"]).result,
                 tags={
                     "Name": "Secondary",
                 }))
         example_service_region = aws.directoryservice.ServiceRegion("example",
-            directory_id=example_directory.id,
-            region_name=example.name,
             vpc_settings={
                 "vpc_id": example_secondary.id,
                 "subnet_ids": [__item.id for __item in example_secondary_subnet],
             },
+            directory_id=example_directory.id,
+            region_name=example.region,
             tags={
                 "Name": "Secondary",
             })
@@ -430,6 +435,7 @@ class ServiceRegion(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:directoryservice/serviceRegion:ServiceRegion example d-9267651497,us-east-2
         ```
+
 
         :param str resource_name: The name of the resource.
         :param ServiceRegionArgs args: The arguments to use to populate this resource's properties.
@@ -446,12 +452,12 @@ class ServiceRegion(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 desired_number_of_domain_controllers: Optional[pulumi.Input[_builtins.int]] = None,
-                 directory_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 region_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 vpc_settings: Optional[pulumi.Input[Union['ServiceRegionVpcSettingsArgs', 'ServiceRegionVpcSettingsArgsDict']]] = None,
+                 desired_number_of_domain_controllers: pulumi.Input[Optional[_builtins.int]] = None,
+                 directory_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 region_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 vpc_settings: pulumi.Input[Optional[Union['ServiceRegionVpcSettingsArgs', 'ServiceRegionVpcSettingsArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -484,13 +490,13 @@ class ServiceRegion(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            desired_number_of_domain_controllers: Optional[pulumi.Input[_builtins.int]] = None,
-            directory_id: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            region_name: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            vpc_settings: Optional[pulumi.Input[Union['ServiceRegionVpcSettingsArgs', 'ServiceRegionVpcSettingsArgsDict']]] = None) -> 'ServiceRegion':
+            desired_number_of_domain_controllers: pulumi.Input[Optional[_builtins.int]] = None,
+            directory_id: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            region_name: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            vpc_settings: pulumi.Input[Optional[Union['ServiceRegionVpcSettingsArgs', 'ServiceRegionVpcSettingsArgsDict']]] = None) -> 'ServiceRegion':
         """
         Get an existing ServiceRegion resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

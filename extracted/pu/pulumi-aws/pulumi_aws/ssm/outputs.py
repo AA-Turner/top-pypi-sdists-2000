@@ -50,6 +50,7 @@ __all__ = [
     'QuicksetupConfigurationManagerStatusSummary',
     'QuicksetupConfigurationManagerTimeouts',
     'ResourceDataSyncS3Destination',
+    'ResourceDataSyncS3DestinationDestinationDataSharing',
     'GetContactsRotationRecurrenceResult',
     'GetContactsRotationRecurrenceDailySettingResult',
     'GetContactsRotationRecurrenceMonthlySettingResult',
@@ -143,8 +144,8 @@ class AssociationTarget(dict):
                  key: _builtins.str,
                  values: Sequence[_builtins.str]):
         """
-        :param _builtins.str key: Either `InstanceIds` or `tag:Tag Name` to specify an EC2 tag.
-        :param Sequence[_builtins.str] values: User-defined criteria that maps to Key. A list of instance IDs or tag values.
+        :param _builtins.str key: User-defined criteria for sending commands that target managed nodes that meet the criteria. See the [AWS documentation](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_Target.html) for the list of available keys.
+        :param Sequence[_builtins.str] values: List of values that correspond to the specified `key`. See the [AWS documentation](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_Target.html) for details.
         """
         pulumi.set(__self__, "key", key)
         pulumi.set(__self__, "values", values)
@@ -153,7 +154,7 @@ class AssociationTarget(dict):
     @pulumi.getter
     def key(self) -> _builtins.str:
         """
-        Either `InstanceIds` or `tag:Tag Name` to specify an EC2 tag.
+        User-defined criteria for sending commands that target managed nodes that meet the criteria. See the [AWS documentation](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_Target.html) for the list of available keys.
         """
         return pulumi.get(self, "key")
 
@@ -161,7 +162,7 @@ class AssociationTarget(dict):
     @pulumi.getter
     def values(self) -> Sequence[_builtins.str]:
         """
-        User-defined criteria that maps to Key. A list of instance IDs or tag values.
+        List of values that correspond to the specified `key`. See the [AWS documentation](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_Target.html) for details.
         """
         return pulumi.get(self, "values")
 
@@ -1108,7 +1109,7 @@ class MaintenanceWindowTaskTaskInvocationParametersRunCommandParameters(dict):
         :param _builtins.str output_s3_bucket: The name of the Amazon S3 bucket.
         :param _builtins.str output_s3_key_prefix: The Amazon S3 bucket subfolder.
         :param Sequence['MaintenanceWindowTaskTaskInvocationParametersRunCommandParametersParameterArgs'] parameters: The parameters for the RUN_COMMAND task execution. Documented below.
-        :param _builtins.str service_role_arn: The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) service role to use to publish Amazon Simple Notification Service (Amazon SNS) notifications for maintenance window Run Command tasks.
+        :param _builtins.str service_role_arn: ARN of the AWS Identity and Access Management (IAM) service role to use to publish Amazon Simple Notification Service (Amazon SNS) notifications for maintenance window Run Command tasks.
         :param _builtins.int timeout_seconds: If this time is reached and the command has not already started executing, it doesn't run.
         """
         if cloudwatch_config is not None:
@@ -1210,7 +1211,7 @@ class MaintenanceWindowTaskTaskInvocationParametersRunCommandParameters(dict):
     @pulumi.getter(name="serviceRoleArn")
     def service_role_arn(self) -> Optional[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) service role to use to publish Amazon Simple Notification Service (Amazon SNS) notifications for maintenance window Run Command tasks.
+        ARN of the AWS Identity and Access Management (IAM) service role to use to publish Amazon Simple Notification Service (Amazon SNS) notifications for maintenance window Run Command tasks.
         """
         return pulumi.get(self, "service_role_arn")
 
@@ -1301,7 +1302,7 @@ class MaintenanceWindowTaskTaskInvocationParametersRunCommandParametersNotificat
                  notification_events: Optional[Sequence[_builtins.str]] = None,
                  notification_type: Optional[_builtins.str] = None):
         """
-        :param _builtins.str notification_arn: An Amazon Resource Name (ARN) for a Simple Notification Service (SNS) topic. Run Command pushes notifications about command status changes to this topic.
+        :param _builtins.str notification_arn: ARN for a Simple Notification Service (SNS) topic. Run Command pushes notifications about command status changes to this topic.
         :param Sequence[_builtins.str] notification_events: The different events for which you can receive notifications. Valid values: `All`, `InProgress`, `Success`, `TimedOut`, `Cancelled`, and `Failed`
         :param _builtins.str notification_type: When specified with `Command`, receive notification when the status of a command changes. When specified with `Invocation`, for commands sent to multiple instances, receive notification on a per-instance basis when the status of a command changes. Valid values: `Command` and `Invocation`
         """
@@ -1316,7 +1317,7 @@ class MaintenanceWindowTaskTaskInvocationParametersRunCommandParametersNotificat
     @pulumi.getter(name="notificationArn")
     def notification_arn(self) -> Optional[_builtins.str]:
         """
-        An Amazon Resource Name (ARN) for a Simple Notification Service (SNS) topic. Run Command pushes notifications about command status changes to this topic.
+        ARN for a Simple Notification Service (SNS) topic. Run Command pushes notifications about command status changes to this topic.
         """
         return pulumi.get(self, "notification_arn")
 
@@ -1765,6 +1766,8 @@ class ResourceDataSyncS3Destination(dict):
         suggest = None
         if key == "bucketName":
             suggest = "bucket_name"
+        elif key == "destinationDataSharing":
+            suggest = "destination_data_sharing"
         elif key == "kmsKeyArn":
             suggest = "kms_key_arn"
         elif key == "syncFormat":
@@ -1784,18 +1787,23 @@ class ResourceDataSyncS3Destination(dict):
     def __init__(__self__, *,
                  bucket_name: _builtins.str,
                  region: _builtins.str,
+                 destination_data_sharing: Optional['outputs.ResourceDataSyncS3DestinationDestinationDataSharing'] = None,
                  kms_key_arn: Optional[_builtins.str] = None,
                  prefix: Optional[_builtins.str] = None,
                  sync_format: Optional[_builtins.str] = None):
         """
         :param _builtins.str bucket_name: Name of S3 bucket where the aggregated data is stored.
         :param _builtins.str region: Region with the bucket targeted by the Resource Data Sync.
+        :param 'ResourceDataSyncS3DestinationDestinationDataSharingArgs' destination_data_sharing: Enables destination data sharing.
+               See `destination_data_sharing` below.
         :param _builtins.str kms_key_arn: ARN of an encryption key for a destination in Amazon S3.
         :param _builtins.str prefix: Prefix for the bucket.
         :param _builtins.str sync_format: A supported sync format. Only JsonSerDe is currently supported. Defaults to JsonSerDe.
         """
         pulumi.set(__self__, "bucket_name", bucket_name)
         pulumi.set(__self__, "region", region)
+        if destination_data_sharing is not None:
+            pulumi.set(__self__, "destination_data_sharing", destination_data_sharing)
         if kms_key_arn is not None:
             pulumi.set(__self__, "kms_key_arn", kms_key_arn)
         if prefix is not None:
@@ -1820,6 +1828,15 @@ class ResourceDataSyncS3Destination(dict):
         return pulumi.get(self, "region")
 
     @_builtins.property
+    @pulumi.getter(name="destinationDataSharing")
+    def destination_data_sharing(self) -> Optional['outputs.ResourceDataSyncS3DestinationDestinationDataSharing']:
+        """
+        Enables destination data sharing.
+        See `destination_data_sharing` below.
+        """
+        return pulumi.get(self, "destination_data_sharing")
+
+    @_builtins.property
     @pulumi.getter(name="kmsKeyArn")
     def kms_key_arn(self) -> Optional[_builtins.str]:
         """
@@ -1842,6 +1859,44 @@ class ResourceDataSyncS3Destination(dict):
         A supported sync format. Only JsonSerDe is currently supported. Defaults to JsonSerDe.
         """
         return pulumi.get(self, "sync_format")
+
+
+@pulumi.output_type
+class ResourceDataSyncS3DestinationDestinationDataSharing(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "destinationDataSharingType":
+            suggest = "destination_data_sharing_type"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ResourceDataSyncS3DestinationDestinationDataSharing. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ResourceDataSyncS3DestinationDestinationDataSharing.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ResourceDataSyncS3DestinationDestinationDataSharing.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 destination_data_sharing_type: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str destination_data_sharing_type: Data sharing type.
+               Only `Organization` is supported.
+        """
+        if destination_data_sharing_type is not None:
+            pulumi.set(__self__, "destination_data_sharing_type", destination_data_sharing_type)
+
+    @_builtins.property
+    @pulumi.getter(name="destinationDataSharingType")
+    def destination_data_sharing_type(self) -> Optional[_builtins.str]:
+        """
+        Data sharing type.
+        Only `Organization` is supported.
+        """
+        return pulumi.get(self, "destination_data_sharing_type")
 
 
 @pulumi.output_type

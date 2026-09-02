@@ -76,10 +76,13 @@ __all__ = [
 ]
 
 class ListenerDefaultActionArgsDict(TypedDict):
-    fixed_response: NotRequired[pulumi.Input['ListenerDefaultActionFixedResponseArgsDict']]
-    forwards: NotRequired[pulumi.Input[Sequence[pulumi.Input['ListenerDefaultActionForwardArgsDict']]]]
+    fixed_response: NotRequired[pulumi.Input[Optional['ListenerDefaultActionFixedResponseArgsDict']]]
     """
-    Route requests to one or more target groups. See Forward blocks below.
+    Configuration block for returning a fixed response. See `fixed_response` Block below.
+    """
+    forwards: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['ListenerDefaultActionForwardArgsDict']]]]]
+    """
+    Route requests to one or more target groups. See `forward` Block below.
 
     > **NOTE:** You must specify exactly one of the following argument blocks: `fixed_response` or `forward`.
     """
@@ -87,10 +90,11 @@ class ListenerDefaultActionArgsDict(TypedDict):
 @pulumi.input_type
 class ListenerDefaultActionArgs:
     def __init__(__self__, *,
-                 fixed_response: Optional[pulumi.Input['ListenerDefaultActionFixedResponseArgs']] = None,
-                 forwards: Optional[pulumi.Input[Sequence[pulumi.Input['ListenerDefaultActionForwardArgs']]]] = None):
+                 fixed_response: pulumi.Input[Optional['ListenerDefaultActionFixedResponseArgs']] = None,
+                 forwards: pulumi.Input[Optional[Sequence[pulumi.Input['ListenerDefaultActionForwardArgs']]]] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['ListenerDefaultActionForwardArgs']]] forwards: Route requests to one or more target groups. See Forward blocks below.
+        :param pulumi.Input['ListenerDefaultActionFixedResponseArgs'] fixed_response: Configuration block for returning a fixed response. See `fixed_response` Block below.
+        :param pulumi.Input[Sequence[pulumi.Input['ListenerDefaultActionForwardArgs']]] forwards: Route requests to one or more target groups. See `forward` Block below.
                
                > **NOTE:** You must specify exactly one of the following argument blocks: `fixed_response` or `forward`.
         """
@@ -101,25 +105,28 @@ class ListenerDefaultActionArgs:
 
     @_builtins.property
     @pulumi.getter(name="fixedResponse")
-    def fixed_response(self) -> Optional[pulumi.Input['ListenerDefaultActionFixedResponseArgs']]:
+    def fixed_response(self) -> pulumi.Input[Optional['ListenerDefaultActionFixedResponseArgs']]:
+        """
+        Configuration block for returning a fixed response. See `fixed_response` Block below.
+        """
         return pulumi.get(self, "fixed_response")
 
     @fixed_response.setter
-    def fixed_response(self, value: Optional[pulumi.Input['ListenerDefaultActionFixedResponseArgs']]):
+    def fixed_response(self, value: pulumi.Input[Optional['ListenerDefaultActionFixedResponseArgs']]):
         pulumi.set(self, "fixed_response", value)
 
     @_builtins.property
     @pulumi.getter
-    def forwards(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ListenerDefaultActionForwardArgs']]]]:
+    def forwards(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ListenerDefaultActionForwardArgs']]]]:
         """
-        Route requests to one or more target groups. See Forward blocks below.
+        Route requests to one or more target groups. See `forward` Block below.
 
         > **NOTE:** You must specify exactly one of the following argument blocks: `fixed_response` or `forward`.
         """
         return pulumi.get(self, "forwards")
 
     @forwards.setter
-    def forwards(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ListenerDefaultActionForwardArgs']]]]):
+    def forwards(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ListenerDefaultActionForwardArgs']]]]):
         pulumi.set(self, "forwards", value)
 
 
@@ -152,54 +159,52 @@ class ListenerDefaultActionFixedResponseArgs:
 
 
 class ListenerDefaultActionForwardArgsDict(TypedDict):
-    target_groups: NotRequired[pulumi.Input[Sequence[pulumi.Input['ListenerDefaultActionForwardTargetGroupArgsDict']]]]
+    target_groups: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['ListenerDefaultActionForwardTargetGroupArgsDict']]]]]
     """
-    One or more target group blocks.
+    One or more target group blocks. See `target_groups` Block below.
     """
 
 @pulumi.input_type
 class ListenerDefaultActionForwardArgs:
     def __init__(__self__, *,
-                 target_groups: Optional[pulumi.Input[Sequence[pulumi.Input['ListenerDefaultActionForwardTargetGroupArgs']]]] = None):
+                 target_groups: pulumi.Input[Optional[Sequence[pulumi.Input['ListenerDefaultActionForwardTargetGroupArgs']]]] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['ListenerDefaultActionForwardTargetGroupArgs']]] target_groups: One or more target group blocks.
+        :param pulumi.Input[Sequence[pulumi.Input['ListenerDefaultActionForwardTargetGroupArgs']]] target_groups: One or more target group blocks. See `target_groups` Block below.
         """
         if target_groups is not None:
             pulumi.set(__self__, "target_groups", target_groups)
 
     @_builtins.property
     @pulumi.getter(name="targetGroups")
-    def target_groups(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ListenerDefaultActionForwardTargetGroupArgs']]]]:
+    def target_groups(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ListenerDefaultActionForwardTargetGroupArgs']]]]:
         """
-        One or more target group blocks.
+        One or more target group blocks. See `target_groups` Block below.
         """
         return pulumi.get(self, "target_groups")
 
     @target_groups.setter
-    def target_groups(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ListenerDefaultActionForwardTargetGroupArgs']]]]):
+    def target_groups(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ListenerDefaultActionForwardTargetGroupArgs']]]]):
         pulumi.set(self, "target_groups", value)
 
 
 class ListenerDefaultActionForwardTargetGroupArgsDict(TypedDict):
-    target_group_identifier: NotRequired[pulumi.Input[_builtins.str]]
+    target_group_identifier: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    ID or Amazon Resource Name (ARN) of the target group.
+    ID or ARN of the target group.
     """
-    weight: NotRequired[pulumi.Input[_builtins.int]]
+    weight: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    Determines how requests are distributed to the target group. Only required if you specify multiple target groups for a forward action. For example, if you specify two target groups, one with a
-    weight of 10 and the other with a weight of 20, the target group with a weight of 20 receives twice as many requests as the other target group. See [Listener rules](https://docs.aws.amazon.com/vpc-lattice/latest/ug/listeners.html#listener-rules) in the AWS documentation for additional examples. Default: `100`.
+    Weight that controls how requests are distributed to the target group. Only required if you specify multiple target groups for a forward action. For example, if you specify two target groups, one with a weight of 10 and the other with a weight of 20, the target group with a weight of 20 receives twice as many requests as the other target group. See [Listener rules](https://docs.aws.amazon.com/vpc-lattice/latest/ug/listeners.html#listener-rules) in the AWS documentation for additional examples. Default: `100`.
     """
 
 @pulumi.input_type
 class ListenerDefaultActionForwardTargetGroupArgs:
     def __init__(__self__, *,
-                 target_group_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 weight: Optional[pulumi.Input[_builtins.int]] = None):
+                 target_group_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 weight: pulumi.Input[Optional[_builtins.int]] = None):
         """
-        :param pulumi.Input[_builtins.str] target_group_identifier: ID or Amazon Resource Name (ARN) of the target group.
-        :param pulumi.Input[_builtins.int] weight: Determines how requests are distributed to the target group. Only required if you specify multiple target groups for a forward action. For example, if you specify two target groups, one with a
-               weight of 10 and the other with a weight of 20, the target group with a weight of 20 receives twice as many requests as the other target group. See [Listener rules](https://docs.aws.amazon.com/vpc-lattice/latest/ug/listeners.html#listener-rules) in the AWS documentation for additional examples. Default: `100`.
+        :param pulumi.Input[_builtins.str] target_group_identifier: ID or ARN of the target group.
+        :param pulumi.Input[_builtins.int] weight: Weight that controls how requests are distributed to the target group. Only required if you specify multiple target groups for a forward action. For example, if you specify two target groups, one with a weight of 10 and the other with a weight of 20, the target group with a weight of 20 receives twice as many requests as the other target group. See [Listener rules](https://docs.aws.amazon.com/vpc-lattice/latest/ug/listeners.html#listener-rules) in the AWS documentation for additional examples. Default: `100`.
         """
         if target_group_identifier is not None:
             pulumi.set(__self__, "target_group_identifier", target_group_identifier)
@@ -208,52 +213,47 @@ class ListenerDefaultActionForwardTargetGroupArgs:
 
     @_builtins.property
     @pulumi.getter(name="targetGroupIdentifier")
-    def target_group_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def target_group_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        ID or Amazon Resource Name (ARN) of the target group.
+        ID or ARN of the target group.
         """
         return pulumi.get(self, "target_group_identifier")
 
     @target_group_identifier.setter
-    def target_group_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def target_group_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "target_group_identifier", value)
 
     @_builtins.property
     @pulumi.getter
-    def weight(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def weight(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        Determines how requests are distributed to the target group. Only required if you specify multiple target groups for a forward action. For example, if you specify two target groups, one with a
-        weight of 10 and the other with a weight of 20, the target group with a weight of 20 receives twice as many requests as the other target group. See [Listener rules](https://docs.aws.amazon.com/vpc-lattice/latest/ug/listeners.html#listener-rules) in the AWS documentation for additional examples. Default: `100`.
+        Weight that controls how requests are distributed to the target group. Only required if you specify multiple target groups for a forward action. For example, if you specify two target groups, one with a weight of 10 and the other with a weight of 20, the target group with a weight of 20 receives twice as many requests as the other target group. See [Listener rules](https://docs.aws.amazon.com/vpc-lattice/latest/ug/listeners.html#listener-rules) in the AWS documentation for additional examples. Default: `100`.
         """
         return pulumi.get(self, "weight")
 
     @weight.setter
-    def weight(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def weight(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "weight", value)
 
 
 class ListenerRuleActionArgsDict(TypedDict):
-    fixed_response: NotRequired[pulumi.Input['ListenerRuleActionFixedResponseArgsDict']]
+    fixed_response: NotRequired[pulumi.Input[Optional['ListenerRuleActionFixedResponseArgsDict']]]
     """
-    Describes the rule action that returns a custom HTTP response.
-    See `fixed_response` Block for details.
+    Rule action that returns a custom HTTP response. See `fixed_response` Block for details.
     """
-    forward: NotRequired[pulumi.Input['ListenerRuleActionForwardArgsDict']]
+    forward: NotRequired[pulumi.Input[Optional['ListenerRuleActionForwardArgsDict']]]
     """
-    The forward action. Traffic that matches the rule is forwarded to the specified target groups.
-    See `forward` Block for details.
+    Forward action. Traffic that matches the rule is forwarded to the specified target groups. See `forward` Block for details.
     """
 
 @pulumi.input_type
 class ListenerRuleActionArgs:
     def __init__(__self__, *,
-                 fixed_response: Optional[pulumi.Input['ListenerRuleActionFixedResponseArgs']] = None,
-                 forward: Optional[pulumi.Input['ListenerRuleActionForwardArgs']] = None):
+                 fixed_response: pulumi.Input[Optional['ListenerRuleActionFixedResponseArgs']] = None,
+                 forward: pulumi.Input[Optional['ListenerRuleActionForwardArgs']] = None):
         """
-        :param pulumi.Input['ListenerRuleActionFixedResponseArgs'] fixed_response: Describes the rule action that returns a custom HTTP response.
-               See `fixed_response` Block for details.
-        :param pulumi.Input['ListenerRuleActionForwardArgs'] forward: The forward action. Traffic that matches the rule is forwarded to the specified target groups.
-               See `forward` Block for details.
+        :param pulumi.Input['ListenerRuleActionFixedResponseArgs'] fixed_response: Rule action that returns a custom HTTP response. See `fixed_response` Block for details.
+        :param pulumi.Input['ListenerRuleActionForwardArgs'] forward: Forward action. Traffic that matches the rule is forwarded to the specified target groups. See `forward` Block for details.
         """
         if fixed_response is not None:
             pulumi.set(__self__, "fixed_response", fixed_response)
@@ -262,35 +262,33 @@ class ListenerRuleActionArgs:
 
     @_builtins.property
     @pulumi.getter(name="fixedResponse")
-    def fixed_response(self) -> Optional[pulumi.Input['ListenerRuleActionFixedResponseArgs']]:
+    def fixed_response(self) -> pulumi.Input[Optional['ListenerRuleActionFixedResponseArgs']]:
         """
-        Describes the rule action that returns a custom HTTP response.
-        See `fixed_response` Block for details.
+        Rule action that returns a custom HTTP response. See `fixed_response` Block for details.
         """
         return pulumi.get(self, "fixed_response")
 
     @fixed_response.setter
-    def fixed_response(self, value: Optional[pulumi.Input['ListenerRuleActionFixedResponseArgs']]):
+    def fixed_response(self, value: pulumi.Input[Optional['ListenerRuleActionFixedResponseArgs']]):
         pulumi.set(self, "fixed_response", value)
 
     @_builtins.property
     @pulumi.getter
-    def forward(self) -> Optional[pulumi.Input['ListenerRuleActionForwardArgs']]:
+    def forward(self) -> pulumi.Input[Optional['ListenerRuleActionForwardArgs']]:
         """
-        The forward action. Traffic that matches the rule is forwarded to the specified target groups.
-        See `forward` Block for details.
+        Forward action. Traffic that matches the rule is forwarded to the specified target groups. See `forward` Block for details.
         """
         return pulumi.get(self, "forward")
 
     @forward.setter
-    def forward(self, value: Optional[pulumi.Input['ListenerRuleActionForwardArgs']]):
+    def forward(self, value: pulumi.Input[Optional['ListenerRuleActionForwardArgs']]):
         pulumi.set(self, "forward", value)
 
 
 class ListenerRuleActionFixedResponseArgsDict(TypedDict):
     status_code: pulumi.Input[_builtins.int]
     """
-    The HTTP response code.
+    HTTP response code.
     """
 
 @pulumi.input_type
@@ -298,7 +296,7 @@ class ListenerRuleActionFixedResponseArgs:
     def __init__(__self__, *,
                  status_code: pulumi.Input[_builtins.int]):
         """
-        :param pulumi.Input[_builtins.int] status_code: The HTTP response code.
+        :param pulumi.Input[_builtins.int] status_code: HTTP response code.
         """
         pulumi.set(__self__, "status_code", status_code)
 
@@ -306,7 +304,7 @@ class ListenerRuleActionFixedResponseArgs:
     @pulumi.getter(name="statusCode")
     def status_code(self) -> pulumi.Input[_builtins.int]:
         """
-        The HTTP response code.
+        HTTP response code.
         """
         return pulumi.get(self, "status_code")
 
@@ -318,9 +316,7 @@ class ListenerRuleActionFixedResponseArgs:
 class ListenerRuleActionForwardArgsDict(TypedDict):
     target_groups: pulumi.Input[Sequence[pulumi.Input['ListenerRuleActionForwardTargetGroupArgsDict']]]
     """
-    The target groups. Traffic matching the rule is forwarded to the specified target groups. With forward actions, you can assign a weight that controls the prioritization and selection of each target group. This means that requests are distributed to individual target groups based on their weights. For example, if two target groups have the same weight, each target group receives half of the traffic.
-
-    The default value is 1 with maximum number of 2. If only one target group is provided, there is no need to set the weight; 100% of traffic will go to that target group.
+    Target groups that traffic matching the rule is forwarded to. See `target_groups` Block for details.
     """
 
 @pulumi.input_type
@@ -328,9 +324,7 @@ class ListenerRuleActionForwardArgs:
     def __init__(__self__, *,
                  target_groups: pulumi.Input[Sequence[pulumi.Input['ListenerRuleActionForwardTargetGroupArgs']]]):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['ListenerRuleActionForwardTargetGroupArgs']]] target_groups: The target groups. Traffic matching the rule is forwarded to the specified target groups. With forward actions, you can assign a weight that controls the prioritization and selection of each target group. This means that requests are distributed to individual target groups based on their weights. For example, if two target groups have the same weight, each target group receives half of the traffic.
-               
-               The default value is 1 with maximum number of 2. If only one target group is provided, there is no need to set the weight; 100% of traffic will go to that target group.
+        :param pulumi.Input[Sequence[pulumi.Input['ListenerRuleActionForwardTargetGroupArgs']]] target_groups: Target groups that traffic matching the rule is forwarded to. See `target_groups` Block for details.
         """
         pulumi.set(__self__, "target_groups", target_groups)
 
@@ -338,9 +332,7 @@ class ListenerRuleActionForwardArgs:
     @pulumi.getter(name="targetGroups")
     def target_groups(self) -> pulumi.Input[Sequence[pulumi.Input['ListenerRuleActionForwardTargetGroupArgs']]]:
         """
-        The target groups. Traffic matching the rule is forwarded to the specified target groups. With forward actions, you can assign a weight that controls the prioritization and selection of each target group. This means that requests are distributed to individual target groups based on their weights. For example, if two target groups have the same weight, each target group receives half of the traffic.
-
-        The default value is 1 with maximum number of 2. If only one target group is provided, there is no need to set the weight; 100% of traffic will go to that target group.
+        Target groups that traffic matching the rule is forwarded to. See `target_groups` Block for details.
         """
         return pulumi.get(self, "target_groups")
 
@@ -351,13 +343,23 @@ class ListenerRuleActionForwardArgs:
 
 class ListenerRuleActionForwardTargetGroupArgsDict(TypedDict):
     target_group_identifier: pulumi.Input[_builtins.str]
-    weight: NotRequired[pulumi.Input[_builtins.int]]
+    """
+    ID or ARN of the target group.
+    """
+    weight: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Weight assigned to the target group, controlling the prioritization and selection of each target group so that requests are distributed based on their weights. Default is `100`.
+    """
 
 @pulumi.input_type
 class ListenerRuleActionForwardTargetGroupArgs:
     def __init__(__self__, *,
                  target_group_identifier: pulumi.Input[_builtins.str],
-                 weight: Optional[pulumi.Input[_builtins.int]] = None):
+                 weight: pulumi.Input[Optional[_builtins.int]] = None):
+        """
+        :param pulumi.Input[_builtins.str] target_group_identifier: ID or ARN of the target group.
+        :param pulumi.Input[_builtins.int] weight: Weight assigned to the target group, controlling the prioritization and selection of each target group so that requests are distributed based on their weights. Default is `100`.
+        """
         pulumi.set(__self__, "target_group_identifier", target_group_identifier)
         if weight is not None:
             pulumi.set(__self__, "weight", weight)
@@ -365,6 +367,9 @@ class ListenerRuleActionForwardTargetGroupArgs:
     @_builtins.property
     @pulumi.getter(name="targetGroupIdentifier")
     def target_group_identifier(self) -> pulumi.Input[_builtins.str]:
+        """
+        ID or ARN of the target group.
+        """
         return pulumi.get(self, "target_group_identifier")
 
     @target_group_identifier.setter
@@ -373,19 +378,21 @@ class ListenerRuleActionForwardTargetGroupArgs:
 
     @_builtins.property
     @pulumi.getter
-    def weight(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def weight(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Weight assigned to the target group, controlling the prioritization and selection of each target group so that requests are distributed based on their weights. Default is `100`.
+        """
         return pulumi.get(self, "weight")
 
     @weight.setter
-    def weight(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def weight(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "weight", value)
 
 
 class ListenerRuleMatchArgsDict(TypedDict):
     http_match: pulumi.Input['ListenerRuleMatchHttpMatchArgsDict']
     """
-    The HTTP criteria that a rule must match.
-    See `http_match` Block for details.
+    HTTP criteria that a rule must match. See `http_match` Block for details.
     """
 
 @pulumi.input_type
@@ -393,8 +400,7 @@ class ListenerRuleMatchArgs:
     def __init__(__self__, *,
                  http_match: pulumi.Input['ListenerRuleMatchHttpMatchArgs']):
         """
-        :param pulumi.Input['ListenerRuleMatchHttpMatchArgs'] http_match: The HTTP criteria that a rule must match.
-               See `http_match` Block for details.
+        :param pulumi.Input['ListenerRuleMatchHttpMatchArgs'] http_match: HTTP criteria that a rule must match. See `http_match` Block for details.
         """
         pulumi.set(__self__, "http_match", http_match)
 
@@ -402,8 +408,7 @@ class ListenerRuleMatchArgs:
     @pulumi.getter(name="httpMatch")
     def http_match(self) -> pulumi.Input['ListenerRuleMatchHttpMatchArgs']:
         """
-        The HTTP criteria that a rule must match.
-        See `http_match` Block for details.
+        HTTP criteria that a rule must match. See `http_match` Block for details.
         """
         return pulumi.get(self, "http_match")
 
@@ -413,35 +418,29 @@ class ListenerRuleMatchArgs:
 
 
 class ListenerRuleMatchHttpMatchArgsDict(TypedDict):
-    header_matches: NotRequired[pulumi.Input[Sequence[pulumi.Input['ListenerRuleMatchHttpMatchHeaderMatchArgsDict']]]]
+    header_matches: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['ListenerRuleMatchHttpMatchHeaderMatchArgsDict']]]]]
     """
-    The header matches.
-    Matches incoming requests with rule based on request header value before applying rule action.
-    See `header_matches` Block for details.
+    Header matches that match incoming requests based on the request header value before applying the rule action. See `header_matches` Block for details.
     """
-    method: NotRequired[pulumi.Input[_builtins.str]]
+    method: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The HTTP method type.
+    HTTP method type.
     """
-    path_match: NotRequired[pulumi.Input['ListenerRuleMatchHttpMatchPathMatchArgsDict']]
+    path_match: NotRequired[pulumi.Input[Optional['ListenerRuleMatchHttpMatchPathMatchArgsDict']]]
     """
-    The path match.
-    See `path_match` Block for details.
+    Path match. See `path_match` Block for details.
     """
 
 @pulumi.input_type
 class ListenerRuleMatchHttpMatchArgs:
     def __init__(__self__, *,
-                 header_matches: Optional[pulumi.Input[Sequence[pulumi.Input['ListenerRuleMatchHttpMatchHeaderMatchArgs']]]] = None,
-                 method: Optional[pulumi.Input[_builtins.str]] = None,
-                 path_match: Optional[pulumi.Input['ListenerRuleMatchHttpMatchPathMatchArgs']] = None):
+                 header_matches: pulumi.Input[Optional[Sequence[pulumi.Input['ListenerRuleMatchHttpMatchHeaderMatchArgs']]]] = None,
+                 method: pulumi.Input[Optional[_builtins.str]] = None,
+                 path_match: pulumi.Input[Optional['ListenerRuleMatchHttpMatchPathMatchArgs']] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input['ListenerRuleMatchHttpMatchHeaderMatchArgs']]] header_matches: The header matches.
-               Matches incoming requests with rule based on request header value before applying rule action.
-               See `header_matches` Block for details.
-        :param pulumi.Input[_builtins.str] method: The HTTP method type.
-        :param pulumi.Input['ListenerRuleMatchHttpMatchPathMatchArgs'] path_match: The path match.
-               See `path_match` Block for details.
+        :param pulumi.Input[Sequence[pulumi.Input['ListenerRuleMatchHttpMatchHeaderMatchArgs']]] header_matches: Header matches that match incoming requests based on the request header value before applying the rule action. See `header_matches` Block for details.
+        :param pulumi.Input[_builtins.str] method: HTTP method type.
+        :param pulumi.Input['ListenerRuleMatchHttpMatchPathMatchArgs'] path_match: Path match. See `path_match` Block for details.
         """
         if header_matches is not None:
             pulumi.set(__self__, "header_matches", header_matches)
@@ -452,58 +451,53 @@ class ListenerRuleMatchHttpMatchArgs:
 
     @_builtins.property
     @pulumi.getter(name="headerMatches")
-    def header_matches(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ListenerRuleMatchHttpMatchHeaderMatchArgs']]]]:
+    def header_matches(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ListenerRuleMatchHttpMatchHeaderMatchArgs']]]]:
         """
-        The header matches.
-        Matches incoming requests with rule based on request header value before applying rule action.
-        See `header_matches` Block for details.
+        Header matches that match incoming requests based on the request header value before applying the rule action. See `header_matches` Block for details.
         """
         return pulumi.get(self, "header_matches")
 
     @header_matches.setter
-    def header_matches(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ListenerRuleMatchHttpMatchHeaderMatchArgs']]]]):
+    def header_matches(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ListenerRuleMatchHttpMatchHeaderMatchArgs']]]]):
         pulumi.set(self, "header_matches", value)
 
     @_builtins.property
     @pulumi.getter
-    def method(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def method(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The HTTP method type.
+        HTTP method type.
         """
         return pulumi.get(self, "method")
 
     @method.setter
-    def method(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def method(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "method", value)
 
     @_builtins.property
     @pulumi.getter(name="pathMatch")
-    def path_match(self) -> Optional[pulumi.Input['ListenerRuleMatchHttpMatchPathMatchArgs']]:
+    def path_match(self) -> pulumi.Input[Optional['ListenerRuleMatchHttpMatchPathMatchArgs']]:
         """
-        The path match.
-        See `path_match` Block for details.
+        Path match. See `path_match` Block for details.
         """
         return pulumi.get(self, "path_match")
 
     @path_match.setter
-    def path_match(self, value: Optional[pulumi.Input['ListenerRuleMatchHttpMatchPathMatchArgs']]):
+    def path_match(self, value: pulumi.Input[Optional['ListenerRuleMatchHttpMatchPathMatchArgs']]):
         pulumi.set(self, "path_match", value)
 
 
 class ListenerRuleMatchHttpMatchHeaderMatchArgsDict(TypedDict):
     match: pulumi.Input['ListenerRuleMatchHttpMatchHeaderMatchMatchArgsDict']
     """
-    The header match type.
-    See Header Match `match` Block for details.
+    Header match type. See `match.http_match.header_matches.match` Block for details.
     """
     name: pulumi.Input[_builtins.str]
     """
-    The name of the header.
+    Name of the header.
     """
-    case_sensitive: NotRequired[pulumi.Input[_builtins.bool]]
+    case_sensitive: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
-    Indicates whether the match is case sensitive.
-    Default is `false`.
+    Whether the match is case sensitive. Default is `false`.
     """
 
 @pulumi.input_type
@@ -511,13 +505,11 @@ class ListenerRuleMatchHttpMatchHeaderMatchArgs:
     def __init__(__self__, *,
                  match: pulumi.Input['ListenerRuleMatchHttpMatchHeaderMatchMatchArgs'],
                  name: pulumi.Input[_builtins.str],
-                 case_sensitive: Optional[pulumi.Input[_builtins.bool]] = None):
+                 case_sensitive: pulumi.Input[Optional[_builtins.bool]] = None):
         """
-        :param pulumi.Input['ListenerRuleMatchHttpMatchHeaderMatchMatchArgs'] match: The header match type.
-               See Header Match `match` Block for details.
-        :param pulumi.Input[_builtins.str] name: The name of the header.
-        :param pulumi.Input[_builtins.bool] case_sensitive: Indicates whether the match is case sensitive.
-               Default is `false`.
+        :param pulumi.Input['ListenerRuleMatchHttpMatchHeaderMatchMatchArgs'] match: Header match type. See `match.http_match.header_matches.match` Block for details.
+        :param pulumi.Input[_builtins.str] name: Name of the header.
+        :param pulumi.Input[_builtins.bool] case_sensitive: Whether the match is case sensitive. Default is `false`.
         """
         pulumi.set(__self__, "match", match)
         pulumi.set(__self__, "name", name)
@@ -528,8 +520,7 @@ class ListenerRuleMatchHttpMatchHeaderMatchArgs:
     @pulumi.getter
     def match(self) -> pulumi.Input['ListenerRuleMatchHttpMatchHeaderMatchMatchArgs']:
         """
-        The header match type.
-        See Header Match `match` Block for details.
+        Header match type. See `match.http_match.header_matches.match` Block for details.
         """
         return pulumi.get(self, "match")
 
@@ -541,7 +532,7 @@ class ListenerRuleMatchHttpMatchHeaderMatchArgs:
     @pulumi.getter
     def name(self) -> pulumi.Input[_builtins.str]:
         """
-        The name of the header.
+        Name of the header.
         """
         return pulumi.get(self, "name")
 
@@ -551,44 +542,41 @@ class ListenerRuleMatchHttpMatchHeaderMatchArgs:
 
     @_builtins.property
     @pulumi.getter(name="caseSensitive")
-    def case_sensitive(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def case_sensitive(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        Indicates whether the match is case sensitive.
-        Default is `false`.
+        Whether the match is case sensitive. Default is `false`.
         """
         return pulumi.get(self, "case_sensitive")
 
     @case_sensitive.setter
-    def case_sensitive(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def case_sensitive(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "case_sensitive", value)
 
 
 class ListenerRuleMatchHttpMatchHeaderMatchMatchArgsDict(TypedDict):
-    contains: NotRequired[pulumi.Input[_builtins.str]]
+    contains: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Specifies a contains type match.
+    Value that the header must contain to match.
     """
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Specifies an exact type match.
+    Exact type match.
     """
-    prefix: NotRequired[pulumi.Input[_builtins.str]]
+    prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Specifies a prefix type match.
-    Matches the value with the prefix.
+    Prefix type match. Matches the value with the prefix.
     """
 
 @pulumi.input_type
 class ListenerRuleMatchHttpMatchHeaderMatchMatchArgs:
     def __init__(__self__, *,
-                 contains: Optional[pulumi.Input[_builtins.str]] = None,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None,
-                 prefix: Optional[pulumi.Input[_builtins.str]] = None):
+                 contains: pulumi.Input[Optional[_builtins.str]] = None,
+                 exact: pulumi.Input[Optional[_builtins.str]] = None,
+                 prefix: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] contains: Specifies a contains type match.
-        :param pulumi.Input[_builtins.str] exact: Specifies an exact type match.
-        :param pulumi.Input[_builtins.str] prefix: Specifies a prefix type match.
-               Matches the value with the prefix.
+        :param pulumi.Input[_builtins.str] contains: Value that the header must contain to match.
+        :param pulumi.Input[_builtins.str] exact: Exact type match.
+        :param pulumi.Input[_builtins.str] prefix: Prefix type match. Matches the value with the prefix.
         """
         if contains is not None:
             pulumi.set(__self__, "contains", contains)
@@ -599,64 +587,59 @@ class ListenerRuleMatchHttpMatchHeaderMatchMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def contains(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def contains(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Specifies a contains type match.
+        Value that the header must contain to match.
         """
         return pulumi.get(self, "contains")
 
     @contains.setter
-    def contains(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def contains(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "contains", value)
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Specifies an exact type match.
+        Exact type match.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
     @_builtins.property
     @pulumi.getter
-    def prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Specifies a prefix type match.
-        Matches the value with the prefix.
+        Prefix type match. Matches the value with the prefix.
         """
         return pulumi.get(self, "prefix")
 
     @prefix.setter
-    def prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "prefix", value)
 
 
 class ListenerRuleMatchHttpMatchPathMatchArgsDict(TypedDict):
     match: pulumi.Input['ListenerRuleMatchHttpMatchPathMatchMatchArgsDict']
     """
-    The header match type.
-    See Path Match `match` Block for details.
+    Path match type. See `match.http_match.path_match.match` Block for details.
     """
-    case_sensitive: NotRequired[pulumi.Input[_builtins.bool]]
+    case_sensitive: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
-    Indicates whether the match is case sensitive.
-    Default is `false`.
+    Whether the match is case sensitive. Default is `false`.
     """
 
 @pulumi.input_type
 class ListenerRuleMatchHttpMatchPathMatchArgs:
     def __init__(__self__, *,
                  match: pulumi.Input['ListenerRuleMatchHttpMatchPathMatchMatchArgs'],
-                 case_sensitive: Optional[pulumi.Input[_builtins.bool]] = None):
+                 case_sensitive: pulumi.Input[Optional[_builtins.bool]] = None):
         """
-        :param pulumi.Input['ListenerRuleMatchHttpMatchPathMatchMatchArgs'] match: The header match type.
-               See Path Match `match` Block for details.
-        :param pulumi.Input[_builtins.bool] case_sensitive: Indicates whether the match is case sensitive.
-               Default is `false`.
+        :param pulumi.Input['ListenerRuleMatchHttpMatchPathMatchMatchArgs'] match: Path match type. See `match.http_match.path_match.match` Block for details.
+        :param pulumi.Input[_builtins.bool] case_sensitive: Whether the match is case sensitive. Default is `false`.
         """
         pulumi.set(__self__, "match", match)
         if case_sensitive is not None:
@@ -666,8 +649,7 @@ class ListenerRuleMatchHttpMatchPathMatchArgs:
     @pulumi.getter
     def match(self) -> pulumi.Input['ListenerRuleMatchHttpMatchPathMatchMatchArgs']:
         """
-        The header match type.
-        See Path Match `match` Block for details.
+        Path match type. See `match.http_match.path_match.match` Block for details.
         """
         return pulumi.get(self, "match")
 
@@ -677,38 +659,35 @@ class ListenerRuleMatchHttpMatchPathMatchArgs:
 
     @_builtins.property
     @pulumi.getter(name="caseSensitive")
-    def case_sensitive(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def case_sensitive(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        Indicates whether the match is case sensitive.
-        Default is `false`.
+        Whether the match is case sensitive. Default is `false`.
         """
         return pulumi.get(self, "case_sensitive")
 
     @case_sensitive.setter
-    def case_sensitive(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def case_sensitive(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "case_sensitive", value)
 
 
 class ListenerRuleMatchHttpMatchPathMatchMatchArgsDict(TypedDict):
-    exact: NotRequired[pulumi.Input[_builtins.str]]
+    exact: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Specifies an exact type match.
+    Exact type match.
     """
-    prefix: NotRequired[pulumi.Input[_builtins.str]]
+    prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Specifies a prefix type match.
-    Matches the value with the prefix.
+    Prefix type match. Matches the value with the prefix.
     """
 
 @pulumi.input_type
 class ListenerRuleMatchHttpMatchPathMatchMatchArgs:
     def __init__(__self__, *,
-                 exact: Optional[pulumi.Input[_builtins.str]] = None,
-                 prefix: Optional[pulumi.Input[_builtins.str]] = None):
+                 exact: pulumi.Input[Optional[_builtins.str]] = None,
+                 prefix: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] exact: Specifies an exact type match.
-        :param pulumi.Input[_builtins.str] prefix: Specifies a prefix type match.
-               Matches the value with the prefix.
+        :param pulumi.Input[_builtins.str] exact: Exact type match.
+        :param pulumi.Input[_builtins.str] prefix: Prefix type match. Matches the value with the prefix.
         """
         if exact is not None:
             pulumi.set(__self__, "exact", exact)
@@ -717,40 +696,39 @@ class ListenerRuleMatchHttpMatchPathMatchMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def exact(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def exact(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Specifies an exact type match.
+        Exact type match.
         """
         return pulumi.get(self, "exact")
 
     @exact.setter
-    def exact(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def exact(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "exact", value)
 
     @_builtins.property
     @pulumi.getter
-    def prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Specifies a prefix type match.
-        Matches the value with the prefix.
+        Prefix type match. Matches the value with the prefix.
         """
         return pulumi.get(self, "prefix")
 
     @prefix.setter
-    def prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "prefix", value)
 
 
 class ResourceConfigurationResourceConfigurationDefinitionArgsDict(TypedDict):
-    arn_resource: NotRequired[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionArnResourceArgsDict']]
+    arn_resource: NotRequired[pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionArnResourceArgsDict']]]
     """
     Resource DNS Configuration. See `arn_resource` Block for details.
     """
-    dns_resource: NotRequired[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionDnsResourceArgsDict']]
+    dns_resource: NotRequired[pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionDnsResourceArgsDict']]]
     """
     Resource DNS Configuration. See `dns_resource` Block for details.
     """
-    ip_resource: NotRequired[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionIpResourceArgsDict']]
+    ip_resource: NotRequired[pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionIpResourceArgsDict']]]
     """
     Resource DNS Configuration. See `ip_resource` Block for details.
     """
@@ -758,9 +736,9 @@ class ResourceConfigurationResourceConfigurationDefinitionArgsDict(TypedDict):
 @pulumi.input_type
 class ResourceConfigurationResourceConfigurationDefinitionArgs:
     def __init__(__self__, *,
-                 arn_resource: Optional[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionArnResourceArgs']] = None,
-                 dns_resource: Optional[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionDnsResourceArgs']] = None,
-                 ip_resource: Optional[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionIpResourceArgs']] = None):
+                 arn_resource: pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionArnResourceArgs']] = None,
+                 dns_resource: pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionDnsResourceArgs']] = None,
+                 ip_resource: pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionIpResourceArgs']] = None):
         """
         :param pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionArnResourceArgs'] arn_resource: Resource DNS Configuration. See `arn_resource` Block for details.
         :param pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionDnsResourceArgs'] dns_resource: Resource DNS Configuration. See `dns_resource` Block for details.
@@ -775,45 +753,45 @@ class ResourceConfigurationResourceConfigurationDefinitionArgs:
 
     @_builtins.property
     @pulumi.getter(name="arnResource")
-    def arn_resource(self) -> Optional[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionArnResourceArgs']]:
+    def arn_resource(self) -> pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionArnResourceArgs']]:
         """
         Resource DNS Configuration. See `arn_resource` Block for details.
         """
         return pulumi.get(self, "arn_resource")
 
     @arn_resource.setter
-    def arn_resource(self, value: Optional[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionArnResourceArgs']]):
+    def arn_resource(self, value: pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionArnResourceArgs']]):
         pulumi.set(self, "arn_resource", value)
 
     @_builtins.property
     @pulumi.getter(name="dnsResource")
-    def dns_resource(self) -> Optional[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionDnsResourceArgs']]:
+    def dns_resource(self) -> pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionDnsResourceArgs']]:
         """
         Resource DNS Configuration. See `dns_resource` Block for details.
         """
         return pulumi.get(self, "dns_resource")
 
     @dns_resource.setter
-    def dns_resource(self, value: Optional[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionDnsResourceArgs']]):
+    def dns_resource(self, value: pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionDnsResourceArgs']]):
         pulumi.set(self, "dns_resource", value)
 
     @_builtins.property
     @pulumi.getter(name="ipResource")
-    def ip_resource(self) -> Optional[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionIpResourceArgs']]:
+    def ip_resource(self) -> pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionIpResourceArgs']]:
         """
         Resource DNS Configuration. See `ip_resource` Block for details.
         """
         return pulumi.get(self, "ip_resource")
 
     @ip_resource.setter
-    def ip_resource(self, value: Optional[pulumi.Input['ResourceConfigurationResourceConfigurationDefinitionIpResourceArgs']]):
+    def ip_resource(self, value: pulumi.Input[Optional['ResourceConfigurationResourceConfigurationDefinitionIpResourceArgs']]):
         pulumi.set(self, "ip_resource", value)
 
 
 class ResourceConfigurationResourceConfigurationDefinitionArnResourceArgsDict(TypedDict):
     arn: pulumi.Input[_builtins.str]
     """
-    The ARN of the Resource for this configuration.
+    ARN of the Resource for this configuration.
     """
 
 @pulumi.input_type
@@ -821,7 +799,7 @@ class ResourceConfigurationResourceConfigurationDefinitionArnResourceArgs:
     def __init__(__self__, *,
                  arn: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] arn: The ARN of the Resource for this configuration.
+        :param pulumi.Input[_builtins.str] arn: ARN of the Resource for this configuration.
         """
         pulumi.set(__self__, "arn", arn)
 
@@ -829,7 +807,7 @@ class ResourceConfigurationResourceConfigurationDefinitionArnResourceArgs:
     @pulumi.getter
     def arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The ARN of the Resource for this configuration.
+        ARN of the Resource for this configuration.
         """
         return pulumi.get(self, "arn")
 
@@ -841,11 +819,11 @@ class ResourceConfigurationResourceConfigurationDefinitionArnResourceArgs:
 class ResourceConfigurationResourceConfigurationDefinitionDnsResourceArgsDict(TypedDict):
     domain_name: pulumi.Input[_builtins.str]
     """
-    The hostname of the Resource for this configuration.
+    Hostname of the Resource for this configuration.
     """
     ip_address_type: pulumi.Input[_builtins.str]
     """
-    The IP Address type either `IPV4` or `IPV6`
+    IP Address type either `IPV4` or `IPV6`
     """
 
 @pulumi.input_type
@@ -854,8 +832,8 @@ class ResourceConfigurationResourceConfigurationDefinitionDnsResourceArgs:
                  domain_name: pulumi.Input[_builtins.str],
                  ip_address_type: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] domain_name: The hostname of the Resource for this configuration.
-        :param pulumi.Input[_builtins.str] ip_address_type: The IP Address type either `IPV4` or `IPV6`
+        :param pulumi.Input[_builtins.str] domain_name: Hostname of the Resource for this configuration.
+        :param pulumi.Input[_builtins.str] ip_address_type: IP Address type either `IPV4` or `IPV6`
         """
         pulumi.set(__self__, "domain_name", domain_name)
         pulumi.set(__self__, "ip_address_type", ip_address_type)
@@ -864,7 +842,7 @@ class ResourceConfigurationResourceConfigurationDefinitionDnsResourceArgs:
     @pulumi.getter(name="domainName")
     def domain_name(self) -> pulumi.Input[_builtins.str]:
         """
-        The hostname of the Resource for this configuration.
+        Hostname of the Resource for this configuration.
         """
         return pulumi.get(self, "domain_name")
 
@@ -876,7 +854,7 @@ class ResourceConfigurationResourceConfigurationDefinitionDnsResourceArgs:
     @pulumi.getter(name="ipAddressType")
     def ip_address_type(self) -> pulumi.Input[_builtins.str]:
         """
-        The IP Address type either `IPV4` or `IPV6`
+        IP Address type either `IPV4` or `IPV6`
         """
         return pulumi.get(self, "ip_address_type")
 
@@ -888,7 +866,7 @@ class ResourceConfigurationResourceConfigurationDefinitionDnsResourceArgs:
 class ResourceConfigurationResourceConfigurationDefinitionIpResourceArgsDict(TypedDict):
     ip_address: pulumi.Input[_builtins.str]
     """
-    The IP Address of the Resource for this configuration.
+    IP Address of the Resource for this configuration.
     """
 
 @pulumi.input_type
@@ -896,7 +874,7 @@ class ResourceConfigurationResourceConfigurationDefinitionIpResourceArgs:
     def __init__(__self__, *,
                  ip_address: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] ip_address: The IP Address of the Resource for this configuration.
+        :param pulumi.Input[_builtins.str] ip_address: IP Address of the Resource for this configuration.
         """
         pulumi.set(__self__, "ip_address", ip_address)
 
@@ -904,7 +882,7 @@ class ResourceConfigurationResourceConfigurationDefinitionIpResourceArgs:
     @pulumi.getter(name="ipAddress")
     def ip_address(self) -> pulumi.Input[_builtins.str]:
         """
-        The IP Address of the Resource for this configuration.
+        IP Address of the Resource for this configuration.
         """
         return pulumi.get(self, "ip_address")
 
@@ -914,15 +892,15 @@ class ResourceConfigurationResourceConfigurationDefinitionIpResourceArgs:
 
 
 class ResourceConfigurationTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
-    update: NotRequired[pulumi.Input[_builtins.str]]
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -930,9 +908,9 @@ class ResourceConfigurationTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class ResourceConfigurationTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None,
-                 update: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -947,51 +925,51 @@ class ResourceConfigurationTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def update(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "update")
 
     @update.setter
-    def update(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update", value)
 
 
 class ResourceGatewayTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
-    update: NotRequired[pulumi.Input[_builtins.str]]
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -999,9 +977,9 @@ class ResourceGatewayTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class ResourceGatewayTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None,
-                 update: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -1016,50 +994,60 @@ class ResourceGatewayTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def update(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "update")
 
     @update.setter
-    def update(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update", value)
 
 
 class ServiceDnsEntryArgsDict(TypedDict):
-    domain_name: NotRequired[pulumi.Input[_builtins.str]]
-    hosted_zone_id: NotRequired[pulumi.Input[_builtins.str]]
+    domain_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Domain name of the service.
+    """
+    hosted_zone_id: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    ID of the hosted zone.
+    """
 
 @pulumi.input_type
 class ServiceDnsEntryArgs:
     def __init__(__self__, *,
-                 domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 hosted_zone_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 hosted_zone_id: pulumi.Input[Optional[_builtins.str]] = None):
+        """
+        :param pulumi.Input[_builtins.str] domain_name: Domain name of the service.
+        :param pulumi.Input[_builtins.str] hosted_zone_id: ID of the hosted zone.
+        """
         if domain_name is not None:
             pulumi.set(__self__, "domain_name", domain_name)
         if hosted_zone_id is not None:
@@ -1067,31 +1055,37 @@ class ServiceDnsEntryArgs:
 
     @_builtins.property
     @pulumi.getter(name="domainName")
-    def domain_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def domain_name(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Domain name of the service.
+        """
         return pulumi.get(self, "domain_name")
 
     @domain_name.setter
-    def domain_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def domain_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "domain_name", value)
 
     @_builtins.property
     @pulumi.getter(name="hostedZoneId")
-    def hosted_zone_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def hosted_zone_id(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        ID of the hosted zone.
+        """
         return pulumi.get(self, "hosted_zone_id")
 
     @hosted_zone_id.setter
-    def hosted_zone_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def hosted_zone_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "hosted_zone_id", value)
 
 
 class ServiceNetworkResourceAssociationDnsEntryArgsDict(TypedDict):
     domain_name: pulumi.Input[_builtins.str]
     """
-    The domain name of the association in the service network.
+    Domain name of the association in the service network.
     """
     hosted_zone_id: pulumi.Input[_builtins.str]
     """
-    The ID of the hosted zone containing the domain name.
+    ID of the hosted zone containing the domain name.
     """
 
 @pulumi.input_type
@@ -1100,8 +1094,8 @@ class ServiceNetworkResourceAssociationDnsEntryArgs:
                  domain_name: pulumi.Input[_builtins.str],
                  hosted_zone_id: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] domain_name: The domain name of the association in the service network.
-        :param pulumi.Input[_builtins.str] hosted_zone_id: The ID of the hosted zone containing the domain name.
+        :param pulumi.Input[_builtins.str] domain_name: Domain name of the association in the service network.
+        :param pulumi.Input[_builtins.str] hosted_zone_id: ID of the hosted zone containing the domain name.
         """
         pulumi.set(__self__, "domain_name", domain_name)
         pulumi.set(__self__, "hosted_zone_id", hosted_zone_id)
@@ -1110,7 +1104,7 @@ class ServiceNetworkResourceAssociationDnsEntryArgs:
     @pulumi.getter(name="domainName")
     def domain_name(self) -> pulumi.Input[_builtins.str]:
         """
-        The domain name of the association in the service network.
+        Domain name of the association in the service network.
         """
         return pulumi.get(self, "domain_name")
 
@@ -1122,7 +1116,7 @@ class ServiceNetworkResourceAssociationDnsEntryArgs:
     @pulumi.getter(name="hostedZoneId")
     def hosted_zone_id(self) -> pulumi.Input[_builtins.str]:
         """
-        The ID of the hosted zone containing the domain name.
+        ID of the hosted zone containing the domain name.
         """
         return pulumi.get(self, "hosted_zone_id")
 
@@ -1132,11 +1126,11 @@ class ServiceNetworkResourceAssociationDnsEntryArgs:
 
 
 class ServiceNetworkResourceAssociationTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
@@ -1144,8 +1138,8 @@ class ServiceNetworkResourceAssociationTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class ServiceNetworkResourceAssociationTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -1157,47 +1151,47 @@ class ServiceNetworkResourceAssociationTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
 
 
 class ServiceNetworkServiceAssociationDnsEntryArgsDict(TypedDict):
-    domain_name: NotRequired[pulumi.Input[_builtins.str]]
+    domain_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The domain name of the service.
+    Domain name of the service.
     """
-    hosted_zone_id: NotRequired[pulumi.Input[_builtins.str]]
+    hosted_zone_id: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The ID of the hosted zone.
+    ID of the hosted zone.
     """
 
 @pulumi.input_type
 class ServiceNetworkServiceAssociationDnsEntryArgs:
     def __init__(__self__, *,
-                 domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 hosted_zone_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 hosted_zone_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] domain_name: The domain name of the service.
-        :param pulumi.Input[_builtins.str] hosted_zone_id: The ID of the hosted zone.
+        :param pulumi.Input[_builtins.str] domain_name: Domain name of the service.
+        :param pulumi.Input[_builtins.str] hosted_zone_id: ID of the hosted zone.
         """
         if domain_name is not None:
             pulumi.set(__self__, "domain_name", domain_name)
@@ -1206,35 +1200,35 @@ class ServiceNetworkServiceAssociationDnsEntryArgs:
 
     @_builtins.property
     @pulumi.getter(name="domainName")
-    def domain_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def domain_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The domain name of the service.
+        Domain name of the service.
         """
         return pulumi.get(self, "domain_name")
 
     @domain_name.setter
-    def domain_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def domain_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "domain_name", value)
 
     @_builtins.property
     @pulumi.getter(name="hostedZoneId")
-    def hosted_zone_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def hosted_zone_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The ID of the hosted zone.
+        ID of the hosted zone.
         """
         return pulumi.get(self, "hosted_zone_id")
 
     @hosted_zone_id.setter
-    def hosted_zone_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def hosted_zone_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "hosted_zone_id", value)
 
 
 class ServiceNetworkVpcAssociationDnsOptionsArgsDict(TypedDict):
-    private_dns_preference: NotRequired[pulumi.Input[_builtins.str]]
+    private_dns_preference: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Preference for which private domains have a private hosted zone created for and associated with the specified VPC. Only supported when `private_dns_enabled` is `true`. Valid Values are `VERIFIED_DOMAINS_ONLY`, `ALL_DOMAINS`, `VERIFIED_DOMAINS_AND_SPECIFIED_DOMAINS` and `SPECIFIED_DOMAINS_ONLY`.
     """
-    private_dns_specified_domains: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    private_dns_specified_domains: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     Private domains to create private hosted zones for and associate with the specified VPC. Only supported when `private_dns_enabled` is `true` and `private_dns_preference` is `VERIFIED_DOMAINS_AND_SPECIFIED_DOMAINS` or `SPECIFIED_DOMAINS_ONLY`.
     """
@@ -1242,8 +1236,8 @@ class ServiceNetworkVpcAssociationDnsOptionsArgsDict(TypedDict):
 @pulumi.input_type
 class ServiceNetworkVpcAssociationDnsOptionsArgs:
     def __init__(__self__, *,
-                 private_dns_preference: Optional[pulumi.Input[_builtins.str]] = None,
-                 private_dns_specified_domains: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 private_dns_preference: pulumi.Input[Optional[_builtins.str]] = None,
+                 private_dns_specified_domains: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         :param pulumi.Input[_builtins.str] private_dns_preference: Preference for which private domains have a private hosted zone created for and associated with the specified VPC. Only supported when `private_dns_enabled` is `true`. Valid Values are `VERIFIED_DOMAINS_ONLY`, `ALL_DOMAINS`, `VERIFIED_DOMAINS_AND_SPECIFIED_DOMAINS` and `SPECIFIED_DOMAINS_ONLY`.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] private_dns_specified_domains: Private domains to create private hosted zones for and associate with the specified VPC. Only supported when `private_dns_enabled` is `true` and `private_dns_preference` is `VERIFIED_DOMAINS_AND_SPECIFIED_DOMAINS` or `SPECIFIED_DOMAINS_ONLY`.
@@ -1255,47 +1249,47 @@ class ServiceNetworkVpcAssociationDnsOptionsArgs:
 
     @_builtins.property
     @pulumi.getter(name="privateDnsPreference")
-    def private_dns_preference(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def private_dns_preference(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Preference for which private domains have a private hosted zone created for and associated with the specified VPC. Only supported when `private_dns_enabled` is `true`. Valid Values are `VERIFIED_DOMAINS_ONLY`, `ALL_DOMAINS`, `VERIFIED_DOMAINS_AND_SPECIFIED_DOMAINS` and `SPECIFIED_DOMAINS_ONLY`.
         """
         return pulumi.get(self, "private_dns_preference")
 
     @private_dns_preference.setter
-    def private_dns_preference(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def private_dns_preference(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "private_dns_preference", value)
 
     @_builtins.property
     @pulumi.getter(name="privateDnsSpecifiedDomains")
-    def private_dns_specified_domains(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def private_dns_specified_domains(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         Private domains to create private hosted zones for and associate with the specified VPC. Only supported when `private_dns_enabled` is `true` and `private_dns_preference` is `VERIFIED_DOMAINS_AND_SPECIFIED_DOMAINS` or `SPECIFIED_DOMAINS_ONLY`.
         """
         return pulumi.get(self, "private_dns_specified_domains")
 
     @private_dns_specified_domains.setter
-    def private_dns_specified_domains(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def private_dns_specified_domains(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "private_dns_specified_domains", value)
 
 
 class TargetGroupAttachmentTargetArgsDict(TypedDict):
     id: pulumi.Input[_builtins.str]
     """
-    The ID of the target. If the target type of the target group is INSTANCE, this is an instance ID. If the target type is IP , this is an IP address. If the target type is LAMBDA, this is the ARN of the Lambda function. If the target type is ALB, this is the ARN of the Application Load Balancer.
+    ID of the target. If the target type of the target group is INSTANCE, this is an instance ID. If the target type is IP , this is an IP address. If the target type is LAMBDA, this is the ARN of the Lambda function. If the target type is ALB, this is the ARN of the Application Load Balancer.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    This port is used for routing traffic to the target, and defaults to the target group port. However, you can override the default and specify a custom port.
+    Port used for routing traffic to the target, and defaults to the target group port. However, you can override the default and specify a custom port.
     """
 
 @pulumi.input_type
 class TargetGroupAttachmentTargetArgs:
     def __init__(__self__, *,
                  id: pulumi.Input[_builtins.str],
-                 port: Optional[pulumi.Input[_builtins.int]] = None):
+                 port: pulumi.Input[Optional[_builtins.int]] = None):
         """
-        :param pulumi.Input[_builtins.str] id: The ID of the target. If the target type of the target group is INSTANCE, this is an instance ID. If the target type is IP , this is an IP address. If the target type is LAMBDA, this is the ARN of the Lambda function. If the target type is ALB, this is the ARN of the Application Load Balancer.
-        :param pulumi.Input[_builtins.int] port: This port is used for routing traffic to the target, and defaults to the target group port. However, you can override the default and specify a custom port.
+        :param pulumi.Input[_builtins.str] id: ID of the target. If the target type of the target group is INSTANCE, this is an instance ID. If the target type is IP , this is an IP address. If the target type is LAMBDA, this is the ARN of the Lambda function. If the target type is ALB, this is the ARN of the Application Load Balancer.
+        :param pulumi.Input[_builtins.int] port: Port used for routing traffic to the target, and defaults to the target group port. However, you can override the default and specify a custom port.
         """
         pulumi.set(__self__, "id", id)
         if port is not None:
@@ -1305,7 +1299,7 @@ class TargetGroupAttachmentTargetArgs:
     @pulumi.getter
     def id(self) -> pulumi.Input[_builtins.str]:
         """
-        The ID of the target. If the target type of the target group is INSTANCE, this is an instance ID. If the target type is IP , this is an IP address. If the target type is LAMBDA, this is the ARN of the Lambda function. If the target type is ALB, this is the ARN of the Application Load Balancer.
+        ID of the target. If the target type of the target group is INSTANCE, this is an instance ID. If the target type is IP , this is an IP address. If the target type is LAMBDA, this is the ARN of the Lambda function. If the target type is ALB, this is the ARN of the Application Load Balancer.
         """
         return pulumi.get(self, "id")
 
@@ -1315,65 +1309,65 @@ class TargetGroupAttachmentTargetArgs:
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        This port is used for routing traffic to the target, and defaults to the target group port. However, you can override the default and specify a custom port.
+        Port used for routing traffic to the target, and defaults to the target group port. However, you can override the default and specify a custom port.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
 
 class TargetGroupConfigArgsDict(TypedDict):
-    health_check: NotRequired[pulumi.Input['TargetGroupConfigHealthCheckArgsDict']]
+    health_check: NotRequired[pulumi.Input[Optional['TargetGroupConfigHealthCheckArgsDict']]]
     """
-    The health check configuration.
+    Health check configuration. See `health_check` Block below.
     """
-    ip_address_type: NotRequired[pulumi.Input[_builtins.str]]
+    ip_address_type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The type of IP address used for the target group. Valid values: `IPV4` | `IPV6`.
+    Type of IP address used for the target group. Valid values: `IPV4` or `IPV6`.
     """
-    lambda_event_structure_version: NotRequired[pulumi.Input[_builtins.str]]
+    lambda_event_structure_version: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The version of the event structure that the Lambda function receives. Supported only if `type` is `LAMBDA`. Valid Values are `V1` | `V2`.
+    Version of the event structure that the Lambda function receives. Supported only if `type` is `LAMBDA`. Valid values are `V1` or `V2`.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The port on which the targets are listening.
+    Port on which the targets are listening.
     """
-    protocol: NotRequired[pulumi.Input[_builtins.str]]
+    protocol: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The protocol to use for routing traffic to the targets. Valid Values are `HTTP` | `HTTPS`.
+    Protocol to use for routing traffic to the targets. Valid values are `HTTP` or `HTTPS`.
     """
-    protocol_version: NotRequired[pulumi.Input[_builtins.str]]
+    protocol_version: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The protocol version. Valid Values are `HTTP1` | `HTTP2` | `GRPC`. Default value is `HTTP1`.
+    Protocol version. Valid values are `HTTP1`, `HTTP2`, or `GRPC`. Default value is `HTTP1`.
     """
-    vpc_identifier: NotRequired[pulumi.Input[_builtins.str]]
+    vpc_identifier: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The ID of the VPC.
+    ID of the VPC.
     """
 
 @pulumi.input_type
 class TargetGroupConfigArgs:
     def __init__(__self__, *,
-                 health_check: Optional[pulumi.Input['TargetGroupConfigHealthCheckArgs']] = None,
-                 ip_address_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 lambda_event_structure_version: Optional[pulumi.Input[_builtins.str]] = None,
-                 port: Optional[pulumi.Input[_builtins.int]] = None,
-                 protocol: Optional[pulumi.Input[_builtins.str]] = None,
-                 protocol_version: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_identifier: Optional[pulumi.Input[_builtins.str]] = None):
+                 health_check: pulumi.Input[Optional['TargetGroupConfigHealthCheckArgs']] = None,
+                 ip_address_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 lambda_event_structure_version: pulumi.Input[Optional[_builtins.str]] = None,
+                 port: pulumi.Input[Optional[_builtins.int]] = None,
+                 protocol: pulumi.Input[Optional[_builtins.str]] = None,
+                 protocol_version: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_identifier: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input['TargetGroupConfigHealthCheckArgs'] health_check: The health check configuration.
-        :param pulumi.Input[_builtins.str] ip_address_type: The type of IP address used for the target group. Valid values: `IPV4` | `IPV6`.
-        :param pulumi.Input[_builtins.str] lambda_event_structure_version: The version of the event structure that the Lambda function receives. Supported only if `type` is `LAMBDA`. Valid Values are `V1` | `V2`.
-        :param pulumi.Input[_builtins.int] port: The port on which the targets are listening.
-        :param pulumi.Input[_builtins.str] protocol: The protocol to use for routing traffic to the targets. Valid Values are `HTTP` | `HTTPS`.
-        :param pulumi.Input[_builtins.str] protocol_version: The protocol version. Valid Values are `HTTP1` | `HTTP2` | `GRPC`. Default value is `HTTP1`.
-        :param pulumi.Input[_builtins.str] vpc_identifier: The ID of the VPC.
+        :param pulumi.Input['TargetGroupConfigHealthCheckArgs'] health_check: Health check configuration. See `health_check` Block below.
+        :param pulumi.Input[_builtins.str] ip_address_type: Type of IP address used for the target group. Valid values: `IPV4` or `IPV6`.
+        :param pulumi.Input[_builtins.str] lambda_event_structure_version: Version of the event structure that the Lambda function receives. Supported only if `type` is `LAMBDA`. Valid values are `V1` or `V2`.
+        :param pulumi.Input[_builtins.int] port: Port on which the targets are listening.
+        :param pulumi.Input[_builtins.str] protocol: Protocol to use for routing traffic to the targets. Valid values are `HTTP` or `HTTPS`.
+        :param pulumi.Input[_builtins.str] protocol_version: Protocol version. Valid values are `HTTP1`, `HTTP2`, or `GRPC`. Default value is `HTTP1`.
+        :param pulumi.Input[_builtins.str] vpc_identifier: ID of the VPC.
         """
         if health_check is not None:
             pulumi.set(__self__, "health_check", health_check)
@@ -1392,153 +1386,155 @@ class TargetGroupConfigArgs:
 
     @_builtins.property
     @pulumi.getter(name="healthCheck")
-    def health_check(self) -> Optional[pulumi.Input['TargetGroupConfigHealthCheckArgs']]:
+    def health_check(self) -> pulumi.Input[Optional['TargetGroupConfigHealthCheckArgs']]:
         """
-        The health check configuration.
+        Health check configuration. See `health_check` Block below.
         """
         return pulumi.get(self, "health_check")
 
     @health_check.setter
-    def health_check(self, value: Optional[pulumi.Input['TargetGroupConfigHealthCheckArgs']]):
+    def health_check(self, value: pulumi.Input[Optional['TargetGroupConfigHealthCheckArgs']]):
         pulumi.set(self, "health_check", value)
 
     @_builtins.property
     @pulumi.getter(name="ipAddressType")
-    def ip_address_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def ip_address_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The type of IP address used for the target group. Valid values: `IPV4` | `IPV6`.
+        Type of IP address used for the target group. Valid values: `IPV4` or `IPV6`.
         """
         return pulumi.get(self, "ip_address_type")
 
     @ip_address_type.setter
-    def ip_address_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def ip_address_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "ip_address_type", value)
 
     @_builtins.property
     @pulumi.getter(name="lambdaEventStructureVersion")
-    def lambda_event_structure_version(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def lambda_event_structure_version(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The version of the event structure that the Lambda function receives. Supported only if `type` is `LAMBDA`. Valid Values are `V1` | `V2`.
+        Version of the event structure that the Lambda function receives. Supported only if `type` is `LAMBDA`. Valid values are `V1` or `V2`.
         """
         return pulumi.get(self, "lambda_event_structure_version")
 
     @lambda_event_structure_version.setter
-    def lambda_event_structure_version(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def lambda_event_structure_version(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "lambda_event_structure_version", value)
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The port on which the targets are listening.
+        Port on which the targets are listening.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
     @_builtins.property
     @pulumi.getter
-    def protocol(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def protocol(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The protocol to use for routing traffic to the targets. Valid Values are `HTTP` | `HTTPS`.
+        Protocol to use for routing traffic to the targets. Valid values are `HTTP` or `HTTPS`.
         """
         return pulumi.get(self, "protocol")
 
     @protocol.setter
-    def protocol(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def protocol(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "protocol", value)
 
     @_builtins.property
     @pulumi.getter(name="protocolVersion")
-    def protocol_version(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def protocol_version(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The protocol version. Valid Values are `HTTP1` | `HTTP2` | `GRPC`. Default value is `HTTP1`.
+        Protocol version. Valid values are `HTTP1`, `HTTP2`, or `GRPC`. Default value is `HTTP1`.
         """
         return pulumi.get(self, "protocol_version")
 
     @protocol_version.setter
-    def protocol_version(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def protocol_version(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "protocol_version", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcIdentifier")
-    def vpc_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def vpc_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The ID of the VPC.
+        ID of the VPC.
         """
         return pulumi.get(self, "vpc_identifier")
 
     @vpc_identifier.setter
-    def vpc_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def vpc_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "vpc_identifier", value)
 
 
 class TargetGroupConfigHealthCheckArgsDict(TypedDict):
-    enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
-    Indicates whether health checking is enabled. Defaults to `true`.
+    Whether health checking is enabled. Defaults to `true`.
     """
-    health_check_interval_seconds: NotRequired[pulumi.Input[_builtins.int]]
+    health_check_interval_seconds: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The approximate amount of time, in seconds, between health checks of an individual target. The range is 5–300 seconds. The default is 30 seconds.
+    Approximate amount of time, in seconds, between health checks of an individual target. The range is 5–300 seconds. The default is 30 seconds.
     """
-    health_check_timeout_seconds: NotRequired[pulumi.Input[_builtins.int]]
+    health_check_timeout_seconds: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The amount of time, in seconds, to wait before reporting a target as unhealthy. The range is 1–120 seconds. The default is 5 seconds.
-    * `healthy_threshold_count ` - (Optional) The number of consecutive successful health checks required before considering an unhealthy target healthy. The range is 2–10. The default is 5.
+    Amount of time, in seconds, to wait before reporting a target as unhealthy. The range is 1–120 seconds. The default is 5 seconds.
     """
-    healthy_threshold_count: NotRequired[pulumi.Input[_builtins.int]]
-    matcher: NotRequired[pulumi.Input['TargetGroupConfigHealthCheckMatcherArgsDict']]
+    healthy_threshold_count: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The codes to use when checking for a successful response from a target. These are called _Success codes_ in the console.
+    Number of consecutive successful health checks required before considering an unhealthy target healthy. The range is 2–10. The default is 5.
     """
-    path: NotRequired[pulumi.Input[_builtins.str]]
+    matcher: NotRequired[pulumi.Input[Optional['TargetGroupConfigHealthCheckMatcherArgsDict']]]
     """
-    The destination for health checks on the targets. If the protocol version is HTTP/1.1 or HTTP/2, specify a valid URI (for example, /path?query). The default path is `/`. Health checks are not supported if the protocol version is gRPC, however, you can choose HTTP/1.1 or HTTP/2 and specify a valid URI.
+    Codes to use when checking for a successful response from a target. See `matcher` Block below.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    path: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The port used when performing health checks on targets. The default setting is the port that a target receives traffic on.
+    Destination for health checks on the targets. If the protocol version is HTTP/1.1 or HTTP/2, specify a valid URI (for example, /path?query). The default path is `/`. Health checks are not supported if the protocol version is gRPC, however, you can choose HTTP/1.1 or HTTP/2 and specify a valid URI.
     """
-    protocol: NotRequired[pulumi.Input[_builtins.str]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The protocol used when performing health checks on targets. The possible protocols are `HTTP` and `HTTPS`.
+    Port used when performing health checks on targets. The default setting is the port that a target receives traffic on.
     """
-    protocol_version: NotRequired[pulumi.Input[_builtins.str]]
+    protocol: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The protocol version used when performing health checks on targets. The possible protocol versions are `HTTP1` and `HTTP2`. The default is `HTTP1`.
+    Protocol used when performing health checks on targets. The possible protocols are `HTTP` and `HTTPS`.
     """
-    unhealthy_threshold_count: NotRequired[pulumi.Input[_builtins.int]]
+    protocol_version: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The number of consecutive failed health checks required before considering a target unhealthy. The range is 2–10. The default is 2.
+    Protocol version used when performing health checks on targets. The possible protocol versions are `HTTP1` and `HTTP2`. The default is `HTTP1`.
+    """
+    unhealthy_threshold_count: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Number of consecutive failed health checks required before considering a target unhealthy. The range is 2–10. The default is 2.
     """
 
 @pulumi.input_type
 class TargetGroupConfigHealthCheckArgs:
     def __init__(__self__, *,
-                 enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 health_check_interval_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 health_check_timeout_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 healthy_threshold_count: Optional[pulumi.Input[_builtins.int]] = None,
-                 matcher: Optional[pulumi.Input['TargetGroupConfigHealthCheckMatcherArgs']] = None,
-                 path: Optional[pulumi.Input[_builtins.str]] = None,
-                 port: Optional[pulumi.Input[_builtins.int]] = None,
-                 protocol: Optional[pulumi.Input[_builtins.str]] = None,
-                 protocol_version: Optional[pulumi.Input[_builtins.str]] = None,
-                 unhealthy_threshold_count: Optional[pulumi.Input[_builtins.int]] = None):
+                 enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 health_check_interval_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 health_check_timeout_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 healthy_threshold_count: pulumi.Input[Optional[_builtins.int]] = None,
+                 matcher: pulumi.Input[Optional['TargetGroupConfigHealthCheckMatcherArgs']] = None,
+                 path: pulumi.Input[Optional[_builtins.str]] = None,
+                 port: pulumi.Input[Optional[_builtins.int]] = None,
+                 protocol: pulumi.Input[Optional[_builtins.str]] = None,
+                 protocol_version: pulumi.Input[Optional[_builtins.str]] = None,
+                 unhealthy_threshold_count: pulumi.Input[Optional[_builtins.int]] = None):
         """
-        :param pulumi.Input[_builtins.bool] enabled: Indicates whether health checking is enabled. Defaults to `true`.
-        :param pulumi.Input[_builtins.int] health_check_interval_seconds: The approximate amount of time, in seconds, between health checks of an individual target. The range is 5–300 seconds. The default is 30 seconds.
-        :param pulumi.Input[_builtins.int] health_check_timeout_seconds: The amount of time, in seconds, to wait before reporting a target as unhealthy. The range is 1–120 seconds. The default is 5 seconds.
-               * `healthy_threshold_count ` - (Optional) The number of consecutive successful health checks required before considering an unhealthy target healthy. The range is 2–10. The default is 5.
-        :param pulumi.Input['TargetGroupConfigHealthCheckMatcherArgs'] matcher: The codes to use when checking for a successful response from a target. These are called _Success codes_ in the console.
-        :param pulumi.Input[_builtins.str] path: The destination for health checks on the targets. If the protocol version is HTTP/1.1 or HTTP/2, specify a valid URI (for example, /path?query). The default path is `/`. Health checks are not supported if the protocol version is gRPC, however, you can choose HTTP/1.1 or HTTP/2 and specify a valid URI.
-        :param pulumi.Input[_builtins.int] port: The port used when performing health checks on targets. The default setting is the port that a target receives traffic on.
-        :param pulumi.Input[_builtins.str] protocol: The protocol used when performing health checks on targets. The possible protocols are `HTTP` and `HTTPS`.
-        :param pulumi.Input[_builtins.str] protocol_version: The protocol version used when performing health checks on targets. The possible protocol versions are `HTTP1` and `HTTP2`. The default is `HTTP1`.
-        :param pulumi.Input[_builtins.int] unhealthy_threshold_count: The number of consecutive failed health checks required before considering a target unhealthy. The range is 2–10. The default is 2.
+        :param pulumi.Input[_builtins.bool] enabled: Whether health checking is enabled. Defaults to `true`.
+        :param pulumi.Input[_builtins.int] health_check_interval_seconds: Approximate amount of time, in seconds, between health checks of an individual target. The range is 5–300 seconds. The default is 30 seconds.
+        :param pulumi.Input[_builtins.int] health_check_timeout_seconds: Amount of time, in seconds, to wait before reporting a target as unhealthy. The range is 1–120 seconds. The default is 5 seconds.
+        :param pulumi.Input[_builtins.int] healthy_threshold_count: Number of consecutive successful health checks required before considering an unhealthy target healthy. The range is 2–10. The default is 5.
+        :param pulumi.Input['TargetGroupConfigHealthCheckMatcherArgs'] matcher: Codes to use when checking for a successful response from a target. See `matcher` Block below.
+        :param pulumi.Input[_builtins.str] path: Destination for health checks on the targets. If the protocol version is HTTP/1.1 or HTTP/2, specify a valid URI (for example, /path?query). The default path is `/`. Health checks are not supported if the protocol version is gRPC, however, you can choose HTTP/1.1 or HTTP/2 and specify a valid URI.
+        :param pulumi.Input[_builtins.int] port: Port used when performing health checks on targets. The default setting is the port that a target receives traffic on.
+        :param pulumi.Input[_builtins.str] protocol: Protocol used when performing health checks on targets. The possible protocols are `HTTP` and `HTTPS`.
+        :param pulumi.Input[_builtins.str] protocol_version: Protocol version used when performing health checks on targets. The possible protocol versions are `HTTP1` and `HTTP2`. The default is `HTTP1`.
+        :param pulumi.Input[_builtins.int] unhealthy_threshold_count: Number of consecutive failed health checks required before considering a target unhealthy. The range is 2–10. The default is 2.
         """
         if enabled is not None:
             pulumi.set(__self__, "enabled", enabled)
@@ -1563,149 +1559,151 @@ class TargetGroupConfigHealthCheckArgs:
 
     @_builtins.property
     @pulumi.getter
-    def enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        Indicates whether health checking is enabled. Defaults to `true`.
+        Whether health checking is enabled. Defaults to `true`.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
-    def enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="healthCheckIntervalSeconds")
-    def health_check_interval_seconds(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def health_check_interval_seconds(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The approximate amount of time, in seconds, between health checks of an individual target. The range is 5–300 seconds. The default is 30 seconds.
+        Approximate amount of time, in seconds, between health checks of an individual target. The range is 5–300 seconds. The default is 30 seconds.
         """
         return pulumi.get(self, "health_check_interval_seconds")
 
     @health_check_interval_seconds.setter
-    def health_check_interval_seconds(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def health_check_interval_seconds(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "health_check_interval_seconds", value)
 
     @_builtins.property
     @pulumi.getter(name="healthCheckTimeoutSeconds")
-    def health_check_timeout_seconds(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def health_check_timeout_seconds(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The amount of time, in seconds, to wait before reporting a target as unhealthy. The range is 1–120 seconds. The default is 5 seconds.
-        * `healthy_threshold_count ` - (Optional) The number of consecutive successful health checks required before considering an unhealthy target healthy. The range is 2–10. The default is 5.
+        Amount of time, in seconds, to wait before reporting a target as unhealthy. The range is 1–120 seconds. The default is 5 seconds.
         """
         return pulumi.get(self, "health_check_timeout_seconds")
 
     @health_check_timeout_seconds.setter
-    def health_check_timeout_seconds(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def health_check_timeout_seconds(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "health_check_timeout_seconds", value)
 
     @_builtins.property
     @pulumi.getter(name="healthyThresholdCount")
-    def healthy_threshold_count(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def healthy_threshold_count(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Number of consecutive successful health checks required before considering an unhealthy target healthy. The range is 2–10. The default is 5.
+        """
         return pulumi.get(self, "healthy_threshold_count")
 
     @healthy_threshold_count.setter
-    def healthy_threshold_count(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def healthy_threshold_count(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "healthy_threshold_count", value)
 
     @_builtins.property
     @pulumi.getter
-    def matcher(self) -> Optional[pulumi.Input['TargetGroupConfigHealthCheckMatcherArgs']]:
+    def matcher(self) -> pulumi.Input[Optional['TargetGroupConfigHealthCheckMatcherArgs']]:
         """
-        The codes to use when checking for a successful response from a target. These are called _Success codes_ in the console.
+        Codes to use when checking for a successful response from a target. See `matcher` Block below.
         """
         return pulumi.get(self, "matcher")
 
     @matcher.setter
-    def matcher(self, value: Optional[pulumi.Input['TargetGroupConfigHealthCheckMatcherArgs']]):
+    def matcher(self, value: pulumi.Input[Optional['TargetGroupConfigHealthCheckMatcherArgs']]):
         pulumi.set(self, "matcher", value)
 
     @_builtins.property
     @pulumi.getter
-    def path(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def path(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The destination for health checks on the targets. If the protocol version is HTTP/1.1 or HTTP/2, specify a valid URI (for example, /path?query). The default path is `/`. Health checks are not supported if the protocol version is gRPC, however, you can choose HTTP/1.1 or HTTP/2 and specify a valid URI.
+        Destination for health checks on the targets. If the protocol version is HTTP/1.1 or HTTP/2, specify a valid URI (for example, /path?query). The default path is `/`. Health checks are not supported if the protocol version is gRPC, however, you can choose HTTP/1.1 or HTTP/2 and specify a valid URI.
         """
         return pulumi.get(self, "path")
 
     @path.setter
-    def path(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def path(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "path", value)
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The port used when performing health checks on targets. The default setting is the port that a target receives traffic on.
+        Port used when performing health checks on targets. The default setting is the port that a target receives traffic on.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
     @_builtins.property
     @pulumi.getter
-    def protocol(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def protocol(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The protocol used when performing health checks on targets. The possible protocols are `HTTP` and `HTTPS`.
+        Protocol used when performing health checks on targets. The possible protocols are `HTTP` and `HTTPS`.
         """
         return pulumi.get(self, "protocol")
 
     @protocol.setter
-    def protocol(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def protocol(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "protocol", value)
 
     @_builtins.property
     @pulumi.getter(name="protocolVersion")
-    def protocol_version(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def protocol_version(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The protocol version used when performing health checks on targets. The possible protocol versions are `HTTP1` and `HTTP2`. The default is `HTTP1`.
+        Protocol version used when performing health checks on targets. The possible protocol versions are `HTTP1` and `HTTP2`. The default is `HTTP1`.
         """
         return pulumi.get(self, "protocol_version")
 
     @protocol_version.setter
-    def protocol_version(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def protocol_version(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "protocol_version", value)
 
     @_builtins.property
     @pulumi.getter(name="unhealthyThresholdCount")
-    def unhealthy_threshold_count(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def unhealthy_threshold_count(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The number of consecutive failed health checks required before considering a target unhealthy. The range is 2–10. The default is 2.
+        Number of consecutive failed health checks required before considering a target unhealthy. The range is 2–10. The default is 2.
         """
         return pulumi.get(self, "unhealthy_threshold_count")
 
     @unhealthy_threshold_count.setter
-    def unhealthy_threshold_count(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def unhealthy_threshold_count(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "unhealthy_threshold_count", value)
 
 
 class TargetGroupConfigHealthCheckMatcherArgsDict(TypedDict):
-    value: NotRequired[pulumi.Input[_builtins.str]]
+    value: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The HTTP codes to use when checking for a successful response from a target.
+    HTTP codes to use when checking for a successful response from a target.
     """
 
 @pulumi.input_type
 class TargetGroupConfigHealthCheckMatcherArgs:
     def __init__(__self__, *,
-                 value: Optional[pulumi.Input[_builtins.str]] = None):
+                 value: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] value: The HTTP codes to use when checking for a successful response from a target.
+        :param pulumi.Input[_builtins.str] value: HTTP codes to use when checking for a successful response from a target.
         """
         if value is not None:
             pulumi.set(__self__, "value", value)
 
     @_builtins.property
     @pulumi.getter
-    def value(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def value(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The HTTP codes to use when checking for a successful response from a target.
+        HTTP codes to use when checking for a successful response from a target.
         """
         return pulumi.get(self, "value")
 
     @value.setter
-    def value(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def value(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "value", value)
 
 

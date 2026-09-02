@@ -24,30 +24,33 @@ class PlanArgs:
                  execution_role: pulumi.Input[_builtins.str],
                  recovery_approach: pulumi.Input[_builtins.str],
                  regions: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
-                 associated_alarms: Optional[pulumi.Input[Sequence[pulumi.Input['PlanAssociatedAlarmArgs']]]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 primary_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 recovery_time_objective_minutes: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['PlanTimeoutsArgs']] = None,
-                 triggers: Optional[pulumi.Input[Sequence[pulumi.Input['PlanTriggerArgs']]]] = None,
-                 workflows: Optional[pulumi.Input[Sequence[pulumi.Input['PlanWorkflowArgs']]]] = None):
+                 associated_alarms: pulumi.Input[Optional[Sequence[pulumi.Input['PlanAssociatedAlarmArgs']]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 primary_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 recovery_time_objective_minutes: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 report_configurations: pulumi.Input[Optional[Sequence[pulumi.Input['PlanReportConfigurationArgs']]]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['PlanTimeoutsArgs']] = None,
+                 triggers: pulumi.Input[Optional[Sequence[pulumi.Input['PlanTriggerArgs']]]] = None,
+                 workflows: pulumi.Input[Optional[Sequence[pulumi.Input['PlanWorkflowArgs']]]] = None):
         """
         The set of arguments for constructing a Plan resource.
+
         :param pulumi.Input[_builtins.str] execution_role: ARN of the IAM role that ARC Region Switch will assume to execute the plan.
         :param pulumi.Input[_builtins.str] recovery_approach: Recovery approach for the plan. Valid values: `activeActive`, `activePassive`.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] regions: List of AWS regions involved in the plan.
-        :param pulumi.Input[Sequence[pulumi.Input['PlanAssociatedAlarmArgs']]] associated_alarms: Set of CloudWatch alarms associated with the plan. See Associated Alarms below.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] regions: List of AWS regions involved in the plan. Must contain at least 2 regions.
+        :param pulumi.Input[Sequence[pulumi.Input['PlanAssociatedAlarmArgs']]] associated_alarms: CloudWatch alarms associated with the plan. See `associated_alarms` Block for details.
         :param pulumi.Input[_builtins.str] description: Description of the plan.
         :param pulumi.Input[_builtins.str] name: Name of the plan. Must be unique within the account.
         :param pulumi.Input[_builtins.str] primary_region: Primary region for the plan.
         :param pulumi.Input[_builtins.int] recovery_time_objective_minutes: Recovery time objective in minutes.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[Sequence[pulumi.Input['PlanReportConfigurationArgs']]] report_configurations: Configuration for automated execution reports. See `report_configuration` Block for details.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[Sequence[pulumi.Input['PlanTriggerArgs']]] triggers: Set of triggers that can initiate the plan execution. See Triggers below.
-        :param pulumi.Input[Sequence[pulumi.Input['PlanWorkflowArgs']]] workflows: List of workflows that define the steps to execute. See Workflow below.
+        :param pulumi.Input[Sequence[pulumi.Input['PlanTriggerArgs']]] triggers: Triggers that can initiate the plan execution. See `triggers` Block for details.
+        :param pulumi.Input[Sequence[pulumi.Input['PlanWorkflowArgs']]] workflows: Workflows that define the steps to execute. See `workflow` Block for details.
                
                The following arguments are optional:
         """
@@ -69,6 +72,8 @@ class PlanArgs:
             pulumi.log.warn("""region is deprecated: This attribute will be removed in a future version of the provider.""")
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if report_configurations is not None:
+            pulumi.set(__self__, "report_configurations", report_configurations)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
         if timeouts is not None:
@@ -106,7 +111,7 @@ class PlanArgs:
     @pulumi.getter
     def regions(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
         """
-        List of AWS regions involved in the plan.
+        List of AWS regions involved in the plan. Must contain at least 2 regions.
         """
         return pulumi.get(self, "regions")
 
@@ -116,147 +121,161 @@ class PlanArgs:
 
     @_builtins.property
     @pulumi.getter(name="associatedAlarms")
-    def associated_alarms(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PlanAssociatedAlarmArgs']]]]:
+    def associated_alarms(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PlanAssociatedAlarmArgs']]]]:
         """
-        Set of CloudWatch alarms associated with the plan. See Associated Alarms below.
+        CloudWatch alarms associated with the plan. See `associated_alarms` Block for details.
         """
         return pulumi.get(self, "associated_alarms")
 
     @associated_alarms.setter
-    def associated_alarms(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PlanAssociatedAlarmArgs']]]]):
+    def associated_alarms(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PlanAssociatedAlarmArgs']]]]):
         pulumi.set(self, "associated_alarms", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the plan.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the plan. Must be unique within the account.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="primaryRegion")
-    def primary_region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def primary_region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Primary region for the plan.
         """
         return pulumi.get(self, "primary_region")
 
     @primary_region.setter
-    def primary_region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def primary_region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "primary_region", value)
 
     @_builtins.property
     @pulumi.getter(name="recoveryTimeObjectiveMinutes")
-    def recovery_time_objective_minutes(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def recovery_time_objective_minutes(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Recovery time objective in minutes.
         """
         return pulumi.get(self, "recovery_time_objective_minutes")
 
     @recovery_time_objective_minutes.setter
-    def recovery_time_objective_minutes(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def recovery_time_objective_minutes(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "recovery_time_objective_minutes", value)
 
     @_builtins.property
     @pulumi.getter
     @_utilities.deprecated("""This attribute will be removed in a future version of the provider.""")
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
+    @pulumi.getter(name="reportConfigurations")
+    def report_configurations(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PlanReportConfigurationArgs']]]]:
+        """
+        Configuration for automated execution reports. See `report_configuration` Block for details.
+        """
+        return pulumi.get(self, "report_configurations")
+
+    @report_configurations.setter
+    def report_configurations(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PlanReportConfigurationArgs']]]]):
+        pulumi.set(self, "report_configurations", value)
+
+    @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['PlanTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['PlanTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['PlanTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['PlanTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter
-    def triggers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PlanTriggerArgs']]]]:
+    def triggers(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PlanTriggerArgs']]]]:
         """
-        Set of triggers that can initiate the plan execution. See Triggers below.
+        Triggers that can initiate the plan execution. See `triggers` Block for details.
         """
         return pulumi.get(self, "triggers")
 
     @triggers.setter
-    def triggers(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PlanTriggerArgs']]]]):
+    def triggers(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PlanTriggerArgs']]]]):
         pulumi.set(self, "triggers", value)
 
     @_builtins.property
     @pulumi.getter
-    def workflows(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PlanWorkflowArgs']]]]:
+    def workflows(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PlanWorkflowArgs']]]]:
         """
-        List of workflows that define the steps to execute. See Workflow below.
+        Workflows that define the steps to execute. See `workflow` Block for details.
 
         The following arguments are optional:
         """
         return pulumi.get(self, "workflows")
 
     @workflows.setter
-    def workflows(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PlanWorkflowArgs']]]]):
+    def workflows(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PlanWorkflowArgs']]]]):
         pulumi.set(self, "workflows", value)
 
 
 @pulumi.input_type
 class _PlanState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 associated_alarms: Optional[pulumi.Input[Sequence[pulumi.Input['PlanAssociatedAlarmArgs']]]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 execution_role: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 primary_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 recovery_approach: Optional[pulumi.Input[_builtins.str]] = None,
-                 recovery_time_objective_minutes: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 regions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['PlanTimeoutsArgs']] = None,
-                 triggers: Optional[pulumi.Input[Sequence[pulumi.Input['PlanTriggerArgs']]]] = None,
-                 workflows: Optional[pulumi.Input[Sequence[pulumi.Input['PlanWorkflowArgs']]]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 associated_alarms: pulumi.Input[Optional[Sequence[pulumi.Input['PlanAssociatedAlarmArgs']]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 execution_role: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 primary_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 recovery_approach: pulumi.Input[Optional[_builtins.str]] = None,
+                 recovery_time_objective_minutes: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 regions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 report_configurations: pulumi.Input[Optional[Sequence[pulumi.Input['PlanReportConfigurationArgs']]]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['PlanTimeoutsArgs']] = None,
+                 triggers: pulumi.Input[Optional[Sequence[pulumi.Input['PlanTriggerArgs']]]] = None,
+                 workflows: pulumi.Input[Optional[Sequence[pulumi.Input['PlanWorkflowArgs']]]] = None):
         """
         Input properties used for looking up and filtering Plan resources.
+
         :param pulumi.Input[_builtins.str] arn: ARN of the plan.
-        :param pulumi.Input[Sequence[pulumi.Input['PlanAssociatedAlarmArgs']]] associated_alarms: Set of CloudWatch alarms associated with the plan. See Associated Alarms below.
+        :param pulumi.Input[Sequence[pulumi.Input['PlanAssociatedAlarmArgs']]] associated_alarms: CloudWatch alarms associated with the plan. See `associated_alarms` Block for details.
         :param pulumi.Input[_builtins.str] description: Description of the plan.
         :param pulumi.Input[_builtins.str] execution_role: ARN of the IAM role that ARC Region Switch will assume to execute the plan.
         :param pulumi.Input[_builtins.str] name: Name of the plan. Must be unique within the account.
@@ -264,11 +283,12 @@ class _PlanState:
         :param pulumi.Input[_builtins.str] recovery_approach: Recovery approach for the plan. Valid values: `activeActive`, `activePassive`.
         :param pulumi.Input[_builtins.int] recovery_time_objective_minutes: Recovery time objective in minutes.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] regions: List of AWS regions involved in the plan.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] regions: List of AWS regions involved in the plan. Must contain at least 2 regions.
+        :param pulumi.Input[Sequence[pulumi.Input['PlanReportConfigurationArgs']]] report_configurations: Configuration for automated execution reports. See `report_configuration` Block for details.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
-        :param pulumi.Input[Sequence[pulumi.Input['PlanTriggerArgs']]] triggers: Set of triggers that can initiate the plan execution. See Triggers below.
-        :param pulumi.Input[Sequence[pulumi.Input['PlanWorkflowArgs']]] workflows: List of workflows that define the steps to execute. See Workflow below.
+        :param pulumi.Input[Sequence[pulumi.Input['PlanTriggerArgs']]] triggers: Triggers that can initiate the plan execution. See `triggers` Block for details.
+        :param pulumi.Input[Sequence[pulumi.Input['PlanWorkflowArgs']]] workflows: Workflows that define the steps to execute. See `workflow` Block for details.
                
                The following arguments are optional:
         """
@@ -295,6 +315,8 @@ class _PlanState:
             pulumi.set(__self__, "region", region)
         if regions is not None:
             pulumi.set(__self__, "regions", regions)
+        if report_configurations is not None:
+            pulumi.set(__self__, "report_configurations", report_configurations)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
         if tags_all is not None:
@@ -308,182 +330,194 @@ class _PlanState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the plan.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="associatedAlarms")
-    def associated_alarms(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PlanAssociatedAlarmArgs']]]]:
+    def associated_alarms(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PlanAssociatedAlarmArgs']]]]:
         """
-        Set of CloudWatch alarms associated with the plan. See Associated Alarms below.
+        CloudWatch alarms associated with the plan. See `associated_alarms` Block for details.
         """
         return pulumi.get(self, "associated_alarms")
 
     @associated_alarms.setter
-    def associated_alarms(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PlanAssociatedAlarmArgs']]]]):
+    def associated_alarms(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PlanAssociatedAlarmArgs']]]]):
         pulumi.set(self, "associated_alarms", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the plan.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="executionRole")
-    def execution_role(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def execution_role(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the IAM role that ARC Region Switch will assume to execute the plan.
         """
         return pulumi.get(self, "execution_role")
 
     @execution_role.setter
-    def execution_role(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def execution_role(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "execution_role", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the plan. Must be unique within the account.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="primaryRegion")
-    def primary_region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def primary_region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Primary region for the plan.
         """
         return pulumi.get(self, "primary_region")
 
     @primary_region.setter
-    def primary_region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def primary_region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "primary_region", value)
 
     @_builtins.property
     @pulumi.getter(name="recoveryApproach")
-    def recovery_approach(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def recovery_approach(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Recovery approach for the plan. Valid values: `activeActive`, `activePassive`.
         """
         return pulumi.get(self, "recovery_approach")
 
     @recovery_approach.setter
-    def recovery_approach(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def recovery_approach(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "recovery_approach", value)
 
     @_builtins.property
     @pulumi.getter(name="recoveryTimeObjectiveMinutes")
-    def recovery_time_objective_minutes(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def recovery_time_objective_minutes(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Recovery time objective in minutes.
         """
         return pulumi.get(self, "recovery_time_objective_minutes")
 
     @recovery_time_objective_minutes.setter
-    def recovery_time_objective_minutes(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def recovery_time_objective_minutes(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "recovery_time_objective_minutes", value)
 
     @_builtins.property
     @pulumi.getter
     @_utilities.deprecated("""This attribute will be removed in a future version of the provider.""")
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def regions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def regions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        List of AWS regions involved in the plan.
+        List of AWS regions involved in the plan. Must contain at least 2 regions.
         """
         return pulumi.get(self, "regions")
 
     @regions.setter
-    def regions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def regions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "regions", value)
 
     @_builtins.property
+    @pulumi.getter(name="reportConfigurations")
+    def report_configurations(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PlanReportConfigurationArgs']]]]:
+        """
+        Configuration for automated execution reports. See `report_configuration` Block for details.
+        """
+        return pulumi.get(self, "report_configurations")
+
+    @report_configurations.setter
+    def report_configurations(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PlanReportConfigurationArgs']]]]):
+        pulumi.set(self, "report_configurations", value)
+
+    @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['PlanTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['PlanTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['PlanTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['PlanTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter
-    def triggers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PlanTriggerArgs']]]]:
+    def triggers(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PlanTriggerArgs']]]]:
         """
-        Set of triggers that can initiate the plan execution. See Triggers below.
+        Triggers that can initiate the plan execution. See `triggers` Block for details.
         """
         return pulumi.get(self, "triggers")
 
     @triggers.setter
-    def triggers(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PlanTriggerArgs']]]]):
+    def triggers(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PlanTriggerArgs']]]]):
         pulumi.set(self, "triggers", value)
 
     @_builtins.property
     @pulumi.getter
-    def workflows(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PlanWorkflowArgs']]]]:
+    def workflows(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PlanWorkflowArgs']]]]:
         """
-        List of workflows that define the steps to execute. See Workflow below.
+        Workflows that define the steps to execute. See `workflow` Block for details.
 
         The following arguments are optional:
         """
         return pulumi.get(self, "workflows")
 
     @workflows.setter
-    def workflows(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PlanWorkflowArgs']]]]):
+    def workflows(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PlanWorkflowArgs']]]]):
         pulumi.set(self, "workflows", value)
 
 
@@ -493,19 +527,20 @@ class Plan(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 associated_alarms: Optional[pulumi.Input[Sequence[pulumi.Input[Union['PlanAssociatedAlarmArgs', 'PlanAssociatedAlarmArgsDict']]]]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 execution_role: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 primary_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 recovery_approach: Optional[pulumi.Input[_builtins.str]] = None,
-                 recovery_time_objective_minutes: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 regions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['PlanTimeoutsArgs', 'PlanTimeoutsArgsDict']]] = None,
-                 triggers: Optional[pulumi.Input[Sequence[pulumi.Input[Union['PlanTriggerArgs', 'PlanTriggerArgsDict']]]]] = None,
-                 workflows: Optional[pulumi.Input[Sequence[pulumi.Input[Union['PlanWorkflowArgs', 'PlanWorkflowArgsDict']]]]] = None,
+                 associated_alarms: pulumi.Input[Optional[Sequence[pulumi.Input[Union['PlanAssociatedAlarmArgs', 'PlanAssociatedAlarmArgsDict']]]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 execution_role: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 primary_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 recovery_approach: pulumi.Input[Optional[_builtins.str]] = None,
+                 recovery_time_objective_minutes: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 regions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 report_configurations: pulumi.Input[Optional[Sequence[pulumi.Input[Union['PlanReportConfigurationArgs', 'PlanReportConfigurationArgsDict']]]]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['PlanTimeoutsArgs', 'PlanTimeoutsArgsDict']]] = None,
+                 triggers: pulumi.Input[Optional[Sequence[pulumi.Input[Union['PlanTriggerArgs', 'PlanTriggerArgsDict']]]]] = None,
+                 workflows: pulumi.Input[Optional[Sequence[pulumi.Input[Union['PlanWorkflowArgs', 'PlanWorkflowArgsDict']]]]] = None,
                  __props__=None):
         """
         Resource for managing an Amazon ARC Region Switch plan.
@@ -532,6 +567,32 @@ class Plan(pulumi.CustomResource):
                 }],
             }))
         example_plan = aws.arcregionswitch.Plan("example",
+            workflows=[
+                {
+                    "steps": [{
+                        "execution_approval_configs": [{
+                            "approval_role": example.arn,
+                            "timeout_minutes": 60,
+                        }],
+                        "name": "manual-approval",
+                        "execution_block_type": "ManualApproval",
+                    }],
+                    "workflow_target_action": "activate",
+                    "workflow_target_region": "us-west-2",
+                },
+                {
+                    "steps": [{
+                        "execution_approval_configs": [{
+                            "approval_role": example.arn,
+                            "timeout_minutes": 60,
+                        }],
+                        "name": "manual-approval",
+                        "execution_block_type": "ManualApproval",
+                    }],
+                    "workflow_target_action": "deactivate",
+                    "workflow_target_region": "us-east-1",
+                },
+            ],
             name="example-plan",
             execution_role=example.arn,
             recovery_approach="activePassive",
@@ -539,33 +600,7 @@ class Plan(pulumi.CustomResource):
                 "us-east-1",
                 "us-west-2",
             ],
-            primary_region="us-east-1",
-            workflows=[
-                {
-                    "workflow_target_action": "activate",
-                    "workflow_target_region": "us-west-2",
-                    "steps": [{
-                        "name": "manual-approval",
-                        "execution_block_type": "ManualApproval",
-                        "execution_approval_configs": [{
-                            "approval_role": example.arn,
-                            "timeout_minutes": 60,
-                        }],
-                    }],
-                },
-                {
-                    "workflow_target_action": "deactivate",
-                    "workflow_target_region": "us-east-1",
-                    "steps": [{
-                        "name": "manual-approval",
-                        "execution_block_type": "ManualApproval",
-                        "execution_approval_configs": [{
-                            "approval_role": example.arn,
-                            "timeout_minutes": 60,
-                        }],
-                    }],
-                },
-            ])
+            primary_region="us-east-1")
         ```
 
         ### Complex Usage with Multiple Step Types
@@ -575,6 +610,81 @@ class Plan(pulumi.CustomResource):
         import pulumi_aws as aws
 
         complex = aws.arcregionswitch.Plan("complex",
+            associated_alarms=[{
+                "name": "application-health-alarm",
+                "alarm_type": "applicationHealth",
+                "resource_identifier": "arn:aws:cloudwatch:us-east-1:123456789012:alarm:MyAlarm",
+            }],
+            triggers=[{
+                "conditions": [{
+                    "associated_alarm_name": "application-health-alarm",
+                    "condition": "red",
+                }],
+                "action": "activate",
+                "target_region": "us-west-2",
+                "min_delay_minutes_between_executions": 30,
+            }],
+            workflows=[
+                {
+                    "steps": [
+                        {
+                            "custom_action_lambda_configs": [{
+                                "lambdas": [{
+                                    "arn": example["arn"],
+                                }],
+                                "region_to_run": "activatingRegion",
+                                "retry_interval_minutes": float(5),
+                                "timeout_minutes": 30,
+                            }],
+                            "name": "lambda-step",
+                            "execution_block_type": "CustomActionLambda",
+                        },
+                        {
+                            "parallel_configs": [{
+                                "steps": [
+                                    {
+                                        "ec2_asg_capacity_increase_configs": [{
+                                            "asgs": [{
+                                                "arn": example_aws_autoscaling_group["arn"],
+                                            }],
+                                            "target_percent": 150,
+                                        }],
+                                        "name": "asg-scaling",
+                                        "execution_block_type": "EC2AutoScaling",
+                                    },
+                                    {
+                                        "ecs_capacity_increase_configs": [{
+                                            "services": [{
+                                                "cluster_arn": example_aws_ecs_cluster["arn"],
+                                                "service_arn": example_aws_ecs_service["arn"],
+                                            }],
+                                            "target_percent": 200,
+                                        }],
+                                        "name": "ecs-scaling",
+                                        "execution_block_type": "ECSServiceScaling",
+                                    },
+                                ],
+                            }],
+                            "name": "parallel-step",
+                            "execution_block_type": "Parallel",
+                        },
+                    ],
+                    "workflow_target_action": "activate",
+                    "workflow_target_region": "us-west-2",
+                },
+                {
+                    "steps": [{
+                        "route53_health_check_configs": [{
+                            "hosted_zone_id": example_aws_route53_zone["zoneId"],
+                            "record_name": "api.example.com",
+                        }],
+                        "name": "route53-health-check",
+                        "execution_block_type": "Route53HealthCheck",
+                    }],
+                    "workflow_target_action": "deactivate",
+                    "workflow_target_region": "us-east-1",
+                },
+            ],
             name="complex-plan",
             execution_role=example_aws_iam_role["arn"],
             recovery_approach="activeActive",
@@ -584,81 +694,6 @@ class Plan(pulumi.CustomResource):
             ],
             description="Complex plan with multiple execution block types",
             recovery_time_objective_minutes=60,
-            associated_alarms=[{
-                "name": "application-health-alarm",
-                "alarm_type": "applicationHealth",
-                "resource_identifier": "arn:aws:cloudwatch:us-east-1:123456789012:alarm:MyAlarm",
-            }],
-            workflows=[
-                {
-                    "workflow_target_action": "activate",
-                    "workflow_target_region": "us-west-2",
-                    "steps": [
-                        {
-                            "name": "lambda-step",
-                            "execution_block_type": "CustomActionLambda",
-                            "custom_action_lambda_configs": [{
-                                "region_to_run": "activatingRegion",
-                                "retry_interval_minutes": 5,
-                                "timeout_minutes": 30,
-                                "lambdas": [{
-                                    "arn": example["arn"],
-                                }],
-                            }],
-                        },
-                        {
-                            "name": "parallel-step",
-                            "execution_block_type": "Parallel",
-                            "parallel_configs": [{
-                                "steps": [
-                                    {
-                                        "name": "asg-scaling",
-                                        "execution_block_type": "EC2AutoScaling",
-                                        "ec2_asg_capacity_increase_configs": [{
-                                            "asgs": [{
-                                                "arn": example_aws_autoscaling_group["arn"],
-                                            }],
-                                            "target_percent": 150,
-                                        }],
-                                    },
-                                    {
-                                        "name": "ecs-scaling",
-                                        "execution_block_type": "ECSServiceScaling",
-                                        "ecs_capacity_increase_configs": [{
-                                            "services": [{
-                                                "cluster_arn": example_aws_ecs_cluster["arn"],
-                                                "service_arn": example_aws_ecs_service["arn"],
-                                            }],
-                                            "target_percent": 200,
-                                        }],
-                                    },
-                                ],
-                            }],
-                        },
-                    ],
-                },
-                {
-                    "workflow_target_action": "deactivate",
-                    "workflow_target_region": "us-east-1",
-                    "steps": [{
-                        "name": "route53-health-check",
-                        "execution_block_type": "Route53HealthCheck",
-                        "route53_health_check_configs": [{
-                            "hosted_zone_id": example_aws_route53_zone["zoneId"],
-                            "record_name": "api.example.com",
-                        }],
-                    }],
-                },
-            ],
-            triggers=[{
-                "action": "activate",
-                "target_region": "us-west-2",
-                "min_delay_minutes_between_executions": 30,
-                "conditions": [{
-                    "associated_alarm_name": "application-health-alarm",
-                    "condition": "red",
-                }],
-            }],
             tags={
                 "Environment": "production",
             })
@@ -666,15 +701,22 @@ class Plan(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        - `arn` (String) ARN of the ARC Region Switch Plan.
+
         Using `pulumi import`, import Application Recovery Controller Region Switch Plan using the `arn`. For example:
 
         ```sh
         $ pulumi import aws:arcregionswitch/plan:Plan example arn:aws:arcregionswitch:us-east-1:123456789012:plan/example-plan
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['PlanAssociatedAlarmArgs', 'PlanAssociatedAlarmArgsDict']]]] associated_alarms: Set of CloudWatch alarms associated with the plan. See Associated Alarms below.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['PlanAssociatedAlarmArgs', 'PlanAssociatedAlarmArgsDict']]]] associated_alarms: CloudWatch alarms associated with the plan. See `associated_alarms` Block for details.
         :param pulumi.Input[_builtins.str] description: Description of the plan.
         :param pulumi.Input[_builtins.str] execution_role: ARN of the IAM role that ARC Region Switch will assume to execute the plan.
         :param pulumi.Input[_builtins.str] name: Name of the plan. Must be unique within the account.
@@ -682,10 +724,11 @@ class Plan(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] recovery_approach: Recovery approach for the plan. Valid values: `activeActive`, `activePassive`.
         :param pulumi.Input[_builtins.int] recovery_time_objective_minutes: Recovery time objective in minutes.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] regions: List of AWS regions involved in the plan.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] regions: List of AWS regions involved in the plan. Must contain at least 2 regions.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['PlanReportConfigurationArgs', 'PlanReportConfigurationArgsDict']]]] report_configurations: Configuration for automated execution reports. See `report_configuration` Block for details.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['PlanTriggerArgs', 'PlanTriggerArgsDict']]]] triggers: Set of triggers that can initiate the plan execution. See Triggers below.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['PlanWorkflowArgs', 'PlanWorkflowArgsDict']]]] workflows: List of workflows that define the steps to execute. See Workflow below.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['PlanTriggerArgs', 'PlanTriggerArgsDict']]]] triggers: Triggers that can initiate the plan execution. See `triggers` Block for details.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['PlanWorkflowArgs', 'PlanWorkflowArgsDict']]]] workflows: Workflows that define the steps to execute. See `workflow` Block for details.
                
                The following arguments are optional:
         """
@@ -720,6 +763,32 @@ class Plan(pulumi.CustomResource):
                 }],
             }))
         example_plan = aws.arcregionswitch.Plan("example",
+            workflows=[
+                {
+                    "steps": [{
+                        "execution_approval_configs": [{
+                            "approval_role": example.arn,
+                            "timeout_minutes": 60,
+                        }],
+                        "name": "manual-approval",
+                        "execution_block_type": "ManualApproval",
+                    }],
+                    "workflow_target_action": "activate",
+                    "workflow_target_region": "us-west-2",
+                },
+                {
+                    "steps": [{
+                        "execution_approval_configs": [{
+                            "approval_role": example.arn,
+                            "timeout_minutes": 60,
+                        }],
+                        "name": "manual-approval",
+                        "execution_block_type": "ManualApproval",
+                    }],
+                    "workflow_target_action": "deactivate",
+                    "workflow_target_region": "us-east-1",
+                },
+            ],
             name="example-plan",
             execution_role=example.arn,
             recovery_approach="activePassive",
@@ -727,33 +796,7 @@ class Plan(pulumi.CustomResource):
                 "us-east-1",
                 "us-west-2",
             ],
-            primary_region="us-east-1",
-            workflows=[
-                {
-                    "workflow_target_action": "activate",
-                    "workflow_target_region": "us-west-2",
-                    "steps": [{
-                        "name": "manual-approval",
-                        "execution_block_type": "ManualApproval",
-                        "execution_approval_configs": [{
-                            "approval_role": example.arn,
-                            "timeout_minutes": 60,
-                        }],
-                    }],
-                },
-                {
-                    "workflow_target_action": "deactivate",
-                    "workflow_target_region": "us-east-1",
-                    "steps": [{
-                        "name": "manual-approval",
-                        "execution_block_type": "ManualApproval",
-                        "execution_approval_configs": [{
-                            "approval_role": example.arn,
-                            "timeout_minutes": 60,
-                        }],
-                    }],
-                },
-            ])
+            primary_region="us-east-1")
         ```
 
         ### Complex Usage with Multiple Step Types
@@ -763,6 +806,81 @@ class Plan(pulumi.CustomResource):
         import pulumi_aws as aws
 
         complex = aws.arcregionswitch.Plan("complex",
+            associated_alarms=[{
+                "name": "application-health-alarm",
+                "alarm_type": "applicationHealth",
+                "resource_identifier": "arn:aws:cloudwatch:us-east-1:123456789012:alarm:MyAlarm",
+            }],
+            triggers=[{
+                "conditions": [{
+                    "associated_alarm_name": "application-health-alarm",
+                    "condition": "red",
+                }],
+                "action": "activate",
+                "target_region": "us-west-2",
+                "min_delay_minutes_between_executions": 30,
+            }],
+            workflows=[
+                {
+                    "steps": [
+                        {
+                            "custom_action_lambda_configs": [{
+                                "lambdas": [{
+                                    "arn": example["arn"],
+                                }],
+                                "region_to_run": "activatingRegion",
+                                "retry_interval_minutes": float(5),
+                                "timeout_minutes": 30,
+                            }],
+                            "name": "lambda-step",
+                            "execution_block_type": "CustomActionLambda",
+                        },
+                        {
+                            "parallel_configs": [{
+                                "steps": [
+                                    {
+                                        "ec2_asg_capacity_increase_configs": [{
+                                            "asgs": [{
+                                                "arn": example_aws_autoscaling_group["arn"],
+                                            }],
+                                            "target_percent": 150,
+                                        }],
+                                        "name": "asg-scaling",
+                                        "execution_block_type": "EC2AutoScaling",
+                                    },
+                                    {
+                                        "ecs_capacity_increase_configs": [{
+                                            "services": [{
+                                                "cluster_arn": example_aws_ecs_cluster["arn"],
+                                                "service_arn": example_aws_ecs_service["arn"],
+                                            }],
+                                            "target_percent": 200,
+                                        }],
+                                        "name": "ecs-scaling",
+                                        "execution_block_type": "ECSServiceScaling",
+                                    },
+                                ],
+                            }],
+                            "name": "parallel-step",
+                            "execution_block_type": "Parallel",
+                        },
+                    ],
+                    "workflow_target_action": "activate",
+                    "workflow_target_region": "us-west-2",
+                },
+                {
+                    "steps": [{
+                        "route53_health_check_configs": [{
+                            "hosted_zone_id": example_aws_route53_zone["zoneId"],
+                            "record_name": "api.example.com",
+                        }],
+                        "name": "route53-health-check",
+                        "execution_block_type": "Route53HealthCheck",
+                    }],
+                    "workflow_target_action": "deactivate",
+                    "workflow_target_region": "us-east-1",
+                },
+            ],
             name="complex-plan",
             execution_role=example_aws_iam_role["arn"],
             recovery_approach="activeActive",
@@ -772,81 +890,6 @@ class Plan(pulumi.CustomResource):
             ],
             description="Complex plan with multiple execution block types",
             recovery_time_objective_minutes=60,
-            associated_alarms=[{
-                "name": "application-health-alarm",
-                "alarm_type": "applicationHealth",
-                "resource_identifier": "arn:aws:cloudwatch:us-east-1:123456789012:alarm:MyAlarm",
-            }],
-            workflows=[
-                {
-                    "workflow_target_action": "activate",
-                    "workflow_target_region": "us-west-2",
-                    "steps": [
-                        {
-                            "name": "lambda-step",
-                            "execution_block_type": "CustomActionLambda",
-                            "custom_action_lambda_configs": [{
-                                "region_to_run": "activatingRegion",
-                                "retry_interval_minutes": 5,
-                                "timeout_minutes": 30,
-                                "lambdas": [{
-                                    "arn": example["arn"],
-                                }],
-                            }],
-                        },
-                        {
-                            "name": "parallel-step",
-                            "execution_block_type": "Parallel",
-                            "parallel_configs": [{
-                                "steps": [
-                                    {
-                                        "name": "asg-scaling",
-                                        "execution_block_type": "EC2AutoScaling",
-                                        "ec2_asg_capacity_increase_configs": [{
-                                            "asgs": [{
-                                                "arn": example_aws_autoscaling_group["arn"],
-                                            }],
-                                            "target_percent": 150,
-                                        }],
-                                    },
-                                    {
-                                        "name": "ecs-scaling",
-                                        "execution_block_type": "ECSServiceScaling",
-                                        "ecs_capacity_increase_configs": [{
-                                            "services": [{
-                                                "cluster_arn": example_aws_ecs_cluster["arn"],
-                                                "service_arn": example_aws_ecs_service["arn"],
-                                            }],
-                                            "target_percent": 200,
-                                        }],
-                                    },
-                                ],
-                            }],
-                        },
-                    ],
-                },
-                {
-                    "workflow_target_action": "deactivate",
-                    "workflow_target_region": "us-east-1",
-                    "steps": [{
-                        "name": "route53-health-check",
-                        "execution_block_type": "Route53HealthCheck",
-                        "route53_health_check_configs": [{
-                            "hosted_zone_id": example_aws_route53_zone["zoneId"],
-                            "record_name": "api.example.com",
-                        }],
-                    }],
-                },
-            ],
-            triggers=[{
-                "action": "activate",
-                "target_region": "us-west-2",
-                "min_delay_minutes_between_executions": 30,
-                "conditions": [{
-                    "associated_alarm_name": "application-health-alarm",
-                    "condition": "red",
-                }],
-            }],
             tags={
                 "Environment": "production",
             })
@@ -854,11 +897,18 @@ class Plan(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        - `arn` (String) ARN of the ARC Region Switch Plan.
+
         Using `pulumi import`, import Application Recovery Controller Region Switch Plan using the `arn`. For example:
 
         ```sh
         $ pulumi import aws:arcregionswitch/plan:Plan example arn:aws:arcregionswitch:us-east-1:123456789012:plan/example-plan
         ```
+
 
         :param str resource_name: The name of the resource.
         :param PlanArgs args: The arguments to use to populate this resource's properties.
@@ -875,19 +925,20 @@ class Plan(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 associated_alarms: Optional[pulumi.Input[Sequence[pulumi.Input[Union['PlanAssociatedAlarmArgs', 'PlanAssociatedAlarmArgsDict']]]]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 execution_role: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 primary_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 recovery_approach: Optional[pulumi.Input[_builtins.str]] = None,
-                 recovery_time_objective_minutes: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 regions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['PlanTimeoutsArgs', 'PlanTimeoutsArgsDict']]] = None,
-                 triggers: Optional[pulumi.Input[Sequence[pulumi.Input[Union['PlanTriggerArgs', 'PlanTriggerArgsDict']]]]] = None,
-                 workflows: Optional[pulumi.Input[Sequence[pulumi.Input[Union['PlanWorkflowArgs', 'PlanWorkflowArgsDict']]]]] = None,
+                 associated_alarms: pulumi.Input[Optional[Sequence[pulumi.Input[Union['PlanAssociatedAlarmArgs', 'PlanAssociatedAlarmArgsDict']]]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 execution_role: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 primary_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 recovery_approach: pulumi.Input[Optional[_builtins.str]] = None,
+                 recovery_time_objective_minutes: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 regions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 report_configurations: pulumi.Input[Optional[Sequence[pulumi.Input[Union['PlanReportConfigurationArgs', 'PlanReportConfigurationArgsDict']]]]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['PlanTimeoutsArgs', 'PlanTimeoutsArgsDict']]] = None,
+                 triggers: pulumi.Input[Optional[Sequence[pulumi.Input[Union['PlanTriggerArgs', 'PlanTriggerArgsDict']]]]] = None,
+                 workflows: pulumi.Input[Optional[Sequence[pulumi.Input[Union['PlanWorkflowArgs', 'PlanWorkflowArgsDict']]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -912,6 +963,7 @@ class Plan(pulumi.CustomResource):
             if regions is None and not opts.urn:
                 raise TypeError("Missing required property 'regions'")
             __props__.__dict__["regions"] = regions
+            __props__.__dict__["report_configurations"] = report_configurations
             __props__.__dict__["tags"] = tags
             __props__.__dict__["timeouts"] = timeouts
             __props__.__dict__["triggers"] = triggers
@@ -928,21 +980,22 @@ class Plan(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            associated_alarms: Optional[pulumi.Input[Sequence[pulumi.Input[Union['PlanAssociatedAlarmArgs', 'PlanAssociatedAlarmArgsDict']]]]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            execution_role: Optional[pulumi.Input[_builtins.str]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            primary_region: Optional[pulumi.Input[_builtins.str]] = None,
-            recovery_approach: Optional[pulumi.Input[_builtins.str]] = None,
-            recovery_time_objective_minutes: Optional[pulumi.Input[_builtins.int]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            regions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            timeouts: Optional[pulumi.Input[Union['PlanTimeoutsArgs', 'PlanTimeoutsArgsDict']]] = None,
-            triggers: Optional[pulumi.Input[Sequence[pulumi.Input[Union['PlanTriggerArgs', 'PlanTriggerArgsDict']]]]] = None,
-            workflows: Optional[pulumi.Input[Sequence[pulumi.Input[Union['PlanWorkflowArgs', 'PlanWorkflowArgsDict']]]]] = None) -> 'Plan':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            associated_alarms: pulumi.Input[Optional[Sequence[pulumi.Input[Union['PlanAssociatedAlarmArgs', 'PlanAssociatedAlarmArgsDict']]]]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            execution_role: pulumi.Input[Optional[_builtins.str]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            primary_region: pulumi.Input[Optional[_builtins.str]] = None,
+            recovery_approach: pulumi.Input[Optional[_builtins.str]] = None,
+            recovery_time_objective_minutes: pulumi.Input[Optional[_builtins.int]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            regions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            report_configurations: pulumi.Input[Optional[Sequence[pulumi.Input[Union['PlanReportConfigurationArgs', 'PlanReportConfigurationArgsDict']]]]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            timeouts: pulumi.Input[Optional[Union['PlanTimeoutsArgs', 'PlanTimeoutsArgsDict']]] = None,
+            triggers: pulumi.Input[Optional[Sequence[pulumi.Input[Union['PlanTriggerArgs', 'PlanTriggerArgsDict']]]]] = None,
+            workflows: pulumi.Input[Optional[Sequence[pulumi.Input[Union['PlanWorkflowArgs', 'PlanWorkflowArgsDict']]]]] = None) -> 'Plan':
         """
         Get an existing Plan resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -951,7 +1004,7 @@ class Plan(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.str] arn: ARN of the plan.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['PlanAssociatedAlarmArgs', 'PlanAssociatedAlarmArgsDict']]]] associated_alarms: Set of CloudWatch alarms associated with the plan. See Associated Alarms below.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['PlanAssociatedAlarmArgs', 'PlanAssociatedAlarmArgsDict']]]] associated_alarms: CloudWatch alarms associated with the plan. See `associated_alarms` Block for details.
         :param pulumi.Input[_builtins.str] description: Description of the plan.
         :param pulumi.Input[_builtins.str] execution_role: ARN of the IAM role that ARC Region Switch will assume to execute the plan.
         :param pulumi.Input[_builtins.str] name: Name of the plan. Must be unique within the account.
@@ -959,11 +1012,12 @@ class Plan(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] recovery_approach: Recovery approach for the plan. Valid values: `activeActive`, `activePassive`.
         :param pulumi.Input[_builtins.int] recovery_time_objective_minutes: Recovery time objective in minutes.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] regions: List of AWS regions involved in the plan.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] regions: List of AWS regions involved in the plan. Must contain at least 2 regions.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['PlanReportConfigurationArgs', 'PlanReportConfigurationArgsDict']]]] report_configurations: Configuration for automated execution reports. See `report_configuration` Block for details.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['PlanTriggerArgs', 'PlanTriggerArgsDict']]]] triggers: Set of triggers that can initiate the plan execution. See Triggers below.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['PlanWorkflowArgs', 'PlanWorkflowArgsDict']]]] workflows: List of workflows that define the steps to execute. See Workflow below.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['PlanTriggerArgs', 'PlanTriggerArgsDict']]]] triggers: Triggers that can initiate the plan execution. See `triggers` Block for details.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['PlanWorkflowArgs', 'PlanWorkflowArgsDict']]]] workflows: Workflows that define the steps to execute. See `workflow` Block for details.
                
                The following arguments are optional:
         """
@@ -981,6 +1035,7 @@ class Plan(pulumi.CustomResource):
         __props__.__dict__["recovery_time_objective_minutes"] = recovery_time_objective_minutes
         __props__.__dict__["region"] = region
         __props__.__dict__["regions"] = regions
+        __props__.__dict__["report_configurations"] = report_configurations
         __props__.__dict__["tags"] = tags
         __props__.__dict__["tags_all"] = tags_all
         __props__.__dict__["timeouts"] = timeouts
@@ -1000,7 +1055,7 @@ class Plan(pulumi.CustomResource):
     @pulumi.getter(name="associatedAlarms")
     def associated_alarms(self) -> pulumi.Output[Optional[Sequence['outputs.PlanAssociatedAlarm']]]:
         """
-        Set of CloudWatch alarms associated with the plan. See Associated Alarms below.
+        CloudWatch alarms associated with the plan. See `associated_alarms` Block for details.
         """
         return pulumi.get(self, "associated_alarms")
 
@@ -1065,9 +1120,17 @@ class Plan(pulumi.CustomResource):
     @pulumi.getter
     def regions(self) -> pulumi.Output[Sequence[_builtins.str]]:
         """
-        List of AWS regions involved in the plan.
+        List of AWS regions involved in the plan. Must contain at least 2 regions.
         """
         return pulumi.get(self, "regions")
+
+    @_builtins.property
+    @pulumi.getter(name="reportConfigurations")
+    def report_configurations(self) -> pulumi.Output[Optional[Sequence['outputs.PlanReportConfiguration']]]:
+        """
+        Configuration for automated execution reports. See `report_configuration` Block for details.
+        """
+        return pulumi.get(self, "report_configurations")
 
     @_builtins.property
     @pulumi.getter
@@ -1094,7 +1157,7 @@ class Plan(pulumi.CustomResource):
     @pulumi.getter
     def triggers(self) -> pulumi.Output[Optional[Sequence['outputs.PlanTrigger']]]:
         """
-        Set of triggers that can initiate the plan execution. See Triggers below.
+        Triggers that can initiate the plan execution. See `triggers` Block for details.
         """
         return pulumi.get(self, "triggers")
 
@@ -1102,7 +1165,7 @@ class Plan(pulumi.CustomResource):
     @pulumi.getter
     def workflows(self) -> pulumi.Output[Optional[Sequence['outputs.PlanWorkflow']]]:
         """
-        List of workflows that define the steps to execute. See Workflow below.
+        Workflows that define the steps to execute. See `workflow` Block for details.
 
         The following arguments are optional:
         """

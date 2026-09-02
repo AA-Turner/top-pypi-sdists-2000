@@ -6,6 +6,7 @@ import builtins as _builtins
 from .. import _utilities
 import typing
 # Export this package's modules as members:
+from .algorithm import *
 from .app import *
 from .app_image_config import *
 from .code_repository import *
@@ -19,10 +20,13 @@ from .feature_group import *
 from .flow_definition import *
 from .get_prebuilt_ecr_image import *
 from .hub import *
+from .hub_content_reference import *
 from .human_task_ui import *
+from .hyper_parameter_tuning_job import *
 from .image import *
 from .image_version import *
 from .labeling_job import *
+from .mlflow_app import *
 from .mlflow_tracking_server import *
 from .model import *
 from .model_card import *
@@ -37,6 +41,7 @@ from .project import *
 from .servicecatalog_portfolio_status import *
 from .space import *
 from .studio_lifecycle_config import *
+from .training_job import *
 from .user_profile import *
 from .workforce import *
 from .workteam import *

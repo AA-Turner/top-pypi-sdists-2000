@@ -23,18 +23,19 @@ class PlaceIndexArgs:
     def __init__(__self__, *,
                  data_source: pulumi.Input[_builtins.str],
                  index_name: pulumi.Input[_builtins.str],
-                 data_source_configuration: Optional[pulumi.Input['PlaceIndexDataSourceConfigurationArgs']] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 data_source_configuration: pulumi.Input[Optional['PlaceIndexDataSourceConfigurationArgs']] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a PlaceIndex resource.
-        :param pulumi.Input[_builtins.str] data_source: Specifies the geospatial data provider for the new place index.
-        :param pulumi.Input[_builtins.str] index_name: The name of the place index resource.
+
+        :param pulumi.Input[_builtins.str] data_source: Geospatial data provider for the new place index.
+        :param pulumi.Input[_builtins.str] index_name: Name of the place index resource.
                
                The following arguments are optional:
         :param pulumi.Input['PlaceIndexDataSourceConfigurationArgs'] data_source_configuration: Configuration block with the data storage option chosen for requesting Places. Detailed below.
-        :param pulumi.Input[_builtins.str] description: The optional description for the place index resource.
+        :param pulumi.Input[_builtins.str] description: Optional description for the place index resource.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value tags for the place index. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
@@ -53,7 +54,7 @@ class PlaceIndexArgs:
     @pulumi.getter(name="dataSource")
     def data_source(self) -> pulumi.Input[_builtins.str]:
         """
-        Specifies the geospatial data provider for the new place index.
+        Geospatial data provider for the new place index.
         """
         return pulumi.get(self, "data_source")
 
@@ -65,7 +66,7 @@ class PlaceIndexArgs:
     @pulumi.getter(name="indexName")
     def index_name(self) -> pulumi.Input[_builtins.str]:
         """
-        The name of the place index resource.
+        Name of the place index resource.
 
         The following arguments are optional:
         """
@@ -77,80 +78,81 @@ class PlaceIndexArgs:
 
     @_builtins.property
     @pulumi.getter(name="dataSourceConfiguration")
-    def data_source_configuration(self) -> Optional[pulumi.Input['PlaceIndexDataSourceConfigurationArgs']]:
+    def data_source_configuration(self) -> pulumi.Input[Optional['PlaceIndexDataSourceConfigurationArgs']]:
         """
         Configuration block with the data storage option chosen for requesting Places. Detailed below.
         """
         return pulumi.get(self, "data_source_configuration")
 
     @data_source_configuration.setter
-    def data_source_configuration(self, value: Optional[pulumi.Input['PlaceIndexDataSourceConfigurationArgs']]):
+    def data_source_configuration(self, value: pulumi.Input[Optional['PlaceIndexDataSourceConfigurationArgs']]):
         pulumi.set(self, "data_source_configuration", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The optional description for the place index resource.
+        Optional description for the place index resource.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value tags for the place index. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _PlaceIndexState:
     def __init__(__self__, *,
-                 create_time: Optional[pulumi.Input[_builtins.str]] = None,
-                 data_source: Optional[pulumi.Input[_builtins.str]] = None,
-                 data_source_configuration: Optional[pulumi.Input['PlaceIndexDataSourceConfigurationArgs']] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 index_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 index_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 update_time: Optional[pulumi.Input[_builtins.str]] = None):
+                 create_time: pulumi.Input[Optional[_builtins.str]] = None,
+                 data_source: pulumi.Input[Optional[_builtins.str]] = None,
+                 data_source_configuration: pulumi.Input[Optional['PlaceIndexDataSourceConfigurationArgs']] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 index_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 index_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 update_time: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering PlaceIndex resources.
-        :param pulumi.Input[_builtins.str] create_time: The timestamp for when the place index resource was created in ISO 8601 format.
-        :param pulumi.Input[_builtins.str] data_source: Specifies the geospatial data provider for the new place index.
+
+        :param pulumi.Input[_builtins.str] create_time: Timestamp for when the place index resource was created in ISO 8601 format.
+        :param pulumi.Input[_builtins.str] data_source: Geospatial data provider for the new place index.
         :param pulumi.Input['PlaceIndexDataSourceConfigurationArgs'] data_source_configuration: Configuration block with the data storage option chosen for requesting Places. Detailed below.
-        :param pulumi.Input[_builtins.str] description: The optional description for the place index resource.
-        :param pulumi.Input[_builtins.str] index_arn: The Amazon Resource Name (ARN) for the place index resource. Used to specify a resource across AWS.
-        :param pulumi.Input[_builtins.str] index_name: The name of the place index resource.
+        :param pulumi.Input[_builtins.str] description: Optional description for the place index resource.
+        :param pulumi.Input[_builtins.str] index_arn: ARN for the place index resource. Used to specify a resource across AWS.
+        :param pulumi.Input[_builtins.str] index_name: Name of the place index resource.
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value tags for the place index. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
-        :param pulumi.Input[_builtins.str] update_time: The timestamp for when the place index resource was last update in ISO 8601.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        :param pulumi.Input[_builtins.str] update_time: Timestamp for when the place index resource was last updated in ISO 8601 format.
         """
         if create_time is not None:
             pulumi.set(__self__, "create_time", create_time)
@@ -175,124 +177,124 @@ class _PlaceIndexState:
 
     @_builtins.property
     @pulumi.getter(name="createTime")
-    def create_time(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create_time(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The timestamp for when the place index resource was created in ISO 8601 format.
+        Timestamp for when the place index resource was created in ISO 8601 format.
         """
         return pulumi.get(self, "create_time")
 
     @create_time.setter
-    def create_time(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create_time(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create_time", value)
 
     @_builtins.property
     @pulumi.getter(name="dataSource")
-    def data_source(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def data_source(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Specifies the geospatial data provider for the new place index.
+        Geospatial data provider for the new place index.
         """
         return pulumi.get(self, "data_source")
 
     @data_source.setter
-    def data_source(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def data_source(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "data_source", value)
 
     @_builtins.property
     @pulumi.getter(name="dataSourceConfiguration")
-    def data_source_configuration(self) -> Optional[pulumi.Input['PlaceIndexDataSourceConfigurationArgs']]:
+    def data_source_configuration(self) -> pulumi.Input[Optional['PlaceIndexDataSourceConfigurationArgs']]:
         """
         Configuration block with the data storage option chosen for requesting Places. Detailed below.
         """
         return pulumi.get(self, "data_source_configuration")
 
     @data_source_configuration.setter
-    def data_source_configuration(self, value: Optional[pulumi.Input['PlaceIndexDataSourceConfigurationArgs']]):
+    def data_source_configuration(self, value: pulumi.Input[Optional['PlaceIndexDataSourceConfigurationArgs']]):
         pulumi.set(self, "data_source_configuration", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The optional description for the place index resource.
+        Optional description for the place index resource.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="indexArn")
-    def index_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def index_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) for the place index resource. Used to specify a resource across AWS.
+        ARN for the place index resource. Used to specify a resource across AWS.
         """
         return pulumi.get(self, "index_arn")
 
     @index_arn.setter
-    def index_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def index_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "index_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="indexName")
-    def index_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def index_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The name of the place index resource.
+        Name of the place index resource.
 
         The following arguments are optional:
         """
         return pulumi.get(self, "index_name")
 
     @index_name.setter
-    def index_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def index_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "index_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value tags for the place index. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter(name="updateTime")
-    def update_time(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update_time(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The timestamp for when the place index resource was last update in ISO 8601.
+        Timestamp for when the place index resource was last updated in ISO 8601 format.
         """
         return pulumi.get(self, "update_time")
 
     @update_time.setter
-    def update_time(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update_time(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update_time", value)
 
 
@@ -302,12 +304,12 @@ class PlaceIndex(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 data_source: Optional[pulumi.Input[_builtins.str]] = None,
-                 data_source_configuration: Optional[pulumi.Input[Union['PlaceIndexDataSourceConfigurationArgs', 'PlaceIndexDataSourceConfigurationArgsDict']]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 index_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 data_source: pulumi.Input[Optional[_builtins.str]] = None,
+                 data_source_configuration: pulumi.Input[Optional[Union['PlaceIndexDataSourceConfigurationArgs', 'PlaceIndexDataSourceConfigurationArgsDict']]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 index_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Provides a Location Service Place Index.
@@ -331,12 +333,13 @@ class PlaceIndex(pulumi.CustomResource):
         $ pulumi import aws:location/placeIndex:PlaceIndex example example
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] data_source: Specifies the geospatial data provider for the new place index.
+        :param pulumi.Input[_builtins.str] data_source: Geospatial data provider for the new place index.
         :param pulumi.Input[Union['PlaceIndexDataSourceConfigurationArgs', 'PlaceIndexDataSourceConfigurationArgsDict']] data_source_configuration: Configuration block with the data storage option chosen for requesting Places. Detailed below.
-        :param pulumi.Input[_builtins.str] description: The optional description for the place index resource.
-        :param pulumi.Input[_builtins.str] index_name: The name of the place index resource.
+        :param pulumi.Input[_builtins.str] description: Optional description for the place index resource.
+        :param pulumi.Input[_builtins.str] index_name: Name of the place index resource.
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -370,6 +373,7 @@ class PlaceIndex(pulumi.CustomResource):
         $ pulumi import aws:location/placeIndex:PlaceIndex example example
         ```
 
+
         :param str resource_name: The name of the resource.
         :param PlaceIndexArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -385,12 +389,12 @@ class PlaceIndex(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 data_source: Optional[pulumi.Input[_builtins.str]] = None,
-                 data_source_configuration: Optional[pulumi.Input[Union['PlaceIndexDataSourceConfigurationArgs', 'PlaceIndexDataSourceConfigurationArgsDict']]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 index_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 data_source: pulumi.Input[Optional[_builtins.str]] = None,
+                 data_source_configuration: pulumi.Input[Optional[Union['PlaceIndexDataSourceConfigurationArgs', 'PlaceIndexDataSourceConfigurationArgsDict']]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 index_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -424,16 +428,16 @@ class PlaceIndex(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            create_time: Optional[pulumi.Input[_builtins.str]] = None,
-            data_source: Optional[pulumi.Input[_builtins.str]] = None,
-            data_source_configuration: Optional[pulumi.Input[Union['PlaceIndexDataSourceConfigurationArgs', 'PlaceIndexDataSourceConfigurationArgsDict']]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            index_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            index_name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            update_time: Optional[pulumi.Input[_builtins.str]] = None) -> 'PlaceIndex':
+            create_time: pulumi.Input[Optional[_builtins.str]] = None,
+            data_source: pulumi.Input[Optional[_builtins.str]] = None,
+            data_source_configuration: pulumi.Input[Optional[Union['PlaceIndexDataSourceConfigurationArgs', 'PlaceIndexDataSourceConfigurationArgsDict']]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            index_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            index_name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            update_time: pulumi.Input[Optional[_builtins.str]] = None) -> 'PlaceIndex':
         """
         Get an existing PlaceIndex resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -441,18 +445,18 @@ class PlaceIndex(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] create_time: The timestamp for when the place index resource was created in ISO 8601 format.
-        :param pulumi.Input[_builtins.str] data_source: Specifies the geospatial data provider for the new place index.
+        :param pulumi.Input[_builtins.str] create_time: Timestamp for when the place index resource was created in ISO 8601 format.
+        :param pulumi.Input[_builtins.str] data_source: Geospatial data provider for the new place index.
         :param pulumi.Input[Union['PlaceIndexDataSourceConfigurationArgs', 'PlaceIndexDataSourceConfigurationArgsDict']] data_source_configuration: Configuration block with the data storage option chosen for requesting Places. Detailed below.
-        :param pulumi.Input[_builtins.str] description: The optional description for the place index resource.
-        :param pulumi.Input[_builtins.str] index_arn: The Amazon Resource Name (ARN) for the place index resource. Used to specify a resource across AWS.
-        :param pulumi.Input[_builtins.str] index_name: The name of the place index resource.
+        :param pulumi.Input[_builtins.str] description: Optional description for the place index resource.
+        :param pulumi.Input[_builtins.str] index_arn: ARN for the place index resource. Used to specify a resource across AWS.
+        :param pulumi.Input[_builtins.str] index_name: Name of the place index resource.
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value tags for the place index. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
-        :param pulumi.Input[_builtins.str] update_time: The timestamp for when the place index resource was last update in ISO 8601.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        :param pulumi.Input[_builtins.str] update_time: Timestamp for when the place index resource was last updated in ISO 8601 format.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -474,7 +478,7 @@ class PlaceIndex(pulumi.CustomResource):
     @pulumi.getter(name="createTime")
     def create_time(self) -> pulumi.Output[_builtins.str]:
         """
-        The timestamp for when the place index resource was created in ISO 8601 format.
+        Timestamp for when the place index resource was created in ISO 8601 format.
         """
         return pulumi.get(self, "create_time")
 
@@ -482,7 +486,7 @@ class PlaceIndex(pulumi.CustomResource):
     @pulumi.getter(name="dataSource")
     def data_source(self) -> pulumi.Output[_builtins.str]:
         """
-        Specifies the geospatial data provider for the new place index.
+        Geospatial data provider for the new place index.
         """
         return pulumi.get(self, "data_source")
 
@@ -498,7 +502,7 @@ class PlaceIndex(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[_builtins.str]]:
         """
-        The optional description for the place index resource.
+        Optional description for the place index resource.
         """
         return pulumi.get(self, "description")
 
@@ -506,7 +510,7 @@ class PlaceIndex(pulumi.CustomResource):
     @pulumi.getter(name="indexArn")
     def index_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) for the place index resource. Used to specify a resource across AWS.
+        ARN for the place index resource. Used to specify a resource across AWS.
         """
         return pulumi.get(self, "index_arn")
 
@@ -514,7 +518,7 @@ class PlaceIndex(pulumi.CustomResource):
     @pulumi.getter(name="indexName")
     def index_name(self) -> pulumi.Output[_builtins.str]:
         """
-        The name of the place index resource.
+        Name of the place index resource.
 
         The following arguments are optional:
         """
@@ -540,7 +544,7 @@ class PlaceIndex(pulumi.CustomResource):
     @pulumi.getter(name="tagsAll")
     def tags_all(self) -> pulumi.Output[Mapping[str, _builtins.str]]:
         """
-        A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
@@ -548,7 +552,7 @@ class PlaceIndex(pulumi.CustomResource):
     @pulumi.getter(name="updateTime")
     def update_time(self) -> pulumi.Output[_builtins.str]:
         """
-        The timestamp for when the place index resource was last update in ISO 8601.
+        Timestamp for when the place index resource was last updated in ISO 8601 format.
         """
         return pulumi.get(self, "update_time")
 

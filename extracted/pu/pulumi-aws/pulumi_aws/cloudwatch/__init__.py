@@ -6,6 +6,7 @@ import builtins as _builtins
 from .. import _utilities
 import typing
 # Export this package's modules as members:
+from .alarm_mute_rule import *
 from .composite_alarm import *
 from .contributor_insight_rule import *
 from .contributor_managed_insight_rule import *
@@ -41,11 +42,14 @@ from .log_group import *
 from .log_index_policy import *
 from .log_metric_filter import *
 from .log_resource_policy import *
+from .log_s3_table_integration_source import *
+from .log_storage_tier_policy import *
 from .log_stream import *
 from .log_subscription_filter import *
 from .log_transformer import *
 from .metric_alarm import *
 from .metric_stream import *
+from .otel_enrichment import *
 from .query_definition import *
 from ._inputs import *
 from . import outputs

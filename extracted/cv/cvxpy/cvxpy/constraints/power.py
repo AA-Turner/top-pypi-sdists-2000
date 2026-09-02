@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import List, Tuple
 
 import numpy as np
 
@@ -49,6 +48,7 @@ class PowCone3D(Cone):
             if not (val.is_affine() and val.is_real()):
                 raise ValueError('All arguments must be affine and real.')
         alpha = Expression.cast_to_const(alpha)
+        alpha_promoted_to_vec = False
         if alpha.is_scalar():
             if self.x.shape:
                 alpha = cvxtypes.promote()(alpha, self.x.shape)
@@ -56,12 +56,13 @@ class PowCone3D(Cone):
                 # when `alpha` is a naked float, it has to be cast into a
                 # 1-D array to be compatible with downstream (vectorized)
                 # processing
+                alpha_promoted_to_vec = True
                 alpha = cvxtypes.promote()(alpha, (1,))
         self.alpha = alpha
         if np.any(self.alpha.value <= 0) or np.any(self.alpha.value >= 1):
             msg = "Argument alpha must have entries in the open interval (0, 1)."
             raise ValueError(msg)
-        if alpha.shape == (1,):
+        if alpha_promoted_to_vec:
             arg_shapes = [self.x.shape, self.y.shape, self.z.shape, ()]
         else:
             arg_shapes = [self.x.shape, self.y.shape, self.z.shape, self.alpha.shape]
@@ -105,7 +106,7 @@ class PowCone3D(Cone):
     def num_cones(self):
         return self.x.size
 
-    def cone_sizes(self) -> List[int]:
+    def cone_sizes(self) -> list[int]:
         return [3]*self.num_cones()
 
     def is_dcp(self, dpp: bool = False) -> bool:
@@ -123,28 +124,27 @@ class PowCone3D(Cone):
         return self.is_dcp()
 
     @property
-    def shape(self) -> Tuple[int, ...]:
+    def shape(self) -> tuple[int, ...]:
         s = (3,) + self.x.shape
         # Note: this can be a 3-tuple of x.ndim == 2.
         return s
 
     def save_dual_value(self, value) -> None:
-        value = np.reshape(value, (3, -1))
-        dv0 = np.reshape(value[0, :], self.x.shape)
-        dv1 = np.reshape(value[1, :], self.y.shape)
-        dv2 = np.reshape(value[2, :], self.z.shape)
+        value = np.asarray(value)
+        dv0 = np.reshape(value[0], self.x.shape, order='F')
+        dv1 = np.reshape(value[1], self.y.shape, order='F')
+        dv2 = np.reshape(value[2], self.z.shape, order='F')
         self.dual_variables[0].save_value(dv0)
         self.dual_variables[1].save_value(dv1)
         self.dual_variables[2].save_value(dv2)
-        # TODO: figure out why the reshaping had to be done differently,
-        #   relative to ExpCone constraints.
 
     def _dual_cone(self, *args):
         """Implements the dual cone of PowCone3D See Pg 85
         of the MOSEK modelling cookbook for more information"""
-        if args is None:
-            PowCone3D(self.dual_variables[0]/self.alpha, self.dual_variables[1]/(1-self.alpha),
-                      self.dual_variables[2], self.alpha)
+        if not args:
+            return PowCone3D(self.dual_variables[0]/self.alpha,
+                             self.dual_variables[1]/(1-self.alpha),
+                             self.dual_variables[2], self.alpha)
         else:
             # some assertions for verifying `args`
             args_shapes = [arg.shape for arg in args]
@@ -153,6 +153,17 @@ class PowCone3D(Cone):
             assert args_shapes == instance_args_shapes
             return PowCone3D(args[0]/self.alpha, args[1]/(1-self.alpha),
                              args[2], self.alpha)
+
+
+class PowCone3DApprox(PowCone3D):
+    """PowCone3D with SOC-based rational approximation.
+
+    Identical semantics to PowCone3D, but the solving chain will
+    convert this constraint to second-order cone (SOC) constraints
+    via rational approximation of the exponent, following the same
+    pattern as PowerApprox / PnormApprox for atoms.
+    """
+    pass
 
 
 class PowConeND(Cone):
@@ -229,6 +240,22 @@ class PowConeND(Cone):
         return [self.alpha, self.axis, self.id]
 
     @property
+    def shape(self) -> tuple[int, int]:
+        # The shape property is a tuple (m, n) where each
+        # column/row is a separate power cone depending on axis.
+        # This constitutes the shape of the hypograph variable z
+        # appended to W in the standard conic form.
+        # TODO: support arbitrary z.dim
+        if self.W.ndim == 1:
+            m, n = self.W.shape[0], 1
+        elif self.axis == 0:
+            m, n = self.W.shape
+        else:
+            m, n = self.W.shape[1], self.W.shape[0]
+        s = (m + 1, n)
+        return s
+
+    @property
     def residual(self):
         # TODO: The projection should be implemented directly.
         from cvxpy import Minimize, Problem, Variable, hstack, norm2
@@ -238,7 +265,7 @@ class PowConeND(Cone):
         z = Variable(self.z.shape)
         constr = [PowConeND(W, z, self.alpha, axis=self.axis)]
         obj = Minimize(norm2(hstack([W.flatten(order='F'), z.flatten(order='F')]) -
-                             hstack([self.W.flatten(order='F').value, 
+                             hstack([self.W.flatten(order='F').value,
                                      self.z.flatten(order='F').value])))
         problem = Problem(obj, constr)
         return problem.solve(solver='SCS', eps=1e-8)
@@ -251,7 +278,7 @@ class PowConeND(Cone):
         cone_size = 1 + self.args[0].shape[self.axis]
         return cone_size * self.num_cones()
 
-    def cone_sizes(self) -> List[int]:
+    def cone_sizes(self) -> list[int]:
         cone_size = 1 + self.args[0].shape[self.axis]
         return [cone_size] * self.num_cones()
 
@@ -263,7 +290,7 @@ class PowConeND(Cone):
                 args_ok = self.args[0].is_affine() and self.args[1].is_affine()
                 exps_ok = not isinstance(self.alpha, cvxtypes.parameter())
                 return args_ok and exps_ok
-        return True
+        return self.args[0].is_affine() and self.args[1].is_affine()
 
     def is_dgp(self, dpp: bool = False) -> bool:
         return False
@@ -272,13 +299,14 @@ class PowConeND(Cone):
         return self.is_dcp()
 
     def save_dual_value(self, value) -> None:
-        dW = value[:, :-1]
-        dz = value[:, -1]
-        if self.axis == 0:
+        # Value has shape (n+1, k) from ConeMatrixStuffing (constraint.shape).
+        # First n rows are W duals, last row is z duals.
+        dW = value[:-1, :]  # Shape (n, k)
+        dz = value[-1, :]   # Shape (k,)
+        if self.axis == 1:
             dW = dW.T
-            dz = dz.T
-        if dW.shape[1] == 1:
-            #NOTE: Targetting problems where duals have the shape
+        if dW.shape[-1] == 1:
+            # NOTE: Targetting problems where duals have the shape
             # (n, 1) --- dropping the extra dimension is crucial for
             # the `_dual_cone` and `dual_residual` methods to work properly
             dW = np.squeeze(dW)
@@ -288,7 +316,7 @@ class PowConeND(Cone):
     def _dual_cone(self, *args):
         """Implements the dual cone of PowConeND See Pg 85
         of the MOSEK modelling cookbook for more information"""
-        if args is None or args == ():
+        if not args:
             scaled_duals = self.dual_variables[0]/self.alpha
             return PowConeND(scaled_duals, self.dual_variables[1], self.alpha, axis=self.axis)
         else:

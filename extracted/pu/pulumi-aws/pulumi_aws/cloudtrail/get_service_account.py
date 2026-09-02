@@ -88,32 +88,28 @@ def get_service_account(region: Optional[_builtins.str] = None,
     bucket = aws.s3.Bucket("bucket",
         bucket="tf-cloudtrail-logging-test-bucket",
         force_destroy=True)
-    allow_cloudtrail_logging = pulumi.Output.all(
-        bucketArn=bucket.arn,
-        bucketArn1=bucket.arn
-    ).apply(lambda resolved_outputs: aws.iam.get_policy_document(statements=[
+    allow_cloudtrail_logging = aws.iam.get_policy_document_output(statements=[
         {
+            "principals": [{
+                "type": "AWS",
+                "identifiers": [main.arn],
+            }],
             "sid": "Put bucket policy needed for trails",
             "effect": "Allow",
-            "principals": [{
-                "type": "AWS",
-                "identifiers": [main.arn],
-            }],
             "actions": ["s3:PutObject"],
-            "resources": [f"{resolved_outputs['bucketArn']}/*"],
+            "resources": [bucket.arn.apply(lambda arn: f"{arn}/*")],
         },
         {
-            "sid": "Get bucket policy needed for trails",
-            "effect": "Allow",
             "principals": [{
                 "type": "AWS",
                 "identifiers": [main.arn],
             }],
+            "sid": "Get bucket policy needed for trails",
+            "effect": "Allow",
             "actions": ["s3:GetBucketAcl"],
-            "resources": [resolved_outputs['bucketArn1']],
+            "resources": [bucket.arn],
         },
-    ]))
-
+    ])
     allow_cloudtrail_logging_bucket_policy = aws.s3.BucketPolicy("allow_cloudtrail_logging",
         bucket=bucket.id,
         policy=allow_cloudtrail_logging.json)
@@ -131,7 +127,7 @@ def get_service_account(region: Optional[_builtins.str] = None,
         arn=pulumi.get(__ret__, 'arn'),
         id=pulumi.get(__ret__, 'id'),
         region=pulumi.get(__ret__, 'region'))
-def get_service_account_output(region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_service_account_output(region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetServiceAccountResult]:
     """
     Use this data source to get the Account ID of the [AWS CloudTrail Service Account](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-supported-regions.html)
@@ -149,32 +145,28 @@ def get_service_account_output(region: Optional[pulumi.Input[Optional[_builtins.
     bucket = aws.s3.Bucket("bucket",
         bucket="tf-cloudtrail-logging-test-bucket",
         force_destroy=True)
-    allow_cloudtrail_logging = pulumi.Output.all(
-        bucketArn=bucket.arn,
-        bucketArn1=bucket.arn
-    ).apply(lambda resolved_outputs: aws.iam.get_policy_document(statements=[
+    allow_cloudtrail_logging = aws.iam.get_policy_document_output(statements=[
         {
+            "principals": [{
+                "type": "AWS",
+                "identifiers": [main.arn],
+            }],
             "sid": "Put bucket policy needed for trails",
             "effect": "Allow",
-            "principals": [{
-                "type": "AWS",
-                "identifiers": [main.arn],
-            }],
             "actions": ["s3:PutObject"],
-            "resources": [f"{resolved_outputs['bucketArn']}/*"],
+            "resources": [bucket.arn.apply(lambda arn: f"{arn}/*")],
         },
         {
-            "sid": "Get bucket policy needed for trails",
-            "effect": "Allow",
             "principals": [{
                 "type": "AWS",
                 "identifiers": [main.arn],
             }],
+            "sid": "Get bucket policy needed for trails",
+            "effect": "Allow",
             "actions": ["s3:GetBucketAcl"],
-            "resources": [resolved_outputs['bucketArn1']],
+            "resources": [bucket.arn],
         },
-    ]))
-
+    ])
     allow_cloudtrail_logging_bucket_policy = aws.s3.BucketPolicy("allow_cloudtrail_logging",
         bucket=bucket.id,
         policy=allow_cloudtrail_logging.json)

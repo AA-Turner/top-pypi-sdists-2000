@@ -15,10 +15,10 @@ limitations under the License.
 """
 
 import logging
-from typing import Any, Dict, Tuple
+from typing import Any
 
 import numpy as np
-from scipy.sparse import csr_matrix
+from scipy.sparse import csr_array
 
 import cvxpy.settings as s
 from cvxpy import Zero
@@ -27,7 +27,9 @@ from cvxpy.reductions.dcp2cone.cone_matrix_stuffing import ParamConeProg
 from cvxpy.reductions.solution import Solution, failure_solution
 from cvxpy.reductions.solvers import utilities
 from cvxpy.reductions.solvers.conic_solvers.conic_solver import ConicSolver
+from cvxpy.utilities.citations import CITATION_DICT
 from cvxpy.utilities.versioning import Version
+from cvxpy.utilities.warn import warn
 
 log = logging.getLogger(__name__)
 
@@ -36,6 +38,7 @@ class PDLP(ConicSolver):
     """An interface to PDLP via OR-Tools."""
 
     SUPPORTED_CONSTRAINTS = ConicSolver.SUPPORTED_CONSTRAINTS
+    BOUNDED_VARIABLES = True
 
     # The key that maps to the pdlp.QuadraticProgram in the data returned by
     # apply().
@@ -51,13 +54,15 @@ class PDLP(ConicSolver):
         if Version(ortools.__version__) < Version('9.7.0'):
             raise RuntimeError(f'Version of ortools ({ortools.__version__}) '
                                f'is too old. Expected >= 9.7.0.')
-        if Version(ortools.__version__) >= Version('9.12.0'):
-            raise RuntimeError('Unrecognized new version of ortools '
-                               f'({ortools.__version__}). Expected < 9.12.0. '
-                               'Please open a feature request on cvxpy to '
-                               'enable support for this version.')
+        if Version(ortools.__version__) >= Version('9.16.0'):
+            warn(
+                f'Unrecognized version of ortools ({ortools.__version__}). '
+                'Version support has been tested up to 9.15.x. '
+                'Newer versions may work but are not officially supported. '
+                'Please open a feature request on cvxpy if you encounter issues.'
+            )
 
-    def apply(self, problem: ParamConeProg) -> Tuple[Dict, Dict]:
+    def apply(self, problem: ParamConeProg) -> tuple[dict, dict]:
         """Returns a new problem and data for inverting the new solution."""
         from ortools.pdlp.python import pdlp
 
@@ -74,14 +79,20 @@ class PDLP(ConicSolver):
 
         # Min c'x + d such that Ax + b = s, s \in cones.
         c, d, A, b = problem.apply_parameters()
-        A = csr_matrix(A)
+        A = csr_array(A)
         data["num_constraints"], data["num_vars"] = A.shape
 
         model = pdlp.QuadraticProgram()
         model.objective_offset = d.item() if isinstance(d, np.ndarray) else d
         model.objective_vector = c
-        model.variable_lower_bounds = np.full_like(c, -np.inf)
-        model.variable_upper_bounds = np.full_like(c, np.inf)
+        if problem.lower_bounds:
+            model.variable_lower_bounds = problem.lower_bounds
+        else:
+            model.variable_lower_bounds = np.full_like(c, -np.inf)
+        if problem.upper_bounds:
+            model.variable_upper_bounds = problem.upper_bounds
+        else:
+            model.variable_upper_bounds = np.full_like(c, np.inf)
 
         model.constraint_matrix = A
         constraint_lower_bounds = np.full_like(b, -np.inf)
@@ -97,10 +108,16 @@ class PDLP(ConicSolver):
         model.constraint_upper_bounds = constraint_upper_bounds
 
         data[self.PDLP_MODEL] = model
+        # stores data in addition to the model
+        data['lb'] = problem.lower_bounds
+        data['ub'] = problem.upper_bounds
+        data['l'] = constraint_lower_bounds
+        data['u'] = constraint_upper_bounds
+        data['A'], data['c'] = A, c
         return data, inv_data
 
-    def invert(self, solution: Dict[str, Any],
-               inverse_data: Dict[str, Any]) -> Solution:
+    def invert(self, solution: dict[str, Any],
+               inverse_data: dict[str, Any]) -> Solution:
         """Returns the solution to the original problem."""
         status = solution["status"]
 
@@ -120,11 +137,11 @@ class PDLP(ConicSolver):
 
     def solve_via_data(
             self,
-            data: Dict[str, Any],
+            data: dict[str, Any],
             warm_start: bool,
             verbose: bool,
-            solver_opts: Dict[str, Any],
-            solver_cache: Dict = None,
+            solver_opts: dict[str, Any],
+            solver_cache: dict = None,
     ) -> Solution:
         """Returns the result of the call to the solver."""
         from ortools.pdlp import solvers_pb2
@@ -203,3 +220,13 @@ class PDLP(ConicSolver):
                       TerminationReason.Name(status),
                       solve_log.termination_string)
             return s.SOLVER_ERROR
+
+    def cite(self, data):
+        """Returns bibtex citation for the solver.
+
+        Parameters
+        ----------
+        data : dict
+            Data generated via an apply call.
+        """
+        return CITATION_DICT["PDLP"]

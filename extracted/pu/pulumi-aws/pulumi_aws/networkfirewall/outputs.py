@@ -16,6 +16,9 @@ from .. import _utilities
 from . import outputs
 
 __all__ = [
+    'ContainerAssociationContainerMonitoringConfiguration',
+    'ContainerAssociationContainerMonitoringConfigurationAttributeFilter',
+    'ContainerAssociationTimeouts',
     'FirewallAvailabilityZoneMapping',
     'FirewallEncryptionConfiguration',
     'FirewallFirewallStatus',
@@ -111,6 +114,127 @@ __all__ = [
     'GetFirewallPolicyFirewallPolicyStatelessRuleGroupReferenceResult',
     'GetFirewallSubnetMappingResult',
 ]
+
+@pulumi.output_type
+class ContainerAssociationContainerMonitoringConfiguration(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "clusterArn":
+            suggest = "cluster_arn"
+        elif key == "attributeFilters":
+            suggest = "attribute_filters"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ContainerAssociationContainerMonitoringConfiguration. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ContainerAssociationContainerMonitoringConfiguration.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ContainerAssociationContainerMonitoringConfiguration.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 cluster_arn: _builtins.str,
+                 attribute_filters: Optional[Sequence['outputs.ContainerAssociationContainerMonitoringConfigurationAttributeFilter']] = None):
+        """
+        :param _builtins.str cluster_arn: ARN of the Amazon ECS or Amazon EKS cluster to monitor. The cluster must be in the same Region and account as the container association.
+        :param Sequence['ContainerAssociationContainerMonitoringConfigurationAttributeFilterArgs'] attribute_filters: Key-value pairs that filter which containers within the cluster are monitored. For Amazon EKS, filter by namespace and Kubernetes labels. For Amazon ECS, filter by container instance attributes; attribute filters only match containers on the EC2 launch type, not Fargate. See `attribute_filter` Block below.
+        """
+        pulumi.set(__self__, "cluster_arn", cluster_arn)
+        if attribute_filters is not None:
+            pulumi.set(__self__, "attribute_filters", attribute_filters)
+
+    @_builtins.property
+    @pulumi.getter(name="clusterArn")
+    def cluster_arn(self) -> _builtins.str:
+        """
+        ARN of the Amazon ECS or Amazon EKS cluster to monitor. The cluster must be in the same Region and account as the container association.
+        """
+        return pulumi.get(self, "cluster_arn")
+
+    @_builtins.property
+    @pulumi.getter(name="attributeFilters")
+    def attribute_filters(self) -> Optional[Sequence['outputs.ContainerAssociationContainerMonitoringConfigurationAttributeFilter']]:
+        """
+        Key-value pairs that filter which containers within the cluster are monitored. For Amazon EKS, filter by namespace and Kubernetes labels. For Amazon ECS, filter by container instance attributes; attribute filters only match containers on the EC2 launch type, not Fargate. See `attribute_filter` Block below.
+        """
+        return pulumi.get(self, "attribute_filters")
+
+
+@pulumi.output_type
+class ContainerAssociationContainerMonitoringConfigurationAttributeFilter(dict):
+    def __init__(__self__, *,
+                 key: _builtins.str,
+                 value: _builtins.str):
+        """
+        :param _builtins.str key: Key of the container attribute to filter on.
+        :param _builtins.str value: Value of the container attribute to filter on.
+        """
+        pulumi.set(__self__, "key", key)
+        pulumi.set(__self__, "value", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def key(self) -> _builtins.str:
+        """
+        Key of the container attribute to filter on.
+        """
+        return pulumi.get(self, "key")
+
+    @_builtins.property
+    @pulumi.getter
+    def value(self) -> _builtins.str:
+        """
+        Value of the container attribute to filter on.
+        """
+        return pulumi.get(self, "value")
+
+
+@pulumi.output_type
+class ContainerAssociationTimeouts(dict):
+    def __init__(__self__, *,
+                 create: Optional[_builtins.str] = None,
+                 delete: Optional[_builtins.str] = None,
+                 update: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        :param _builtins.str delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        :param _builtins.str update: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        if create is not None:
+            pulumi.set(__self__, "create", create)
+        if delete is not None:
+            pulumi.set(__self__, "delete", delete)
+        if update is not None:
+            pulumi.set(__self__, "update", update)
+
+    @_builtins.property
+    @pulumi.getter
+    def create(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "create")
+
+    @_builtins.property
+    @pulumi.getter
+    def delete(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        return pulumi.get(self, "delete")
+
+    @_builtins.property
+    @pulumi.getter
+    def update(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "update")
+
 
 @pulumi.output_type
 class FirewallAvailabilityZoneMapping(dict):
@@ -434,6 +558,8 @@ class FirewallPolicyFirewallPolicy(dict):
             suggest = "stateless_default_actions"
         elif key == "statelessFragmentDefaultActions":
             suggest = "stateless_fragment_default_actions"
+        elif key == "enableTlsSessionHolding":
+            suggest = "enable_tls_session_holding"
         elif key == "policyVariables":
             suggest = "policy_variables"
         elif key == "statefulDefaultActions":
@@ -463,6 +589,7 @@ class FirewallPolicyFirewallPolicy(dict):
     def __init__(__self__, *,
                  stateless_default_actions: Sequence[_builtins.str],
                  stateless_fragment_default_actions: Sequence[_builtins.str],
+                 enable_tls_session_holding: Optional[_builtins.bool] = None,
                  policy_variables: Optional['outputs.FirewallPolicyFirewallPolicyPolicyVariables'] = None,
                  stateful_default_actions: Optional[Sequence[_builtins.str]] = None,
                  stateful_engine_options: Optional['outputs.FirewallPolicyFirewallPolicyStatefulEngineOptions'] = None,
@@ -475,8 +602,9 @@ class FirewallPolicyFirewallPolicy(dict):
                In addition, you can specify custom actions that are compatible with your standard action choice. If you want non-matching packets to be forwarded for stateful inspection, specify `aws:forward_to_sfe`.
         :param Sequence[_builtins.str] stateless_fragment_default_actions: Set of actions to take on a fragmented packet if it does not match any of the stateless rules in the policy. You must specify one of the standard actions including: `aws:drop`, `aws:pass`, or `aws:forward_to_sfe`.
                In addition, you can specify custom actions that are compatible with your standard action choice. If you want non-matching packets to be forwarded for stateful inspection, specify `aws:forward_to_sfe`.
+        :param _builtins.bool enable_tls_session_holding: Boolean indicating whether to prevent TCP and TLS packets from reaching destination servers until TLS Inspection has evaluated Server Name Indication (SNI) rules. If `true`, `tls_inspection_configuration_arn` is required. Default value: `false`.
         :param 'FirewallPolicyFirewallPolicyPolicyVariablesArgs' policy_variables: . Contains variables that you can use to override default Suricata settings in your firewall policy. See Rule Variables for details.
-        :param Sequence[_builtins.str] stateful_default_actions: Set of actions to take on a packet if it does not match any stateful rules in the policy. This can only be specified if the policy has a `stateful_engine_options` block with a `rule_order` value of `STRICT_ORDER`. Value values: `aws:drop_strict`, `aws:drop_established`, `aws:drop_established_app_layer`, `aws:alert_strict`, `aws:alert_established, `aws:alert_established_app_layer`. For more information, see [Strict evaluation order](https://docs.aws.amazon.com/network-firewall/latest/developerguide/suricata-rule-evaluation-order.html#suricata-strict-rule-evaluation-order.html) in the AWS Network Firewall Developer Guide.
+        :param Sequence[_builtins.str] stateful_default_actions: Set of actions to take on a packet if it does not match any stateful rules in the policy. This can only be specified if the policy has a `stateful_engine_options` block with a `rule_order` value of `STRICT_ORDER`. Value values: `aws:drop_strict`, `aws:drop_established`, `aws:drop_established_app_layer`, `aws:alert_strict`, ` aws:alert_established,  `aws:alert_established_app_layer`. For more information, see [Strict evaluation order](https://docs.aws.amazon.com/network-firewall/latest/developerguide/suricata-rule-evaluation-order.html#suricata-strict-rule-evaluation-order.html) in the AWS Network Firewall Developer Guide.
         :param 'FirewallPolicyFirewallPolicyStatefulEngineOptionsArgs' stateful_engine_options: A configuration block that defines options on how the policy handles stateful rules. See Stateful Engine Options below for details.
         :param Sequence['FirewallPolicyFirewallPolicyStatefulRuleGroupReferenceArgs'] stateful_rule_group_references: Set of configuration blocks containing references to the stateful rule groups that are used in the policy. See Stateful Rule Group Reference below for details.
         :param Sequence['FirewallPolicyFirewallPolicyStatelessCustomActionArgs'] stateless_custom_actions: Set of configuration blocks describing the custom action definitions that are available for use in the firewall policy's `stateless_default_actions`. See Stateless Custom Action below for details.
@@ -485,6 +613,8 @@ class FirewallPolicyFirewallPolicy(dict):
         """
         pulumi.set(__self__, "stateless_default_actions", stateless_default_actions)
         pulumi.set(__self__, "stateless_fragment_default_actions", stateless_fragment_default_actions)
+        if enable_tls_session_holding is not None:
+            pulumi.set(__self__, "enable_tls_session_holding", enable_tls_session_holding)
         if policy_variables is not None:
             pulumi.set(__self__, "policy_variables", policy_variables)
         if stateful_default_actions is not None:
@@ -519,6 +649,14 @@ class FirewallPolicyFirewallPolicy(dict):
         return pulumi.get(self, "stateless_fragment_default_actions")
 
     @_builtins.property
+    @pulumi.getter(name="enableTlsSessionHolding")
+    def enable_tls_session_holding(self) -> Optional[_builtins.bool]:
+        """
+        Boolean indicating whether to prevent TCP and TLS packets from reaching destination servers until TLS Inspection has evaluated Server Name Indication (SNI) rules. If `true`, `tls_inspection_configuration_arn` is required. Default value: `false`.
+        """
+        return pulumi.get(self, "enable_tls_session_holding")
+
+    @_builtins.property
     @pulumi.getter(name="policyVariables")
     def policy_variables(self) -> Optional['outputs.FirewallPolicyFirewallPolicyPolicyVariables']:
         """
@@ -530,7 +668,7 @@ class FirewallPolicyFirewallPolicy(dict):
     @pulumi.getter(name="statefulDefaultActions")
     def stateful_default_actions(self) -> Optional[Sequence[_builtins.str]]:
         """
-        Set of actions to take on a packet if it does not match any stateful rules in the policy. This can only be specified if the policy has a `stateful_engine_options` block with a `rule_order` value of `STRICT_ORDER`. Value values: `aws:drop_strict`, `aws:drop_established`, `aws:drop_established_app_layer`, `aws:alert_strict`, `aws:alert_established, `aws:alert_established_app_layer`. For more information, see [Strict evaluation order](https://docs.aws.amazon.com/network-firewall/latest/developerguide/suricata-rule-evaluation-order.html#suricata-strict-rule-evaluation-order.html) in the AWS Network Firewall Developer Guide.
+        Set of actions to take on a packet if it does not match any stateful rules in the policy. This can only be specified if the policy has a `stateful_engine_options` block with a `rule_order` value of `STRICT_ORDER`. Value values: `aws:drop_strict`, `aws:drop_established`, `aws:drop_established_app_layer`, `aws:alert_strict`, ` aws:alert_established,  `aws:alert_established_app_layer`. For more information, see [Strict evaluation order](https://docs.aws.amazon.com/network-firewall/latest/developerguide/suricata-rule-evaluation-order.html#suricata-strict-rule-evaluation-order.html) in the AWS Network Firewall Developer Guide.
         """
         return pulumi.get(self, "stateful_default_actions")
 
@@ -796,7 +934,7 @@ class FirewallPolicyFirewallPolicyStatefulRuleGroupReference(dict):
                  override: Optional['outputs.FirewallPolicyFirewallPolicyStatefulRuleGroupReferenceOverride'] = None,
                  priority: Optional[_builtins.int] = None):
         """
-        :param _builtins.str resource_arn: The Amazon Resource Name (ARN) of the stateful rule group.
+        :param _builtins.str resource_arn: ARN of the stateful rule group.
         :param _builtins.str deep_threat_inspection: Whether to enable deep threat inspection, which allows AWS to analyze service logs of network traffic processed by these rule groups to identify threat indicators across customers. AWS will use these threat indicators to improve the active threat defense managed rule groups and protect the security of AWS customers and services. This only applies to active threat defense maanaged rule groups.
                
                For details, refer to [AWS active threat defense for AWS Network Firewall](https://docs.aws.amazon.com/network-firewall/latest/developerguide/aws-managed-rule-groups-atd.html) in the AWS Network Firewall Developer Guide.
@@ -815,7 +953,7 @@ class FirewallPolicyFirewallPolicyStatefulRuleGroupReference(dict):
     @pulumi.getter(name="resourceArn")
     def resource_arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) of the stateful rule group.
+        ARN of the stateful rule group.
         """
         return pulumi.get(self, "resource_arn")
 
@@ -1008,7 +1146,7 @@ class FirewallPolicyFirewallPolicyStatelessRuleGroupReference(dict):
                  resource_arn: _builtins.str):
         """
         :param _builtins.int priority: An integer setting that indicates the order in which to run the stateless rule groups in a single policy. AWS Network Firewall applies each stateless rule group to a packet starting with the group that has the lowest priority setting.
-        :param _builtins.str resource_arn: The Amazon Resource Name (ARN) of the stateless rule group.
+        :param _builtins.str resource_arn: ARN of the stateless rule group.
         """
         pulumi.set(__self__, "priority", priority)
         pulumi.set(__self__, "resource_arn", resource_arn)
@@ -1025,7 +1163,7 @@ class FirewallPolicyFirewallPolicyStatelessRuleGroupReference(dict):
     @pulumi.getter(name="resourceArn")
     def resource_arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) of the stateless rule group.
+        ARN of the stateless rule group.
         """
         return pulumi.get(self, "resource_arn")
 
@@ -2232,7 +2370,7 @@ class RuleGroupRuleGroupRulesSourceStatelessRulesAndCustomActionsStatelessRuleRu
         """
         :param Sequence['RuleGroupRuleGroupRulesSourceStatelessRulesAndCustomActionsStatelessRuleRuleDefinitionMatchAttributesDestinationPortArgs'] destination_ports: Set of configuration blocks describing the destination ports to inspect for. If not specified, this matches with any destination port. See Destination Port below for details.
         :param Sequence['RuleGroupRuleGroupRulesSourceStatelessRulesAndCustomActionsStatelessRuleRuleDefinitionMatchAttributesDestinationArgs'] destinations: Set of configuration blocks describing the destination IP address and address ranges to inspect for, in CIDR notation. If not specified, this matches with any destination address. See Destination below for details.
-        :param Sequence[_builtins.int] protocols: Set of protocols to inspect for, specified using the protocol's assigned internet protocol number (IANA). If not specified, this matches with any protocol.
+        :param Sequence[_builtins.int] protocols: Set of protocols to inspect for, specified using the protocol's assigned IP number (IANA). If not specified, this matches with any protocol.
         :param Sequence['RuleGroupRuleGroupRulesSourceStatelessRulesAndCustomActionsStatelessRuleRuleDefinitionMatchAttributesSourcePortArgs'] source_ports: Set of configuration blocks describing the source ports to inspect for. If not specified, this matches with any source port. See Source Port below for details.
         :param Sequence['RuleGroupRuleGroupRulesSourceStatelessRulesAndCustomActionsStatelessRuleRuleDefinitionMatchAttributesSourceArgs'] sources: Set of configuration blocks describing the source IP address and address ranges to inspect for, in CIDR notation. If not specified, this matches with any source address. See Source below for details.
         :param Sequence['RuleGroupRuleGroupRulesSourceStatelessRulesAndCustomActionsStatelessRuleRuleDefinitionMatchAttributesTcpFlagArgs'] tcp_flags: Set of configuration blocks containing the TCP flags and masks to inspect for. If not specified, this matches with any settings.
@@ -2270,7 +2408,7 @@ class RuleGroupRuleGroupRulesSourceStatelessRulesAndCustomActionsStatelessRuleRu
     @pulumi.getter
     def protocols(self) -> Optional[Sequence[_builtins.int]]:
         """
-        Set of protocols to inspect for, specified using the protocol's assigned internet protocol number (IANA). If not specified, this matches with any protocol.
+        Set of protocols to inspect for, specified using the protocol's assigned IP number (IANA). If not specified, this matches with any protocol.
         """
         return pulumi.get(self, "protocols")
 
@@ -2703,7 +2841,7 @@ class TlsInspectionConfigurationEncryptionConfiguration(dict):
                  key_id: _builtins.str,
                  type: _builtins.str):
         """
-        :param _builtins.str key_id: ARN of the Amazon Web Services Key Management Service (KMS) customer managed key.
+        :param _builtins.str key_id: ARN of the Amazon Web Services KMS customer managed key.
         :param _builtins.str type: Type of KMS key to use for encryption of your Network Firewall resources. Valid values: `AWS_OWNED_KMS_KEY`, `CUSTOMER_KMS`.
         """
         pulumi.set(__self__, "key_id", key_id)
@@ -2713,7 +2851,7 @@ class TlsInspectionConfigurationEncryptionConfiguration(dict):
     @pulumi.getter(name="keyId")
     def key_id(self) -> _builtins.str:
         """
-        ARN of the Amazon Web Services Key Management Service (KMS) customer managed key.
+        ARN of the Amazon Web Services KMS customer managed key.
         """
         return pulumi.get(self, "key_id")
 
@@ -2948,7 +3086,7 @@ class TlsInspectionConfigurationTlsInspectionConfigurationServerCertificateConfi
                  sources: Optional[Sequence['outputs.TlsInspectionConfigurationTlsInspectionConfigurationServerCertificateConfigurationScopeSource']] = None):
         """
         :param Sequence['TlsInspectionConfigurationTlsInspectionConfigurationServerCertificateConfigurationScopeDestinationArgs'] destinations: Set of configuration blocks describing the destination IP address and address ranges to inspect for, in CIDR notation. If not specified, this matches with any destination address. See Destination below for details.
-        :param Sequence[_builtins.int] protocols: Set of protocols to inspect for, specified using the protocol's assigned internet protocol number (IANA). Network Firewall currently supports TCP only. Valid values: `6`
+        :param Sequence[_builtins.int] protocols: Set of protocols to inspect for, specified using the protocol's assigned IP number (IANA). Network Firewall currently supports TCP only. Valid values: `6`
         :param Sequence['TlsInspectionConfigurationTlsInspectionConfigurationServerCertificateConfigurationScopeDestinationPortArgs'] destination_ports: Set of configuration blocks describing the destination ports to inspect for. If not specified, this matches with any destination port. See Destination Ports below for details.
         :param Sequence['TlsInspectionConfigurationTlsInspectionConfigurationServerCertificateConfigurationScopeSourcePortArgs'] source_ports: Set of configuration blocks describing the source ports to inspect for. If not specified, this matches with any source port. See Source Ports below for details.
         :param Sequence['TlsInspectionConfigurationTlsInspectionConfigurationServerCertificateConfigurationScopeSourceArgs'] sources: Set of configuration blocks describing the source IP address and address ranges to inspect for, in CIDR notation. If not specified, this matches with any source address. See Source below for details.
@@ -2974,7 +3112,7 @@ class TlsInspectionConfigurationTlsInspectionConfigurationServerCertificateConfi
     @pulumi.getter
     def protocols(self) -> Sequence[_builtins.int]:
         """
-        Set of protocols to inspect for, specified using the protocol's assigned internet protocol number (IANA). Network Firewall currently supports TCP only. Valid values: `6`
+        Set of protocols to inspect for, specified using the protocol's assigned IP number (IANA). Network Firewall currently supports TCP only. Valid values: `6`
         """
         return pulumi.get(self, "protocols")
 
@@ -3306,11 +3444,17 @@ class VpcEndpointAssociationVpcEndpointAssociationStatus(dict):
 
     def __init__(__self__, *,
                  association_sync_states: Sequence['outputs.VpcEndpointAssociationVpcEndpointAssociationStatusAssociationSyncState']):
+        """
+        :param Sequence['VpcEndpointAssociationVpcEndpointAssociationStatusAssociationSyncStateArgs'] association_sync_states: Set of subnets configured for use by the VPC Endpoint Association.
+        """
         pulumi.set(__self__, "association_sync_states", association_sync_states)
 
     @_builtins.property
     @pulumi.getter(name="associationSyncStates")
     def association_sync_states(self) -> Sequence['outputs.VpcEndpointAssociationVpcEndpointAssociationStatusAssociationSyncState']:
+        """
+        Set of subnets configured for use by the VPC Endpoint Association.
+        """
         return pulumi.get(self, "association_sync_states")
 
 
@@ -3448,8 +3592,8 @@ class GetFirewallEncryptionConfigurationResult(dict):
                  key_id: _builtins.str,
                  type: _builtins.str):
         """
-        :param _builtins.str key_id: The ID of the AWS Key Management Service (AWS KMS) customer managed key.
-        :param _builtins.str type: The type of the AWS Key Management Service (AWS KMS) key use by the firewall.
+        :param _builtins.str key_id: The ID of the KMS customer managed key.
+        :param _builtins.str type: The type of the KMS key use by the firewall.
         """
         pulumi.set(__self__, "key_id", key_id)
         pulumi.set(__self__, "type", type)
@@ -3458,7 +3602,7 @@ class GetFirewallEncryptionConfigurationResult(dict):
     @pulumi.getter(name="keyId")
     def key_id(self) -> _builtins.str:
         """
-        The ID of the AWS Key Management Service (AWS KMS) customer managed key.
+        The ID of the KMS customer managed key.
         """
         return pulumi.get(self, "key_id")
 
@@ -3466,7 +3610,7 @@ class GetFirewallEncryptionConfigurationResult(dict):
     @pulumi.getter
     def type(self) -> _builtins.str:
         """
-        The type of the AWS Key Management Service (AWS KMS) key use by the firewall.
+        The type of the KMS key use by the firewall.
         """
         return pulumi.get(self, "type")
 
@@ -3732,6 +3876,7 @@ class GetFirewallFirewallStatusTransitGatewayAttachmentSyncStateResult(dict):
 @pulumi.output_type
 class GetFirewallPolicyFirewallPolicyResult(dict):
     def __init__(__self__, *,
+                 enable_tls_session_holding: _builtins.bool,
                  policy_variables: Sequence['outputs.GetFirewallPolicyFirewallPolicyPolicyVariableResult'],
                  stateful_default_actions: Sequence[_builtins.str],
                  stateful_engine_options: Sequence['outputs.GetFirewallPolicyFirewallPolicyStatefulEngineOptionResult'],
@@ -3741,6 +3886,7 @@ class GetFirewallPolicyFirewallPolicyResult(dict):
                  stateless_fragment_default_actions: Sequence[_builtins.str],
                  stateless_rule_group_references: Sequence['outputs.GetFirewallPolicyFirewallPolicyStatelessRuleGroupReferenceResult'],
                  tls_inspection_configuration_arn: _builtins.str):
+        pulumi.set(__self__, "enable_tls_session_holding", enable_tls_session_holding)
         pulumi.set(__self__, "policy_variables", policy_variables)
         pulumi.set(__self__, "stateful_default_actions", stateful_default_actions)
         pulumi.set(__self__, "stateful_engine_options", stateful_engine_options)
@@ -3750,6 +3896,11 @@ class GetFirewallPolicyFirewallPolicyResult(dict):
         pulumi.set(__self__, "stateless_fragment_default_actions", stateless_fragment_default_actions)
         pulumi.set(__self__, "stateless_rule_group_references", stateless_rule_group_references)
         pulumi.set(__self__, "tls_inspection_configuration_arn", tls_inspection_configuration_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="enableTlsSessionHolding")
+    def enable_tls_session_holding(self) -> _builtins.bool:
+        return pulumi.get(self, "enable_tls_session_holding")
 
     @_builtins.property
     @pulumi.getter(name="policyVariables")

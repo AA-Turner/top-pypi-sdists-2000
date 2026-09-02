@@ -84,7 +84,7 @@ class GetAvailabilityZonesResult:
     @pulumi.getter(name="groupNames")
     def group_names(self) -> Sequence[_builtins.str]:
         """
-        A set of the Availability Zone Group names. For Availability Zones, this is the same value as the Region name. For Local Zones, the name of the associated group, for example `us-west-2-lax-1`.
+        Set of the Availability Zone Group names. For Availability Zones, this is the same value as the Region name. For Local Zones, the name of the associated group, for example `us-west-2-lax-1`.
         """
         return pulumi.get(self, "group_names")
 
@@ -181,14 +181,14 @@ def get_availability_zones(all_availability_zones: Optional[_builtins.bool] = No
     import pulumi
     import pulumi_aws as aws
 
-    example = aws.get_availability_zones(all_availability_zones=True,
-        filters=[{
+    example = aws.get_availability_zones(filters=[{
             "name": "opt-in-status",
             "values": [
                 "not-opted-in",
                 "opted-in",
             ],
-        }])
+        }],
+        all_availability_zones=True)
     ```
 
     Only Availability Zones (no Local Zones):
@@ -209,10 +209,7 @@ def get_availability_zones(all_availability_zones: Optional[_builtins.bool] = No
     :param Sequence[_builtins.str] exclude_zone_ids: List of Availability Zone IDs to exclude.
     :param Sequence[Union['GetAvailabilityZonesFilterArgs', 'GetAvailabilityZonesFilterArgsDict']] filters: Configuration block(s) for filtering. Detailed below.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param _builtins.str state: Allows to filter list of Availability Zones based on their
-           current state. Can be either `"available"`, `"information"`, `"impaired"` or
-           `"unavailable"`. By default the list includes a complete set of Availability Zones
-           to which the underlying AWS account has access, regardless of their state.
+    :param _builtins.str state: Allows to filter list of Availability Zones based on their current state. Can be either `"available"`, `"information"`, `"impaired"` or `"unavailable"`. By default the list includes a complete set of Availability Zones to which the underlying AWS account has access, regardless of their state.
     """
     __args__ = dict()
     __args__['allAvailabilityZones'] = all_availability_zones
@@ -235,12 +232,12 @@ def get_availability_zones(all_availability_zones: Optional[_builtins.bool] = No
         region=pulumi.get(__ret__, 'region'),
         state=pulumi.get(__ret__, 'state'),
         zone_ids=pulumi.get(__ret__, 'zone_ids'))
-def get_availability_zones_output(all_availability_zones: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                                  exclude_names: Optional[pulumi.Input[Optional[Sequence[_builtins.str]]]] = None,
-                                  exclude_zone_ids: Optional[pulumi.Input[Optional[Sequence[_builtins.str]]]] = None,
-                                  filters: Optional[pulumi.Input[Optional[Sequence[Union['GetAvailabilityZonesFilterArgs', 'GetAvailabilityZonesFilterArgsDict']]]]] = None,
-                                  region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                  state: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_availability_zones_output(all_availability_zones: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                                  exclude_names: pulumi.Input[Optional[Optional[Sequence[_builtins.str]]]] = None,
+                                  exclude_zone_ids: pulumi.Input[Optional[Optional[Sequence[_builtins.str]]]] = None,
+                                  filters: pulumi.Input[Optional[Optional[Sequence[Union['GetAvailabilityZonesFilterArgs', 'GetAvailabilityZonesFilterArgsDict']]]]] = None,
+                                  region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                  state: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                   opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetAvailabilityZonesResult]:
     """
     The Availability Zones data source allows access to the list of AWS
@@ -275,14 +272,14 @@ def get_availability_zones_output(all_availability_zones: Optional[pulumi.Input[
     import pulumi
     import pulumi_aws as aws
 
-    example = aws.get_availability_zones(all_availability_zones=True,
-        filters=[{
+    example = aws.get_availability_zones(filters=[{
             "name": "opt-in-status",
             "values": [
                 "not-opted-in",
                 "opted-in",
             ],
-        }])
+        }],
+        all_availability_zones=True)
     ```
 
     Only Availability Zones (no Local Zones):
@@ -303,10 +300,7 @@ def get_availability_zones_output(all_availability_zones: Optional[pulumi.Input[
     :param Sequence[_builtins.str] exclude_zone_ids: List of Availability Zone IDs to exclude.
     :param Sequence[Union['GetAvailabilityZonesFilterArgs', 'GetAvailabilityZonesFilterArgsDict']] filters: Configuration block(s) for filtering. Detailed below.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param _builtins.str state: Allows to filter list of Availability Zones based on their
-           current state. Can be either `"available"`, `"information"`, `"impaired"` or
-           `"unavailable"`. By default the list includes a complete set of Availability Zones
-           to which the underlying AWS account has access, regardless of their state.
+    :param _builtins.str state: Allows to filter list of Availability Zones based on their current state. Can be either `"available"`, `"information"`, `"impaired"` or `"unavailable"`. By default the list includes a complete set of Availability Zones to which the underlying AWS account has access, regardless of their state.
     """
     __args__ = dict()
     __args__['allAvailabilityZones'] = all_availability_zones

@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import List, Tuple
 
 import numpy as np
 import scipy.sparse as sp
@@ -80,14 +79,14 @@ class dotsort(Atom):
         indices = np.argsort(x)
         n = len(x)
         sorted_w = np.sort(w_padded)
-        return [sp.csc_matrix((sorted_w, (indices, np.zeros(n))), shape=(n, 1))]
+        return [sp.csc_array((sorted_w, (indices, np.zeros(n))), shape=(n, 1))]
 
-    def shape_from_args(self) -> Tuple[int, ...]:
+    def shape_from_args(self) -> tuple[int, ...]:
         """Returns the (row, col) shape of the expression.
         """
         return tuple()
 
-    def sign_from_args(self) -> Tuple[bool, bool]:
+    def sign_from_args(self) -> tuple[bool, bool]:
         """Returns sign (is positive, is negative) of the expression.
         """
         # Same as argument.
@@ -133,9 +132,14 @@ class dotsort(Atom):
         """
         return None
 
+    def is_pwl(self) -> bool:
+        """Is the expression piecewise linear?
+        """
+        return True
+
     @staticmethod
-    def _get_args_from_values(values: List[np.ndarray]) \
-            -> Tuple[np.ndarray, np.ndarray]:
+    def _get_args_from_values(values: list[np.ndarray]) \
+            -> tuple[np.ndarray, np.ndarray]:
         x = values[0].flatten()
         w = values[1].flatten()
 

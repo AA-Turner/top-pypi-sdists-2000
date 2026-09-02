@@ -28,7 +28,7 @@ class GetListenerRuleResult:
     """
     A collection of values returned by getListenerRule.
     """
-    def __init__(__self__, actions=None, arn=None, conditions=None, id=None, listener_arn=None, priority=None, region=None, tags=None, transforms=None):
+    def __init__(__self__, actions=None, arn=None, conditions=None, listener_arn=None, priority=None, region=None, tags=None, transforms=None):
         if actions and not isinstance(actions, list):
             raise TypeError("Expected argument 'actions' to be a list")
         pulumi.set(__self__, "actions", actions)
@@ -38,9 +38,6 @@ class GetListenerRuleResult:
         if conditions and not isinstance(conditions, list):
             raise TypeError("Expected argument 'conditions' to be a list")
         pulumi.set(__self__, "conditions", conditions)
-        if id and not isinstance(id, str):
-            raise TypeError("Expected argument 'id' to be a str")
-        pulumi.set(__self__, "id", id)
         if listener_arn and not isinstance(listener_arn, str):
             raise TypeError("Expected argument 'listener_arn' to be a str")
         pulumi.set(__self__, "listener_arn", listener_arn)
@@ -84,14 +81,6 @@ class GetListenerRuleResult:
         return pulumi.get(self, "conditions")
 
     @_builtins.property
-    @pulumi.getter
-    def id(self) -> _builtins.str:
-        """
-        The provider-assigned unique ID for this managed resource.
-        """
-        return pulumi.get(self, "id")
-
-    @_builtins.property
     @pulumi.getter(name="listenerArn")
     def listener_arn(self) -> _builtins.str:
         return pulumi.get(self, "listener_arn")
@@ -132,7 +121,6 @@ class AwaitableGetListenerRuleResult(GetListenerRuleResult):
             actions=self.actions,
             arn=self.arn,
             conditions=self.conditions,
-            id=self.id,
             listener_arn=self.listener_arn,
             priority=self.priority,
             region=self.region,
@@ -174,7 +162,7 @@ def get_listener_rule(actions: Optional[Sequence[Union['GetListenerRuleActionArg
     lb_listener_arn = config.require("lbListenerArn")
     lb_rule_priority = config.require_float("lbRulePriority")
     example = aws.lb.get_listener_rule(listener_arn=lb_listener_arn,
-        priority=lb_rule_priority)
+        priority=int(lb_rule_priority))
     ```
 
 
@@ -206,19 +194,18 @@ def get_listener_rule(actions: Optional[Sequence[Union['GetListenerRuleActionArg
         actions=pulumi.get(__ret__, 'actions'),
         arn=pulumi.get(__ret__, 'arn'),
         conditions=pulumi.get(__ret__, 'conditions'),
-        id=pulumi.get(__ret__, 'id'),
         listener_arn=pulumi.get(__ret__, 'listener_arn'),
         priority=pulumi.get(__ret__, 'priority'),
         region=pulumi.get(__ret__, 'region'),
         tags=pulumi.get(__ret__, 'tags'),
         transforms=pulumi.get(__ret__, 'transforms'))
-def get_listener_rule_output(actions: Optional[pulumi.Input[Optional[Sequence[Union['GetListenerRuleActionArgs', 'GetListenerRuleActionArgsDict']]]]] = None,
-                             arn: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                             conditions: Optional[pulumi.Input[Optional[Sequence[Union['GetListenerRuleConditionArgs', 'GetListenerRuleConditionArgsDict']]]]] = None,
-                             listener_arn: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                             priority: Optional[pulumi.Input[Optional[_builtins.int]]] = None,
-                             region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                             transforms: Optional[pulumi.Input[Optional[Sequence[Union['GetListenerRuleTransformArgs', 'GetListenerRuleTransformArgsDict']]]]] = None,
+def get_listener_rule_output(actions: pulumi.Input[Optional[Optional[Sequence[Union['GetListenerRuleActionArgs', 'GetListenerRuleActionArgsDict']]]]] = None,
+                             arn: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                             conditions: pulumi.Input[Optional[Optional[Sequence[Union['GetListenerRuleConditionArgs', 'GetListenerRuleConditionArgsDict']]]]] = None,
+                             listener_arn: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                             priority: pulumi.Input[Optional[Optional[_builtins.int]]] = None,
+                             region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                             transforms: pulumi.Input[Optional[Optional[Sequence[Union['GetListenerRuleTransformArgs', 'GetListenerRuleTransformArgsDict']]]]] = None,
                              opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetListenerRuleResult]:
     """
     Provides information about an AWS Elastic Load Balancing Listener Rule.
@@ -246,7 +233,7 @@ def get_listener_rule_output(actions: Optional[pulumi.Input[Optional[Sequence[Un
     lb_listener_arn = config.require("lbListenerArn")
     lb_rule_priority = config.require_float("lbRulePriority")
     example = aws.lb.get_listener_rule(listener_arn=lb_listener_arn,
-        priority=lb_rule_priority)
+        priority=int(lb_rule_priority))
     ```
 
 
@@ -277,7 +264,6 @@ def get_listener_rule_output(actions: Optional[pulumi.Input[Optional[Sequence[Un
         actions=pulumi.get(__response__, 'actions'),
         arn=pulumi.get(__response__, 'arn'),
         conditions=pulumi.get(__response__, 'conditions'),
-        id=pulumi.get(__response__, 'id'),
         listener_arn=pulumi.get(__response__, 'listener_arn'),
         priority=pulumi.get(__response__, 'priority'),
         region=pulumi.get(__response__, 'region'),

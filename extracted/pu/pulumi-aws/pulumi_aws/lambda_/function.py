@@ -23,47 +23,49 @@ __all__ = ['FunctionArgs', 'Function']
 class FunctionArgs:
     def __init__(__self__, *,
                  role: pulumi.Input[_builtins.str],
-                 architectures: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 capacity_provider_config: Optional[pulumi.Input['FunctionCapacityProviderConfigArgs']] = None,
-                 code: Optional[pulumi.Input[pulumi.Archive]] = None,
-                 code_sha256: Optional[pulumi.Input[_builtins.str]] = None,
-                 code_signing_config_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 dead_letter_config: Optional[pulumi.Input['FunctionDeadLetterConfigArgs']] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 durable_config: Optional[pulumi.Input['FunctionDurableConfigArgs']] = None,
-                 environment: Optional[pulumi.Input['FunctionEnvironmentArgs']] = None,
-                 ephemeral_storage: Optional[pulumi.Input['FunctionEphemeralStorageArgs']] = None,
-                 file_system_config: Optional[pulumi.Input['FunctionFileSystemConfigArgs']] = None,
-                 handler: Optional[pulumi.Input[_builtins.str]] = None,
-                 image_config: Optional[pulumi.Input['FunctionImageConfigArgs']] = None,
-                 image_uri: Optional[pulumi.Input[_builtins.str]] = None,
-                 kms_key_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 layers: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 logging_config: Optional[pulumi.Input['FunctionLoggingConfigArgs']] = None,
-                 memory_size: Optional[pulumi.Input[_builtins.int]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 package_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 publish: Optional[pulumi.Input[_builtins.bool]] = None,
-                 publish_to: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 replace_security_groups_on_destroy: Optional[pulumi.Input[_builtins.bool]] = None,
-                 replacement_security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 reserved_concurrent_executions: Optional[pulumi.Input[_builtins.int]] = None,
-                 runtime: Optional[pulumi.Input[Union[_builtins.str, 'Runtime']]] = None,
-                 s3_bucket: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_object_version: Optional[pulumi.Input[_builtins.str]] = None,
-                 skip_destroy: Optional[pulumi.Input[_builtins.bool]] = None,
-                 snap_start: Optional[pulumi.Input['FunctionSnapStartArgs']] = None,
-                 source_code_hash: Optional[pulumi.Input[_builtins.str]] = None,
-                 source_kms_key_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tenancy_config: Optional[pulumi.Input['FunctionTenancyConfigArgs']] = None,
-                 timeout: Optional[pulumi.Input[_builtins.int]] = None,
-                 tracing_config: Optional[pulumi.Input['FunctionTracingConfigArgs']] = None,
-                 vpc_config: Optional[pulumi.Input['FunctionVpcConfigArgs']] = None):
+                 architectures: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 capacity_provider_config: pulumi.Input[Optional['FunctionCapacityProviderConfigArgs']] = None,
+                 code: pulumi.Input[Optional[pulumi.Archive]] = None,
+                 code_sha256: pulumi.Input[Optional[_builtins.str]] = None,
+                 code_signing_config_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 dead_letter_config: pulumi.Input[Optional['FunctionDeadLetterConfigArgs']] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 durable_config: pulumi.Input[Optional['FunctionDurableConfigArgs']] = None,
+                 environment: pulumi.Input[Optional['FunctionEnvironmentArgs']] = None,
+                 ephemeral_storage: pulumi.Input[Optional['FunctionEphemeralStorageArgs']] = None,
+                 file_system_config: pulumi.Input[Optional['FunctionFileSystemConfigArgs']] = None,
+                 handler: pulumi.Input[Optional[_builtins.str]] = None,
+                 image_config: pulumi.Input[Optional['FunctionImageConfigArgs']] = None,
+                 image_uri: pulumi.Input[Optional[_builtins.str]] = None,
+                 kms_key_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 layers: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 logging_config: pulumi.Input[Optional['FunctionLoggingConfigArgs']] = None,
+                 memory_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 package_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 publish: pulumi.Input[Optional[_builtins.bool]] = None,
+                 publish_to: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 replace_security_groups_on_destroy: pulumi.Input[Optional[_builtins.bool]] = None,
+                 replacement_security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 reserved_concurrent_executions: pulumi.Input[Optional[_builtins.int]] = None,
+                 runtime: pulumi.Input[Optional[Union[_builtins.str, 'Runtime']]] = None,
+                 s3_bucket: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_object_version: pulumi.Input[Optional[_builtins.str]] = None,
+                 skip_destroy: pulumi.Input[Optional[_builtins.bool]] = None,
+                 snap_start: pulumi.Input[Optional['FunctionSnapStartArgs']] = None,
+                 source_code_hash: pulumi.Input[Optional[_builtins.str]] = None,
+                 source_kms_key_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tenancy_config: pulumi.Input[Optional['FunctionTenancyConfigArgs']] = None,
+                 timeout: pulumi.Input[Optional[_builtins.int]] = None,
+                 tracing_config: pulumi.Input[Optional['FunctionTracingConfigArgs']] = None,
+                 use_resource_timeout_for_propagation: pulumi.Input[Optional[_builtins.bool]] = None,
+                 vpc_config: pulumi.Input[Optional['FunctionVpcConfigArgs']] = None):
         """
         The set of arguments for constructing a Function resource.
+
         :param pulumi.Input[_builtins.str] role: ARN of the function's execution role. The role provides the function's identity and access to AWS services and resources.
                
                The following arguments are optional:
@@ -77,11 +79,11 @@ class FunctionArgs:
         :param pulumi.Input['FunctionDurableConfigArgs'] durable_config: Configuration block for durable function settings. See below. `durable_config` may only be available in [limited regions](https://builder.aws.com/build/capabilities), including `us-east-2`.
         :param pulumi.Input['FunctionEnvironmentArgs'] environment: Configuration block for environment variables. See below.
         :param pulumi.Input['FunctionEphemeralStorageArgs'] ephemeral_storage: Amount of ephemeral storage (`/tmp`) to allocate for the Lambda Function. See below.
-        :param pulumi.Input['FunctionFileSystemConfigArgs'] file_system_config: Configuration block for EFS file system. See below.
+        :param pulumi.Input['FunctionFileSystemConfigArgs'] file_system_config: Configuration block for EFS or S3 Files file system. See below.
         :param pulumi.Input[_builtins.str] handler: Function entry point in your code. Required if `package_type` is `Zip`.
         :param pulumi.Input['FunctionImageConfigArgs'] image_config: Container image configuration values. See below.
         :param pulumi.Input[_builtins.str] image_uri: ECR image URI containing the function's deployment package. Conflicts with `filename` and `s3_bucket`. One of `filename`, `image_uri`, or `s3_bucket` must be specified.
-        :param pulumi.Input[_builtins.str] kms_key_arn: ARN of the AWS Key Management Service key used to encrypt environment variables. If not provided when environment variables are in use, AWS Lambda uses a default service key. If provided when environment variables are not in use, the AWS Lambda API does not save this configuration.
+        :param pulumi.Input[_builtins.str] kms_key_arn: ARN of the KMS key used to encrypt environment variables. If not provided when environment variables are in use, AWS Lambda uses a default service key. If provided when environment variables are not in use, the AWS Lambda API does not save this configuration.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] layers: List of Lambda Layer Version ARNs (maximum of 5) to attach to your Lambda Function.
         :param pulumi.Input['FunctionLoggingConfigArgs'] logging_config: Configuration block for advanced logging settings. See below.
         :param pulumi.Input[_builtins.int] memory_size: Amount of memory in MB your Lambda Function can use at runtime. Valid value between 128 MB to 32,768 MB (32 GB), in 1 MB increments. Defaults to 128.
@@ -100,11 +102,12 @@ class FunctionArgs:
         :param pulumi.Input[_builtins.bool] skip_destroy: Whether to retain the old version of a previously deployed Lambda Layer. Default is `false`.
         :param pulumi.Input['FunctionSnapStartArgs'] snap_start: Configuration block for snap start settings. See below.
         :param pulumi.Input[_builtins.str] source_code_hash: User-defined hash of the source code package file. Use this argument to trigger updates when the local function source code changes. This is a synthetic argument tracked only by the AWS provider and does not need to match the hashing algorithm used by Lambda to compute the `CodeSha256` response value. Out-of-band changes to the source code _will not_ be captured by this argument. To include out-of-band source code changes as an update trigger, use the `code_sha256` argument instead.
-        :param pulumi.Input[_builtins.str] source_kms_key_arn: ARN of the AWS Key Management Service key used to encrypt the function's `.zip` deployment package. Conflicts with `image_uri`.
+        :param pulumi.Input[_builtins.str] source_kms_key_arn: ARN of the KMS key used to encrypt the function's `.zip` deployment package. Conflicts with `image_uri`.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of tags for the Lambda function. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input['FunctionTenancyConfigArgs'] tenancy_config: Configuration block for Tenancy. See below.
         :param pulumi.Input[_builtins.int] timeout: Amount of time your Lambda Function has to run in seconds. Defaults to 3. Valid between 1 and 900.
         :param pulumi.Input['FunctionTracingConfigArgs'] tracing_config: Configuration block for X-Ray tracing. See below.
+        :param pulumi.Input[_builtins.bool] use_resource_timeout_for_propagation: Whether to apply resource level timeout values while retrying eventually consistent API operations. By default the provider uses a 5 minute timeout to allow for propagation in the Lambda service. When set to `true`, this default value is replaced with the configurable resource timeouts. Increased timeout values may be useful in highly active accounts, or regions where propagation delays are inconsistent.
         :param pulumi.Input['FunctionVpcConfigArgs'] vpc_config: Configuration block for VPC. See below.
         """
         pulumi.set(__self__, "role", role)
@@ -184,6 +187,8 @@ class FunctionArgs:
             pulumi.set(__self__, "timeout", timeout)
         if tracing_config is not None:
             pulumi.set(__self__, "tracing_config", tracing_config)
+        if use_resource_timeout_for_propagation is not None:
+            pulumi.set(__self__, "use_resource_timeout_for_propagation", use_resource_timeout_for_propagation)
         if vpc_config is not None:
             pulumi.set(__self__, "vpc_config", vpc_config)
 
@@ -203,529 +208,543 @@ class FunctionArgs:
 
     @_builtins.property
     @pulumi.getter
-    def architectures(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def architectures(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         Instruction set architecture for your Lambda function. Valid values are `["x86_64"]` and `["arm64"]`. Default is `["x86_64"]`. Removing this attribute, function's architecture stays the same.
         """
         return pulumi.get(self, "architectures")
 
     @architectures.setter
-    def architectures(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def architectures(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "architectures", value)
 
     @_builtins.property
     @pulumi.getter(name="capacityProviderConfig")
-    def capacity_provider_config(self) -> Optional[pulumi.Input['FunctionCapacityProviderConfigArgs']]:
+    def capacity_provider_config(self) -> pulumi.Input[Optional['FunctionCapacityProviderConfigArgs']]:
         """
         Configuration block for Lambda Capacity Provider. See below.
         """
         return pulumi.get(self, "capacity_provider_config")
 
     @capacity_provider_config.setter
-    def capacity_provider_config(self, value: Optional[pulumi.Input['FunctionCapacityProviderConfigArgs']]):
+    def capacity_provider_config(self, value: pulumi.Input[Optional['FunctionCapacityProviderConfigArgs']]):
         pulumi.set(self, "capacity_provider_config", value)
 
     @_builtins.property
     @pulumi.getter
-    def code(self) -> Optional[pulumi.Input[pulumi.Archive]]:
+    def code(self) -> pulumi.Input[Optional[pulumi.Archive]]:
         """
         Path to the function's deployment package within the local filesystem. Conflicts with `image_uri` and `s3_bucket`. One of `filename`, `image_uri`, or `s3_bucket` must be specified.
         """
         return pulumi.get(self, "code")
 
     @code.setter
-    def code(self, value: Optional[pulumi.Input[pulumi.Archive]]):
+    def code(self, value: pulumi.Input[Optional[pulumi.Archive]]):
         pulumi.set(self, "code", value)
 
     @_builtins.property
     @pulumi.getter(name="codeSha256")
-    def code_sha256(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def code_sha256(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Base64-encoded representation the source code package file. Use this argument to trigger updates when the function source code changes. For OCI, this value is relayed directly from the image digest. For zip files, this value is the Base64 encoded SHA-256 hash of the `.zip` file. Layers are not included in the calculation. To trigger updates using a non-standard hashing algorithm, use the `source_code_hash` argument instead.
         """
         return pulumi.get(self, "code_sha256")
 
     @code_sha256.setter
-    def code_sha256(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def code_sha256(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "code_sha256", value)
 
     @_builtins.property
     @pulumi.getter(name="codeSigningConfigArn")
-    def code_signing_config_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def code_signing_config_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of a code-signing configuration to enable code signing for this function.
         """
         return pulumi.get(self, "code_signing_config_arn")
 
     @code_signing_config_arn.setter
-    def code_signing_config_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def code_signing_config_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "code_signing_config_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="deadLetterConfig")
-    def dead_letter_config(self) -> Optional[pulumi.Input['FunctionDeadLetterConfigArgs']]:
+    def dead_letter_config(self) -> pulumi.Input[Optional['FunctionDeadLetterConfigArgs']]:
         """
         Configuration block for dead letter queue. See below.
         """
         return pulumi.get(self, "dead_letter_config")
 
     @dead_letter_config.setter
-    def dead_letter_config(self, value: Optional[pulumi.Input['FunctionDeadLetterConfigArgs']]):
+    def dead_letter_config(self, value: pulumi.Input[Optional['FunctionDeadLetterConfigArgs']]):
         pulumi.set(self, "dead_letter_config", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of what your Lambda Function does.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="durableConfig")
-    def durable_config(self) -> Optional[pulumi.Input['FunctionDurableConfigArgs']]:
+    def durable_config(self) -> pulumi.Input[Optional['FunctionDurableConfigArgs']]:
         """
         Configuration block for durable function settings. See below. `durable_config` may only be available in [limited regions](https://builder.aws.com/build/capabilities), including `us-east-2`.
         """
         return pulumi.get(self, "durable_config")
 
     @durable_config.setter
-    def durable_config(self, value: Optional[pulumi.Input['FunctionDurableConfigArgs']]):
+    def durable_config(self, value: pulumi.Input[Optional['FunctionDurableConfigArgs']]):
         pulumi.set(self, "durable_config", value)
 
     @_builtins.property
     @pulumi.getter
-    def environment(self) -> Optional[pulumi.Input['FunctionEnvironmentArgs']]:
+    def environment(self) -> pulumi.Input[Optional['FunctionEnvironmentArgs']]:
         """
         Configuration block for environment variables. See below.
         """
         return pulumi.get(self, "environment")
 
     @environment.setter
-    def environment(self, value: Optional[pulumi.Input['FunctionEnvironmentArgs']]):
+    def environment(self, value: pulumi.Input[Optional['FunctionEnvironmentArgs']]):
         pulumi.set(self, "environment", value)
 
     @_builtins.property
     @pulumi.getter(name="ephemeralStorage")
-    def ephemeral_storage(self) -> Optional[pulumi.Input['FunctionEphemeralStorageArgs']]:
+    def ephemeral_storage(self) -> pulumi.Input[Optional['FunctionEphemeralStorageArgs']]:
         """
         Amount of ephemeral storage (`/tmp`) to allocate for the Lambda Function. See below.
         """
         return pulumi.get(self, "ephemeral_storage")
 
     @ephemeral_storage.setter
-    def ephemeral_storage(self, value: Optional[pulumi.Input['FunctionEphemeralStorageArgs']]):
+    def ephemeral_storage(self, value: pulumi.Input[Optional['FunctionEphemeralStorageArgs']]):
         pulumi.set(self, "ephemeral_storage", value)
 
     @_builtins.property
     @pulumi.getter(name="fileSystemConfig")
-    def file_system_config(self) -> Optional[pulumi.Input['FunctionFileSystemConfigArgs']]:
+    def file_system_config(self) -> pulumi.Input[Optional['FunctionFileSystemConfigArgs']]:
         """
-        Configuration block for EFS file system. See below.
+        Configuration block for EFS or S3 Files file system. See below.
         """
         return pulumi.get(self, "file_system_config")
 
     @file_system_config.setter
-    def file_system_config(self, value: Optional[pulumi.Input['FunctionFileSystemConfigArgs']]):
+    def file_system_config(self, value: pulumi.Input[Optional['FunctionFileSystemConfigArgs']]):
         pulumi.set(self, "file_system_config", value)
 
     @_builtins.property
     @pulumi.getter
-    def handler(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def handler(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Function entry point in your code. Required if `package_type` is `Zip`.
         """
         return pulumi.get(self, "handler")
 
     @handler.setter
-    def handler(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def handler(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "handler", value)
 
     @_builtins.property
     @pulumi.getter(name="imageConfig")
-    def image_config(self) -> Optional[pulumi.Input['FunctionImageConfigArgs']]:
+    def image_config(self) -> pulumi.Input[Optional['FunctionImageConfigArgs']]:
         """
         Container image configuration values. See below.
         """
         return pulumi.get(self, "image_config")
 
     @image_config.setter
-    def image_config(self, value: Optional[pulumi.Input['FunctionImageConfigArgs']]):
+    def image_config(self, value: pulumi.Input[Optional['FunctionImageConfigArgs']]):
         pulumi.set(self, "image_config", value)
 
     @_builtins.property
     @pulumi.getter(name="imageUri")
-    def image_uri(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def image_uri(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ECR image URI containing the function's deployment package. Conflicts with `filename` and `s3_bucket`. One of `filename`, `image_uri`, or `s3_bucket` must be specified.
         """
         return pulumi.get(self, "image_uri")
 
     @image_uri.setter
-    def image_uri(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def image_uri(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "image_uri", value)
 
     @_builtins.property
     @pulumi.getter(name="kmsKeyArn")
-    def kms_key_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        ARN of the AWS Key Management Service key used to encrypt environment variables. If not provided when environment variables are in use, AWS Lambda uses a default service key. If provided when environment variables are not in use, the AWS Lambda API does not save this configuration.
+        ARN of the KMS key used to encrypt environment variables. If not provided when environment variables are in use, AWS Lambda uses a default service key. If provided when environment variables are not in use, the AWS Lambda API does not save this configuration.
         """
         return pulumi.get(self, "kms_key_arn")
 
     @kms_key_arn.setter
-    def kms_key_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def layers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def layers(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of Lambda Layer Version ARNs (maximum of 5) to attach to your Lambda Function.
         """
         return pulumi.get(self, "layers")
 
     @layers.setter
-    def layers(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def layers(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "layers", value)
 
     @_builtins.property
     @pulumi.getter(name="loggingConfig")
-    def logging_config(self) -> Optional[pulumi.Input['FunctionLoggingConfigArgs']]:
+    def logging_config(self) -> pulumi.Input[Optional['FunctionLoggingConfigArgs']]:
         """
         Configuration block for advanced logging settings. See below.
         """
         return pulumi.get(self, "logging_config")
 
     @logging_config.setter
-    def logging_config(self, value: Optional[pulumi.Input['FunctionLoggingConfigArgs']]):
+    def logging_config(self, value: pulumi.Input[Optional['FunctionLoggingConfigArgs']]):
         pulumi.set(self, "logging_config", value)
 
     @_builtins.property
     @pulumi.getter(name="memorySize")
-    def memory_size(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def memory_size(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Amount of memory in MB your Lambda Function can use at runtime. Valid value between 128 MB to 32,768 MB (32 GB), in 1 MB increments. Defaults to 128.
         """
         return pulumi.get(self, "memory_size")
 
     @memory_size.setter
-    def memory_size(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def memory_size(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "memory_size", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique name for your Lambda Function.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="packageType")
-    def package_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def package_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Lambda deployment package type. Valid values are `Zip` and `Image`. Defaults to `Zip`.
         """
         return pulumi.get(self, "package_type")
 
     @package_type.setter
-    def package_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def package_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "package_type", value)
 
     @_builtins.property
     @pulumi.getter
-    def publish(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def publish(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to publish creation/change as new Lambda Function Version. Defaults to `false`.
         """
         return pulumi.get(self, "publish")
 
     @publish.setter
-    def publish(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def publish(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "publish", value)
 
     @_builtins.property
     @pulumi.getter(name="publishTo")
-    def publish_to(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def publish_to(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Whether to publish to a alias or version number. Omit for regular version publishing. Option is `LATEST_PUBLISHED`.
         """
         return pulumi.get(self, "publish_to")
 
     @publish_to.setter
-    def publish_to(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def publish_to(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "publish_to", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="replaceSecurityGroupsOnDestroy")
-    def replace_security_groups_on_destroy(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def replace_security_groups_on_destroy(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to replace the security groups on the function's VPC configuration prior to destruction. Default is `false`.
         """
         return pulumi.get(self, "replace_security_groups_on_destroy")
 
     @replace_security_groups_on_destroy.setter
-    def replace_security_groups_on_destroy(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def replace_security_groups_on_destroy(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "replace_security_groups_on_destroy", value)
 
     @_builtins.property
     @pulumi.getter(name="replacementSecurityGroupIds")
-    def replacement_security_group_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def replacement_security_group_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of security group IDs to assign to the function's VPC configuration prior to destruction. Required if `replace_security_groups_on_destroy` is `true`.
         """
         return pulumi.get(self, "replacement_security_group_ids")
 
     @replacement_security_group_ids.setter
-    def replacement_security_group_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def replacement_security_group_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "replacement_security_group_ids", value)
 
     @_builtins.property
     @pulumi.getter(name="reservedConcurrentExecutions")
-    def reserved_concurrent_executions(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def reserved_concurrent_executions(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Amount of reserved concurrent executions for this lambda function. A value of `0` disables lambda from being triggered and `-1` removes any concurrency limitations. Defaults to Unreserved Concurrency Limits `-1`.
         """
         return pulumi.get(self, "reserved_concurrent_executions")
 
     @reserved_concurrent_executions.setter
-    def reserved_concurrent_executions(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def reserved_concurrent_executions(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "reserved_concurrent_executions", value)
 
     @_builtins.property
     @pulumi.getter
-    def runtime(self) -> Optional[pulumi.Input[Union[_builtins.str, 'Runtime']]]:
+    def runtime(self) -> pulumi.Input[Optional[Union[_builtins.str, 'Runtime']]]:
         """
         Identifier of the function's runtime. Required if `package_type` is `Zip`. See [Runtimes](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-Runtime) for valid values.
         """
         return pulumi.get(self, "runtime")
 
     @runtime.setter
-    def runtime(self, value: Optional[pulumi.Input[Union[_builtins.str, 'Runtime']]]):
+    def runtime(self, value: pulumi.Input[Optional[Union[_builtins.str, 'Runtime']]]):
         pulumi.set(self, "runtime", value)
 
     @_builtins.property
     @pulumi.getter(name="s3Bucket")
-    def s3_bucket(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def s3_bucket(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         S3 bucket location containing the function's deployment package. Conflicts with `filename` and `image_uri`. One of `filename`, `image_uri`, or `s3_bucket` must be specified.
         """
         return pulumi.get(self, "s3_bucket")
 
     @s3_bucket.setter
-    def s3_bucket(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def s3_bucket(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "s3_bucket", value)
 
     @_builtins.property
     @pulumi.getter(name="s3Key")
-    def s3_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def s3_key(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         S3 key of an object containing the function's deployment package. Required if `s3_bucket` is set.
         """
         return pulumi.get(self, "s3_key")
 
     @s3_key.setter
-    def s3_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def s3_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "s3_key", value)
 
     @_builtins.property
     @pulumi.getter(name="s3ObjectVersion")
-    def s3_object_version(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def s3_object_version(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Object version containing the function's deployment package. Conflicts with `filename` and `image_uri`.
         """
         return pulumi.get(self, "s3_object_version")
 
     @s3_object_version.setter
-    def s3_object_version(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def s3_object_version(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "s3_object_version", value)
 
     @_builtins.property
     @pulumi.getter(name="skipDestroy")
-    def skip_destroy(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def skip_destroy(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to retain the old version of a previously deployed Lambda Layer. Default is `false`.
         """
         return pulumi.get(self, "skip_destroy")
 
     @skip_destroy.setter
-    def skip_destroy(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def skip_destroy(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "skip_destroy", value)
 
     @_builtins.property
     @pulumi.getter(name="snapStart")
-    def snap_start(self) -> Optional[pulumi.Input['FunctionSnapStartArgs']]:
+    def snap_start(self) -> pulumi.Input[Optional['FunctionSnapStartArgs']]:
         """
         Configuration block for snap start settings. See below.
         """
         return pulumi.get(self, "snap_start")
 
     @snap_start.setter
-    def snap_start(self, value: Optional[pulumi.Input['FunctionSnapStartArgs']]):
+    def snap_start(self, value: pulumi.Input[Optional['FunctionSnapStartArgs']]):
         pulumi.set(self, "snap_start", value)
 
     @_builtins.property
     @pulumi.getter(name="sourceCodeHash")
-    def source_code_hash(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def source_code_hash(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         User-defined hash of the source code package file. Use this argument to trigger updates when the local function source code changes. This is a synthetic argument tracked only by the AWS provider and does not need to match the hashing algorithm used by Lambda to compute the `CodeSha256` response value. Out-of-band changes to the source code _will not_ be captured by this argument. To include out-of-band source code changes as an update trigger, use the `code_sha256` argument instead.
         """
         return pulumi.get(self, "source_code_hash")
 
     @source_code_hash.setter
-    def source_code_hash(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def source_code_hash(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "source_code_hash", value)
 
     @_builtins.property
     @pulumi.getter(name="sourceKmsKeyArn")
-    def source_kms_key_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def source_kms_key_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        ARN of the AWS Key Management Service key used to encrypt the function's `.zip` deployment package. Conflicts with `image_uri`.
+        ARN of the KMS key used to encrypt the function's `.zip` deployment package. Conflicts with `image_uri`.
         """
         return pulumi.get(self, "source_kms_key_arn")
 
     @source_kms_key_arn.setter
-    def source_kms_key_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def source_kms_key_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "source_kms_key_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of tags for the Lambda function. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tenancyConfig")
-    def tenancy_config(self) -> Optional[pulumi.Input['FunctionTenancyConfigArgs']]:
+    def tenancy_config(self) -> pulumi.Input[Optional['FunctionTenancyConfigArgs']]:
         """
         Configuration block for Tenancy. See below.
         """
         return pulumi.get(self, "tenancy_config")
 
     @tenancy_config.setter
-    def tenancy_config(self, value: Optional[pulumi.Input['FunctionTenancyConfigArgs']]):
+    def tenancy_config(self, value: pulumi.Input[Optional['FunctionTenancyConfigArgs']]):
         pulumi.set(self, "tenancy_config", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeout(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def timeout(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Amount of time your Lambda Function has to run in seconds. Defaults to 3. Valid between 1 and 900.
         """
         return pulumi.get(self, "timeout")
 
     @timeout.setter
-    def timeout(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def timeout(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "timeout", value)
 
     @_builtins.property
     @pulumi.getter(name="tracingConfig")
-    def tracing_config(self) -> Optional[pulumi.Input['FunctionTracingConfigArgs']]:
+    def tracing_config(self) -> pulumi.Input[Optional['FunctionTracingConfigArgs']]:
         """
         Configuration block for X-Ray tracing. See below.
         """
         return pulumi.get(self, "tracing_config")
 
     @tracing_config.setter
-    def tracing_config(self, value: Optional[pulumi.Input['FunctionTracingConfigArgs']]):
+    def tracing_config(self, value: pulumi.Input[Optional['FunctionTracingConfigArgs']]):
         pulumi.set(self, "tracing_config", value)
 
     @_builtins.property
+    @pulumi.getter(name="useResourceTimeoutForPropagation")
+    def use_resource_timeout_for_propagation(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        Whether to apply resource level timeout values while retrying eventually consistent API operations. By default the provider uses a 5 minute timeout to allow for propagation in the Lambda service. When set to `true`, this default value is replaced with the configurable resource timeouts. Increased timeout values may be useful in highly active accounts, or regions where propagation delays are inconsistent.
+        """
+        return pulumi.get(self, "use_resource_timeout_for_propagation")
+
+    @use_resource_timeout_for_propagation.setter
+    def use_resource_timeout_for_propagation(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "use_resource_timeout_for_propagation", value)
+
+    @_builtins.property
     @pulumi.getter(name="vpcConfig")
-    def vpc_config(self) -> Optional[pulumi.Input['FunctionVpcConfigArgs']]:
+    def vpc_config(self) -> pulumi.Input[Optional['FunctionVpcConfigArgs']]:
         """
         Configuration block for VPC. See below.
         """
         return pulumi.get(self, "vpc_config")
 
     @vpc_config.setter
-    def vpc_config(self, value: Optional[pulumi.Input['FunctionVpcConfigArgs']]):
+    def vpc_config(self, value: pulumi.Input[Optional['FunctionVpcConfigArgs']]):
         pulumi.set(self, "vpc_config", value)
 
 
 @pulumi.input_type
 class _FunctionState:
     def __init__(__self__, *,
-                 architectures: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 capacity_provider_config: Optional[pulumi.Input['FunctionCapacityProviderConfigArgs']] = None,
-                 code: Optional[pulumi.Input[pulumi.Archive]] = None,
-                 code_sha256: Optional[pulumi.Input[_builtins.str]] = None,
-                 code_signing_config_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 dead_letter_config: Optional[pulumi.Input['FunctionDeadLetterConfigArgs']] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 durable_config: Optional[pulumi.Input['FunctionDurableConfigArgs']] = None,
-                 environment: Optional[pulumi.Input['FunctionEnvironmentArgs']] = None,
-                 ephemeral_storage: Optional[pulumi.Input['FunctionEphemeralStorageArgs']] = None,
-                 file_system_config: Optional[pulumi.Input['FunctionFileSystemConfigArgs']] = None,
-                 handler: Optional[pulumi.Input[_builtins.str]] = None,
-                 image_config: Optional[pulumi.Input['FunctionImageConfigArgs']] = None,
-                 image_uri: Optional[pulumi.Input[_builtins.str]] = None,
-                 invoke_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 kms_key_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 last_modified: Optional[pulumi.Input[_builtins.str]] = None,
-                 layers: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 logging_config: Optional[pulumi.Input['FunctionLoggingConfigArgs']] = None,
-                 memory_size: Optional[pulumi.Input[_builtins.int]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 package_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 publish: Optional[pulumi.Input[_builtins.bool]] = None,
-                 publish_to: Optional[pulumi.Input[_builtins.str]] = None,
-                 qualified_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 qualified_invoke_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 replace_security_groups_on_destroy: Optional[pulumi.Input[_builtins.bool]] = None,
-                 replacement_security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 reserved_concurrent_executions: Optional[pulumi.Input[_builtins.int]] = None,
-                 response_streaming_invoke_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 role: Optional[pulumi.Input[_builtins.str]] = None,
-                 runtime: Optional[pulumi.Input[Union[_builtins.str, 'Runtime']]] = None,
-                 s3_bucket: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_object_version: Optional[pulumi.Input[_builtins.str]] = None,
-                 signing_job_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 signing_profile_version_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 skip_destroy: Optional[pulumi.Input[_builtins.bool]] = None,
-                 snap_start: Optional[pulumi.Input['FunctionSnapStartArgs']] = None,
-                 source_code_hash: Optional[pulumi.Input[_builtins.str]] = None,
-                 source_code_size: Optional[pulumi.Input[_builtins.int]] = None,
-                 source_kms_key_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tenancy_config: Optional[pulumi.Input['FunctionTenancyConfigArgs']] = None,
-                 timeout: Optional[pulumi.Input[_builtins.int]] = None,
-                 tracing_config: Optional[pulumi.Input['FunctionTracingConfigArgs']] = None,
-                 version: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_config: Optional[pulumi.Input['FunctionVpcConfigArgs']] = None):
+                 architectures: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 capacity_provider_config: pulumi.Input[Optional['FunctionCapacityProviderConfigArgs']] = None,
+                 code: pulumi.Input[Optional[pulumi.Archive]] = None,
+                 code_sha256: pulumi.Input[Optional[_builtins.str]] = None,
+                 code_signing_config_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 dead_letter_config: pulumi.Input[Optional['FunctionDeadLetterConfigArgs']] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 durable_config: pulumi.Input[Optional['FunctionDurableConfigArgs']] = None,
+                 environment: pulumi.Input[Optional['FunctionEnvironmentArgs']] = None,
+                 ephemeral_storage: pulumi.Input[Optional['FunctionEphemeralStorageArgs']] = None,
+                 file_system_config: pulumi.Input[Optional['FunctionFileSystemConfigArgs']] = None,
+                 handler: pulumi.Input[Optional[_builtins.str]] = None,
+                 image_config: pulumi.Input[Optional['FunctionImageConfigArgs']] = None,
+                 image_uri: pulumi.Input[Optional[_builtins.str]] = None,
+                 invoke_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 kms_key_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 last_modified: pulumi.Input[Optional[_builtins.str]] = None,
+                 layers: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 logging_config: pulumi.Input[Optional['FunctionLoggingConfigArgs']] = None,
+                 memory_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 package_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 publish: pulumi.Input[Optional[_builtins.bool]] = None,
+                 publish_to: pulumi.Input[Optional[_builtins.str]] = None,
+                 qualified_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 qualified_invoke_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 replace_security_groups_on_destroy: pulumi.Input[Optional[_builtins.bool]] = None,
+                 replacement_security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 reserved_concurrent_executions: pulumi.Input[Optional[_builtins.int]] = None,
+                 response_streaming_invoke_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 role: pulumi.Input[Optional[_builtins.str]] = None,
+                 runtime: pulumi.Input[Optional[Union[_builtins.str, 'Runtime']]] = None,
+                 s3_bucket: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_object_version: pulumi.Input[Optional[_builtins.str]] = None,
+                 signing_job_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 signing_profile_version_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 skip_destroy: pulumi.Input[Optional[_builtins.bool]] = None,
+                 snap_start: pulumi.Input[Optional['FunctionSnapStartArgs']] = None,
+                 source_code_hash: pulumi.Input[Optional[_builtins.str]] = None,
+                 source_code_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 source_kms_key_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tenancy_config: pulumi.Input[Optional['FunctionTenancyConfigArgs']] = None,
+                 timeout: pulumi.Input[Optional[_builtins.int]] = None,
+                 tracing_config: pulumi.Input[Optional['FunctionTracingConfigArgs']] = None,
+                 use_resource_timeout_for_propagation: pulumi.Input[Optional[_builtins.bool]] = None,
+                 version: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_config: pulumi.Input[Optional['FunctionVpcConfigArgs']] = None):
         """
         Input properties used for looking up and filtering Function resources.
+
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] architectures: Instruction set architecture for your Lambda function. Valid values are `["x86_64"]` and `["arm64"]`. Default is `["x86_64"]`. Removing this attribute, function's architecture stays the same.
         :param pulumi.Input[_builtins.str] arn: ARN identifying your Lambda Function.
         :param pulumi.Input['FunctionCapacityProviderConfigArgs'] capacity_provider_config: Configuration block for Lambda Capacity Provider. See below.
@@ -737,12 +756,12 @@ class _FunctionState:
         :param pulumi.Input['FunctionDurableConfigArgs'] durable_config: Configuration block for durable function settings. See below. `durable_config` may only be available in [limited regions](https://builder.aws.com/build/capabilities), including `us-east-2`.
         :param pulumi.Input['FunctionEnvironmentArgs'] environment: Configuration block for environment variables. See below.
         :param pulumi.Input['FunctionEphemeralStorageArgs'] ephemeral_storage: Amount of ephemeral storage (`/tmp`) to allocate for the Lambda Function. See below.
-        :param pulumi.Input['FunctionFileSystemConfigArgs'] file_system_config: Configuration block for EFS file system. See below.
+        :param pulumi.Input['FunctionFileSystemConfigArgs'] file_system_config: Configuration block for EFS or S3 Files file system. See below.
         :param pulumi.Input[_builtins.str] handler: Function entry point in your code. Required if `package_type` is `Zip`.
         :param pulumi.Input['FunctionImageConfigArgs'] image_config: Container image configuration values. See below.
         :param pulumi.Input[_builtins.str] image_uri: ECR image URI containing the function's deployment package. Conflicts with `filename` and `s3_bucket`. One of `filename`, `image_uri`, or `s3_bucket` must be specified.
         :param pulumi.Input[_builtins.str] invoke_arn: ARN to be used for invoking Lambda Function from API Gateway - to be used in `apigateway.Integration`'s `uri`.
-        :param pulumi.Input[_builtins.str] kms_key_arn: ARN of the AWS Key Management Service key used to encrypt environment variables. If not provided when environment variables are in use, AWS Lambda uses a default service key. If provided when environment variables are not in use, the AWS Lambda API does not save this configuration.
+        :param pulumi.Input[_builtins.str] kms_key_arn: ARN of the KMS key used to encrypt environment variables. If not provided when environment variables are in use, AWS Lambda uses a default service key. If provided when environment variables are not in use, the AWS Lambda API does not save this configuration.
         :param pulumi.Input[_builtins.str] last_modified: Date this resource was last modified.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] layers: List of Lambda Layer Version ARNs (maximum of 5) to attach to your Lambda Function.
         :param pulumi.Input['FunctionLoggingConfigArgs'] logging_config: Configuration block for advanced logging settings. See below.
@@ -771,12 +790,13 @@ class _FunctionState:
         :param pulumi.Input['FunctionSnapStartArgs'] snap_start: Configuration block for snap start settings. See below.
         :param pulumi.Input[_builtins.str] source_code_hash: User-defined hash of the source code package file. Use this argument to trigger updates when the local function source code changes. This is a synthetic argument tracked only by the AWS provider and does not need to match the hashing algorithm used by Lambda to compute the `CodeSha256` response value. Out-of-band changes to the source code _will not_ be captured by this argument. To include out-of-band source code changes as an update trigger, use the `code_sha256` argument instead.
         :param pulumi.Input[_builtins.int] source_code_size: Size in bytes of the function .zip file.
-        :param pulumi.Input[_builtins.str] source_kms_key_arn: ARN of the AWS Key Management Service key used to encrypt the function's `.zip` deployment package. Conflicts with `image_uri`.
+        :param pulumi.Input[_builtins.str] source_kms_key_arn: ARN of the KMS key used to encrypt the function's `.zip` deployment package. Conflicts with `image_uri`.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of tags for the Lambda function. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         :param pulumi.Input['FunctionTenancyConfigArgs'] tenancy_config: Configuration block for Tenancy. See below.
         :param pulumi.Input[_builtins.int] timeout: Amount of time your Lambda Function has to run in seconds. Defaults to 3. Valid between 1 and 900.
         :param pulumi.Input['FunctionTracingConfigArgs'] tracing_config: Configuration block for X-Ray tracing. See below.
+        :param pulumi.Input[_builtins.bool] use_resource_timeout_for_propagation: Whether to apply resource level timeout values while retrying eventually consistent API operations. By default the provider uses a 5 minute timeout to allow for propagation in the Lambda service. When set to `true`, this default value is replaced with the configurable resource timeouts. Increased timeout values may be useful in highly active accounts, or regions where propagation delays are inconsistent.
         :param pulumi.Input[_builtins.str] version: Latest published version of your Lambda Function.
         :param pulumi.Input['FunctionVpcConfigArgs'] vpc_config: Configuration block for VPC. See below.
         """
@@ -878,6 +898,8 @@ class _FunctionState:
             pulumi.set(__self__, "timeout", timeout)
         if tracing_config is not None:
             pulumi.set(__self__, "tracing_config", tracing_config)
+        if use_resource_timeout_for_propagation is not None:
+            pulumi.set(__self__, "use_resource_timeout_for_propagation", use_resource_timeout_for_propagation)
         if version is not None:
             pulumi.set(__self__, "version", version)
         if vpc_config is not None:
@@ -885,391 +907,391 @@ class _FunctionState:
 
     @_builtins.property
     @pulumi.getter
-    def architectures(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def architectures(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         Instruction set architecture for your Lambda function. Valid values are `["x86_64"]` and `["arm64"]`. Default is `["x86_64"]`. Removing this attribute, function's architecture stays the same.
         """
         return pulumi.get(self, "architectures")
 
     @architectures.setter
-    def architectures(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def architectures(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "architectures", value)
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN identifying your Lambda Function.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="capacityProviderConfig")
-    def capacity_provider_config(self) -> Optional[pulumi.Input['FunctionCapacityProviderConfigArgs']]:
+    def capacity_provider_config(self) -> pulumi.Input[Optional['FunctionCapacityProviderConfigArgs']]:
         """
         Configuration block for Lambda Capacity Provider. See below.
         """
         return pulumi.get(self, "capacity_provider_config")
 
     @capacity_provider_config.setter
-    def capacity_provider_config(self, value: Optional[pulumi.Input['FunctionCapacityProviderConfigArgs']]):
+    def capacity_provider_config(self, value: pulumi.Input[Optional['FunctionCapacityProviderConfigArgs']]):
         pulumi.set(self, "capacity_provider_config", value)
 
     @_builtins.property
     @pulumi.getter
-    def code(self) -> Optional[pulumi.Input[pulumi.Archive]]:
+    def code(self) -> pulumi.Input[Optional[pulumi.Archive]]:
         """
         Path to the function's deployment package within the local filesystem. Conflicts with `image_uri` and `s3_bucket`. One of `filename`, `image_uri`, or `s3_bucket` must be specified.
         """
         return pulumi.get(self, "code")
 
     @code.setter
-    def code(self, value: Optional[pulumi.Input[pulumi.Archive]]):
+    def code(self, value: pulumi.Input[Optional[pulumi.Archive]]):
         pulumi.set(self, "code", value)
 
     @_builtins.property
     @pulumi.getter(name="codeSha256")
-    def code_sha256(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def code_sha256(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Base64-encoded representation the source code package file. Use this argument to trigger updates when the function source code changes. For OCI, this value is relayed directly from the image digest. For zip files, this value is the Base64 encoded SHA-256 hash of the `.zip` file. Layers are not included in the calculation. To trigger updates using a non-standard hashing algorithm, use the `source_code_hash` argument instead.
         """
         return pulumi.get(self, "code_sha256")
 
     @code_sha256.setter
-    def code_sha256(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def code_sha256(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "code_sha256", value)
 
     @_builtins.property
     @pulumi.getter(name="codeSigningConfigArn")
-    def code_signing_config_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def code_signing_config_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of a code-signing configuration to enable code signing for this function.
         """
         return pulumi.get(self, "code_signing_config_arn")
 
     @code_signing_config_arn.setter
-    def code_signing_config_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def code_signing_config_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "code_signing_config_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="deadLetterConfig")
-    def dead_letter_config(self) -> Optional[pulumi.Input['FunctionDeadLetterConfigArgs']]:
+    def dead_letter_config(self) -> pulumi.Input[Optional['FunctionDeadLetterConfigArgs']]:
         """
         Configuration block for dead letter queue. See below.
         """
         return pulumi.get(self, "dead_letter_config")
 
     @dead_letter_config.setter
-    def dead_letter_config(self, value: Optional[pulumi.Input['FunctionDeadLetterConfigArgs']]):
+    def dead_letter_config(self, value: pulumi.Input[Optional['FunctionDeadLetterConfigArgs']]):
         pulumi.set(self, "dead_letter_config", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of what your Lambda Function does.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="durableConfig")
-    def durable_config(self) -> Optional[pulumi.Input['FunctionDurableConfigArgs']]:
+    def durable_config(self) -> pulumi.Input[Optional['FunctionDurableConfigArgs']]:
         """
         Configuration block for durable function settings. See below. `durable_config` may only be available in [limited regions](https://builder.aws.com/build/capabilities), including `us-east-2`.
         """
         return pulumi.get(self, "durable_config")
 
     @durable_config.setter
-    def durable_config(self, value: Optional[pulumi.Input['FunctionDurableConfigArgs']]):
+    def durable_config(self, value: pulumi.Input[Optional['FunctionDurableConfigArgs']]):
         pulumi.set(self, "durable_config", value)
 
     @_builtins.property
     @pulumi.getter
-    def environment(self) -> Optional[pulumi.Input['FunctionEnvironmentArgs']]:
+    def environment(self) -> pulumi.Input[Optional['FunctionEnvironmentArgs']]:
         """
         Configuration block for environment variables. See below.
         """
         return pulumi.get(self, "environment")
 
     @environment.setter
-    def environment(self, value: Optional[pulumi.Input['FunctionEnvironmentArgs']]):
+    def environment(self, value: pulumi.Input[Optional['FunctionEnvironmentArgs']]):
         pulumi.set(self, "environment", value)
 
     @_builtins.property
     @pulumi.getter(name="ephemeralStorage")
-    def ephemeral_storage(self) -> Optional[pulumi.Input['FunctionEphemeralStorageArgs']]:
+    def ephemeral_storage(self) -> pulumi.Input[Optional['FunctionEphemeralStorageArgs']]:
         """
         Amount of ephemeral storage (`/tmp`) to allocate for the Lambda Function. See below.
         """
         return pulumi.get(self, "ephemeral_storage")
 
     @ephemeral_storage.setter
-    def ephemeral_storage(self, value: Optional[pulumi.Input['FunctionEphemeralStorageArgs']]):
+    def ephemeral_storage(self, value: pulumi.Input[Optional['FunctionEphemeralStorageArgs']]):
         pulumi.set(self, "ephemeral_storage", value)
 
     @_builtins.property
     @pulumi.getter(name="fileSystemConfig")
-    def file_system_config(self) -> Optional[pulumi.Input['FunctionFileSystemConfigArgs']]:
+    def file_system_config(self) -> pulumi.Input[Optional['FunctionFileSystemConfigArgs']]:
         """
-        Configuration block for EFS file system. See below.
+        Configuration block for EFS or S3 Files file system. See below.
         """
         return pulumi.get(self, "file_system_config")
 
     @file_system_config.setter
-    def file_system_config(self, value: Optional[pulumi.Input['FunctionFileSystemConfigArgs']]):
+    def file_system_config(self, value: pulumi.Input[Optional['FunctionFileSystemConfigArgs']]):
         pulumi.set(self, "file_system_config", value)
 
     @_builtins.property
     @pulumi.getter
-    def handler(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def handler(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Function entry point in your code. Required if `package_type` is `Zip`.
         """
         return pulumi.get(self, "handler")
 
     @handler.setter
-    def handler(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def handler(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "handler", value)
 
     @_builtins.property
     @pulumi.getter(name="imageConfig")
-    def image_config(self) -> Optional[pulumi.Input['FunctionImageConfigArgs']]:
+    def image_config(self) -> pulumi.Input[Optional['FunctionImageConfigArgs']]:
         """
         Container image configuration values. See below.
         """
         return pulumi.get(self, "image_config")
 
     @image_config.setter
-    def image_config(self, value: Optional[pulumi.Input['FunctionImageConfigArgs']]):
+    def image_config(self, value: pulumi.Input[Optional['FunctionImageConfigArgs']]):
         pulumi.set(self, "image_config", value)
 
     @_builtins.property
     @pulumi.getter(name="imageUri")
-    def image_uri(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def image_uri(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ECR image URI containing the function's deployment package. Conflicts with `filename` and `s3_bucket`. One of `filename`, `image_uri`, or `s3_bucket` must be specified.
         """
         return pulumi.get(self, "image_uri")
 
     @image_uri.setter
-    def image_uri(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def image_uri(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "image_uri", value)
 
     @_builtins.property
     @pulumi.getter(name="invokeArn")
-    def invoke_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def invoke_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN to be used for invoking Lambda Function from API Gateway - to be used in `apigateway.Integration`'s `uri`.
         """
         return pulumi.get(self, "invoke_arn")
 
     @invoke_arn.setter
-    def invoke_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def invoke_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "invoke_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="kmsKeyArn")
-    def kms_key_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        ARN of the AWS Key Management Service key used to encrypt environment variables. If not provided when environment variables are in use, AWS Lambda uses a default service key. If provided when environment variables are not in use, the AWS Lambda API does not save this configuration.
+        ARN of the KMS key used to encrypt environment variables. If not provided when environment variables are in use, AWS Lambda uses a default service key. If provided when environment variables are not in use, the AWS Lambda API does not save this configuration.
         """
         return pulumi.get(self, "kms_key_arn")
 
     @kms_key_arn.setter
-    def kms_key_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="lastModified")
-    def last_modified(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def last_modified(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Date this resource was last modified.
         """
         return pulumi.get(self, "last_modified")
 
     @last_modified.setter
-    def last_modified(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def last_modified(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "last_modified", value)
 
     @_builtins.property
     @pulumi.getter
-    def layers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def layers(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of Lambda Layer Version ARNs (maximum of 5) to attach to your Lambda Function.
         """
         return pulumi.get(self, "layers")
 
     @layers.setter
-    def layers(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def layers(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "layers", value)
 
     @_builtins.property
     @pulumi.getter(name="loggingConfig")
-    def logging_config(self) -> Optional[pulumi.Input['FunctionLoggingConfigArgs']]:
+    def logging_config(self) -> pulumi.Input[Optional['FunctionLoggingConfigArgs']]:
         """
         Configuration block for advanced logging settings. See below.
         """
         return pulumi.get(self, "logging_config")
 
     @logging_config.setter
-    def logging_config(self, value: Optional[pulumi.Input['FunctionLoggingConfigArgs']]):
+    def logging_config(self, value: pulumi.Input[Optional['FunctionLoggingConfigArgs']]):
         pulumi.set(self, "logging_config", value)
 
     @_builtins.property
     @pulumi.getter(name="memorySize")
-    def memory_size(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def memory_size(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Amount of memory in MB your Lambda Function can use at runtime. Valid value between 128 MB to 32,768 MB (32 GB), in 1 MB increments. Defaults to 128.
         """
         return pulumi.get(self, "memory_size")
 
     @memory_size.setter
-    def memory_size(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def memory_size(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "memory_size", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique name for your Lambda Function.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="packageType")
-    def package_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def package_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Lambda deployment package type. Valid values are `Zip` and `Image`. Defaults to `Zip`.
         """
         return pulumi.get(self, "package_type")
 
     @package_type.setter
-    def package_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def package_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "package_type", value)
 
     @_builtins.property
     @pulumi.getter
-    def publish(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def publish(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to publish creation/change as new Lambda Function Version. Defaults to `false`.
         """
         return pulumi.get(self, "publish")
 
     @publish.setter
-    def publish(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def publish(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "publish", value)
 
     @_builtins.property
     @pulumi.getter(name="publishTo")
-    def publish_to(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def publish_to(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Whether to publish to a alias or version number. Omit for regular version publishing. Option is `LATEST_PUBLISHED`.
         """
         return pulumi.get(self, "publish_to")
 
     @publish_to.setter
-    def publish_to(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def publish_to(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "publish_to", value)
 
     @_builtins.property
     @pulumi.getter(name="qualifiedArn")
-    def qualified_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def qualified_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN identifying your Lambda Function Version (if versioning is enabled via `publish = true`).
         """
         return pulumi.get(self, "qualified_arn")
 
     @qualified_arn.setter
-    def qualified_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def qualified_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "qualified_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="qualifiedInvokeArn")
-    def qualified_invoke_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def qualified_invoke_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Qualified ARN (ARN with lambda version number) to be used for invoking Lambda Function from API Gateway - to be used in `apigateway.Integration`'s `uri`.
         """
         return pulumi.get(self, "qualified_invoke_arn")
 
     @qualified_invoke_arn.setter
-    def qualified_invoke_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def qualified_invoke_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "qualified_invoke_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="replaceSecurityGroupsOnDestroy")
-    def replace_security_groups_on_destroy(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def replace_security_groups_on_destroy(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to replace the security groups on the function's VPC configuration prior to destruction. Default is `false`.
         """
         return pulumi.get(self, "replace_security_groups_on_destroy")
 
     @replace_security_groups_on_destroy.setter
-    def replace_security_groups_on_destroy(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def replace_security_groups_on_destroy(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "replace_security_groups_on_destroy", value)
 
     @_builtins.property
     @pulumi.getter(name="replacementSecurityGroupIds")
-    def replacement_security_group_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def replacement_security_group_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of security group IDs to assign to the function's VPC configuration prior to destruction. Required if `replace_security_groups_on_destroy` is `true`.
         """
         return pulumi.get(self, "replacement_security_group_ids")
 
     @replacement_security_group_ids.setter
-    def replacement_security_group_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def replacement_security_group_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "replacement_security_group_ids", value)
 
     @_builtins.property
     @pulumi.getter(name="reservedConcurrentExecutions")
-    def reserved_concurrent_executions(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def reserved_concurrent_executions(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Amount of reserved concurrent executions for this lambda function. A value of `0` disables lambda from being triggered and `-1` removes any concurrency limitations. Defaults to Unreserved Concurrency Limits `-1`.
         """
         return pulumi.get(self, "reserved_concurrent_executions")
 
     @reserved_concurrent_executions.setter
-    def reserved_concurrent_executions(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def reserved_concurrent_executions(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "reserved_concurrent_executions", value)
 
     @_builtins.property
     @pulumi.getter(name="responseStreamingInvokeArn")
-    def response_streaming_invoke_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def response_streaming_invoke_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN to be used for invoking Lambda Function from API Gateway with response streaming - to be used in `apigateway.Integration`'s `uri`.
         """
         return pulumi.get(self, "response_streaming_invoke_arn")
 
     @response_streaming_invoke_arn.setter
-    def response_streaming_invoke_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def response_streaming_invoke_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "response_streaming_invoke_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def role(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def role(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the function's execution role. The role provides the function's identity and access to AWS services and resources.
 
@@ -1278,223 +1300,235 @@ class _FunctionState:
         return pulumi.get(self, "role")
 
     @role.setter
-    def role(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def role(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "role", value)
 
     @_builtins.property
     @pulumi.getter
-    def runtime(self) -> Optional[pulumi.Input[Union[_builtins.str, 'Runtime']]]:
+    def runtime(self) -> pulumi.Input[Optional[Union[_builtins.str, 'Runtime']]]:
         """
         Identifier of the function's runtime. Required if `package_type` is `Zip`. See [Runtimes](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-Runtime) for valid values.
         """
         return pulumi.get(self, "runtime")
 
     @runtime.setter
-    def runtime(self, value: Optional[pulumi.Input[Union[_builtins.str, 'Runtime']]]):
+    def runtime(self, value: pulumi.Input[Optional[Union[_builtins.str, 'Runtime']]]):
         pulumi.set(self, "runtime", value)
 
     @_builtins.property
     @pulumi.getter(name="s3Bucket")
-    def s3_bucket(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def s3_bucket(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         S3 bucket location containing the function's deployment package. Conflicts with `filename` and `image_uri`. One of `filename`, `image_uri`, or `s3_bucket` must be specified.
         """
         return pulumi.get(self, "s3_bucket")
 
     @s3_bucket.setter
-    def s3_bucket(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def s3_bucket(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "s3_bucket", value)
 
     @_builtins.property
     @pulumi.getter(name="s3Key")
-    def s3_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def s3_key(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         S3 key of an object containing the function's deployment package. Required if `s3_bucket` is set.
         """
         return pulumi.get(self, "s3_key")
 
     @s3_key.setter
-    def s3_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def s3_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "s3_key", value)
 
     @_builtins.property
     @pulumi.getter(name="s3ObjectVersion")
-    def s3_object_version(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def s3_object_version(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Object version containing the function's deployment package. Conflicts with `filename` and `image_uri`.
         """
         return pulumi.get(self, "s3_object_version")
 
     @s3_object_version.setter
-    def s3_object_version(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def s3_object_version(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "s3_object_version", value)
 
     @_builtins.property
     @pulumi.getter(name="signingJobArn")
-    def signing_job_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def signing_job_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the signing job.
         """
         return pulumi.get(self, "signing_job_arn")
 
     @signing_job_arn.setter
-    def signing_job_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def signing_job_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "signing_job_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="signingProfileVersionArn")
-    def signing_profile_version_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def signing_profile_version_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the signing profile version.
         """
         return pulumi.get(self, "signing_profile_version_arn")
 
     @signing_profile_version_arn.setter
-    def signing_profile_version_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def signing_profile_version_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "signing_profile_version_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="skipDestroy")
-    def skip_destroy(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def skip_destroy(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to retain the old version of a previously deployed Lambda Layer. Default is `false`.
         """
         return pulumi.get(self, "skip_destroy")
 
     @skip_destroy.setter
-    def skip_destroy(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def skip_destroy(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "skip_destroy", value)
 
     @_builtins.property
     @pulumi.getter(name="snapStart")
-    def snap_start(self) -> Optional[pulumi.Input['FunctionSnapStartArgs']]:
+    def snap_start(self) -> pulumi.Input[Optional['FunctionSnapStartArgs']]:
         """
         Configuration block for snap start settings. See below.
         """
         return pulumi.get(self, "snap_start")
 
     @snap_start.setter
-    def snap_start(self, value: Optional[pulumi.Input['FunctionSnapStartArgs']]):
+    def snap_start(self, value: pulumi.Input[Optional['FunctionSnapStartArgs']]):
         pulumi.set(self, "snap_start", value)
 
     @_builtins.property
     @pulumi.getter(name="sourceCodeHash")
-    def source_code_hash(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def source_code_hash(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         User-defined hash of the source code package file. Use this argument to trigger updates when the local function source code changes. This is a synthetic argument tracked only by the AWS provider and does not need to match the hashing algorithm used by Lambda to compute the `CodeSha256` response value. Out-of-band changes to the source code _will not_ be captured by this argument. To include out-of-band source code changes as an update trigger, use the `code_sha256` argument instead.
         """
         return pulumi.get(self, "source_code_hash")
 
     @source_code_hash.setter
-    def source_code_hash(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def source_code_hash(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "source_code_hash", value)
 
     @_builtins.property
     @pulumi.getter(name="sourceCodeSize")
-    def source_code_size(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def source_code_size(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Size in bytes of the function .zip file.
         """
         return pulumi.get(self, "source_code_size")
 
     @source_code_size.setter
-    def source_code_size(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def source_code_size(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "source_code_size", value)
 
     @_builtins.property
     @pulumi.getter(name="sourceKmsKeyArn")
-    def source_kms_key_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def source_kms_key_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        ARN of the AWS Key Management Service key used to encrypt the function's `.zip` deployment package. Conflicts with `image_uri`.
+        ARN of the KMS key used to encrypt the function's `.zip` deployment package. Conflicts with `image_uri`.
         """
         return pulumi.get(self, "source_kms_key_arn")
 
     @source_kms_key_arn.setter
-    def source_kms_key_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def source_kms_key_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "source_kms_key_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of tags for the Lambda function. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter(name="tenancyConfig")
-    def tenancy_config(self) -> Optional[pulumi.Input['FunctionTenancyConfigArgs']]:
+    def tenancy_config(self) -> pulumi.Input[Optional['FunctionTenancyConfigArgs']]:
         """
         Configuration block for Tenancy. See below.
         """
         return pulumi.get(self, "tenancy_config")
 
     @tenancy_config.setter
-    def tenancy_config(self, value: Optional[pulumi.Input['FunctionTenancyConfigArgs']]):
+    def tenancy_config(self, value: pulumi.Input[Optional['FunctionTenancyConfigArgs']]):
         pulumi.set(self, "tenancy_config", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeout(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def timeout(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Amount of time your Lambda Function has to run in seconds. Defaults to 3. Valid between 1 and 900.
         """
         return pulumi.get(self, "timeout")
 
     @timeout.setter
-    def timeout(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def timeout(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "timeout", value)
 
     @_builtins.property
     @pulumi.getter(name="tracingConfig")
-    def tracing_config(self) -> Optional[pulumi.Input['FunctionTracingConfigArgs']]:
+    def tracing_config(self) -> pulumi.Input[Optional['FunctionTracingConfigArgs']]:
         """
         Configuration block for X-Ray tracing. See below.
         """
         return pulumi.get(self, "tracing_config")
 
     @tracing_config.setter
-    def tracing_config(self, value: Optional[pulumi.Input['FunctionTracingConfigArgs']]):
+    def tracing_config(self, value: pulumi.Input[Optional['FunctionTracingConfigArgs']]):
         pulumi.set(self, "tracing_config", value)
 
     @_builtins.property
+    @pulumi.getter(name="useResourceTimeoutForPropagation")
+    def use_resource_timeout_for_propagation(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        Whether to apply resource level timeout values while retrying eventually consistent API operations. By default the provider uses a 5 minute timeout to allow for propagation in the Lambda service. When set to `true`, this default value is replaced with the configurable resource timeouts. Increased timeout values may be useful in highly active accounts, or regions where propagation delays are inconsistent.
+        """
+        return pulumi.get(self, "use_resource_timeout_for_propagation")
+
+    @use_resource_timeout_for_propagation.setter
+    def use_resource_timeout_for_propagation(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "use_resource_timeout_for_propagation", value)
+
+    @_builtins.property
     @pulumi.getter
-    def version(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def version(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Latest published version of your Lambda Function.
         """
         return pulumi.get(self, "version")
 
     @version.setter
-    def version(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def version(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "version", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcConfig")
-    def vpc_config(self) -> Optional[pulumi.Input['FunctionVpcConfigArgs']]:
+    def vpc_config(self) -> pulumi.Input[Optional['FunctionVpcConfigArgs']]:
         """
         Configuration block for VPC. See below.
         """
         return pulumi.get(self, "vpc_config")
 
     @vpc_config.setter
-    def vpc_config(self, value: Optional[pulumi.Input['FunctionVpcConfigArgs']]):
+    def vpc_config(self, value: pulumi.Input[Optional['FunctionVpcConfigArgs']]):
         pulumi.set(self, "vpc_config", value)
 
 
@@ -1504,46 +1538,47 @@ class Function(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 architectures: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 capacity_provider_config: Optional[pulumi.Input[Union['FunctionCapacityProviderConfigArgs', 'FunctionCapacityProviderConfigArgsDict']]] = None,
-                 code: Optional[pulumi.Input[pulumi.Archive]] = None,
-                 code_sha256: Optional[pulumi.Input[_builtins.str]] = None,
-                 code_signing_config_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 dead_letter_config: Optional[pulumi.Input[Union['FunctionDeadLetterConfigArgs', 'FunctionDeadLetterConfigArgsDict']]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 durable_config: Optional[pulumi.Input[Union['FunctionDurableConfigArgs', 'FunctionDurableConfigArgsDict']]] = None,
-                 environment: Optional[pulumi.Input[Union['FunctionEnvironmentArgs', 'FunctionEnvironmentArgsDict']]] = None,
-                 ephemeral_storage: Optional[pulumi.Input[Union['FunctionEphemeralStorageArgs', 'FunctionEphemeralStorageArgsDict']]] = None,
-                 file_system_config: Optional[pulumi.Input[Union['FunctionFileSystemConfigArgs', 'FunctionFileSystemConfigArgsDict']]] = None,
-                 handler: Optional[pulumi.Input[_builtins.str]] = None,
-                 image_config: Optional[pulumi.Input[Union['FunctionImageConfigArgs', 'FunctionImageConfigArgsDict']]] = None,
-                 image_uri: Optional[pulumi.Input[_builtins.str]] = None,
-                 kms_key_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 layers: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 logging_config: Optional[pulumi.Input[Union['FunctionLoggingConfigArgs', 'FunctionLoggingConfigArgsDict']]] = None,
-                 memory_size: Optional[pulumi.Input[_builtins.int]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 package_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 publish: Optional[pulumi.Input[_builtins.bool]] = None,
-                 publish_to: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 replace_security_groups_on_destroy: Optional[pulumi.Input[_builtins.bool]] = None,
-                 replacement_security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 reserved_concurrent_executions: Optional[pulumi.Input[_builtins.int]] = None,
-                 role: Optional[pulumi.Input[_builtins.str]] = None,
-                 runtime: Optional[pulumi.Input[Union[_builtins.str, 'Runtime']]] = None,
-                 s3_bucket: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_object_version: Optional[pulumi.Input[_builtins.str]] = None,
-                 skip_destroy: Optional[pulumi.Input[_builtins.bool]] = None,
-                 snap_start: Optional[pulumi.Input[Union['FunctionSnapStartArgs', 'FunctionSnapStartArgsDict']]] = None,
-                 source_code_hash: Optional[pulumi.Input[_builtins.str]] = None,
-                 source_kms_key_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tenancy_config: Optional[pulumi.Input[Union['FunctionTenancyConfigArgs', 'FunctionTenancyConfigArgsDict']]] = None,
-                 timeout: Optional[pulumi.Input[_builtins.int]] = None,
-                 tracing_config: Optional[pulumi.Input[Union['FunctionTracingConfigArgs', 'FunctionTracingConfigArgsDict']]] = None,
-                 vpc_config: Optional[pulumi.Input[Union['FunctionVpcConfigArgs', 'FunctionVpcConfigArgsDict']]] = None,
+                 architectures: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 capacity_provider_config: pulumi.Input[Optional[Union['FunctionCapacityProviderConfigArgs', 'FunctionCapacityProviderConfigArgsDict']]] = None,
+                 code: pulumi.Input[Optional[pulumi.Archive]] = None,
+                 code_sha256: pulumi.Input[Optional[_builtins.str]] = None,
+                 code_signing_config_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 dead_letter_config: pulumi.Input[Optional[Union['FunctionDeadLetterConfigArgs', 'FunctionDeadLetterConfigArgsDict']]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 durable_config: pulumi.Input[Optional[Union['FunctionDurableConfigArgs', 'FunctionDurableConfigArgsDict']]] = None,
+                 environment: pulumi.Input[Optional[Union['FunctionEnvironmentArgs', 'FunctionEnvironmentArgsDict']]] = None,
+                 ephemeral_storage: pulumi.Input[Optional[Union['FunctionEphemeralStorageArgs', 'FunctionEphemeralStorageArgsDict']]] = None,
+                 file_system_config: pulumi.Input[Optional[Union['FunctionFileSystemConfigArgs', 'FunctionFileSystemConfigArgsDict']]] = None,
+                 handler: pulumi.Input[Optional[_builtins.str]] = None,
+                 image_config: pulumi.Input[Optional[Union['FunctionImageConfigArgs', 'FunctionImageConfigArgsDict']]] = None,
+                 image_uri: pulumi.Input[Optional[_builtins.str]] = None,
+                 kms_key_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 layers: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 logging_config: pulumi.Input[Optional[Union['FunctionLoggingConfigArgs', 'FunctionLoggingConfigArgsDict']]] = None,
+                 memory_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 package_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 publish: pulumi.Input[Optional[_builtins.bool]] = None,
+                 publish_to: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 replace_security_groups_on_destroy: pulumi.Input[Optional[_builtins.bool]] = None,
+                 replacement_security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 reserved_concurrent_executions: pulumi.Input[Optional[_builtins.int]] = None,
+                 role: pulumi.Input[Optional[_builtins.str]] = None,
+                 runtime: pulumi.Input[Optional[Union[_builtins.str, 'Runtime']]] = None,
+                 s3_bucket: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_object_version: pulumi.Input[Optional[_builtins.str]] = None,
+                 skip_destroy: pulumi.Input[Optional[_builtins.bool]] = None,
+                 snap_start: pulumi.Input[Optional[Union['FunctionSnapStartArgs', 'FunctionSnapStartArgsDict']]] = None,
+                 source_code_hash: pulumi.Input[Optional[_builtins.str]] = None,
+                 source_kms_key_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tenancy_config: pulumi.Input[Optional[Union['FunctionTenancyConfigArgs', 'FunctionTenancyConfigArgsDict']]] = None,
+                 timeout: pulumi.Input[Optional[_builtins.int]] = None,
+                 tracing_config: pulumi.Input[Optional[Union['FunctionTracingConfigArgs', 'FunctionTracingConfigArgsDict']]] = None,
+                 use_resource_timeout_for_propagation: pulumi.Input[Optional[_builtins.bool]] = None,
+                 vpc_config: pulumi.Input[Optional[Union['FunctionVpcConfigArgs', 'FunctionVpcConfigArgsDict']]] = None,
                  __props__=None):
         """
         Manages an AWS Lambda Function. Use this resource to create serverless functions that run code in response to events without provisioning or managing servers.
@@ -1565,14 +1600,14 @@ class Function(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lambda_.Function("example",
-            name="example_container_function",
-            role=example_aws_iam_role["arn"],
-            package_type="Image",
-            image_uri=f"{example_aws_ecr_repository['repositoryUrl']}:latest",
             image_config={
                 "entry_points": ["/lambda-entrypoint.sh"],
                 "commands": ["app.handler"],
             },
+            name="example_container_function",
+            role=example_aws_iam_role["arn"],
+            package_type="Image",
+            image_uri=f"{example_aws_ecr_repository['repositoryUrl']}:latest",
             memory_size=512,
             timeout=30,
             architectures=["arm64"])
@@ -1592,7 +1627,7 @@ class Function(pulumi.CustomResource):
             layer_name="example_dependencies_layer",
             description="Common dependencies for Lambda functions",
             compatible_runtimes=[
-                "nodejs20.x",
+                "nodejs24.x",
                 "python3.12",
             ],
             compatible_architectures=[
@@ -1601,15 +1636,15 @@ class Function(pulumi.CustomResource):
             ])
         # Function using the layer
         example_function = aws.lambda_.Function("example",
+            tracing_config={
+                "mode": "Active",
+            },
             code=pulumi.FileArchive("function.zip"),
             name="example_layered_function",
             role=example_aws_iam_role["arn"],
             handler="index.handler",
-            runtime=aws.lambda_.Runtime.NODE_JS20D_X,
-            layers=[example.arn],
-            tracing_config={
-                "mode": "Active",
-            })
+            runtime=aws.lambda_.Runtime.NODE_JS24D_X,
+            layers=[example.arn])
         ```
 
         ### VPC Function with Enhanced Networking
@@ -1619,13 +1654,6 @@ class Function(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lambda_.Function("example",
-            code=pulumi.FileArchive("function.zip"),
-            name="example_vpc_function",
-            role=example_aws_iam_role["arn"],
-            handler="app.handler",
-            runtime=aws.lambda_.Runtime.PYTHON3D12,
-            memory_size=1024,
-            timeout=30,
             vpc_config={
                 "subnet_ids": [
                     example_private1["id"],
@@ -1639,13 +1667,21 @@ class Function(pulumi.CustomResource):
             },
             snap_start={
                 "apply_on": "PublishedVersions",
-            })
+            },
+            code=pulumi.FileArchive("function.zip"),
+            name="example_vpc_function",
+            role=example_aws_iam_role["arn"],
+            handler="app.handler",
+            runtime=aws.lambda_.Runtime.PYTHON3D12,
+            memory_size=1024,
+            timeout=30)
         ```
 
         ### Function with EFS Integration
 
         ```python
         import pulumi
+        from typing import Any
         import pulumi_aws as aws
 
         # EFS file system for Lambda
@@ -1663,34 +1699,29 @@ class Function(pulumi.CustomResource):
                 "subnet-87654321",
             ]
         # Mount target in each subnet
-        example_mount_target = []
-        for range in [{"value": i} for i in range(0, len(subnet_ids))]:
-            example_mount_target.append(aws.efs.MountTarget(f"example-{range['value']}",
+        example_mount_target: list[aws.efs.MountTarget] = []
+        for example_mount_target_range in [{"value": i} for i in range(0, len(subnet_ids))]:
+            example_mount_target.append(aws.efs.MountTarget(f"example-{example_mount_target_range['value']}",
                 file_system_id=example.id,
-                subnet_id=subnet_ids[range["value"]],
+                subnet_id=subnet_ids[example_mount_target_range["value"]],
                 security_groups=[efs["id"]]))
         # Access point for Lambda
         example_access_point = aws.efs.AccessPoint("example",
-            file_system_id=example.id,
             root_directory={
-                "path": "/lambda",
                 "creation_info": {
                     "owner_gid": 1000,
                     "owner_uid": 1000,
                     "permissions": "755",
                 },
+                "path": "/lambda",
             },
             posix_user={
                 "gid": 1000,
                 "uid": 1000,
-            })
+            },
+            file_system_id=example.id)
         # Lambda function with EFS
         example_function = aws.lambda_.Function("example",
-            code=pulumi.FileArchive("function.zip"),
-            name="example_efs_function",
-            role=example_aws_iam_role["arn"],
-            handler="index.handler",
-            runtime=aws.lambda_.Runtime.NODE_JS20D_X,
             vpc_config={
                 "subnet_ids": subnet_ids,
                 "security_group_ids": [lambda_["id"]],
@@ -1699,7 +1730,81 @@ class Function(pulumi.CustomResource):
                 "arn": example_access_point.arn,
                 "local_mount_path": "/mnt/data",
             },
+            code=pulumi.FileArchive("function.zip"),
+            name="example_efs_function",
+            role=example_aws_iam_role["arn"],
+            handler="index.handler",
+            runtime=aws.lambda_.Runtime.NODE_JS24D_X,
             opts = pulumi.ResourceOptions(depends_on=[example_mount_target]))
+        ```
+
+        ### Function with S3 Files File System
+
+        ```python
+        import pulumi
+        import pulumi_aws as aws
+
+        current = aws.get_caller_identity()
+        current_get_region = aws.get_region()
+        lambda_file_system = aws.s3.Bucket("lambda_file_system",
+            bucket=f"example-{current.account_id}-{current_get_region.name}-an",
+            bucket_namespace="account-regional")
+        lambda_file_system_bucket_versioning = aws.s3.BucketVersioning("lambda_file_system",
+            versioning_configuration={
+                "status": "Enabled",
+            },
+            bucket=lambda_file_system.bucket)
+        for_lambda = aws.s3.FilesFileSystem("for_lambda",
+            bucket=lambda_file_system.arn,
+            role_arn=s3files["arn"],
+            opts = pulumi.ResourceOptions(depends_on=[lambda_file_system_bucket_versioning]))
+        for_lambda_files_access_point = aws.s3.FilesAccessPoint("for_lambda",
+            posix_users=[{
+                "gid": 1000,
+                "uid": 1000,
+            }],
+            root_directories=[{
+                "creation_permissions": [{
+                    "owner_gid": 1000,
+                    "owner_uid": 1000,
+                    "permissions": "755",
+                }],
+                "path": "/lambda",
+            }],
+            file_system_id=for_lambda.id)
+        s3files_mount_targets = aws.ec2.SecurityGroup("s3files_mount_targets",
+            name="example-s3files-mount-targets-sg",
+            vpc_id=vpc_for_lambda["id"])
+        lambda_s3files = aws.ec2.SecurityGroup("lambda_s3files",
+            name="example-lambda-s3files-sg",
+            vpc_id=vpc_for_lambda["id"])
+        s3files_mount_targets_nfs = aws.vpc.SecurityGroupIngressRule("s3files_mount_targets_nfs",
+            ip_protocol="tcp",
+            from_port=2049,
+            to_port=2049,
+            referenced_security_group_id=lambda_s3files.id,
+            security_group_id=s3files_mount_targets.id)
+        lambda_s3files_nfs = aws.vpc.SecurityGroupEgressRule("lambda_s3files_nfs",
+            ip_protocol="tcp",
+            security_group_id=lambda_s3files.id,
+            from_port=2049,
+            to_port=2049,
+            referenced_security_group_id=s3files_mount_targets.id)
+        example = aws.lambda_.Function("example",
+            vpc_config={
+                "subnet_ids": [subnet_for_lambda_az1["id"]],
+                "security_group_ids": [lambda_s3files.id],
+            },
+            file_system_config={
+                "arn": for_lambda_files_access_point.arn,
+                "local_mount_path": "/mnt/s3files",
+            },
+            code=pulumi.FileArchive("function.zip"),
+            name="example_s3files_function",
+            role=iam_for_lambda["arn"],
+            handler="exports.example",
+            runtime=aws.lambda_.Runtime.NODE_JS24D_X,
+            opts = pulumi.ResourceOptions(depends_on=[for_lambda_aws_s3files_mount_target]))
         ```
 
         ### Function with Advanced Logging
@@ -1716,16 +1821,16 @@ class Function(pulumi.CustomResource):
                 "Application": "example",
             })
         example_function = aws.lambda_.Function("example",
-            code=pulumi.FileArchive("function.zip"),
-            name="example_function",
-            role=example_aws_iam_role["arn"],
-            handler="index.handler",
-            runtime=aws.lambda_.Runtime.NODE_JS20D_X,
             logging_config={
                 "log_format": "JSON",
                 "application_log_level": "INFO",
                 "system_log_level": "WARN",
             },
+            code=pulumi.FileArchive("function.zip"),
+            name="example_function",
+            role=example_aws_iam_role["arn"],
+            handler="index.handler",
+            runtime=aws.lambda_.Runtime.NODE_JS24D_X,
             opts = pulumi.ResourceOptions(depends_on=[example]))
         ```
 
@@ -1763,12 +1868,12 @@ class Function(pulumi.CustomResource):
             name=f"/aws/lambda/{lambda_function_name}",
             log_group_class="DELIVERY")
         logs_assume_role = aws.iam.get_policy_document(statements=[{
-            "actions": ["sts:AssumeRole"],
-            "effect": "Allow",
             "principals": [{
                 "type": "Service",
                 "identifiers": ["logs.amazonaws.com"],
             }],
+            "actions": ["sts:AssumeRole"],
+            "effect": "Allow",
         }])
         logs_log_export = aws.iam.Role("logs_log_export",
             name=f"{lambda_function_name}-lambda-log-export-role",
@@ -1788,15 +1893,15 @@ class Function(pulumi.CustomResource):
             destination_arn=lambda_log_export_bucket.arn,
             role_arn=logs_log_export.arn)
         log_export = aws.lambda_.Function("log_export",
+            logging_config={
+                "log_format": "Text",
+                "log_group": export.name,
+            },
             name=lambda_function_name,
             handler="index.lambda_handler",
             runtime=aws.lambda_.Runtime.PYTHON3D13,
             role=example["arn"],
             code=pulumi.FileArchive("function.zip"),
-            logging_config={
-                "log_format": "Text",
-                "log_group": export.name,
-            },
             opts = pulumi.ResourceOptions(depends_on=[export]))
         ```
 
@@ -1808,19 +1913,16 @@ class Function(pulumi.CustomResource):
 
         # Main Lambda function
         example = aws.lambda_.Function("example",
+            dead_letter_config={
+                "target_arn": dlq["arn"],
+            },
             code=pulumi.FileArchive("function.zip"),
             name="example_function",
             role=example_aws_iam_role["arn"],
             handler="index.handler",
-            runtime=aws.lambda_.Runtime.NODE_JS20D_X,
-            dead_letter_config={
-                "target_arn": dlq["arn"],
-            })
+            runtime=aws.lambda_.Runtime.NODE_JS24D_X)
         # Event invoke configuration for retries
         example_function_event_invoke_config = aws.lambda_.FunctionEventInvokeConfig("example",
-            function_name=example.name,
-            maximum_event_age_in_seconds=60,
-            maximum_retry_attempts=2,
             destination_config={
                 "on_failure": {
                     "destination": dlq["arn"],
@@ -1828,7 +1930,10 @@ class Function(pulumi.CustomResource):
                 "on_success": {
                     "destination": success["arn"],
                 },
-            })
+            },
+            function_name=example.name,
+            maximum_event_age_in_seconds=60,
+            maximum_retry_attempts=2)
         ```
 
         ### CloudWatch Logging and Permissions
@@ -1887,16 +1992,16 @@ class Function(pulumi.CustomResource):
             policy_arn=lambda_logging.arn)
         # Lambda function with logging
         example_function = aws.lambda_.Function("example",
-            code=pulumi.FileArchive("function.zip"),
-            name=function_name,
-            role=example_role.arn,
-            handler="index.handler",
-            runtime=aws.lambda_.Runtime.NODE_JS20D_X,
             logging_config={
                 "log_format": "JSON",
                 "application_log_level": "INFO",
                 "system_log_level": "WARN",
             },
+            code=pulumi.FileArchive("function.zip"),
+            name=function_name,
+            role=example_role.arn,
+            handler="index.handler",
+            runtime=aws.lambda_.Runtime.NODE_JS24D_X,
             opts = pulumi.ResourceOptions(depends_on=[
                     lambda_logs,
                     example,
@@ -1912,13 +2017,6 @@ class Function(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lambda_.Function("example",
-            code=pulumi.FileArchive("function.zip"),
-            name="example_durable_function",
-            role=example_aws_iam_role["arn"],
-            handler="index.handler",
-            runtime=aws.lambda_.Runtime.NODE_JS22D_X,
-            memory_size=512,
-            timeout=30,
             durable_config={
                 "execution_timeout": 3600,
                 "retention_period": 7,
@@ -1928,10 +2026,18 @@ class Function(pulumi.CustomResource):
                     "DURABLE_MODE": "enabled",
                 },
             },
+            code=pulumi.FileArchive("function.zip"),
+            name="example_durable_function",
+            role=example_aws_iam_role["arn"],
+            handler="index.handler",
+            runtime=aws.lambda_.Runtime.NODE_JS24D_X,
+            memory_size=512,
+            timeout=30,
             tags={
                 "Environment": "production",
                 "Type": "durable",
-            })
+            },
+            opts = pulumi.ResourceOptions(custom_timeouts=pulumi.CustomTimeouts(delete="60m")))
         ```
 
         ### Capacity Provider Configuration
@@ -1941,33 +2047,30 @@ class Function(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example_capacity_provider = aws.lambda_.CapacityProvider("example",
-            name="example",
             vpc_config={
                 "subnet_ids": [example_aws_subnet["id"]],
                 "security_group_ids": [example_aws_security_group["id"]],
             },
             permissions_config={
                 "capacity_provider_operator_role_arn": example_aws_iam_role["arn"],
-            })
+            },
+            name="example")
         example = aws.lambda_.Function("example",
-            code=pulumi.FileArchive("function.zip"),
-            name="example",
-            role=example_aws_iam_role["arn"],
-            handler="index.handler",
-            runtime=aws.lambda_.Runtime.NODE_JS20D_X,
-            memory_size=2048,
-            publish=True,
             capacity_provider_config={
                 "lambda_managed_instances_capacity_provider_config": {
                     "capacity_provider_arn": example_capacity_provider.arn,
                 },
-            })
+            },
+            code=pulumi.FileArchive("function.zip"),
+            name="example",
+            role=example_aws_iam_role["arn"],
+            handler="index.handler",
+            runtime=aws.lambda_.Runtime.NODE_JS24D_X,
+            memory_size=2048,
+            publish=True)
         ```
 
         See the `lambda.CapacityProvider` resource for more details, such as configuring instance requirements and the scaling policy.
-
-        ## Specifying the Deployment Package
-
         AWS Lambda expects source code to be provided as a deployment package whose structure varies depending on which `runtime` is in use. See [Runtimes](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-Runtime) for the valid values of `runtime`. The expected structure of the deployment package can be found in [the AWS Lambda documentation for each runtime](https://docs.aws.amazon.com/lambda/latest/dg/deployment-package-v2.html).
 
         Once you have created your deployment package you can specify it either directly as a local file (using the `filename` argument) or indirectly via Amazon S3 (using the `s3_bucket`, `s3_key` and `s3_object_version` arguments). When providing the deployment package via S3 it may be useful to use the `s3.BucketObjectv2` resource to upload it.
@@ -1993,6 +2096,7 @@ class Function(pulumi.CustomResource):
         $ pulumi import aws:lambda/function:Function example example
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] architectures: Instruction set architecture for your Lambda function. Valid values are `["x86_64"]` and `["arm64"]`. Default is `["x86_64"]`. Removing this attribute, function's architecture stays the same.
@@ -2005,11 +2109,11 @@ class Function(pulumi.CustomResource):
         :param pulumi.Input[Union['FunctionDurableConfigArgs', 'FunctionDurableConfigArgsDict']] durable_config: Configuration block for durable function settings. See below. `durable_config` may only be available in [limited regions](https://builder.aws.com/build/capabilities), including `us-east-2`.
         :param pulumi.Input[Union['FunctionEnvironmentArgs', 'FunctionEnvironmentArgsDict']] environment: Configuration block for environment variables. See below.
         :param pulumi.Input[Union['FunctionEphemeralStorageArgs', 'FunctionEphemeralStorageArgsDict']] ephemeral_storage: Amount of ephemeral storage (`/tmp`) to allocate for the Lambda Function. See below.
-        :param pulumi.Input[Union['FunctionFileSystemConfigArgs', 'FunctionFileSystemConfigArgsDict']] file_system_config: Configuration block for EFS file system. See below.
+        :param pulumi.Input[Union['FunctionFileSystemConfigArgs', 'FunctionFileSystemConfigArgsDict']] file_system_config: Configuration block for EFS or S3 Files file system. See below.
         :param pulumi.Input[_builtins.str] handler: Function entry point in your code. Required if `package_type` is `Zip`.
         :param pulumi.Input[Union['FunctionImageConfigArgs', 'FunctionImageConfigArgsDict']] image_config: Container image configuration values. See below.
         :param pulumi.Input[_builtins.str] image_uri: ECR image URI containing the function's deployment package. Conflicts with `filename` and `s3_bucket`. One of `filename`, `image_uri`, or `s3_bucket` must be specified.
-        :param pulumi.Input[_builtins.str] kms_key_arn: ARN of the AWS Key Management Service key used to encrypt environment variables. If not provided when environment variables are in use, AWS Lambda uses a default service key. If provided when environment variables are not in use, the AWS Lambda API does not save this configuration.
+        :param pulumi.Input[_builtins.str] kms_key_arn: ARN of the KMS key used to encrypt environment variables. If not provided when environment variables are in use, AWS Lambda uses a default service key. If provided when environment variables are not in use, the AWS Lambda API does not save this configuration.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] layers: List of Lambda Layer Version ARNs (maximum of 5) to attach to your Lambda Function.
         :param pulumi.Input[Union['FunctionLoggingConfigArgs', 'FunctionLoggingConfigArgsDict']] logging_config: Configuration block for advanced logging settings. See below.
         :param pulumi.Input[_builtins.int] memory_size: Amount of memory in MB your Lambda Function can use at runtime. Valid value between 128 MB to 32,768 MB (32 GB), in 1 MB increments. Defaults to 128.
@@ -2031,11 +2135,12 @@ class Function(pulumi.CustomResource):
         :param pulumi.Input[_builtins.bool] skip_destroy: Whether to retain the old version of a previously deployed Lambda Layer. Default is `false`.
         :param pulumi.Input[Union['FunctionSnapStartArgs', 'FunctionSnapStartArgsDict']] snap_start: Configuration block for snap start settings. See below.
         :param pulumi.Input[_builtins.str] source_code_hash: User-defined hash of the source code package file. Use this argument to trigger updates when the local function source code changes. This is a synthetic argument tracked only by the AWS provider and does not need to match the hashing algorithm used by Lambda to compute the `CodeSha256` response value. Out-of-band changes to the source code _will not_ be captured by this argument. To include out-of-band source code changes as an update trigger, use the `code_sha256` argument instead.
-        :param pulumi.Input[_builtins.str] source_kms_key_arn: ARN of the AWS Key Management Service key used to encrypt the function's `.zip` deployment package. Conflicts with `image_uri`.
+        :param pulumi.Input[_builtins.str] source_kms_key_arn: ARN of the KMS key used to encrypt the function's `.zip` deployment package. Conflicts with `image_uri`.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of tags for the Lambda function. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Union['FunctionTenancyConfigArgs', 'FunctionTenancyConfigArgsDict']] tenancy_config: Configuration block for Tenancy. See below.
         :param pulumi.Input[_builtins.int] timeout: Amount of time your Lambda Function has to run in seconds. Defaults to 3. Valid between 1 and 900.
         :param pulumi.Input[Union['FunctionTracingConfigArgs', 'FunctionTracingConfigArgsDict']] tracing_config: Configuration block for X-Ray tracing. See below.
+        :param pulumi.Input[_builtins.bool] use_resource_timeout_for_propagation: Whether to apply resource level timeout values while retrying eventually consistent API operations. By default the provider uses a 5 minute timeout to allow for propagation in the Lambda service. When set to `true`, this default value is replaced with the configurable resource timeouts. Increased timeout values may be useful in highly active accounts, or regions where propagation delays are inconsistent.
         :param pulumi.Input[Union['FunctionVpcConfigArgs', 'FunctionVpcConfigArgsDict']] vpc_config: Configuration block for VPC. See below.
         """
         ...
@@ -2064,14 +2169,14 @@ class Function(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lambda_.Function("example",
-            name="example_container_function",
-            role=example_aws_iam_role["arn"],
-            package_type="Image",
-            image_uri=f"{example_aws_ecr_repository['repositoryUrl']}:latest",
             image_config={
                 "entry_points": ["/lambda-entrypoint.sh"],
                 "commands": ["app.handler"],
             },
+            name="example_container_function",
+            role=example_aws_iam_role["arn"],
+            package_type="Image",
+            image_uri=f"{example_aws_ecr_repository['repositoryUrl']}:latest",
             memory_size=512,
             timeout=30,
             architectures=["arm64"])
@@ -2091,7 +2196,7 @@ class Function(pulumi.CustomResource):
             layer_name="example_dependencies_layer",
             description="Common dependencies for Lambda functions",
             compatible_runtimes=[
-                "nodejs20.x",
+                "nodejs24.x",
                 "python3.12",
             ],
             compatible_architectures=[
@@ -2100,15 +2205,15 @@ class Function(pulumi.CustomResource):
             ])
         # Function using the layer
         example_function = aws.lambda_.Function("example",
+            tracing_config={
+                "mode": "Active",
+            },
             code=pulumi.FileArchive("function.zip"),
             name="example_layered_function",
             role=example_aws_iam_role["arn"],
             handler="index.handler",
-            runtime=aws.lambda_.Runtime.NODE_JS20D_X,
-            layers=[example.arn],
-            tracing_config={
-                "mode": "Active",
-            })
+            runtime=aws.lambda_.Runtime.NODE_JS24D_X,
+            layers=[example.arn])
         ```
 
         ### VPC Function with Enhanced Networking
@@ -2118,13 +2223,6 @@ class Function(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lambda_.Function("example",
-            code=pulumi.FileArchive("function.zip"),
-            name="example_vpc_function",
-            role=example_aws_iam_role["arn"],
-            handler="app.handler",
-            runtime=aws.lambda_.Runtime.PYTHON3D12,
-            memory_size=1024,
-            timeout=30,
             vpc_config={
                 "subnet_ids": [
                     example_private1["id"],
@@ -2138,13 +2236,21 @@ class Function(pulumi.CustomResource):
             },
             snap_start={
                 "apply_on": "PublishedVersions",
-            })
+            },
+            code=pulumi.FileArchive("function.zip"),
+            name="example_vpc_function",
+            role=example_aws_iam_role["arn"],
+            handler="app.handler",
+            runtime=aws.lambda_.Runtime.PYTHON3D12,
+            memory_size=1024,
+            timeout=30)
         ```
 
         ### Function with EFS Integration
 
         ```python
         import pulumi
+        from typing import Any
         import pulumi_aws as aws
 
         # EFS file system for Lambda
@@ -2162,34 +2268,29 @@ class Function(pulumi.CustomResource):
                 "subnet-87654321",
             ]
         # Mount target in each subnet
-        example_mount_target = []
-        for range in [{"value": i} for i in range(0, len(subnet_ids))]:
-            example_mount_target.append(aws.efs.MountTarget(f"example-{range['value']}",
+        example_mount_target: list[aws.efs.MountTarget] = []
+        for example_mount_target_range in [{"value": i} for i in range(0, len(subnet_ids))]:
+            example_mount_target.append(aws.efs.MountTarget(f"example-{example_mount_target_range['value']}",
                 file_system_id=example.id,
-                subnet_id=subnet_ids[range["value"]],
+                subnet_id=subnet_ids[example_mount_target_range["value"]],
                 security_groups=[efs["id"]]))
         # Access point for Lambda
         example_access_point = aws.efs.AccessPoint("example",
-            file_system_id=example.id,
             root_directory={
-                "path": "/lambda",
                 "creation_info": {
                     "owner_gid": 1000,
                     "owner_uid": 1000,
                     "permissions": "755",
                 },
+                "path": "/lambda",
             },
             posix_user={
                 "gid": 1000,
                 "uid": 1000,
-            })
+            },
+            file_system_id=example.id)
         # Lambda function with EFS
         example_function = aws.lambda_.Function("example",
-            code=pulumi.FileArchive("function.zip"),
-            name="example_efs_function",
-            role=example_aws_iam_role["arn"],
-            handler="index.handler",
-            runtime=aws.lambda_.Runtime.NODE_JS20D_X,
             vpc_config={
                 "subnet_ids": subnet_ids,
                 "security_group_ids": [lambda_["id"]],
@@ -2198,7 +2299,81 @@ class Function(pulumi.CustomResource):
                 "arn": example_access_point.arn,
                 "local_mount_path": "/mnt/data",
             },
+            code=pulumi.FileArchive("function.zip"),
+            name="example_efs_function",
+            role=example_aws_iam_role["arn"],
+            handler="index.handler",
+            runtime=aws.lambda_.Runtime.NODE_JS24D_X,
             opts = pulumi.ResourceOptions(depends_on=[example_mount_target]))
+        ```
+
+        ### Function with S3 Files File System
+
+        ```python
+        import pulumi
+        import pulumi_aws as aws
+
+        current = aws.get_caller_identity()
+        current_get_region = aws.get_region()
+        lambda_file_system = aws.s3.Bucket("lambda_file_system",
+            bucket=f"example-{current.account_id}-{current_get_region.name}-an",
+            bucket_namespace="account-regional")
+        lambda_file_system_bucket_versioning = aws.s3.BucketVersioning("lambda_file_system",
+            versioning_configuration={
+                "status": "Enabled",
+            },
+            bucket=lambda_file_system.bucket)
+        for_lambda = aws.s3.FilesFileSystem("for_lambda",
+            bucket=lambda_file_system.arn,
+            role_arn=s3files["arn"],
+            opts = pulumi.ResourceOptions(depends_on=[lambda_file_system_bucket_versioning]))
+        for_lambda_files_access_point = aws.s3.FilesAccessPoint("for_lambda",
+            posix_users=[{
+                "gid": 1000,
+                "uid": 1000,
+            }],
+            root_directories=[{
+                "creation_permissions": [{
+                    "owner_gid": 1000,
+                    "owner_uid": 1000,
+                    "permissions": "755",
+                }],
+                "path": "/lambda",
+            }],
+            file_system_id=for_lambda.id)
+        s3files_mount_targets = aws.ec2.SecurityGroup("s3files_mount_targets",
+            name="example-s3files-mount-targets-sg",
+            vpc_id=vpc_for_lambda["id"])
+        lambda_s3files = aws.ec2.SecurityGroup("lambda_s3files",
+            name="example-lambda-s3files-sg",
+            vpc_id=vpc_for_lambda["id"])
+        s3files_mount_targets_nfs = aws.vpc.SecurityGroupIngressRule("s3files_mount_targets_nfs",
+            ip_protocol="tcp",
+            from_port=2049,
+            to_port=2049,
+            referenced_security_group_id=lambda_s3files.id,
+            security_group_id=s3files_mount_targets.id)
+        lambda_s3files_nfs = aws.vpc.SecurityGroupEgressRule("lambda_s3files_nfs",
+            ip_protocol="tcp",
+            security_group_id=lambda_s3files.id,
+            from_port=2049,
+            to_port=2049,
+            referenced_security_group_id=s3files_mount_targets.id)
+        example = aws.lambda_.Function("example",
+            vpc_config={
+                "subnet_ids": [subnet_for_lambda_az1["id"]],
+                "security_group_ids": [lambda_s3files.id],
+            },
+            file_system_config={
+                "arn": for_lambda_files_access_point.arn,
+                "local_mount_path": "/mnt/s3files",
+            },
+            code=pulumi.FileArchive("function.zip"),
+            name="example_s3files_function",
+            role=iam_for_lambda["arn"],
+            handler="exports.example",
+            runtime=aws.lambda_.Runtime.NODE_JS24D_X,
+            opts = pulumi.ResourceOptions(depends_on=[for_lambda_aws_s3files_mount_target]))
         ```
 
         ### Function with Advanced Logging
@@ -2215,16 +2390,16 @@ class Function(pulumi.CustomResource):
                 "Application": "example",
             })
         example_function = aws.lambda_.Function("example",
-            code=pulumi.FileArchive("function.zip"),
-            name="example_function",
-            role=example_aws_iam_role["arn"],
-            handler="index.handler",
-            runtime=aws.lambda_.Runtime.NODE_JS20D_X,
             logging_config={
                 "log_format": "JSON",
                 "application_log_level": "INFO",
                 "system_log_level": "WARN",
             },
+            code=pulumi.FileArchive("function.zip"),
+            name="example_function",
+            role=example_aws_iam_role["arn"],
+            handler="index.handler",
+            runtime=aws.lambda_.Runtime.NODE_JS24D_X,
             opts = pulumi.ResourceOptions(depends_on=[example]))
         ```
 
@@ -2262,12 +2437,12 @@ class Function(pulumi.CustomResource):
             name=f"/aws/lambda/{lambda_function_name}",
             log_group_class="DELIVERY")
         logs_assume_role = aws.iam.get_policy_document(statements=[{
-            "actions": ["sts:AssumeRole"],
-            "effect": "Allow",
             "principals": [{
                 "type": "Service",
                 "identifiers": ["logs.amazonaws.com"],
             }],
+            "actions": ["sts:AssumeRole"],
+            "effect": "Allow",
         }])
         logs_log_export = aws.iam.Role("logs_log_export",
             name=f"{lambda_function_name}-lambda-log-export-role",
@@ -2287,15 +2462,15 @@ class Function(pulumi.CustomResource):
             destination_arn=lambda_log_export_bucket.arn,
             role_arn=logs_log_export.arn)
         log_export = aws.lambda_.Function("log_export",
+            logging_config={
+                "log_format": "Text",
+                "log_group": export.name,
+            },
             name=lambda_function_name,
             handler="index.lambda_handler",
             runtime=aws.lambda_.Runtime.PYTHON3D13,
             role=example["arn"],
             code=pulumi.FileArchive("function.zip"),
-            logging_config={
-                "log_format": "Text",
-                "log_group": export.name,
-            },
             opts = pulumi.ResourceOptions(depends_on=[export]))
         ```
 
@@ -2307,19 +2482,16 @@ class Function(pulumi.CustomResource):
 
         # Main Lambda function
         example = aws.lambda_.Function("example",
+            dead_letter_config={
+                "target_arn": dlq["arn"],
+            },
             code=pulumi.FileArchive("function.zip"),
             name="example_function",
             role=example_aws_iam_role["arn"],
             handler="index.handler",
-            runtime=aws.lambda_.Runtime.NODE_JS20D_X,
-            dead_letter_config={
-                "target_arn": dlq["arn"],
-            })
+            runtime=aws.lambda_.Runtime.NODE_JS24D_X)
         # Event invoke configuration for retries
         example_function_event_invoke_config = aws.lambda_.FunctionEventInvokeConfig("example",
-            function_name=example.name,
-            maximum_event_age_in_seconds=60,
-            maximum_retry_attempts=2,
             destination_config={
                 "on_failure": {
                     "destination": dlq["arn"],
@@ -2327,7 +2499,10 @@ class Function(pulumi.CustomResource):
                 "on_success": {
                     "destination": success["arn"],
                 },
-            })
+            },
+            function_name=example.name,
+            maximum_event_age_in_seconds=60,
+            maximum_retry_attempts=2)
         ```
 
         ### CloudWatch Logging and Permissions
@@ -2386,16 +2561,16 @@ class Function(pulumi.CustomResource):
             policy_arn=lambda_logging.arn)
         # Lambda function with logging
         example_function = aws.lambda_.Function("example",
-            code=pulumi.FileArchive("function.zip"),
-            name=function_name,
-            role=example_role.arn,
-            handler="index.handler",
-            runtime=aws.lambda_.Runtime.NODE_JS20D_X,
             logging_config={
                 "log_format": "JSON",
                 "application_log_level": "INFO",
                 "system_log_level": "WARN",
             },
+            code=pulumi.FileArchive("function.zip"),
+            name=function_name,
+            role=example_role.arn,
+            handler="index.handler",
+            runtime=aws.lambda_.Runtime.NODE_JS24D_X,
             opts = pulumi.ResourceOptions(depends_on=[
                     lambda_logs,
                     example,
@@ -2411,13 +2586,6 @@ class Function(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lambda_.Function("example",
-            code=pulumi.FileArchive("function.zip"),
-            name="example_durable_function",
-            role=example_aws_iam_role["arn"],
-            handler="index.handler",
-            runtime=aws.lambda_.Runtime.NODE_JS22D_X,
-            memory_size=512,
-            timeout=30,
             durable_config={
                 "execution_timeout": 3600,
                 "retention_period": 7,
@@ -2427,10 +2595,18 @@ class Function(pulumi.CustomResource):
                     "DURABLE_MODE": "enabled",
                 },
             },
+            code=pulumi.FileArchive("function.zip"),
+            name="example_durable_function",
+            role=example_aws_iam_role["arn"],
+            handler="index.handler",
+            runtime=aws.lambda_.Runtime.NODE_JS24D_X,
+            memory_size=512,
+            timeout=30,
             tags={
                 "Environment": "production",
                 "Type": "durable",
-            })
+            },
+            opts = pulumi.ResourceOptions(custom_timeouts=pulumi.CustomTimeouts(delete="60m")))
         ```
 
         ### Capacity Provider Configuration
@@ -2440,33 +2616,30 @@ class Function(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example_capacity_provider = aws.lambda_.CapacityProvider("example",
-            name="example",
             vpc_config={
                 "subnet_ids": [example_aws_subnet["id"]],
                 "security_group_ids": [example_aws_security_group["id"]],
             },
             permissions_config={
                 "capacity_provider_operator_role_arn": example_aws_iam_role["arn"],
-            })
+            },
+            name="example")
         example = aws.lambda_.Function("example",
-            code=pulumi.FileArchive("function.zip"),
-            name="example",
-            role=example_aws_iam_role["arn"],
-            handler="index.handler",
-            runtime=aws.lambda_.Runtime.NODE_JS20D_X,
-            memory_size=2048,
-            publish=True,
             capacity_provider_config={
                 "lambda_managed_instances_capacity_provider_config": {
                     "capacity_provider_arn": example_capacity_provider.arn,
                 },
-            })
+            },
+            code=pulumi.FileArchive("function.zip"),
+            name="example",
+            role=example_aws_iam_role["arn"],
+            handler="index.handler",
+            runtime=aws.lambda_.Runtime.NODE_JS24D_X,
+            memory_size=2048,
+            publish=True)
         ```
 
         See the `lambda.CapacityProvider` resource for more details, such as configuring instance requirements and the scaling policy.
-
-        ## Specifying the Deployment Package
-
         AWS Lambda expects source code to be provided as a deployment package whose structure varies depending on which `runtime` is in use. See [Runtimes](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-Runtime) for the valid values of `runtime`. The expected structure of the deployment package can be found in [the AWS Lambda documentation for each runtime](https://docs.aws.amazon.com/lambda/latest/dg/deployment-package-v2.html).
 
         Once you have created your deployment package you can specify it either directly as a local file (using the `filename` argument) or indirectly via Amazon S3 (using the `s3_bucket`, `s3_key` and `s3_object_version` arguments). When providing the deployment package via S3 it may be useful to use the `s3.BucketObjectv2` resource to upload it.
@@ -2492,6 +2665,7 @@ class Function(pulumi.CustomResource):
         $ pulumi import aws:lambda/function:Function example example
         ```
 
+
         :param str resource_name: The name of the resource.
         :param FunctionArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -2507,46 +2681,47 @@ class Function(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 architectures: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 capacity_provider_config: Optional[pulumi.Input[Union['FunctionCapacityProviderConfigArgs', 'FunctionCapacityProviderConfigArgsDict']]] = None,
-                 code: Optional[pulumi.Input[pulumi.Archive]] = None,
-                 code_sha256: Optional[pulumi.Input[_builtins.str]] = None,
-                 code_signing_config_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 dead_letter_config: Optional[pulumi.Input[Union['FunctionDeadLetterConfigArgs', 'FunctionDeadLetterConfigArgsDict']]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 durable_config: Optional[pulumi.Input[Union['FunctionDurableConfigArgs', 'FunctionDurableConfigArgsDict']]] = None,
-                 environment: Optional[pulumi.Input[Union['FunctionEnvironmentArgs', 'FunctionEnvironmentArgsDict']]] = None,
-                 ephemeral_storage: Optional[pulumi.Input[Union['FunctionEphemeralStorageArgs', 'FunctionEphemeralStorageArgsDict']]] = None,
-                 file_system_config: Optional[pulumi.Input[Union['FunctionFileSystemConfigArgs', 'FunctionFileSystemConfigArgsDict']]] = None,
-                 handler: Optional[pulumi.Input[_builtins.str]] = None,
-                 image_config: Optional[pulumi.Input[Union['FunctionImageConfigArgs', 'FunctionImageConfigArgsDict']]] = None,
-                 image_uri: Optional[pulumi.Input[_builtins.str]] = None,
-                 kms_key_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 layers: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 logging_config: Optional[pulumi.Input[Union['FunctionLoggingConfigArgs', 'FunctionLoggingConfigArgsDict']]] = None,
-                 memory_size: Optional[pulumi.Input[_builtins.int]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 package_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 publish: Optional[pulumi.Input[_builtins.bool]] = None,
-                 publish_to: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 replace_security_groups_on_destroy: Optional[pulumi.Input[_builtins.bool]] = None,
-                 replacement_security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 reserved_concurrent_executions: Optional[pulumi.Input[_builtins.int]] = None,
-                 role: Optional[pulumi.Input[_builtins.str]] = None,
-                 runtime: Optional[pulumi.Input[Union[_builtins.str, 'Runtime']]] = None,
-                 s3_bucket: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_object_version: Optional[pulumi.Input[_builtins.str]] = None,
-                 skip_destroy: Optional[pulumi.Input[_builtins.bool]] = None,
-                 snap_start: Optional[pulumi.Input[Union['FunctionSnapStartArgs', 'FunctionSnapStartArgsDict']]] = None,
-                 source_code_hash: Optional[pulumi.Input[_builtins.str]] = None,
-                 source_kms_key_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tenancy_config: Optional[pulumi.Input[Union['FunctionTenancyConfigArgs', 'FunctionTenancyConfigArgsDict']]] = None,
-                 timeout: Optional[pulumi.Input[_builtins.int]] = None,
-                 tracing_config: Optional[pulumi.Input[Union['FunctionTracingConfigArgs', 'FunctionTracingConfigArgsDict']]] = None,
-                 vpc_config: Optional[pulumi.Input[Union['FunctionVpcConfigArgs', 'FunctionVpcConfigArgsDict']]] = None,
+                 architectures: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 capacity_provider_config: pulumi.Input[Optional[Union['FunctionCapacityProviderConfigArgs', 'FunctionCapacityProviderConfigArgsDict']]] = None,
+                 code: pulumi.Input[Optional[pulumi.Archive]] = None,
+                 code_sha256: pulumi.Input[Optional[_builtins.str]] = None,
+                 code_signing_config_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 dead_letter_config: pulumi.Input[Optional[Union['FunctionDeadLetterConfigArgs', 'FunctionDeadLetterConfigArgsDict']]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 durable_config: pulumi.Input[Optional[Union['FunctionDurableConfigArgs', 'FunctionDurableConfigArgsDict']]] = None,
+                 environment: pulumi.Input[Optional[Union['FunctionEnvironmentArgs', 'FunctionEnvironmentArgsDict']]] = None,
+                 ephemeral_storage: pulumi.Input[Optional[Union['FunctionEphemeralStorageArgs', 'FunctionEphemeralStorageArgsDict']]] = None,
+                 file_system_config: pulumi.Input[Optional[Union['FunctionFileSystemConfigArgs', 'FunctionFileSystemConfigArgsDict']]] = None,
+                 handler: pulumi.Input[Optional[_builtins.str]] = None,
+                 image_config: pulumi.Input[Optional[Union['FunctionImageConfigArgs', 'FunctionImageConfigArgsDict']]] = None,
+                 image_uri: pulumi.Input[Optional[_builtins.str]] = None,
+                 kms_key_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 layers: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 logging_config: pulumi.Input[Optional[Union['FunctionLoggingConfigArgs', 'FunctionLoggingConfigArgsDict']]] = None,
+                 memory_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 package_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 publish: pulumi.Input[Optional[_builtins.bool]] = None,
+                 publish_to: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 replace_security_groups_on_destroy: pulumi.Input[Optional[_builtins.bool]] = None,
+                 replacement_security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 reserved_concurrent_executions: pulumi.Input[Optional[_builtins.int]] = None,
+                 role: pulumi.Input[Optional[_builtins.str]] = None,
+                 runtime: pulumi.Input[Optional[Union[_builtins.str, 'Runtime']]] = None,
+                 s3_bucket: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_object_version: pulumi.Input[Optional[_builtins.str]] = None,
+                 skip_destroy: pulumi.Input[Optional[_builtins.bool]] = None,
+                 snap_start: pulumi.Input[Optional[Union['FunctionSnapStartArgs', 'FunctionSnapStartArgsDict']]] = None,
+                 source_code_hash: pulumi.Input[Optional[_builtins.str]] = None,
+                 source_kms_key_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tenancy_config: pulumi.Input[Optional[Union['FunctionTenancyConfigArgs', 'FunctionTenancyConfigArgsDict']]] = None,
+                 timeout: pulumi.Input[Optional[_builtins.int]] = None,
+                 tracing_config: pulumi.Input[Optional[Union['FunctionTracingConfigArgs', 'FunctionTracingConfigArgsDict']]] = None,
+                 use_resource_timeout_for_propagation: pulumi.Input[Optional[_builtins.bool]] = None,
+                 vpc_config: pulumi.Input[Optional[Union['FunctionVpcConfigArgs', 'FunctionVpcConfigArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -2597,6 +2772,7 @@ class Function(pulumi.CustomResource):
             __props__.__dict__["tenancy_config"] = tenancy_config
             __props__.__dict__["timeout"] = timeout
             __props__.__dict__["tracing_config"] = tracing_config
+            __props__.__dict__["use_resource_timeout_for_propagation"] = use_resource_timeout_for_propagation
             __props__.__dict__["vpc_config"] = vpc_config
             __props__.__dict__["arn"] = None
             __props__.__dict__["invoke_arn"] = None
@@ -2619,57 +2795,58 @@ class Function(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            architectures: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            capacity_provider_config: Optional[pulumi.Input[Union['FunctionCapacityProviderConfigArgs', 'FunctionCapacityProviderConfigArgsDict']]] = None,
-            code: Optional[pulumi.Input[pulumi.Archive]] = None,
-            code_sha256: Optional[pulumi.Input[_builtins.str]] = None,
-            code_signing_config_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            dead_letter_config: Optional[pulumi.Input[Union['FunctionDeadLetterConfigArgs', 'FunctionDeadLetterConfigArgsDict']]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            durable_config: Optional[pulumi.Input[Union['FunctionDurableConfigArgs', 'FunctionDurableConfigArgsDict']]] = None,
-            environment: Optional[pulumi.Input[Union['FunctionEnvironmentArgs', 'FunctionEnvironmentArgsDict']]] = None,
-            ephemeral_storage: Optional[pulumi.Input[Union['FunctionEphemeralStorageArgs', 'FunctionEphemeralStorageArgsDict']]] = None,
-            file_system_config: Optional[pulumi.Input[Union['FunctionFileSystemConfigArgs', 'FunctionFileSystemConfigArgsDict']]] = None,
-            handler: Optional[pulumi.Input[_builtins.str]] = None,
-            image_config: Optional[pulumi.Input[Union['FunctionImageConfigArgs', 'FunctionImageConfigArgsDict']]] = None,
-            image_uri: Optional[pulumi.Input[_builtins.str]] = None,
-            invoke_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            kms_key_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            last_modified: Optional[pulumi.Input[_builtins.str]] = None,
-            layers: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            logging_config: Optional[pulumi.Input[Union['FunctionLoggingConfigArgs', 'FunctionLoggingConfigArgsDict']]] = None,
-            memory_size: Optional[pulumi.Input[_builtins.int]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            package_type: Optional[pulumi.Input[_builtins.str]] = None,
-            publish: Optional[pulumi.Input[_builtins.bool]] = None,
-            publish_to: Optional[pulumi.Input[_builtins.str]] = None,
-            qualified_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            qualified_invoke_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            replace_security_groups_on_destroy: Optional[pulumi.Input[_builtins.bool]] = None,
-            replacement_security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            reserved_concurrent_executions: Optional[pulumi.Input[_builtins.int]] = None,
-            response_streaming_invoke_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            role: Optional[pulumi.Input[_builtins.str]] = None,
-            runtime: Optional[pulumi.Input[Union[_builtins.str, 'Runtime']]] = None,
-            s3_bucket: Optional[pulumi.Input[_builtins.str]] = None,
-            s3_key: Optional[pulumi.Input[_builtins.str]] = None,
-            s3_object_version: Optional[pulumi.Input[_builtins.str]] = None,
-            signing_job_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            signing_profile_version_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            skip_destroy: Optional[pulumi.Input[_builtins.bool]] = None,
-            snap_start: Optional[pulumi.Input[Union['FunctionSnapStartArgs', 'FunctionSnapStartArgsDict']]] = None,
-            source_code_hash: Optional[pulumi.Input[_builtins.str]] = None,
-            source_code_size: Optional[pulumi.Input[_builtins.int]] = None,
-            source_kms_key_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tenancy_config: Optional[pulumi.Input[Union['FunctionTenancyConfigArgs', 'FunctionTenancyConfigArgsDict']]] = None,
-            timeout: Optional[pulumi.Input[_builtins.int]] = None,
-            tracing_config: Optional[pulumi.Input[Union['FunctionTracingConfigArgs', 'FunctionTracingConfigArgsDict']]] = None,
-            version: Optional[pulumi.Input[_builtins.str]] = None,
-            vpc_config: Optional[pulumi.Input[Union['FunctionVpcConfigArgs', 'FunctionVpcConfigArgsDict']]] = None) -> 'Function':
+            architectures: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            capacity_provider_config: pulumi.Input[Optional[Union['FunctionCapacityProviderConfigArgs', 'FunctionCapacityProviderConfigArgsDict']]] = None,
+            code: pulumi.Input[Optional[pulumi.Archive]] = None,
+            code_sha256: pulumi.Input[Optional[_builtins.str]] = None,
+            code_signing_config_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            dead_letter_config: pulumi.Input[Optional[Union['FunctionDeadLetterConfigArgs', 'FunctionDeadLetterConfigArgsDict']]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            durable_config: pulumi.Input[Optional[Union['FunctionDurableConfigArgs', 'FunctionDurableConfigArgsDict']]] = None,
+            environment: pulumi.Input[Optional[Union['FunctionEnvironmentArgs', 'FunctionEnvironmentArgsDict']]] = None,
+            ephemeral_storage: pulumi.Input[Optional[Union['FunctionEphemeralStorageArgs', 'FunctionEphemeralStorageArgsDict']]] = None,
+            file_system_config: pulumi.Input[Optional[Union['FunctionFileSystemConfigArgs', 'FunctionFileSystemConfigArgsDict']]] = None,
+            handler: pulumi.Input[Optional[_builtins.str]] = None,
+            image_config: pulumi.Input[Optional[Union['FunctionImageConfigArgs', 'FunctionImageConfigArgsDict']]] = None,
+            image_uri: pulumi.Input[Optional[_builtins.str]] = None,
+            invoke_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            kms_key_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            last_modified: pulumi.Input[Optional[_builtins.str]] = None,
+            layers: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            logging_config: pulumi.Input[Optional[Union['FunctionLoggingConfigArgs', 'FunctionLoggingConfigArgsDict']]] = None,
+            memory_size: pulumi.Input[Optional[_builtins.int]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            package_type: pulumi.Input[Optional[_builtins.str]] = None,
+            publish: pulumi.Input[Optional[_builtins.bool]] = None,
+            publish_to: pulumi.Input[Optional[_builtins.str]] = None,
+            qualified_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            qualified_invoke_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            replace_security_groups_on_destroy: pulumi.Input[Optional[_builtins.bool]] = None,
+            replacement_security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            reserved_concurrent_executions: pulumi.Input[Optional[_builtins.int]] = None,
+            response_streaming_invoke_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            role: pulumi.Input[Optional[_builtins.str]] = None,
+            runtime: pulumi.Input[Optional[Union[_builtins.str, 'Runtime']]] = None,
+            s3_bucket: pulumi.Input[Optional[_builtins.str]] = None,
+            s3_key: pulumi.Input[Optional[_builtins.str]] = None,
+            s3_object_version: pulumi.Input[Optional[_builtins.str]] = None,
+            signing_job_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            signing_profile_version_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            skip_destroy: pulumi.Input[Optional[_builtins.bool]] = None,
+            snap_start: pulumi.Input[Optional[Union['FunctionSnapStartArgs', 'FunctionSnapStartArgsDict']]] = None,
+            source_code_hash: pulumi.Input[Optional[_builtins.str]] = None,
+            source_code_size: pulumi.Input[Optional[_builtins.int]] = None,
+            source_kms_key_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tenancy_config: pulumi.Input[Optional[Union['FunctionTenancyConfigArgs', 'FunctionTenancyConfigArgsDict']]] = None,
+            timeout: pulumi.Input[Optional[_builtins.int]] = None,
+            tracing_config: pulumi.Input[Optional[Union['FunctionTracingConfigArgs', 'FunctionTracingConfigArgsDict']]] = None,
+            use_resource_timeout_for_propagation: pulumi.Input[Optional[_builtins.bool]] = None,
+            version: pulumi.Input[Optional[_builtins.str]] = None,
+            vpc_config: pulumi.Input[Optional[Union['FunctionVpcConfigArgs', 'FunctionVpcConfigArgsDict']]] = None) -> 'Function':
         """
         Get an existing Function resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -2688,12 +2865,12 @@ class Function(pulumi.CustomResource):
         :param pulumi.Input[Union['FunctionDurableConfigArgs', 'FunctionDurableConfigArgsDict']] durable_config: Configuration block for durable function settings. See below. `durable_config` may only be available in [limited regions](https://builder.aws.com/build/capabilities), including `us-east-2`.
         :param pulumi.Input[Union['FunctionEnvironmentArgs', 'FunctionEnvironmentArgsDict']] environment: Configuration block for environment variables. See below.
         :param pulumi.Input[Union['FunctionEphemeralStorageArgs', 'FunctionEphemeralStorageArgsDict']] ephemeral_storage: Amount of ephemeral storage (`/tmp`) to allocate for the Lambda Function. See below.
-        :param pulumi.Input[Union['FunctionFileSystemConfigArgs', 'FunctionFileSystemConfigArgsDict']] file_system_config: Configuration block for EFS file system. See below.
+        :param pulumi.Input[Union['FunctionFileSystemConfigArgs', 'FunctionFileSystemConfigArgsDict']] file_system_config: Configuration block for EFS or S3 Files file system. See below.
         :param pulumi.Input[_builtins.str] handler: Function entry point in your code. Required if `package_type` is `Zip`.
         :param pulumi.Input[Union['FunctionImageConfigArgs', 'FunctionImageConfigArgsDict']] image_config: Container image configuration values. See below.
         :param pulumi.Input[_builtins.str] image_uri: ECR image URI containing the function's deployment package. Conflicts with `filename` and `s3_bucket`. One of `filename`, `image_uri`, or `s3_bucket` must be specified.
         :param pulumi.Input[_builtins.str] invoke_arn: ARN to be used for invoking Lambda Function from API Gateway - to be used in `apigateway.Integration`'s `uri`.
-        :param pulumi.Input[_builtins.str] kms_key_arn: ARN of the AWS Key Management Service key used to encrypt environment variables. If not provided when environment variables are in use, AWS Lambda uses a default service key. If provided when environment variables are not in use, the AWS Lambda API does not save this configuration.
+        :param pulumi.Input[_builtins.str] kms_key_arn: ARN of the KMS key used to encrypt environment variables. If not provided when environment variables are in use, AWS Lambda uses a default service key. If provided when environment variables are not in use, the AWS Lambda API does not save this configuration.
         :param pulumi.Input[_builtins.str] last_modified: Date this resource was last modified.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] layers: List of Lambda Layer Version ARNs (maximum of 5) to attach to your Lambda Function.
         :param pulumi.Input[Union['FunctionLoggingConfigArgs', 'FunctionLoggingConfigArgsDict']] logging_config: Configuration block for advanced logging settings. See below.
@@ -2722,12 +2899,13 @@ class Function(pulumi.CustomResource):
         :param pulumi.Input[Union['FunctionSnapStartArgs', 'FunctionSnapStartArgsDict']] snap_start: Configuration block for snap start settings. See below.
         :param pulumi.Input[_builtins.str] source_code_hash: User-defined hash of the source code package file. Use this argument to trigger updates when the local function source code changes. This is a synthetic argument tracked only by the AWS provider and does not need to match the hashing algorithm used by Lambda to compute the `CodeSha256` response value. Out-of-band changes to the source code _will not_ be captured by this argument. To include out-of-band source code changes as an update trigger, use the `code_sha256` argument instead.
         :param pulumi.Input[_builtins.int] source_code_size: Size in bytes of the function .zip file.
-        :param pulumi.Input[_builtins.str] source_kms_key_arn: ARN of the AWS Key Management Service key used to encrypt the function's `.zip` deployment package. Conflicts with `image_uri`.
+        :param pulumi.Input[_builtins.str] source_kms_key_arn: ARN of the KMS key used to encrypt the function's `.zip` deployment package. Conflicts with `image_uri`.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of tags for the Lambda function. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         :param pulumi.Input[Union['FunctionTenancyConfigArgs', 'FunctionTenancyConfigArgsDict']] tenancy_config: Configuration block for Tenancy. See below.
         :param pulumi.Input[_builtins.int] timeout: Amount of time your Lambda Function has to run in seconds. Defaults to 3. Valid between 1 and 900.
         :param pulumi.Input[Union['FunctionTracingConfigArgs', 'FunctionTracingConfigArgsDict']] tracing_config: Configuration block for X-Ray tracing. See below.
+        :param pulumi.Input[_builtins.bool] use_resource_timeout_for_propagation: Whether to apply resource level timeout values while retrying eventually consistent API operations. By default the provider uses a 5 minute timeout to allow for propagation in the Lambda service. When set to `true`, this default value is replaced with the configurable resource timeouts. Increased timeout values may be useful in highly active accounts, or regions where propagation delays are inconsistent.
         :param pulumi.Input[_builtins.str] version: Latest published version of your Lambda Function.
         :param pulumi.Input[Union['FunctionVpcConfigArgs', 'FunctionVpcConfigArgsDict']] vpc_config: Configuration block for VPC. See below.
         """
@@ -2784,6 +2962,7 @@ class Function(pulumi.CustomResource):
         __props__.__dict__["tenancy_config"] = tenancy_config
         __props__.__dict__["timeout"] = timeout
         __props__.__dict__["tracing_config"] = tracing_config
+        __props__.__dict__["use_resource_timeout_for_propagation"] = use_resource_timeout_for_propagation
         __props__.__dict__["version"] = version
         __props__.__dict__["vpc_config"] = vpc_config
         return Function(resource_name, opts=opts, __props__=__props__)
@@ -2880,7 +3059,7 @@ class Function(pulumi.CustomResource):
     @pulumi.getter(name="fileSystemConfig")
     def file_system_config(self) -> pulumi.Output[Optional['outputs.FunctionFileSystemConfig']]:
         """
-        Configuration block for EFS file system. See below.
+        Configuration block for EFS or S3 Files file system. See below.
         """
         return pulumi.get(self, "file_system_config")
 
@@ -2920,7 +3099,7 @@ class Function(pulumi.CustomResource):
     @pulumi.getter(name="kmsKeyArn")
     def kms_key_arn(self) -> pulumi.Output[Optional[_builtins.str]]:
         """
-        ARN of the AWS Key Management Service key used to encrypt environment variables. If not provided when environment variables are in use, AWS Lambda uses a default service key. If provided when environment variables are not in use, the AWS Lambda API does not save this configuration.
+        ARN of the KMS key used to encrypt environment variables. If not provided when environment variables are in use, AWS Lambda uses a default service key. If provided when environment variables are not in use, the AWS Lambda API does not save this configuration.
         """
         return pulumi.get(self, "kms_key_arn")
 
@@ -3138,7 +3317,7 @@ class Function(pulumi.CustomResource):
     @pulumi.getter(name="sourceKmsKeyArn")
     def source_kms_key_arn(self) -> pulumi.Output[Optional[_builtins.str]]:
         """
-        ARN of the AWS Key Management Service key used to encrypt the function's `.zip` deployment package. Conflicts with `image_uri`.
+        ARN of the KMS key used to encrypt the function's `.zip` deployment package. Conflicts with `image_uri`.
         """
         return pulumi.get(self, "source_kms_key_arn")
 
@@ -3181,6 +3360,14 @@ class Function(pulumi.CustomResource):
         Configuration block for X-Ray tracing. See below.
         """
         return pulumi.get(self, "tracing_config")
+
+    @_builtins.property
+    @pulumi.getter(name="useResourceTimeoutForPropagation")
+    def use_resource_timeout_for_propagation(self) -> pulumi.Output[Optional[_builtins.bool]]:
+        """
+        Whether to apply resource level timeout values while retrying eventually consistent API operations. By default the provider uses a 5 minute timeout to allow for propagation in the Lambda service. When set to `true`, this default value is replaced with the configurable resource timeouts. Increased timeout values may be useful in highly active accounts, or regions where propagation delays are inconsistent.
+        """
+        return pulumi.get(self, "use_resource_timeout_for_propagation")
 
     @_builtins.property
     @pulumi.getter

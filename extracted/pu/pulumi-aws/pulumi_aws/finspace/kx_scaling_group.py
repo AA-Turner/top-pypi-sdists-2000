@@ -22,17 +22,18 @@ class KxScalingGroupArgs:
                  availability_zone_id: pulumi.Input[_builtins.str],
                  environment_id: pulumi.Input[_builtins.str],
                  host_type: pulumi.Input[_builtins.str],
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a KxScalingGroup resource.
-        :param pulumi.Input[_builtins.str] availability_zone_id: The availability zone identifiers for the requested regions.
-        :param pulumi.Input[_builtins.str] environment_id: A unique identifier for the kdb environment, where you want to create the scaling group.
-        :param pulumi.Input[_builtins.str] host_type: The memory and CPU capabilities of the scaling group host on which FinSpace Managed kdb clusters will be placed.
+
+        :param pulumi.Input[_builtins.str] availability_zone_id: Availability zone identifiers for the requested regions.
+        :param pulumi.Input[_builtins.str] environment_id: Unique identifier for the kdb environment, where you want to create the scaling group.
+        :param pulumi.Input[_builtins.str] host_type: Memory and CPU capabilities of the scaling group host on which FinSpace Managed kdb clusters will be placed.
+        :param pulumi.Input[_builtins.str] name: Unique name for the scaling group that you want to create.
                
                The following arguments are optional:
-        :param pulumi.Input[_builtins.str] name: Unique name for the scaling group that you want to create.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value mapping of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level. You can add up to 50 tags to a scaling group.
         """
@@ -50,7 +51,7 @@ class KxScalingGroupArgs:
     @pulumi.getter(name="availabilityZoneId")
     def availability_zone_id(self) -> pulumi.Input[_builtins.str]:
         """
-        The availability zone identifiers for the requested regions.
+        Availability zone identifiers for the requested regions.
         """
         return pulumi.get(self, "availability_zone_id")
 
@@ -62,7 +63,7 @@ class KxScalingGroupArgs:
     @pulumi.getter(name="environmentId")
     def environment_id(self) -> pulumi.Input[_builtins.str]:
         """
-        A unique identifier for the kdb environment, where you want to create the scaling group.
+        Unique identifier for the kdb environment, where you want to create the scaling group.
         """
         return pulumi.get(self, "environment_id")
 
@@ -74,9 +75,7 @@ class KxScalingGroupArgs:
     @pulumi.getter(name="hostType")
     def host_type(self) -> pulumi.Input[_builtins.str]:
         """
-        The memory and CPU capabilities of the scaling group host on which FinSpace Managed kdb clusters will be placed.
-
-        The following arguments are optional:
+        Memory and CPU capabilities of the scaling group host on which FinSpace Managed kdb clusters will be placed.
         """
         return pulumi.get(self, "host_type")
 
@@ -86,80 +85,75 @@ class KxScalingGroupArgs:
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique name for the scaling group that you want to create.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value mapping of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level. You can add up to 50 tags to a scaling group.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _KxScalingGroupState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 availability_zone_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 clusters: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 created_timestamp: Optional[pulumi.Input[_builtins.str]] = None,
-                 environment_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 host_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 last_modified_timestamp: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 status_reason: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 availability_zone_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 clusters: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 created_timestamp: pulumi.Input[Optional[_builtins.str]] = None,
+                 environment_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 host_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 last_modified_timestamp: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 status_reason: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         Input properties used for looking up and filtering KxScalingGroup resources.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name (ARN) identifier of the KX Scaling Group.
-        :param pulumi.Input[_builtins.str] availability_zone_id: The availability zone identifiers for the requested regions.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] clusters: The list of Managed kdb clusters that are currently active in the given scaling group.
-        :param pulumi.Input[_builtins.str] created_timestamp: The timestamp at which the scaling group was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.
-        :param pulumi.Input[_builtins.str] environment_id: A unique identifier for the kdb environment, where you want to create the scaling group.
-        :param pulumi.Input[_builtins.str] host_type: The memory and CPU capabilities of the scaling group host on which FinSpace Managed kdb clusters will be placed.
-               
-               The following arguments are optional:
+
+        :param pulumi.Input[_builtins.str] arn: ARN identifier of the KX Scaling Group.
+        :param pulumi.Input[_builtins.str] availability_zone_id: Availability zone identifiers for the requested regions.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] clusters: List of Managed kdb clusters that are currently active in the given scaling group.
+        :param pulumi.Input[_builtins.str] created_timestamp: Timestamp at which the scaling group was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.
+        :param pulumi.Input[_builtins.str] environment_id: Unique identifier for the kdb environment, where you want to create the scaling group.
+        :param pulumi.Input[_builtins.str] host_type: Memory and CPU capabilities of the scaling group host on which FinSpace Managed kdb clusters will be placed.
         :param pulumi.Input[_builtins.str] last_modified_timestamp: Last timestamp at which the scaling group was updated in FinSpace. Value determined as epoch time in seconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000.
         :param pulumi.Input[_builtins.str] name: Unique name for the scaling group that you want to create.
+               
+               The following arguments are optional:
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] status: The status of scaling group.
-               * `CREATING` - The scaling group creation is in progress.
-               * `CREATE_FAILED` - The scaling group creation has failed.
-               * `ACTIVE` - The scaling group is active.
-               * `UPDATING` - The scaling group is in the process of being updated.
-               * `UPDATE_FAILED` - The update action failed.
-               * `DELETING` - The scaling group is in the process of being deleted.
-               * `DELETE_FAILED` - The system failed to delete the scaling group.
-               * `DELETED` - The scaling group is successfully deleted.
-        :param pulumi.Input[_builtins.str] status_reason: The error message when a failed state occurs.
+        :param pulumi.Input[_builtins.str] status: Status of scaling group (`CREATING`, `CREATE_FAILED`, `ACTIVE`, `UPDATING`, `UPDATE_FAILED`, `DELETING`, `DELETE_FAILED`, `DELETED`).
+        :param pulumi.Input[_builtins.str] status_reason: Error message when a failed state occurs.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value mapping of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level. You can add up to 50 tags to a scaling group.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
@@ -192,168 +186,160 @@ class _KxScalingGroupState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Amazon Resource Name (ARN) identifier of the KX Scaling Group.
+        ARN identifier of the KX Scaling Group.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="availabilityZoneId")
-    def availability_zone_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def availability_zone_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The availability zone identifiers for the requested regions.
+        Availability zone identifiers for the requested regions.
         """
         return pulumi.get(self, "availability_zone_id")
 
     @availability_zone_id.setter
-    def availability_zone_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def availability_zone_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "availability_zone_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def clusters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def clusters(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        The list of Managed kdb clusters that are currently active in the given scaling group.
+        List of Managed kdb clusters that are currently active in the given scaling group.
         """
         return pulumi.get(self, "clusters")
 
     @clusters.setter
-    def clusters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def clusters(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "clusters", value)
 
     @_builtins.property
     @pulumi.getter(name="createdTimestamp")
-    def created_timestamp(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def created_timestamp(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The timestamp at which the scaling group was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.
+        Timestamp at which the scaling group was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.
         """
         return pulumi.get(self, "created_timestamp")
 
     @created_timestamp.setter
-    def created_timestamp(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def created_timestamp(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "created_timestamp", value)
 
     @_builtins.property
     @pulumi.getter(name="environmentId")
-    def environment_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def environment_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        A unique identifier for the kdb environment, where you want to create the scaling group.
+        Unique identifier for the kdb environment, where you want to create the scaling group.
         """
         return pulumi.get(self, "environment_id")
 
     @environment_id.setter
-    def environment_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def environment_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "environment_id", value)
 
     @_builtins.property
     @pulumi.getter(name="hostType")
-    def host_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def host_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The memory and CPU capabilities of the scaling group host on which FinSpace Managed kdb clusters will be placed.
-
-        The following arguments are optional:
+        Memory and CPU capabilities of the scaling group host on which FinSpace Managed kdb clusters will be placed.
         """
         return pulumi.get(self, "host_type")
 
     @host_type.setter
-    def host_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def host_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "host_type", value)
 
     @_builtins.property
     @pulumi.getter(name="lastModifiedTimestamp")
-    def last_modified_timestamp(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def last_modified_timestamp(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Last timestamp at which the scaling group was updated in FinSpace. Value determined as epoch time in seconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000.
         """
         return pulumi.get(self, "last_modified_timestamp")
 
     @last_modified_timestamp.setter
-    def last_modified_timestamp(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def last_modified_timestamp(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "last_modified_timestamp", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique name for the scaling group that you want to create.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The status of scaling group.
-        * `CREATING` - The scaling group creation is in progress.
-        * `CREATE_FAILED` - The scaling group creation has failed.
-        * `ACTIVE` - The scaling group is active.
-        * `UPDATING` - The scaling group is in the process of being updated.
-        * `UPDATE_FAILED` - The update action failed.
-        * `DELETING` - The scaling group is in the process of being deleted.
-        * `DELETE_FAILED` - The system failed to delete the scaling group.
-        * `DELETED` - The scaling group is successfully deleted.
+        Status of scaling group (`CREATING`, `CREATE_FAILED`, `ACTIVE`, `UPDATING`, `UPDATE_FAILED`, `DELETING`, `DELETE_FAILED`, `DELETED`).
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
     @_builtins.property
     @pulumi.getter(name="statusReason")
-    def status_reason(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status_reason(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The error message when a failed state occurs.
+        Error message when a failed state occurs.
         """
         return pulumi.get(self, "status_reason")
 
     @status_reason.setter
-    def status_reason(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status_reason(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status_reason", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value mapping of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level. You can add up to 50 tags to a scaling group.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
 
@@ -363,12 +349,12 @@ class KxScalingGroup(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 availability_zone_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 environment_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 host_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 availability_zone_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 environment_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 host_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Resource for managing an AWS FinSpace Kx Scaling Group.
@@ -396,14 +382,15 @@ class KxScalingGroup(pulumi.CustomResource):
         $ pulumi import aws:finspace/kxScalingGroup:KxScalingGroup example n3ceo7wqxoxcti5tujqwzs,my-tf-kx-scalinggroup
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] availability_zone_id: The availability zone identifiers for the requested regions.
-        :param pulumi.Input[_builtins.str] environment_id: A unique identifier for the kdb environment, where you want to create the scaling group.
-        :param pulumi.Input[_builtins.str] host_type: The memory and CPU capabilities of the scaling group host on which FinSpace Managed kdb clusters will be placed.
+        :param pulumi.Input[_builtins.str] availability_zone_id: Availability zone identifiers for the requested regions.
+        :param pulumi.Input[_builtins.str] environment_id: Unique identifier for the kdb environment, where you want to create the scaling group.
+        :param pulumi.Input[_builtins.str] host_type: Memory and CPU capabilities of the scaling group host on which FinSpace Managed kdb clusters will be placed.
+        :param pulumi.Input[_builtins.str] name: Unique name for the scaling group that you want to create.
                
                The following arguments are optional:
-        :param pulumi.Input[_builtins.str] name: Unique name for the scaling group that you want to create.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value mapping of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level. You can add up to 50 tags to a scaling group.
         """
@@ -439,6 +426,7 @@ class KxScalingGroup(pulumi.CustomResource):
         $ pulumi import aws:finspace/kxScalingGroup:KxScalingGroup example n3ceo7wqxoxcti5tujqwzs,my-tf-kx-scalinggroup
         ```
 
+
         :param str resource_name: The name of the resource.
         :param KxScalingGroupArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -454,12 +442,12 @@ class KxScalingGroup(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 availability_zone_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 environment_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 host_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 availability_zone_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 environment_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 host_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -498,19 +486,19 @@ class KxScalingGroup(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            availability_zone_id: Optional[pulumi.Input[_builtins.str]] = None,
-            clusters: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            created_timestamp: Optional[pulumi.Input[_builtins.str]] = None,
-            environment_id: Optional[pulumi.Input[_builtins.str]] = None,
-            host_type: Optional[pulumi.Input[_builtins.str]] = None,
-            last_modified_timestamp: Optional[pulumi.Input[_builtins.str]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            status: Optional[pulumi.Input[_builtins.str]] = None,
-            status_reason: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'KxScalingGroup':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            availability_zone_id: pulumi.Input[Optional[_builtins.str]] = None,
+            clusters: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            created_timestamp: pulumi.Input[Optional[_builtins.str]] = None,
+            environment_id: pulumi.Input[Optional[_builtins.str]] = None,
+            host_type: pulumi.Input[Optional[_builtins.str]] = None,
+            last_modified_timestamp: pulumi.Input[Optional[_builtins.str]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            status: pulumi.Input[Optional[_builtins.str]] = None,
+            status_reason: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'KxScalingGroup':
         """
         Get an existing KxScalingGroup resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -518,27 +506,19 @@ class KxScalingGroup(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name (ARN) identifier of the KX Scaling Group.
-        :param pulumi.Input[_builtins.str] availability_zone_id: The availability zone identifiers for the requested regions.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] clusters: The list of Managed kdb clusters that are currently active in the given scaling group.
-        :param pulumi.Input[_builtins.str] created_timestamp: The timestamp at which the scaling group was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.
-        :param pulumi.Input[_builtins.str] environment_id: A unique identifier for the kdb environment, where you want to create the scaling group.
-        :param pulumi.Input[_builtins.str] host_type: The memory and CPU capabilities of the scaling group host on which FinSpace Managed kdb clusters will be placed.
-               
-               The following arguments are optional:
+        :param pulumi.Input[_builtins.str] arn: ARN identifier of the KX Scaling Group.
+        :param pulumi.Input[_builtins.str] availability_zone_id: Availability zone identifiers for the requested regions.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] clusters: List of Managed kdb clusters that are currently active in the given scaling group.
+        :param pulumi.Input[_builtins.str] created_timestamp: Timestamp at which the scaling group was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.
+        :param pulumi.Input[_builtins.str] environment_id: Unique identifier for the kdb environment, where you want to create the scaling group.
+        :param pulumi.Input[_builtins.str] host_type: Memory and CPU capabilities of the scaling group host on which FinSpace Managed kdb clusters will be placed.
         :param pulumi.Input[_builtins.str] last_modified_timestamp: Last timestamp at which the scaling group was updated in FinSpace. Value determined as epoch time in seconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000.
         :param pulumi.Input[_builtins.str] name: Unique name for the scaling group that you want to create.
+               
+               The following arguments are optional:
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] status: The status of scaling group.
-               * `CREATING` - The scaling group creation is in progress.
-               * `CREATE_FAILED` - The scaling group creation has failed.
-               * `ACTIVE` - The scaling group is active.
-               * `UPDATING` - The scaling group is in the process of being updated.
-               * `UPDATE_FAILED` - The update action failed.
-               * `DELETING` - The scaling group is in the process of being deleted.
-               * `DELETE_FAILED` - The system failed to delete the scaling group.
-               * `DELETED` - The scaling group is successfully deleted.
-        :param pulumi.Input[_builtins.str] status_reason: The error message when a failed state occurs.
+        :param pulumi.Input[_builtins.str] status: Status of scaling group (`CREATING`, `CREATE_FAILED`, `ACTIVE`, `UPDATING`, `UPDATE_FAILED`, `DELETING`, `DELETE_FAILED`, `DELETED`).
+        :param pulumi.Input[_builtins.str] status_reason: Error message when a failed state occurs.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value mapping of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level. You can add up to 50 tags to a scaling group.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
@@ -565,7 +545,7 @@ class KxScalingGroup(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        Amazon Resource Name (ARN) identifier of the KX Scaling Group.
+        ARN identifier of the KX Scaling Group.
         """
         return pulumi.get(self, "arn")
 
@@ -573,7 +553,7 @@ class KxScalingGroup(pulumi.CustomResource):
     @pulumi.getter(name="availabilityZoneId")
     def availability_zone_id(self) -> pulumi.Output[_builtins.str]:
         """
-        The availability zone identifiers for the requested regions.
+        Availability zone identifiers for the requested regions.
         """
         return pulumi.get(self, "availability_zone_id")
 
@@ -581,7 +561,7 @@ class KxScalingGroup(pulumi.CustomResource):
     @pulumi.getter
     def clusters(self) -> pulumi.Output[Sequence[_builtins.str]]:
         """
-        The list of Managed kdb clusters that are currently active in the given scaling group.
+        List of Managed kdb clusters that are currently active in the given scaling group.
         """
         return pulumi.get(self, "clusters")
 
@@ -589,7 +569,7 @@ class KxScalingGroup(pulumi.CustomResource):
     @pulumi.getter(name="createdTimestamp")
     def created_timestamp(self) -> pulumi.Output[_builtins.str]:
         """
-        The timestamp at which the scaling group was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.
+        Timestamp at which the scaling group was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.
         """
         return pulumi.get(self, "created_timestamp")
 
@@ -597,7 +577,7 @@ class KxScalingGroup(pulumi.CustomResource):
     @pulumi.getter(name="environmentId")
     def environment_id(self) -> pulumi.Output[_builtins.str]:
         """
-        A unique identifier for the kdb environment, where you want to create the scaling group.
+        Unique identifier for the kdb environment, where you want to create the scaling group.
         """
         return pulumi.get(self, "environment_id")
 
@@ -605,9 +585,7 @@ class KxScalingGroup(pulumi.CustomResource):
     @pulumi.getter(name="hostType")
     def host_type(self) -> pulumi.Output[_builtins.str]:
         """
-        The memory and CPU capabilities of the scaling group host on which FinSpace Managed kdb clusters will be placed.
-
-        The following arguments are optional:
+        Memory and CPU capabilities of the scaling group host on which FinSpace Managed kdb clusters will be placed.
         """
         return pulumi.get(self, "host_type")
 
@@ -624,6 +602,8 @@ class KxScalingGroup(pulumi.CustomResource):
     def name(self) -> pulumi.Output[_builtins.str]:
         """
         Unique name for the scaling group that you want to create.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "name")
 
@@ -639,15 +619,7 @@ class KxScalingGroup(pulumi.CustomResource):
     @pulumi.getter
     def status(self) -> pulumi.Output[_builtins.str]:
         """
-        The status of scaling group.
-        * `CREATING` - The scaling group creation is in progress.
-        * `CREATE_FAILED` - The scaling group creation has failed.
-        * `ACTIVE` - The scaling group is active.
-        * `UPDATING` - The scaling group is in the process of being updated.
-        * `UPDATE_FAILED` - The update action failed.
-        * `DELETING` - The scaling group is in the process of being deleted.
-        * `DELETE_FAILED` - The system failed to delete the scaling group.
-        * `DELETED` - The scaling group is successfully deleted.
+        Status of scaling group (`CREATING`, `CREATE_FAILED`, `ACTIVE`, `UPDATING`, `UPDATE_FAILED`, `DELETING`, `DELETE_FAILED`, `DELETED`).
         """
         return pulumi.get(self, "status")
 
@@ -655,7 +627,7 @@ class KxScalingGroup(pulumi.CustomResource):
     @pulumi.getter(name="statusReason")
     def status_reason(self) -> pulumi.Output[_builtins.str]:
         """
-        The error message when a failed state occurs.
+        Error message when a failed state occurs.
         """
         return pulumi.get(self, "status_reason")
 

@@ -110,8 +110,8 @@ def get_subnets(filters: Optional[Sequence[Union['GetSubnetsFilterArgs', 'GetSub
         "name": "vpc-id",
         "values": [vpc_id],
     }])
-    example_get_subnet = {__key: aws.ec2.get_subnet(id=__value) for __key, __value in std.toset(input=example.ids).result}
-    pulumi.export("subnetCidrBlocks", [s.cidr_block for s in example_get_subnet])
+    example_get_subnet = {str(__key): aws.ec2.get_subnet(id=__value) for __key, __value in enumerate(std.toset(input=example.ids).result)}
+    pulumi.export("subnetCidrBlocks", [s.cidr_block for s in example_get_subnet.values()])
     ```
 
     The following example retrieves a set of all subnets in a VPC with a custom
@@ -120,8 +120,8 @@ def get_subnets(filters: Optional[Sequence[Union['GetSubnetsFilterArgs', 'GetSub
 
     ```python
     import pulumi
+    from typing import Any
     import pulumi_aws as aws
-    import pulumi_std as std
 
     private = aws.ec2.get_subnets(filters=[{
             "name": "vpc-id",
@@ -130,12 +130,12 @@ def get_subnets(filters: Optional[Sequence[Union['GetSubnetsFilterArgs', 'GetSub
         tags={
             "Tier": "Private",
         })
-    app = []
-    for range in [{"key": k, "value": v} for [k, v] in enumerate(std.toset(input=private.ids).result)]:
-        app.append(aws.ec2.Instance(f"app-{range['key']}",
+    app: list[aws.ec2.Instance] = []
+    for app_range in [{"key": k, "value": v} for [k, v] in enumerate({entry: entry for entry in private.ids})]:
+        app.append(aws.ec2.Instance(f"app-{app_range['key']}",
             ami=ami,
             instance_type=aws.ec2.InstanceType.T2_MICRO,
-            subnet_id=range["value"]))
+            subnet_id=app_range["value"]))
     ```
 
 
@@ -157,9 +157,9 @@ def get_subnets(filters: Optional[Sequence[Union['GetSubnetsFilterArgs', 'GetSub
         ids=pulumi.get(__ret__, 'ids'),
         region=pulumi.get(__ret__, 'region'),
         tags=pulumi.get(__ret__, 'tags'))
-def get_subnets_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['GetSubnetsFilterArgs', 'GetSubnetsFilterArgsDict']]]]] = None,
-                       region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                       tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_subnets_output(filters: pulumi.Input[Optional[Optional[Sequence[Union['GetSubnetsFilterArgs', 'GetSubnetsFilterArgsDict']]]]] = None,
+                       region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                       tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                        opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetSubnetsResult]:
     """
     This resource can be useful for getting back a set of subnet IDs.
@@ -177,8 +177,8 @@ def get_subnets_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['G
         "name": "vpc-id",
         "values": [vpc_id],
     }])
-    example_get_subnet = {__key: aws.ec2.get_subnet(id=__value) for __key, __value in std.toset(input=example.ids).result}
-    pulumi.export("subnetCidrBlocks", [s.cidr_block for s in example_get_subnet])
+    example_get_subnet = {str(__key): aws.ec2.get_subnet(id=__value) for __key, __value in enumerate(std.toset(input=example.ids).result)}
+    pulumi.export("subnetCidrBlocks", [s.cidr_block for s in example_get_subnet.values()])
     ```
 
     The following example retrieves a set of all subnets in a VPC with a custom
@@ -187,8 +187,8 @@ def get_subnets_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['G
 
     ```python
     import pulumi
+    from typing import Any
     import pulumi_aws as aws
-    import pulumi_std as std
 
     private = aws.ec2.get_subnets(filters=[{
             "name": "vpc-id",
@@ -197,12 +197,12 @@ def get_subnets_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['G
         tags={
             "Tier": "Private",
         })
-    app = []
-    for range in [{"key": k, "value": v} for [k, v] in enumerate(std.toset(input=private.ids).result)]:
-        app.append(aws.ec2.Instance(f"app-{range['key']}",
+    app: list[aws.ec2.Instance] = []
+    for app_range in [{"key": k, "value": v} for [k, v] in enumerate({entry: entry for entry in private.ids})]:
+        app.append(aws.ec2.Instance(f"app-{app_range['key']}",
             ami=ami,
             instance_type=aws.ec2.InstanceType.T2_MICRO,
-            subnet_id=range["value"]))
+            subnet_id=app_range["value"]))
     ```
 
 

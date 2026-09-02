@@ -20,10 +20,11 @@ __all__ = ['PeeringAttachmentAccepterArgs', 'PeeringAttachmentAccepter']
 class PeeringAttachmentAccepterArgs:
     def __init__(__self__, *,
                  transit_gateway_attachment_id: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a PeeringAttachmentAccepter resource.
+
         :param pulumi.Input[_builtins.str] transit_gateway_attachment_id: The ID of the EC2 Transit Gateway Peering Attachment to manage.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value tags for the EC2 Transit Gateway Peering Attachment. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
@@ -48,42 +49,43 @@ class PeeringAttachmentAccepterArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value tags for the EC2 Transit Gateway Peering Attachment. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _PeeringAttachmentAccepterState:
     def __init__(__self__, *,
-                 peer_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 peer_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 peer_transit_gateway_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 transit_gateway_attachment_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 transit_gateway_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 peer_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 peer_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 peer_transit_gateway_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 transit_gateway_attachment_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 transit_gateway_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering PeeringAttachmentAccepter resources.
+
         :param pulumi.Input[_builtins.str] peer_account_id: Identifier of the AWS account that owns the EC2 TGW peering.
         :param pulumi.Input[_builtins.str] peer_transit_gateway_id: Identifier of EC2 Transit Gateway to peer with.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -111,95 +113,95 @@ class _PeeringAttachmentAccepterState:
 
     @_builtins.property
     @pulumi.getter(name="peerAccountId")
-    def peer_account_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def peer_account_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Identifier of the AWS account that owns the EC2 TGW peering.
         """
         return pulumi.get(self, "peer_account_id")
 
     @peer_account_id.setter
-    def peer_account_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def peer_account_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "peer_account_id", value)
 
     @_builtins.property
     @pulumi.getter(name="peerRegion")
-    def peer_region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def peer_region(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "peer_region")
 
     @peer_region.setter
-    def peer_region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def peer_region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "peer_region", value)
 
     @_builtins.property
     @pulumi.getter(name="peerTransitGatewayId")
-    def peer_transit_gateway_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def peer_transit_gateway_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Identifier of EC2 Transit Gateway to peer with.
         """
         return pulumi.get(self, "peer_transit_gateway_id")
 
     @peer_transit_gateway_id.setter
-    def peer_transit_gateway_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def peer_transit_gateway_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "peer_transit_gateway_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value tags for the EC2 Transit Gateway Peering Attachment. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter(name="transitGatewayAttachmentId")
-    def transit_gateway_attachment_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def transit_gateway_attachment_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the EC2 Transit Gateway Peering Attachment to manage.
         """
         return pulumi.get(self, "transit_gateway_attachment_id")
 
     @transit_gateway_attachment_id.setter
-    def transit_gateway_attachment_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def transit_gateway_attachment_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "transit_gateway_attachment_id", value)
 
     @_builtins.property
     @pulumi.getter(name="transitGatewayId")
-    def transit_gateway_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def transit_gateway_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Identifier of EC2 Transit Gateway.
         """
         return pulumi.get(self, "transit_gateway_id")
 
     @transit_gateway_id.setter
-    def transit_gateway_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def transit_gateway_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "transit_gateway_id", value)
 
 
@@ -209,9 +211,9 @@ class PeeringAttachmentAccepter(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 transit_gateway_attachment_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 transit_gateway_attachment_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Manages the accepter's side of an EC2 Transit Gateway Peering Attachment.
@@ -236,6 +238,7 @@ class PeeringAttachmentAccepter(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:ec2transitgateway/peeringAttachmentAccepter:PeeringAttachmentAccepter example tgw-attach-12345678
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -273,6 +276,7 @@ class PeeringAttachmentAccepter(pulumi.CustomResource):
         $ pulumi import aws:ec2transitgateway/peeringAttachmentAccepter:PeeringAttachmentAccepter example tgw-attach-12345678
         ```
 
+
         :param str resource_name: The name of the resource.
         :param PeeringAttachmentAccepterArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -288,9 +292,9 @@ class PeeringAttachmentAccepter(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 transit_gateway_attachment_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 transit_gateway_attachment_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -322,14 +326,14 @@ class PeeringAttachmentAccepter(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            peer_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-            peer_region: Optional[pulumi.Input[_builtins.str]] = None,
-            peer_transit_gateway_id: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            transit_gateway_attachment_id: Optional[pulumi.Input[_builtins.str]] = None,
-            transit_gateway_id: Optional[pulumi.Input[_builtins.str]] = None) -> 'PeeringAttachmentAccepter':
+            peer_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+            peer_region: pulumi.Input[Optional[_builtins.str]] = None,
+            peer_transit_gateway_id: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            transit_gateway_attachment_id: pulumi.Input[Optional[_builtins.str]] = None,
+            transit_gateway_id: pulumi.Input[Optional[_builtins.str]] = None) -> 'PeeringAttachmentAccepter':
         """
         Get an existing PeeringAttachmentAccepter resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import List, Tuple
 
 import numpy as np
 
@@ -24,17 +23,17 @@ from cvxpy.constraints.constraint import Constraint
 
 
 class conj(AffAtom):
-    """Complex conjugate.
+    """Elementwise complex conjugate.
     """
     def __init__(self, expr) -> None:
         super(conj, self).__init__(expr)
 
     def numeric(self, values):
-        """Convert the vector constant into a diagonal matrix.
+        """Elementwise Complex conjugate of an array
         """
         return np.conj(values[0])
 
-    def shape_from_args(self) -> Tuple[int, ...]:
+    def shape_from_args(self) -> tuple[int, ...]:
         """Returns the shape of the expression.
         """
         return self.args[0].shape
@@ -60,8 +59,8 @@ class conj(AffAtom):
         return self.args[0].is_hermitian()
 
     def graph_implementation(
-        self, arg_objs, shape: Tuple[int, ...], data=None
-    ) -> Tuple[lo.LinOp, List[Constraint]]:
+        self, arg_objs, shape: tuple[int, ...], data=None
+    ) -> tuple[lo.LinOp, list[Constraint]]:
         """Multiply the linear expressions.
 
         Parameters

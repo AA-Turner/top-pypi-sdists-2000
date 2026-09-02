@@ -223,7 +223,7 @@ class GetClusterResult:
     @pulumi.getter(name="clusterNamespaceArn")
     def cluster_namespace_arn(self) -> _builtins.str:
         """
-        The namespace Amazon Resource Name (ARN) of the cluster
+        Namespace ARN of the cluster
         """
         return pulumi.get(self, "cluster_namespace_arn")
 
@@ -551,16 +551,7 @@ def get_cluster(cluster_identifier: Optional[_builtins.str] = None,
 
     example = aws.redshift.get_cluster(cluster_identifier="example-cluster")
     example_stream = aws.kinesis.FirehoseDeliveryStream("example_stream",
-        name="kinesis-firehose-example-stream",
-        destination="redshift",
         redshift_configuration={
-            "role_arn": firehose_role["arn"],
-            "cluster_jdbcurl": f"jdbc:redshift://{example.endpoint}/{example.database_name}",
-            "username": "exampleuser",
-            "password": "Exampl3Pass",
-            "data_table_name": "example-table",
-            "copy_options": "delimiter '|'",
-            "data_table_columns": "example-col",
             "s3_configuration": {
                 "role_arn": firehose_role["arn"],
                 "bucket_arn": bucket["arn"],
@@ -568,7 +559,16 @@ def get_cluster(cluster_identifier: Optional[_builtins.str] = None,
                 "buffer_interval": 400,
                 "compression_format": "GZIP",
             },
-        })
+            "role_arn": firehose_role["arn"],
+            "cluster_jdbcurl": f"jdbc:redshift://{example.endpoint}/{example.database_name}",
+            "username": "exampleuser",
+            "password": "Exampl3Pass",
+            "data_table_name": "example-table",
+            "copy_options": "delimiter '|'",
+            "data_table_columns": "example-col",
+        },
+        name="kinesis-firehose-example-stream",
+        destination="redshift")
     ```
 
 
@@ -626,9 +626,9 @@ def get_cluster(cluster_identifier: Optional[_builtins.str] = None,
         tags=pulumi.get(__ret__, 'tags'),
         vpc_id=pulumi.get(__ret__, 'vpc_id'),
         vpc_security_group_ids=pulumi.get(__ret__, 'vpc_security_group_ids'))
-def get_cluster_output(cluster_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                       region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                       tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_cluster_output(cluster_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                       region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                       tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                        opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetClusterResult]:
     """
     Provides details about a specific redshift cluster.
@@ -641,16 +641,7 @@ def get_cluster_output(cluster_identifier: Optional[pulumi.Input[_builtins.str]]
 
     example = aws.redshift.get_cluster(cluster_identifier="example-cluster")
     example_stream = aws.kinesis.FirehoseDeliveryStream("example_stream",
-        name="kinesis-firehose-example-stream",
-        destination="redshift",
         redshift_configuration={
-            "role_arn": firehose_role["arn"],
-            "cluster_jdbcurl": f"jdbc:redshift://{example.endpoint}/{example.database_name}",
-            "username": "exampleuser",
-            "password": "Exampl3Pass",
-            "data_table_name": "example-table",
-            "copy_options": "delimiter '|'",
-            "data_table_columns": "example-col",
             "s3_configuration": {
                 "role_arn": firehose_role["arn"],
                 "bucket_arn": bucket["arn"],
@@ -658,7 +649,16 @@ def get_cluster_output(cluster_identifier: Optional[pulumi.Input[_builtins.str]]
                 "buffer_interval": 400,
                 "compression_format": "GZIP",
             },
-        })
+            "role_arn": firehose_role["arn"],
+            "cluster_jdbcurl": f"jdbc:redshift://{example.endpoint}/{example.database_name}",
+            "username": "exampleuser",
+            "password": "Exampl3Pass",
+            "data_table_name": "example-table",
+            "copy_options": "delimiter '|'",
+            "data_table_columns": "example-col",
+        },
+        name="kinesis-firehose-example-stream",
+        destination="redshift")
     ```
 
 

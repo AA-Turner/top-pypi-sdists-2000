@@ -23,18 +23,24 @@ __all__ = ['LogResourcePolicyArgs', 'LogResourcePolicy']
 class LogResourcePolicyArgs:
     def __init__(__self__, *,
                  policy_document: pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']],
-                 policy_name: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 policy_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_arn: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a LogResourcePolicy resource.
+
         :param pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']] policy_document: Details of the resource policy, including the identity of the principal that is enabled to put logs to this account. This is formatted as a JSON string. Maximum length of 5120 characters.
-        :param pulumi.Input[_builtins.str] policy_name: Name of the resource policy.
+        :param pulumi.Input[_builtins.str] policy_name: Name of the resource policy. Exactly one of `policy_name` or `resource_arn` must be specified and this argument is required for account-scoped policies. Note that the number of resource policies without `resource_arn` is limited to 10 per region.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[_builtins.str] resource_arn: ARN of the CloudWatch Logs resource to which the resource policy is attached. Exactly one of `policy_name` or `resource_arn` must be specified and this argument is required for resource-scoped policies. Only one policy can be attached per log group resource ARN.
         """
         pulumi.set(__self__, "policy_document", policy_document)
-        pulumi.set(__self__, "policy_name", policy_name)
+        if policy_name is not None:
+            pulumi.set(__self__, "policy_name", policy_name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if resource_arn is not None:
+            pulumi.set(__self__, "resource_arn", resource_arn)
 
     @_builtins.property
     @pulumi.getter(name="policyDocument")
@@ -50,83 +56,144 @@ class LogResourcePolicyArgs:
 
     @_builtins.property
     @pulumi.getter(name="policyName")
-    def policy_name(self) -> pulumi.Input[_builtins.str]:
+    def policy_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Name of the resource policy.
+        Name of the resource policy. Exactly one of `policy_name` or `resource_arn` must be specified and this argument is required for account-scoped policies. Note that the number of resource policies without `resource_arn` is limited to 10 per region.
         """
         return pulumi.get(self, "policy_name")
 
     @policy_name.setter
-    def policy_name(self, value: pulumi.Input[_builtins.str]):
+    def policy_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "policy_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
+
+    @_builtins.property
+    @pulumi.getter(name="resourceArn")
+    def resource_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        ARN of the CloudWatch Logs resource to which the resource policy is attached. Exactly one of `policy_name` or `resource_arn` must be specified and this argument is required for resource-scoped policies. Only one policy can be attached per log group resource ARN.
+        """
+        return pulumi.get(self, "resource_arn")
+
+    @resource_arn.setter
+    def resource_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "resource_arn", value)
 
 
 @pulumi.input_type
 class _LogResourcePolicyState:
     def __init__(__self__, *,
-                 policy_document: Optional[pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']]] = None,
-                 policy_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 policy_document: pulumi.Input[Optional[Union[_builtins.str, 'PolicyDocumentArgs']]] = None,
+                 policy_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 policy_scope: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 revision_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering LogResourcePolicy resources.
+
         :param pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']] policy_document: Details of the resource policy, including the identity of the principal that is enabled to put logs to this account. This is formatted as a JSON string. Maximum length of 5120 characters.
-        :param pulumi.Input[_builtins.str] policy_name: Name of the resource policy.
+        :param pulumi.Input[_builtins.str] policy_name: Name of the resource policy. Exactly one of `policy_name` or `resource_arn` must be specified and this argument is required for account-scoped policies. Note that the number of resource policies without `resource_arn` is limited to 10 per region.
+        :param pulumi.Input[_builtins.str] policy_scope: Scope of the resource policy (`ACCOUNT` or `RESOURCE`).
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[_builtins.str] resource_arn: ARN of the CloudWatch Logs resource to which the resource policy is attached. Exactly one of `policy_name` or `resource_arn` must be specified and this argument is required for resource-scoped policies. Only one policy can be attached per log group resource ARN.
+        :param pulumi.Input[_builtins.str] revision_id: Revision ID of the resource policy. Only populated for resource-scoped policies.
         """
         if policy_document is not None:
             pulumi.set(__self__, "policy_document", policy_document)
         if policy_name is not None:
             pulumi.set(__self__, "policy_name", policy_name)
+        if policy_scope is not None:
+            pulumi.set(__self__, "policy_scope", policy_scope)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if resource_arn is not None:
+            pulumi.set(__self__, "resource_arn", resource_arn)
+        if revision_id is not None:
+            pulumi.set(__self__, "revision_id", revision_id)
 
     @_builtins.property
     @pulumi.getter(name="policyDocument")
-    def policy_document(self) -> Optional[pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']]]:
+    def policy_document(self) -> pulumi.Input[Optional[Union[_builtins.str, 'PolicyDocumentArgs']]]:
         """
         Details of the resource policy, including the identity of the principal that is enabled to put logs to this account. This is formatted as a JSON string. Maximum length of 5120 characters.
         """
         return pulumi.get(self, "policy_document")
 
     @policy_document.setter
-    def policy_document(self, value: Optional[pulumi.Input[Union[_builtins.str, 'PolicyDocumentArgs']]]):
+    def policy_document(self, value: pulumi.Input[Optional[Union[_builtins.str, 'PolicyDocumentArgs']]]):
         pulumi.set(self, "policy_document", value)
 
     @_builtins.property
     @pulumi.getter(name="policyName")
-    def policy_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def policy_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Name of the resource policy.
+        Name of the resource policy. Exactly one of `policy_name` or `resource_arn` must be specified and this argument is required for account-scoped policies. Note that the number of resource policies without `resource_arn` is limited to 10 per region.
         """
         return pulumi.get(self, "policy_name")
 
     @policy_name.setter
-    def policy_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def policy_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "policy_name", value)
 
     @_builtins.property
+    @pulumi.getter(name="policyScope")
+    def policy_scope(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Scope of the resource policy (`ACCOUNT` or `RESOURCE`).
+        """
+        return pulumi.get(self, "policy_scope")
+
+    @policy_scope.setter
+    def policy_scope(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "policy_scope", value)
+
+    @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
+
+    @_builtins.property
+    @pulumi.getter(name="resourceArn")
+    def resource_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        ARN of the CloudWatch Logs resource to which the resource policy is attached. Exactly one of `policy_name` or `resource_arn` must be specified and this argument is required for resource-scoped policies. Only one policy can be attached per log group resource ARN.
+        """
+        return pulumi.get(self, "resource_arn")
+
+    @resource_arn.setter
+    def resource_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "resource_arn", value)
+
+    @_builtins.property
+    @pulumi.getter(name="revisionId")
+    def revision_id(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Revision ID of the resource policy. Only populated for resource-scoped policies.
+        """
+        return pulumi.get(self, "revision_id")
+
+    @revision_id.setter
+    def revision_id(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "revision_id", value)
 
 
 @pulumi.type_token("aws:cloudwatch/logResourcePolicy:LogResourcePolicy")
@@ -135,9 +202,10 @@ class LogResourcePolicy(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 policy_document: Optional[pulumi.Input[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
-                 policy_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 policy_document: pulumi.Input[Optional[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
+                 policy_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides a resource to manage a CloudWatch log resource policy.
@@ -151,16 +219,16 @@ class LogResourcePolicy(pulumi.CustomResource):
         import pulumi_aws as aws
 
         elasticsearch_log_publishing_policy = aws.iam.get_policy_document(statements=[{
+            "principals": [{
+                "identifiers": ["es.amazonaws.com"],
+                "type": "Service",
+            }],
             "actions": [
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
                 "logs:PutLogEventsBatch",
             ],
             "resources": ["arn:aws:logs:*"],
-            "principals": [{
-                "identifiers": ["es.amazonaws.com"],
-                "type": "Service",
-            }],
         }])
         elasticsearch_log_publishing_policy_log_resource_policy = aws.cloudwatch.LogResourcePolicy("elasticsearch-log-publishing-policy",
             policy_document=elasticsearch_log_publishing_policy.json,
@@ -174,15 +242,15 @@ class LogResourcePolicy(pulumi.CustomResource):
         import pulumi_aws as aws
 
         route53_query_logging_policy = aws.iam.get_policy_document(statements=[{
+            "principals": [{
+                "identifiers": ["route53.amazonaws.com"],
+                "type": "Service",
+            }],
             "actions": [
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
             ],
             "resources": ["arn:aws:logs:*:*:log-group:/aws/route53/*"],
-            "principals": [{
-                "identifiers": ["route53.amazonaws.com"],
-                "type": "Service",
-            }],
         }])
         route53_query_logging_policy_log_resource_policy = aws.cloudwatch.LogResourcePolicy("route53-query-logging-policy",
             policy_document=route53_query_logging_policy.json,
@@ -191,17 +259,34 @@ class LogResourcePolicy(pulumi.CustomResource):
 
         ## Import
 
-        Using `pulumi import`, import CloudWatch log resource policies using the policy name. For example:
+        ### Identity Schema
+
+        Exactly one of `policy_name` or `resource_arn` must be configured.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `policy_name` (String) Name of the resource policy.
+        * `region` (String) Region where this resource is managed.
+        * `resource_arn` (String) ARN of the resource to which the policy is attached.
+
+        Using `pulumi import`, import Resource Policies using `policy_name` for account-scoped policies, or `resource_arn` for resource-scoped policies. For example:
 
         ```sh
-        $ pulumi import aws:cloudwatch/logResourcePolicy:LogResourcePolicy MyPolicy MyPolicy
+        $ pulumi import aws:cloudwatch/logResourcePolicy:LogResourcePolicy my_policy_account_scoped my_policy
         ```
+
+        ```sh
+        $ pulumi import aws:cloudwatch/logResourcePolicy:LogResourcePolicy my_policy_resource_scoped "arn:aws:logs:us-west-2:123456789012:log-group:/my-log-group"
+        ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]] policy_document: Details of the resource policy, including the identity of the principal that is enabled to put logs to this account. This is formatted as a JSON string. Maximum length of 5120 characters.
-        :param pulumi.Input[_builtins.str] policy_name: Name of the resource policy.
+        :param pulumi.Input[_builtins.str] policy_name: Name of the resource policy. Exactly one of `policy_name` or `resource_arn` must be specified and this argument is required for account-scoped policies. Note that the number of resource policies without `resource_arn` is limited to 10 per region.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[_builtins.str] resource_arn: ARN of the CloudWatch Logs resource to which the resource policy is attached. Exactly one of `policy_name` or `resource_arn` must be specified and this argument is required for resource-scoped policies. Only one policy can be attached per log group resource ARN.
         """
         ...
     @overload
@@ -221,16 +306,16 @@ class LogResourcePolicy(pulumi.CustomResource):
         import pulumi_aws as aws
 
         elasticsearch_log_publishing_policy = aws.iam.get_policy_document(statements=[{
+            "principals": [{
+                "identifiers": ["es.amazonaws.com"],
+                "type": "Service",
+            }],
             "actions": [
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
                 "logs:PutLogEventsBatch",
             ],
             "resources": ["arn:aws:logs:*"],
-            "principals": [{
-                "identifiers": ["es.amazonaws.com"],
-                "type": "Service",
-            }],
         }])
         elasticsearch_log_publishing_policy_log_resource_policy = aws.cloudwatch.LogResourcePolicy("elasticsearch-log-publishing-policy",
             policy_document=elasticsearch_log_publishing_policy.json,
@@ -244,15 +329,15 @@ class LogResourcePolicy(pulumi.CustomResource):
         import pulumi_aws as aws
 
         route53_query_logging_policy = aws.iam.get_policy_document(statements=[{
+            "principals": [{
+                "identifiers": ["route53.amazonaws.com"],
+                "type": "Service",
+            }],
             "actions": [
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
             ],
             "resources": ["arn:aws:logs:*:*:log-group:/aws/route53/*"],
-            "principals": [{
-                "identifiers": ["route53.amazonaws.com"],
-                "type": "Service",
-            }],
         }])
         route53_query_logging_policy_log_resource_policy = aws.cloudwatch.LogResourcePolicy("route53-query-logging-policy",
             policy_document=route53_query_logging_policy.json,
@@ -261,11 +346,27 @@ class LogResourcePolicy(pulumi.CustomResource):
 
         ## Import
 
-        Using `pulumi import`, import CloudWatch log resource policies using the policy name. For example:
+        ### Identity Schema
+
+        Exactly one of `policy_name` or `resource_arn` must be configured.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `policy_name` (String) Name of the resource policy.
+        * `region` (String) Region where this resource is managed.
+        * `resource_arn` (String) ARN of the resource to which the policy is attached.
+
+        Using `pulumi import`, import Resource Policies using `policy_name` for account-scoped policies, or `resource_arn` for resource-scoped policies. For example:
 
         ```sh
-        $ pulumi import aws:cloudwatch/logResourcePolicy:LogResourcePolicy MyPolicy MyPolicy
+        $ pulumi import aws:cloudwatch/logResourcePolicy:LogResourcePolicy my_policy_account_scoped my_policy
         ```
+
+        ```sh
+        $ pulumi import aws:cloudwatch/logResourcePolicy:LogResourcePolicy my_policy_resource_scoped "arn:aws:logs:us-west-2:123456789012:log-group:/my-log-group"
+        ```
+
 
         :param str resource_name: The name of the resource.
         :param LogResourcePolicyArgs args: The arguments to use to populate this resource's properties.
@@ -282,9 +383,10 @@ class LogResourcePolicy(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 policy_document: Optional[pulumi.Input[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
-                 policy_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 policy_document: pulumi.Input[Optional[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
+                 policy_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -297,10 +399,11 @@ class LogResourcePolicy(pulumi.CustomResource):
             if policy_document is None and not opts.urn:
                 raise TypeError("Missing required property 'policy_document'")
             __props__.__dict__["policy_document"] = policy_document
-            if policy_name is None and not opts.urn:
-                raise TypeError("Missing required property 'policy_name'")
             __props__.__dict__["policy_name"] = policy_name
             __props__.__dict__["region"] = region
+            __props__.__dict__["resource_arn"] = resource_arn
+            __props__.__dict__["policy_scope"] = None
+            __props__.__dict__["revision_id"] = None
         super(LogResourcePolicy, __self__).__init__(
             'aws:cloudwatch/logResourcePolicy:LogResourcePolicy',
             resource_name,
@@ -311,9 +414,12 @@ class LogResourcePolicy(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            policy_document: Optional[pulumi.Input[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
-            policy_name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'LogResourcePolicy':
+            policy_document: pulumi.Input[Optional[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]]] = None,
+            policy_name: pulumi.Input[Optional[_builtins.str]] = None,
+            policy_scope: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            resource_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            revision_id: pulumi.Input[Optional[_builtins.str]] = None) -> 'LogResourcePolicy':
         """
         Get an existing LogResourcePolicy resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -322,8 +428,11 @@ class LogResourcePolicy(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Union[_builtins.str, Union['PolicyDocumentArgs', 'PolicyDocumentArgsDict']]] policy_document: Details of the resource policy, including the identity of the principal that is enabled to put logs to this account. This is formatted as a JSON string. Maximum length of 5120 characters.
-        :param pulumi.Input[_builtins.str] policy_name: Name of the resource policy.
+        :param pulumi.Input[_builtins.str] policy_name: Name of the resource policy. Exactly one of `policy_name` or `resource_arn` must be specified and this argument is required for account-scoped policies. Note that the number of resource policies without `resource_arn` is limited to 10 per region.
+        :param pulumi.Input[_builtins.str] policy_scope: Scope of the resource policy (`ACCOUNT` or `RESOURCE`).
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[_builtins.str] resource_arn: ARN of the CloudWatch Logs resource to which the resource policy is attached. Exactly one of `policy_name` or `resource_arn` must be specified and this argument is required for resource-scoped policies. Only one policy can be attached per log group resource ARN.
+        :param pulumi.Input[_builtins.str] revision_id: Revision ID of the resource policy. Only populated for resource-scoped policies.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -331,7 +440,10 @@ class LogResourcePolicy(pulumi.CustomResource):
 
         __props__.__dict__["policy_document"] = policy_document
         __props__.__dict__["policy_name"] = policy_name
+        __props__.__dict__["policy_scope"] = policy_scope
         __props__.__dict__["region"] = region
+        __props__.__dict__["resource_arn"] = resource_arn
+        __props__.__dict__["revision_id"] = revision_id
         return LogResourcePolicy(resource_name, opts=opts, __props__=__props__)
 
     @_builtins.property
@@ -344,11 +456,19 @@ class LogResourcePolicy(pulumi.CustomResource):
 
     @_builtins.property
     @pulumi.getter(name="policyName")
-    def policy_name(self) -> pulumi.Output[_builtins.str]:
+    def policy_name(self) -> pulumi.Output[Optional[_builtins.str]]:
         """
-        Name of the resource policy.
+        Name of the resource policy. Exactly one of `policy_name` or `resource_arn` must be specified and this argument is required for account-scoped policies. Note that the number of resource policies without `resource_arn` is limited to 10 per region.
         """
         return pulumi.get(self, "policy_name")
+
+    @_builtins.property
+    @pulumi.getter(name="policyScope")
+    def policy_scope(self) -> pulumi.Output[_builtins.str]:
+        """
+        Scope of the resource policy (`ACCOUNT` or `RESOURCE`).
+        """
+        return pulumi.get(self, "policy_scope")
 
     @_builtins.property
     @pulumi.getter
@@ -357,4 +477,20 @@ class LogResourcePolicy(pulumi.CustomResource):
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
+
+    @_builtins.property
+    @pulumi.getter(name="resourceArn")
+    def resource_arn(self) -> pulumi.Output[Optional[_builtins.str]]:
+        """
+        ARN of the CloudWatch Logs resource to which the resource policy is attached. Exactly one of `policy_name` or `resource_arn` must be specified and this argument is required for resource-scoped policies. Only one policy can be attached per log group resource ARN.
+        """
+        return pulumi.get(self, "resource_arn")
+
+    @_builtins.property
+    @pulumi.getter(name="revisionId")
+    def revision_id(self) -> pulumi.Output[_builtins.str]:
+        """
+        Revision ID of the resource policy. Only populated for resource-scoped policies.
+        """
+        return pulumi.get(self, "revision_id")
 

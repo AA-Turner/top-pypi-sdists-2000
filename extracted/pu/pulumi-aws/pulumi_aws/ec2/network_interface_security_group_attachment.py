@@ -21,9 +21,10 @@ class NetworkInterfaceSecurityGroupAttachmentArgs:
     def __init__(__self__, *,
                  network_interface_id: pulumi.Input[_builtins.str],
                  security_group_id: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a NetworkInterfaceSecurityGroupAttachment resource.
+
         :param pulumi.Input[_builtins.str] network_interface_id: The ID of the network interface to attach to.
         :param pulumi.Input[_builtins.str] security_group_id: The ID of the security group.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -59,25 +60,26 @@ class NetworkInterfaceSecurityGroupAttachmentArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _NetworkInterfaceSecurityGroupAttachmentState:
     def __init__(__self__, *,
-                 network_interface_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 security_group_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 network_interface_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 security_group_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering NetworkInterfaceSecurityGroupAttachment resources.
+
         :param pulumi.Input[_builtins.str] network_interface_id: The ID of the network interface to attach to.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[_builtins.str] security_group_id: The ID of the security group.
@@ -91,38 +93,38 @@ class _NetworkInterfaceSecurityGroupAttachmentState:
 
     @_builtins.property
     @pulumi.getter(name="networkInterfaceId")
-    def network_interface_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def network_interface_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the network interface to attach to.
         """
         return pulumi.get(self, "network_interface_id")
 
     @network_interface_id.setter
-    def network_interface_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def network_interface_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "network_interface_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="securityGroupId")
-    def security_group_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def security_group_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the security group.
         """
         return pulumi.get(self, "security_group_id")
 
     @security_group_id.setter
-    def security_group_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def security_group_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "security_group_id", value)
 
 
@@ -132,9 +134,9 @@ class NetworkInterfaceSecurityGroupAttachment(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 network_interface_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 security_group_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 network_interface_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 security_group_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         This resource attaches a security group to an Elastic Network Interface (ENI).
@@ -142,8 +144,8 @@ class NetworkInterfaceSecurityGroupAttachment(pulumi.CustomResource):
         secondary ENI or one attached as the primary interface on an instance.
 
         > **NOTE on instances, interfaces, and security groups:** This provider currently
-        provides the capability to assign security groups via the [`ec2.Instance`][1]
-        and the [`ec2.NetworkInterface`][2] resources. Using this resource in
+        provides the capability to assign security groups via the `ec2.Instance`
+        and the `ec2.NetworkInterface` resources. Using this resource in
         conjunction with security groups provided in-line in those resources will cause
         conflicts, and will lead to spurious diffs and undefined behavior - please use
         one or the other.
@@ -160,11 +162,11 @@ class NetworkInterfaceSecurityGroupAttachment(pulumi.CustomResource):
         import pulumi
         import pulumi_aws as aws
 
-        ami = aws.ec2.get_ami(most_recent=True,
-            filters=[{
+        ami = aws.ec2.get_ami(filters=[{
                 "name": "name",
                 "values": ["amzn-ami-hvm-*"],
             }],
+            most_recent=True,
             owners=["amazon"])
         instance = aws.ec2.Instance("instance",
             instance_type=aws.ec2.InstanceType.T2_MICRO,
@@ -204,6 +206,7 @@ class NetworkInterfaceSecurityGroupAttachment(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:ec2/networkInterfaceSecurityGroupAttachment:NetworkInterfaceSecurityGroupAttachment sg_attachment eni-1234567890abcdef0_sg-1234567890abcdef0
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -223,8 +226,8 @@ class NetworkInterfaceSecurityGroupAttachment(pulumi.CustomResource):
         secondary ENI or one attached as the primary interface on an instance.
 
         > **NOTE on instances, interfaces, and security groups:** This provider currently
-        provides the capability to assign security groups via the [`ec2.Instance`][1]
-        and the [`ec2.NetworkInterface`][2] resources. Using this resource in
+        provides the capability to assign security groups via the `ec2.Instance`
+        and the `ec2.NetworkInterface` resources. Using this resource in
         conjunction with security groups provided in-line in those resources will cause
         conflicts, and will lead to spurious diffs and undefined behavior - please use
         one or the other.
@@ -241,11 +244,11 @@ class NetworkInterfaceSecurityGroupAttachment(pulumi.CustomResource):
         import pulumi
         import pulumi_aws as aws
 
-        ami = aws.ec2.get_ami(most_recent=True,
-            filters=[{
+        ami = aws.ec2.get_ami(filters=[{
                 "name": "name",
                 "values": ["amzn-ami-hvm-*"],
             }],
+            most_recent=True,
             owners=["amazon"])
         instance = aws.ec2.Instance("instance",
             instance_type=aws.ec2.InstanceType.T2_MICRO,
@@ -286,6 +289,7 @@ class NetworkInterfaceSecurityGroupAttachment(pulumi.CustomResource):
         $ pulumi import aws:ec2/networkInterfaceSecurityGroupAttachment:NetworkInterfaceSecurityGroupAttachment sg_attachment eni-1234567890abcdef0_sg-1234567890abcdef0
         ```
 
+
         :param str resource_name: The name of the resource.
         :param NetworkInterfaceSecurityGroupAttachmentArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -301,9 +305,9 @@ class NetworkInterfaceSecurityGroupAttachment(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 network_interface_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 security_group_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 network_interface_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 security_group_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -330,9 +334,9 @@ class NetworkInterfaceSecurityGroupAttachment(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            network_interface_id: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            security_group_id: Optional[pulumi.Input[_builtins.str]] = None) -> 'NetworkInterfaceSecurityGroupAttachment':
+            network_interface_id: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            security_group_id: pulumi.Input[Optional[_builtins.str]] = None) -> 'NetworkInterfaceSecurityGroupAttachment':
         """
         Get an existing NetworkInterfaceSecurityGroupAttachment resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

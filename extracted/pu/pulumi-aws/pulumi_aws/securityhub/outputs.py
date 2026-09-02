@@ -66,6 +66,10 @@ __all__ = [
     'AutomationRuleCriteriaUserDefinedField',
     'AutomationRuleCriteriaVerificationState',
     'AutomationRuleCriteriaWorkflowStatus',
+    'AutomationRuleV2Action',
+    'AutomationRuleV2ActionExternalIntegrationConfiguration',
+    'AutomationRuleV2ActionFindingFieldsUpdate',
+    'AutomationRuleV2Criteria',
     'ConfigurationPolicyConfigurationPolicy',
     'ConfigurationPolicyConfigurationPolicySecurityControlsConfiguration',
     'ConfigurationPolicyConfigurationPolicySecurityControlsConfigurationSecurityControlCustomParameter',
@@ -78,9 +82,18 @@ __all__ = [
     'ConfigurationPolicyConfigurationPolicySecurityControlsConfigurationSecurityControlCustomParameterParameterIntList',
     'ConfigurationPolicyConfigurationPolicySecurityControlsConfigurationSecurityControlCustomParameterParameterString',
     'ConfigurationPolicyConfigurationPolicySecurityControlsConfigurationSecurityControlCustomParameterParameterStringList',
+    'ConnectorV2ConnectorProvider',
+    'ConnectorV2ConnectorProviderJiraCloud',
+    'ConnectorV2ConnectorProviderServiceNow',
+    'ConnectorV2Health',
     'InsightFilters',
     'InsightFiltersAwsAccountId',
+    'InsightFiltersAwsAccountName',
     'InsightFiltersCompanyName',
+    'InsightFiltersComplianceAssociatedStandardsId',
+    'InsightFiltersComplianceSecurityControlId',
+    'InsightFiltersComplianceSecurityControlParametersName',
+    'InsightFiltersComplianceSecurityControlParametersValue',
     'InsightFiltersComplianceStatus',
     'InsightFiltersConfidence',
     'InsightFiltersCreatedAt',
@@ -179,6 +192,9 @@ __all__ = [
     'InsightFiltersVerificationState',
     'InsightFiltersWorkflowStatus',
     'OrganizationConfigurationOrganizationConfiguration',
+    'GetEnabledStandardsStandardsSubscriptionResult',
+    'GetEnabledStandardsStandardsSubscriptionStandardsStatusReasonResult',
+    'GetSecurityControlsSecurityControlDefinitionResult',
     'GetStandardsControlAssociationsStandardsControlAssociationResult',
 ]
 
@@ -646,15 +662,15 @@ class AutomationRuleCriteria(dict):
         :param Sequence['AutomationRuleCriteriaNoteTextArgs'] note_texts: The text of a user-defined note that's added to a finding. Documented below.
         :param Sequence['AutomationRuleCriteriaNoteUpdatedAtArgs'] note_updated_ats: The timestamp of when the note was updated. Documented below.
         :param Sequence['AutomationRuleCriteriaNoteUpdatedByArgs'] note_updated_bies: The principal that created a note. Documented below.
-        :param Sequence['AutomationRuleCriteriaProductArnArgs'] product_arns: The Amazon Resource Name (ARN) for a third-party product that generated a finding in Security Hub. Documented below.
+        :param Sequence['AutomationRuleCriteriaProductArnArgs'] product_arns: ARN for a third-party product that generated a finding in Security Hub. Documented below.
         :param Sequence['AutomationRuleCriteriaProductNameArgs'] product_names: Provides the name of the product that generated the finding. For control-based findings, the product name is Security Hub. Documented below.
         :param Sequence['AutomationRuleCriteriaRecordStateArgs'] record_states: Provides the current state of a finding. Documented below.
         :param Sequence['AutomationRuleCriteriaRelatedFindingsIdArgs'] related_findings_ids: The product-generated identifier for a related finding.  Documented below.
         :param Sequence['AutomationRuleCriteriaRelatedFindingsProductArnArgs'] related_findings_product_arns: The ARN for the product that generated a related finding. Documented below.
-        :param Sequence['AutomationRuleCriteriaResourceApplicationArnArgs'] resource_application_arns: The Amazon Resource Name (ARN) of the application that is related to a finding. Documented below.
+        :param Sequence['AutomationRuleCriteriaResourceApplicationArnArgs'] resource_application_arns: ARN of the application that is related to a finding. Documented below.
         :param Sequence['AutomationRuleCriteriaResourceApplicationNameArgs'] resource_application_names: The name of the application that is related to a finding. Documented below.
         :param Sequence['AutomationRuleCriteriaResourceDetailsOtherArgs'] resource_details_others: Custom fields and values about the resource that a finding pertains to. Documented below.
-        :param Sequence['AutomationRuleCriteriaResourceIdArgs'] resource_ids: The identifier for the given resource type. For AWS resources that are identified by Amazon Resource Names (ARNs), this is the ARN. For AWS resources that lack ARNs, this is the identifier as defined by the AWS service that created the resource. For non-AWS resources, this is a unique identifier that is associated with the resource. Documented below.
+        :param Sequence['AutomationRuleCriteriaResourceIdArgs'] resource_ids: Identifier for the given resource type. For AWS resources that are identified by ARNs, this is the ARN. For AWS resources that lack ARNs, this is the identifier as defined by the AWS service that created the resource. For non-AWS resources, this is a unique identifier that is associated with the resource. Documented below.
         :param Sequence['AutomationRuleCriteriaResourcePartitionArgs'] resource_partitions: The partition in which the resource that the finding pertains to is located. A partition is a group of AWS Regions. Each AWS account is scoped to one partition. Documented below.
         :param Sequence['AutomationRuleCriteriaResourceRegionArgs'] resource_regions: The AWS Region where the resource that a finding pertains to is located. Documented below.
         :param Sequence['AutomationRuleCriteriaResourceTagArgs'] resource_tags: A list of AWS tags associated with a resource at the time the finding was processed. Documented below.
@@ -885,7 +901,7 @@ class AutomationRuleCriteria(dict):
     @pulumi.getter(name="productArns")
     def product_arns(self) -> Optional[Sequence['outputs.AutomationRuleCriteriaProductArn']]:
         """
-        The Amazon Resource Name (ARN) for a third-party product that generated a finding in Security Hub. Documented below.
+        ARN for a third-party product that generated a finding in Security Hub. Documented below.
         """
         return pulumi.get(self, "product_arns")
 
@@ -925,7 +941,7 @@ class AutomationRuleCriteria(dict):
     @pulumi.getter(name="resourceApplicationArns")
     def resource_application_arns(self) -> Optional[Sequence['outputs.AutomationRuleCriteriaResourceApplicationArn']]:
         """
-        The Amazon Resource Name (ARN) of the application that is related to a finding. Documented below.
+        ARN of the application that is related to a finding. Documented below.
         """
         return pulumi.get(self, "resource_application_arns")
 
@@ -949,7 +965,7 @@ class AutomationRuleCriteria(dict):
     @pulumi.getter(name="resourceIds")
     def resource_ids(self) -> Optional[Sequence['outputs.AutomationRuleCriteriaResourceId']]:
         """
-        The identifier for the given resource type. For AWS resources that are identified by Amazon Resource Names (ARNs), this is the ARN. For AWS resources that lack ARNs, this is the identifier as defined by the AWS service that created the resource. For non-AWS resources, this is a unique identifier that is associated with the resource. Documented below.
+        Identifier for the given resource type. For AWS resources that are identified by ARNs, this is the ARN. For AWS resources that lack ARNs, this is the identifier as defined by the AWS service that created the resource. For non-AWS resources, this is a unique identifier that is associated with the resource. Documented below.
         """
         return pulumi.get(self, "resource_ids")
 
@@ -2242,6 +2258,199 @@ class AutomationRuleCriteriaWorkflowStatus(dict):
 
 
 @pulumi.output_type
+class AutomationRuleV2Action(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "externalIntegrationConfiguration":
+            suggest = "external_integration_configuration"
+        elif key == "findingFieldsUpdate":
+            suggest = "finding_fields_update"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in AutomationRuleV2Action. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        AutomationRuleV2Action.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        AutomationRuleV2Action.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 type: _builtins.str,
+                 external_integration_configuration: Optional['outputs.AutomationRuleV2ActionExternalIntegrationConfiguration'] = None,
+                 finding_fields_update: Optional['outputs.AutomationRuleV2ActionFindingFieldsUpdate'] = None):
+        """
+        :param _builtins.str type: The action type. Valid values: `FINDING_FIELDS_UPDATE`, `EXTERNAL_INTEGRATION`.
+        :param 'AutomationRuleV2ActionExternalIntegrationConfigurationArgs' external_integration_configuration: Settings for external integration actions. See `external_integration_configuration` below.
+        :param 'AutomationRuleV2ActionFindingFieldsUpdateArgs' finding_fields_update: Settings for updating finding fields. See `finding_fields_update` below.
+        """
+        pulumi.set(__self__, "type", type)
+        if external_integration_configuration is not None:
+            pulumi.set(__self__, "external_integration_configuration", external_integration_configuration)
+        if finding_fields_update is not None:
+            pulumi.set(__self__, "finding_fields_update", finding_fields_update)
+
+    @_builtins.property
+    @pulumi.getter
+    def type(self) -> _builtins.str:
+        """
+        The action type. Valid values: `FINDING_FIELDS_UPDATE`, `EXTERNAL_INTEGRATION`.
+        """
+        return pulumi.get(self, "type")
+
+    @_builtins.property
+    @pulumi.getter(name="externalIntegrationConfiguration")
+    def external_integration_configuration(self) -> Optional['outputs.AutomationRuleV2ActionExternalIntegrationConfiguration']:
+        """
+        Settings for external integration actions. See `external_integration_configuration` below.
+        """
+        return pulumi.get(self, "external_integration_configuration")
+
+    @_builtins.property
+    @pulumi.getter(name="findingFieldsUpdate")
+    def finding_fields_update(self) -> Optional['outputs.AutomationRuleV2ActionFindingFieldsUpdate']:
+        """
+        Settings for updating finding fields. See `finding_fields_update` below.
+        """
+        return pulumi.get(self, "finding_fields_update")
+
+
+@pulumi.output_type
+class AutomationRuleV2ActionExternalIntegrationConfiguration(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "connectorArn":
+            suggest = "connector_arn"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in AutomationRuleV2ActionExternalIntegrationConfiguration. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        AutomationRuleV2ActionExternalIntegrationConfiguration.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        AutomationRuleV2ActionExternalIntegrationConfiguration.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 connector_arn: _builtins.str):
+        """
+        :param _builtins.str connector_arn: The ARN of the connector.
+        """
+        pulumi.set(__self__, "connector_arn", connector_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="connectorArn")
+    def connector_arn(self) -> _builtins.str:
+        """
+        The ARN of the connector.
+        """
+        return pulumi.get(self, "connector_arn")
+
+
+@pulumi.output_type
+class AutomationRuleV2ActionFindingFieldsUpdate(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "severityId":
+            suggest = "severity_id"
+        elif key == "statusId":
+            suggest = "status_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in AutomationRuleV2ActionFindingFieldsUpdate. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        AutomationRuleV2ActionFindingFieldsUpdate.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        AutomationRuleV2ActionFindingFieldsUpdate.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 comment: Optional[_builtins.str] = None,
+                 severity_id: Optional[_builtins.int] = None,
+                 status_id: Optional[_builtins.int] = None):
+        """
+        :param _builtins.str comment: A comment for the finding.
+        :param _builtins.int severity_id: The severity ID to assign.
+        :param _builtins.int status_id: The status ID to assign.
+        """
+        if comment is not None:
+            pulumi.set(__self__, "comment", comment)
+        if severity_id is not None:
+            pulumi.set(__self__, "severity_id", severity_id)
+        if status_id is not None:
+            pulumi.set(__self__, "status_id", status_id)
+
+    @_builtins.property
+    @pulumi.getter
+    def comment(self) -> Optional[_builtins.str]:
+        """
+        A comment for the finding.
+        """
+        return pulumi.get(self, "comment")
+
+    @_builtins.property
+    @pulumi.getter(name="severityId")
+    def severity_id(self) -> Optional[_builtins.int]:
+        """
+        The severity ID to assign.
+        """
+        return pulumi.get(self, "severity_id")
+
+    @_builtins.property
+    @pulumi.getter(name="statusId")
+    def status_id(self) -> Optional[_builtins.int]:
+        """
+        The status ID to assign.
+        """
+        return pulumi.get(self, "status_id")
+
+
+@pulumi.output_type
+class AutomationRuleV2Criteria(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "ocsfFindingCriteriaJson":
+            suggest = "ocsf_finding_criteria_json"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in AutomationRuleV2Criteria. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        AutomationRuleV2Criteria.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        AutomationRuleV2Criteria.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 ocsf_finding_criteria_json: _builtins.str):
+        """
+        :param _builtins.str ocsf_finding_criteria_json: JSON-encoded OCSF finding criteria for the rule. See the [AWS API Reference](https://docs.aws.amazon.com/securityhub/1.0/APIReference/API_OcsfFindingFilters.html) for details.
+        """
+        pulumi.set(__self__, "ocsf_finding_criteria_json", ocsf_finding_criteria_json)
+
+    @_builtins.property
+    @pulumi.getter(name="ocsfFindingCriteriaJson")
+    def ocsf_finding_criteria_json(self) -> _builtins.str:
+        """
+        JSON-encoded OCSF finding criteria for the rule. See the [AWS API Reference](https://docs.aws.amazon.com/securityhub/1.0/APIReference/API_OcsfFindingFilters.html) for details.
+        """
+        return pulumi.get(self, "ocsf_finding_criteria_json")
+
+
+@pulumi.output_type
 class ConfigurationPolicyConfigurationPolicy(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -2659,14 +2868,284 @@ class ConfigurationPolicyConfigurationPolicySecurityControlsConfigurationSecurit
 
 
 @pulumi.output_type
+class ConnectorV2ConnectorProvider(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "jiraCloud":
+            suggest = "jira_cloud"
+        elif key == "serviceNow":
+            suggest = "service_now"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ConnectorV2ConnectorProvider. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ConnectorV2ConnectorProvider.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ConnectorV2ConnectorProvider.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 jira_cloud: Optional['outputs.ConnectorV2ConnectorProviderJiraCloud'] = None,
+                 service_now: Optional['outputs.ConnectorV2ConnectorProviderServiceNow'] = None):
+        """
+        :param 'ConnectorV2ConnectorProviderJiraCloudArgs' jira_cloud: Details about a Jira Cloud integration. See `jira_cloud` below.
+        :param 'ConnectorV2ConnectorProviderServiceNowArgs' service_now: Details about a ServiceNow ITSM integration. See `service_now` below.
+        """
+        if jira_cloud is not None:
+            pulumi.set(__self__, "jira_cloud", jira_cloud)
+        if service_now is not None:
+            pulumi.set(__self__, "service_now", service_now)
+
+    @_builtins.property
+    @pulumi.getter(name="jiraCloud")
+    def jira_cloud(self) -> Optional['outputs.ConnectorV2ConnectorProviderJiraCloud']:
+        """
+        Details about a Jira Cloud integration. See `jira_cloud` below.
+        """
+        return pulumi.get(self, "jira_cloud")
+
+    @_builtins.property
+    @pulumi.getter(name="serviceNow")
+    def service_now(self) -> Optional['outputs.ConnectorV2ConnectorProviderServiceNow']:
+        """
+        Details about a ServiceNow ITSM integration. See `service_now` below.
+        """
+        return pulumi.get(self, "service_now")
+
+
+@pulumi.output_type
+class ConnectorV2ConnectorProviderJiraCloud(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "projectKey":
+            suggest = "project_key"
+        elif key == "authStatus":
+            suggest = "auth_status"
+        elif key == "authUrl":
+            suggest = "auth_url"
+        elif key == "cloudId":
+            suggest = "cloud_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ConnectorV2ConnectorProviderJiraCloud. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ConnectorV2ConnectorProviderJiraCloud.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ConnectorV2ConnectorProviderJiraCloud.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 project_key: _builtins.str,
+                 auth_status: Optional[_builtins.str] = None,
+                 auth_url: Optional[_builtins.str] = None,
+                 cloud_id: Optional[_builtins.str] = None,
+                 domain: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str project_key: Jira Cloud project key.
+        :param _builtins.str auth_status: Status of the authorization between Jira Cloud and the service.
+        :param _builtins.str auth_url: URL to provide to customers for OAuth auth code flow.
+        :param _builtins.str cloud_id: Cloud ID of the Jira Cloud.
+        :param _builtins.str domain: URL domain of the Jira Cloud instance.
+        """
+        pulumi.set(__self__, "project_key", project_key)
+        if auth_status is not None:
+            pulumi.set(__self__, "auth_status", auth_status)
+        if auth_url is not None:
+            pulumi.set(__self__, "auth_url", auth_url)
+        if cloud_id is not None:
+            pulumi.set(__self__, "cloud_id", cloud_id)
+        if domain is not None:
+            pulumi.set(__self__, "domain", domain)
+
+    @_builtins.property
+    @pulumi.getter(name="projectKey")
+    def project_key(self) -> _builtins.str:
+        """
+        Jira Cloud project key.
+        """
+        return pulumi.get(self, "project_key")
+
+    @_builtins.property
+    @pulumi.getter(name="authStatus")
+    def auth_status(self) -> Optional[_builtins.str]:
+        """
+        Status of the authorization between Jira Cloud and the service.
+        """
+        return pulumi.get(self, "auth_status")
+
+    @_builtins.property
+    @pulumi.getter(name="authUrl")
+    def auth_url(self) -> Optional[_builtins.str]:
+        """
+        URL to provide to customers for OAuth auth code flow.
+        """
+        return pulumi.get(self, "auth_url")
+
+    @_builtins.property
+    @pulumi.getter(name="cloudId")
+    def cloud_id(self) -> Optional[_builtins.str]:
+        """
+        Cloud ID of the Jira Cloud.
+        """
+        return pulumi.get(self, "cloud_id")
+
+    @_builtins.property
+    @pulumi.getter
+    def domain(self) -> Optional[_builtins.str]:
+        """
+        URL domain of the Jira Cloud instance.
+        """
+        return pulumi.get(self, "domain")
+
+
+@pulumi.output_type
+class ConnectorV2ConnectorProviderServiceNow(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "instanceName":
+            suggest = "instance_name"
+        elif key == "secretArn":
+            suggest = "secret_arn"
+        elif key == "authStatus":
+            suggest = "auth_status"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ConnectorV2ConnectorProviderServiceNow. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ConnectorV2ConnectorProviderServiceNow.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ConnectorV2ConnectorProviderServiceNow.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 instance_name: _builtins.str,
+                 secret_arn: _builtins.str,
+                 auth_status: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str instance_name: Instance name of ServiceNow ITSM.
+        :param _builtins.str secret_arn: ARN of the AWS Secrets Manager secret that contains the ServiceNow credentials.
+        :param _builtins.str auth_status: Status of the authorization between ServiceNow and the service.
+        """
+        pulumi.set(__self__, "instance_name", instance_name)
+        pulumi.set(__self__, "secret_arn", secret_arn)
+        if auth_status is not None:
+            pulumi.set(__self__, "auth_status", auth_status)
+
+    @_builtins.property
+    @pulumi.getter(name="instanceName")
+    def instance_name(self) -> _builtins.str:
+        """
+        Instance name of ServiceNow ITSM.
+        """
+        return pulumi.get(self, "instance_name")
+
+    @_builtins.property
+    @pulumi.getter(name="secretArn")
+    def secret_arn(self) -> _builtins.str:
+        """
+        ARN of the AWS Secrets Manager secret that contains the ServiceNow credentials.
+        """
+        return pulumi.get(self, "secret_arn")
+
+    @_builtins.property
+    @pulumi.getter(name="authStatus")
+    def auth_status(self) -> Optional[_builtins.str]:
+        """
+        Status of the authorization between ServiceNow and the service.
+        """
+        return pulumi.get(self, "auth_status")
+
+
+@pulumi.output_type
+class ConnectorV2Health(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "connectorStatus":
+            suggest = "connector_status"
+        elif key == "lastCheckedAt":
+            suggest = "last_checked_at"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ConnectorV2Health. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ConnectorV2Health.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ConnectorV2Health.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 connector_status: _builtins.str,
+                 last_checked_at: _builtins.str,
+                 message: _builtins.str):
+        """
+        :param _builtins.str connector_status: Status of the connector.
+        :param _builtins.str last_checked_at: Timestamp for the time the health status was checked.
+        :param _builtins.str message: Message for the reason of `connector_status` change.
+        """
+        pulumi.set(__self__, "connector_status", connector_status)
+        pulumi.set(__self__, "last_checked_at", last_checked_at)
+        pulumi.set(__self__, "message", message)
+
+    @_builtins.property
+    @pulumi.getter(name="connectorStatus")
+    def connector_status(self) -> _builtins.str:
+        """
+        Status of the connector.
+        """
+        return pulumi.get(self, "connector_status")
+
+    @_builtins.property
+    @pulumi.getter(name="lastCheckedAt")
+    def last_checked_at(self) -> _builtins.str:
+        """
+        Timestamp for the time the health status was checked.
+        """
+        return pulumi.get(self, "last_checked_at")
+
+    @_builtins.property
+    @pulumi.getter
+    def message(self) -> _builtins.str:
+        """
+        Message for the reason of `connector_status` change.
+        """
+        return pulumi.get(self, "message")
+
+
+@pulumi.output_type
 class InsightFilters(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
         if key == "awsAccountIds":
             suggest = "aws_account_ids"
+        elif key == "awsAccountNames":
+            suggest = "aws_account_names"
         elif key == "companyNames":
             suggest = "company_names"
+        elif key == "complianceAssociatedStandardsIds":
+            suggest = "compliance_associated_standards_ids"
+        elif key == "complianceSecurityControlIds":
+            suggest = "compliance_security_control_ids"
+        elif key == "complianceSecurityControlParametersNames":
+            suggest = "compliance_security_control_parameters_names"
+        elif key == "complianceSecurityControlParametersValues":
+            suggest = "compliance_security_control_parameters_values"
         elif key == "complianceStatuses":
             suggest = "compliance_statuses"
         elif key == "createdAts":
@@ -2839,7 +3318,12 @@ class InsightFilters(dict):
 
     def __init__(__self__, *,
                  aws_account_ids: Optional[Sequence['outputs.InsightFiltersAwsAccountId']] = None,
+                 aws_account_names: Optional[Sequence['outputs.InsightFiltersAwsAccountName']] = None,
                  company_names: Optional[Sequence['outputs.InsightFiltersCompanyName']] = None,
+                 compliance_associated_standards_ids: Optional[Sequence['outputs.InsightFiltersComplianceAssociatedStandardsId']] = None,
+                 compliance_security_control_ids: Optional[Sequence['outputs.InsightFiltersComplianceSecurityControlId']] = None,
+                 compliance_security_control_parameters_names: Optional[Sequence['outputs.InsightFiltersComplianceSecurityControlParametersName']] = None,
+                 compliance_security_control_parameters_values: Optional[Sequence['outputs.InsightFiltersComplianceSecurityControlParametersValue']] = None,
                  compliance_statuses: Optional[Sequence['outputs.InsightFiltersComplianceStatus']] = None,
                  confidences: Optional[Sequence['outputs.InsightFiltersConfidence']] = None,
                  created_ats: Optional[Sequence['outputs.InsightFiltersCreatedAt']] = None,
@@ -2928,7 +3412,12 @@ class InsightFilters(dict):
                  workflow_statuses: Optional[Sequence['outputs.InsightFiltersWorkflowStatus']] = None):
         """
         :param Sequence['InsightFiltersAwsAccountIdArgs'] aws_account_ids: AWS account ID that a finding is generated in. See String_Filter below for more details.
+        :param Sequence['InsightFiltersAwsAccountNameArgs'] aws_account_names: The name of the AWS account in which a finding is generated. See String_Filter below for more details.
         :param Sequence['InsightFiltersCompanyNameArgs'] company_names: The name of the findings provider (company) that owns the solution (product) that generates findings. See String_Filter below for more details.
+        :param Sequence['InsightFiltersComplianceAssociatedStandardsIdArgs'] compliance_associated_standards_ids: The unique identifier of a standard in which a control is enabled. See String_Filter below for more details.
+        :param Sequence['InsightFiltersComplianceSecurityControlIdArgs'] compliance_security_control_ids: The unique identifier of a control across standards. See String_Filter below for more details.
+        :param Sequence['InsightFiltersComplianceSecurityControlParametersNameArgs'] compliance_security_control_parameters_names: The unique identifier of a control across standards. See String_Filter below for more details.
+        :param Sequence['InsightFiltersComplianceSecurityControlParametersValueArgs'] compliance_security_control_parameters_values: The current value of a security control parameter. See String_Filter below for more details.
         :param Sequence['InsightFiltersComplianceStatusArgs'] compliance_statuses: Exclusive to findings that are generated as the result of a check run against a specific rule in a supported standard, such as CIS AWS Foundations. Contains security standard-related finding details. See String Filter below for more details.
         :param Sequence['InsightFiltersConfidenceArgs'] confidences: A finding's confidence. Confidence is defined as the likelihood that a finding accurately identifies the behavior or issue that it was intended to identify. Confidence is scored on a 0-100 basis using a ratio scale, where 0 means zero percent confidence and 100 means 100 percent confidence. See Number Filter below for more details.
         :param Sequence['InsightFiltersCreatedAtArgs'] created_ats: An ISO8601-formatted timestamp that indicates when the security-findings provider captured the potential security issue that a finding captured. See Date Filter below for more details.
@@ -2978,7 +3467,7 @@ class InsightFilters(dict):
         :param Sequence['InsightFiltersRelatedFindingsIdArgs'] related_findings_ids: The solution-generated identifier for a related finding. See String Filter below for more details.
         :param Sequence['InsightFiltersRelatedFindingsProductArnArgs'] related_findings_product_arns: The ARN of the solution that generated a related finding. See String Filter below for more details.
         :param Sequence['InsightFiltersResourceAwsEc2InstanceIamInstanceProfileArnArgs'] resource_aws_ec2_instance_iam_instance_profile_arns: The IAM profile ARN of the instance. See String Filter below for more details.
-        :param Sequence['InsightFiltersResourceAwsEc2InstanceImageIdArgs'] resource_aws_ec2_instance_image_ids: The Amazon Machine Image (AMI) ID of the instance. See String Filter below for more details.
+        :param Sequence['InsightFiltersResourceAwsEc2InstanceImageIdArgs'] resource_aws_ec2_instance_image_ids: AMI ID of the instance. See String Filter below for more details.
         :param Sequence['InsightFiltersResourceAwsEc2InstanceIpv4AddressArgs'] resource_aws_ec2_instance_ipv4_addresses: The IPv4 addresses associated with the instance. See Ip Filter below for more details.
         :param Sequence['InsightFiltersResourceAwsEc2InstanceIpv6AddressArgs'] resource_aws_ec2_instance_ipv6_addresses: The IPv6 addresses associated with the instance. See Ip Filter below for more details.
         :param Sequence['InsightFiltersResourceAwsEc2InstanceKeyNameArgs'] resource_aws_ec2_instance_key_names: The key name associated with the instance. See String Filter below for more details.
@@ -3018,8 +3507,18 @@ class InsightFilters(dict):
         """
         if aws_account_ids is not None:
             pulumi.set(__self__, "aws_account_ids", aws_account_ids)
+        if aws_account_names is not None:
+            pulumi.set(__self__, "aws_account_names", aws_account_names)
         if company_names is not None:
             pulumi.set(__self__, "company_names", company_names)
+        if compliance_associated_standards_ids is not None:
+            pulumi.set(__self__, "compliance_associated_standards_ids", compliance_associated_standards_ids)
+        if compliance_security_control_ids is not None:
+            pulumi.set(__self__, "compliance_security_control_ids", compliance_security_control_ids)
+        if compliance_security_control_parameters_names is not None:
+            pulumi.set(__self__, "compliance_security_control_parameters_names", compliance_security_control_parameters_names)
+        if compliance_security_control_parameters_values is not None:
+            pulumi.set(__self__, "compliance_security_control_parameters_values", compliance_security_control_parameters_values)
         if compliance_statuses is not None:
             pulumi.set(__self__, "compliance_statuses", compliance_statuses)
         if confidences is not None:
@@ -3202,12 +3701,52 @@ class InsightFilters(dict):
         return pulumi.get(self, "aws_account_ids")
 
     @_builtins.property
+    @pulumi.getter(name="awsAccountNames")
+    def aws_account_names(self) -> Optional[Sequence['outputs.InsightFiltersAwsAccountName']]:
+        """
+        The name of the AWS account in which a finding is generated. See String_Filter below for more details.
+        """
+        return pulumi.get(self, "aws_account_names")
+
+    @_builtins.property
     @pulumi.getter(name="companyNames")
     def company_names(self) -> Optional[Sequence['outputs.InsightFiltersCompanyName']]:
         """
         The name of the findings provider (company) that owns the solution (product) that generates findings. See String_Filter below for more details.
         """
         return pulumi.get(self, "company_names")
+
+    @_builtins.property
+    @pulumi.getter(name="complianceAssociatedStandardsIds")
+    def compliance_associated_standards_ids(self) -> Optional[Sequence['outputs.InsightFiltersComplianceAssociatedStandardsId']]:
+        """
+        The unique identifier of a standard in which a control is enabled. See String_Filter below for more details.
+        """
+        return pulumi.get(self, "compliance_associated_standards_ids")
+
+    @_builtins.property
+    @pulumi.getter(name="complianceSecurityControlIds")
+    def compliance_security_control_ids(self) -> Optional[Sequence['outputs.InsightFiltersComplianceSecurityControlId']]:
+        """
+        The unique identifier of a control across standards. See String_Filter below for more details.
+        """
+        return pulumi.get(self, "compliance_security_control_ids")
+
+    @_builtins.property
+    @pulumi.getter(name="complianceSecurityControlParametersNames")
+    def compliance_security_control_parameters_names(self) -> Optional[Sequence['outputs.InsightFiltersComplianceSecurityControlParametersName']]:
+        """
+        The unique identifier of a control across standards. See String_Filter below for more details.
+        """
+        return pulumi.get(self, "compliance_security_control_parameters_names")
+
+    @_builtins.property
+    @pulumi.getter(name="complianceSecurityControlParametersValues")
+    def compliance_security_control_parameters_values(self) -> Optional[Sequence['outputs.InsightFiltersComplianceSecurityControlParametersValue']]:
+        """
+        The current value of a security control parameter. See String_Filter below for more details.
+        """
+        return pulumi.get(self, "compliance_security_control_parameters_values")
 
     @_builtins.property
     @pulumi.getter(name="complianceStatuses")
@@ -3605,7 +4144,7 @@ class InsightFilters(dict):
     @pulumi.getter(name="resourceAwsEc2InstanceImageIds")
     def resource_aws_ec2_instance_image_ids(self) -> Optional[Sequence['outputs.InsightFiltersResourceAwsEc2InstanceImageId']]:
         """
-        The Amazon Machine Image (AMI) ID of the instance. See String Filter below for more details.
+        AMI ID of the instance. See String Filter below for more details.
         """
         return pulumi.get(self, "resource_aws_ec2_instance_image_ids")
 
@@ -3918,7 +4457,102 @@ class InsightFiltersAwsAccountId(dict):
 
 
 @pulumi.output_type
+class InsightFiltersAwsAccountName(dict):
+    def __init__(__self__, *,
+                 comparison: _builtins.str,
+                 value: _builtins.str):
+        pulumi.set(__self__, "comparison", comparison)
+        pulumi.set(__self__, "value", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def comparison(self) -> _builtins.str:
+        return pulumi.get(self, "comparison")
+
+    @_builtins.property
+    @pulumi.getter
+    def value(self) -> _builtins.str:
+        return pulumi.get(self, "value")
+
+
+@pulumi.output_type
 class InsightFiltersCompanyName(dict):
+    def __init__(__self__, *,
+                 comparison: _builtins.str,
+                 value: _builtins.str):
+        pulumi.set(__self__, "comparison", comparison)
+        pulumi.set(__self__, "value", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def comparison(self) -> _builtins.str:
+        return pulumi.get(self, "comparison")
+
+    @_builtins.property
+    @pulumi.getter
+    def value(self) -> _builtins.str:
+        return pulumi.get(self, "value")
+
+
+@pulumi.output_type
+class InsightFiltersComplianceAssociatedStandardsId(dict):
+    def __init__(__self__, *,
+                 comparison: _builtins.str,
+                 value: _builtins.str):
+        pulumi.set(__self__, "comparison", comparison)
+        pulumi.set(__self__, "value", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def comparison(self) -> _builtins.str:
+        return pulumi.get(self, "comparison")
+
+    @_builtins.property
+    @pulumi.getter
+    def value(self) -> _builtins.str:
+        return pulumi.get(self, "value")
+
+
+@pulumi.output_type
+class InsightFiltersComplianceSecurityControlId(dict):
+    def __init__(__self__, *,
+                 comparison: _builtins.str,
+                 value: _builtins.str):
+        pulumi.set(__self__, "comparison", comparison)
+        pulumi.set(__self__, "value", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def comparison(self) -> _builtins.str:
+        return pulumi.get(self, "comparison")
+
+    @_builtins.property
+    @pulumi.getter
+    def value(self) -> _builtins.str:
+        return pulumi.get(self, "value")
+
+
+@pulumi.output_type
+class InsightFiltersComplianceSecurityControlParametersName(dict):
+    def __init__(__self__, *,
+                 comparison: _builtins.str,
+                 value: _builtins.str):
+        pulumi.set(__self__, "comparison", comparison)
+        pulumi.set(__self__, "value", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def comparison(self) -> _builtins.str:
+        return pulumi.get(self, "comparison")
+
+    @_builtins.property
+    @pulumi.getter
+    def value(self) -> _builtins.str:
+        return pulumi.get(self, "value")
+
+
+@pulumi.output_type
+class InsightFiltersComplianceSecurityControlParametersValue(dict):
     def __init__(__self__, *,
                  comparison: _builtins.str,
                  value: _builtins.str):
@@ -6610,6 +7244,181 @@ class OrganizationConfigurationOrganizationConfiguration(dict):
         Indicates whether the organization uses local or central configuration. If using central configuration, `auto_enable` must be set to `false` and `auto_enable_standards` set to `NONE`. More information can be found in the [documentation for central configuration](https://docs.aws.amazon.com/securityhub/latest/userguide/central-configuration-intro.html). Valid values: `LOCAL`, `CENTRAL`.
         """
         return pulumi.get(self, "configuration_type")
+
+
+@pulumi.output_type
+class GetEnabledStandardsStandardsSubscriptionResult(dict):
+    def __init__(__self__, *,
+                 standards_arn: _builtins.str,
+                 standards_controls_updatable: _builtins.str,
+                 standards_inputs: Mapping[str, _builtins.str],
+                 standards_status: _builtins.str,
+                 standards_status_reasons: Sequence['outputs.GetEnabledStandardsStandardsSubscriptionStandardsStatusReasonResult'],
+                 standards_subscription_arn: _builtins.str):
+        """
+        :param _builtins.str standards_arn: ARN of the standard.
+        :param _builtins.str standards_controls_updatable: Whether you can retrieve information about and configure individual controls that apply to the standard. Valid values: `READY_FOR_UPDATES`, `NOT_READY_FOR_UPDATES`.
+        :param Mapping[str, _builtins.str] standards_inputs: Key-value map of input for the standard.
+        :param _builtins.str standards_status: Status of your subscription to the standard. Valid values: `PENDING`, `READY`, `FAILED`, `DELETING`, `INCOMPLETE`.
+        :param Sequence['GetEnabledStandardsStandardsSubscriptionStandardsStatusReasonArgs'] standards_status_reasons: Reason for the current status. See below for details.
+        :param _builtins.str standards_subscription_arn: ARN of the resource that represents your subscription to the standard.
+        """
+        pulumi.set(__self__, "standards_arn", standards_arn)
+        pulumi.set(__self__, "standards_controls_updatable", standards_controls_updatable)
+        pulumi.set(__self__, "standards_inputs", standards_inputs)
+        pulumi.set(__self__, "standards_status", standards_status)
+        pulumi.set(__self__, "standards_status_reasons", standards_status_reasons)
+        pulumi.set(__self__, "standards_subscription_arn", standards_subscription_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="standardsArn")
+    def standards_arn(self) -> _builtins.str:
+        """
+        ARN of the standard.
+        """
+        return pulumi.get(self, "standards_arn")
+
+    @_builtins.property
+    @pulumi.getter(name="standardsControlsUpdatable")
+    def standards_controls_updatable(self) -> _builtins.str:
+        """
+        Whether you can retrieve information about and configure individual controls that apply to the standard. Valid values: `READY_FOR_UPDATES`, `NOT_READY_FOR_UPDATES`.
+        """
+        return pulumi.get(self, "standards_controls_updatable")
+
+    @_builtins.property
+    @pulumi.getter(name="standardsInputs")
+    def standards_inputs(self) -> Mapping[str, _builtins.str]:
+        """
+        Key-value map of input for the standard.
+        """
+        return pulumi.get(self, "standards_inputs")
+
+    @_builtins.property
+    @pulumi.getter(name="standardsStatus")
+    def standards_status(self) -> _builtins.str:
+        """
+        Status of your subscription to the standard. Valid values: `PENDING`, `READY`, `FAILED`, `DELETING`, `INCOMPLETE`.
+        """
+        return pulumi.get(self, "standards_status")
+
+    @_builtins.property
+    @pulumi.getter(name="standardsStatusReasons")
+    def standards_status_reasons(self) -> Sequence['outputs.GetEnabledStandardsStandardsSubscriptionStandardsStatusReasonResult']:
+        """
+        Reason for the current status. See below for details.
+        """
+        return pulumi.get(self, "standards_status_reasons")
+
+    @_builtins.property
+    @pulumi.getter(name="standardsSubscriptionArn")
+    def standards_subscription_arn(self) -> _builtins.str:
+        """
+        ARN of the resource that represents your subscription to the standard.
+        """
+        return pulumi.get(self, "standards_subscription_arn")
+
+
+@pulumi.output_type
+class GetEnabledStandardsStandardsSubscriptionStandardsStatusReasonResult(dict):
+    def __init__(__self__, *,
+                 status_reason_code: _builtins.str):
+        """
+        :param _builtins.str status_reason_code: Reason code that represents the reason for the current status of a standard subscription. Valid values: `NO_AVAILABLE_CONFIGURATION_RECORDER`, `MAXIMUM_NUMBER_OF_CONFIG_RULES_EXCEEDED`, `INTERNAL_ERROR`.
+        """
+        pulumi.set(__self__, "status_reason_code", status_reason_code)
+
+    @_builtins.property
+    @pulumi.getter(name="statusReasonCode")
+    def status_reason_code(self) -> _builtins.str:
+        """
+        Reason code that represents the reason for the current status of a standard subscription. Valid values: `NO_AVAILABLE_CONFIGURATION_RECORDER`, `MAXIMUM_NUMBER_OF_CONFIG_RULES_EXCEEDED`, `INTERNAL_ERROR`.
+        """
+        return pulumi.get(self, "status_reason_code")
+
+
+@pulumi.output_type
+class GetSecurityControlsSecurityControlDefinitionResult(dict):
+    def __init__(__self__, *,
+                 current_region_availability: _builtins.str,
+                 customizable_properties: Sequence[_builtins.str],
+                 description: _builtins.str,
+                 remediation_url: _builtins.str,
+                 security_control_id: _builtins.str,
+                 severity_rating: _builtins.str,
+                 title: _builtins.str):
+        """
+        :param _builtins.str current_region_availability: Whether the security control is available in the current AWS Region. Valid values: `AVAILABLE`, `UNAVAILABLE`.
+        :param Sequence[_builtins.str] customizable_properties: Security control properties that you can customize.
+        :param _builtins.str description: Description of the security control across standards.
+        :param _builtins.str remediation_url: Link to Security Hub CSPM documentation that explains how to remediate a failed finding for the security control.
+        :param _builtins.str security_control_id: Unique identifier of the security control across standards.
+        :param _builtins.str severity_rating: Severity of the security control. Valid values: `LOW`, `MEDIUM`, `HIGH`, `CRITICAL`.
+        :param _builtins.str title: Title of the security control.
+        """
+        pulumi.set(__self__, "current_region_availability", current_region_availability)
+        pulumi.set(__self__, "customizable_properties", customizable_properties)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "remediation_url", remediation_url)
+        pulumi.set(__self__, "security_control_id", security_control_id)
+        pulumi.set(__self__, "severity_rating", severity_rating)
+        pulumi.set(__self__, "title", title)
+
+    @_builtins.property
+    @pulumi.getter(name="currentRegionAvailability")
+    def current_region_availability(self) -> _builtins.str:
+        """
+        Whether the security control is available in the current AWS Region. Valid values: `AVAILABLE`, `UNAVAILABLE`.
+        """
+        return pulumi.get(self, "current_region_availability")
+
+    @_builtins.property
+    @pulumi.getter(name="customizableProperties")
+    def customizable_properties(self) -> Sequence[_builtins.str]:
+        """
+        Security control properties that you can customize.
+        """
+        return pulumi.get(self, "customizable_properties")
+
+    @_builtins.property
+    @pulumi.getter
+    def description(self) -> _builtins.str:
+        """
+        Description of the security control across standards.
+        """
+        return pulumi.get(self, "description")
+
+    @_builtins.property
+    @pulumi.getter(name="remediationUrl")
+    def remediation_url(self) -> _builtins.str:
+        """
+        Link to Security Hub CSPM documentation that explains how to remediate a failed finding for the security control.
+        """
+        return pulumi.get(self, "remediation_url")
+
+    @_builtins.property
+    @pulumi.getter(name="securityControlId")
+    def security_control_id(self) -> _builtins.str:
+        """
+        Unique identifier of the security control across standards.
+        """
+        return pulumi.get(self, "security_control_id")
+
+    @_builtins.property
+    @pulumi.getter(name="severityRating")
+    def severity_rating(self) -> _builtins.str:
+        """
+        Severity of the security control. Valid values: `LOW`, `MEDIUM`, `HIGH`, `CRITICAL`.
+        """
+        return pulumi.get(self, "severity_rating")
+
+    @_builtins.property
+    @pulumi.getter
+    def title(self) -> _builtins.str:
+        """
+        Title of the security control.
+        """
+        return pulumi.get(self, "title")
 
 
 @pulumi.output_type

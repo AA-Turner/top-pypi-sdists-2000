@@ -60,8 +60,8 @@ class AccountThrottleSetting(dict):
                  burst_limit: _builtins.int,
                  rate_limit: _builtins.float):
         """
-        :param _builtins.int burst_limit: Absolute maximum number of times API Gateway allows the API to be called per second (RPS).
-        :param _builtins.float rate_limit: Number of times API Gateway allows the API to be called per second on average (RPS).
+        :param _builtins.int burst_limit: Absolute maximum number of times API Gateway allows the API to be called per second.
+        :param _builtins.float rate_limit: Number of times API Gateway allows the API to be called per second on average.
         """
         pulumi.set(__self__, "burst_limit", burst_limit)
         pulumi.set(__self__, "rate_limit", rate_limit)
@@ -70,7 +70,7 @@ class AccountThrottleSetting(dict):
     @pulumi.getter(name="burstLimit")
     def burst_limit(self) -> _builtins.int:
         """
-        Absolute maximum number of times API Gateway allows the API to be called per second (RPS).
+        Absolute maximum number of times API Gateway allows the API to be called per second.
         """
         return pulumi.get(self, "burst_limit")
 
@@ -78,7 +78,7 @@ class AccountThrottleSetting(dict):
     @pulumi.getter(name="rateLimit")
     def rate_limit(self) -> _builtins.float:
         """
-        Number of times API Gateway allows the API to be called per second on average (RPS).
+        Number of times API Gateway allows the API to be called per second on average.
         """
         return pulumi.get(self, "rate_limit")
 
@@ -189,8 +189,8 @@ class DomainNameEndpointConfiguration(dict):
                  types: _builtins.str,
                  ip_address_type: Optional[_builtins.str] = None):
         """
-        :param _builtins.str types: A list of endpoint types of an API or its custom domain name. For an edge-optimized API and its custom domain name, the endpoint type is `EDGE`. For a regional API and its custom domain name, the endpoint type is `REGIONAL`. For a private API, the endpoint type is `PRIVATE`.
-        :param _builtins.str ip_address_type: The IP address types that can invoke a DomainName. Valid values: `ipv4`, `dualstack`. Use `ipv4` to allow only IPv4 addresses to invoke a DomainName, or use `dualstack` to allow both IPv4 and IPv6 addresses to invoke a DomainName. For the `PRIVATE` endpoint type, only `dualstack` is supported. Terraform performs drift detection for this argument only when the value is provided.
+        :param _builtins.str types: List of endpoint types of an API or its custom domain name. For an edge-optimized API and its custom domain name, the endpoint type is `EDGE`. For a regional API and its custom domain name, the endpoint type is `REGIONAL`. For a private API, the endpoint type is `PRIVATE`.
+        :param _builtins.str ip_address_type: IP address types that can invoke a DomainName. Valid values: `ipv4`, `dualstack`. Use `ipv4` to allow only IPv4 addresses to invoke a DomainName, or use `dualstack` to allow both IPv4 and IPv6 addresses to invoke a DomainName. For the `PRIVATE` endpoint type, only `dualstack` is supported. Terraform performs drift detection for this argument only when the value is provided.
         """
         pulumi.set(__self__, "types", types)
         if ip_address_type is not None:
@@ -200,7 +200,7 @@ class DomainNameEndpointConfiguration(dict):
     @pulumi.getter
     def types(self) -> _builtins.str:
         """
-        A list of endpoint types of an API or its custom domain name. For an edge-optimized API and its custom domain name, the endpoint type is `EDGE`. For a regional API and its custom domain name, the endpoint type is `REGIONAL`. For a private API, the endpoint type is `PRIVATE`.
+        List of endpoint types of an API or its custom domain name. For an edge-optimized API and its custom domain name, the endpoint type is `EDGE`. For a regional API and its custom domain name, the endpoint type is `REGIONAL`. For a private API, the endpoint type is `PRIVATE`.
         """
         return pulumi.get(self, "types")
 
@@ -208,7 +208,7 @@ class DomainNameEndpointConfiguration(dict):
     @pulumi.getter(name="ipAddressType")
     def ip_address_type(self) -> Optional[_builtins.str]:
         """
-        The IP address types that can invoke a DomainName. Valid values: `ipv4`, `dualstack`. Use `ipv4` to allow only IPv4 addresses to invoke a DomainName, or use `dualstack` to allow both IPv4 and IPv6 addresses to invoke a DomainName. For the `PRIVATE` endpoint type, only `dualstack` is supported. Terraform performs drift detection for this argument only when the value is provided.
+        IP address types that can invoke a DomainName. Valid values: `ipv4`, `dualstack`. Use `ipv4` to allow only IPv4 addresses to invoke a DomainName, or use `dualstack` to allow both IPv4 and IPv6 addresses to invoke a DomainName. For the `PRIVATE` endpoint type, only `dualstack` is supported. Terraform performs drift detection for this argument only when the value is provided.
         """
         return pulumi.get(self, "ip_address_type")
 
@@ -487,7 +487,7 @@ class RestApiEndpointConfiguration(dict):
                  vpc_endpoint_ids: Optional[Sequence[_builtins.str]] = None):
         """
         :param _builtins.str types: List of endpoint types. This resource currently only supports managing a single value. Valid values: `EDGE`, `REGIONAL` or `PRIVATE`. If unspecified, defaults to `EDGE`. If set to `PRIVATE` recommend to set `put_rest_api_mode` = `merge` to not cause the endpoints and associated Route53 records to be deleted. Refer to the [documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/create-regional-api.html) for more information on the difference between edge-optimized and regional APIs.
-        :param _builtins.str ip_address_type: The IP address types that can invoke an API (RestApi). Valid values: `ipv4`, `dualstack`. Use `ipv4` to allow only IPv4 addresses to invoke an API, or use `dualstack` to allow both IPv4 and IPv6 addresses to invoke an API. For the `PRIVATE` endpoint type, only `dualstack` is supported. The provider performs drift detection for this argument only when the value is provided.
+        :param _builtins.str ip_address_type: IP address types that can invoke a REST API. Valid values: `ipv4`, `dualstack`. Use `ipv4` to allow only IPv4 addresses to invoke an API, or use `dualstack` to allow both IPv4 and IPv6 addresses to invoke an API. For the `PRIVATE` endpoint type, only `dualstack` is supported. The provider performs drift detection for this argument only when the value is provided.
         :param Sequence[_builtins.str] vpc_endpoint_ids: Set of VPC Endpoint identifiers. It is only supported for `PRIVATE` endpoint type. If importing an OpenAPI specification via the `body` argument, this corresponds to the [`x-amazon-apigateway-endpoint-configuration` extension `vpcEndpointIds` property](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions-endpoint-configuration.html). If the argument value is provided and is different than the OpenAPI value, **the argument value will override the OpenAPI value**.
         """
         pulumi.set(__self__, "types", types)
@@ -508,7 +508,7 @@ class RestApiEndpointConfiguration(dict):
     @pulumi.getter(name="ipAddressType")
     def ip_address_type(self) -> Optional[_builtins.str]:
         """
-        The IP address types that can invoke an API (RestApi). Valid values: `ipv4`, `dualstack`. Use `ipv4` to allow only IPv4 addresses to invoke an API, or use `dualstack` to allow both IPv4 and IPv6 addresses to invoke an API. For the `PRIVATE` endpoint type, only `dualstack` is supported. The provider performs drift detection for this argument only when the value is provided.
+        IP address types that can invoke a REST API. Valid values: `ipv4`, `dualstack`. Use `ipv4` to allow only IPv4 addresses to invoke an API, or use `dualstack` to allow both IPv4 and IPv6 addresses to invoke an API. For the `PRIVATE` endpoint type, only `dualstack` is supported. The provider performs drift detection for this argument only when the value is provided.
         """
         return pulumi.get(self, "ip_address_type")
 
@@ -564,8 +564,7 @@ class StageAccessLogSettings(dict):
                  format: _builtins.str):
         """
         :param _builtins.str destination_arn: ARN of the CloudWatch Logs log group or Kinesis Data Firehose delivery stream to receive access logs. If you specify a Kinesis Data Firehose delivery stream, the stream name must begin with `amazon-apigateway-`. Automatically removes trailing `:*` if present.
-        :param _builtins.str format: Formatting and values recorded in the logs.
-               For more information on configuring the log format rules visit the AWS [documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html)
+        :param _builtins.str format: Formatting and values recorded in the logs. For more information on configuring the log format rules visit the AWS [documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html)
         """
         pulumi.set(__self__, "destination_arn", destination_arn)
         pulumi.set(__self__, "format", format)
@@ -582,8 +581,7 @@ class StageAccessLogSettings(dict):
     @pulumi.getter
     def format(self) -> _builtins.str:
         """
-        Formatting and values recorded in the logs.
-        For more information on configuring the log format rules visit the AWS [documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html)
+        Formatting and values recorded in the logs. For more information on configuring the log format rules visit the AWS [documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html)
         """
         return pulumi.get(self, "format")
 
@@ -689,9 +687,11 @@ class UsagePlanApiStage(dict):
                  stage: _builtins.str,
                  throttles: Optional[Sequence['outputs.UsagePlanApiStageThrottle']] = None):
         """
-        :param _builtins.str api_id: API Id of the associated API stage in a usage plan.
+        :param _builtins.str api_id: API ID of the associated API stage in a usage plan.
         :param _builtins.str stage: API stage name of the associated API stage in a usage plan.
-        :param Sequence['UsagePlanApiStageThrottleArgs'] throttles: The throttling limits of the usage plan.
+               
+               The following arguments are optional:
+        :param Sequence['UsagePlanApiStageThrottleArgs'] throttles: Throttling limits applied to the API stage. See `throttle` Block below.
         """
         pulumi.set(__self__, "api_id", api_id)
         pulumi.set(__self__, "stage", stage)
@@ -702,7 +702,7 @@ class UsagePlanApiStage(dict):
     @pulumi.getter(name="apiId")
     def api_id(self) -> _builtins.str:
         """
-        API Id of the associated API stage in a usage plan.
+        API ID of the associated API stage in a usage plan.
         """
         return pulumi.get(self, "api_id")
 
@@ -711,6 +711,8 @@ class UsagePlanApiStage(dict):
     def stage(self) -> _builtins.str:
         """
         API stage name of the associated API stage in a usage plan.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "stage")
 
@@ -718,7 +720,7 @@ class UsagePlanApiStage(dict):
     @pulumi.getter
     def throttles(self) -> Optional[Sequence['outputs.UsagePlanApiStageThrottle']]:
         """
-        The throttling limits of the usage plan.
+        Throttling limits applied to the API stage. See `throttle` Block below.
         """
         return pulumi.get(self, "throttles")
 
@@ -749,9 +751,11 @@ class UsagePlanApiStageThrottle(dict):
                  burst_limit: Optional[_builtins.int] = None,
                  rate_limit: Optional[_builtins.float] = None):
         """
-        :param _builtins.str path: Method to apply the throttle settings for. Specfiy the path and method, for example `/test/GET`.
-        :param _builtins.int burst_limit: The API request burst limit, the maximum rate limit over a time ranging from one to a few seconds, depending upon whether the underlying token bucket is at its full capacity.
-        :param _builtins.float rate_limit: The API request steady-state rate limit.
+        :param _builtins.str path: Method to apply the throttle settings for. Specify the path and method, for example `/test/GET`.
+               
+               The following arguments are optional:
+        :param _builtins.int burst_limit: API request burst limit, the maximum rate limit over a time ranging from one to a few seconds, depending upon whether the underlying token bucket is at its full capacity.
+        :param _builtins.float rate_limit: API request steady-state rate limit.
         """
         pulumi.set(__self__, "path", path)
         if burst_limit is not None:
@@ -763,7 +767,9 @@ class UsagePlanApiStageThrottle(dict):
     @pulumi.getter
     def path(self) -> _builtins.str:
         """
-        Method to apply the throttle settings for. Specfiy the path and method, for example `/test/GET`.
+        Method to apply the throttle settings for. Specify the path and method, for example `/test/GET`.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "path")
 
@@ -771,7 +777,7 @@ class UsagePlanApiStageThrottle(dict):
     @pulumi.getter(name="burstLimit")
     def burst_limit(self) -> Optional[_builtins.int]:
         """
-        The API request burst limit, the maximum rate limit over a time ranging from one to a few seconds, depending upon whether the underlying token bucket is at its full capacity.
+        API request burst limit, the maximum rate limit over a time ranging from one to a few seconds, depending upon whether the underlying token bucket is at its full capacity.
         """
         return pulumi.get(self, "burst_limit")
 
@@ -779,7 +785,7 @@ class UsagePlanApiStageThrottle(dict):
     @pulumi.getter(name="rateLimit")
     def rate_limit(self) -> Optional[_builtins.float]:
         """
-        The API request steady-state rate limit.
+        API request steady-state rate limit.
         """
         return pulumi.get(self, "rate_limit")
 
@@ -792,7 +798,9 @@ class UsagePlanQuotaSettings(dict):
                  offset: Optional[_builtins.int] = None):
         """
         :param _builtins.int limit: Maximum number of requests that can be made in a given time period.
-        :param _builtins.str period: Time period in which the limit applies. Valid values are "DAY", "WEEK" or "MONTH".
+        :param _builtins.str period: Time period in which the limit applies. Valid values are `DAY`, `WEEK`, or `MONTH`.
+               
+               The following arguments are optional:
         :param _builtins.int offset: Number of requests subtracted from the given limit in the initial time period.
         """
         pulumi.set(__self__, "limit", limit)
@@ -812,7 +820,9 @@ class UsagePlanQuotaSettings(dict):
     @pulumi.getter
     def period(self) -> _builtins.str:
         """
-        Time period in which the limit applies. Valid values are "DAY", "WEEK" or "MONTH".
+        Time period in which the limit applies. Valid values are `DAY`, `WEEK`, or `MONTH`.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "period")
 
@@ -849,6 +859,10 @@ class UsagePlanThrottleSettings(dict):
     def __init__(__self__, *,
                  burst_limit: Optional[_builtins.int] = None,
                  rate_limit: Optional[_builtins.float] = None):
+        """
+        :param _builtins.int burst_limit: API request burst limit, the maximum rate limit over a time ranging from one to a few seconds, depending upon whether the underlying token bucket is at its full capacity.
+        :param _builtins.float rate_limit: API request steady-state rate limit.
+        """
         if burst_limit is not None:
             pulumi.set(__self__, "burst_limit", burst_limit)
         if rate_limit is not None:
@@ -857,11 +871,17 @@ class UsagePlanThrottleSettings(dict):
     @_builtins.property
     @pulumi.getter(name="burstLimit")
     def burst_limit(self) -> Optional[_builtins.int]:
+        """
+        API request burst limit, the maximum rate limit over a time ranging from one to a few seconds, depending upon whether the underlying token bucket is at its full capacity.
+        """
         return pulumi.get(self, "burst_limit")
 
     @_builtins.property
     @pulumi.getter(name="rateLimit")
     def rate_limit(self) -> Optional[_builtins.float]:
+        """
+        API request steady-state rate limit.
+        """
         return pulumi.get(self, "rate_limit")
 
 
@@ -886,6 +906,7 @@ class GetApiKeysItemResult(dict):
         :param _builtins.str id: ID of the API Key.
         :param _builtins.str last_updated_date: Date and time when the API Key was last updated.
         :param _builtins.str name: Name of the API Key.
+        :param Sequence[_builtins.str] stage_keys: List of stage keys associated with the API Key.
         :param Mapping[str, _builtins.str] tags: Map of tags for the resource.
         :param _builtins.str value: Value of the API Key.
         """
@@ -959,6 +980,9 @@ class GetApiKeysItemResult(dict):
     @_builtins.property
     @pulumi.getter(name="stageKeys")
     def stage_keys(self) -> Sequence[_builtins.str]:
+        """
+        List of stage keys associated with the API Key.
+        """
         return pulumi.get(self, "stage_keys")
 
     @_builtins.property
@@ -984,7 +1008,7 @@ class GetDomainNameEndpointConfigurationResult(dict):
                  ip_address_type: _builtins.str,
                  types: Sequence[_builtins.str]):
         """
-        :param _builtins.str ip_address_type: The IP address types that can invoke an API (RestApi).
+        :param _builtins.str ip_address_type: IP address types that can invoke a DomainName.
         :param Sequence[_builtins.str] types: List of endpoint types.
         """
         pulumi.set(__self__, "ip_address_type", ip_address_type)
@@ -994,7 +1018,7 @@ class GetDomainNameEndpointConfigurationResult(dict):
     @pulumi.getter(name="ipAddressType")
     def ip_address_type(self) -> _builtins.str:
         """
-        The IP address types that can invoke an API (RestApi).
+        IP address types that can invoke a DomainName.
         """
         return pulumi.get(self, "ip_address_type")
 
@@ -1014,7 +1038,7 @@ class GetRestApiEndpointConfigurationResult(dict):
                  types: Sequence[_builtins.str],
                  vpc_endpoint_ids: Sequence[_builtins.str]):
         """
-        :param _builtins.str ip_address_type: The IP address types that can invoke an API (RestApi).
+        :param _builtins.str ip_address_type: IP address types that can invoke a REST API.
         :param Sequence[_builtins.str] types: List of endpoint types.
         :param Sequence[_builtins.str] vpc_endpoint_ids: Set of VPC Endpoint identifiers.
         """
@@ -1026,7 +1050,7 @@ class GetRestApiEndpointConfigurationResult(dict):
     @pulumi.getter(name="ipAddressType")
     def ip_address_type(self) -> _builtins.str:
         """
-        The IP address types that can invoke an API (RestApi).
+        IP address types that can invoke a REST API.
         """
         return pulumi.get(self, "ip_address_type")
 

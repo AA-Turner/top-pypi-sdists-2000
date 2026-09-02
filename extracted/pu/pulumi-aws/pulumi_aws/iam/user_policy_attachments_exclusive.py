@@ -23,6 +23,7 @@ class UserPolicyAttachmentsExclusiveArgs:
                  user_name: pulumi.Input[_builtins.str]):
         """
         The set of arguments for constructing a UserPolicyAttachmentsExclusive resource.
+
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] policy_arns: A list of managed IAM policy ARNs to be attached to the user. Policies attached to this user but not configured in this argument will be removed.
         :param pulumi.Input[_builtins.str] user_name: IAM user name.
         """
@@ -57,10 +58,11 @@ class UserPolicyAttachmentsExclusiveArgs:
 @pulumi.input_type
 class _UserPolicyAttachmentsExclusiveState:
     def __init__(__self__, *,
-                 policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 user_name: Optional[pulumi.Input[_builtins.str]] = None):
+                 policy_arns: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 user_name: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering UserPolicyAttachmentsExclusive resources.
+
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] policy_arns: A list of managed IAM policy ARNs to be attached to the user. Policies attached to this user but not configured in this argument will be removed.
         :param pulumi.Input[_builtins.str] user_name: IAM user name.
         """
@@ -71,26 +73,26 @@ class _UserPolicyAttachmentsExclusiveState:
 
     @_builtins.property
     @pulumi.getter(name="policyArns")
-    def policy_arns(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def policy_arns(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of managed IAM policy ARNs to be attached to the user. Policies attached to this user but not configured in this argument will be removed.
         """
         return pulumi.get(self, "policy_arns")
 
     @policy_arns.setter
-    def policy_arns(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def policy_arns(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "policy_arns", value)
 
     @_builtins.property
     @pulumi.getter(name="userName")
-    def user_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def user_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         IAM user name.
         """
         return pulumi.get(self, "user_name")
 
     @user_name.setter
-    def user_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def user_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "user_name", value)
 
 
@@ -100,13 +102,13 @@ class UserPolicyAttachmentsExclusive(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 user_name: Optional[pulumi.Input[_builtins.str]] = None,
+                 policy_arns: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 user_name: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for maintaining exclusive management of managed IAM policies assigned to an AWS IAM (Identity & Access Management) user.
 
-        !> This resource takes exclusive ownership over managed IAM policies attached to a user. This includes removal of managed IAM policies which are not explicitly configured. To prevent persistent drift, ensure any `iam.UserPolicyAttachment` resources managed alongside this resource are included in the `policy_arns` argument.
+        > This resource takes exclusive ownership over managed IAM policies attached to a user. This includes removal of managed IAM policies which are not explicitly configured. To prevent persistent drift, ensure any `iam.UserPolicyAttachment` resources managed alongside this resource are included in the `policy_arns` argument.
 
         > Destruction of this resource means Terraform will no longer manage reconciliation of the configured policy attachments. It **will not** detach the configured policies from the user.
 
@@ -145,6 +147,7 @@ class UserPolicyAttachmentsExclusive(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:iam/userPolicyAttachmentsExclusive:UserPolicyAttachmentsExclusive example MyUser
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -160,7 +163,7 @@ class UserPolicyAttachmentsExclusive(pulumi.CustomResource):
         """
         Resource for maintaining exclusive management of managed IAM policies assigned to an AWS IAM (Identity & Access Management) user.
 
-        !> This resource takes exclusive ownership over managed IAM policies attached to a user. This includes removal of managed IAM policies which are not explicitly configured. To prevent persistent drift, ensure any `iam.UserPolicyAttachment` resources managed alongside this resource are included in the `policy_arns` argument.
+        > This resource takes exclusive ownership over managed IAM policies attached to a user. This includes removal of managed IAM policies which are not explicitly configured. To prevent persistent drift, ensure any `iam.UserPolicyAttachment` resources managed alongside this resource are included in the `policy_arns` argument.
 
         > Destruction of this resource means Terraform will no longer manage reconciliation of the configured policy attachments. It **will not** detach the configured policies from the user.
 
@@ -199,6 +202,7 @@ class UserPolicyAttachmentsExclusive(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:iam/userPolicyAttachmentsExclusive:UserPolicyAttachmentsExclusive example MyUser
         ```
+
 
         :param str resource_name: The name of the resource.
         :param UserPolicyAttachmentsExclusiveArgs args: The arguments to use to populate this resource's properties.
@@ -215,8 +219,8 @@ class UserPolicyAttachmentsExclusive(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 user_name: Optional[pulumi.Input[_builtins.str]] = None,
+                 policy_arns: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 user_name: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -242,8 +246,8 @@ class UserPolicyAttachmentsExclusive(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            user_name: Optional[pulumi.Input[_builtins.str]] = None) -> 'UserPolicyAttachmentsExclusive':
+            policy_arns: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            user_name: pulumi.Input[Optional[_builtins.str]] = None) -> 'UserPolicyAttachmentsExclusive':
         """
         Get an existing UserPolicyAttachmentsExclusive resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

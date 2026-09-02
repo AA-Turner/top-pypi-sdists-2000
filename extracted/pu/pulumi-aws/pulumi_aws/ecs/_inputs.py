@@ -25,6 +25,8 @@ __all__ = [
     'CapacityProviderManagedInstancesProviderInfrastructureOptimizationArgsDict',
     'CapacityProviderManagedInstancesProviderInstanceLaunchTemplateArgs',
     'CapacityProviderManagedInstancesProviderInstanceLaunchTemplateArgsDict',
+    'CapacityProviderManagedInstancesProviderInstanceLaunchTemplateCapacityReservationsArgs',
+    'CapacityProviderManagedInstancesProviderInstanceLaunchTemplateCapacityReservationsArgsDict',
     'CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsArgs',
     'CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsArgsDict',
     'CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorCountArgs',
@@ -45,6 +47,8 @@ __all__ = [
     'CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsTotalLocalStorageGbArgsDict',
     'CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsVcpuCountArgs',
     'CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsVcpuCountArgsDict',
+    'CapacityProviderManagedInstancesProviderInstanceLaunchTemplateLocalStorageConfigurationArgs',
+    'CapacityProviderManagedInstancesProviderInstanceLaunchTemplateLocalStorageConfigurationArgsDict',
     'CapacityProviderManagedInstancesProviderInstanceLaunchTemplateNetworkConfigurationArgs',
     'CapacityProviderManagedInstancesProviderInstanceLaunchTemplateNetworkConfigurationArgsDict',
     'CapacityProviderManagedInstancesProviderInstanceLaunchTemplateStorageConfigurationArgs',
@@ -63,6 +67,52 @@ __all__ = [
     'ClusterServiceConnectDefaultsArgsDict',
     'ClusterSettingArgs',
     'ClusterSettingArgsDict',
+    'DaemonDeploymentConfigurationArgs',
+    'DaemonDeploymentConfigurationArgsDict',
+    'DaemonDeploymentConfigurationAlarmsArgs',
+    'DaemonDeploymentConfigurationAlarmsArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionArgs',
+    'DaemonTaskDefinitionContainerDefinitionArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionDependsOnArgs',
+    'DaemonTaskDefinitionContainerDefinitionDependsOnArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionEnvironmentArgs',
+    'DaemonTaskDefinitionContainerDefinitionEnvironmentArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionEnvironmentFileArgs',
+    'DaemonTaskDefinitionContainerDefinitionEnvironmentFileArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionFirelensConfigurationArgs',
+    'DaemonTaskDefinitionContainerDefinitionFirelensConfigurationArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionHealthCheckArgs',
+    'DaemonTaskDefinitionContainerDefinitionHealthCheckArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionLinuxParametersArgs',
+    'DaemonTaskDefinitionContainerDefinitionLinuxParametersArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionLinuxParametersCapabilitiesArgs',
+    'DaemonTaskDefinitionContainerDefinitionLinuxParametersCapabilitiesArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionLinuxParametersDeviceArgs',
+    'DaemonTaskDefinitionContainerDefinitionLinuxParametersDeviceArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionLinuxParametersTmpfArgs',
+    'DaemonTaskDefinitionContainerDefinitionLinuxParametersTmpfArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionLogConfigurationArgs',
+    'DaemonTaskDefinitionContainerDefinitionLogConfigurationArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionLogConfigurationSecretOptionArgs',
+    'DaemonTaskDefinitionContainerDefinitionLogConfigurationSecretOptionArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionMountPointArgs',
+    'DaemonTaskDefinitionContainerDefinitionMountPointArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionRepositoryCredentialsArgs',
+    'DaemonTaskDefinitionContainerDefinitionRepositoryCredentialsArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionRestartPolicyArgs',
+    'DaemonTaskDefinitionContainerDefinitionRestartPolicyArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionSecretArgs',
+    'DaemonTaskDefinitionContainerDefinitionSecretArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionSystemControlArgs',
+    'DaemonTaskDefinitionContainerDefinitionSystemControlArgsDict',
+    'DaemonTaskDefinitionContainerDefinitionUlimitArgs',
+    'DaemonTaskDefinitionContainerDefinitionUlimitArgsDict',
+    'DaemonTaskDefinitionVolumeArgs',
+    'DaemonTaskDefinitionVolumeArgsDict',
+    'DaemonTaskDefinitionVolumeHostArgs',
+    'DaemonTaskDefinitionVolumeHostArgsDict',
+    'DaemonTimeoutsArgs',
+    'DaemonTimeoutsArgsDict',
     'ExpressGatewayServiceIngressPathArgs',
     'ExpressGatewayServiceIngressPathArgsDict',
     'ExpressGatewayServiceNetworkConfigurationArgs',
@@ -109,6 +159,8 @@ __all__ = [
     'ServicePlacementConstraintArgsDict',
     'ServiceServiceConnectConfigurationArgs',
     'ServiceServiceConnectConfigurationArgsDict',
+    'ServiceServiceConnectConfigurationAccessLogConfigurationArgs',
+    'ServiceServiceConnectConfigurationAccessLogConfigurationArgsDict',
     'ServiceServiceConnectConfigurationLogConfigurationArgs',
     'ServiceServiceConnectConfigurationLogConfigurationArgsDict',
     'ServiceServiceConnectConfigurationLogConfigurationSecretOptionArgs',
@@ -159,6 +211,8 @@ __all__ = [
     'TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationArgsDict',
     'TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationAuthorizationConfigArgs',
     'TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationAuthorizationConfigArgsDict',
+    'TaskDefinitionVolumeS3filesVolumeConfigurationArgs',
+    'TaskDefinitionVolumeS3filesVolumeConfigurationArgsDict',
     'TaskSetCapacityProviderStrategyArgs',
     'TaskSetCapacityProviderStrategyArgsDict',
     'TaskSetLoadBalancerArgs',
@@ -192,15 +246,15 @@ class CapacityProviderAutoScalingGroupProviderArgsDict(TypedDict):
     """
     ARN of the associated auto scaling group.
     """
-    managed_draining: NotRequired[pulumi.Input[_builtins.str]]
+    managed_draining: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Enables or disables a graceful shutdown of instances without disturbing workloads. Valid values are `ENABLED` and `DISABLED`. The default value is `ENABLED` when a capacity provider is created.
     """
-    managed_scaling: NotRequired[pulumi.Input['CapacityProviderAutoScalingGroupProviderManagedScalingArgsDict']]
+    managed_scaling: NotRequired[pulumi.Input[Optional['CapacityProviderAutoScalingGroupProviderManagedScalingArgsDict']]]
     """
     Configuration block defining the parameters of the auto scaling. Detailed below.
     """
-    managed_termination_protection: NotRequired[pulumi.Input[_builtins.str]]
+    managed_termination_protection: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Enables or disables container-aware termination of instances in the auto scaling group when scale-in happens. Valid values are `ENABLED` and `DISABLED`.
     """
@@ -209,9 +263,9 @@ class CapacityProviderAutoScalingGroupProviderArgsDict(TypedDict):
 class CapacityProviderAutoScalingGroupProviderArgs:
     def __init__(__self__, *,
                  auto_scaling_group_arn: pulumi.Input[_builtins.str],
-                 managed_draining: Optional[pulumi.Input[_builtins.str]] = None,
-                 managed_scaling: Optional[pulumi.Input['CapacityProviderAutoScalingGroupProviderManagedScalingArgs']] = None,
-                 managed_termination_protection: Optional[pulumi.Input[_builtins.str]] = None):
+                 managed_draining: pulumi.Input[Optional[_builtins.str]] = None,
+                 managed_scaling: pulumi.Input[Optional['CapacityProviderAutoScalingGroupProviderManagedScalingArgs']] = None,
+                 managed_termination_protection: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] auto_scaling_group_arn: ARN of the associated auto scaling group.
         :param pulumi.Input[_builtins.str] managed_draining: Enables or disables a graceful shutdown of instances without disturbing workloads. Valid values are `ENABLED` and `DISABLED`. The default value is `ENABLED` when a capacity provider is created.
@@ -240,61 +294,61 @@ class CapacityProviderAutoScalingGroupProviderArgs:
 
     @_builtins.property
     @pulumi.getter(name="managedDraining")
-    def managed_draining(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def managed_draining(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Enables or disables a graceful shutdown of instances without disturbing workloads. Valid values are `ENABLED` and `DISABLED`. The default value is `ENABLED` when a capacity provider is created.
         """
         return pulumi.get(self, "managed_draining")
 
     @managed_draining.setter
-    def managed_draining(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def managed_draining(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "managed_draining", value)
 
     @_builtins.property
     @pulumi.getter(name="managedScaling")
-    def managed_scaling(self) -> Optional[pulumi.Input['CapacityProviderAutoScalingGroupProviderManagedScalingArgs']]:
+    def managed_scaling(self) -> pulumi.Input[Optional['CapacityProviderAutoScalingGroupProviderManagedScalingArgs']]:
         """
         Configuration block defining the parameters of the auto scaling. Detailed below.
         """
         return pulumi.get(self, "managed_scaling")
 
     @managed_scaling.setter
-    def managed_scaling(self, value: Optional[pulumi.Input['CapacityProviderAutoScalingGroupProviderManagedScalingArgs']]):
+    def managed_scaling(self, value: pulumi.Input[Optional['CapacityProviderAutoScalingGroupProviderManagedScalingArgs']]):
         pulumi.set(self, "managed_scaling", value)
 
     @_builtins.property
     @pulumi.getter(name="managedTerminationProtection")
-    def managed_termination_protection(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def managed_termination_protection(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Enables or disables container-aware termination of instances in the auto scaling group when scale-in happens. Valid values are `ENABLED` and `DISABLED`.
         """
         return pulumi.get(self, "managed_termination_protection")
 
     @managed_termination_protection.setter
-    def managed_termination_protection(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def managed_termination_protection(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "managed_termination_protection", value)
 
 
 class CapacityProviderAutoScalingGroupProviderManagedScalingArgsDict(TypedDict):
-    instance_warmup_period: NotRequired[pulumi.Input[_builtins.int]]
+    instance_warmup_period: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Period of time, in seconds, after a newly launched Amazon EC2 instance can contribute to CloudWatch metrics for Auto Scaling group. If this parameter is omitted, the default value of 300 seconds is used.
 
     For more information on how the instance warmup period contributes to managed scale-out behavior, see [Control the instances Amazon ECS terminates](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/managed-termination-protection.html) in the _Amazon Elastic Container Service Developer Guide_.
     """
-    maximum_scaling_step_size: NotRequired[pulumi.Input[_builtins.int]]
+    maximum_scaling_step_size: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Maximum step adjustment size. A number between 1 and 10,000.
     """
-    minimum_scaling_step_size: NotRequired[pulumi.Input[_builtins.int]]
+    minimum_scaling_step_size: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Minimum step adjustment size. A number between 1 and 10,000.
     """
-    status: NotRequired[pulumi.Input[_builtins.str]]
+    status: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Whether auto scaling is managed by ECS. Valid values are `ENABLED` and `DISABLED`.
     """
-    target_capacity: NotRequired[pulumi.Input[_builtins.int]]
+    target_capacity: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Target utilization for the capacity provider. A number between 1 and 100.
     """
@@ -302,11 +356,11 @@ class CapacityProviderAutoScalingGroupProviderManagedScalingArgsDict(TypedDict):
 @pulumi.input_type
 class CapacityProviderAutoScalingGroupProviderManagedScalingArgs:
     def __init__(__self__, *,
-                 instance_warmup_period: Optional[pulumi.Input[_builtins.int]] = None,
-                 maximum_scaling_step_size: Optional[pulumi.Input[_builtins.int]] = None,
-                 minimum_scaling_step_size: Optional[pulumi.Input[_builtins.int]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 target_capacity: Optional[pulumi.Input[_builtins.int]] = None):
+                 instance_warmup_period: pulumi.Input[Optional[_builtins.int]] = None,
+                 maximum_scaling_step_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 minimum_scaling_step_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 target_capacity: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.int] instance_warmup_period: Period of time, in seconds, after a newly launched Amazon EC2 instance can contribute to CloudWatch metrics for Auto Scaling group. If this parameter is omitted, the default value of 300 seconds is used.
                
@@ -329,7 +383,7 @@ class CapacityProviderAutoScalingGroupProviderManagedScalingArgs:
 
     @_builtins.property
     @pulumi.getter(name="instanceWarmupPeriod")
-    def instance_warmup_period(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def instance_warmup_period(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Period of time, in seconds, after a newly launched Amazon EC2 instance can contribute to CloudWatch metrics for Auto Scaling group. If this parameter is omitted, the default value of 300 seconds is used.
 
@@ -338,74 +392,74 @@ class CapacityProviderAutoScalingGroupProviderManagedScalingArgs:
         return pulumi.get(self, "instance_warmup_period")
 
     @instance_warmup_period.setter
-    def instance_warmup_period(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def instance_warmup_period(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "instance_warmup_period", value)
 
     @_builtins.property
     @pulumi.getter(name="maximumScalingStepSize")
-    def maximum_scaling_step_size(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def maximum_scaling_step_size(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Maximum step adjustment size. A number between 1 and 10,000.
         """
         return pulumi.get(self, "maximum_scaling_step_size")
 
     @maximum_scaling_step_size.setter
-    def maximum_scaling_step_size(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def maximum_scaling_step_size(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "maximum_scaling_step_size", value)
 
     @_builtins.property
     @pulumi.getter(name="minimumScalingStepSize")
-    def minimum_scaling_step_size(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def minimum_scaling_step_size(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Minimum step adjustment size. A number between 1 and 10,000.
         """
         return pulumi.get(self, "minimum_scaling_step_size")
 
     @minimum_scaling_step_size.setter
-    def minimum_scaling_step_size(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def minimum_scaling_step_size(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "minimum_scaling_step_size", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Whether auto scaling is managed by ECS. Valid values are `ENABLED` and `DISABLED`.
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
     @_builtins.property
     @pulumi.getter(name="targetCapacity")
-    def target_capacity(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def target_capacity(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Target utilization for the capacity provider. A number between 1 and 100.
         """
         return pulumi.get(self, "target_capacity")
 
     @target_capacity.setter
-    def target_capacity(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def target_capacity(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "target_capacity", value)
 
 
 class CapacityProviderManagedInstancesProviderArgsDict(TypedDict):
     infrastructure_role_arn: pulumi.Input[_builtins.str]
     """
-    The Amazon Resource Name (ARN) of the infrastructure role that Amazon ECS uses to manage instances on your behalf. This role must have permissions to launch, terminate, and manage Amazon EC2 instances, as well as access to other AWS services required for Amazon ECS Managed Instances functionality. For more information, see [Amazon ECS infrastructure IAM role](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/infrastructure_IAM_role.html) in the Amazon ECS Developer Guide.
+    ARN of the infrastructure role that Amazon ECS uses to manage instances on your behalf. This role must have permissions to launch, terminate, and manage Amazon EC2 instances, as well as access to other AWS services required for Amazon ECS Managed Instances functionality. For more information, see [Amazon ECS infrastructure IAM role](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/infrastructure_IAM_role.html) in the Amazon ECS Developer Guide.
     """
     instance_launch_template: pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateArgsDict']
     """
-    The launch template configuration that specifies how Amazon ECS should launch Amazon EC2 instances. This includes the instance profile, network configuration, storage settings, and instance requirements for attribute-based instance type selection. For more information, see [Store instance launch parameters in Amazon EC2 launch templates](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html) in the Amazon EC2 User Guide. Detailed below.
+    Launch template configuration that specifies how Amazon ECS should launch Amazon EC2 instances. This includes the instance profile, network configuration, storage settings, and instance requirements for attribute-based instance type selection. For more information, see [Store instance launch parameters in Amazon EC2 launch templates](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html) in the Amazon EC2 User Guide. Detailed below.
     """
-    infrastructure_optimization: NotRequired[pulumi.Input['CapacityProviderManagedInstancesProviderInfrastructureOptimizationArgsDict']]
+    infrastructure_optimization: NotRequired[pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInfrastructureOptimizationArgsDict']]]
     """
-    Defines how Amazon ECS Managed Instances optimizes the infrastructure in your capacity provider. Configure it to turn on or off the infrastructure optimization in your capacity provider, and to control the idle EC2 instances optimization delay.
+    Configuration block for how Amazon ECS Managed Instances optimizes the infrastructure in your capacity provider, including whether to turn optimization on or off and how long to delay optimizing idle EC2 instances. Detailed below.
     """
-    propagate_tags: NotRequired[pulumi.Input[_builtins.str]]
+    propagate_tags: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Specifies whether to propagate tags from the capacity provider to the Amazon ECS Managed Instances. When enabled, tags applied to the capacity provider are automatically applied to all instances launched by this provider. Valid values are `CAPACITY_PROVIDER` and `NONE`.
+    Whether to propagate tags from the capacity provider to the Amazon ECS Managed Instances. When enabled, tags applied to the capacity provider are automatically applied to all instances launched by this provider. Valid values are `CAPACITY_PROVIDER` and `NONE`.
     """
 
 @pulumi.input_type
@@ -413,13 +467,13 @@ class CapacityProviderManagedInstancesProviderArgs:
     def __init__(__self__, *,
                  infrastructure_role_arn: pulumi.Input[_builtins.str],
                  instance_launch_template: pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateArgs'],
-                 infrastructure_optimization: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInfrastructureOptimizationArgs']] = None,
-                 propagate_tags: Optional[pulumi.Input[_builtins.str]] = None):
+                 infrastructure_optimization: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInfrastructureOptimizationArgs']] = None,
+                 propagate_tags: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] infrastructure_role_arn: The Amazon Resource Name (ARN) of the infrastructure role that Amazon ECS uses to manage instances on your behalf. This role must have permissions to launch, terminate, and manage Amazon EC2 instances, as well as access to other AWS services required for Amazon ECS Managed Instances functionality. For more information, see [Amazon ECS infrastructure IAM role](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/infrastructure_IAM_role.html) in the Amazon ECS Developer Guide.
-        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateArgs'] instance_launch_template: The launch template configuration that specifies how Amazon ECS should launch Amazon EC2 instances. This includes the instance profile, network configuration, storage settings, and instance requirements for attribute-based instance type selection. For more information, see [Store instance launch parameters in Amazon EC2 launch templates](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html) in the Amazon EC2 User Guide. Detailed below.
-        :param pulumi.Input['CapacityProviderManagedInstancesProviderInfrastructureOptimizationArgs'] infrastructure_optimization: Defines how Amazon ECS Managed Instances optimizes the infrastructure in your capacity provider. Configure it to turn on or off the infrastructure optimization in your capacity provider, and to control the idle EC2 instances optimization delay.
-        :param pulumi.Input[_builtins.str] propagate_tags: Specifies whether to propagate tags from the capacity provider to the Amazon ECS Managed Instances. When enabled, tags applied to the capacity provider are automatically applied to all instances launched by this provider. Valid values are `CAPACITY_PROVIDER` and `NONE`.
+        :param pulumi.Input[_builtins.str] infrastructure_role_arn: ARN of the infrastructure role that Amazon ECS uses to manage instances on your behalf. This role must have permissions to launch, terminate, and manage Amazon EC2 instances, as well as access to other AWS services required for Amazon ECS Managed Instances functionality. For more information, see [Amazon ECS infrastructure IAM role](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/infrastructure_IAM_role.html) in the Amazon ECS Developer Guide.
+        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateArgs'] instance_launch_template: Launch template configuration that specifies how Amazon ECS should launch Amazon EC2 instances. This includes the instance profile, network configuration, storage settings, and instance requirements for attribute-based instance type selection. For more information, see [Store instance launch parameters in Amazon EC2 launch templates](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html) in the Amazon EC2 User Guide. Detailed below.
+        :param pulumi.Input['CapacityProviderManagedInstancesProviderInfrastructureOptimizationArgs'] infrastructure_optimization: Configuration block for how Amazon ECS Managed Instances optimizes the infrastructure in your capacity provider, including whether to turn optimization on or off and how long to delay optimizing idle EC2 instances. Detailed below.
+        :param pulumi.Input[_builtins.str] propagate_tags: Whether to propagate tags from the capacity provider to the Amazon ECS Managed Instances. When enabled, tags applied to the capacity provider are automatically applied to all instances launched by this provider. Valid values are `CAPACITY_PROVIDER` and `NONE`.
         """
         pulumi.set(__self__, "infrastructure_role_arn", infrastructure_role_arn)
         pulumi.set(__self__, "instance_launch_template", instance_launch_template)
@@ -432,7 +486,7 @@ class CapacityProviderManagedInstancesProviderArgs:
     @pulumi.getter(name="infrastructureRoleArn")
     def infrastructure_role_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the infrastructure role that Amazon ECS uses to manage instances on your behalf. This role must have permissions to launch, terminate, and manage Amazon EC2 instances, as well as access to other AWS services required for Amazon ECS Managed Instances functionality. For more information, see [Amazon ECS infrastructure IAM role](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/infrastructure_IAM_role.html) in the Amazon ECS Developer Guide.
+        ARN of the infrastructure role that Amazon ECS uses to manage instances on your behalf. This role must have permissions to launch, terminate, and manage Amazon EC2 instances, as well as access to other AWS services required for Amazon ECS Managed Instances functionality. For more information, see [Amazon ECS infrastructure IAM role](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/infrastructure_IAM_role.html) in the Amazon ECS Developer Guide.
         """
         return pulumi.get(self, "infrastructure_role_arn")
 
@@ -444,7 +498,7 @@ class CapacityProviderManagedInstancesProviderArgs:
     @pulumi.getter(name="instanceLaunchTemplate")
     def instance_launch_template(self) -> pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateArgs']:
         """
-        The launch template configuration that specifies how Amazon ECS should launch Amazon EC2 instances. This includes the instance profile, network configuration, storage settings, and instance requirements for attribute-based instance type selection. For more information, see [Store instance launch parameters in Amazon EC2 launch templates](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html) in the Amazon EC2 User Guide. Detailed below.
+        Launch template configuration that specifies how Amazon ECS should launch Amazon EC2 instances. This includes the instance profile, network configuration, storage settings, and instance requirements for attribute-based instance type selection. For more information, see [Store instance launch parameters in Amazon EC2 launch templates](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html) in the Amazon EC2 User Guide. Detailed below.
         """
         return pulumi.get(self, "instance_launch_template")
 
@@ -454,88 +508,90 @@ class CapacityProviderManagedInstancesProviderArgs:
 
     @_builtins.property
     @pulumi.getter(name="infrastructureOptimization")
-    def infrastructure_optimization(self) -> Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInfrastructureOptimizationArgs']]:
+    def infrastructure_optimization(self) -> pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInfrastructureOptimizationArgs']]:
         """
-        Defines how Amazon ECS Managed Instances optimizes the infrastructure in your capacity provider. Configure it to turn on or off the infrastructure optimization in your capacity provider, and to control the idle EC2 instances optimization delay.
+        Configuration block for how Amazon ECS Managed Instances optimizes the infrastructure in your capacity provider, including whether to turn optimization on or off and how long to delay optimizing idle EC2 instances. Detailed below.
         """
         return pulumi.get(self, "infrastructure_optimization")
 
     @infrastructure_optimization.setter
-    def infrastructure_optimization(self, value: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInfrastructureOptimizationArgs']]):
+    def infrastructure_optimization(self, value: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInfrastructureOptimizationArgs']]):
         pulumi.set(self, "infrastructure_optimization", value)
 
     @_builtins.property
     @pulumi.getter(name="propagateTags")
-    def propagate_tags(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def propagate_tags(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Specifies whether to propagate tags from the capacity provider to the Amazon ECS Managed Instances. When enabled, tags applied to the capacity provider are automatically applied to all instances launched by this provider. Valid values are `CAPACITY_PROVIDER` and `NONE`.
+        Whether to propagate tags from the capacity provider to the Amazon ECS Managed Instances. When enabled, tags applied to the capacity provider are automatically applied to all instances launched by this provider. Valid values are `CAPACITY_PROVIDER` and `NONE`.
         """
         return pulumi.get(self, "propagate_tags")
 
     @propagate_tags.setter
-    def propagate_tags(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def propagate_tags(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "propagate_tags", value)
 
 
 class CapacityProviderManagedInstancesProviderInfrastructureOptimizationArgsDict(TypedDict):
-    scale_in_after: NotRequired[pulumi.Input[_builtins.int]]
+    scale_in_after: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    This parameter defines the number of seconds Amazon ECS Managed Instances waits before optimizing EC2 instances that have become idle or underutilized. A longer delay increases the likelihood of placing new tasks on idle instances, reducing startup time. A shorter delay helps reduce infrastructure costs by optimizing idle instances more quickly. Valid values are:
-    * Not set (null) - Uses the default optimization behavior.
-    * `-1` - Disables automatic infrastructure optimization.
+    Number of seconds Amazon ECS Managed Instances waits before optimizing EC2 instances that have become idle or underutilized. A longer delay increases the likelihood of placing new tasks on idle instances, reducing startup time. A shorter delay helps reduce infrastructure costs by optimizing idle instances more quickly. Valid values are `-1` to disable automatic infrastructure optimization, `0` to `3600` (inclusive) to specify the number of seconds to wait before optimizing instances, or leave unset (null) to use the default optimization behavior.
     """
 
 @pulumi.input_type
 class CapacityProviderManagedInstancesProviderInfrastructureOptimizationArgs:
     def __init__(__self__, *,
-                 scale_in_after: Optional[pulumi.Input[_builtins.int]] = None):
+                 scale_in_after: pulumi.Input[Optional[_builtins.int]] = None):
         """
-        :param pulumi.Input[_builtins.int] scale_in_after: This parameter defines the number of seconds Amazon ECS Managed Instances waits before optimizing EC2 instances that have become idle or underutilized. A longer delay increases the likelihood of placing new tasks on idle instances, reducing startup time. A shorter delay helps reduce infrastructure costs by optimizing idle instances more quickly. Valid values are:
-               * Not set (null) - Uses the default optimization behavior.
-               * `-1` - Disables automatic infrastructure optimization.
+        :param pulumi.Input[_builtins.int] scale_in_after: Number of seconds Amazon ECS Managed Instances waits before optimizing EC2 instances that have become idle or underutilized. A longer delay increases the likelihood of placing new tasks on idle instances, reducing startup time. A shorter delay helps reduce infrastructure costs by optimizing idle instances more quickly. Valid values are `-1` to disable automatic infrastructure optimization, `0` to `3600` (inclusive) to specify the number of seconds to wait before optimizing instances, or leave unset (null) to use the default optimization behavior.
         """
         if scale_in_after is not None:
             pulumi.set(__self__, "scale_in_after", scale_in_after)
 
     @_builtins.property
     @pulumi.getter(name="scaleInAfter")
-    def scale_in_after(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def scale_in_after(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        This parameter defines the number of seconds Amazon ECS Managed Instances waits before optimizing EC2 instances that have become idle or underutilized. A longer delay increases the likelihood of placing new tasks on idle instances, reducing startup time. A shorter delay helps reduce infrastructure costs by optimizing idle instances more quickly. Valid values are:
-        * Not set (null) - Uses the default optimization behavior.
-        * `-1` - Disables automatic infrastructure optimization.
+        Number of seconds Amazon ECS Managed Instances waits before optimizing EC2 instances that have become idle or underutilized. A longer delay increases the likelihood of placing new tasks on idle instances, reducing startup time. A shorter delay helps reduce infrastructure costs by optimizing idle instances more quickly. Valid values are `-1` to disable automatic infrastructure optimization, `0` to `3600` (inclusive) to specify the number of seconds to wait before optimizing instances, or leave unset (null) to use the default optimization behavior.
         """
         return pulumi.get(self, "scale_in_after")
 
     @scale_in_after.setter
-    def scale_in_after(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def scale_in_after(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "scale_in_after", value)
 
 
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateArgsDict(TypedDict):
     ec2_instance_profile_arn: pulumi.Input[_builtins.str]
     """
-    The Amazon Resource Name (ARN) of the instance profile that Amazon ECS applies to Amazon ECS Managed Instances. This instance profile must include the necessary permissions for your tasks to access AWS services and resources. For more information, see [Amazon ECS instance profile for Managed Instances](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/instance_IAM_role.html) in the Amazon ECS Developer Guide.
+    ARN of the instance profile that Amazon ECS applies to Amazon ECS Managed Instances. This instance profile must include the necessary permissions for your tasks to access AWS services and resources. For more information, see [Amazon ECS instance profile for Managed Instances](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/instance_IAM_role.html) in the Amazon ECS Developer Guide.
     """
     network_configuration: pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateNetworkConfigurationArgsDict']
     """
-    The network configuration for Amazon ECS Managed Instances. This specifies the subnets and security groups that instances use for network connectivity. Detailed below.
+    Network configuration for Amazon ECS Managed Instances. This specifies the subnets and security groups that instances use for network connectivity. Detailed below.
     """
-    capacity_option_type: NotRequired[pulumi.Input[_builtins.str]]
+    capacity_option_type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The purchasing option for the EC2 instances used in the capacity provider. Determines whether to use On-Demand or Spot instances. Valid values are `ON_DEMAND` and `SPOT`. Defaults to `ON_DEMAND` when not specified. Changing this value will trigger replacement of the capacity provider. For more information, see [Amazon EC2 billing and purchasing options](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html) in the Amazon EC2 User Guide.
+    Purchasing option for the EC2 instances used in the capacity provider. Determines whether to use On-Demand, Spot, or Capacity Reservation instances. Valid values are `ON_DEMAND`, `SPOT`, and `RESERVED`. Defaults to `ON_DEMAND` when not specified. Changing this value will trigger replacement of the capacity provider. For more information, see [Amazon EC2 billing and purchasing options](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html) in the Amazon EC2 User Guide.
     """
-    instance_requirements: NotRequired[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsArgsDict']]
+    capacity_reservations: NotRequired[pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateCapacityReservationsArgsDict']]]
     """
-    The instance requirements. You can specify the instance types and instance requirements such as vCPU count, memory, network performance, and accelerator specifications. Amazon ECS automatically selects the instances that match the specified criteria. Detailed below.
+    Capacity Reservation configuration used to launch instances. Required when `capacity_option_type` is `RESERVED`. Detailed below.
     """
-    monitoring: NotRequired[pulumi.Input[_builtins.str]]
+    instance_requirements: NotRequired[pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsArgsDict']]]
+    """
+    Instance requirements. You can specify the instance types and instance requirements such as vCPU count, memory, network performance, and accelerator specifications. Amazon ECS automatically selects the instances that match the specified criteria. Detailed below.
+    """
+    local_storage_configuration: NotRequired[pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateLocalStorageConfigurationArgsDict']]]
+    """
+    Configuration block for the local storage settings applied to Amazon ECS Managed Instances. Detailed below.
+    """
+    monitoring: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     CloudWatch provides two categories of monitoring: basic monitoring and detailed monitoring. By default, your managed instance is configured for basic monitoring. You can optionally enable detailed monitoring to help you more quickly identify and act on operational issues. You can enable or turn off detailed monitoring at launch or when the managed instance is running or stopped. For more information, see [Detailed monitoring for Amazon ECS Managed Instances](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cloudwatch-metrics.html) in the Amazon ECS Developer Guide. Valid values are `BASIC` and `DETAILED`.
     """
-    storage_configuration: NotRequired[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateStorageConfigurationArgsDict']]
+    storage_configuration: NotRequired[pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateStorageConfigurationArgsDict']]]
     """
-    The storage configuration for Amazon ECS Managed Instances. This defines the root volume size and type for the instances. Detailed below.
+    Storage configuration for Amazon ECS Managed Instances. This defines the root volume size and type for the instances. Detailed below.
     """
 
 @pulumi.input_type
@@ -543,24 +599,32 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateArgs:
     def __init__(__self__, *,
                  ec2_instance_profile_arn: pulumi.Input[_builtins.str],
                  network_configuration: pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateNetworkConfigurationArgs'],
-                 capacity_option_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 instance_requirements: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsArgs']] = None,
-                 monitoring: Optional[pulumi.Input[_builtins.str]] = None,
-                 storage_configuration: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateStorageConfigurationArgs']] = None):
+                 capacity_option_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 capacity_reservations: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateCapacityReservationsArgs']] = None,
+                 instance_requirements: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsArgs']] = None,
+                 local_storage_configuration: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateLocalStorageConfigurationArgs']] = None,
+                 monitoring: pulumi.Input[Optional[_builtins.str]] = None,
+                 storage_configuration: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateStorageConfigurationArgs']] = None):
         """
-        :param pulumi.Input[_builtins.str] ec2_instance_profile_arn: The Amazon Resource Name (ARN) of the instance profile that Amazon ECS applies to Amazon ECS Managed Instances. This instance profile must include the necessary permissions for your tasks to access AWS services and resources. For more information, see [Amazon ECS instance profile for Managed Instances](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/instance_IAM_role.html) in the Amazon ECS Developer Guide.
-        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateNetworkConfigurationArgs'] network_configuration: The network configuration for Amazon ECS Managed Instances. This specifies the subnets and security groups that instances use for network connectivity. Detailed below.
-        :param pulumi.Input[_builtins.str] capacity_option_type: The purchasing option for the EC2 instances used in the capacity provider. Determines whether to use On-Demand or Spot instances. Valid values are `ON_DEMAND` and `SPOT`. Defaults to `ON_DEMAND` when not specified. Changing this value will trigger replacement of the capacity provider. For more information, see [Amazon EC2 billing and purchasing options](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html) in the Amazon EC2 User Guide.
-        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsArgs'] instance_requirements: The instance requirements. You can specify the instance types and instance requirements such as vCPU count, memory, network performance, and accelerator specifications. Amazon ECS automatically selects the instances that match the specified criteria. Detailed below.
+        :param pulumi.Input[_builtins.str] ec2_instance_profile_arn: ARN of the instance profile that Amazon ECS applies to Amazon ECS Managed Instances. This instance profile must include the necessary permissions for your tasks to access AWS services and resources. For more information, see [Amazon ECS instance profile for Managed Instances](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/instance_IAM_role.html) in the Amazon ECS Developer Guide.
+        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateNetworkConfigurationArgs'] network_configuration: Network configuration for Amazon ECS Managed Instances. This specifies the subnets and security groups that instances use for network connectivity. Detailed below.
+        :param pulumi.Input[_builtins.str] capacity_option_type: Purchasing option for the EC2 instances used in the capacity provider. Determines whether to use On-Demand, Spot, or Capacity Reservation instances. Valid values are `ON_DEMAND`, `SPOT`, and `RESERVED`. Defaults to `ON_DEMAND` when not specified. Changing this value will trigger replacement of the capacity provider. For more information, see [Amazon EC2 billing and purchasing options](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html) in the Amazon EC2 User Guide.
+        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateCapacityReservationsArgs'] capacity_reservations: Capacity Reservation configuration used to launch instances. Required when `capacity_option_type` is `RESERVED`. Detailed below.
+        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsArgs'] instance_requirements: Instance requirements. You can specify the instance types and instance requirements such as vCPU count, memory, network performance, and accelerator specifications. Amazon ECS automatically selects the instances that match the specified criteria. Detailed below.
+        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateLocalStorageConfigurationArgs'] local_storage_configuration: Configuration block for the local storage settings applied to Amazon ECS Managed Instances. Detailed below.
         :param pulumi.Input[_builtins.str] monitoring: CloudWatch provides two categories of monitoring: basic monitoring and detailed monitoring. By default, your managed instance is configured for basic monitoring. You can optionally enable detailed monitoring to help you more quickly identify and act on operational issues. You can enable or turn off detailed monitoring at launch or when the managed instance is running or stopped. For more information, see [Detailed monitoring for Amazon ECS Managed Instances](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cloudwatch-metrics.html) in the Amazon ECS Developer Guide. Valid values are `BASIC` and `DETAILED`.
-        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateStorageConfigurationArgs'] storage_configuration: The storage configuration for Amazon ECS Managed Instances. This defines the root volume size and type for the instances. Detailed below.
+        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateStorageConfigurationArgs'] storage_configuration: Storage configuration for Amazon ECS Managed Instances. This defines the root volume size and type for the instances. Detailed below.
         """
         pulumi.set(__self__, "ec2_instance_profile_arn", ec2_instance_profile_arn)
         pulumi.set(__self__, "network_configuration", network_configuration)
         if capacity_option_type is not None:
             pulumi.set(__self__, "capacity_option_type", capacity_option_type)
+        if capacity_reservations is not None:
+            pulumi.set(__self__, "capacity_reservations", capacity_reservations)
         if instance_requirements is not None:
             pulumi.set(__self__, "instance_requirements", instance_requirements)
+        if local_storage_configuration is not None:
+            pulumi.set(__self__, "local_storage_configuration", local_storage_configuration)
         if monitoring is not None:
             pulumi.set(__self__, "monitoring", monitoring)
         if storage_configuration is not None:
@@ -570,7 +634,7 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateArgs:
     @pulumi.getter(name="ec2InstanceProfileArn")
     def ec2_instance_profile_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the instance profile that Amazon ECS applies to Amazon ECS Managed Instances. This instance profile must include the necessary permissions for your tasks to access AWS services and resources. For more information, see [Amazon ECS instance profile for Managed Instances](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/instance_IAM_role.html) in the Amazon ECS Developer Guide.
+        ARN of the instance profile that Amazon ECS applies to Amazon ECS Managed Instances. This instance profile must include the necessary permissions for your tasks to access AWS services and resources. For more information, see [Amazon ECS instance profile for Managed Instances](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/instance_IAM_role.html) in the Amazon ECS Developer Guide.
         """
         return pulumi.get(self, "ec2_instance_profile_arn")
 
@@ -582,7 +646,7 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateArgs:
     @pulumi.getter(name="networkConfiguration")
     def network_configuration(self) -> pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateNetworkConfigurationArgs']:
         """
-        The network configuration for Amazon ECS Managed Instances. This specifies the subnets and security groups that instances use for network connectivity. Detailed below.
+        Network configuration for Amazon ECS Managed Instances. This specifies the subnets and security groups that instances use for network connectivity. Detailed below.
         """
         return pulumi.get(self, "network_configuration")
 
@@ -592,149 +656,222 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateArgs:
 
     @_builtins.property
     @pulumi.getter(name="capacityOptionType")
-    def capacity_option_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def capacity_option_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The purchasing option for the EC2 instances used in the capacity provider. Determines whether to use On-Demand or Spot instances. Valid values are `ON_DEMAND` and `SPOT`. Defaults to `ON_DEMAND` when not specified. Changing this value will trigger replacement of the capacity provider. For more information, see [Amazon EC2 billing and purchasing options](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html) in the Amazon EC2 User Guide.
+        Purchasing option for the EC2 instances used in the capacity provider. Determines whether to use On-Demand, Spot, or Capacity Reservation instances. Valid values are `ON_DEMAND`, `SPOT`, and `RESERVED`. Defaults to `ON_DEMAND` when not specified. Changing this value will trigger replacement of the capacity provider. For more information, see [Amazon EC2 billing and purchasing options](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html) in the Amazon EC2 User Guide.
         """
         return pulumi.get(self, "capacity_option_type")
 
     @capacity_option_type.setter
-    def capacity_option_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def capacity_option_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "capacity_option_type", value)
 
     @_builtins.property
-    @pulumi.getter(name="instanceRequirements")
-    def instance_requirements(self) -> Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsArgs']]:
+    @pulumi.getter(name="capacityReservations")
+    def capacity_reservations(self) -> pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateCapacityReservationsArgs']]:
         """
-        The instance requirements. You can specify the instance types and instance requirements such as vCPU count, memory, network performance, and accelerator specifications. Amazon ECS automatically selects the instances that match the specified criteria. Detailed below.
+        Capacity Reservation configuration used to launch instances. Required when `capacity_option_type` is `RESERVED`. Detailed below.
+        """
+        return pulumi.get(self, "capacity_reservations")
+
+    @capacity_reservations.setter
+    def capacity_reservations(self, value: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateCapacityReservationsArgs']]):
+        pulumi.set(self, "capacity_reservations", value)
+
+    @_builtins.property
+    @pulumi.getter(name="instanceRequirements")
+    def instance_requirements(self) -> pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsArgs']]:
+        """
+        Instance requirements. You can specify the instance types and instance requirements such as vCPU count, memory, network performance, and accelerator specifications. Amazon ECS automatically selects the instances that match the specified criteria. Detailed below.
         """
         return pulumi.get(self, "instance_requirements")
 
     @instance_requirements.setter
-    def instance_requirements(self, value: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsArgs']]):
+    def instance_requirements(self, value: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsArgs']]):
         pulumi.set(self, "instance_requirements", value)
 
     @_builtins.property
+    @pulumi.getter(name="localStorageConfiguration")
+    def local_storage_configuration(self) -> pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateLocalStorageConfigurationArgs']]:
+        """
+        Configuration block for the local storage settings applied to Amazon ECS Managed Instances. Detailed below.
+        """
+        return pulumi.get(self, "local_storage_configuration")
+
+    @local_storage_configuration.setter
+    def local_storage_configuration(self, value: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateLocalStorageConfigurationArgs']]):
+        pulumi.set(self, "local_storage_configuration", value)
+
+    @_builtins.property
     @pulumi.getter
-    def monitoring(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def monitoring(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         CloudWatch provides two categories of monitoring: basic monitoring and detailed monitoring. By default, your managed instance is configured for basic monitoring. You can optionally enable detailed monitoring to help you more quickly identify and act on operational issues. You can enable or turn off detailed monitoring at launch or when the managed instance is running or stopped. For more information, see [Detailed monitoring for Amazon ECS Managed Instances](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cloudwatch-metrics.html) in the Amazon ECS Developer Guide. Valid values are `BASIC` and `DETAILED`.
         """
         return pulumi.get(self, "monitoring")
 
     @monitoring.setter
-    def monitoring(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def monitoring(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "monitoring", value)
 
     @_builtins.property
     @pulumi.getter(name="storageConfiguration")
-    def storage_configuration(self) -> Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateStorageConfigurationArgs']]:
+    def storage_configuration(self) -> pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateStorageConfigurationArgs']]:
         """
-        The storage configuration for Amazon ECS Managed Instances. This defines the root volume size and type for the instances. Detailed below.
+        Storage configuration for Amazon ECS Managed Instances. This defines the root volume size and type for the instances. Detailed below.
         """
         return pulumi.get(self, "storage_configuration")
 
     @storage_configuration.setter
-    def storage_configuration(self, value: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateStorageConfigurationArgs']]):
+    def storage_configuration(self, value: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateStorageConfigurationArgs']]):
         pulumi.set(self, "storage_configuration", value)
+
+
+class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateCapacityReservationsArgsDict(TypedDict):
+    reservation_group_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    ARN of the Capacity Reservation resource group in which to run instances. Can only be set when `reservation_preference` is `RESERVATIONS_ONLY`.
+    """
+    reservation_preference: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Preference for when Capacity Reservations should be used. Valid values are `RESERVATIONS_ONLY`, `RESERVATIONS_FIRST`, and `RESERVATIONS_EXCLUDED`. `instance_requirements` must be provided when set to `RESERVATIONS_ONLY` or `RESERVATIONS_FIRST`.
+    """
+
+@pulumi.input_type
+class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateCapacityReservationsArgs:
+    def __init__(__self__, *,
+                 reservation_group_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 reservation_preference: pulumi.Input[Optional[_builtins.str]] = None):
+        """
+        :param pulumi.Input[_builtins.str] reservation_group_arn: ARN of the Capacity Reservation resource group in which to run instances. Can only be set when `reservation_preference` is `RESERVATIONS_ONLY`.
+        :param pulumi.Input[_builtins.str] reservation_preference: Preference for when Capacity Reservations should be used. Valid values are `RESERVATIONS_ONLY`, `RESERVATIONS_FIRST`, and `RESERVATIONS_EXCLUDED`. `instance_requirements` must be provided when set to `RESERVATIONS_ONLY` or `RESERVATIONS_FIRST`.
+        """
+        if reservation_group_arn is not None:
+            pulumi.set(__self__, "reservation_group_arn", reservation_group_arn)
+        if reservation_preference is not None:
+            pulumi.set(__self__, "reservation_preference", reservation_preference)
+
+    @_builtins.property
+    @pulumi.getter(name="reservationGroupArn")
+    def reservation_group_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        ARN of the Capacity Reservation resource group in which to run instances. Can only be set when `reservation_preference` is `RESERVATIONS_ONLY`.
+        """
+        return pulumi.get(self, "reservation_group_arn")
+
+    @reservation_group_arn.setter
+    def reservation_group_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "reservation_group_arn", value)
+
+    @_builtins.property
+    @pulumi.getter(name="reservationPreference")
+    def reservation_preference(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Preference for when Capacity Reservations should be used. Valid values are `RESERVATIONS_ONLY`, `RESERVATIONS_FIRST`, and `RESERVATIONS_EXCLUDED`. `instance_requirements` must be provided when set to `RESERVATIONS_ONLY` or `RESERVATIONS_FIRST`.
+        """
+        return pulumi.get(self, "reservation_preference")
+
+    @reservation_preference.setter
+    def reservation_preference(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "reservation_preference", value)
 
 
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsArgsDict(TypedDict):
     memory_mib: pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryMibArgsDict']
     """
-    The minimum and maximum amount of memory in mebibytes (MiB) for the instance types. Amazon ECS selects instance types that have memory within this range.
+    Minimum and maximum amount of memory in mebibytes (MiB) for the instance types. Amazon ECS selects instance types that have memory within this range. Detailed below.
     """
     vcpu_count: pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsVcpuCountArgsDict']
     """
-    The minimum and maximum number of vCPUs for the instance types. Amazon ECS selects instance types that have vCPU counts within this range.
+    Minimum and maximum number of vCPUs for the instance types. Amazon ECS selects instance types that have vCPU counts within this range. Detailed below.
     """
-    accelerator_count: NotRequired[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorCountArgsDict']]
+    accelerator_count: NotRequired[pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorCountArgsDict']]]
     """
-    The minimum and maximum number of accelerators for the instance types. This is used when you need instances with specific numbers of GPUs or other accelerators.
+    Minimum and maximum number of accelerators for the instance types. This is used when you need instances with specific numbers of GPUs or other accelerators. Detailed below.
     """
-    accelerator_manufacturers: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    accelerator_manufacturers: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    The accelerator manufacturers to include. You can specify `nvidia`, `amd`, `amazon-web-services`, `xilinx`, or `habana` depending on your accelerator requirements. Valid values are `amazon-web-services`, `amd`, `nvidia`, `xilinx`, `habana`.
+    Accelerator manufacturers to include. You can specify `nvidia`, `amd`, `amazon-web-services`, `xilinx`, or `habana` depending on your accelerator requirements. Valid values are `amazon-web-services`, `amd`, `nvidia`, `xilinx`, `habana`.
     """
-    accelerator_names: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    accelerator_names: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    The specific accelerator names to include. For example, you can specify `a100`, `v100`, `k80`, or other specific accelerator models. Valid values are `a100`, `inferentia`, `k520`, `k80`, `m60`, `radeon-pro-v520`, `t4`, `vu9p`, `v100`, `a10g`, `h100`, `t4g`.
+    Specific accelerator names to include. For example, you can specify `a100`, `v100`, `k80`, or other specific accelerator models. Valid values are `a100`, `inferentia`, `k520`, `k80`, `m60`, `radeon-pro-v520`, `t4`, `vu9p`, `v100`, `a10g`, `h100`, `t4g`.
     """
-    accelerator_total_memory_mib: NotRequired[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorTotalMemoryMibArgsDict']]
+    accelerator_total_memory_mib: NotRequired[pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorTotalMemoryMibArgsDict']]]
     """
-    The minimum and maximum total accelerator memory in mebibytes (MiB). This is important for GPU workloads that require specific amounts of video memory.
+    Minimum and maximum total accelerator memory in mebibytes (MiB). This is important for GPU workloads that require specific amounts of video memory. Detailed below.
     """
-    accelerator_types: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    accelerator_types: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    The accelerator types to include. You can specify `gpu` for graphics processing units, `fpga` for field programmable gate arrays, or `inference` for machine learning inference accelerators. Valid values are `gpu`, `fpga`, `inference`.
+    Accelerator types to include. You can specify `gpu` for GPUs, `fpga` for field programmable gate arrays, or `inference` for machine learning inference accelerators. Valid values are `gpu`, `fpga`, `inference`.
     """
-    allowed_instance_types: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    allowed_instance_types: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    The instance types to include in the selection. When specified, Amazon ECS only considers these instance types, subject to the other requirements specified. Maximum of 400 instance types. You can specify instance type patterns using wildcards (e.g., `m5.*`).
+    Instance types to include in the selection. When specified, Amazon ECS only considers these instance types, subject to the other requirements specified. Maximum of 400 instance types. You can specify instance type patterns using wildcards (e.g., `m5.*`).
     """
-    bare_metal: NotRequired[pulumi.Input[_builtins.str]]
+    bare_metal: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Indicates whether to include bare metal instance types. Set to `included` to allow bare metal instances, `excluded` to exclude them, or `required` to use only bare metal instances. Valid values are `included`, `excluded`, `required`.
+    Whether to include bare metal instance types. Set to `included` to allow bare metal instances, `excluded` to exclude them, or `required` to use only bare metal instances. Valid values are `included`, `excluded`, `required`.
     """
-    baseline_ebs_bandwidth_mbps: NotRequired[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsBaselineEbsBandwidthMbpsArgsDict']]
+    baseline_ebs_bandwidth_mbps: NotRequired[pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsBaselineEbsBandwidthMbpsArgsDict']]]
     """
-    The minimum and maximum baseline Amazon EBS bandwidth in megabits per second (Mbps). This is important for workloads with high storage I/O requirements.
+    Minimum and maximum baseline Amazon EBS bandwidth in megabits per second (Mbps). This is important for workloads with high storage I/O requirements. Detailed below.
     """
-    burstable_performance: NotRequired[pulumi.Input[_builtins.str]]
+    burstable_performance: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Indicates whether to include burstable performance instance types (T2, T3, T3a, T4g). Set to `included` to allow burstable instances, `excluded` to exclude them, or `required` to use only burstable instances. Valid values are `included`, `excluded`, `required`.
+    Whether to include burstable performance instance types (T2, T3, T3a, T4g). Set to `included` to allow burstable instances, `excluded` to exclude them, or `required` to use only burstable instances. Valid values are `included`, `excluded`, `required`.
     """
-    cpu_manufacturers: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    cpu_manufacturers: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    The CPU manufacturers to include or exclude. You can specify `intel`, `amd`, or `amazon-web-services` to control which CPU types are used for your workloads. Valid values are `intel`, `amd`, `amazon-web-services`.
+    CPU manufacturers to include or exclude. You can specify `intel`, `amd`, or `amazon-web-services` to control which CPU types are used for your workloads. Valid values are `intel`, `amd`, `amazon-web-services`.
     """
-    excluded_instance_types: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    excluded_instance_types: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    The instance types to exclude from selection. Use this to prevent Amazon ECS from selecting specific instance types that may not be suitable for your workloads. Maximum of 400 instance types.
+    Instance types to exclude from selection. Use this to prevent Amazon ECS from selecting specific instance types that may not be suitable for your workloads. Maximum of 400 instance types.
     """
-    instance_generations: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    instance_generations: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    The instance generations to include. You can specify `current` to use the latest generation instances, or `previous` to include previous generation instances for cost optimization. Valid values are `current`, `previous`.
+    Instance generations to include. You can specify `current` to use the latest generation instances, or `previous` to include previous generation instances for cost optimization. Valid values are `current`, `previous`.
     """
-    local_storage: NotRequired[pulumi.Input[_builtins.str]]
+    local_storage: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Indicates whether to include instance types with local storage. Set to `included` to allow local storage, `excluded` to exclude it, or `required` to use only instances with local storage. Valid values are `included`, `excluded`, `required`.
+    Whether to include instance types with local storage. Set to `included` to allow local storage, `excluded` to exclude it, or `required` to use only instances with local storage. Valid values are `included`, `excluded`, `required`.
     """
-    local_storage_types: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    local_storage_types: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    The local storage types to include. You can specify `hdd` for hard disk drives, `ssd` for solid state drives, or both. Valid values are `hdd`, `ssd`.
+    Local storage types to include. You can specify `hdd` for hard disk drives, `ssd` for solid state drives, or both. Valid values are `hdd`, `ssd`.
     """
-    max_spot_price_as_percentage_of_optimal_on_demand_price: NotRequired[pulumi.Input[_builtins.int]]
+    max_spot_price_as_percentage_of_optimal_on_demand_price: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The maximum price for Spot instances as a percentage of the optimal On-Demand price. This provides more precise cost control for Spot instance selection.
+    Maximum price for Spot instances as a percentage of the optimal On-Demand price. This provides more precise cost control for Spot instance selection.
     """
-    memory_gib_per_vcpu: NotRequired[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryGibPerVcpuArgsDict']]
+    memory_gib_per_vcpu: NotRequired[pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryGibPerVcpuArgsDict']]]
     """
-    The minimum and maximum amount of memory per vCPU in gibibytes (GiB). This helps ensure that instance types have the appropriate memory-to-CPU ratio for your workloads.
+    Minimum and maximum amount of memory per vCPU in gibibytes (GiB). This helps ensure that instance types have the appropriate memory-to-CPU ratio for your workloads. Detailed below.
     """
-    network_bandwidth_gbps: NotRequired[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkBandwidthGbpsArgsDict']]
+    network_bandwidth_gbps: NotRequired[pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkBandwidthGbpsArgsDict']]]
     """
-    The minimum and maximum network bandwidth in gigabits per second (Gbps). This is crucial for network-intensive workloads that require high throughput.
+    Minimum and maximum network bandwidth in gigabits per second (Gbps). This is crucial for network-intensive workloads that require high throughput. Detailed below.
     """
-    network_interface_count: NotRequired[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkInterfaceCountArgsDict']]
+    network_interface_count: NotRequired[pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkInterfaceCountArgsDict']]]
     """
-    The minimum and maximum number of network interfaces for the instance types. This is useful for workloads that require multiple network interfaces.
+    Minimum and maximum number of network interfaces for the instance types. This is useful for workloads that require multiple network interfaces. Detailed below.
     """
-    on_demand_max_price_percentage_over_lowest_price: NotRequired[pulumi.Input[_builtins.int]]
+    on_demand_max_price_percentage_over_lowest_price: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The price protection threshold for On-Demand Instances, as a percentage higher than an identified On-Demand price. The identified On-Demand price is the price of the lowest priced current generation C, M, or R instance type with your specified attributes. When Amazon ECS selects instance types with your attributes, it will exclude instance types whose price exceeds your specified threshold.
+    Price protection threshold for On-Demand Instances, as a percentage higher than an identified On-Demand price. The identified On-Demand price is the price of the lowest priced current generation C, M, or R instance type with your specified attributes. When Amazon ECS selects instance types with your attributes, it will exclude instance types whose price exceeds your specified threshold.
     """
-    require_hibernate_support: NotRequired[pulumi.Input[_builtins.bool]]
+    require_hibernate_support: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
-    Indicates whether the instance types must support hibernation. When set to `true`, only instance types that support hibernation are selected.
+    Whether the instance types must support hibernation. When set to `true`, only instance types that support hibernation are selected.
     """
-    spot_max_price_percentage_over_lowest_price: NotRequired[pulumi.Input[_builtins.int]]
+    spot_max_price_percentage_over_lowest_price: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The maximum price for Spot instances as a percentage over the lowest priced On-Demand instance. This helps control Spot instance costs while maintaining access to capacity.
+    Maximum price for Spot instances as a percentage over the lowest priced On-Demand instance. This helps control Spot instance costs while maintaining access to capacity.
     """
-    total_local_storage_gb: NotRequired[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsTotalLocalStorageGbArgsDict']]
+    total_local_storage_gb: NotRequired[pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsTotalLocalStorageGbArgsDict']]]
     """
-    The minimum and maximum total local storage in gigabytes (GB) for instance types with local storage.
+    Minimum and maximum total local storage in gigabytes (GB) for instance types with local storage. Detailed below.
     """
 
 @pulumi.input_type
@@ -742,53 +879,53 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequ
     def __init__(__self__, *,
                  memory_mib: pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryMibArgs'],
                  vcpu_count: pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsVcpuCountArgs'],
-                 accelerator_count: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorCountArgs']] = None,
-                 accelerator_manufacturers: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 accelerator_names: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 accelerator_total_memory_mib: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorTotalMemoryMibArgs']] = None,
-                 accelerator_types: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 allowed_instance_types: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 bare_metal: Optional[pulumi.Input[_builtins.str]] = None,
-                 baseline_ebs_bandwidth_mbps: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsBaselineEbsBandwidthMbpsArgs']] = None,
-                 burstable_performance: Optional[pulumi.Input[_builtins.str]] = None,
-                 cpu_manufacturers: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 excluded_instance_types: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 instance_generations: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 local_storage: Optional[pulumi.Input[_builtins.str]] = None,
-                 local_storage_types: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 max_spot_price_as_percentage_of_optimal_on_demand_price: Optional[pulumi.Input[_builtins.int]] = None,
-                 memory_gib_per_vcpu: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryGibPerVcpuArgs']] = None,
-                 network_bandwidth_gbps: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkBandwidthGbpsArgs']] = None,
-                 network_interface_count: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkInterfaceCountArgs']] = None,
-                 on_demand_max_price_percentage_over_lowest_price: Optional[pulumi.Input[_builtins.int]] = None,
-                 require_hibernate_support: Optional[pulumi.Input[_builtins.bool]] = None,
-                 spot_max_price_percentage_over_lowest_price: Optional[pulumi.Input[_builtins.int]] = None,
-                 total_local_storage_gb: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsTotalLocalStorageGbArgs']] = None):
+                 accelerator_count: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorCountArgs']] = None,
+                 accelerator_manufacturers: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 accelerator_names: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 accelerator_total_memory_mib: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorTotalMemoryMibArgs']] = None,
+                 accelerator_types: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 allowed_instance_types: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 bare_metal: pulumi.Input[Optional[_builtins.str]] = None,
+                 baseline_ebs_bandwidth_mbps: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsBaselineEbsBandwidthMbpsArgs']] = None,
+                 burstable_performance: pulumi.Input[Optional[_builtins.str]] = None,
+                 cpu_manufacturers: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 excluded_instance_types: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 instance_generations: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 local_storage: pulumi.Input[Optional[_builtins.str]] = None,
+                 local_storage_types: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 max_spot_price_as_percentage_of_optimal_on_demand_price: pulumi.Input[Optional[_builtins.int]] = None,
+                 memory_gib_per_vcpu: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryGibPerVcpuArgs']] = None,
+                 network_bandwidth_gbps: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkBandwidthGbpsArgs']] = None,
+                 network_interface_count: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkInterfaceCountArgs']] = None,
+                 on_demand_max_price_percentage_over_lowest_price: pulumi.Input[Optional[_builtins.int]] = None,
+                 require_hibernate_support: pulumi.Input[Optional[_builtins.bool]] = None,
+                 spot_max_price_percentage_over_lowest_price: pulumi.Input[Optional[_builtins.int]] = None,
+                 total_local_storage_gb: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsTotalLocalStorageGbArgs']] = None):
         """
-        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryMibArgs'] memory_mib: The minimum and maximum amount of memory in mebibytes (MiB) for the instance types. Amazon ECS selects instance types that have memory within this range.
-        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsVcpuCountArgs'] vcpu_count: The minimum and maximum number of vCPUs for the instance types. Amazon ECS selects instance types that have vCPU counts within this range.
-        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorCountArgs'] accelerator_count: The minimum and maximum number of accelerators for the instance types. This is used when you need instances with specific numbers of GPUs or other accelerators.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] accelerator_manufacturers: The accelerator manufacturers to include. You can specify `nvidia`, `amd`, `amazon-web-services`, `xilinx`, or `habana` depending on your accelerator requirements. Valid values are `amazon-web-services`, `amd`, `nvidia`, `xilinx`, `habana`.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] accelerator_names: The specific accelerator names to include. For example, you can specify `a100`, `v100`, `k80`, or other specific accelerator models. Valid values are `a100`, `inferentia`, `k520`, `k80`, `m60`, `radeon-pro-v520`, `t4`, `vu9p`, `v100`, `a10g`, `h100`, `t4g`.
-        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorTotalMemoryMibArgs'] accelerator_total_memory_mib: The minimum and maximum total accelerator memory in mebibytes (MiB). This is important for GPU workloads that require specific amounts of video memory.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] accelerator_types: The accelerator types to include. You can specify `gpu` for graphics processing units, `fpga` for field programmable gate arrays, or `inference` for machine learning inference accelerators. Valid values are `gpu`, `fpga`, `inference`.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] allowed_instance_types: The instance types to include in the selection. When specified, Amazon ECS only considers these instance types, subject to the other requirements specified. Maximum of 400 instance types. You can specify instance type patterns using wildcards (e.g., `m5.*`).
-        :param pulumi.Input[_builtins.str] bare_metal: Indicates whether to include bare metal instance types. Set to `included` to allow bare metal instances, `excluded` to exclude them, or `required` to use only bare metal instances. Valid values are `included`, `excluded`, `required`.
-        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsBaselineEbsBandwidthMbpsArgs'] baseline_ebs_bandwidth_mbps: The minimum and maximum baseline Amazon EBS bandwidth in megabits per second (Mbps). This is important for workloads with high storage I/O requirements.
-        :param pulumi.Input[_builtins.str] burstable_performance: Indicates whether to include burstable performance instance types (T2, T3, T3a, T4g). Set to `included` to allow burstable instances, `excluded` to exclude them, or `required` to use only burstable instances. Valid values are `included`, `excluded`, `required`.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] cpu_manufacturers: The CPU manufacturers to include or exclude. You can specify `intel`, `amd`, or `amazon-web-services` to control which CPU types are used for your workloads. Valid values are `intel`, `amd`, `amazon-web-services`.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] excluded_instance_types: The instance types to exclude from selection. Use this to prevent Amazon ECS from selecting specific instance types that may not be suitable for your workloads. Maximum of 400 instance types.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] instance_generations: The instance generations to include. You can specify `current` to use the latest generation instances, or `previous` to include previous generation instances for cost optimization. Valid values are `current`, `previous`.
-        :param pulumi.Input[_builtins.str] local_storage: Indicates whether to include instance types with local storage. Set to `included` to allow local storage, `excluded` to exclude it, or `required` to use only instances with local storage. Valid values are `included`, `excluded`, `required`.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] local_storage_types: The local storage types to include. You can specify `hdd` for hard disk drives, `ssd` for solid state drives, or both. Valid values are `hdd`, `ssd`.
-        :param pulumi.Input[_builtins.int] max_spot_price_as_percentage_of_optimal_on_demand_price: The maximum price for Spot instances as a percentage of the optimal On-Demand price. This provides more precise cost control for Spot instance selection.
-        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryGibPerVcpuArgs'] memory_gib_per_vcpu: The minimum and maximum amount of memory per vCPU in gibibytes (GiB). This helps ensure that instance types have the appropriate memory-to-CPU ratio for your workloads.
-        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkBandwidthGbpsArgs'] network_bandwidth_gbps: The minimum and maximum network bandwidth in gigabits per second (Gbps). This is crucial for network-intensive workloads that require high throughput.
-        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkInterfaceCountArgs'] network_interface_count: The minimum and maximum number of network interfaces for the instance types. This is useful for workloads that require multiple network interfaces.
-        :param pulumi.Input[_builtins.int] on_demand_max_price_percentage_over_lowest_price: The price protection threshold for On-Demand Instances, as a percentage higher than an identified On-Demand price. The identified On-Demand price is the price of the lowest priced current generation C, M, or R instance type with your specified attributes. When Amazon ECS selects instance types with your attributes, it will exclude instance types whose price exceeds your specified threshold.
-        :param pulumi.Input[_builtins.bool] require_hibernate_support: Indicates whether the instance types must support hibernation. When set to `true`, only instance types that support hibernation are selected.
-        :param pulumi.Input[_builtins.int] spot_max_price_percentage_over_lowest_price: The maximum price for Spot instances as a percentage over the lowest priced On-Demand instance. This helps control Spot instance costs while maintaining access to capacity.
-        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsTotalLocalStorageGbArgs'] total_local_storage_gb: The minimum and maximum total local storage in gigabytes (GB) for instance types with local storage.
+        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryMibArgs'] memory_mib: Minimum and maximum amount of memory in mebibytes (MiB) for the instance types. Amazon ECS selects instance types that have memory within this range. Detailed below.
+        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsVcpuCountArgs'] vcpu_count: Minimum and maximum number of vCPUs for the instance types. Amazon ECS selects instance types that have vCPU counts within this range. Detailed below.
+        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorCountArgs'] accelerator_count: Minimum and maximum number of accelerators for the instance types. This is used when you need instances with specific numbers of GPUs or other accelerators. Detailed below.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] accelerator_manufacturers: Accelerator manufacturers to include. You can specify `nvidia`, `amd`, `amazon-web-services`, `xilinx`, or `habana` depending on your accelerator requirements. Valid values are `amazon-web-services`, `amd`, `nvidia`, `xilinx`, `habana`.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] accelerator_names: Specific accelerator names to include. For example, you can specify `a100`, `v100`, `k80`, or other specific accelerator models. Valid values are `a100`, `inferentia`, `k520`, `k80`, `m60`, `radeon-pro-v520`, `t4`, `vu9p`, `v100`, `a10g`, `h100`, `t4g`.
+        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorTotalMemoryMibArgs'] accelerator_total_memory_mib: Minimum and maximum total accelerator memory in mebibytes (MiB). This is important for GPU workloads that require specific amounts of video memory. Detailed below.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] accelerator_types: Accelerator types to include. You can specify `gpu` for GPUs, `fpga` for field programmable gate arrays, or `inference` for machine learning inference accelerators. Valid values are `gpu`, `fpga`, `inference`.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] allowed_instance_types: Instance types to include in the selection. When specified, Amazon ECS only considers these instance types, subject to the other requirements specified. Maximum of 400 instance types. You can specify instance type patterns using wildcards (e.g., `m5.*`).
+        :param pulumi.Input[_builtins.str] bare_metal: Whether to include bare metal instance types. Set to `included` to allow bare metal instances, `excluded` to exclude them, or `required` to use only bare metal instances. Valid values are `included`, `excluded`, `required`.
+        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsBaselineEbsBandwidthMbpsArgs'] baseline_ebs_bandwidth_mbps: Minimum and maximum baseline Amazon EBS bandwidth in megabits per second (Mbps). This is important for workloads with high storage I/O requirements. Detailed below.
+        :param pulumi.Input[_builtins.str] burstable_performance: Whether to include burstable performance instance types (T2, T3, T3a, T4g). Set to `included` to allow burstable instances, `excluded` to exclude them, or `required` to use only burstable instances. Valid values are `included`, `excluded`, `required`.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] cpu_manufacturers: CPU manufacturers to include or exclude. You can specify `intel`, `amd`, or `amazon-web-services` to control which CPU types are used for your workloads. Valid values are `intel`, `amd`, `amazon-web-services`.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] excluded_instance_types: Instance types to exclude from selection. Use this to prevent Amazon ECS from selecting specific instance types that may not be suitable for your workloads. Maximum of 400 instance types.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] instance_generations: Instance generations to include. You can specify `current` to use the latest generation instances, or `previous` to include previous generation instances for cost optimization. Valid values are `current`, `previous`.
+        :param pulumi.Input[_builtins.str] local_storage: Whether to include instance types with local storage. Set to `included` to allow local storage, `excluded` to exclude it, or `required` to use only instances with local storage. Valid values are `included`, `excluded`, `required`.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] local_storage_types: Local storage types to include. You can specify `hdd` for hard disk drives, `ssd` for solid state drives, or both. Valid values are `hdd`, `ssd`.
+        :param pulumi.Input[_builtins.int] max_spot_price_as_percentage_of_optimal_on_demand_price: Maximum price for Spot instances as a percentage of the optimal On-Demand price. This provides more precise cost control for Spot instance selection.
+        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryGibPerVcpuArgs'] memory_gib_per_vcpu: Minimum and maximum amount of memory per vCPU in gibibytes (GiB). This helps ensure that instance types have the appropriate memory-to-CPU ratio for your workloads. Detailed below.
+        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkBandwidthGbpsArgs'] network_bandwidth_gbps: Minimum and maximum network bandwidth in gigabits per second (Gbps). This is crucial for network-intensive workloads that require high throughput. Detailed below.
+        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkInterfaceCountArgs'] network_interface_count: Minimum and maximum number of network interfaces for the instance types. This is useful for workloads that require multiple network interfaces. Detailed below.
+        :param pulumi.Input[_builtins.int] on_demand_max_price_percentage_over_lowest_price: Price protection threshold for On-Demand Instances, as a percentage higher than an identified On-Demand price. The identified On-Demand price is the price of the lowest priced current generation C, M, or R instance type with your specified attributes. When Amazon ECS selects instance types with your attributes, it will exclude instance types whose price exceeds your specified threshold.
+        :param pulumi.Input[_builtins.bool] require_hibernate_support: Whether the instance types must support hibernation. When set to `true`, only instance types that support hibernation are selected.
+        :param pulumi.Input[_builtins.int] spot_max_price_percentage_over_lowest_price: Maximum price for Spot instances as a percentage over the lowest priced On-Demand instance. This helps control Spot instance costs while maintaining access to capacity.
+        :param pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsTotalLocalStorageGbArgs'] total_local_storage_gb: Minimum and maximum total local storage in gigabytes (GB) for instance types with local storage. Detailed below.
         """
         pulumi.set(__self__, "memory_mib", memory_mib)
         pulumi.set(__self__, "vcpu_count", vcpu_count)
@@ -841,7 +978,7 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequ
     @pulumi.getter(name="memoryMib")
     def memory_mib(self) -> pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryMibArgs']:
         """
-        The minimum and maximum amount of memory in mebibytes (MiB) for the instance types. Amazon ECS selects instance types that have memory within this range.
+        Minimum and maximum amount of memory in mebibytes (MiB) for the instance types. Amazon ECS selects instance types that have memory within this range. Detailed below.
         """
         return pulumi.get(self, "memory_mib")
 
@@ -853,7 +990,7 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequ
     @pulumi.getter(name="vcpuCount")
     def vcpu_count(self) -> pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsVcpuCountArgs']:
         """
-        The minimum and maximum number of vCPUs for the instance types. Amazon ECS selects instance types that have vCPU counts within this range.
+        Minimum and maximum number of vCPUs for the instance types. Amazon ECS selects instance types that have vCPU counts within this range. Detailed below.
         """
         return pulumi.get(self, "vcpu_count")
 
@@ -863,278 +1000,288 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequ
 
     @_builtins.property
     @pulumi.getter(name="acceleratorCount")
-    def accelerator_count(self) -> Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorCountArgs']]:
+    def accelerator_count(self) -> pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorCountArgs']]:
         """
-        The minimum and maximum number of accelerators for the instance types. This is used when you need instances with specific numbers of GPUs or other accelerators.
+        Minimum and maximum number of accelerators for the instance types. This is used when you need instances with specific numbers of GPUs or other accelerators. Detailed below.
         """
         return pulumi.get(self, "accelerator_count")
 
     @accelerator_count.setter
-    def accelerator_count(self, value: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorCountArgs']]):
+    def accelerator_count(self, value: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorCountArgs']]):
         pulumi.set(self, "accelerator_count", value)
 
     @_builtins.property
     @pulumi.getter(name="acceleratorManufacturers")
-    def accelerator_manufacturers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def accelerator_manufacturers(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        The accelerator manufacturers to include. You can specify `nvidia`, `amd`, `amazon-web-services`, `xilinx`, or `habana` depending on your accelerator requirements. Valid values are `amazon-web-services`, `amd`, `nvidia`, `xilinx`, `habana`.
+        Accelerator manufacturers to include. You can specify `nvidia`, `amd`, `amazon-web-services`, `xilinx`, or `habana` depending on your accelerator requirements. Valid values are `amazon-web-services`, `amd`, `nvidia`, `xilinx`, `habana`.
         """
         return pulumi.get(self, "accelerator_manufacturers")
 
     @accelerator_manufacturers.setter
-    def accelerator_manufacturers(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def accelerator_manufacturers(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "accelerator_manufacturers", value)
 
     @_builtins.property
     @pulumi.getter(name="acceleratorNames")
-    def accelerator_names(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def accelerator_names(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        The specific accelerator names to include. For example, you can specify `a100`, `v100`, `k80`, or other specific accelerator models. Valid values are `a100`, `inferentia`, `k520`, `k80`, `m60`, `radeon-pro-v520`, `t4`, `vu9p`, `v100`, `a10g`, `h100`, `t4g`.
+        Specific accelerator names to include. For example, you can specify `a100`, `v100`, `k80`, or other specific accelerator models. Valid values are `a100`, `inferentia`, `k520`, `k80`, `m60`, `radeon-pro-v520`, `t4`, `vu9p`, `v100`, `a10g`, `h100`, `t4g`.
         """
         return pulumi.get(self, "accelerator_names")
 
     @accelerator_names.setter
-    def accelerator_names(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def accelerator_names(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "accelerator_names", value)
 
     @_builtins.property
     @pulumi.getter(name="acceleratorTotalMemoryMib")
-    def accelerator_total_memory_mib(self) -> Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorTotalMemoryMibArgs']]:
+    def accelerator_total_memory_mib(self) -> pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorTotalMemoryMibArgs']]:
         """
-        The minimum and maximum total accelerator memory in mebibytes (MiB). This is important for GPU workloads that require specific amounts of video memory.
+        Minimum and maximum total accelerator memory in mebibytes (MiB). This is important for GPU workloads that require specific amounts of video memory. Detailed below.
         """
         return pulumi.get(self, "accelerator_total_memory_mib")
 
     @accelerator_total_memory_mib.setter
-    def accelerator_total_memory_mib(self, value: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorTotalMemoryMibArgs']]):
+    def accelerator_total_memory_mib(self, value: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorTotalMemoryMibArgs']]):
         pulumi.set(self, "accelerator_total_memory_mib", value)
 
     @_builtins.property
     @pulumi.getter(name="acceleratorTypes")
-    def accelerator_types(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def accelerator_types(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        The accelerator types to include. You can specify `gpu` for graphics processing units, `fpga` for field programmable gate arrays, or `inference` for machine learning inference accelerators. Valid values are `gpu`, `fpga`, `inference`.
+        Accelerator types to include. You can specify `gpu` for GPUs, `fpga` for field programmable gate arrays, or `inference` for machine learning inference accelerators. Valid values are `gpu`, `fpga`, `inference`.
         """
         return pulumi.get(self, "accelerator_types")
 
     @accelerator_types.setter
-    def accelerator_types(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def accelerator_types(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "accelerator_types", value)
 
     @_builtins.property
     @pulumi.getter(name="allowedInstanceTypes")
-    def allowed_instance_types(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def allowed_instance_types(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        The instance types to include in the selection. When specified, Amazon ECS only considers these instance types, subject to the other requirements specified. Maximum of 400 instance types. You can specify instance type patterns using wildcards (e.g., `m5.*`).
+        Instance types to include in the selection. When specified, Amazon ECS only considers these instance types, subject to the other requirements specified. Maximum of 400 instance types. You can specify instance type patterns using wildcards (e.g., `m5.*`).
         """
         return pulumi.get(self, "allowed_instance_types")
 
     @allowed_instance_types.setter
-    def allowed_instance_types(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def allowed_instance_types(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "allowed_instance_types", value)
 
     @_builtins.property
     @pulumi.getter(name="bareMetal")
-    def bare_metal(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def bare_metal(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Indicates whether to include bare metal instance types. Set to `included` to allow bare metal instances, `excluded` to exclude them, or `required` to use only bare metal instances. Valid values are `included`, `excluded`, `required`.
+        Whether to include bare metal instance types. Set to `included` to allow bare metal instances, `excluded` to exclude them, or `required` to use only bare metal instances. Valid values are `included`, `excluded`, `required`.
         """
         return pulumi.get(self, "bare_metal")
 
     @bare_metal.setter
-    def bare_metal(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def bare_metal(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "bare_metal", value)
 
     @_builtins.property
     @pulumi.getter(name="baselineEbsBandwidthMbps")
-    def baseline_ebs_bandwidth_mbps(self) -> Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsBaselineEbsBandwidthMbpsArgs']]:
+    def baseline_ebs_bandwidth_mbps(self) -> pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsBaselineEbsBandwidthMbpsArgs']]:
         """
-        The minimum and maximum baseline Amazon EBS bandwidth in megabits per second (Mbps). This is important for workloads with high storage I/O requirements.
+        Minimum and maximum baseline Amazon EBS bandwidth in megabits per second (Mbps). This is important for workloads with high storage I/O requirements. Detailed below.
         """
         return pulumi.get(self, "baseline_ebs_bandwidth_mbps")
 
     @baseline_ebs_bandwidth_mbps.setter
-    def baseline_ebs_bandwidth_mbps(self, value: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsBaselineEbsBandwidthMbpsArgs']]):
+    def baseline_ebs_bandwidth_mbps(self, value: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsBaselineEbsBandwidthMbpsArgs']]):
         pulumi.set(self, "baseline_ebs_bandwidth_mbps", value)
 
     @_builtins.property
     @pulumi.getter(name="burstablePerformance")
-    def burstable_performance(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def burstable_performance(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Indicates whether to include burstable performance instance types (T2, T3, T3a, T4g). Set to `included` to allow burstable instances, `excluded` to exclude them, or `required` to use only burstable instances. Valid values are `included`, `excluded`, `required`.
+        Whether to include burstable performance instance types (T2, T3, T3a, T4g). Set to `included` to allow burstable instances, `excluded` to exclude them, or `required` to use only burstable instances. Valid values are `included`, `excluded`, `required`.
         """
         return pulumi.get(self, "burstable_performance")
 
     @burstable_performance.setter
-    def burstable_performance(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def burstable_performance(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "burstable_performance", value)
 
     @_builtins.property
     @pulumi.getter(name="cpuManufacturers")
-    def cpu_manufacturers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def cpu_manufacturers(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        The CPU manufacturers to include or exclude. You can specify `intel`, `amd`, or `amazon-web-services` to control which CPU types are used for your workloads. Valid values are `intel`, `amd`, `amazon-web-services`.
+        CPU manufacturers to include or exclude. You can specify `intel`, `amd`, or `amazon-web-services` to control which CPU types are used for your workloads. Valid values are `intel`, `amd`, `amazon-web-services`.
         """
         return pulumi.get(self, "cpu_manufacturers")
 
     @cpu_manufacturers.setter
-    def cpu_manufacturers(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def cpu_manufacturers(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "cpu_manufacturers", value)
 
     @_builtins.property
     @pulumi.getter(name="excludedInstanceTypes")
-    def excluded_instance_types(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def excluded_instance_types(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        The instance types to exclude from selection. Use this to prevent Amazon ECS from selecting specific instance types that may not be suitable for your workloads. Maximum of 400 instance types.
+        Instance types to exclude from selection. Use this to prevent Amazon ECS from selecting specific instance types that may not be suitable for your workloads. Maximum of 400 instance types.
         """
         return pulumi.get(self, "excluded_instance_types")
 
     @excluded_instance_types.setter
-    def excluded_instance_types(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def excluded_instance_types(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "excluded_instance_types", value)
 
     @_builtins.property
     @pulumi.getter(name="instanceGenerations")
-    def instance_generations(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def instance_generations(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        The instance generations to include. You can specify `current` to use the latest generation instances, or `previous` to include previous generation instances for cost optimization. Valid values are `current`, `previous`.
+        Instance generations to include. You can specify `current` to use the latest generation instances, or `previous` to include previous generation instances for cost optimization. Valid values are `current`, `previous`.
         """
         return pulumi.get(self, "instance_generations")
 
     @instance_generations.setter
-    def instance_generations(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def instance_generations(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "instance_generations", value)
 
     @_builtins.property
     @pulumi.getter(name="localStorage")
-    def local_storage(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def local_storage(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Indicates whether to include instance types with local storage. Set to `included` to allow local storage, `excluded` to exclude it, or `required` to use only instances with local storage. Valid values are `included`, `excluded`, `required`.
+        Whether to include instance types with local storage. Set to `included` to allow local storage, `excluded` to exclude it, or `required` to use only instances with local storage. Valid values are `included`, `excluded`, `required`.
         """
         return pulumi.get(self, "local_storage")
 
     @local_storage.setter
-    def local_storage(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def local_storage(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "local_storage", value)
 
     @_builtins.property
     @pulumi.getter(name="localStorageTypes")
-    def local_storage_types(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def local_storage_types(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        The local storage types to include. You can specify `hdd` for hard disk drives, `ssd` for solid state drives, or both. Valid values are `hdd`, `ssd`.
+        Local storage types to include. You can specify `hdd` for hard disk drives, `ssd` for solid state drives, or both. Valid values are `hdd`, `ssd`.
         """
         return pulumi.get(self, "local_storage_types")
 
     @local_storage_types.setter
-    def local_storage_types(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def local_storage_types(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "local_storage_types", value)
 
     @_builtins.property
     @pulumi.getter(name="maxSpotPriceAsPercentageOfOptimalOnDemandPrice")
-    def max_spot_price_as_percentage_of_optimal_on_demand_price(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max_spot_price_as_percentage_of_optimal_on_demand_price(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The maximum price for Spot instances as a percentage of the optimal On-Demand price. This provides more precise cost control for Spot instance selection.
+        Maximum price for Spot instances as a percentage of the optimal On-Demand price. This provides more precise cost control for Spot instance selection.
         """
         return pulumi.get(self, "max_spot_price_as_percentage_of_optimal_on_demand_price")
 
     @max_spot_price_as_percentage_of_optimal_on_demand_price.setter
-    def max_spot_price_as_percentage_of_optimal_on_demand_price(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max_spot_price_as_percentage_of_optimal_on_demand_price(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max_spot_price_as_percentage_of_optimal_on_demand_price", value)
 
     @_builtins.property
     @pulumi.getter(name="memoryGibPerVcpu")
-    def memory_gib_per_vcpu(self) -> Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryGibPerVcpuArgs']]:
+    def memory_gib_per_vcpu(self) -> pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryGibPerVcpuArgs']]:
         """
-        The minimum and maximum amount of memory per vCPU in gibibytes (GiB). This helps ensure that instance types have the appropriate memory-to-CPU ratio for your workloads.
+        Minimum and maximum amount of memory per vCPU in gibibytes (GiB). This helps ensure that instance types have the appropriate memory-to-CPU ratio for your workloads. Detailed below.
         """
         return pulumi.get(self, "memory_gib_per_vcpu")
 
     @memory_gib_per_vcpu.setter
-    def memory_gib_per_vcpu(self, value: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryGibPerVcpuArgs']]):
+    def memory_gib_per_vcpu(self, value: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryGibPerVcpuArgs']]):
         pulumi.set(self, "memory_gib_per_vcpu", value)
 
     @_builtins.property
     @pulumi.getter(name="networkBandwidthGbps")
-    def network_bandwidth_gbps(self) -> Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkBandwidthGbpsArgs']]:
+    def network_bandwidth_gbps(self) -> pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkBandwidthGbpsArgs']]:
         """
-        The minimum and maximum network bandwidth in gigabits per second (Gbps). This is crucial for network-intensive workloads that require high throughput.
+        Minimum and maximum network bandwidth in gigabits per second (Gbps). This is crucial for network-intensive workloads that require high throughput. Detailed below.
         """
         return pulumi.get(self, "network_bandwidth_gbps")
 
     @network_bandwidth_gbps.setter
-    def network_bandwidth_gbps(self, value: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkBandwidthGbpsArgs']]):
+    def network_bandwidth_gbps(self, value: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkBandwidthGbpsArgs']]):
         pulumi.set(self, "network_bandwidth_gbps", value)
 
     @_builtins.property
     @pulumi.getter(name="networkInterfaceCount")
-    def network_interface_count(self) -> Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkInterfaceCountArgs']]:
+    def network_interface_count(self) -> pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkInterfaceCountArgs']]:
         """
-        The minimum and maximum number of network interfaces for the instance types. This is useful for workloads that require multiple network interfaces.
+        Minimum and maximum number of network interfaces for the instance types. This is useful for workloads that require multiple network interfaces. Detailed below.
         """
         return pulumi.get(self, "network_interface_count")
 
     @network_interface_count.setter
-    def network_interface_count(self, value: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkInterfaceCountArgs']]):
+    def network_interface_count(self, value: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkInterfaceCountArgs']]):
         pulumi.set(self, "network_interface_count", value)
 
     @_builtins.property
     @pulumi.getter(name="onDemandMaxPricePercentageOverLowestPrice")
-    def on_demand_max_price_percentage_over_lowest_price(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def on_demand_max_price_percentage_over_lowest_price(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The price protection threshold for On-Demand Instances, as a percentage higher than an identified On-Demand price. The identified On-Demand price is the price of the lowest priced current generation C, M, or R instance type with your specified attributes. When Amazon ECS selects instance types with your attributes, it will exclude instance types whose price exceeds your specified threshold.
+        Price protection threshold for On-Demand Instances, as a percentage higher than an identified On-Demand price. The identified On-Demand price is the price of the lowest priced current generation C, M, or R instance type with your specified attributes. When Amazon ECS selects instance types with your attributes, it will exclude instance types whose price exceeds your specified threshold.
         """
         return pulumi.get(self, "on_demand_max_price_percentage_over_lowest_price")
 
     @on_demand_max_price_percentage_over_lowest_price.setter
-    def on_demand_max_price_percentage_over_lowest_price(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def on_demand_max_price_percentage_over_lowest_price(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "on_demand_max_price_percentage_over_lowest_price", value)
 
     @_builtins.property
     @pulumi.getter(name="requireHibernateSupport")
-    def require_hibernate_support(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def require_hibernate_support(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        Indicates whether the instance types must support hibernation. When set to `true`, only instance types that support hibernation are selected.
+        Whether the instance types must support hibernation. When set to `true`, only instance types that support hibernation are selected.
         """
         return pulumi.get(self, "require_hibernate_support")
 
     @require_hibernate_support.setter
-    def require_hibernate_support(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def require_hibernate_support(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "require_hibernate_support", value)
 
     @_builtins.property
     @pulumi.getter(name="spotMaxPricePercentageOverLowestPrice")
-    def spot_max_price_percentage_over_lowest_price(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def spot_max_price_percentage_over_lowest_price(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The maximum price for Spot instances as a percentage over the lowest priced On-Demand instance. This helps control Spot instance costs while maintaining access to capacity.
+        Maximum price for Spot instances as a percentage over the lowest priced On-Demand instance. This helps control Spot instance costs while maintaining access to capacity.
         """
         return pulumi.get(self, "spot_max_price_percentage_over_lowest_price")
 
     @spot_max_price_percentage_over_lowest_price.setter
-    def spot_max_price_percentage_over_lowest_price(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def spot_max_price_percentage_over_lowest_price(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "spot_max_price_percentage_over_lowest_price", value)
 
     @_builtins.property
     @pulumi.getter(name="totalLocalStorageGb")
-    def total_local_storage_gb(self) -> Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsTotalLocalStorageGbArgs']]:
+    def total_local_storage_gb(self) -> pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsTotalLocalStorageGbArgs']]:
         """
-        The minimum and maximum total local storage in gigabytes (GB) for instance types with local storage.
+        Minimum and maximum total local storage in gigabytes (GB) for instance types with local storage. Detailed below.
         """
         return pulumi.get(self, "total_local_storage_gb")
 
     @total_local_storage_gb.setter
-    def total_local_storage_gb(self, value: Optional[pulumi.Input['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsTotalLocalStorageGbArgs']]):
+    def total_local_storage_gb(self, value: pulumi.Input[Optional['CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsTotalLocalStorageGbArgs']]):
         pulumi.set(self, "total_local_storage_gb", value)
 
 
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorCountArgsDict(TypedDict):
-    max: NotRequired[pulumi.Input[_builtins.int]]
-    min: NotRequired[pulumi.Input[_builtins.int]]
+    max: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Maximum number of accelerators.
+    """
+    min: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Minimum number of accelerators.
+    """
 
 @pulumi.input_type
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorCountArgs:
     def __init__(__self__, *,
-                 max: Optional[pulumi.Input[_builtins.int]] = None,
-                 min: Optional[pulumi.Input[_builtins.int]] = None):
+                 max: pulumi.Input[Optional[_builtins.int]] = None,
+                 min: pulumi.Input[Optional[_builtins.int]] = None):
+        """
+        :param pulumi.Input[_builtins.int] max: Maximum number of accelerators.
+        :param pulumi.Input[_builtins.int] min: Minimum number of accelerators.
+        """
         if max is not None:
             pulumi.set(__self__, "max", max)
         if min is not None:
@@ -1142,32 +1289,48 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequ
 
     @_builtins.property
     @pulumi.getter
-    def max(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Maximum number of accelerators.
+        """
         return pulumi.get(self, "max")
 
     @max.setter
-    def max(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max", value)
 
     @_builtins.property
     @pulumi.getter
-    def min(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def min(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Minimum number of accelerators.
+        """
         return pulumi.get(self, "min")
 
     @min.setter
-    def min(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def min(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "min", value)
 
 
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorTotalMemoryMibArgsDict(TypedDict):
-    max: NotRequired[pulumi.Input[_builtins.int]]
-    min: NotRequired[pulumi.Input[_builtins.int]]
+    max: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Maximum total accelerator memory, in MiB.
+    """
+    min: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Minimum total accelerator memory, in MiB.
+    """
 
 @pulumi.input_type
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsAcceleratorTotalMemoryMibArgs:
     def __init__(__self__, *,
-                 max: Optional[pulumi.Input[_builtins.int]] = None,
-                 min: Optional[pulumi.Input[_builtins.int]] = None):
+                 max: pulumi.Input[Optional[_builtins.int]] = None,
+                 min: pulumi.Input[Optional[_builtins.int]] = None):
+        """
+        :param pulumi.Input[_builtins.int] max: Maximum total accelerator memory, in MiB.
+        :param pulumi.Input[_builtins.int] min: Minimum total accelerator memory, in MiB.
+        """
         if max is not None:
             pulumi.set(__self__, "max", max)
         if min is not None:
@@ -1175,32 +1338,48 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequ
 
     @_builtins.property
     @pulumi.getter
-    def max(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Maximum total accelerator memory, in MiB.
+        """
         return pulumi.get(self, "max")
 
     @max.setter
-    def max(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max", value)
 
     @_builtins.property
     @pulumi.getter
-    def min(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def min(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Minimum total accelerator memory, in MiB.
+        """
         return pulumi.get(self, "min")
 
     @min.setter
-    def min(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def min(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "min", value)
 
 
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsBaselineEbsBandwidthMbpsArgsDict(TypedDict):
-    max: NotRequired[pulumi.Input[_builtins.int]]
-    min: NotRequired[pulumi.Input[_builtins.int]]
+    max: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Maximum baseline Amazon EBS bandwidth, in Mbps.
+    """
+    min: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Minimum baseline Amazon EBS bandwidth, in Mbps.
+    """
 
 @pulumi.input_type
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsBaselineEbsBandwidthMbpsArgs:
     def __init__(__self__, *,
-                 max: Optional[pulumi.Input[_builtins.int]] = None,
-                 min: Optional[pulumi.Input[_builtins.int]] = None):
+                 max: pulumi.Input[Optional[_builtins.int]] = None,
+                 min: pulumi.Input[Optional[_builtins.int]] = None):
+        """
+        :param pulumi.Input[_builtins.int] max: Maximum baseline Amazon EBS bandwidth, in Mbps.
+        :param pulumi.Input[_builtins.int] min: Minimum baseline Amazon EBS bandwidth, in Mbps.
+        """
         if max is not None:
             pulumi.set(__self__, "max", max)
         if min is not None:
@@ -1208,32 +1387,48 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequ
 
     @_builtins.property
     @pulumi.getter
-    def max(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Maximum baseline Amazon EBS bandwidth, in Mbps.
+        """
         return pulumi.get(self, "max")
 
     @max.setter
-    def max(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max", value)
 
     @_builtins.property
     @pulumi.getter
-    def min(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def min(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Minimum baseline Amazon EBS bandwidth, in Mbps.
+        """
         return pulumi.get(self, "min")
 
     @min.setter
-    def min(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def min(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "min", value)
 
 
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryGibPerVcpuArgsDict(TypedDict):
-    max: NotRequired[pulumi.Input[_builtins.float]]
-    min: NotRequired[pulumi.Input[_builtins.float]]
+    max: NotRequired[pulumi.Input[Optional[_builtins.float]]]
+    """
+    Maximum amount of memory per vCPU, in GiB.
+    """
+    min: NotRequired[pulumi.Input[Optional[_builtins.float]]]
+    """
+    Minimum amount of memory per vCPU, in GiB.
+    """
 
 @pulumi.input_type
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryGibPerVcpuArgs:
     def __init__(__self__, *,
-                 max: Optional[pulumi.Input[_builtins.float]] = None,
-                 min: Optional[pulumi.Input[_builtins.float]] = None):
+                 max: pulumi.Input[Optional[_builtins.float]] = None,
+                 min: pulumi.Input[Optional[_builtins.float]] = None):
+        """
+        :param pulumi.Input[_builtins.float] max: Maximum amount of memory per vCPU, in GiB.
+        :param pulumi.Input[_builtins.float] min: Minimum amount of memory per vCPU, in GiB.
+        """
         if max is not None:
             pulumi.set(__self__, "max", max)
         if min is not None:
@@ -1241,32 +1436,48 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequ
 
     @_builtins.property
     @pulumi.getter
-    def max(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def max(self) -> pulumi.Input[Optional[_builtins.float]]:
+        """
+        Maximum amount of memory per vCPU, in GiB.
+        """
         return pulumi.get(self, "max")
 
     @max.setter
-    def max(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def max(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "max", value)
 
     @_builtins.property
     @pulumi.getter
-    def min(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def min(self) -> pulumi.Input[Optional[_builtins.float]]:
+        """
+        Minimum amount of memory per vCPU, in GiB.
+        """
         return pulumi.get(self, "min")
 
     @min.setter
-    def min(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def min(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "min", value)
 
 
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryMibArgsDict(TypedDict):
     min: pulumi.Input[_builtins.int]
-    max: NotRequired[pulumi.Input[_builtins.int]]
+    """
+    Minimum amount of memory, in MiB.
+    """
+    max: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Maximum amount of memory, in MiB.
+    """
 
 @pulumi.input_type
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsMemoryMibArgs:
     def __init__(__self__, *,
                  min: pulumi.Input[_builtins.int],
-                 max: Optional[pulumi.Input[_builtins.int]] = None):
+                 max: pulumi.Input[Optional[_builtins.int]] = None):
+        """
+        :param pulumi.Input[_builtins.int] min: Minimum amount of memory, in MiB.
+        :param pulumi.Input[_builtins.int] max: Maximum amount of memory, in MiB.
+        """
         pulumi.set(__self__, "min", min)
         if max is not None:
             pulumi.set(__self__, "max", max)
@@ -1274,6 +1485,9 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequ
     @_builtins.property
     @pulumi.getter
     def min(self) -> pulumi.Input[_builtins.int]:
+        """
+        Minimum amount of memory, in MiB.
+        """
         return pulumi.get(self, "min")
 
     @min.setter
@@ -1282,23 +1496,36 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequ
 
     @_builtins.property
     @pulumi.getter
-    def max(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Maximum amount of memory, in MiB.
+        """
         return pulumi.get(self, "max")
 
     @max.setter
-    def max(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max", value)
 
 
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkBandwidthGbpsArgsDict(TypedDict):
-    max: NotRequired[pulumi.Input[_builtins.float]]
-    min: NotRequired[pulumi.Input[_builtins.float]]
+    max: NotRequired[pulumi.Input[Optional[_builtins.float]]]
+    """
+    Maximum network bandwidth, in Gbps.
+    """
+    min: NotRequired[pulumi.Input[Optional[_builtins.float]]]
+    """
+    Minimum network bandwidth, in Gbps.
+    """
 
 @pulumi.input_type
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkBandwidthGbpsArgs:
     def __init__(__self__, *,
-                 max: Optional[pulumi.Input[_builtins.float]] = None,
-                 min: Optional[pulumi.Input[_builtins.float]] = None):
+                 max: pulumi.Input[Optional[_builtins.float]] = None,
+                 min: pulumi.Input[Optional[_builtins.float]] = None):
+        """
+        :param pulumi.Input[_builtins.float] max: Maximum network bandwidth, in Gbps.
+        :param pulumi.Input[_builtins.float] min: Minimum network bandwidth, in Gbps.
+        """
         if max is not None:
             pulumi.set(__self__, "max", max)
         if min is not None:
@@ -1306,32 +1533,48 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequ
 
     @_builtins.property
     @pulumi.getter
-    def max(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def max(self) -> pulumi.Input[Optional[_builtins.float]]:
+        """
+        Maximum network bandwidth, in Gbps.
+        """
         return pulumi.get(self, "max")
 
     @max.setter
-    def max(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def max(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "max", value)
 
     @_builtins.property
     @pulumi.getter
-    def min(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def min(self) -> pulumi.Input[Optional[_builtins.float]]:
+        """
+        Minimum network bandwidth, in Gbps.
+        """
         return pulumi.get(self, "min")
 
     @min.setter
-    def min(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def min(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "min", value)
 
 
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkInterfaceCountArgsDict(TypedDict):
-    max: NotRequired[pulumi.Input[_builtins.int]]
-    min: NotRequired[pulumi.Input[_builtins.int]]
+    max: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Maximum number of network interfaces.
+    """
+    min: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Minimum number of network interfaces.
+    """
 
 @pulumi.input_type
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsNetworkInterfaceCountArgs:
     def __init__(__self__, *,
-                 max: Optional[pulumi.Input[_builtins.int]] = None,
-                 min: Optional[pulumi.Input[_builtins.int]] = None):
+                 max: pulumi.Input[Optional[_builtins.int]] = None,
+                 min: pulumi.Input[Optional[_builtins.int]] = None):
+        """
+        :param pulumi.Input[_builtins.int] max: Maximum number of network interfaces.
+        :param pulumi.Input[_builtins.int] min: Minimum number of network interfaces.
+        """
         if max is not None:
             pulumi.set(__self__, "max", max)
         if min is not None:
@@ -1339,32 +1582,48 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequ
 
     @_builtins.property
     @pulumi.getter
-    def max(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Maximum number of network interfaces.
+        """
         return pulumi.get(self, "max")
 
     @max.setter
-    def max(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max", value)
 
     @_builtins.property
     @pulumi.getter
-    def min(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def min(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Minimum number of network interfaces.
+        """
         return pulumi.get(self, "min")
 
     @min.setter
-    def min(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def min(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "min", value)
 
 
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsTotalLocalStorageGbArgsDict(TypedDict):
-    max: NotRequired[pulumi.Input[_builtins.float]]
-    min: NotRequired[pulumi.Input[_builtins.float]]
+    max: NotRequired[pulumi.Input[Optional[_builtins.float]]]
+    """
+    Maximum total local storage, in GB.
+    """
+    min: NotRequired[pulumi.Input[Optional[_builtins.float]]]
+    """
+    Minimum total local storage, in GB.
+    """
 
 @pulumi.input_type
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsTotalLocalStorageGbArgs:
     def __init__(__self__, *,
-                 max: Optional[pulumi.Input[_builtins.float]] = None,
-                 min: Optional[pulumi.Input[_builtins.float]] = None):
+                 max: pulumi.Input[Optional[_builtins.float]] = None,
+                 min: pulumi.Input[Optional[_builtins.float]] = None):
+        """
+        :param pulumi.Input[_builtins.float] max: Maximum total local storage, in GB.
+        :param pulumi.Input[_builtins.float] min: Minimum total local storage, in GB.
+        """
         if max is not None:
             pulumi.set(__self__, "max", max)
         if min is not None:
@@ -1372,32 +1631,48 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequ
 
     @_builtins.property
     @pulumi.getter
-    def max(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def max(self) -> pulumi.Input[Optional[_builtins.float]]:
+        """
+        Maximum total local storage, in GB.
+        """
         return pulumi.get(self, "max")
 
     @max.setter
-    def max(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def max(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "max", value)
 
     @_builtins.property
     @pulumi.getter
-    def min(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def min(self) -> pulumi.Input[Optional[_builtins.float]]:
+        """
+        Minimum total local storage, in GB.
+        """
         return pulumi.get(self, "min")
 
     @min.setter
-    def min(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def min(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "min", value)
 
 
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsVcpuCountArgsDict(TypedDict):
     min: pulumi.Input[_builtins.int]
-    max: NotRequired[pulumi.Input[_builtins.int]]
+    """
+    Minimum number of vCPUs.
+    """
+    max: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Maximum number of vCPUs.
+    """
 
 @pulumi.input_type
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequirementsVcpuCountArgs:
     def __init__(__self__, *,
                  min: pulumi.Input[_builtins.int],
-                 max: Optional[pulumi.Input[_builtins.int]] = None):
+                 max: pulumi.Input[Optional[_builtins.int]] = None):
+        """
+        :param pulumi.Input[_builtins.int] min: Minimum number of vCPUs.
+        :param pulumi.Input[_builtins.int] max: Maximum number of vCPUs.
+        """
         pulumi.set(__self__, "min", min)
         if max is not None:
             pulumi.set(__self__, "max", max)
@@ -1405,6 +1680,9 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequ
     @_builtins.property
     @pulumi.getter
     def min(self) -> pulumi.Input[_builtins.int]:
+        """
+        Minimum number of vCPUs.
+        """
         return pulumi.get(self, "min")
 
     @min.setter
@@ -1413,32 +1691,64 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateInstanceRequ
 
     @_builtins.property
     @pulumi.getter
-    def max(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Maximum number of vCPUs.
+        """
         return pulumi.get(self, "max")
 
     @max.setter
-    def max(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max", value)
+
+
+class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateLocalStorageConfigurationArgsDict(TypedDict):
+    use_local_storage: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
+    """
+    Whether to use the local storage of the instance for Amazon ECS Managed Instances.
+    """
+
+@pulumi.input_type
+class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateLocalStorageConfigurationArgs:
+    def __init__(__self__, *,
+                 use_local_storage: pulumi.Input[Optional[_builtins.bool]] = None):
+        """
+        :param pulumi.Input[_builtins.bool] use_local_storage: Whether to use the local storage of the instance for Amazon ECS Managed Instances.
+        """
+        if use_local_storage is not None:
+            pulumi.set(__self__, "use_local_storage", use_local_storage)
+
+    @_builtins.property
+    @pulumi.getter(name="useLocalStorage")
+    def use_local_storage(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        Whether to use the local storage of the instance for Amazon ECS Managed Instances.
+        """
+        return pulumi.get(self, "use_local_storage")
+
+    @use_local_storage.setter
+    def use_local_storage(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "use_local_storage", value)
 
 
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateNetworkConfigurationArgsDict(TypedDict):
     subnets: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
     """
-    The list of subnet IDs where Amazon ECS can launch Amazon ECS Managed Instances. Instances are distributed across the specified subnets for high availability. All subnets must be in the same VPC.
+    List of subnet IDs where Amazon ECS can launch Amazon ECS Managed Instances. Instances are distributed across the specified subnets for high availability. All subnets must be in the same VPC.
     """
-    security_groups: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    security_groups: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    The list of security group IDs to apply to Amazon ECS Managed Instances. These security groups control the network traffic allowed to and from the instances.
+    List of security group IDs to apply to Amazon ECS Managed Instances. These security groups control the network traffic allowed to and from the instances.
     """
 
 @pulumi.input_type
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateNetworkConfigurationArgs:
     def __init__(__self__, *,
                  subnets: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
-                 security_groups: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 security_groups: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnets: The list of subnet IDs where Amazon ECS can launch Amazon ECS Managed Instances. Instances are distributed across the specified subnets for high availability. All subnets must be in the same VPC.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_groups: The list of security group IDs to apply to Amazon ECS Managed Instances. These security groups control the network traffic allowed to and from the instances.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnets: List of subnet IDs where Amazon ECS can launch Amazon ECS Managed Instances. Instances are distributed across the specified subnets for high availability. All subnets must be in the same VPC.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_groups: List of security group IDs to apply to Amazon ECS Managed Instances. These security groups control the network traffic allowed to and from the instances.
         """
         pulumi.set(__self__, "subnets", subnets)
         if security_groups is not None:
@@ -1448,7 +1758,7 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateNetworkConfi
     @pulumi.getter
     def subnets(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
         """
-        The list of subnet IDs where Amazon ECS can launch Amazon ECS Managed Instances. Instances are distributed across the specified subnets for high availability. All subnets must be in the same VPC.
+        List of subnet IDs where Amazon ECS can launch Amazon ECS Managed Instances. Instances are distributed across the specified subnets for high availability. All subnets must be in the same VPC.
         """
         return pulumi.get(self, "subnets")
 
@@ -1458,21 +1768,21 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateNetworkConfi
 
     @_builtins.property
     @pulumi.getter(name="securityGroups")
-    def security_groups(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def security_groups(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        The list of security group IDs to apply to Amazon ECS Managed Instances. These security groups control the network traffic allowed to and from the instances.
+        List of security group IDs to apply to Amazon ECS Managed Instances. These security groups control the network traffic allowed to and from the instances.
         """
         return pulumi.get(self, "security_groups")
 
     @security_groups.setter
-    def security_groups(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def security_groups(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "security_groups", value)
 
 
 class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateStorageConfigurationArgsDict(TypedDict):
     storage_size_gib: pulumi.Input[_builtins.int]
     """
-    The size of the tasks volume in GiB. Must be at least 1.
+    Size of the tasks volume in GiB. Must be at least 1.
     """
 
 @pulumi.input_type
@@ -1480,7 +1790,7 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateStorageConfi
     def __init__(__self__, *,
                  storage_size_gib: pulumi.Input[_builtins.int]):
         """
-        :param pulumi.Input[_builtins.int] storage_size_gib: The size of the tasks volume in GiB. Must be at least 1.
+        :param pulumi.Input[_builtins.int] storage_size_gib: Size of the tasks volume in GiB. Must be at least 1.
         """
         pulumi.set(__self__, "storage_size_gib", storage_size_gib)
 
@@ -1488,7 +1798,7 @@ class CapacityProviderManagedInstancesProviderInstanceLaunchTemplateStorageConfi
     @pulumi.getter(name="storageSizeGib")
     def storage_size_gib(self) -> pulumi.Input[_builtins.int]:
         """
-        The size of the tasks volume in GiB. Must be at least 1.
+        Size of the tasks volume in GiB. Must be at least 1.
         """
         return pulumi.get(self, "storage_size_gib")
 
@@ -1502,25 +1812,25 @@ class ClusterCapacityProvidersDefaultCapacityProviderStrategyArgsDict(TypedDict)
     """
     Name of the capacity provider.
     """
-    base: NotRequired[pulumi.Input[_builtins.int]]
+    base: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. Defaults to `0`.
+    Number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. Defaults to `0`.
     """
-    weight: NotRequired[pulumi.Input[_builtins.int]]
+    weight: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The relative percentage of the total number of launched tasks that should use the specified capacity provider. The `weight` value is taken into consideration after the `base` count of tasks has been satisfied. Defaults to `0`.
+    Relative percentage of the total number of launched tasks that should use the specified capacity provider. The `weight` value is taken into consideration after the `base` count of tasks has been satisfied. Defaults to `0`.
     """
 
 @pulumi.input_type
 class ClusterCapacityProvidersDefaultCapacityProviderStrategyArgs:
     def __init__(__self__, *,
                  capacity_provider: pulumi.Input[_builtins.str],
-                 base: Optional[pulumi.Input[_builtins.int]] = None,
-                 weight: Optional[pulumi.Input[_builtins.int]] = None):
+                 base: pulumi.Input[Optional[_builtins.int]] = None,
+                 weight: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.str] capacity_provider: Name of the capacity provider.
-        :param pulumi.Input[_builtins.int] base: The number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. Defaults to `0`.
-        :param pulumi.Input[_builtins.int] weight: The relative percentage of the total number of launched tasks that should use the specified capacity provider. The `weight` value is taken into consideration after the `base` count of tasks has been satisfied. Defaults to `0`.
+        :param pulumi.Input[_builtins.int] base: Number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. Defaults to `0`.
+        :param pulumi.Input[_builtins.int] weight: Relative percentage of the total number of launched tasks that should use the specified capacity provider. The `weight` value is taken into consideration after the `base` count of tasks has been satisfied. Defaults to `0`.
         """
         pulumi.set(__self__, "capacity_provider", capacity_provider)
         if base is not None:
@@ -1542,35 +1852,35 @@ class ClusterCapacityProvidersDefaultCapacityProviderStrategyArgs:
 
     @_builtins.property
     @pulumi.getter
-    def base(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def base(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. Defaults to `0`.
+        Number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. Defaults to `0`.
         """
         return pulumi.get(self, "base")
 
     @base.setter
-    def base(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def base(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "base", value)
 
     @_builtins.property
     @pulumi.getter
-    def weight(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def weight(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The relative percentage of the total number of launched tasks that should use the specified capacity provider. The `weight` value is taken into consideration after the `base` count of tasks has been satisfied. Defaults to `0`.
+        Relative percentage of the total number of launched tasks that should use the specified capacity provider. The `weight` value is taken into consideration after the `base` count of tasks has been satisfied. Defaults to `0`.
         """
         return pulumi.get(self, "weight")
 
     @weight.setter
-    def weight(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def weight(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "weight", value)
 
 
 class ClusterConfigurationArgsDict(TypedDict):
-    execute_command_configuration: NotRequired[pulumi.Input['ClusterConfigurationExecuteCommandConfigurationArgsDict']]
+    execute_command_configuration: NotRequired[pulumi.Input[Optional['ClusterConfigurationExecuteCommandConfigurationArgsDict']]]
     """
     Details of the execute command configuration. See `execute_command_configuration` Block for details.
     """
-    managed_storage_configuration: NotRequired[pulumi.Input['ClusterConfigurationManagedStorageConfigurationArgsDict']]
+    managed_storage_configuration: NotRequired[pulumi.Input[Optional['ClusterConfigurationManagedStorageConfigurationArgsDict']]]
     """
     Details of the managed storage configuration. See `managed_storage_configuration` Block for details.
     """
@@ -1578,8 +1888,8 @@ class ClusterConfigurationArgsDict(TypedDict):
 @pulumi.input_type
 class ClusterConfigurationArgs:
     def __init__(__self__, *,
-                 execute_command_configuration: Optional[pulumi.Input['ClusterConfigurationExecuteCommandConfigurationArgs']] = None,
-                 managed_storage_configuration: Optional[pulumi.Input['ClusterConfigurationManagedStorageConfigurationArgs']] = None):
+                 execute_command_configuration: pulumi.Input[Optional['ClusterConfigurationExecuteCommandConfigurationArgs']] = None,
+                 managed_storage_configuration: pulumi.Input[Optional['ClusterConfigurationManagedStorageConfigurationArgs']] = None):
         """
         :param pulumi.Input['ClusterConfigurationExecuteCommandConfigurationArgs'] execute_command_configuration: Details of the execute command configuration. See `execute_command_configuration` Block for details.
         :param pulumi.Input['ClusterConfigurationManagedStorageConfigurationArgs'] managed_storage_configuration: Details of the managed storage configuration. See `managed_storage_configuration` Block for details.
@@ -1591,39 +1901,39 @@ class ClusterConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="executeCommandConfiguration")
-    def execute_command_configuration(self) -> Optional[pulumi.Input['ClusterConfigurationExecuteCommandConfigurationArgs']]:
+    def execute_command_configuration(self) -> pulumi.Input[Optional['ClusterConfigurationExecuteCommandConfigurationArgs']]:
         """
         Details of the execute command configuration. See `execute_command_configuration` Block for details.
         """
         return pulumi.get(self, "execute_command_configuration")
 
     @execute_command_configuration.setter
-    def execute_command_configuration(self, value: Optional[pulumi.Input['ClusterConfigurationExecuteCommandConfigurationArgs']]):
+    def execute_command_configuration(self, value: pulumi.Input[Optional['ClusterConfigurationExecuteCommandConfigurationArgs']]):
         pulumi.set(self, "execute_command_configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="managedStorageConfiguration")
-    def managed_storage_configuration(self) -> Optional[pulumi.Input['ClusterConfigurationManagedStorageConfigurationArgs']]:
+    def managed_storage_configuration(self) -> pulumi.Input[Optional['ClusterConfigurationManagedStorageConfigurationArgs']]:
         """
         Details of the managed storage configuration. See `managed_storage_configuration` Block for details.
         """
         return pulumi.get(self, "managed_storage_configuration")
 
     @managed_storage_configuration.setter
-    def managed_storage_configuration(self, value: Optional[pulumi.Input['ClusterConfigurationManagedStorageConfigurationArgs']]):
+    def managed_storage_configuration(self, value: pulumi.Input[Optional['ClusterConfigurationManagedStorageConfigurationArgs']]):
         pulumi.set(self, "managed_storage_configuration", value)
 
 
 class ClusterConfigurationExecuteCommandConfigurationArgsDict(TypedDict):
-    kms_key_id: NotRequired[pulumi.Input[_builtins.str]]
+    kms_key_id: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    AWS Key Management Service key ID to encrypt the data between the local client and the container.
+    KMS key ID to encrypt the data between the local client and the container.
     """
-    log_configuration: NotRequired[pulumi.Input['ClusterConfigurationExecuteCommandConfigurationLogConfigurationArgsDict']]
+    log_configuration: NotRequired[pulumi.Input[Optional['ClusterConfigurationExecuteCommandConfigurationLogConfigurationArgsDict']]]
     """
     Log configuration for the results of the execute command actions. Required when `logging` is `OVERRIDE`. See `log_configuration` Block for details.
     """
-    logging: NotRequired[pulumi.Input[_builtins.str]]
+    logging: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Log setting to use for redirecting logs for your execute command results. Valid values: `NONE`, `DEFAULT`, `OVERRIDE`.
     """
@@ -1631,11 +1941,11 @@ class ClusterConfigurationExecuteCommandConfigurationArgsDict(TypedDict):
 @pulumi.input_type
 class ClusterConfigurationExecuteCommandConfigurationArgs:
     def __init__(__self__, *,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 log_configuration: Optional[pulumi.Input['ClusterConfigurationExecuteCommandConfigurationLogConfigurationArgs']] = None,
-                 logging: Optional[pulumi.Input[_builtins.str]] = None):
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 log_configuration: pulumi.Input[Optional['ClusterConfigurationExecuteCommandConfigurationLogConfigurationArgs']] = None,
+                 logging: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] kms_key_id: AWS Key Management Service key ID to encrypt the data between the local client and the container.
+        :param pulumi.Input[_builtins.str] kms_key_id: KMS key ID to encrypt the data between the local client and the container.
         :param pulumi.Input['ClusterConfigurationExecuteCommandConfigurationLogConfigurationArgs'] log_configuration: Log configuration for the results of the execute command actions. Required when `logging` is `OVERRIDE`. See `log_configuration` Block for details.
         :param pulumi.Input[_builtins.str] logging: Log setting to use for redirecting logs for your execute command results. Valid values: `NONE`, `DEFAULT`, `OVERRIDE`.
         """
@@ -1648,59 +1958,59 @@ class ClusterConfigurationExecuteCommandConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="kmsKeyId")
-    def kms_key_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        AWS Key Management Service key ID to encrypt the data between the local client and the container.
+        KMS key ID to encrypt the data between the local client and the container.
         """
         return pulumi.get(self, "kms_key_id")
 
     @kms_key_id.setter
-    def kms_key_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key_id", value)
 
     @_builtins.property
     @pulumi.getter(name="logConfiguration")
-    def log_configuration(self) -> Optional[pulumi.Input['ClusterConfigurationExecuteCommandConfigurationLogConfigurationArgs']]:
+    def log_configuration(self) -> pulumi.Input[Optional['ClusterConfigurationExecuteCommandConfigurationLogConfigurationArgs']]:
         """
         Log configuration for the results of the execute command actions. Required when `logging` is `OVERRIDE`. See `log_configuration` Block for details.
         """
         return pulumi.get(self, "log_configuration")
 
     @log_configuration.setter
-    def log_configuration(self, value: Optional[pulumi.Input['ClusterConfigurationExecuteCommandConfigurationLogConfigurationArgs']]):
+    def log_configuration(self, value: pulumi.Input[Optional['ClusterConfigurationExecuteCommandConfigurationLogConfigurationArgs']]):
         pulumi.set(self, "log_configuration", value)
 
     @_builtins.property
     @pulumi.getter
-    def logging(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def logging(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Log setting to use for redirecting logs for your execute command results. Valid values: `NONE`, `DEFAULT`, `OVERRIDE`.
         """
         return pulumi.get(self, "logging")
 
     @logging.setter
-    def logging(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def logging(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "logging", value)
 
 
 class ClusterConfigurationExecuteCommandConfigurationLogConfigurationArgsDict(TypedDict):
-    cloud_watch_encryption_enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    cloud_watch_encryption_enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether to enable encryption on the CloudWatch logs. If not specified, encryption will be disabled.
     """
-    cloud_watch_log_group_name: NotRequired[pulumi.Input[_builtins.str]]
+    cloud_watch_log_group_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The name of the CloudWatch log group to send logs to.
+    Name of the CloudWatch log group to send logs to.
     """
-    s3_bucket_encryption_enabled: NotRequired[pulumi.Input[_builtins.bool]]
+    s3_bucket_encryption_enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether to enable encryption on the logs sent to S3. If not specified, encryption will be disabled.
     """
-    s3_bucket_name: NotRequired[pulumi.Input[_builtins.str]]
+    s3_bucket_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Name of the S3 bucket to send logs to.
     """
-    s3_key_prefix: NotRequired[pulumi.Input[_builtins.str]]
+    s3_key_prefix: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Optional folder in the S3 bucket to place logs in.
     """
@@ -1708,14 +2018,14 @@ class ClusterConfigurationExecuteCommandConfigurationLogConfigurationArgsDict(Ty
 @pulumi.input_type
 class ClusterConfigurationExecuteCommandConfigurationLogConfigurationArgs:
     def __init__(__self__, *,
-                 cloud_watch_encryption_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 cloud_watch_log_group_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_bucket_encryption_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 s3_bucket_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 s3_key_prefix: Optional[pulumi.Input[_builtins.str]] = None):
+                 cloud_watch_encryption_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 cloud_watch_log_group_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_bucket_encryption_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 s3_bucket_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3_key_prefix: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.bool] cloud_watch_encryption_enabled: Whether to enable encryption on the CloudWatch logs. If not specified, encryption will be disabled.
-        :param pulumi.Input[_builtins.str] cloud_watch_log_group_name: The name of the CloudWatch log group to send logs to.
+        :param pulumi.Input[_builtins.str] cloud_watch_log_group_name: Name of the CloudWatch log group to send logs to.
         :param pulumi.Input[_builtins.bool] s3_bucket_encryption_enabled: Whether to enable encryption on the logs sent to S3. If not specified, encryption will be disabled.
         :param pulumi.Input[_builtins.str] s3_bucket_name: Name of the S3 bucket to send logs to.
         :param pulumi.Input[_builtins.str] s3_key_prefix: Optional folder in the S3 bucket to place logs in.
@@ -1733,83 +2043,83 @@ class ClusterConfigurationExecuteCommandConfigurationLogConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="cloudWatchEncryptionEnabled")
-    def cloud_watch_encryption_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def cloud_watch_encryption_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to enable encryption on the CloudWatch logs. If not specified, encryption will be disabled.
         """
         return pulumi.get(self, "cloud_watch_encryption_enabled")
 
     @cloud_watch_encryption_enabled.setter
-    def cloud_watch_encryption_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def cloud_watch_encryption_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "cloud_watch_encryption_enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="cloudWatchLogGroupName")
-    def cloud_watch_log_group_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def cloud_watch_log_group_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The name of the CloudWatch log group to send logs to.
+        Name of the CloudWatch log group to send logs to.
         """
         return pulumi.get(self, "cloud_watch_log_group_name")
 
     @cloud_watch_log_group_name.setter
-    def cloud_watch_log_group_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def cloud_watch_log_group_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "cloud_watch_log_group_name", value)
 
     @_builtins.property
     @pulumi.getter(name="s3BucketEncryptionEnabled")
-    def s3_bucket_encryption_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def s3_bucket_encryption_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to enable encryption on the logs sent to S3. If not specified, encryption will be disabled.
         """
         return pulumi.get(self, "s3_bucket_encryption_enabled")
 
     @s3_bucket_encryption_enabled.setter
-    def s3_bucket_encryption_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def s3_bucket_encryption_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "s3_bucket_encryption_enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="s3BucketName")
-    def s3_bucket_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def s3_bucket_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the S3 bucket to send logs to.
         """
         return pulumi.get(self, "s3_bucket_name")
 
     @s3_bucket_name.setter
-    def s3_bucket_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def s3_bucket_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "s3_bucket_name", value)
 
     @_builtins.property
     @pulumi.getter(name="s3KeyPrefix")
-    def s3_key_prefix(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def s3_key_prefix(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Optional folder in the S3 bucket to place logs in.
         """
         return pulumi.get(self, "s3_key_prefix")
 
     @s3_key_prefix.setter
-    def s3_key_prefix(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def s3_key_prefix(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "s3_key_prefix", value)
 
 
 class ClusterConfigurationManagedStorageConfigurationArgsDict(TypedDict):
-    fargate_ephemeral_storage_kms_key_id: NotRequired[pulumi.Input[_builtins.str]]
+    fargate_ephemeral_storage_kms_key_id: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    AWS Key Management Service key ARN for the Fargate ephemeral storage.
+    KMS key ARN for the Fargate ephemeral storage.
     """
-    kms_key_id: NotRequired[pulumi.Input[_builtins.str]]
+    kms_key_id: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    AWS Key Management Service key ARN to encrypt the managed storage.
+    KMS key ARN to encrypt the managed storage.
     """
 
 @pulumi.input_type
 class ClusterConfigurationManagedStorageConfigurationArgs:
     def __init__(__self__, *,
-                 fargate_ephemeral_storage_kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 fargate_ephemeral_storage_kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] fargate_ephemeral_storage_kms_key_id: AWS Key Management Service key ARN for the Fargate ephemeral storage.
-        :param pulumi.Input[_builtins.str] kms_key_id: AWS Key Management Service key ARN to encrypt the managed storage.
+        :param pulumi.Input[_builtins.str] fargate_ephemeral_storage_kms_key_id: KMS key ARN for the Fargate ephemeral storage.
+        :param pulumi.Input[_builtins.str] kms_key_id: KMS key ARN to encrypt the managed storage.
         """
         if fargate_ephemeral_storage_kms_key_id is not None:
             pulumi.set(__self__, "fargate_ephemeral_storage_kms_key_id", fargate_ephemeral_storage_kms_key_id)
@@ -1818,26 +2128,26 @@ class ClusterConfigurationManagedStorageConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="fargateEphemeralStorageKmsKeyId")
-    def fargate_ephemeral_storage_kms_key_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def fargate_ephemeral_storage_kms_key_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        AWS Key Management Service key ARN for the Fargate ephemeral storage.
+        KMS key ARN for the Fargate ephemeral storage.
         """
         return pulumi.get(self, "fargate_ephemeral_storage_kms_key_id")
 
     @fargate_ephemeral_storage_kms_key_id.setter
-    def fargate_ephemeral_storage_kms_key_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def fargate_ephemeral_storage_kms_key_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "fargate_ephemeral_storage_kms_key_id", value)
 
     @_builtins.property
     @pulumi.getter(name="kmsKeyId")
-    def kms_key_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        AWS Key Management Service key ARN to encrypt the managed storage.
+        KMS key ARN to encrypt the managed storage.
         """
         return pulumi.get(self, "kms_key_id")
 
     @kms_key_id.setter
-    def kms_key_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key_id", value)
 
 
@@ -1916,21 +2226,1900 @@ class ClusterSettingArgs:
         pulumi.set(self, "value", value)
 
 
+class DaemonDeploymentConfigurationArgsDict(TypedDict):
+    alarms: NotRequired[pulumi.Input[Optional['DaemonDeploymentConfigurationAlarmsArgsDict']]]
+    """
+    Alarm configuration for deployment monitoring. See Alarms below.
+    """
+    bake_time_in_minutes: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Time in minutes to wait before considering a deployment successful. Valid values are between 0 and 1440. Defaults to `0`.
+    """
+    drain_percent: NotRequired[pulumi.Input[Optional[_builtins.float]]]
+    """
+    Percentage of tasks to drain during deployment. Valid values are between 0.0 and 100.0.
+    """
+
+@pulumi.input_type
+class DaemonDeploymentConfigurationArgs:
+    def __init__(__self__, *,
+                 alarms: pulumi.Input[Optional['DaemonDeploymentConfigurationAlarmsArgs']] = None,
+                 bake_time_in_minutes: pulumi.Input[Optional[_builtins.int]] = None,
+                 drain_percent: pulumi.Input[Optional[_builtins.float]] = None):
+        """
+        :param pulumi.Input['DaemonDeploymentConfigurationAlarmsArgs'] alarms: Alarm configuration for deployment monitoring. See Alarms below.
+        :param pulumi.Input[_builtins.int] bake_time_in_minutes: Time in minutes to wait before considering a deployment successful. Valid values are between 0 and 1440. Defaults to `0`.
+        :param pulumi.Input[_builtins.float] drain_percent: Percentage of tasks to drain during deployment. Valid values are between 0.0 and 100.0.
+        """
+        if alarms is not None:
+            pulumi.set(__self__, "alarms", alarms)
+        if bake_time_in_minutes is not None:
+            pulumi.set(__self__, "bake_time_in_minutes", bake_time_in_minutes)
+        if drain_percent is not None:
+            pulumi.set(__self__, "drain_percent", drain_percent)
+
+    @_builtins.property
+    @pulumi.getter
+    def alarms(self) -> pulumi.Input[Optional['DaemonDeploymentConfigurationAlarmsArgs']]:
+        """
+        Alarm configuration for deployment monitoring. See Alarms below.
+        """
+        return pulumi.get(self, "alarms")
+
+    @alarms.setter
+    def alarms(self, value: pulumi.Input[Optional['DaemonDeploymentConfigurationAlarmsArgs']]):
+        pulumi.set(self, "alarms", value)
+
+    @_builtins.property
+    @pulumi.getter(name="bakeTimeInMinutes")
+    def bake_time_in_minutes(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Time in minutes to wait before considering a deployment successful. Valid values are between 0 and 1440. Defaults to `0`.
+        """
+        return pulumi.get(self, "bake_time_in_minutes")
+
+    @bake_time_in_minutes.setter
+    def bake_time_in_minutes(self, value: pulumi.Input[Optional[_builtins.int]]):
+        pulumi.set(self, "bake_time_in_minutes", value)
+
+    @_builtins.property
+    @pulumi.getter(name="drainPercent")
+    def drain_percent(self) -> pulumi.Input[Optional[_builtins.float]]:
+        """
+        Percentage of tasks to drain during deployment. Valid values are between 0.0 and 100.0.
+        """
+        return pulumi.get(self, "drain_percent")
+
+    @drain_percent.setter
+    def drain_percent(self, value: pulumi.Input[Optional[_builtins.float]]):
+        pulumi.set(self, "drain_percent", value)
+
+
+class DaemonDeploymentConfigurationAlarmsArgsDict(TypedDict):
+    alarm_names: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
+    """
+    List of CloudWatch alarm names to monitor during deployment.
+    """
+    enable: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
+    """
+    Whether to enable alarm monitoring for deployments. Defaults to `false`.
+    """
+
+@pulumi.input_type
+class DaemonDeploymentConfigurationAlarmsArgs:
+    def __init__(__self__, *,
+                 alarm_names: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 enable: pulumi.Input[Optional[_builtins.bool]] = None):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] alarm_names: List of CloudWatch alarm names to monitor during deployment.
+        :param pulumi.Input[_builtins.bool] enable: Whether to enable alarm monitoring for deployments. Defaults to `false`.
+        """
+        if alarm_names is not None:
+            pulumi.set(__self__, "alarm_names", alarm_names)
+        if enable is not None:
+            pulumi.set(__self__, "enable", enable)
+
+    @_builtins.property
+    @pulumi.getter(name="alarmNames")
+    def alarm_names(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
+        """
+        List of CloudWatch alarm names to monitor during deployment.
+        """
+        return pulumi.get(self, "alarm_names")
+
+    @alarm_names.setter
+    def alarm_names(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "alarm_names", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def enable(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        Whether to enable alarm monitoring for deployments. Defaults to `false`.
+        """
+        return pulumi.get(self, "enable")
+
+    @enable.setter
+    def enable(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "enable", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionArgsDict(TypedDict):
+    image: pulumi.Input[_builtins.str]
+    """
+    Image used to start a container.
+    """
+    commands: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
+    """
+    Command that is passed to the container.
+    """
+    cpu: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Number of CPU units reserved for the container.
+    """
+    depends_ons: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionDependsOnArgsDict']]]]]
+    """
+    Dependencies defined for container startup and shutdown. Detailed below.
+    """
+    entry_points: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
+    """
+    Entry point that is passed to the container.
+    """
+    environment_files: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionEnvironmentFileArgsDict']]]]]
+    """
+    List of files containing the environment variables to pass to a container. Detailed below.
+    """
+    environments: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionEnvironmentArgsDict']]]]]
+    """
+    Environment variables to pass to a container. Detailed below.
+    """
+    essential: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
+    """
+    If the essential parameter of a container is marked as true, and that container fails or stops for any reason, all other containers that are part of the task are stopped.
+    """
+    firelens_configuration: NotRequired[pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionFirelensConfigurationArgsDict']]]
+    """
+    FireLens configuration for the container. Detailed below.
+    """
+    health_check: NotRequired[pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionHealthCheckArgsDict']]]
+    """
+    Container health check command and associated configuration parameters for the container. Detailed below.
+    """
+    interactive: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
+    """
+    When this parameter is true, you can deploy containerized applications that require stdin or a tty to be allocated.
+    """
+    linux_parameters: NotRequired[pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionLinuxParametersArgsDict']]]
+    """
+    Linux-specific modifications that are applied to the container. Detailed below.
+    """
+    log_configuration: NotRequired[pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionLogConfigurationArgsDict']]]
+    """
+    Log configuration specification for the container. Detailed below.
+    """
+    memory: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Amount (in MiB) of memory to present to the container.
+    """
+    memory_reservation: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Soft limit (in MiB) of memory to reserve for the container.
+    """
+    mount_points: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionMountPointArgsDict']]]]]
+    """
+    Mount points for data volumes in your container. Detailed below.
+    """
+    name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Name of a container.
+    """
+    privileged: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
+    """
+    When this parameter is true, the container is given elevated privileges on the host container instance.
+    """
+    pseudo_terminal: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
+    """
+    When this parameter is true, a TTY is allocated.
+    """
+    readonly_root_filesystem: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
+    """
+    When this parameter is true, the container is given read-only access to its root file system.
+    """
+    repository_credentials: NotRequired[pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionRepositoryCredentialsArgsDict']]]
+    """
+    Private repository authentication credentials to use. Detailed below.
+    """
+    restart_policy: NotRequired[pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionRestartPolicyArgsDict']]]
+    """
+    Restart policy for a container. Detailed below.
+    """
+    secrets: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionSecretArgsDict']]]]]
+    """
+    Secrets to pass to the container. Detailed below.
+    """
+    start_timeout: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Time duration (in seconds) to wait before giving up on resolving dependencies for a container.
+    """
+    stop_timeout: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Time duration (in seconds) to wait before the container is forcefully killed if it doesn't exit normally on its own.
+    """
+    system_controls: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionSystemControlArgsDict']]]]]
+    """
+    List of namespaced kernel parameters to set in the container. Detailed below.
+    """
+    ulimits: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionUlimitArgsDict']]]]]
+    """
+    List of ulimits to set in the container. Detailed below.
+    """
+    user: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    User to use inside the container.
+    """
+    working_directory: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Working directory to run commands inside the container.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionArgs:
+    def __init__(__self__, *,
+                 image: pulumi.Input[_builtins.str],
+                 commands: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 cpu: pulumi.Input[Optional[_builtins.int]] = None,
+                 depends_ons: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionDependsOnArgs']]]] = None,
+                 entry_points: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 environment_files: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionEnvironmentFileArgs']]]] = None,
+                 environments: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionEnvironmentArgs']]]] = None,
+                 essential: pulumi.Input[Optional[_builtins.bool]] = None,
+                 firelens_configuration: pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionFirelensConfigurationArgs']] = None,
+                 health_check: pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionHealthCheckArgs']] = None,
+                 interactive: pulumi.Input[Optional[_builtins.bool]] = None,
+                 linux_parameters: pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionLinuxParametersArgs']] = None,
+                 log_configuration: pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionLogConfigurationArgs']] = None,
+                 memory: pulumi.Input[Optional[_builtins.int]] = None,
+                 memory_reservation: pulumi.Input[Optional[_builtins.int]] = None,
+                 mount_points: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionMountPointArgs']]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 privileged: pulumi.Input[Optional[_builtins.bool]] = None,
+                 pseudo_terminal: pulumi.Input[Optional[_builtins.bool]] = None,
+                 readonly_root_filesystem: pulumi.Input[Optional[_builtins.bool]] = None,
+                 repository_credentials: pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionRepositoryCredentialsArgs']] = None,
+                 restart_policy: pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionRestartPolicyArgs']] = None,
+                 secrets: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionSecretArgs']]]] = None,
+                 start_timeout: pulumi.Input[Optional[_builtins.int]] = None,
+                 stop_timeout: pulumi.Input[Optional[_builtins.int]] = None,
+                 system_controls: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionSystemControlArgs']]]] = None,
+                 ulimits: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionUlimitArgs']]]] = None,
+                 user: pulumi.Input[Optional[_builtins.str]] = None,
+                 working_directory: pulumi.Input[Optional[_builtins.str]] = None):
+        """
+        :param pulumi.Input[_builtins.str] image: Image used to start a container.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] commands: Command that is passed to the container.
+        :param pulumi.Input[_builtins.int] cpu: Number of CPU units reserved for the container.
+        :param pulumi.Input[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionDependsOnArgs']]] depends_ons: Dependencies defined for container startup and shutdown. Detailed below.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] entry_points: Entry point that is passed to the container.
+        :param pulumi.Input[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionEnvironmentFileArgs']]] environment_files: List of files containing the environment variables to pass to a container. Detailed below.
+        :param pulumi.Input[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionEnvironmentArgs']]] environments: Environment variables to pass to a container. Detailed below.
+        :param pulumi.Input[_builtins.bool] essential: If the essential parameter of a container is marked as true, and that container fails or stops for any reason, all other containers that are part of the task are stopped.
+        :param pulumi.Input['DaemonTaskDefinitionContainerDefinitionFirelensConfigurationArgs'] firelens_configuration: FireLens configuration for the container. Detailed below.
+        :param pulumi.Input['DaemonTaskDefinitionContainerDefinitionHealthCheckArgs'] health_check: Container health check command and associated configuration parameters for the container. Detailed below.
+        :param pulumi.Input[_builtins.bool] interactive: When this parameter is true, you can deploy containerized applications that require stdin or a tty to be allocated.
+        :param pulumi.Input['DaemonTaskDefinitionContainerDefinitionLinuxParametersArgs'] linux_parameters: Linux-specific modifications that are applied to the container. Detailed below.
+        :param pulumi.Input['DaemonTaskDefinitionContainerDefinitionLogConfigurationArgs'] log_configuration: Log configuration specification for the container. Detailed below.
+        :param pulumi.Input[_builtins.int] memory: Amount (in MiB) of memory to present to the container.
+        :param pulumi.Input[_builtins.int] memory_reservation: Soft limit (in MiB) of memory to reserve for the container.
+        :param pulumi.Input[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionMountPointArgs']]] mount_points: Mount points for data volumes in your container. Detailed below.
+        :param pulumi.Input[_builtins.str] name: Name of a container.
+        :param pulumi.Input[_builtins.bool] privileged: When this parameter is true, the container is given elevated privileges on the host container instance.
+        :param pulumi.Input[_builtins.bool] pseudo_terminal: When this parameter is true, a TTY is allocated.
+        :param pulumi.Input[_builtins.bool] readonly_root_filesystem: When this parameter is true, the container is given read-only access to its root file system.
+        :param pulumi.Input['DaemonTaskDefinitionContainerDefinitionRepositoryCredentialsArgs'] repository_credentials: Private repository authentication credentials to use. Detailed below.
+        :param pulumi.Input['DaemonTaskDefinitionContainerDefinitionRestartPolicyArgs'] restart_policy: Restart policy for a container. Detailed below.
+        :param pulumi.Input[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionSecretArgs']]] secrets: Secrets to pass to the container. Detailed below.
+        :param pulumi.Input[_builtins.int] start_timeout: Time duration (in seconds) to wait before giving up on resolving dependencies for a container.
+        :param pulumi.Input[_builtins.int] stop_timeout: Time duration (in seconds) to wait before the container is forcefully killed if it doesn't exit normally on its own.
+        :param pulumi.Input[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionSystemControlArgs']]] system_controls: List of namespaced kernel parameters to set in the container. Detailed below.
+        :param pulumi.Input[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionUlimitArgs']]] ulimits: List of ulimits to set in the container. Detailed below.
+        :param pulumi.Input[_builtins.str] user: User to use inside the container.
+        :param pulumi.Input[_builtins.str] working_directory: Working directory to run commands inside the container.
+        """
+        pulumi.set(__self__, "image", image)
+        if commands is not None:
+            pulumi.set(__self__, "commands", commands)
+        if cpu is not None:
+            pulumi.set(__self__, "cpu", cpu)
+        if depends_ons is not None:
+            pulumi.set(__self__, "depends_ons", depends_ons)
+        if entry_points is not None:
+            pulumi.set(__self__, "entry_points", entry_points)
+        if environment_files is not None:
+            pulumi.set(__self__, "environment_files", environment_files)
+        if environments is not None:
+            pulumi.set(__self__, "environments", environments)
+        if essential is not None:
+            pulumi.set(__self__, "essential", essential)
+        if firelens_configuration is not None:
+            pulumi.set(__self__, "firelens_configuration", firelens_configuration)
+        if health_check is not None:
+            pulumi.set(__self__, "health_check", health_check)
+        if interactive is not None:
+            pulumi.set(__self__, "interactive", interactive)
+        if linux_parameters is not None:
+            pulumi.set(__self__, "linux_parameters", linux_parameters)
+        if log_configuration is not None:
+            pulumi.set(__self__, "log_configuration", log_configuration)
+        if memory is not None:
+            pulumi.set(__self__, "memory", memory)
+        if memory_reservation is not None:
+            pulumi.set(__self__, "memory_reservation", memory_reservation)
+        if mount_points is not None:
+            pulumi.set(__self__, "mount_points", mount_points)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if privileged is not None:
+            pulumi.set(__self__, "privileged", privileged)
+        if pseudo_terminal is not None:
+            pulumi.set(__self__, "pseudo_terminal", pseudo_terminal)
+        if readonly_root_filesystem is not None:
+            pulumi.set(__self__, "readonly_root_filesystem", readonly_root_filesystem)
+        if repository_credentials is not None:
+            pulumi.set(__self__, "repository_credentials", repository_credentials)
+        if restart_policy is not None:
+            pulumi.set(__self__, "restart_policy", restart_policy)
+        if secrets is not None:
+            pulumi.set(__self__, "secrets", secrets)
+        if start_timeout is not None:
+            pulumi.set(__self__, "start_timeout", start_timeout)
+        if stop_timeout is not None:
+            pulumi.set(__self__, "stop_timeout", stop_timeout)
+        if system_controls is not None:
+            pulumi.set(__self__, "system_controls", system_controls)
+        if ulimits is not None:
+            pulumi.set(__self__, "ulimits", ulimits)
+        if user is not None:
+            pulumi.set(__self__, "user", user)
+        if working_directory is not None:
+            pulumi.set(__self__, "working_directory", working_directory)
+
+    @_builtins.property
+    @pulumi.getter
+    def image(self) -> pulumi.Input[_builtins.str]:
+        """
+        Image used to start a container.
+        """
+        return pulumi.get(self, "image")
+
+    @image.setter
+    def image(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "image", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def commands(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
+        """
+        Command that is passed to the container.
+        """
+        return pulumi.get(self, "commands")
+
+    @commands.setter
+    def commands(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "commands", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def cpu(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Number of CPU units reserved for the container.
+        """
+        return pulumi.get(self, "cpu")
+
+    @cpu.setter
+    def cpu(self, value: pulumi.Input[Optional[_builtins.int]]):
+        pulumi.set(self, "cpu", value)
+
+    @_builtins.property
+    @pulumi.getter(name="dependsOns")
+    def depends_ons(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionDependsOnArgs']]]]:
+        """
+        Dependencies defined for container startup and shutdown. Detailed below.
+        """
+        return pulumi.get(self, "depends_ons")
+
+    @depends_ons.setter
+    def depends_ons(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionDependsOnArgs']]]]):
+        pulumi.set(self, "depends_ons", value)
+
+    @_builtins.property
+    @pulumi.getter(name="entryPoints")
+    def entry_points(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
+        """
+        Entry point that is passed to the container.
+        """
+        return pulumi.get(self, "entry_points")
+
+    @entry_points.setter
+    def entry_points(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "entry_points", value)
+
+    @_builtins.property
+    @pulumi.getter(name="environmentFiles")
+    def environment_files(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionEnvironmentFileArgs']]]]:
+        """
+        List of files containing the environment variables to pass to a container. Detailed below.
+        """
+        return pulumi.get(self, "environment_files")
+
+    @environment_files.setter
+    def environment_files(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionEnvironmentFileArgs']]]]):
+        pulumi.set(self, "environment_files", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def environments(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionEnvironmentArgs']]]]:
+        """
+        Environment variables to pass to a container. Detailed below.
+        """
+        return pulumi.get(self, "environments")
+
+    @environments.setter
+    def environments(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionEnvironmentArgs']]]]):
+        pulumi.set(self, "environments", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def essential(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        If the essential parameter of a container is marked as true, and that container fails or stops for any reason, all other containers that are part of the task are stopped.
+        """
+        return pulumi.get(self, "essential")
+
+    @essential.setter
+    def essential(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "essential", value)
+
+    @_builtins.property
+    @pulumi.getter(name="firelensConfiguration")
+    def firelens_configuration(self) -> pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionFirelensConfigurationArgs']]:
+        """
+        FireLens configuration for the container. Detailed below.
+        """
+        return pulumi.get(self, "firelens_configuration")
+
+    @firelens_configuration.setter
+    def firelens_configuration(self, value: pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionFirelensConfigurationArgs']]):
+        pulumi.set(self, "firelens_configuration", value)
+
+    @_builtins.property
+    @pulumi.getter(name="healthCheck")
+    def health_check(self) -> pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionHealthCheckArgs']]:
+        """
+        Container health check command and associated configuration parameters for the container. Detailed below.
+        """
+        return pulumi.get(self, "health_check")
+
+    @health_check.setter
+    def health_check(self, value: pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionHealthCheckArgs']]):
+        pulumi.set(self, "health_check", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def interactive(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        When this parameter is true, you can deploy containerized applications that require stdin or a tty to be allocated.
+        """
+        return pulumi.get(self, "interactive")
+
+    @interactive.setter
+    def interactive(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "interactive", value)
+
+    @_builtins.property
+    @pulumi.getter(name="linuxParameters")
+    def linux_parameters(self) -> pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionLinuxParametersArgs']]:
+        """
+        Linux-specific modifications that are applied to the container. Detailed below.
+        """
+        return pulumi.get(self, "linux_parameters")
+
+    @linux_parameters.setter
+    def linux_parameters(self, value: pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionLinuxParametersArgs']]):
+        pulumi.set(self, "linux_parameters", value)
+
+    @_builtins.property
+    @pulumi.getter(name="logConfiguration")
+    def log_configuration(self) -> pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionLogConfigurationArgs']]:
+        """
+        Log configuration specification for the container. Detailed below.
+        """
+        return pulumi.get(self, "log_configuration")
+
+    @log_configuration.setter
+    def log_configuration(self, value: pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionLogConfigurationArgs']]):
+        pulumi.set(self, "log_configuration", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def memory(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Amount (in MiB) of memory to present to the container.
+        """
+        return pulumi.get(self, "memory")
+
+    @memory.setter
+    def memory(self, value: pulumi.Input[Optional[_builtins.int]]):
+        pulumi.set(self, "memory", value)
+
+    @_builtins.property
+    @pulumi.getter(name="memoryReservation")
+    def memory_reservation(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Soft limit (in MiB) of memory to reserve for the container.
+        """
+        return pulumi.get(self, "memory_reservation")
+
+    @memory_reservation.setter
+    def memory_reservation(self, value: pulumi.Input[Optional[_builtins.int]]):
+        pulumi.set(self, "memory_reservation", value)
+
+    @_builtins.property
+    @pulumi.getter(name="mountPoints")
+    def mount_points(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionMountPointArgs']]]]:
+        """
+        Mount points for data volumes in your container. Detailed below.
+        """
+        return pulumi.get(self, "mount_points")
+
+    @mount_points.setter
+    def mount_points(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionMountPointArgs']]]]):
+        pulumi.set(self, "mount_points", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Name of a container.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "name", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def privileged(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        When this parameter is true, the container is given elevated privileges on the host container instance.
+        """
+        return pulumi.get(self, "privileged")
+
+    @privileged.setter
+    def privileged(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "privileged", value)
+
+    @_builtins.property
+    @pulumi.getter(name="pseudoTerminal")
+    def pseudo_terminal(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        When this parameter is true, a TTY is allocated.
+        """
+        return pulumi.get(self, "pseudo_terminal")
+
+    @pseudo_terminal.setter
+    def pseudo_terminal(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "pseudo_terminal", value)
+
+    @_builtins.property
+    @pulumi.getter(name="readonlyRootFilesystem")
+    def readonly_root_filesystem(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        When this parameter is true, the container is given read-only access to its root file system.
+        """
+        return pulumi.get(self, "readonly_root_filesystem")
+
+    @readonly_root_filesystem.setter
+    def readonly_root_filesystem(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "readonly_root_filesystem", value)
+
+    @_builtins.property
+    @pulumi.getter(name="repositoryCredentials")
+    def repository_credentials(self) -> pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionRepositoryCredentialsArgs']]:
+        """
+        Private repository authentication credentials to use. Detailed below.
+        """
+        return pulumi.get(self, "repository_credentials")
+
+    @repository_credentials.setter
+    def repository_credentials(self, value: pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionRepositoryCredentialsArgs']]):
+        pulumi.set(self, "repository_credentials", value)
+
+    @_builtins.property
+    @pulumi.getter(name="restartPolicy")
+    def restart_policy(self) -> pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionRestartPolicyArgs']]:
+        """
+        Restart policy for a container. Detailed below.
+        """
+        return pulumi.get(self, "restart_policy")
+
+    @restart_policy.setter
+    def restart_policy(self, value: pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionRestartPolicyArgs']]):
+        pulumi.set(self, "restart_policy", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def secrets(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionSecretArgs']]]]:
+        """
+        Secrets to pass to the container. Detailed below.
+        """
+        return pulumi.get(self, "secrets")
+
+    @secrets.setter
+    def secrets(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionSecretArgs']]]]):
+        pulumi.set(self, "secrets", value)
+
+    @_builtins.property
+    @pulumi.getter(name="startTimeout")
+    def start_timeout(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Time duration (in seconds) to wait before giving up on resolving dependencies for a container.
+        """
+        return pulumi.get(self, "start_timeout")
+
+    @start_timeout.setter
+    def start_timeout(self, value: pulumi.Input[Optional[_builtins.int]]):
+        pulumi.set(self, "start_timeout", value)
+
+    @_builtins.property
+    @pulumi.getter(name="stopTimeout")
+    def stop_timeout(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Time duration (in seconds) to wait before the container is forcefully killed if it doesn't exit normally on its own.
+        """
+        return pulumi.get(self, "stop_timeout")
+
+    @stop_timeout.setter
+    def stop_timeout(self, value: pulumi.Input[Optional[_builtins.int]]):
+        pulumi.set(self, "stop_timeout", value)
+
+    @_builtins.property
+    @pulumi.getter(name="systemControls")
+    def system_controls(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionSystemControlArgs']]]]:
+        """
+        List of namespaced kernel parameters to set in the container. Detailed below.
+        """
+        return pulumi.get(self, "system_controls")
+
+    @system_controls.setter
+    def system_controls(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionSystemControlArgs']]]]):
+        pulumi.set(self, "system_controls", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def ulimits(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionUlimitArgs']]]]:
+        """
+        List of ulimits to set in the container. Detailed below.
+        """
+        return pulumi.get(self, "ulimits")
+
+    @ulimits.setter
+    def ulimits(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionUlimitArgs']]]]):
+        pulumi.set(self, "ulimits", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def user(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        User to use inside the container.
+        """
+        return pulumi.get(self, "user")
+
+    @user.setter
+    def user(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "user", value)
+
+    @_builtins.property
+    @pulumi.getter(name="workingDirectory")
+    def working_directory(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Working directory to run commands inside the container.
+        """
+        return pulumi.get(self, "working_directory")
+
+    @working_directory.setter
+    def working_directory(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "working_directory", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionDependsOnArgsDict(TypedDict):
+    condition: pulumi.Input[_builtins.str]
+    """
+    Dependency condition of the container. Valid values: `START`, `COMPLETE`, `SUCCESS`, `HEALTHY`.
+    """
+    container_name: pulumi.Input[_builtins.str]
+    """
+    Name of a container.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionDependsOnArgs:
+    def __init__(__self__, *,
+                 condition: pulumi.Input[_builtins.str],
+                 container_name: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] condition: Dependency condition of the container. Valid values: `START`, `COMPLETE`, `SUCCESS`, `HEALTHY`.
+        :param pulumi.Input[_builtins.str] container_name: Name of a container.
+        """
+        pulumi.set(__self__, "condition", condition)
+        pulumi.set(__self__, "container_name", container_name)
+
+    @_builtins.property
+    @pulumi.getter
+    def condition(self) -> pulumi.Input[_builtins.str]:
+        """
+        Dependency condition of the container. Valid values: `START`, `COMPLETE`, `SUCCESS`, `HEALTHY`.
+        """
+        return pulumi.get(self, "condition")
+
+    @condition.setter
+    def condition(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "condition", value)
+
+    @_builtins.property
+    @pulumi.getter(name="containerName")
+    def container_name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Name of a container.
+        """
+        return pulumi.get(self, "container_name")
+
+    @container_name.setter
+    def container_name(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "container_name", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionEnvironmentArgsDict(TypedDict):
+    name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Name of the environment variable.
+    """
+    value: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Value of the environment variable.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionEnvironmentArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 value: pulumi.Input[Optional[_builtins.str]] = None):
+        """
+        :param pulumi.Input[_builtins.str] name: Name of the environment variable.
+        :param pulumi.Input[_builtins.str] value: Value of the environment variable.
+        """
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if value is not None:
+            pulumi.set(__self__, "value", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Name of the environment variable.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "name", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Value of the environment variable.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "value", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionEnvironmentFileArgsDict(TypedDict):
+    type: pulumi.Input[_builtins.str]
+    """
+    File type to use. The only supported value is `s3`.
+    """
+    value: pulumi.Input[_builtins.str]
+    """
+    ARN of the Amazon S3 object containing the environment variable file.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionEnvironmentFileArgs:
+    def __init__(__self__, *,
+                 type: pulumi.Input[_builtins.str],
+                 value: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] type: File type to use. The only supported value is `s3`.
+        :param pulumi.Input[_builtins.str] value: ARN of the Amazon S3 object containing the environment variable file.
+        """
+        pulumi.set(__self__, "type", type)
+        pulumi.set(__self__, "value", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def type(self) -> pulumi.Input[_builtins.str]:
+        """
+        File type to use. The only supported value is `s3`.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "type", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[_builtins.str]:
+        """
+        ARN of the Amazon S3 object containing the environment variable file.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "value", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionFirelensConfigurationArgsDict(TypedDict):
+    type: pulumi.Input[_builtins.str]
+    """
+    Log router to use. Valid values: `fluentd`, `fluentbit`.
+    """
+    options: NotRequired[pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]]
+    """
+    Options to use when configuring the log router.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionFirelensConfigurationArgs:
+    def __init__(__self__, *,
+                 type: pulumi.Input[_builtins.str],
+                 options: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+        """
+        :param pulumi.Input[_builtins.str] type: Log router to use. Valid values: `fluentd`, `fluentbit`.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] options: Options to use when configuring the log router.
+        """
+        pulumi.set(__self__, "type", type)
+        if options is not None:
+            pulumi.set(__self__, "options", options)
+
+    @_builtins.property
+    @pulumi.getter
+    def type(self) -> pulumi.Input[_builtins.str]:
+        """
+        Log router to use. Valid values: `fluentd`, `fluentbit`.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "type", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def options(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
+        """
+        Options to use when configuring the log router.
+        """
+        return pulumi.get(self, "options")
+
+    @options.setter
+    def options(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "options", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionHealthCheckArgsDict(TypedDict):
+    commands: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
+    """
+    String array representing the command that the container runs to determine if it is healthy.
+    """
+    interval: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Time period in seconds between each health check execution. Valid range: 5–300.
+    """
+    retries: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Number of times to retry a failed health check. Valid range: 1–10.
+    """
+    start_period: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Grace period in seconds to provide containers time to bootstrap. Valid range: 0–300.
+    """
+    timeout: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Time period in seconds to wait for a health check to succeed. Valid range: 2–60.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionHealthCheckArgs:
+    def __init__(__self__, *,
+                 commands: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
+                 interval: pulumi.Input[Optional[_builtins.int]] = None,
+                 retries: pulumi.Input[Optional[_builtins.int]] = None,
+                 start_period: pulumi.Input[Optional[_builtins.int]] = None,
+                 timeout: pulumi.Input[Optional[_builtins.int]] = None):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] commands: String array representing the command that the container runs to determine if it is healthy.
+        :param pulumi.Input[_builtins.int] interval: Time period in seconds between each health check execution. Valid range: 5–300.
+        :param pulumi.Input[_builtins.int] retries: Number of times to retry a failed health check. Valid range: 1–10.
+        :param pulumi.Input[_builtins.int] start_period: Grace period in seconds to provide containers time to bootstrap. Valid range: 0–300.
+        :param pulumi.Input[_builtins.int] timeout: Time period in seconds to wait for a health check to succeed. Valid range: 2–60.
+        """
+        pulumi.set(__self__, "commands", commands)
+        if interval is not None:
+            pulumi.set(__self__, "interval", interval)
+        if retries is not None:
+            pulumi.set(__self__, "retries", retries)
+        if start_period is not None:
+            pulumi.set(__self__, "start_period", start_period)
+        if timeout is not None:
+            pulumi.set(__self__, "timeout", timeout)
+
+    @_builtins.property
+    @pulumi.getter
+    def commands(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
+        """
+        String array representing the command that the container runs to determine if it is healthy.
+        """
+        return pulumi.get(self, "commands")
+
+    @commands.setter
+    def commands(self, value: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]):
+        pulumi.set(self, "commands", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def interval(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Time period in seconds between each health check execution. Valid range: 5–300.
+        """
+        return pulumi.get(self, "interval")
+
+    @interval.setter
+    def interval(self, value: pulumi.Input[Optional[_builtins.int]]):
+        pulumi.set(self, "interval", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def retries(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Number of times to retry a failed health check. Valid range: 1–10.
+        """
+        return pulumi.get(self, "retries")
+
+    @retries.setter
+    def retries(self, value: pulumi.Input[Optional[_builtins.int]]):
+        pulumi.set(self, "retries", value)
+
+    @_builtins.property
+    @pulumi.getter(name="startPeriod")
+    def start_period(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Grace period in seconds to provide containers time to bootstrap. Valid range: 0–300.
+        """
+        return pulumi.get(self, "start_period")
+
+    @start_period.setter
+    def start_period(self, value: pulumi.Input[Optional[_builtins.int]]):
+        pulumi.set(self, "start_period", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def timeout(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Time period in seconds to wait for a health check to succeed. Valid range: 2–60.
+        """
+        return pulumi.get(self, "timeout")
+
+    @timeout.setter
+    def timeout(self, value: pulumi.Input[Optional[_builtins.int]]):
+        pulumi.set(self, "timeout", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionLinuxParametersArgsDict(TypedDict):
+    capabilities: NotRequired[pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionLinuxParametersCapabilitiesArgsDict']]]
+    """
+    Linux capabilities for the container. Detailed below.
+    """
+    devices: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionLinuxParametersDeviceArgsDict']]]]]
+    """
+    Any host devices to expose to the container. Detailed below.
+    """
+    init_process_enabled: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
+    """
+    Run an init process inside the container that forwards signals and reaps processes.
+    """
+    tmpfs: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionLinuxParametersTmpfArgsDict']]]]]
+    """
+    Container path, mount options, and size of the tmpfs mount. Detailed below.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionLinuxParametersArgs:
+    def __init__(__self__, *,
+                 capabilities: pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionLinuxParametersCapabilitiesArgs']] = None,
+                 devices: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionLinuxParametersDeviceArgs']]]] = None,
+                 init_process_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 tmpfs: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionLinuxParametersTmpfArgs']]]] = None):
+        """
+        :param pulumi.Input['DaemonTaskDefinitionContainerDefinitionLinuxParametersCapabilitiesArgs'] capabilities: Linux capabilities for the container. Detailed below.
+        :param pulumi.Input[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionLinuxParametersDeviceArgs']]] devices: Any host devices to expose to the container. Detailed below.
+        :param pulumi.Input[_builtins.bool] init_process_enabled: Run an init process inside the container that forwards signals and reaps processes.
+        :param pulumi.Input[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionLinuxParametersTmpfArgs']]] tmpfs: Container path, mount options, and size of the tmpfs mount. Detailed below.
+        """
+        if capabilities is not None:
+            pulumi.set(__self__, "capabilities", capabilities)
+        if devices is not None:
+            pulumi.set(__self__, "devices", devices)
+        if init_process_enabled is not None:
+            pulumi.set(__self__, "init_process_enabled", init_process_enabled)
+        if tmpfs is not None:
+            pulumi.set(__self__, "tmpfs", tmpfs)
+
+    @_builtins.property
+    @pulumi.getter
+    def capabilities(self) -> pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionLinuxParametersCapabilitiesArgs']]:
+        """
+        Linux capabilities for the container. Detailed below.
+        """
+        return pulumi.get(self, "capabilities")
+
+    @capabilities.setter
+    def capabilities(self, value: pulumi.Input[Optional['DaemonTaskDefinitionContainerDefinitionLinuxParametersCapabilitiesArgs']]):
+        pulumi.set(self, "capabilities", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def devices(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionLinuxParametersDeviceArgs']]]]:
+        """
+        Any host devices to expose to the container. Detailed below.
+        """
+        return pulumi.get(self, "devices")
+
+    @devices.setter
+    def devices(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionLinuxParametersDeviceArgs']]]]):
+        pulumi.set(self, "devices", value)
+
+    @_builtins.property
+    @pulumi.getter(name="initProcessEnabled")
+    def init_process_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        Run an init process inside the container that forwards signals and reaps processes.
+        """
+        return pulumi.get(self, "init_process_enabled")
+
+    @init_process_enabled.setter
+    def init_process_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "init_process_enabled", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def tmpfs(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionLinuxParametersTmpfArgs']]]]:
+        """
+        Container path, mount options, and size of the tmpfs mount. Detailed below.
+        """
+        return pulumi.get(self, "tmpfs")
+
+    @tmpfs.setter
+    def tmpfs(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionLinuxParametersTmpfArgs']]]]):
+        pulumi.set(self, "tmpfs", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionLinuxParametersCapabilitiesArgsDict(TypedDict):
+    adds: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
+    """
+    Linux capabilities for the container that have been added to the default configuration provided by Docker.
+    """
+    drops: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
+    """
+    Linux capabilities for the container that have been removed from the default configuration provided by Docker.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionLinuxParametersCapabilitiesArgs:
+    def __init__(__self__, *,
+                 adds: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 drops: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] adds: Linux capabilities for the container that have been added to the default configuration provided by Docker.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] drops: Linux capabilities for the container that have been removed from the default configuration provided by Docker.
+        """
+        if adds is not None:
+            pulumi.set(__self__, "adds", adds)
+        if drops is not None:
+            pulumi.set(__self__, "drops", drops)
+
+    @_builtins.property
+    @pulumi.getter
+    def adds(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
+        """
+        Linux capabilities for the container that have been added to the default configuration provided by Docker.
+        """
+        return pulumi.get(self, "adds")
+
+    @adds.setter
+    def adds(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "adds", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def drops(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
+        """
+        Linux capabilities for the container that have been removed from the default configuration provided by Docker.
+        """
+        return pulumi.get(self, "drops")
+
+    @drops.setter
+    def drops(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "drops", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionLinuxParametersDeviceArgsDict(TypedDict):
+    host_path: pulumi.Input[_builtins.str]
+    """
+    Path for the device on the host container instance.
+    """
+    container_path: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Path inside the container at which to expose the host device.
+    """
+    permissions: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
+    """
+    Explicit permissions to provide to the container for the device. Valid values: `read`, `write`, `mknod`.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionLinuxParametersDeviceArgs:
+    def __init__(__self__, *,
+                 host_path: pulumi.Input[_builtins.str],
+                 container_path: pulumi.Input[Optional[_builtins.str]] = None,
+                 permissions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
+        """
+        :param pulumi.Input[_builtins.str] host_path: Path for the device on the host container instance.
+        :param pulumi.Input[_builtins.str] container_path: Path inside the container at which to expose the host device.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] permissions: Explicit permissions to provide to the container for the device. Valid values: `read`, `write`, `mknod`.
+        """
+        pulumi.set(__self__, "host_path", host_path)
+        if container_path is not None:
+            pulumi.set(__self__, "container_path", container_path)
+        if permissions is not None:
+            pulumi.set(__self__, "permissions", permissions)
+
+    @_builtins.property
+    @pulumi.getter(name="hostPath")
+    def host_path(self) -> pulumi.Input[_builtins.str]:
+        """
+        Path for the device on the host container instance.
+        """
+        return pulumi.get(self, "host_path")
+
+    @host_path.setter
+    def host_path(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "host_path", value)
+
+    @_builtins.property
+    @pulumi.getter(name="containerPath")
+    def container_path(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Path inside the container at which to expose the host device.
+        """
+        return pulumi.get(self, "container_path")
+
+    @container_path.setter
+    def container_path(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "container_path", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def permissions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
+        """
+        Explicit permissions to provide to the container for the device. Valid values: `read`, `write`, `mknod`.
+        """
+        return pulumi.get(self, "permissions")
+
+    @permissions.setter
+    def permissions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "permissions", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionLinuxParametersTmpfArgsDict(TypedDict):
+    container_path: pulumi.Input[_builtins.str]
+    """
+    Absolute file path where the tmpfs volume is to be mounted.
+    """
+    size: pulumi.Input[_builtins.int]
+    """
+    Maximum size (in MiB) of the tmpfs volume.
+    """
+    mount_options: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
+    """
+    List of tmpfs volume mount options.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionLinuxParametersTmpfArgs:
+    def __init__(__self__, *,
+                 container_path: pulumi.Input[_builtins.str],
+                 size: pulumi.Input[_builtins.int],
+                 mount_options: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
+        """
+        :param pulumi.Input[_builtins.str] container_path: Absolute file path where the tmpfs volume is to be mounted.
+        :param pulumi.Input[_builtins.int] size: Maximum size (in MiB) of the tmpfs volume.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] mount_options: List of tmpfs volume mount options.
+        """
+        pulumi.set(__self__, "container_path", container_path)
+        pulumi.set(__self__, "size", size)
+        if mount_options is not None:
+            pulumi.set(__self__, "mount_options", mount_options)
+
+    @_builtins.property
+    @pulumi.getter(name="containerPath")
+    def container_path(self) -> pulumi.Input[_builtins.str]:
+        """
+        Absolute file path where the tmpfs volume is to be mounted.
+        """
+        return pulumi.get(self, "container_path")
+
+    @container_path.setter
+    def container_path(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "container_path", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def size(self) -> pulumi.Input[_builtins.int]:
+        """
+        Maximum size (in MiB) of the tmpfs volume.
+        """
+        return pulumi.get(self, "size")
+
+    @size.setter
+    def size(self, value: pulumi.Input[_builtins.int]):
+        pulumi.set(self, "size", value)
+
+    @_builtins.property
+    @pulumi.getter(name="mountOptions")
+    def mount_options(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
+        """
+        List of tmpfs volume mount options.
+        """
+        return pulumi.get(self, "mount_options")
+
+    @mount_options.setter
+    def mount_options(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "mount_options", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionLogConfigurationArgsDict(TypedDict):
+    log_driver: pulumi.Input[_builtins.str]
+    """
+    Log driver to use for the container. Valid values: `json-file`, `syslog`, `journald`, `gelf`, `fluentd`, `awslogs`, `splunk`, `awsfirelens`.
+    """
+    options: NotRequired[pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]]
+    """
+    Configuration options to send to the log driver.
+    """
+    secret_options: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionLogConfigurationSecretOptionArgsDict']]]]]
+    """
+    Secrets to pass to the log configuration. Detailed below.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionLogConfigurationArgs:
+    def __init__(__self__, *,
+                 log_driver: pulumi.Input[_builtins.str],
+                 options: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 secret_options: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionLogConfigurationSecretOptionArgs']]]] = None):
+        """
+        :param pulumi.Input[_builtins.str] log_driver: Log driver to use for the container. Valid values: `json-file`, `syslog`, `journald`, `gelf`, `fluentd`, `awslogs`, `splunk`, `awsfirelens`.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] options: Configuration options to send to the log driver.
+        :param pulumi.Input[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionLogConfigurationSecretOptionArgs']]] secret_options: Secrets to pass to the log configuration. Detailed below.
+        """
+        pulumi.set(__self__, "log_driver", log_driver)
+        if options is not None:
+            pulumi.set(__self__, "options", options)
+        if secret_options is not None:
+            pulumi.set(__self__, "secret_options", secret_options)
+
+    @_builtins.property
+    @pulumi.getter(name="logDriver")
+    def log_driver(self) -> pulumi.Input[_builtins.str]:
+        """
+        Log driver to use for the container. Valid values: `json-file`, `syslog`, `journald`, `gelf`, `fluentd`, `awslogs`, `splunk`, `awsfirelens`.
+        """
+        return pulumi.get(self, "log_driver")
+
+    @log_driver.setter
+    def log_driver(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "log_driver", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def options(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
+        """
+        Configuration options to send to the log driver.
+        """
+        return pulumi.get(self, "options")
+
+    @options.setter
+    def options(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "options", value)
+
+    @_builtins.property
+    @pulumi.getter(name="secretOptions")
+    def secret_options(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionLogConfigurationSecretOptionArgs']]]]:
+        """
+        Secrets to pass to the log configuration. Detailed below.
+        """
+        return pulumi.get(self, "secret_options")
+
+    @secret_options.setter
+    def secret_options(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionContainerDefinitionLogConfigurationSecretOptionArgs']]]]):
+        pulumi.set(self, "secret_options", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionLogConfigurationSecretOptionArgsDict(TypedDict):
+    name: pulumi.Input[_builtins.str]
+    """
+    Name of the secret.
+    """
+    value_from: pulumi.Input[_builtins.str]
+    """
+    Secret to expose to the log configuration.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionLogConfigurationSecretOptionArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[_builtins.str],
+                 value_from: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] name: Name of the secret.
+        :param pulumi.Input[_builtins.str] value_from: Secret to expose to the log configuration.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value_from", value_from)
+
+    @_builtins.property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Name of the secret.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "name", value)
+
+    @_builtins.property
+    @pulumi.getter(name="valueFrom")
+    def value_from(self) -> pulumi.Input[_builtins.str]:
+        """
+        Secret to expose to the log configuration.
+        """
+        return pulumi.get(self, "value_from")
+
+    @value_from.setter
+    def value_from(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "value_from", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionMountPointArgsDict(TypedDict):
+    container_path: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Path on the container to mount the host volume at.
+    """
+    read_only: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
+    """
+    If this value is true, the container has read-only access to the volume.
+    """
+    source_volume: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Name of the volume to mount.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionMountPointArgs:
+    def __init__(__self__, *,
+                 container_path: pulumi.Input[Optional[_builtins.str]] = None,
+                 read_only: pulumi.Input[Optional[_builtins.bool]] = None,
+                 source_volume: pulumi.Input[Optional[_builtins.str]] = None):
+        """
+        :param pulumi.Input[_builtins.str] container_path: Path on the container to mount the host volume at.
+        :param pulumi.Input[_builtins.bool] read_only: If this value is true, the container has read-only access to the volume.
+        :param pulumi.Input[_builtins.str] source_volume: Name of the volume to mount.
+        """
+        if container_path is not None:
+            pulumi.set(__self__, "container_path", container_path)
+        if read_only is not None:
+            pulumi.set(__self__, "read_only", read_only)
+        if source_volume is not None:
+            pulumi.set(__self__, "source_volume", source_volume)
+
+    @_builtins.property
+    @pulumi.getter(name="containerPath")
+    def container_path(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Path on the container to mount the host volume at.
+        """
+        return pulumi.get(self, "container_path")
+
+    @container_path.setter
+    def container_path(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "container_path", value)
+
+    @_builtins.property
+    @pulumi.getter(name="readOnly")
+    def read_only(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        If this value is true, the container has read-only access to the volume.
+        """
+        return pulumi.get(self, "read_only")
+
+    @read_only.setter
+    def read_only(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "read_only", value)
+
+    @_builtins.property
+    @pulumi.getter(name="sourceVolume")
+    def source_volume(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Name of the volume to mount.
+        """
+        return pulumi.get(self, "source_volume")
+
+    @source_volume.setter
+    def source_volume(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "source_volume", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionRepositoryCredentialsArgsDict(TypedDict):
+    credentials_parameter: pulumi.Input[_builtins.str]
+    """
+    ARN of the secret containing the private repository credentials.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionRepositoryCredentialsArgs:
+    def __init__(__self__, *,
+                 credentials_parameter: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] credentials_parameter: ARN of the secret containing the private repository credentials.
+        """
+        pulumi.set(__self__, "credentials_parameter", credentials_parameter)
+
+    @_builtins.property
+    @pulumi.getter(name="credentialsParameter")
+    def credentials_parameter(self) -> pulumi.Input[_builtins.str]:
+        """
+        ARN of the secret containing the private repository credentials.
+        """
+        return pulumi.get(self, "credentials_parameter")
+
+    @credentials_parameter.setter
+    def credentials_parameter(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "credentials_parameter", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionRestartPolicyArgsDict(TypedDict):
+    enabled: pulumi.Input[_builtins.bool]
+    """
+    Whether a restart policy is enabled for the container.
+    """
+    ignored_exit_codes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]]
+    """
+    List of exit codes that Amazon ECS will ignore and not attempt a restart on. Maximum of 50.
+    """
+    restart_attempt_period: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Period of time (in seconds) that the container must run for before a restart can be attempted. Valid range: 60–1800.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionRestartPolicyArgs:
+    def __init__(__self__, *,
+                 enabled: pulumi.Input[_builtins.bool],
+                 ignored_exit_codes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]] = None,
+                 restart_attempt_period: pulumi.Input[Optional[_builtins.int]] = None):
+        """
+        :param pulumi.Input[_builtins.bool] enabled: Whether a restart policy is enabled for the container.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.int]]] ignored_exit_codes: List of exit codes that Amazon ECS will ignore and not attempt a restart on. Maximum of 50.
+        :param pulumi.Input[_builtins.int] restart_attempt_period: Period of time (in seconds) that the container must run for before a restart can be attempted. Valid range: 60–1800.
+        """
+        pulumi.set(__self__, "enabled", enabled)
+        if ignored_exit_codes is not None:
+            pulumi.set(__self__, "ignored_exit_codes", ignored_exit_codes)
+        if restart_attempt_period is not None:
+            pulumi.set(__self__, "restart_attempt_period", restart_attempt_period)
+
+    @_builtins.property
+    @pulumi.getter
+    def enabled(self) -> pulumi.Input[_builtins.bool]:
+        """
+        Whether a restart policy is enabled for the container.
+        """
+        return pulumi.get(self, "enabled")
+
+    @enabled.setter
+    def enabled(self, value: pulumi.Input[_builtins.bool]):
+        pulumi.set(self, "enabled", value)
+
+    @_builtins.property
+    @pulumi.getter(name="ignoredExitCodes")
+    def ignored_exit_codes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]:
+        """
+        List of exit codes that Amazon ECS will ignore and not attempt a restart on. Maximum of 50.
+        """
+        return pulumi.get(self, "ignored_exit_codes")
+
+    @ignored_exit_codes.setter
+    def ignored_exit_codes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.int]]]]):
+        pulumi.set(self, "ignored_exit_codes", value)
+
+    @_builtins.property
+    @pulumi.getter(name="restartAttemptPeriod")
+    def restart_attempt_period(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Period of time (in seconds) that the container must run for before a restart can be attempted. Valid range: 60–1800.
+        """
+        return pulumi.get(self, "restart_attempt_period")
+
+    @restart_attempt_period.setter
+    def restart_attempt_period(self, value: pulumi.Input[Optional[_builtins.int]]):
+        pulumi.set(self, "restart_attempt_period", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionSecretArgsDict(TypedDict):
+    name: pulumi.Input[_builtins.str]
+    """
+    Name of the secret.
+    """
+    value_from: pulumi.Input[_builtins.str]
+    """
+    Secret to expose to the container. The supported values are either the full ARN of the Secrets Manager secret or the full ARN of the parameter in the SSM Parameter Store.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionSecretArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[_builtins.str],
+                 value_from: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] name: Name of the secret.
+        :param pulumi.Input[_builtins.str] value_from: Secret to expose to the container. The supported values are either the full ARN of the Secrets Manager secret or the full ARN of the parameter in the SSM Parameter Store.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value_from", value_from)
+
+    @_builtins.property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Name of the secret.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "name", value)
+
+    @_builtins.property
+    @pulumi.getter(name="valueFrom")
+    def value_from(self) -> pulumi.Input[_builtins.str]:
+        """
+        Secret to expose to the container. The supported values are either the full ARN of the Secrets Manager secret or the full ARN of the parameter in the SSM Parameter Store.
+        """
+        return pulumi.get(self, "value_from")
+
+    @value_from.setter
+    def value_from(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "value_from", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionSystemControlArgsDict(TypedDict):
+    namespace: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Namespaced kernel parameter to set a value for.
+    """
+    value: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Value for the namespaced kernel parameter.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionSystemControlArgs:
+    def __init__(__self__, *,
+                 namespace: pulumi.Input[Optional[_builtins.str]] = None,
+                 value: pulumi.Input[Optional[_builtins.str]] = None):
+        """
+        :param pulumi.Input[_builtins.str] namespace: Namespaced kernel parameter to set a value for.
+        :param pulumi.Input[_builtins.str] value: Value for the namespaced kernel parameter.
+        """
+        if namespace is not None:
+            pulumi.set(__self__, "namespace", namespace)
+        if value is not None:
+            pulumi.set(__self__, "value", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def namespace(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Namespaced kernel parameter to set a value for.
+        """
+        return pulumi.get(self, "namespace")
+
+    @namespace.setter
+    def namespace(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "namespace", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Value for the namespaced kernel parameter.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "value", value)
+
+
+class DaemonTaskDefinitionContainerDefinitionUlimitArgsDict(TypedDict):
+    hard_limit: pulumi.Input[_builtins.int]
+    """
+    Hard limit for the ulimit type.
+    """
+    name: pulumi.Input[_builtins.str]
+    """
+    Type of the ulimit.
+    """
+    soft_limit: pulumi.Input[_builtins.int]
+    """
+    Soft limit for the ulimit type.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionContainerDefinitionUlimitArgs:
+    def __init__(__self__, *,
+                 hard_limit: pulumi.Input[_builtins.int],
+                 name: pulumi.Input[_builtins.str],
+                 soft_limit: pulumi.Input[_builtins.int]):
+        """
+        :param pulumi.Input[_builtins.int] hard_limit: Hard limit for the ulimit type.
+        :param pulumi.Input[_builtins.str] name: Type of the ulimit.
+        :param pulumi.Input[_builtins.int] soft_limit: Soft limit for the ulimit type.
+        """
+        pulumi.set(__self__, "hard_limit", hard_limit)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "soft_limit", soft_limit)
+
+    @_builtins.property
+    @pulumi.getter(name="hardLimit")
+    def hard_limit(self) -> pulumi.Input[_builtins.int]:
+        """
+        Hard limit for the ulimit type.
+        """
+        return pulumi.get(self, "hard_limit")
+
+    @hard_limit.setter
+    def hard_limit(self, value: pulumi.Input[_builtins.int]):
+        pulumi.set(self, "hard_limit", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Type of the ulimit.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "name", value)
+
+    @_builtins.property
+    @pulumi.getter(name="softLimit")
+    def soft_limit(self) -> pulumi.Input[_builtins.int]:
+        """
+        Soft limit for the ulimit type.
+        """
+        return pulumi.get(self, "soft_limit")
+
+    @soft_limit.setter
+    def soft_limit(self, value: pulumi.Input[_builtins.int]):
+        pulumi.set(self, "soft_limit", value)
+
+
+class DaemonTaskDefinitionVolumeArgsDict(TypedDict):
+    name: pulumi.Input[_builtins.str]
+    """
+    Name of the volume. This name is referenced in the `sourceVolume` parameter of container definition in the `mountPoints` section.
+    """
+    hosts: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionVolumeHostArgsDict']]]]]
+    """
+    Configuration for a host volume. Detailed below.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionVolumeArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[_builtins.str],
+                 hosts: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionVolumeHostArgs']]]] = None):
+        """
+        :param pulumi.Input[_builtins.str] name: Name of the volume. This name is referenced in the `sourceVolume` parameter of container definition in the `mountPoints` section.
+        :param pulumi.Input[Sequence[pulumi.Input['DaemonTaskDefinitionVolumeHostArgs']]] hosts: Configuration for a host volume. Detailed below.
+        """
+        pulumi.set(__self__, "name", name)
+        if hosts is not None:
+            pulumi.set(__self__, "hosts", hosts)
+
+    @_builtins.property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Name of the volume. This name is referenced in the `sourceVolume` parameter of container definition in the `mountPoints` section.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "name", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def hosts(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionVolumeHostArgs']]]]:
+        """
+        Configuration for a host volume. Detailed below.
+        """
+        return pulumi.get(self, "hosts")
+
+    @hosts.setter
+    def hosts(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['DaemonTaskDefinitionVolumeHostArgs']]]]):
+        pulumi.set(self, "hosts", value)
+
+
+class DaemonTaskDefinitionVolumeHostArgsDict(TypedDict):
+    source_path: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Path on the host container instance that is presented to the container. If not set, ECS will create a non-persistent data volume that starts empty and is deleted after the task has finished.
+    """
+
+@pulumi.input_type
+class DaemonTaskDefinitionVolumeHostArgs:
+    def __init__(__self__, *,
+                 source_path: pulumi.Input[Optional[_builtins.str]] = None):
+        """
+        :param pulumi.Input[_builtins.str] source_path: Path on the host container instance that is presented to the container. If not set, ECS will create a non-persistent data volume that starts empty and is deleted after the task has finished.
+        """
+        if source_path is not None:
+            pulumi.set(__self__, "source_path", source_path)
+
+    @_builtins.property
+    @pulumi.getter(name="sourcePath")
+    def source_path(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Path on the host container instance that is presented to the container. If not set, ECS will create a non-persistent data volume that starts empty and is deleted after the task has finished.
+        """
+        return pulumi.get(self, "source_path")
+
+    @source_path.setter
+    def source_path(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "source_path", value)
+
+
+class DaemonTimeoutsArgsDict(TypedDict):
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+    """
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+    """
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+    """
+
+@pulumi.input_type
+class DaemonTimeoutsArgs:
+    def __init__(__self__, *,
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
+        """
+        :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        :param pulumi.Input[_builtins.str] update: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        if create is not None:
+            pulumi.set(__self__, "create", create)
+        if delete is not None:
+            pulumi.set(__self__, "delete", delete)
+        if update is not None:
+            pulumi.set(__self__, "update", update)
+
+    @_builtins.property
+    @pulumi.getter
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "create")
+
+    @create.setter
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "create", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        return pulumi.get(self, "delete")
+
+    @delete.setter
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "delete", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "update")
+
+    @update.setter
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "update", value)
+
+
 class ExpressGatewayServiceIngressPathArgsDict(TypedDict):
     access_type: pulumi.Input[_builtins.str]
+    """
+    Access type for the ingress path.
+    """
     endpoint: pulumi.Input[_builtins.str]
+    """
+    Endpoint for the ingress path.
+    """
 
 @pulumi.input_type
 class ExpressGatewayServiceIngressPathArgs:
     def __init__(__self__, *,
                  access_type: pulumi.Input[_builtins.str],
                  endpoint: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] access_type: Access type for the ingress path.
+        :param pulumi.Input[_builtins.str] endpoint: Endpoint for the ingress path.
+        """
         pulumi.set(__self__, "access_type", access_type)
         pulumi.set(__self__, "endpoint", endpoint)
 
     @_builtins.property
     @pulumi.getter(name="accessType")
     def access_type(self) -> pulumi.Input[_builtins.str]:
+        """
+        Access type for the ingress path.
+        """
         return pulumi.get(self, "access_type")
 
     @access_type.setter
@@ -1940,6 +4129,9 @@ class ExpressGatewayServiceIngressPathArgs:
     @_builtins.property
     @pulumi.getter
     def endpoint(self) -> pulumi.Input[_builtins.str]:
+        """
+        Endpoint for the ingress path.
+        """
         return pulumi.get(self, "endpoint")
 
     @endpoint.setter
@@ -1999,33 +4191,37 @@ class ExpressGatewayServicePrimaryContainerArgsDict(TypedDict):
     """
     Docker image to use for the container.
     """
-    aws_logs_configurations: NotRequired[pulumi.Input[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerAwsLogsConfigurationArgsDict']]]]
-    commands: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    aws_logs_configurations: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerAwsLogsConfigurationArgsDict']]]]]
+    """
+    CloudWatch Logs configuration for the container. See `aws_logs_configuration` Block below.
+    """
+    commands: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     Command to run in the container. Overrides the default command from the Docker image.
     """
-    container_port: NotRequired[pulumi.Input[_builtins.int]]
+    container_port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    Port on which the container listens for connections.
+    Port on which the container listens for connections. Defaults to `80`.
     """
-    environments: NotRequired[pulumi.Input[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerEnvironmentArgsDict']]]]
-    repository_credentials: NotRequired[pulumi.Input['ExpressGatewayServicePrimaryContainerRepositoryCredentialsArgsDict']]
-    secrets: NotRequired[pulumi.Input[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerSecretArgsDict']]]]
+    environments: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerEnvironmentArgsDict']]]]]
+    repository_credentials: NotRequired[pulumi.Input[Optional['ExpressGatewayServicePrimaryContainerRepositoryCredentialsArgsDict']]]
+    secrets: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerSecretArgsDict']]]]]
 
 @pulumi.input_type
 class ExpressGatewayServicePrimaryContainerArgs:
     def __init__(__self__, *,
                  image: pulumi.Input[_builtins.str],
-                 aws_logs_configurations: Optional[pulumi.Input[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerAwsLogsConfigurationArgs']]]] = None,
-                 commands: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 container_port: Optional[pulumi.Input[_builtins.int]] = None,
-                 environments: Optional[pulumi.Input[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerEnvironmentArgs']]]] = None,
-                 repository_credentials: Optional[pulumi.Input['ExpressGatewayServicePrimaryContainerRepositoryCredentialsArgs']] = None,
-                 secrets: Optional[pulumi.Input[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerSecretArgs']]]] = None):
+                 aws_logs_configurations: pulumi.Input[Optional[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerAwsLogsConfigurationArgs']]]] = None,
+                 commands: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 container_port: pulumi.Input[Optional[_builtins.int]] = None,
+                 environments: pulumi.Input[Optional[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerEnvironmentArgs']]]] = None,
+                 repository_credentials: pulumi.Input[Optional['ExpressGatewayServicePrimaryContainerRepositoryCredentialsArgs']] = None,
+                 secrets: pulumi.Input[Optional[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerSecretArgs']]]] = None):
         """
         :param pulumi.Input[_builtins.str] image: Docker image to use for the container.
+        :param pulumi.Input[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerAwsLogsConfigurationArgs']]] aws_logs_configurations: CloudWatch Logs configuration for the container. See `aws_logs_configuration` Block below.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] commands: Command to run in the container. Overrides the default command from the Docker image.
-        :param pulumi.Input[_builtins.int] container_port: Port on which the container listens for connections.
+        :param pulumi.Input[_builtins.int] container_port: Port on which the container listens for connections. Defaults to `80`.
         """
         pulumi.set(__self__, "image", image)
         if aws_logs_configurations is not None:
@@ -2055,62 +4251,65 @@ class ExpressGatewayServicePrimaryContainerArgs:
 
     @_builtins.property
     @pulumi.getter(name="awsLogsConfigurations")
-    def aws_logs_configurations(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerAwsLogsConfigurationArgs']]]]:
+    def aws_logs_configurations(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerAwsLogsConfigurationArgs']]]]:
+        """
+        CloudWatch Logs configuration for the container. See `aws_logs_configuration` Block below.
+        """
         return pulumi.get(self, "aws_logs_configurations")
 
     @aws_logs_configurations.setter
-    def aws_logs_configurations(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerAwsLogsConfigurationArgs']]]]):
+    def aws_logs_configurations(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerAwsLogsConfigurationArgs']]]]):
         pulumi.set(self, "aws_logs_configurations", value)
 
     @_builtins.property
     @pulumi.getter
-    def commands(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def commands(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         Command to run in the container. Overrides the default command from the Docker image.
         """
         return pulumi.get(self, "commands")
 
     @commands.setter
-    def commands(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def commands(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "commands", value)
 
     @_builtins.property
     @pulumi.getter(name="containerPort")
-    def container_port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def container_port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        Port on which the container listens for connections.
+        Port on which the container listens for connections. Defaults to `80`.
         """
         return pulumi.get(self, "container_port")
 
     @container_port.setter
-    def container_port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def container_port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "container_port", value)
 
     @_builtins.property
     @pulumi.getter
-    def environments(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerEnvironmentArgs']]]]:
+    def environments(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerEnvironmentArgs']]]]:
         return pulumi.get(self, "environments")
 
     @environments.setter
-    def environments(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerEnvironmentArgs']]]]):
+    def environments(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerEnvironmentArgs']]]]):
         pulumi.set(self, "environments", value)
 
     @_builtins.property
     @pulumi.getter(name="repositoryCredentials")
-    def repository_credentials(self) -> Optional[pulumi.Input['ExpressGatewayServicePrimaryContainerRepositoryCredentialsArgs']]:
+    def repository_credentials(self) -> pulumi.Input[Optional['ExpressGatewayServicePrimaryContainerRepositoryCredentialsArgs']]:
         return pulumi.get(self, "repository_credentials")
 
     @repository_credentials.setter
-    def repository_credentials(self, value: Optional[pulumi.Input['ExpressGatewayServicePrimaryContainerRepositoryCredentialsArgs']]):
+    def repository_credentials(self, value: pulumi.Input[Optional['ExpressGatewayServicePrimaryContainerRepositoryCredentialsArgs']]):
         pulumi.set(self, "repository_credentials", value)
 
     @_builtins.property
     @pulumi.getter
-    def secrets(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerSecretArgs']]]]:
+    def secrets(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerSecretArgs']]]]:
         return pulumi.get(self, "secrets")
 
     @secrets.setter
-    def secrets(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerSecretArgs']]]]):
+    def secrets(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ExpressGatewayServicePrimaryContainerSecretArgs']]]]):
         pulumi.set(self, "secrets", value)
 
 
@@ -2238,6 +4437,9 @@ class ExpressGatewayServicePrimaryContainerRepositoryCredentialsArgs:
 
 class ExpressGatewayServicePrimaryContainerSecretArgsDict(TypedDict):
     name: pulumi.Input[_builtins.str]
+    """
+    Name of the secret.
+    """
     value_from: pulumi.Input[_builtins.str]
     """
     ARN of the AWS Secrets Manager secret or AWS Systems Manager parameter containing the secret value.
@@ -2249,6 +4451,7 @@ class ExpressGatewayServicePrimaryContainerSecretArgs:
                  name: pulumi.Input[_builtins.str],
                  value_from: pulumi.Input[_builtins.str]):
         """
+        :param pulumi.Input[_builtins.str] name: Name of the secret.
         :param pulumi.Input[_builtins.str] value_from: ARN of the AWS Secrets Manager secret or AWS Systems Manager parameter containing the secret value.
         """
         pulumi.set(__self__, "name", name)
@@ -2257,6 +4460,9 @@ class ExpressGatewayServicePrimaryContainerSecretArgs:
     @_builtins.property
     @pulumi.getter
     def name(self) -> pulumi.Input[_builtins.str]:
+        """
+        Name of the secret.
+        """
         return pulumi.get(self, "name")
 
     @name.setter
@@ -2279,7 +4485,7 @@ class ExpressGatewayServicePrimaryContainerSecretArgs:
 class ExpressGatewayServiceScalingTargetArgsDict(TypedDict):
     auto_scaling_metric: pulumi.Input[_builtins.str]
     """
-    Metric to use for auto-scaling. Valid values are `CPU` and `MEMORY`.
+    Metric to use for auto-scaling. Valid values are `AVERAGE_CPU`, `AVERAGE_MEMORY` and `REQUEST_COUNT_PER_TARGET`.
     """
     auto_scaling_target_value: pulumi.Input[_builtins.int]
     """
@@ -2287,11 +4493,11 @@ class ExpressGatewayServiceScalingTargetArgsDict(TypedDict):
     """
     max_task_count: pulumi.Input[_builtins.int]
     """
-    Maximum number of tasks to run.
+    Maximum number of tasks to run. Defaults to `20`.
     """
     min_task_count: pulumi.Input[_builtins.int]
     """
-    Minimum number of tasks to run.
+    Minimum number of tasks to run. Defaults to `1`.
     """
 
 @pulumi.input_type
@@ -2302,10 +4508,10 @@ class ExpressGatewayServiceScalingTargetArgs:
                  max_task_count: pulumi.Input[_builtins.int],
                  min_task_count: pulumi.Input[_builtins.int]):
         """
-        :param pulumi.Input[_builtins.str] auto_scaling_metric: Metric to use for auto-scaling. Valid values are `CPU` and `MEMORY`.
+        :param pulumi.Input[_builtins.str] auto_scaling_metric: Metric to use for auto-scaling. Valid values are `AVERAGE_CPU`, `AVERAGE_MEMORY` and `REQUEST_COUNT_PER_TARGET`.
         :param pulumi.Input[_builtins.int] auto_scaling_target_value: Target value for the auto-scaling metric (as a percentage). Defaults to `60`.
-        :param pulumi.Input[_builtins.int] max_task_count: Maximum number of tasks to run.
-        :param pulumi.Input[_builtins.int] min_task_count: Minimum number of tasks to run.
+        :param pulumi.Input[_builtins.int] max_task_count: Maximum number of tasks to run. Defaults to `20`.
+        :param pulumi.Input[_builtins.int] min_task_count: Minimum number of tasks to run. Defaults to `1`.
         """
         pulumi.set(__self__, "auto_scaling_metric", auto_scaling_metric)
         pulumi.set(__self__, "auto_scaling_target_value", auto_scaling_target_value)
@@ -2316,7 +4522,7 @@ class ExpressGatewayServiceScalingTargetArgs:
     @pulumi.getter(name="autoScalingMetric")
     def auto_scaling_metric(self) -> pulumi.Input[_builtins.str]:
         """
-        Metric to use for auto-scaling. Valid values are `CPU` and `MEMORY`.
+        Metric to use for auto-scaling. Valid values are `AVERAGE_CPU`, `AVERAGE_MEMORY` and `REQUEST_COUNT_PER_TARGET`.
         """
         return pulumi.get(self, "auto_scaling_metric")
 
@@ -2340,7 +4546,7 @@ class ExpressGatewayServiceScalingTargetArgs:
     @pulumi.getter(name="maxTaskCount")
     def max_task_count(self) -> pulumi.Input[_builtins.int]:
         """
-        Maximum number of tasks to run.
+        Maximum number of tasks to run. Defaults to `20`.
         """
         return pulumi.get(self, "max_task_count")
 
@@ -2352,7 +4558,7 @@ class ExpressGatewayServiceScalingTargetArgs:
     @pulumi.getter(name="minTaskCount")
     def min_task_count(self) -> pulumi.Input[_builtins.int]:
         """
-        Minimum number of tasks to run.
+        Minimum number of tasks to run. Defaults to `1`.
         """
         return pulumi.get(self, "min_task_count")
 
@@ -2362,15 +4568,15 @@ class ExpressGatewayServiceScalingTargetArgs:
 
 
 class ExpressGatewayServiceTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
-    update: NotRequired[pulumi.Input[_builtins.str]]
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -2378,9 +4584,9 @@ class ExpressGatewayServiceTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class ExpressGatewayServiceTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None,
-                 update: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -2395,38 +4601,38 @@ class ExpressGatewayServiceTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def update(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "update")
 
     @update.setter
-    def update(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update", value)
 
 
@@ -2501,11 +4707,11 @@ class ServiceCapacityProviderStrategyArgsDict(TypedDict):
     """
     Short name of the capacity provider.
     """
-    base: NotRequired[pulumi.Input[_builtins.int]]
+    base: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined.
     """
-    weight: NotRequired[pulumi.Input[_builtins.int]]
+    weight: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Relative percentage of the total number of launched tasks that should use the specified capacity provider.
     """
@@ -2514,8 +4720,8 @@ class ServiceCapacityProviderStrategyArgsDict(TypedDict):
 class ServiceCapacityProviderStrategyArgs:
     def __init__(__self__, *,
                  capacity_provider: pulumi.Input[_builtins.str],
-                 base: Optional[pulumi.Input[_builtins.int]] = None,
-                 weight: Optional[pulumi.Input[_builtins.int]] = None):
+                 base: pulumi.Input[Optional[_builtins.int]] = None,
+                 weight: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.str] capacity_provider: Short name of the capacity provider.
         :param pulumi.Input[_builtins.int] base: Number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined.
@@ -2541,26 +4747,26 @@ class ServiceCapacityProviderStrategyArgs:
 
     @_builtins.property
     @pulumi.getter
-    def base(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def base(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined.
         """
         return pulumi.get(self, "base")
 
     @base.setter
-    def base(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def base(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "base", value)
 
     @_builtins.property
     @pulumi.getter
-    def weight(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def weight(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Relative percentage of the total number of launched tasks that should use the specified capacity provider.
         """
         return pulumi.get(self, "weight")
 
     @weight.setter
-    def weight(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def weight(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "weight", value)
 
 
@@ -2612,23 +4818,23 @@ class ServiceDeploymentCircuitBreakerArgs:
 
 
 class ServiceDeploymentConfigurationArgsDict(TypedDict):
-    bake_time_in_minutes: NotRequired[pulumi.Input[_builtins.str]]
+    bake_time_in_minutes: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Number of minutes to wait after a new deployment is fully provisioned before terminating the old deployment. Valid range: 0-1440 minutes. Used with `BLUE_GREEN`, `LINEAR`, and `CANARY` strategies.
     """
-    canary_configuration: NotRequired[pulumi.Input['ServiceDeploymentConfigurationCanaryConfigurationArgsDict']]
+    canary_configuration: NotRequired[pulumi.Input[Optional['ServiceDeploymentConfigurationCanaryConfigurationArgsDict']]]
     """
     Configuration block for canary deployment strategy. Required when `strategy` is set to `CANARY`. See below.
     """
-    lifecycle_hooks: NotRequired[pulumi.Input[Sequence[pulumi.Input['ServiceDeploymentConfigurationLifecycleHookArgsDict']]]]
+    lifecycle_hooks: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['ServiceDeploymentConfigurationLifecycleHookArgsDict']]]]]
     """
     Configuration block for lifecycle hooks that are invoked during deployments. See below.
     """
-    linear_configuration: NotRequired[pulumi.Input['ServiceDeploymentConfigurationLinearConfigurationArgsDict']]
+    linear_configuration: NotRequired[pulumi.Input[Optional['ServiceDeploymentConfigurationLinearConfigurationArgsDict']]]
     """
     Configuration block for linear deployment strategy. Required when `strategy` is set to `LINEAR`. See below.
     """
-    strategy: NotRequired[pulumi.Input[_builtins.str]]
+    strategy: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Type of deployment strategy. Valid values: `ROLLING`, `BLUE_GREEN`, `LINEAR`, `CANARY`. Default: `ROLLING`.
     """
@@ -2636,11 +4842,11 @@ class ServiceDeploymentConfigurationArgsDict(TypedDict):
 @pulumi.input_type
 class ServiceDeploymentConfigurationArgs:
     def __init__(__self__, *,
-                 bake_time_in_minutes: Optional[pulumi.Input[_builtins.str]] = None,
-                 canary_configuration: Optional[pulumi.Input['ServiceDeploymentConfigurationCanaryConfigurationArgs']] = None,
-                 lifecycle_hooks: Optional[pulumi.Input[Sequence[pulumi.Input['ServiceDeploymentConfigurationLifecycleHookArgs']]]] = None,
-                 linear_configuration: Optional[pulumi.Input['ServiceDeploymentConfigurationLinearConfigurationArgs']] = None,
-                 strategy: Optional[pulumi.Input[_builtins.str]] = None):
+                 bake_time_in_minutes: pulumi.Input[Optional[_builtins.str]] = None,
+                 canary_configuration: pulumi.Input[Optional['ServiceDeploymentConfigurationCanaryConfigurationArgs']] = None,
+                 lifecycle_hooks: pulumi.Input[Optional[Sequence[pulumi.Input['ServiceDeploymentConfigurationLifecycleHookArgs']]]] = None,
+                 linear_configuration: pulumi.Input[Optional['ServiceDeploymentConfigurationLinearConfigurationArgs']] = None,
+                 strategy: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] bake_time_in_minutes: Number of minutes to wait after a new deployment is fully provisioned before terminating the old deployment. Valid range: 0-1440 minutes. Used with `BLUE_GREEN`, `LINEAR`, and `CANARY` strategies.
         :param pulumi.Input['ServiceDeploymentConfigurationCanaryConfigurationArgs'] canary_configuration: Configuration block for canary deployment strategy. Required when `strategy` is set to `CANARY`. See below.
@@ -2661,71 +4867,71 @@ class ServiceDeploymentConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="bakeTimeInMinutes")
-    def bake_time_in_minutes(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def bake_time_in_minutes(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Number of minutes to wait after a new deployment is fully provisioned before terminating the old deployment. Valid range: 0-1440 minutes. Used with `BLUE_GREEN`, `LINEAR`, and `CANARY` strategies.
         """
         return pulumi.get(self, "bake_time_in_minutes")
 
     @bake_time_in_minutes.setter
-    def bake_time_in_minutes(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def bake_time_in_minutes(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "bake_time_in_minutes", value)
 
     @_builtins.property
     @pulumi.getter(name="canaryConfiguration")
-    def canary_configuration(self) -> Optional[pulumi.Input['ServiceDeploymentConfigurationCanaryConfigurationArgs']]:
+    def canary_configuration(self) -> pulumi.Input[Optional['ServiceDeploymentConfigurationCanaryConfigurationArgs']]:
         """
         Configuration block for canary deployment strategy. Required when `strategy` is set to `CANARY`. See below.
         """
         return pulumi.get(self, "canary_configuration")
 
     @canary_configuration.setter
-    def canary_configuration(self, value: Optional[pulumi.Input['ServiceDeploymentConfigurationCanaryConfigurationArgs']]):
+    def canary_configuration(self, value: pulumi.Input[Optional['ServiceDeploymentConfigurationCanaryConfigurationArgs']]):
         pulumi.set(self, "canary_configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="lifecycleHooks")
-    def lifecycle_hooks(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ServiceDeploymentConfigurationLifecycleHookArgs']]]]:
+    def lifecycle_hooks(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ServiceDeploymentConfigurationLifecycleHookArgs']]]]:
         """
         Configuration block for lifecycle hooks that are invoked during deployments. See below.
         """
         return pulumi.get(self, "lifecycle_hooks")
 
     @lifecycle_hooks.setter
-    def lifecycle_hooks(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ServiceDeploymentConfigurationLifecycleHookArgs']]]]):
+    def lifecycle_hooks(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ServiceDeploymentConfigurationLifecycleHookArgs']]]]):
         pulumi.set(self, "lifecycle_hooks", value)
 
     @_builtins.property
     @pulumi.getter(name="linearConfiguration")
-    def linear_configuration(self) -> Optional[pulumi.Input['ServiceDeploymentConfigurationLinearConfigurationArgs']]:
+    def linear_configuration(self) -> pulumi.Input[Optional['ServiceDeploymentConfigurationLinearConfigurationArgs']]:
         """
         Configuration block for linear deployment strategy. Required when `strategy` is set to `LINEAR`. See below.
         """
         return pulumi.get(self, "linear_configuration")
 
     @linear_configuration.setter
-    def linear_configuration(self, value: Optional[pulumi.Input['ServiceDeploymentConfigurationLinearConfigurationArgs']]):
+    def linear_configuration(self, value: pulumi.Input[Optional['ServiceDeploymentConfigurationLinearConfigurationArgs']]):
         pulumi.set(self, "linear_configuration", value)
 
     @_builtins.property
     @pulumi.getter
-    def strategy(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def strategy(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Type of deployment strategy. Valid values: `ROLLING`, `BLUE_GREEN`, `LINEAR`, `CANARY`. Default: `ROLLING`.
         """
         return pulumi.get(self, "strategy")
 
     @strategy.setter
-    def strategy(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def strategy(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "strategy", value)
 
 
 class ServiceDeploymentConfigurationCanaryConfigurationArgsDict(TypedDict):
-    canary_bake_time_in_minutes: NotRequired[pulumi.Input[_builtins.str]]
+    canary_bake_time_in_minutes: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Number of minutes to wait before shifting all traffic to the new deployment. Valid range: 0-1440 minutes.
     """
-    canary_percent: NotRequired[pulumi.Input[_builtins.float]]
+    canary_percent: NotRequired[pulumi.Input[Optional[_builtins.float]]]
     """
     Percentage of traffic to route to the canary deployment. Valid range: 0.1-100.0.
     """
@@ -2733,8 +4939,8 @@ class ServiceDeploymentConfigurationCanaryConfigurationArgsDict(TypedDict):
 @pulumi.input_type
 class ServiceDeploymentConfigurationCanaryConfigurationArgs:
     def __init__(__self__, *,
-                 canary_bake_time_in_minutes: Optional[pulumi.Input[_builtins.str]] = None,
-                 canary_percent: Optional[pulumi.Input[_builtins.float]] = None):
+                 canary_bake_time_in_minutes: pulumi.Input[Optional[_builtins.str]] = None,
+                 canary_percent: pulumi.Input[Optional[_builtins.float]] = None):
         """
         :param pulumi.Input[_builtins.str] canary_bake_time_in_minutes: Number of minutes to wait before shifting all traffic to the new deployment. Valid range: 0-1440 minutes.
         :param pulumi.Input[_builtins.float] canary_percent: Percentage of traffic to route to the canary deployment. Valid range: 0.1-100.0.
@@ -2746,26 +4952,26 @@ class ServiceDeploymentConfigurationCanaryConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="canaryBakeTimeInMinutes")
-    def canary_bake_time_in_minutes(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def canary_bake_time_in_minutes(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Number of minutes to wait before shifting all traffic to the new deployment. Valid range: 0-1440 minutes.
         """
         return pulumi.get(self, "canary_bake_time_in_minutes")
 
     @canary_bake_time_in_minutes.setter
-    def canary_bake_time_in_minutes(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def canary_bake_time_in_minutes(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "canary_bake_time_in_minutes", value)
 
     @_builtins.property
     @pulumi.getter(name="canaryPercent")
-    def canary_percent(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def canary_percent(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
         Percentage of traffic to route to the canary deployment. Valid range: 0.1-100.0.
         """
         return pulumi.get(self, "canary_percent")
 
     @canary_percent.setter
-    def canary_percent(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def canary_percent(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "canary_percent", value)
 
 
@@ -2782,7 +4988,7 @@ class ServiceDeploymentConfigurationLifecycleHookArgsDict(TypedDict):
     """
     ARN of the IAM role that grants the service permission to invoke the Lambda function.
     """
-    hook_details: NotRequired[pulumi.Input[_builtins.str]]
+    hook_details: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Custom parameters that Amazon ECS will pass to the hook target invocations (such as a Lambda function).
     """
@@ -2793,7 +4999,7 @@ class ServiceDeploymentConfigurationLifecycleHookArgs:
                  hook_target_arn: pulumi.Input[_builtins.str],
                  lifecycle_stages: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
                  role_arn: pulumi.Input[_builtins.str],
-                 hook_details: Optional[pulumi.Input[_builtins.str]] = None):
+                 hook_details: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] hook_target_arn: ARN of the Lambda function to invoke for the lifecycle hook.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] lifecycle_stages: Stages during the deployment when the hook should be invoked. Valid values: `RECONCILE_SERVICE`, `PRE_SCALE_UP`, `POST_SCALE_UP`, `TEST_TRAFFIC_SHIFT`, `POST_TEST_TRAFFIC_SHIFT`, `PRODUCTION_TRAFFIC_SHIFT`, `POST_PRODUCTION_TRAFFIC_SHIFT`.
@@ -2844,23 +5050,23 @@ class ServiceDeploymentConfigurationLifecycleHookArgs:
 
     @_builtins.property
     @pulumi.getter(name="hookDetails")
-    def hook_details(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def hook_details(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Custom parameters that Amazon ECS will pass to the hook target invocations (such as a Lambda function).
         """
         return pulumi.get(self, "hook_details")
 
     @hook_details.setter
-    def hook_details(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def hook_details(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "hook_details", value)
 
 
 class ServiceDeploymentConfigurationLinearConfigurationArgsDict(TypedDict):
-    step_bake_time_in_minutes: NotRequired[pulumi.Input[_builtins.str]]
+    step_bake_time_in_minutes: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Number of minutes to wait between each step during a linear deployment. Valid range: 0-1440 minutes.
     """
-    step_percent: NotRequired[pulumi.Input[_builtins.float]]
+    step_percent: NotRequired[pulumi.Input[Optional[_builtins.float]]]
     """
     Percentage of traffic to shift in each step during a linear deployment. Valid range: 3.0-100.0.
     """
@@ -2868,8 +5074,8 @@ class ServiceDeploymentConfigurationLinearConfigurationArgsDict(TypedDict):
 @pulumi.input_type
 class ServiceDeploymentConfigurationLinearConfigurationArgs:
     def __init__(__self__, *,
-                 step_bake_time_in_minutes: Optional[pulumi.Input[_builtins.str]] = None,
-                 step_percent: Optional[pulumi.Input[_builtins.float]] = None):
+                 step_bake_time_in_minutes: pulumi.Input[Optional[_builtins.str]] = None,
+                 step_percent: pulumi.Input[Optional[_builtins.float]] = None):
         """
         :param pulumi.Input[_builtins.str] step_bake_time_in_minutes: Number of minutes to wait between each step during a linear deployment. Valid range: 0-1440 minutes.
         :param pulumi.Input[_builtins.float] step_percent: Percentage of traffic to shift in each step during a linear deployment. Valid range: 3.0-100.0.
@@ -2881,31 +5087,31 @@ class ServiceDeploymentConfigurationLinearConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="stepBakeTimeInMinutes")
-    def step_bake_time_in_minutes(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def step_bake_time_in_minutes(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Number of minutes to wait between each step during a linear deployment. Valid range: 0-1440 minutes.
         """
         return pulumi.get(self, "step_bake_time_in_minutes")
 
     @step_bake_time_in_minutes.setter
-    def step_bake_time_in_minutes(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def step_bake_time_in_minutes(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "step_bake_time_in_minutes", value)
 
     @_builtins.property
     @pulumi.getter(name="stepPercent")
-    def step_percent(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def step_percent(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
         Percentage of traffic to shift in each step during a linear deployment. Valid range: 3.0-100.0.
         """
         return pulumi.get(self, "step_percent")
 
     @step_percent.setter
-    def step_percent(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def step_percent(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "step_percent", value)
 
 
 class ServiceDeploymentControllerArgsDict(TypedDict):
-    type: NotRequired[pulumi.Input[_builtins.str]]
+    type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Type of deployment controller. Valid values: `CODE_DEPLOY`, `ECS`, `EXTERNAL`. Default: `ECS`.
     """
@@ -2913,7 +5119,7 @@ class ServiceDeploymentControllerArgsDict(TypedDict):
 @pulumi.input_type
 class ServiceDeploymentControllerArgs:
     def __init__(__self__, *,
-                 type: Optional[pulumi.Input[_builtins.str]] = None):
+                 type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] type: Type of deployment controller. Valid values: `CODE_DEPLOY`, `ECS`, `EXTERNAL`. Default: `ECS`.
         """
@@ -2922,14 +5128,14 @@ class ServiceDeploymentControllerArgs:
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Type of deployment controller. Valid values: `CODE_DEPLOY`, `ECS`, `EXTERNAL`. Default: `ECS`.
         """
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
 
@@ -2942,17 +5148,17 @@ class ServiceLoadBalancerArgsDict(TypedDict):
     """
     Port on the container to associate with the load balancer.
     """
-    advanced_configuration: NotRequired[pulumi.Input['ServiceLoadBalancerAdvancedConfigurationArgsDict']]
+    advanced_configuration: NotRequired[pulumi.Input[Optional['ServiceLoadBalancerAdvancedConfigurationArgsDict']]]
     """
     Configuration block for Blue/Green deployment settings. Required when using `BLUE_GREEN` deployment strategy. See below.
     """
-    elb_name: NotRequired[pulumi.Input[_builtins.str]]
+    elb_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Name of the ELB (Classic) to associate with the service.
+    Name of the ELB (Classic) to associate with the service. Required for ELB Classic.
     """
-    target_group_arn: NotRequired[pulumi.Input[_builtins.str]]
+    target_group_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    ARN of the Load Balancer target group to associate with the service.
+    ARN of the Load Balancer target group to associate with the service. Required for ALB/NLB.
 
     > **Version note:** Multiple `load_balancer` configuration block support was added in version 2.22.0 of the provider. This allows configuration of [ECS service support for multiple target groups](https://aws.amazon.com/about-aws/whats-new/2019/07/amazon-ecs-services-now-support-multiple-load-balancer-target-groups/).
     """
@@ -2962,15 +5168,15 @@ class ServiceLoadBalancerArgs:
     def __init__(__self__, *,
                  container_name: pulumi.Input[_builtins.str],
                  container_port: pulumi.Input[_builtins.int],
-                 advanced_configuration: Optional[pulumi.Input['ServiceLoadBalancerAdvancedConfigurationArgs']] = None,
-                 elb_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 target_group_arn: Optional[pulumi.Input[_builtins.str]] = None):
+                 advanced_configuration: pulumi.Input[Optional['ServiceLoadBalancerAdvancedConfigurationArgs']] = None,
+                 elb_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 target_group_arn: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] container_name: Name of the container to associate with the load balancer (as it appears in a container definition).
         :param pulumi.Input[_builtins.int] container_port: Port on the container to associate with the load balancer.
         :param pulumi.Input['ServiceLoadBalancerAdvancedConfigurationArgs'] advanced_configuration: Configuration block for Blue/Green deployment settings. Required when using `BLUE_GREEN` deployment strategy. See below.
-        :param pulumi.Input[_builtins.str] elb_name: Name of the ELB (Classic) to associate with the service.
-        :param pulumi.Input[_builtins.str] target_group_arn: ARN of the Load Balancer target group to associate with the service.
+        :param pulumi.Input[_builtins.str] elb_name: Name of the ELB (Classic) to associate with the service. Required for ELB Classic.
+        :param pulumi.Input[_builtins.str] target_group_arn: ARN of the Load Balancer target group to associate with the service. Required for ALB/NLB.
                
                > **Version note:** Multiple `load_balancer` configuration block support was added in version 2.22.0 of the provider. This allows configuration of [ECS service support for multiple target groups](https://aws.amazon.com/about-aws/whats-new/2019/07/amazon-ecs-services-now-support-multiple-load-balancer-target-groups/).
         """
@@ -3009,40 +5215,40 @@ class ServiceLoadBalancerArgs:
 
     @_builtins.property
     @pulumi.getter(name="advancedConfiguration")
-    def advanced_configuration(self) -> Optional[pulumi.Input['ServiceLoadBalancerAdvancedConfigurationArgs']]:
+    def advanced_configuration(self) -> pulumi.Input[Optional['ServiceLoadBalancerAdvancedConfigurationArgs']]:
         """
         Configuration block for Blue/Green deployment settings. Required when using `BLUE_GREEN` deployment strategy. See below.
         """
         return pulumi.get(self, "advanced_configuration")
 
     @advanced_configuration.setter
-    def advanced_configuration(self, value: Optional[pulumi.Input['ServiceLoadBalancerAdvancedConfigurationArgs']]):
+    def advanced_configuration(self, value: pulumi.Input[Optional['ServiceLoadBalancerAdvancedConfigurationArgs']]):
         pulumi.set(self, "advanced_configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="elbName")
-    def elb_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def elb_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Name of the ELB (Classic) to associate with the service.
+        Name of the ELB (Classic) to associate with the service. Required for ELB Classic.
         """
         return pulumi.get(self, "elb_name")
 
     @elb_name.setter
-    def elb_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def elb_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "elb_name", value)
 
     @_builtins.property
     @pulumi.getter(name="targetGroupArn")
-    def target_group_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def target_group_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        ARN of the Load Balancer target group to associate with the service.
+        ARN of the Load Balancer target group to associate with the service. Required for ALB/NLB.
 
         > **Version note:** Multiple `load_balancer` configuration block support was added in version 2.22.0 of the provider. This allows configuration of [ECS service support for multiple target groups](https://aws.amazon.com/about-aws/whats-new/2019/07/amazon-ecs-services-now-support-multiple-load-balancer-target-groups/).
         """
         return pulumi.get(self, "target_group_arn")
 
     @target_group_arn.setter
-    def target_group_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def target_group_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "target_group_arn", value)
 
 
@@ -3059,7 +5265,7 @@ class ServiceLoadBalancerAdvancedConfigurationArgsDict(TypedDict):
     """
     ARN of the IAM role that allows ECS to manage the target groups.
     """
-    test_listener_rule: NotRequired[pulumi.Input[_builtins.str]]
+    test_listener_rule: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     ARN of the listener rule that routes test traffic.
     """
@@ -3070,7 +5276,7 @@ class ServiceLoadBalancerAdvancedConfigurationArgs:
                  alternate_target_group_arn: pulumi.Input[_builtins.str],
                  production_listener_rule: pulumi.Input[_builtins.str],
                  role_arn: pulumi.Input[_builtins.str],
-                 test_listener_rule: Optional[pulumi.Input[_builtins.str]] = None):
+                 test_listener_rule: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] alternate_target_group_arn: ARN of the alternate target group to use for Blue/Green deployments.
         :param pulumi.Input[_builtins.str] production_listener_rule: ARN of the listener rule that routes production traffic.
@@ -3121,14 +5327,14 @@ class ServiceLoadBalancerAdvancedConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="testListenerRule")
-    def test_listener_rule(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def test_listener_rule(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the listener rule that routes test traffic.
         """
         return pulumi.get(self, "test_listener_rule")
 
     @test_listener_rule.setter
-    def test_listener_rule(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def test_listener_rule(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "test_listener_rule", value)
 
 
@@ -3136,14 +5342,12 @@ class ServiceNetworkConfigurationArgsDict(TypedDict):
     subnets: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
     """
     Subnets associated with the task or service.
-
-    For more information, see [Task Networking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html)
     """
-    assign_public_ip: NotRequired[pulumi.Input[_builtins.bool]]
+    assign_public_ip: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Assign a public IP address to the ENI (Fargate launch type only). Valid values are `true` or `false`. Default `false`.
     """
-    security_groups: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    security_groups: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     Security groups associated with the task or service. If you do not specify a security group, the default security group for the VPC is used.
     """
@@ -3152,12 +5356,10 @@ class ServiceNetworkConfigurationArgsDict(TypedDict):
 class ServiceNetworkConfigurationArgs:
     def __init__(__self__, *,
                  subnets: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
-                 assign_public_ip: Optional[pulumi.Input[_builtins.bool]] = None,
-                 security_groups: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 assign_public_ip: pulumi.Input[Optional[_builtins.bool]] = None,
+                 security_groups: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnets: Subnets associated with the task or service.
-               
-               For more information, see [Task Networking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html)
         :param pulumi.Input[_builtins.bool] assign_public_ip: Assign a public IP address to the ENI (Fargate launch type only). Valid values are `true` or `false`. Default `false`.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_groups: Security groups associated with the task or service. If you do not specify a security group, the default security group for the VPC is used.
         """
@@ -3172,8 +5374,6 @@ class ServiceNetworkConfigurationArgs:
     def subnets(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
         """
         Subnets associated with the task or service.
-
-        For more information, see [Task Networking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html)
         """
         return pulumi.get(self, "subnets")
 
@@ -3183,26 +5383,26 @@ class ServiceNetworkConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="assignPublicIp")
-    def assign_public_ip(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def assign_public_ip(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Assign a public IP address to the ENI (Fargate launch type only). Valid values are `true` or `false`. Default `false`.
         """
         return pulumi.get(self, "assign_public_ip")
 
     @assign_public_ip.setter
-    def assign_public_ip(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def assign_public_ip(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "assign_public_ip", value)
 
     @_builtins.property
     @pulumi.getter(name="securityGroups")
-    def security_groups(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def security_groups(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         Security groups associated with the task or service. If you do not specify a security group, the default security group for the VPC is used.
         """
         return pulumi.get(self, "security_groups")
 
     @security_groups.setter
-    def security_groups(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def security_groups(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "security_groups", value)
 
 
@@ -3213,7 +5413,7 @@ class ServiceOrderedPlacementStrategyArgsDict(TypedDict):
 
     > **Note:** for `spread`, `host` and `instanceId` will be normalized, by AWS, to be `instanceId`. This means the statefile will show `instanceId` but your config will differ if you use `host`.
     """
-    field: NotRequired[pulumi.Input[_builtins.str]]
+    field: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     For the `spread` placement strategy, valid values are `instanceId` (or `host`, which has the same effect), or any platform or custom attribute that is applied to a container instance. For the `binpack` type, valid values are `memory` and `cpu`. For the `random` type, this attribute is not needed. For more information, see [Placement Strategy](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_PlacementStrategy.html).
     """
@@ -3222,7 +5422,7 @@ class ServiceOrderedPlacementStrategyArgsDict(TypedDict):
 class ServiceOrderedPlacementStrategyArgs:
     def __init__(__self__, *,
                  type: pulumi.Input[_builtins.str],
-                 field: Optional[pulumi.Input[_builtins.str]] = None):
+                 field: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] type: Type of placement strategy. Must be one of: `binpack`, `random`, or `spread`
                
@@ -3249,14 +5449,14 @@ class ServiceOrderedPlacementStrategyArgs:
 
     @_builtins.property
     @pulumi.getter
-    def field(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def field(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         For the `spread` placement strategy, valid values are `instanceId` (or `host`, which has the same effect), or any platform or custom attribute that is applied to a container instance. For the `binpack` type, valid values are `memory` and `cpu`. For the `random` type, this attribute is not needed. For more information, see [Placement Strategy](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_PlacementStrategy.html).
         """
         return pulumi.get(self, "field")
 
     @field.setter
-    def field(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def field(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "field", value)
 
 
@@ -3265,7 +5465,7 @@ class ServicePlacementConstraintArgsDict(TypedDict):
     """
     Type of constraint. The only valid values at this time are `memberOf` and `distinctInstance`.
     """
-    expression: NotRequired[pulumi.Input[_builtins.str]]
+    expression: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Cluster Query Language expression to apply to the constraint. Does not need to be specified for the `distinctInstance` type. For more information, see [Cluster Query Language in the Amazon EC2 Container Service Developer Guide](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html).
     """
@@ -3274,7 +5474,7 @@ class ServicePlacementConstraintArgsDict(TypedDict):
 class ServicePlacementConstraintArgs:
     def __init__(__self__, *,
                  type: pulumi.Input[_builtins.str],
-                 expression: Optional[pulumi.Input[_builtins.str]] = None):
+                 expression: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] type: Type of constraint. The only valid values at this time are `memberOf` and `distinctInstance`.
         :param pulumi.Input[_builtins.str] expression: Cluster Query Language expression to apply to the constraint. Does not need to be specified for the `distinctInstance` type. For more information, see [Cluster Query Language in the Amazon EC2 Container Service Developer Guide](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html).
@@ -3297,14 +5497,14 @@ class ServicePlacementConstraintArgs:
 
     @_builtins.property
     @pulumi.getter
-    def expression(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def expression(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Cluster Query Language expression to apply to the constraint. Does not need to be specified for the `distinctInstance` type. For more information, see [Cluster Query Language in the Amazon EC2 Container Service Developer Guide](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html).
         """
         return pulumi.get(self, "expression")
 
     @expression.setter
-    def expression(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def expression(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "expression", value)
 
 
@@ -3313,15 +5513,19 @@ class ServiceServiceConnectConfigurationArgsDict(TypedDict):
     """
     Whether to use Service Connect with this service.
     """
-    log_configuration: NotRequired[pulumi.Input['ServiceServiceConnectConfigurationLogConfigurationArgsDict']]
+    access_log_configuration: NotRequired[pulumi.Input[Optional['ServiceServiceConnectConfigurationAccessLogConfigurationArgsDict']]]
+    """
+    Configuration for Service Connect access logs. See below.
+    """
+    log_configuration: NotRequired[pulumi.Input[Optional['ServiceServiceConnectConfigurationLogConfigurationArgsDict']]]
     """
     Log configuration for the container. See below.
     """
-    namespace: NotRequired[pulumi.Input[_builtins.str]]
+    namespace: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Namespace name or ARN of the `servicediscovery.HttpNamespace` for use with Service Connect.
     """
-    services: NotRequired[pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceArgsDict']]]]
+    services: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceArgsDict']]]]]
     """
     List of Service Connect service objects. See below.
     """
@@ -3330,16 +5534,20 @@ class ServiceServiceConnectConfigurationArgsDict(TypedDict):
 class ServiceServiceConnectConfigurationArgs:
     def __init__(__self__, *,
                  enabled: pulumi.Input[_builtins.bool],
-                 log_configuration: Optional[pulumi.Input['ServiceServiceConnectConfigurationLogConfigurationArgs']] = None,
-                 namespace: Optional[pulumi.Input[_builtins.str]] = None,
-                 services: Optional[pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceArgs']]]] = None):
+                 access_log_configuration: pulumi.Input[Optional['ServiceServiceConnectConfigurationAccessLogConfigurationArgs']] = None,
+                 log_configuration: pulumi.Input[Optional['ServiceServiceConnectConfigurationLogConfigurationArgs']] = None,
+                 namespace: pulumi.Input[Optional[_builtins.str]] = None,
+                 services: pulumi.Input[Optional[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceArgs']]]] = None):
         """
         :param pulumi.Input[_builtins.bool] enabled: Whether to use Service Connect with this service.
+        :param pulumi.Input['ServiceServiceConnectConfigurationAccessLogConfigurationArgs'] access_log_configuration: Configuration for Service Connect access logs. See below.
         :param pulumi.Input['ServiceServiceConnectConfigurationLogConfigurationArgs'] log_configuration: Log configuration for the container. See below.
         :param pulumi.Input[_builtins.str] namespace: Namespace name or ARN of the `servicediscovery.HttpNamespace` for use with Service Connect.
         :param pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceArgs']]] services: List of Service Connect service objects. See below.
         """
         pulumi.set(__self__, "enabled", enabled)
+        if access_log_configuration is not None:
+            pulumi.set(__self__, "access_log_configuration", access_log_configuration)
         if log_configuration is not None:
             pulumi.set(__self__, "log_configuration", log_configuration)
         if namespace is not None:
@@ -3360,40 +5568,112 @@ class ServiceServiceConnectConfigurationArgs:
         pulumi.set(self, "enabled", value)
 
     @_builtins.property
+    @pulumi.getter(name="accessLogConfiguration")
+    def access_log_configuration(self) -> pulumi.Input[Optional['ServiceServiceConnectConfigurationAccessLogConfigurationArgs']]:
+        """
+        Configuration for Service Connect access logs. See below.
+        """
+        return pulumi.get(self, "access_log_configuration")
+
+    @access_log_configuration.setter
+    def access_log_configuration(self, value: pulumi.Input[Optional['ServiceServiceConnectConfigurationAccessLogConfigurationArgs']]):
+        pulumi.set(self, "access_log_configuration", value)
+
+    @_builtins.property
     @pulumi.getter(name="logConfiguration")
-    def log_configuration(self) -> Optional[pulumi.Input['ServiceServiceConnectConfigurationLogConfigurationArgs']]:
+    def log_configuration(self) -> pulumi.Input[Optional['ServiceServiceConnectConfigurationLogConfigurationArgs']]:
         """
         Log configuration for the container. See below.
         """
         return pulumi.get(self, "log_configuration")
 
     @log_configuration.setter
-    def log_configuration(self, value: Optional[pulumi.Input['ServiceServiceConnectConfigurationLogConfigurationArgs']]):
+    def log_configuration(self, value: pulumi.Input[Optional['ServiceServiceConnectConfigurationLogConfigurationArgs']]):
         pulumi.set(self, "log_configuration", value)
 
     @_builtins.property
     @pulumi.getter
-    def namespace(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def namespace(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Namespace name or ARN of the `servicediscovery.HttpNamespace` for use with Service Connect.
         """
         return pulumi.get(self, "namespace")
 
     @namespace.setter
-    def namespace(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def namespace(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "namespace", value)
 
     @_builtins.property
     @pulumi.getter
-    def services(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceArgs']]]]:
+    def services(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceArgs']]]]:
         """
         List of Service Connect service objects. See below.
         """
         return pulumi.get(self, "services")
 
     @services.setter
-    def services(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceArgs']]]]):
+    def services(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceArgs']]]]):
         pulumi.set(self, "services", value)
+
+
+class ServiceServiceConnectConfigurationAccessLogConfigurationArgsDict(TypedDict):
+    format: pulumi.Input[_builtins.str]
+    """
+    Format for Service Connect access log output. Valid values: `TEXT`, `JSON`. See [AWS documentation](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-connect-envoy-access-logs.html) for format details.
+    """
+    include_query_parameters: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Whether to include query parameters in Service Connect access logs. Valid values: `ENABLED`, `DISABLED`. Default: `DISABLED`. Query parameters may contain sensitive information.
+
+    > **NOTE:** Access logs are delivered to the destination log group specified in the `log_configuration` block. You must configure `log_configuration` to enable access logs.
+
+    > **SECURITY WARNING:** When `include_query_parameters` is set to `ENABLED`, query parameters (which may contain sensitive data such as request IDs, tokens, or session identifiers) will be included in access logs.
+    """
+
+@pulumi.input_type
+class ServiceServiceConnectConfigurationAccessLogConfigurationArgs:
+    def __init__(__self__, *,
+                 format: pulumi.Input[_builtins.str],
+                 include_query_parameters: pulumi.Input[Optional[_builtins.str]] = None):
+        """
+        :param pulumi.Input[_builtins.str] format: Format for Service Connect access log output. Valid values: `TEXT`, `JSON`. See [AWS documentation](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-connect-envoy-access-logs.html) for format details.
+        :param pulumi.Input[_builtins.str] include_query_parameters: Whether to include query parameters in Service Connect access logs. Valid values: `ENABLED`, `DISABLED`. Default: `DISABLED`. Query parameters may contain sensitive information.
+               
+               > **NOTE:** Access logs are delivered to the destination log group specified in the `log_configuration` block. You must configure `log_configuration` to enable access logs.
+               
+               > **SECURITY WARNING:** When `include_query_parameters` is set to `ENABLED`, query parameters (which may contain sensitive data such as request IDs, tokens, or session identifiers) will be included in access logs.
+        """
+        pulumi.set(__self__, "format", format)
+        if include_query_parameters is not None:
+            pulumi.set(__self__, "include_query_parameters", include_query_parameters)
+
+    @_builtins.property
+    @pulumi.getter
+    def format(self) -> pulumi.Input[_builtins.str]:
+        """
+        Format for Service Connect access log output. Valid values: `TEXT`, `JSON`. See [AWS documentation](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-connect-envoy-access-logs.html) for format details.
+        """
+        return pulumi.get(self, "format")
+
+    @format.setter
+    def format(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "format", value)
+
+    @_builtins.property
+    @pulumi.getter(name="includeQueryParameters")
+    def include_query_parameters(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Whether to include query parameters in Service Connect access logs. Valid values: `ENABLED`, `DISABLED`. Default: `DISABLED`. Query parameters may contain sensitive information.
+
+        > **NOTE:** Access logs are delivered to the destination log group specified in the `log_configuration` block. You must configure `log_configuration` to enable access logs.
+
+        > **SECURITY WARNING:** When `include_query_parameters` is set to `ENABLED`, query parameters (which may contain sensitive data such as request IDs, tokens, or session identifiers) will be included in access logs.
+        """
+        return pulumi.get(self, "include_query_parameters")
+
+    @include_query_parameters.setter
+    def include_query_parameters(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "include_query_parameters", value)
 
 
 class ServiceServiceConnectConfigurationLogConfigurationArgsDict(TypedDict):
@@ -3401,11 +5681,11 @@ class ServiceServiceConnectConfigurationLogConfigurationArgsDict(TypedDict):
     """
     Log driver to use for the container.
     """
-    options: NotRequired[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]
+    options: NotRequired[pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]]
     """
     Configuration options to send to the log driver.
     """
-    secret_options: NotRequired[pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationLogConfigurationSecretOptionArgsDict']]]]
+    secret_options: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['ServiceServiceConnectConfigurationLogConfigurationSecretOptionArgsDict']]]]]
     """
     Secrets to pass to the log configuration. See below.
     """
@@ -3414,8 +5694,8 @@ class ServiceServiceConnectConfigurationLogConfigurationArgsDict(TypedDict):
 class ServiceServiceConnectConfigurationLogConfigurationArgs:
     def __init__(__self__, *,
                  log_driver: pulumi.Input[_builtins.str],
-                 options: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 secret_options: Optional[pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationLogConfigurationSecretOptionArgs']]]] = None):
+                 options: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 secret_options: pulumi.Input[Optional[Sequence[pulumi.Input['ServiceServiceConnectConfigurationLogConfigurationSecretOptionArgs']]]] = None):
         """
         :param pulumi.Input[_builtins.str] log_driver: Log driver to use for the container.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] options: Configuration options to send to the log driver.
@@ -3441,26 +5721,26 @@ class ServiceServiceConnectConfigurationLogConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def options(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def options(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Configuration options to send to the log driver.
         """
         return pulumi.get(self, "options")
 
     @options.setter
-    def options(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def options(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "options", value)
 
     @_builtins.property
     @pulumi.getter(name="secretOptions")
-    def secret_options(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationLogConfigurationSecretOptionArgs']]]]:
+    def secret_options(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ServiceServiceConnectConfigurationLogConfigurationSecretOptionArgs']]]]:
         """
         Secrets to pass to the log configuration. See below.
         """
         return pulumi.get(self, "secret_options")
 
     @secret_options.setter
-    def secret_options(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationLogConfigurationSecretOptionArgs']]]]):
+    def secret_options(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ServiceServiceConnectConfigurationLogConfigurationSecretOptionArgs']]]]):
         pulumi.set(self, "secret_options", value)
 
 
@@ -3516,43 +5796,43 @@ class ServiceServiceConnectConfigurationServiceArgsDict(TypedDict):
     """
     Name of one of the `portMappings` from all the containers in the task definition of this Amazon ECS service.
     """
-    client_alias: NotRequired[pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasArgsDict']]]]
+    client_alias: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasArgsDict']]]]]
     """
     List of client aliases for this Service Connect service. You use these to assign names that can be used by client applications. For each service block where enabled is true, exactly one `client_alias` with one `port` should be specified. See below.
     """
-    discovery_name: NotRequired[pulumi.Input[_builtins.str]]
+    discovery_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Name of the new AWS Cloud Map service that Amazon ECS creates for this Amazon ECS service.
     """
-    ingress_port_override: NotRequired[pulumi.Input[_builtins.int]]
+    ingress_port_override: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Port number for the Service Connect proxy to listen on.
     """
-    timeout: NotRequired[pulumi.Input['ServiceServiceConnectConfigurationServiceTimeoutArgsDict']]
+    timeout: NotRequired[pulumi.Input[Optional['ServiceServiceConnectConfigurationServiceTimeoutArgsDict']]]
     """
     Configuration timeouts for Service Connect
     """
-    tls: NotRequired[pulumi.Input['ServiceServiceConnectConfigurationServiceTlsArgsDict']]
+    tls: NotRequired[pulumi.Input[Optional['ServiceServiceConnectConfigurationServiceTlsArgsDict']]]
     """
-    Configuration for enabling Transport Layer Security (TLS)
+    Configuration for enabling TLS
     """
 
 @pulumi.input_type
 class ServiceServiceConnectConfigurationServiceArgs:
     def __init__(__self__, *,
                  port_name: pulumi.Input[_builtins.str],
-                 client_alias: Optional[pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasArgs']]]] = None,
-                 discovery_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 ingress_port_override: Optional[pulumi.Input[_builtins.int]] = None,
-                 timeout: Optional[pulumi.Input['ServiceServiceConnectConfigurationServiceTimeoutArgs']] = None,
-                 tls: Optional[pulumi.Input['ServiceServiceConnectConfigurationServiceTlsArgs']] = None):
+                 client_alias: pulumi.Input[Optional[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasArgs']]]] = None,
+                 discovery_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 ingress_port_override: pulumi.Input[Optional[_builtins.int]] = None,
+                 timeout: pulumi.Input[Optional['ServiceServiceConnectConfigurationServiceTimeoutArgs']] = None,
+                 tls: pulumi.Input[Optional['ServiceServiceConnectConfigurationServiceTlsArgs']] = None):
         """
         :param pulumi.Input[_builtins.str] port_name: Name of one of the `portMappings` from all the containers in the task definition of this Amazon ECS service.
         :param pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasArgs']]] client_alias: List of client aliases for this Service Connect service. You use these to assign names that can be used by client applications. For each service block where enabled is true, exactly one `client_alias` with one `port` should be specified. See below.
         :param pulumi.Input[_builtins.str] discovery_name: Name of the new AWS Cloud Map service that Amazon ECS creates for this Amazon ECS service.
         :param pulumi.Input[_builtins.int] ingress_port_override: Port number for the Service Connect proxy to listen on.
         :param pulumi.Input['ServiceServiceConnectConfigurationServiceTimeoutArgs'] timeout: Configuration timeouts for Service Connect
-        :param pulumi.Input['ServiceServiceConnectConfigurationServiceTlsArgs'] tls: Configuration for enabling Transport Layer Security (TLS)
+        :param pulumi.Input['ServiceServiceConnectConfigurationServiceTlsArgs'] tls: Configuration for enabling TLS
         """
         pulumi.set(__self__, "port_name", port_name)
         if client_alias is not None:
@@ -3580,62 +5860,62 @@ class ServiceServiceConnectConfigurationServiceArgs:
 
     @_builtins.property
     @pulumi.getter(name="clientAlias")
-    def client_alias(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasArgs']]]]:
+    def client_alias(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasArgs']]]]:
         """
         List of client aliases for this Service Connect service. You use these to assign names that can be used by client applications. For each service block where enabled is true, exactly one `client_alias` with one `port` should be specified. See below.
         """
         return pulumi.get(self, "client_alias")
 
     @client_alias.setter
-    def client_alias(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasArgs']]]]):
+    def client_alias(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasArgs']]]]):
         pulumi.set(self, "client_alias", value)
 
     @_builtins.property
     @pulumi.getter(name="discoveryName")
-    def discovery_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def discovery_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the new AWS Cloud Map service that Amazon ECS creates for this Amazon ECS service.
         """
         return pulumi.get(self, "discovery_name")
 
     @discovery_name.setter
-    def discovery_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def discovery_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "discovery_name", value)
 
     @_builtins.property
     @pulumi.getter(name="ingressPortOverride")
-    def ingress_port_override(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def ingress_port_override(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Port number for the Service Connect proxy to listen on.
         """
         return pulumi.get(self, "ingress_port_override")
 
     @ingress_port_override.setter
-    def ingress_port_override(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def ingress_port_override(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "ingress_port_override", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeout(self) -> Optional[pulumi.Input['ServiceServiceConnectConfigurationServiceTimeoutArgs']]:
+    def timeout(self) -> pulumi.Input[Optional['ServiceServiceConnectConfigurationServiceTimeoutArgs']]:
         """
         Configuration timeouts for Service Connect
         """
         return pulumi.get(self, "timeout")
 
     @timeout.setter
-    def timeout(self, value: Optional[pulumi.Input['ServiceServiceConnectConfigurationServiceTimeoutArgs']]):
+    def timeout(self, value: pulumi.Input[Optional['ServiceServiceConnectConfigurationServiceTimeoutArgs']]):
         pulumi.set(self, "timeout", value)
 
     @_builtins.property
     @pulumi.getter
-    def tls(self) -> Optional[pulumi.Input['ServiceServiceConnectConfigurationServiceTlsArgs']]:
+    def tls(self) -> pulumi.Input[Optional['ServiceServiceConnectConfigurationServiceTlsArgs']]:
         """
-        Configuration for enabling Transport Layer Security (TLS)
+        Configuration for enabling TLS
         """
         return pulumi.get(self, "tls")
 
     @tls.setter
-    def tls(self, value: Optional[pulumi.Input['ServiceServiceConnectConfigurationServiceTlsArgs']]):
+    def tls(self, value: pulumi.Input[Optional['ServiceServiceConnectConfigurationServiceTlsArgs']]):
         pulumi.set(self, "tls", value)
 
 
@@ -3644,11 +5924,11 @@ class ServiceServiceConnectConfigurationServiceClientAliasArgsDict(TypedDict):
     """
     Listening port number for the Service Connect proxy. This port is available inside of all of the tasks within the same namespace.
     """
-    dns_name: NotRequired[pulumi.Input[_builtins.str]]
+    dns_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Name that you use in the applications of client tasks to connect to this service.
     """
-    test_traffic_rules: NotRequired[pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleArgsDict']]]]
+    test_traffic_rules: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleArgsDict']]]]]
     """
     Configuration block for test traffic routing rules. See below.
     """
@@ -3657,8 +5937,8 @@ class ServiceServiceConnectConfigurationServiceClientAliasArgsDict(TypedDict):
 class ServiceServiceConnectConfigurationServiceClientAliasArgs:
     def __init__(__self__, *,
                  port: pulumi.Input[_builtins.int],
-                 dns_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 test_traffic_rules: Optional[pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleArgs']]]] = None):
+                 dns_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 test_traffic_rules: pulumi.Input[Optional[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleArgs']]]] = None):
         """
         :param pulumi.Input[_builtins.int] port: Listening port number for the Service Connect proxy. This port is available inside of all of the tasks within the same namespace.
         :param pulumi.Input[_builtins.str] dns_name: Name that you use in the applications of client tasks to connect to this service.
@@ -3684,31 +5964,31 @@ class ServiceServiceConnectConfigurationServiceClientAliasArgs:
 
     @_builtins.property
     @pulumi.getter(name="dnsName")
-    def dns_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def dns_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name that you use in the applications of client tasks to connect to this service.
         """
         return pulumi.get(self, "dns_name")
 
     @dns_name.setter
-    def dns_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def dns_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "dns_name", value)
 
     @_builtins.property
     @pulumi.getter(name="testTrafficRules")
-    def test_traffic_rules(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleArgs']]]]:
+    def test_traffic_rules(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleArgs']]]]:
         """
         Configuration block for test traffic routing rules. See below.
         """
         return pulumi.get(self, "test_traffic_rules")
 
     @test_traffic_rules.setter
-    def test_traffic_rules(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleArgs']]]]):
+    def test_traffic_rules(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleArgs']]]]):
         pulumi.set(self, "test_traffic_rules", value)
 
 
 class ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleArgsDict(TypedDict):
-    header: NotRequired[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleHeaderArgsDict']]
+    header: NotRequired[pulumi.Input[Optional['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleHeaderArgsDict']]]
     """
     Configuration block for header-based routing rules. See below.
     """
@@ -3716,7 +5996,7 @@ class ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleArgsDic
 @pulumi.input_type
 class ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleArgs:
     def __init__(__self__, *,
-                 header: Optional[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleHeaderArgs']] = None):
+                 header: pulumi.Input[Optional['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleHeaderArgs']] = None):
         """
         :param pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleHeaderArgs'] header: Configuration block for header-based routing rules. See below.
         """
@@ -3725,14 +6005,14 @@ class ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleArgs:
 
     @_builtins.property
     @pulumi.getter
-    def header(self) -> Optional[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleHeaderArgs']]:
+    def header(self) -> pulumi.Input[Optional['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleHeaderArgs']]:
         """
         Configuration block for header-based routing rules. See below.
         """
         return pulumi.get(self, "header")
 
     @header.setter
-    def header(self, value: Optional[pulumi.Input['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleHeaderArgs']]):
+    def header(self, value: pulumi.Input[Optional['ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleHeaderArgs']]):
         pulumi.set(self, "header", value)
 
 
@@ -3812,11 +6092,11 @@ class ServiceServiceConnectConfigurationServiceClientAliasTestTrafficRuleHeaderV
 
 
 class ServiceServiceConnectConfigurationServiceTimeoutArgsDict(TypedDict):
-    idle_timeout_seconds: NotRequired[pulumi.Input[_builtins.int]]
+    idle_timeout_seconds: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Amount of time in seconds a connection will stay active while idle. A value of 0 can be set to disable idleTimeout.
     """
-    per_request_timeout_seconds: NotRequired[pulumi.Input[_builtins.int]]
+    per_request_timeout_seconds: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Amount of time in seconds for the upstream to respond with a complete response per request. A value of 0 can be set to disable perRequestTimeout. Can only be set when appProtocol isn't TCP.
     """
@@ -3824,8 +6104,8 @@ class ServiceServiceConnectConfigurationServiceTimeoutArgsDict(TypedDict):
 @pulumi.input_type
 class ServiceServiceConnectConfigurationServiceTimeoutArgs:
     def __init__(__self__, *,
-                 idle_timeout_seconds: Optional[pulumi.Input[_builtins.int]] = None,
-                 per_request_timeout_seconds: Optional[pulumi.Input[_builtins.int]] = None):
+                 idle_timeout_seconds: pulumi.Input[Optional[_builtins.int]] = None,
+                 per_request_timeout_seconds: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.int] idle_timeout_seconds: Amount of time in seconds a connection will stay active while idle. A value of 0 can be set to disable idleTimeout.
         :param pulumi.Input[_builtins.int] per_request_timeout_seconds: Amount of time in seconds for the upstream to respond with a complete response per request. A value of 0 can be set to disable perRequestTimeout. Can only be set when appProtocol isn't TCP.
@@ -3837,26 +6117,26 @@ class ServiceServiceConnectConfigurationServiceTimeoutArgs:
 
     @_builtins.property
     @pulumi.getter(name="idleTimeoutSeconds")
-    def idle_timeout_seconds(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def idle_timeout_seconds(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Amount of time in seconds a connection will stay active while idle. A value of 0 can be set to disable idleTimeout.
         """
         return pulumi.get(self, "idle_timeout_seconds")
 
     @idle_timeout_seconds.setter
-    def idle_timeout_seconds(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def idle_timeout_seconds(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "idle_timeout_seconds", value)
 
     @_builtins.property
     @pulumi.getter(name="perRequestTimeoutSeconds")
-    def per_request_timeout_seconds(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def per_request_timeout_seconds(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Amount of time in seconds for the upstream to respond with a complete response per request. A value of 0 can be set to disable perRequestTimeout. Can only be set when appProtocol isn't TCP.
         """
         return pulumi.get(self, "per_request_timeout_seconds")
 
     @per_request_timeout_seconds.setter
-    def per_request_timeout_seconds(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def per_request_timeout_seconds(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "per_request_timeout_seconds", value)
 
 
@@ -3865,11 +6145,11 @@ class ServiceServiceConnectConfigurationServiceTlsArgsDict(TypedDict):
     """
     Details of the certificate authority which will issue the certificate.
     """
-    kms_key: NotRequired[pulumi.Input[_builtins.str]]
+    kms_key: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     KMS key used to encrypt the private key in Secrets Manager.
     """
-    role_arn: NotRequired[pulumi.Input[_builtins.str]]
+    role_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     ARN of the IAM Role that's associated with the Service Connect TLS.
     """
@@ -3878,8 +6158,8 @@ class ServiceServiceConnectConfigurationServiceTlsArgsDict(TypedDict):
 class ServiceServiceConnectConfigurationServiceTlsArgs:
     def __init__(__self__, *,
                  issuer_cert_authority: pulumi.Input['ServiceServiceConnectConfigurationServiceTlsIssuerCertAuthorityArgs'],
-                 kms_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None):
+                 kms_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input['ServiceServiceConnectConfigurationServiceTlsIssuerCertAuthorityArgs'] issuer_cert_authority: Details of the certificate authority which will issue the certificate.
         :param pulumi.Input[_builtins.str] kms_key: KMS key used to encrypt the private key in Secrets Manager.
@@ -3905,26 +6185,26 @@ class ServiceServiceConnectConfigurationServiceTlsArgs:
 
     @_builtins.property
     @pulumi.getter(name="kmsKey")
-    def kms_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         KMS key used to encrypt the private key in Secrets Manager.
         """
         return pulumi.get(self, "kms_key")
 
     @kms_key.setter
-    def kms_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key", value)
 
     @_builtins.property
     @pulumi.getter(name="roleArn")
-    def role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the IAM Role that's associated with the Service Connect TLS.
         """
         return pulumi.get(self, "role_arn")
 
     @role_arn.setter
-    def role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "role_arn", value)
 
 
@@ -3961,15 +6241,15 @@ class ServiceServiceRegistriesArgsDict(TypedDict):
     """
     ARN of the Service Registry. The currently supported service registry is Amazon Route 53 Auto Naming Service(`servicediscovery.Service`). For more information, see [Service](https://docs.aws.amazon.com/Route53/latest/APIReference/API_autonaming_Service.html)
     """
-    container_name: NotRequired[pulumi.Input[_builtins.str]]
+    container_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Container name value, already specified in the task definition, to be used for your service discovery service.
     """
-    container_port: NotRequired[pulumi.Input[_builtins.int]]
+    container_port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Port value, already specified in the task definition, to be used for your service discovery service.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Port value used if your Service Discovery service specified an SRV record.
     """
@@ -3978,9 +6258,9 @@ class ServiceServiceRegistriesArgsDict(TypedDict):
 class ServiceServiceRegistriesArgs:
     def __init__(__self__, *,
                  registry_arn: pulumi.Input[_builtins.str],
-                 container_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 container_port: Optional[pulumi.Input[_builtins.int]] = None,
-                 port: Optional[pulumi.Input[_builtins.int]] = None):
+                 container_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 container_port: pulumi.Input[Optional[_builtins.int]] = None,
+                 port: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.str] registry_arn: ARN of the Service Registry. The currently supported service registry is Amazon Route 53 Auto Naming Service(`servicediscovery.Service`). For more information, see [Service](https://docs.aws.amazon.com/Route53/latest/APIReference/API_autonaming_Service.html)
         :param pulumi.Input[_builtins.str] container_name: Container name value, already specified in the task definition, to be used for your service discovery service.
@@ -4009,38 +6289,38 @@ class ServiceServiceRegistriesArgs:
 
     @_builtins.property
     @pulumi.getter(name="containerName")
-    def container_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def container_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Container name value, already specified in the task definition, to be used for your service discovery service.
         """
         return pulumi.get(self, "container_name")
 
     @container_name.setter
-    def container_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def container_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "container_name", value)
 
     @_builtins.property
     @pulumi.getter(name="containerPort")
-    def container_port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def container_port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Port value, already specified in the task definition, to be used for your service discovery service.
         """
         return pulumi.get(self, "container_port")
 
     @container_port.setter
-    def container_port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def container_port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "container_port", value)
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Port value used if your Service Discovery service specified an SRV record.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
 
@@ -4096,43 +6376,43 @@ class ServiceVolumeConfigurationManagedEbsVolumeArgsDict(TypedDict):
     """
     Amazon ECS infrastructure IAM role that is used to manage your Amazon Web Services infrastructure. Recommended using the Amazon ECS-managed `AmazonECSInfrastructureRolePolicyForVolumes` IAM policy with this role.
     """
-    encrypted: NotRequired[pulumi.Input[_builtins.bool]]
+    encrypted: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether the volume should be encrypted. Default value is `true`.
     """
-    file_system_type: NotRequired[pulumi.Input[_builtins.str]]
+    file_system_type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Linux filesystem type for the volume. For volumes created from a snapshot, same filesystem type must be specified that the volume was using when the snapshot was created. Valid values are `ext3`, `ext4`, `xfs`. Default value is `xfs`.
     """
-    iops: NotRequired[pulumi.Input[_builtins.int]]
+    iops: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Number of I/O operations per second (IOPS).
     """
-    kms_key_id: NotRequired[pulumi.Input[_builtins.str]]
+    kms_key_id: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Amazon Resource Name (ARN) identifier of the Amazon Web Services Key Management Service key to use for Amazon EBS encryption.
+    ARN identifier of the Amazon Web Services KMS key to use for Amazon EBS encryption.
     """
-    size_in_gb: NotRequired[pulumi.Input[_builtins.int]]
+    size_in_gb: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Size of the volume in GiB. You must specify either a `size_in_gb` or a `snapshot_id`. You can optionally specify a volume size greater than or equal to the snapshot size.
     """
-    snapshot_id: NotRequired[pulumi.Input[_builtins.str]]
+    snapshot_id: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Snapshot that Amazon ECS uses to create the volume. You must specify either a `size_in_gb` or a `snapshot_id`.
     """
-    tag_specifications: NotRequired[pulumi.Input[Sequence[pulumi.Input['ServiceVolumeConfigurationManagedEbsVolumeTagSpecificationArgsDict']]]]
+    tag_specifications: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['ServiceVolumeConfigurationManagedEbsVolumeTagSpecificationArgsDict']]]]]
     """
-    The tags to apply to the volume. See below.
+    Tags to apply to the volume. See below.
     """
-    throughput: NotRequired[pulumi.Input[_builtins.int]]
+    throughput: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Throughput to provision for a volume, in MiB/s, with a maximum of 1,000 MiB/s.
     """
-    volume_initialization_rate: NotRequired[pulumi.Input[_builtins.int]]
+    volume_initialization_rate: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Volume Initialization Rate in MiB/s. You must also specify a `snapshot_id`.
     """
-    volume_type: NotRequired[pulumi.Input[_builtins.str]]
+    volume_type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Volume type.
     """
@@ -4141,25 +6421,25 @@ class ServiceVolumeConfigurationManagedEbsVolumeArgsDict(TypedDict):
 class ServiceVolumeConfigurationManagedEbsVolumeArgs:
     def __init__(__self__, *,
                  role_arn: pulumi.Input[_builtins.str],
-                 encrypted: Optional[pulumi.Input[_builtins.bool]] = None,
-                 file_system_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 iops: Optional[pulumi.Input[_builtins.int]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 size_in_gb: Optional[pulumi.Input[_builtins.int]] = None,
-                 snapshot_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 tag_specifications: Optional[pulumi.Input[Sequence[pulumi.Input['ServiceVolumeConfigurationManagedEbsVolumeTagSpecificationArgs']]]] = None,
-                 throughput: Optional[pulumi.Input[_builtins.int]] = None,
-                 volume_initialization_rate: Optional[pulumi.Input[_builtins.int]] = None,
-                 volume_type: Optional[pulumi.Input[_builtins.str]] = None):
+                 encrypted: pulumi.Input[Optional[_builtins.bool]] = None,
+                 file_system_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 iops: pulumi.Input[Optional[_builtins.int]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 size_in_gb: pulumi.Input[Optional[_builtins.int]] = None,
+                 snapshot_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 tag_specifications: pulumi.Input[Optional[Sequence[pulumi.Input['ServiceVolumeConfigurationManagedEbsVolumeTagSpecificationArgs']]]] = None,
+                 throughput: pulumi.Input[Optional[_builtins.int]] = None,
+                 volume_initialization_rate: pulumi.Input[Optional[_builtins.int]] = None,
+                 volume_type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] role_arn: Amazon ECS infrastructure IAM role that is used to manage your Amazon Web Services infrastructure. Recommended using the Amazon ECS-managed `AmazonECSInfrastructureRolePolicyForVolumes` IAM policy with this role.
         :param pulumi.Input[_builtins.bool] encrypted: Whether the volume should be encrypted. Default value is `true`.
         :param pulumi.Input[_builtins.str] file_system_type: Linux filesystem type for the volume. For volumes created from a snapshot, same filesystem type must be specified that the volume was using when the snapshot was created. Valid values are `ext3`, `ext4`, `xfs`. Default value is `xfs`.
         :param pulumi.Input[_builtins.int] iops: Number of I/O operations per second (IOPS).
-        :param pulumi.Input[_builtins.str] kms_key_id: Amazon Resource Name (ARN) identifier of the Amazon Web Services Key Management Service key to use for Amazon EBS encryption.
+        :param pulumi.Input[_builtins.str] kms_key_id: ARN identifier of the Amazon Web Services KMS key to use for Amazon EBS encryption.
         :param pulumi.Input[_builtins.int] size_in_gb: Size of the volume in GiB. You must specify either a `size_in_gb` or a `snapshot_id`. You can optionally specify a volume size greater than or equal to the snapshot size.
         :param pulumi.Input[_builtins.str] snapshot_id: Snapshot that Amazon ECS uses to create the volume. You must specify either a `size_in_gb` or a `snapshot_id`.
-        :param pulumi.Input[Sequence[pulumi.Input['ServiceVolumeConfigurationManagedEbsVolumeTagSpecificationArgs']]] tag_specifications: The tags to apply to the volume. See below.
+        :param pulumi.Input[Sequence[pulumi.Input['ServiceVolumeConfigurationManagedEbsVolumeTagSpecificationArgs']]] tag_specifications: Tags to apply to the volume. See below.
         :param pulumi.Input[_builtins.int] throughput: Throughput to provision for a volume, in MiB/s, with a maximum of 1,000 MiB/s.
         :param pulumi.Input[_builtins.int] volume_initialization_rate: Volume Initialization Rate in MiB/s. You must also specify a `snapshot_id`.
         :param pulumi.Input[_builtins.str] volume_type: Volume type.
@@ -4200,149 +6480,149 @@ class ServiceVolumeConfigurationManagedEbsVolumeArgs:
 
     @_builtins.property
     @pulumi.getter
-    def encrypted(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def encrypted(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the volume should be encrypted. Default value is `true`.
         """
         return pulumi.get(self, "encrypted")
 
     @encrypted.setter
-    def encrypted(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def encrypted(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "encrypted", value)
 
     @_builtins.property
     @pulumi.getter(name="fileSystemType")
-    def file_system_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def file_system_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Linux filesystem type for the volume. For volumes created from a snapshot, same filesystem type must be specified that the volume was using when the snapshot was created. Valid values are `ext3`, `ext4`, `xfs`. Default value is `xfs`.
         """
         return pulumi.get(self, "file_system_type")
 
     @file_system_type.setter
-    def file_system_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def file_system_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "file_system_type", value)
 
     @_builtins.property
     @pulumi.getter
-    def iops(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def iops(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Number of I/O operations per second (IOPS).
         """
         return pulumi.get(self, "iops")
 
     @iops.setter
-    def iops(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def iops(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "iops", value)
 
     @_builtins.property
     @pulumi.getter(name="kmsKeyId")
-    def kms_key_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Amazon Resource Name (ARN) identifier of the Amazon Web Services Key Management Service key to use for Amazon EBS encryption.
+        ARN identifier of the Amazon Web Services KMS key to use for Amazon EBS encryption.
         """
         return pulumi.get(self, "kms_key_id")
 
     @kms_key_id.setter
-    def kms_key_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key_id", value)
 
     @_builtins.property
     @pulumi.getter(name="sizeInGb")
-    def size_in_gb(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def size_in_gb(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Size of the volume in GiB. You must specify either a `size_in_gb` or a `snapshot_id`. You can optionally specify a volume size greater than or equal to the snapshot size.
         """
         return pulumi.get(self, "size_in_gb")
 
     @size_in_gb.setter
-    def size_in_gb(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def size_in_gb(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "size_in_gb", value)
 
     @_builtins.property
     @pulumi.getter(name="snapshotId")
-    def snapshot_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def snapshot_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Snapshot that Amazon ECS uses to create the volume. You must specify either a `size_in_gb` or a `snapshot_id`.
         """
         return pulumi.get(self, "snapshot_id")
 
     @snapshot_id.setter
-    def snapshot_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def snapshot_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "snapshot_id", value)
 
     @_builtins.property
     @pulumi.getter(name="tagSpecifications")
-    def tag_specifications(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ServiceVolumeConfigurationManagedEbsVolumeTagSpecificationArgs']]]]:
+    def tag_specifications(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ServiceVolumeConfigurationManagedEbsVolumeTagSpecificationArgs']]]]:
         """
-        The tags to apply to the volume. See below.
+        Tags to apply to the volume. See below.
         """
         return pulumi.get(self, "tag_specifications")
 
     @tag_specifications.setter
-    def tag_specifications(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ServiceVolumeConfigurationManagedEbsVolumeTagSpecificationArgs']]]]):
+    def tag_specifications(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ServiceVolumeConfigurationManagedEbsVolumeTagSpecificationArgs']]]]):
         pulumi.set(self, "tag_specifications", value)
 
     @_builtins.property
     @pulumi.getter
-    def throughput(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def throughput(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Throughput to provision for a volume, in MiB/s, with a maximum of 1,000 MiB/s.
         """
         return pulumi.get(self, "throughput")
 
     @throughput.setter
-    def throughput(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def throughput(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "throughput", value)
 
     @_builtins.property
     @pulumi.getter(name="volumeInitializationRate")
-    def volume_initialization_rate(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def volume_initialization_rate(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Volume Initialization Rate in MiB/s. You must also specify a `snapshot_id`.
         """
         return pulumi.get(self, "volume_initialization_rate")
 
     @volume_initialization_rate.setter
-    def volume_initialization_rate(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def volume_initialization_rate(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "volume_initialization_rate", value)
 
     @_builtins.property
     @pulumi.getter(name="volumeType")
-    def volume_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def volume_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Volume type.
         """
         return pulumi.get(self, "volume_type")
 
     @volume_type.setter
-    def volume_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def volume_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "volume_type", value)
 
 
 class ServiceVolumeConfigurationManagedEbsVolumeTagSpecificationArgsDict(TypedDict):
     resource_type: pulumi.Input[_builtins.str]
     """
-    The type of volume resource. Valid values, `volume`.
+    Type of volume resource. Valid values, `volume`.
     """
-    propagate_tags: NotRequired[pulumi.Input[_builtins.str]]
+    propagate_tags: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    Determines whether to propagate the tags from the task definition to the Amazon EBS volume.
+    Whether to propagate the tags from the task definition to the Amazon EBS volume.
     """
-    tags: NotRequired[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]
+    tags: NotRequired[pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]]
     """
-    The tags applied to this Amazon EBS volume. `AmazonECSCreated` and `AmazonECSManaged` are reserved tags that can't be used.
+    Tags applied to this Amazon EBS volume. `AmazonECSCreated` and `AmazonECSManaged` are reserved tags that can't be used.
     """
 
 @pulumi.input_type
 class ServiceVolumeConfigurationManagedEbsVolumeTagSpecificationArgs:
     def __init__(__self__, *,
                  resource_type: pulumi.Input[_builtins.str],
-                 propagate_tags: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 propagate_tags: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
-        :param pulumi.Input[_builtins.str] resource_type: The type of volume resource. Valid values, `volume`.
-        :param pulumi.Input[_builtins.str] propagate_tags: Determines whether to propagate the tags from the task definition to the Amazon EBS volume.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: The tags applied to this Amazon EBS volume. `AmazonECSCreated` and `AmazonECSManaged` are reserved tags that can't be used.
+        :param pulumi.Input[_builtins.str] resource_type: Type of volume resource. Valid values, `volume`.
+        :param pulumi.Input[_builtins.str] propagate_tags: Whether to propagate the tags from the task definition to the Amazon EBS volume.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Tags applied to this Amazon EBS volume. `AmazonECSCreated` and `AmazonECSManaged` are reserved tags that can't be used.
         """
         pulumi.set(__self__, "resource_type", resource_type)
         if propagate_tags is not None:
@@ -4354,7 +6634,7 @@ class ServiceVolumeConfigurationManagedEbsVolumeTagSpecificationArgs:
     @pulumi.getter(name="resourceType")
     def resource_type(self) -> pulumi.Input[_builtins.str]:
         """
-        The type of volume resource. Valid values, `volume`.
+        Type of volume resource. Valid values, `volume`.
         """
         return pulumi.get(self, "resource_type")
 
@@ -4364,41 +6644,41 @@ class ServiceVolumeConfigurationManagedEbsVolumeTagSpecificationArgs:
 
     @_builtins.property
     @pulumi.getter(name="propagateTags")
-    def propagate_tags(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def propagate_tags(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Determines whether to propagate the tags from the task definition to the Amazon EBS volume.
+        Whether to propagate the tags from the task definition to the Amazon EBS volume.
         """
         return pulumi.get(self, "propagate_tags")
 
     @propagate_tags.setter
-    def propagate_tags(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def propagate_tags(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "propagate_tags", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        The tags applied to this Amazon EBS volume. `AmazonECSCreated` and `AmazonECSManaged` are reserved tags that can't be used.
+        Tags applied to this Amazon EBS volume. `AmazonECSCreated` and `AmazonECSManaged` are reserved tags that can't be used.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 class ServiceVpcLatticeConfigurationArgsDict(TypedDict):
     port_name: pulumi.Input[_builtins.str]
     """
-    The name of the port for a target group associated with the VPC Lattice configuration.
+    Name of the port for a target group associated with the VPC Lattice configuration.
     """
     role_arn: pulumi.Input[_builtins.str]
     """
-    The ARN of the IAM role to associate with this volume. This is the Amazon ECS infrastructure IAM role that is used to manage your AWS infrastructure.
+    ARN of the IAM role to associate with this volume. This is the Amazon ECS infrastructure IAM role that is used to manage your AWS infrastructure.
     """
     target_group_arn: pulumi.Input[_builtins.str]
     """
-    The full ARN of the target group or groups associated with the VPC Lattice configuration.
+    Full ARN of the target group or groups associated with the VPC Lattice configuration.
     """
 
 @pulumi.input_type
@@ -4408,9 +6688,9 @@ class ServiceVpcLatticeConfigurationArgs:
                  role_arn: pulumi.Input[_builtins.str],
                  target_group_arn: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] port_name: The name of the port for a target group associated with the VPC Lattice configuration.
-        :param pulumi.Input[_builtins.str] role_arn: The ARN of the IAM role to associate with this volume. This is the Amazon ECS infrastructure IAM role that is used to manage your AWS infrastructure.
-        :param pulumi.Input[_builtins.str] target_group_arn: The full ARN of the target group or groups associated with the VPC Lattice configuration.
+        :param pulumi.Input[_builtins.str] port_name: Name of the port for a target group associated with the VPC Lattice configuration.
+        :param pulumi.Input[_builtins.str] role_arn: ARN of the IAM role to associate with this volume. This is the Amazon ECS infrastructure IAM role that is used to manage your AWS infrastructure.
+        :param pulumi.Input[_builtins.str] target_group_arn: Full ARN of the target group or groups associated with the VPC Lattice configuration.
         """
         pulumi.set(__self__, "port_name", port_name)
         pulumi.set(__self__, "role_arn", role_arn)
@@ -4420,7 +6700,7 @@ class ServiceVpcLatticeConfigurationArgs:
     @pulumi.getter(name="portName")
     def port_name(self) -> pulumi.Input[_builtins.str]:
         """
-        The name of the port for a target group associated with the VPC Lattice configuration.
+        Name of the port for a target group associated with the VPC Lattice configuration.
         """
         return pulumi.get(self, "port_name")
 
@@ -4432,7 +6712,7 @@ class ServiceVpcLatticeConfigurationArgs:
     @pulumi.getter(name="roleArn")
     def role_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The ARN of the IAM role to associate with this volume. This is the Amazon ECS infrastructure IAM role that is used to manage your AWS infrastructure.
+        ARN of the IAM role to associate with this volume. This is the Amazon ECS infrastructure IAM role that is used to manage your AWS infrastructure.
         """
         return pulumi.get(self, "role_arn")
 
@@ -4444,7 +6724,7 @@ class ServiceVpcLatticeConfigurationArgs:
     @pulumi.getter(name="targetGroupArn")
     def target_group_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The full ARN of the target group or groups associated with the VPC Lattice configuration.
+        Full ARN of the target group or groups associated with the VPC Lattice configuration.
         """
         return pulumi.get(self, "target_group_arn")
 
@@ -4456,7 +6736,7 @@ class ServiceVpcLatticeConfigurationArgs:
 class TaskDefinitionEphemeralStorageArgsDict(TypedDict):
     size_in_gib: pulumi.Input[_builtins.int]
     """
-    The total amount, in GiB, of ephemeral storage to set for the task. The minimum supported value is `21` GiB and the maximum supported value is `200` GiB.
+    Total amount, in GiB, of ephemeral storage to set for the task. The minimum supported value is `21` GiB and the maximum supported value is `200` GiB.
     """
 
 @pulumi.input_type
@@ -4464,7 +6744,7 @@ class TaskDefinitionEphemeralStorageArgs:
     def __init__(__self__, *,
                  size_in_gib: pulumi.Input[_builtins.int]):
         """
-        :param pulumi.Input[_builtins.int] size_in_gib: The total amount, in GiB, of ephemeral storage to set for the task. The minimum supported value is `21` GiB and the maximum supported value is `200` GiB.
+        :param pulumi.Input[_builtins.int] size_in_gib: Total amount, in GiB, of ephemeral storage to set for the task. The minimum supported value is `21` GiB and the maximum supported value is `200` GiB.
         """
         pulumi.set(__self__, "size_in_gib", size_in_gib)
 
@@ -4472,7 +6752,7 @@ class TaskDefinitionEphemeralStorageArgs:
     @pulumi.getter(name="sizeInGib")
     def size_in_gib(self) -> pulumi.Input[_builtins.int]:
         """
-        The total amount, in GiB, of ephemeral storage to set for the task. The minimum supported value is `21` GiB and the maximum supported value is `200` GiB.
+        Total amount, in GiB, of ephemeral storage to set for the task. The minimum supported value is `21` GiB and the maximum supported value is `200` GiB.
         """
         return pulumi.get(self, "size_in_gib")
 
@@ -4486,7 +6766,7 @@ class TaskDefinitionPlacementConstraintArgsDict(TypedDict):
     """
     Type of constraint. Use `memberOf` to restrict selection to a group of valid candidates. Note that `distinctInstance` is not supported in task definitions.
     """
-    expression: NotRequired[pulumi.Input[_builtins.str]]
+    expression: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Cluster Query Language expression to apply to the constraint. For more information, see [Cluster Query Language in the Amazon EC2 Container Service Developer Guide](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html).
     """
@@ -4495,7 +6775,7 @@ class TaskDefinitionPlacementConstraintArgsDict(TypedDict):
 class TaskDefinitionPlacementConstraintArgs:
     def __init__(__self__, *,
                  type: pulumi.Input[_builtins.str],
-                 expression: Optional[pulumi.Input[_builtins.str]] = None):
+                 expression: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] type: Type of constraint. Use `memberOf` to restrict selection to a group of valid candidates. Note that `distinctInstance` is not supported in task definitions.
         :param pulumi.Input[_builtins.str] expression: Cluster Query Language expression to apply to the constraint. For more information, see [Cluster Query Language in the Amazon EC2 Container Service Developer Guide](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html).
@@ -4518,14 +6798,14 @@ class TaskDefinitionPlacementConstraintArgs:
 
     @_builtins.property
     @pulumi.getter
-    def expression(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def expression(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Cluster Query Language expression to apply to the constraint. For more information, see [Cluster Query Language in the Amazon EC2 Container Service Developer Guide](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html).
         """
         return pulumi.get(self, "expression")
 
     @expression.setter
-    def expression(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def expression(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "expression", value)
 
 
@@ -4534,11 +6814,11 @@ class TaskDefinitionProxyConfigurationArgsDict(TypedDict):
     """
     Name of the container that will serve as the App Mesh proxy.
     """
-    properties: NotRequired[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]
+    properties: NotRequired[pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]]
     """
     Set of network configuration parameters to provide the Container Network Interface (CNI) plugin, specified a key-value mapping.
     """
-    type: NotRequired[pulumi.Input[_builtins.str]]
+    type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Proxy type. The default value is `APPMESH`. The only supported value is `APPMESH`.
     """
@@ -4547,8 +6827,8 @@ class TaskDefinitionProxyConfigurationArgsDict(TypedDict):
 class TaskDefinitionProxyConfigurationArgs:
     def __init__(__self__, *,
                  container_name: pulumi.Input[_builtins.str],
-                 properties: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None):
+                 properties: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] container_name: Name of the container that will serve as the App Mesh proxy.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] properties: Set of network configuration parameters to provide the Container Network Interface (CNI) plugin, specified a key-value mapping.
@@ -4574,35 +6854,35 @@ class TaskDefinitionProxyConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def properties(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def properties(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Set of network configuration parameters to provide the Container Network Interface (CNI) plugin, specified a key-value mapping.
         """
         return pulumi.get(self, "properties")
 
     @properties.setter
-    def properties(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def properties(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "properties", value)
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Proxy type. The default value is `APPMESH`. The only supported value is `APPMESH`.
         """
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
 
 class TaskDefinitionRuntimePlatformArgsDict(TypedDict):
-    cpu_architecture: NotRequired[pulumi.Input[_builtins.str]]
+    cpu_architecture: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Must be set to either `X86_64` or `ARM64`; see [cpu architecture](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#runtime-platform)
     """
-    operating_system_family: NotRequired[pulumi.Input[_builtins.str]]
+    operating_system_family: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     If the `requires_compatibilities` is `FARGATE` this field is required; must be set to a valid option from the [operating system family in the runtime platform](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#runtime-platform) setting
     """
@@ -4610,8 +6890,8 @@ class TaskDefinitionRuntimePlatformArgsDict(TypedDict):
 @pulumi.input_type
 class TaskDefinitionRuntimePlatformArgs:
     def __init__(__self__, *,
-                 cpu_architecture: Optional[pulumi.Input[_builtins.str]] = None,
-                 operating_system_family: Optional[pulumi.Input[_builtins.str]] = None):
+                 cpu_architecture: pulumi.Input[Optional[_builtins.str]] = None,
+                 operating_system_family: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] cpu_architecture: Must be set to either `X86_64` or `ARM64`; see [cpu architecture](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#runtime-platform)
         :param pulumi.Input[_builtins.str] operating_system_family: If the `requires_compatibilities` is `FARGATE` this field is required; must be set to a valid option from the [operating system family in the runtime platform](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#runtime-platform) setting
@@ -4623,73 +6903,77 @@ class TaskDefinitionRuntimePlatformArgs:
 
     @_builtins.property
     @pulumi.getter(name="cpuArchitecture")
-    def cpu_architecture(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def cpu_architecture(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Must be set to either `X86_64` or `ARM64`; see [cpu architecture](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#runtime-platform)
         """
         return pulumi.get(self, "cpu_architecture")
 
     @cpu_architecture.setter
-    def cpu_architecture(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def cpu_architecture(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "cpu_architecture", value)
 
     @_builtins.property
     @pulumi.getter(name="operatingSystemFamily")
-    def operating_system_family(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def operating_system_family(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         If the `requires_compatibilities` is `FARGATE` this field is required; must be set to a valid option from the [operating system family in the runtime platform](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#runtime-platform) setting
         """
         return pulumi.get(self, "operating_system_family")
 
     @operating_system_family.setter
-    def operating_system_family(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def operating_system_family(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "operating_system_family", value)
 
 
 class TaskDefinitionVolumeArgsDict(TypedDict):
     name: pulumi.Input[_builtins.str]
     """
-    Name of the volume. This name is referenced in the `sourceVolume`
-    parameter of container definition in the `mountPoints` section.
+    Name of the volume. This name is referenced in the `sourceVolume` parameter of container definition in the `mountPoints` section.
     """
-    configure_at_launch: NotRequired[pulumi.Input[_builtins.bool]]
+    configure_at_launch: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether the volume should be configured at launch time. This is used to create Amazon EBS volumes for standalone tasks or tasks created as part of a service. Each task definition revision may only have one volume configured at launch in the volume configuration.
     """
-    docker_volume_configuration: NotRequired[pulumi.Input['TaskDefinitionVolumeDockerVolumeConfigurationArgsDict']]
+    docker_volume_configuration: NotRequired[pulumi.Input[Optional['TaskDefinitionVolumeDockerVolumeConfigurationArgsDict']]]
     """
     Configuration block to configure a docker volume. Detailed below.
     """
-    efs_volume_configuration: NotRequired[pulumi.Input['TaskDefinitionVolumeEfsVolumeConfigurationArgsDict']]
+    efs_volume_configuration: NotRequired[pulumi.Input[Optional['TaskDefinitionVolumeEfsVolumeConfigurationArgsDict']]]
     """
     Configuration block for an EFS volume. Detailed below.
     """
-    fsx_windows_file_server_volume_configuration: NotRequired[pulumi.Input['TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationArgsDict']]
+    fsx_windows_file_server_volume_configuration: NotRequired[pulumi.Input[Optional['TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationArgsDict']]]
     """
     Configuration block for an FSX Windows File Server volume. Detailed below.
     """
-    host_path: NotRequired[pulumi.Input[_builtins.str]]
+    host_path: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Path on the host container instance that is presented to the container. If not set, ECS will create a nonpersistent data volume that starts empty and is deleted after the task has finished.
+    """
+    s3files_volume_configuration: NotRequired[pulumi.Input[Optional['TaskDefinitionVolumeS3filesVolumeConfigurationArgsDict']]]
+    """
+    Configuration block for an S3 Files volume. Detailed below.
     """
 
 @pulumi.input_type
 class TaskDefinitionVolumeArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str],
-                 configure_at_launch: Optional[pulumi.Input[_builtins.bool]] = None,
-                 docker_volume_configuration: Optional[pulumi.Input['TaskDefinitionVolumeDockerVolumeConfigurationArgs']] = None,
-                 efs_volume_configuration: Optional[pulumi.Input['TaskDefinitionVolumeEfsVolumeConfigurationArgs']] = None,
-                 fsx_windows_file_server_volume_configuration: Optional[pulumi.Input['TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationArgs']] = None,
-                 host_path: Optional[pulumi.Input[_builtins.str]] = None):
+                 configure_at_launch: pulumi.Input[Optional[_builtins.bool]] = None,
+                 docker_volume_configuration: pulumi.Input[Optional['TaskDefinitionVolumeDockerVolumeConfigurationArgs']] = None,
+                 efs_volume_configuration: pulumi.Input[Optional['TaskDefinitionVolumeEfsVolumeConfigurationArgs']] = None,
+                 fsx_windows_file_server_volume_configuration: pulumi.Input[Optional['TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationArgs']] = None,
+                 host_path: pulumi.Input[Optional[_builtins.str]] = None,
+                 s3files_volume_configuration: pulumi.Input[Optional['TaskDefinitionVolumeS3filesVolumeConfigurationArgs']] = None):
         """
-        :param pulumi.Input[_builtins.str] name: Name of the volume. This name is referenced in the `sourceVolume`
-               parameter of container definition in the `mountPoints` section.
+        :param pulumi.Input[_builtins.str] name: Name of the volume. This name is referenced in the `sourceVolume` parameter of container definition in the `mountPoints` section.
         :param pulumi.Input[_builtins.bool] configure_at_launch: Whether the volume should be configured at launch time. This is used to create Amazon EBS volumes for standalone tasks or tasks created as part of a service. Each task definition revision may only have one volume configured at launch in the volume configuration.
         :param pulumi.Input['TaskDefinitionVolumeDockerVolumeConfigurationArgs'] docker_volume_configuration: Configuration block to configure a docker volume. Detailed below.
         :param pulumi.Input['TaskDefinitionVolumeEfsVolumeConfigurationArgs'] efs_volume_configuration: Configuration block for an EFS volume. Detailed below.
         :param pulumi.Input['TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationArgs'] fsx_windows_file_server_volume_configuration: Configuration block for an FSX Windows File Server volume. Detailed below.
         :param pulumi.Input[_builtins.str] host_path: Path on the host container instance that is presented to the container. If not set, ECS will create a nonpersistent data volume that starts empty and is deleted after the task has finished.
+        :param pulumi.Input['TaskDefinitionVolumeS3filesVolumeConfigurationArgs'] s3files_volume_configuration: Configuration block for an S3 Files volume. Detailed below.
         """
         pulumi.set(__self__, "name", name)
         if configure_at_launch is not None:
@@ -4702,13 +6986,14 @@ class TaskDefinitionVolumeArgs:
             pulumi.set(__self__, "fsx_windows_file_server_volume_configuration", fsx_windows_file_server_volume_configuration)
         if host_path is not None:
             pulumi.set(__self__, "host_path", host_path)
+        if s3files_volume_configuration is not None:
+            pulumi.set(__self__, "s3files_volume_configuration", s3files_volume_configuration)
 
     @_builtins.property
     @pulumi.getter
     def name(self) -> pulumi.Input[_builtins.str]:
         """
-        Name of the volume. This name is referenced in the `sourceVolume`
-        parameter of container definition in the `mountPoints` section.
+        Name of the volume. This name is referenced in the `sourceVolume` parameter of container definition in the `mountPoints` section.
         """
         return pulumi.get(self, "name")
 
@@ -4718,83 +7003,95 @@ class TaskDefinitionVolumeArgs:
 
     @_builtins.property
     @pulumi.getter(name="configureAtLaunch")
-    def configure_at_launch(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def configure_at_launch(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the volume should be configured at launch time. This is used to create Amazon EBS volumes for standalone tasks or tasks created as part of a service. Each task definition revision may only have one volume configured at launch in the volume configuration.
         """
         return pulumi.get(self, "configure_at_launch")
 
     @configure_at_launch.setter
-    def configure_at_launch(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def configure_at_launch(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "configure_at_launch", value)
 
     @_builtins.property
     @pulumi.getter(name="dockerVolumeConfiguration")
-    def docker_volume_configuration(self) -> Optional[pulumi.Input['TaskDefinitionVolumeDockerVolumeConfigurationArgs']]:
+    def docker_volume_configuration(self) -> pulumi.Input[Optional['TaskDefinitionVolumeDockerVolumeConfigurationArgs']]:
         """
         Configuration block to configure a docker volume. Detailed below.
         """
         return pulumi.get(self, "docker_volume_configuration")
 
     @docker_volume_configuration.setter
-    def docker_volume_configuration(self, value: Optional[pulumi.Input['TaskDefinitionVolumeDockerVolumeConfigurationArgs']]):
+    def docker_volume_configuration(self, value: pulumi.Input[Optional['TaskDefinitionVolumeDockerVolumeConfigurationArgs']]):
         pulumi.set(self, "docker_volume_configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="efsVolumeConfiguration")
-    def efs_volume_configuration(self) -> Optional[pulumi.Input['TaskDefinitionVolumeEfsVolumeConfigurationArgs']]:
+    def efs_volume_configuration(self) -> pulumi.Input[Optional['TaskDefinitionVolumeEfsVolumeConfigurationArgs']]:
         """
         Configuration block for an EFS volume. Detailed below.
         """
         return pulumi.get(self, "efs_volume_configuration")
 
     @efs_volume_configuration.setter
-    def efs_volume_configuration(self, value: Optional[pulumi.Input['TaskDefinitionVolumeEfsVolumeConfigurationArgs']]):
+    def efs_volume_configuration(self, value: pulumi.Input[Optional['TaskDefinitionVolumeEfsVolumeConfigurationArgs']]):
         pulumi.set(self, "efs_volume_configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="fsxWindowsFileServerVolumeConfiguration")
-    def fsx_windows_file_server_volume_configuration(self) -> Optional[pulumi.Input['TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationArgs']]:
+    def fsx_windows_file_server_volume_configuration(self) -> pulumi.Input[Optional['TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationArgs']]:
         """
         Configuration block for an FSX Windows File Server volume. Detailed below.
         """
         return pulumi.get(self, "fsx_windows_file_server_volume_configuration")
 
     @fsx_windows_file_server_volume_configuration.setter
-    def fsx_windows_file_server_volume_configuration(self, value: Optional[pulumi.Input['TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationArgs']]):
+    def fsx_windows_file_server_volume_configuration(self, value: pulumi.Input[Optional['TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationArgs']]):
         pulumi.set(self, "fsx_windows_file_server_volume_configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="hostPath")
-    def host_path(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def host_path(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Path on the host container instance that is presented to the container. If not set, ECS will create a nonpersistent data volume that starts empty and is deleted after the task has finished.
         """
         return pulumi.get(self, "host_path")
 
     @host_path.setter
-    def host_path(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def host_path(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "host_path", value)
+
+    @_builtins.property
+    @pulumi.getter(name="s3filesVolumeConfiguration")
+    def s3files_volume_configuration(self) -> pulumi.Input[Optional['TaskDefinitionVolumeS3filesVolumeConfigurationArgs']]:
+        """
+        Configuration block for an S3 Files volume. Detailed below.
+        """
+        return pulumi.get(self, "s3files_volume_configuration")
+
+    @s3files_volume_configuration.setter
+    def s3files_volume_configuration(self, value: pulumi.Input[Optional['TaskDefinitionVolumeS3filesVolumeConfigurationArgs']]):
+        pulumi.set(self, "s3files_volume_configuration", value)
 
 
 class TaskDefinitionVolumeDockerVolumeConfigurationArgsDict(TypedDict):
-    autoprovision: NotRequired[pulumi.Input[_builtins.bool]]
+    autoprovision: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     If this value is `true`, the Docker volume is created if it does not already exist. *Note*: This field is only used if the scope is `shared`.
     """
-    driver: NotRequired[pulumi.Input[_builtins.str]]
+    driver: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Docker volume driver to use. The driver value must match the driver name provided by Docker because it is used for task placement.
     """
-    driver_opts: NotRequired[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]
+    driver_opts: NotRequired[pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]]
     """
     Map of Docker driver specific options.
     """
-    labels: NotRequired[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]
+    labels: NotRequired[pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]]
     """
     Map of custom metadata to add to your Docker volume.
     """
-    scope: NotRequired[pulumi.Input[_builtins.str]]
+    scope: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Scope for the Docker volume, which determines its lifecycle, either `task` or `shared`.  Docker volumes that are scoped to a `task` are automatically provisioned when the task starts and destroyed when the task stops. Docker volumes that are scoped as `shared` persist after the task stops.
     """
@@ -4802,11 +7099,11 @@ class TaskDefinitionVolumeDockerVolumeConfigurationArgsDict(TypedDict):
 @pulumi.input_type
 class TaskDefinitionVolumeDockerVolumeConfigurationArgs:
     def __init__(__self__, *,
-                 autoprovision: Optional[pulumi.Input[_builtins.bool]] = None,
-                 driver: Optional[pulumi.Input[_builtins.str]] = None,
-                 driver_opts: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 labels: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 scope: Optional[pulumi.Input[_builtins.str]] = None):
+                 autoprovision: pulumi.Input[Optional[_builtins.bool]] = None,
+                 driver: pulumi.Input[Optional[_builtins.str]] = None,
+                 driver_opts: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 labels: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 scope: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.bool] autoprovision: If this value is `true`, the Docker volume is created if it does not already exist. *Note*: This field is only used if the scope is `shared`.
         :param pulumi.Input[_builtins.str] driver: Docker volume driver to use. The driver value must match the driver name provided by Docker because it is used for task placement.
@@ -4827,62 +7124,62 @@ class TaskDefinitionVolumeDockerVolumeConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def autoprovision(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def autoprovision(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         If this value is `true`, the Docker volume is created if it does not already exist. *Note*: This field is only used if the scope is `shared`.
         """
         return pulumi.get(self, "autoprovision")
 
     @autoprovision.setter
-    def autoprovision(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def autoprovision(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "autoprovision", value)
 
     @_builtins.property
     @pulumi.getter
-    def driver(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def driver(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Docker volume driver to use. The driver value must match the driver name provided by Docker because it is used for task placement.
         """
         return pulumi.get(self, "driver")
 
     @driver.setter
-    def driver(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def driver(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "driver", value)
 
     @_builtins.property
     @pulumi.getter(name="driverOpts")
-    def driver_opts(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def driver_opts(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of Docker driver specific options.
         """
         return pulumi.get(self, "driver_opts")
 
     @driver_opts.setter
-    def driver_opts(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def driver_opts(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "driver_opts", value)
 
     @_builtins.property
     @pulumi.getter
-    def labels(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def labels(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of custom metadata to add to your Docker volume.
         """
         return pulumi.get(self, "labels")
 
     @labels.setter
-    def labels(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def labels(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "labels", value)
 
     @_builtins.property
     @pulumi.getter
-    def scope(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def scope(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Scope for the Docker volume, which determines its lifecycle, either `task` or `shared`.  Docker volumes that are scoped to a `task` are automatically provisioned when the task starts and destroyed when the task stops. Docker volumes that are scoped as `shared` persist after the task stops.
         """
         return pulumi.get(self, "scope")
 
     @scope.setter
-    def scope(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def scope(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "scope", value)
 
 
@@ -4891,19 +7188,19 @@ class TaskDefinitionVolumeEfsVolumeConfigurationArgsDict(TypedDict):
     """
     ID of the EFS File System.
     """
-    authorization_config: NotRequired[pulumi.Input['TaskDefinitionVolumeEfsVolumeConfigurationAuthorizationConfigArgsDict']]
+    authorization_config: NotRequired[pulumi.Input[Optional['TaskDefinitionVolumeEfsVolumeConfigurationAuthorizationConfigArgsDict']]]
     """
     Configuration block for authorization for the Amazon EFS file system. Detailed below.
     """
-    root_directory: NotRequired[pulumi.Input[_builtins.str]]
+    root_directory: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Directory within the Amazon EFS file system to mount as the root directory inside the host. If this parameter is omitted, the root of the Amazon EFS volume will be used. Specifying / will have the same effect as omitting this parameter. This argument is ignored when using `authorization_config`.
     """
-    transit_encryption: NotRequired[pulumi.Input[_builtins.str]]
+    transit_encryption: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Whether or not to enable encryption for Amazon EFS data in transit between the Amazon ECS host and the Amazon EFS server. Transit encryption must be enabled if Amazon EFS IAM authorization is used. Valid values: `ENABLED`, `DISABLED`. If this parameter is omitted, the default value of `DISABLED` is used.
     """
-    transit_encryption_port: NotRequired[pulumi.Input[_builtins.int]]
+    transit_encryption_port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     Port to use for transit encryption. If you do not specify a transit encryption port, it will use the port selection strategy that the Amazon EFS mount helper uses.
     """
@@ -4912,10 +7209,10 @@ class TaskDefinitionVolumeEfsVolumeConfigurationArgsDict(TypedDict):
 class TaskDefinitionVolumeEfsVolumeConfigurationArgs:
     def __init__(__self__, *,
                  file_system_id: pulumi.Input[_builtins.str],
-                 authorization_config: Optional[pulumi.Input['TaskDefinitionVolumeEfsVolumeConfigurationAuthorizationConfigArgs']] = None,
-                 root_directory: Optional[pulumi.Input[_builtins.str]] = None,
-                 transit_encryption: Optional[pulumi.Input[_builtins.str]] = None,
-                 transit_encryption_port: Optional[pulumi.Input[_builtins.int]] = None):
+                 authorization_config: pulumi.Input[Optional['TaskDefinitionVolumeEfsVolumeConfigurationAuthorizationConfigArgs']] = None,
+                 root_directory: pulumi.Input[Optional[_builtins.str]] = None,
+                 transit_encryption: pulumi.Input[Optional[_builtins.str]] = None,
+                 transit_encryption_port: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.str] file_system_id: ID of the EFS File System.
         :param pulumi.Input['TaskDefinitionVolumeEfsVolumeConfigurationAuthorizationConfigArgs'] authorization_config: Configuration block for authorization for the Amazon EFS file system. Detailed below.
@@ -4947,59 +7244,59 @@ class TaskDefinitionVolumeEfsVolumeConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="authorizationConfig")
-    def authorization_config(self) -> Optional[pulumi.Input['TaskDefinitionVolumeEfsVolumeConfigurationAuthorizationConfigArgs']]:
+    def authorization_config(self) -> pulumi.Input[Optional['TaskDefinitionVolumeEfsVolumeConfigurationAuthorizationConfigArgs']]:
         """
         Configuration block for authorization for the Amazon EFS file system. Detailed below.
         """
         return pulumi.get(self, "authorization_config")
 
     @authorization_config.setter
-    def authorization_config(self, value: Optional[pulumi.Input['TaskDefinitionVolumeEfsVolumeConfigurationAuthorizationConfigArgs']]):
+    def authorization_config(self, value: pulumi.Input[Optional['TaskDefinitionVolumeEfsVolumeConfigurationAuthorizationConfigArgs']]):
         pulumi.set(self, "authorization_config", value)
 
     @_builtins.property
     @pulumi.getter(name="rootDirectory")
-    def root_directory(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def root_directory(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Directory within the Amazon EFS file system to mount as the root directory inside the host. If this parameter is omitted, the root of the Amazon EFS volume will be used. Specifying / will have the same effect as omitting this parameter. This argument is ignored when using `authorization_config`.
         """
         return pulumi.get(self, "root_directory")
 
     @root_directory.setter
-    def root_directory(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def root_directory(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "root_directory", value)
 
     @_builtins.property
     @pulumi.getter(name="transitEncryption")
-    def transit_encryption(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def transit_encryption(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Whether or not to enable encryption for Amazon EFS data in transit between the Amazon ECS host and the Amazon EFS server. Transit encryption must be enabled if Amazon EFS IAM authorization is used. Valid values: `ENABLED`, `DISABLED`. If this parameter is omitted, the default value of `DISABLED` is used.
         """
         return pulumi.get(self, "transit_encryption")
 
     @transit_encryption.setter
-    def transit_encryption(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def transit_encryption(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "transit_encryption", value)
 
     @_builtins.property
     @pulumi.getter(name="transitEncryptionPort")
-    def transit_encryption_port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def transit_encryption_port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Port to use for transit encryption. If you do not specify a transit encryption port, it will use the port selection strategy that the Amazon EFS mount helper uses.
         """
         return pulumi.get(self, "transit_encryption_port")
 
     @transit_encryption_port.setter
-    def transit_encryption_port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def transit_encryption_port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "transit_encryption_port", value)
 
 
 class TaskDefinitionVolumeEfsVolumeConfigurationAuthorizationConfigArgsDict(TypedDict):
-    access_point_id: NotRequired[pulumi.Input[_builtins.str]]
+    access_point_id: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Access point ID to use. If an access point is specified, the root directory value will be relative to the directory set for the access point. If specified, transit encryption must be enabled in the EFSVolumeConfiguration.
     """
-    iam: NotRequired[pulumi.Input[_builtins.str]]
+    iam: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     Whether or not to use the Amazon ECS task IAM role defined in a task definition when mounting the Amazon EFS file system. If enabled, transit encryption must be enabled in the EFSVolumeConfiguration. Valid values: `ENABLED`, `DISABLED`. If this parameter is omitted, the default value of `DISABLED` is used.
     """
@@ -5007,8 +7304,8 @@ class TaskDefinitionVolumeEfsVolumeConfigurationAuthorizationConfigArgsDict(Type
 @pulumi.input_type
 class TaskDefinitionVolumeEfsVolumeConfigurationAuthorizationConfigArgs:
     def __init__(__self__, *,
-                 access_point_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 iam: Optional[pulumi.Input[_builtins.str]] = None):
+                 access_point_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 iam: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] access_point_id: Access point ID to use. If an access point is specified, the root directory value will be relative to the directory set for the access point. If specified, transit encryption must be enabled in the EFSVolumeConfiguration.
         :param pulumi.Input[_builtins.str] iam: Whether or not to use the Amazon ECS task IAM role defined in a task definition when mounting the Amazon EFS file system. If enabled, transit encryption must be enabled in the EFSVolumeConfiguration. Valid values: `ENABLED`, `DISABLED`. If this parameter is omitted, the default value of `DISABLED` is used.
@@ -5020,26 +7317,26 @@ class TaskDefinitionVolumeEfsVolumeConfigurationAuthorizationConfigArgs:
 
     @_builtins.property
     @pulumi.getter(name="accessPointId")
-    def access_point_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def access_point_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Access point ID to use. If an access point is specified, the root directory value will be relative to the directory set for the access point. If specified, transit encryption must be enabled in the EFSVolumeConfiguration.
         """
         return pulumi.get(self, "access_point_id")
 
     @access_point_id.setter
-    def access_point_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def access_point_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "access_point_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def iam(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def iam(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Whether or not to use the Amazon ECS task IAM role defined in a task definition when mounting the Amazon EFS file system. If enabled, transit encryption must be enabled in the EFSVolumeConfiguration. Valid values: `ENABLED`, `DISABLED`. If this parameter is omitted, the default value of `DISABLED` is used.
         """
         return pulumi.get(self, "iam")
 
     @iam.setter
-    def iam(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def iam(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "iam", value)
 
 
@@ -5050,11 +7347,11 @@ class TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationArgsDict(TypedD
     """
     file_system_id: pulumi.Input[_builtins.str]
     """
-    The Amazon FSx for Windows File Server file system ID to use.
+    Amazon FSx for Windows File Server file system ID to use.
     """
     root_directory: pulumi.Input[_builtins.str]
     """
-    The directory within the Amazon FSx for Windows File Server file system to mount as the root directory inside the host.
+    Directory within the Amazon FSx for Windows File Server file system to mount as the root directory inside the host.
     """
 
 @pulumi.input_type
@@ -5065,8 +7362,8 @@ class TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationArgs:
                  root_directory: pulumi.Input[_builtins.str]):
         """
         :param pulumi.Input['TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationAuthorizationConfigArgs'] authorization_config: Configuration block for authorization for the Amazon FSx for Windows File Server file system detailed below.
-        :param pulumi.Input[_builtins.str] file_system_id: The Amazon FSx for Windows File Server file system ID to use.
-        :param pulumi.Input[_builtins.str] root_directory: The directory within the Amazon FSx for Windows File Server file system to mount as the root directory inside the host.
+        :param pulumi.Input[_builtins.str] file_system_id: Amazon FSx for Windows File Server file system ID to use.
+        :param pulumi.Input[_builtins.str] root_directory: Directory within the Amazon FSx for Windows File Server file system to mount as the root directory inside the host.
         """
         pulumi.set(__self__, "authorization_config", authorization_config)
         pulumi.set(__self__, "file_system_id", file_system_id)
@@ -5088,7 +7385,7 @@ class TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationArgs:
     @pulumi.getter(name="fileSystemId")
     def file_system_id(self) -> pulumi.Input[_builtins.str]:
         """
-        The Amazon FSx for Windows File Server file system ID to use.
+        Amazon FSx for Windows File Server file system ID to use.
         """
         return pulumi.get(self, "file_system_id")
 
@@ -5100,7 +7397,7 @@ class TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationArgs:
     @pulumi.getter(name="rootDirectory")
     def root_directory(self) -> pulumi.Input[_builtins.str]:
         """
-        The directory within the Amazon FSx for Windows File Server file system to mount as the root directory inside the host.
+        Directory within the Amazon FSx for Windows File Server file system to mount as the root directory inside the host.
         """
         return pulumi.get(self, "root_directory")
 
@@ -5112,11 +7409,11 @@ class TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationArgs:
 class TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationAuthorizationConfigArgsDict(TypedDict):
     credentials_parameter: pulumi.Input[_builtins.str]
     """
-    The authorization credential option to use. The authorization credential options can be provided using either the Amazon Resource Name (ARN) of an AWS Secrets Manager secret or AWS Systems Manager Parameter Store parameter. The ARNs refer to the stored credentials.
+    Authorization credential option to use. The authorization credential options can be provided using either the ARN of an AWS Secrets Manager secret or AWS Systems Manager Parameter Store parameter. The ARNs refer to the stored credentials.
     """
     domain: pulumi.Input[_builtins.str]
     """
-    A fully qualified domain name hosted by an AWS Directory Service Managed Microsoft AD (Active Directory) or self-hosted AD on Amazon EC2.
+    Fully qualified domain name hosted by an AWS Directory Service Managed Microsoft AD (Active Directory) or self-hosted AD on Amazon EC2.
     """
 
 @pulumi.input_type
@@ -5125,8 +7422,8 @@ class TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationAuthorizationCo
                  credentials_parameter: pulumi.Input[_builtins.str],
                  domain: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] credentials_parameter: The authorization credential option to use. The authorization credential options can be provided using either the Amazon Resource Name (ARN) of an AWS Secrets Manager secret or AWS Systems Manager Parameter Store parameter. The ARNs refer to the stored credentials.
-        :param pulumi.Input[_builtins.str] domain: A fully qualified domain name hosted by an AWS Directory Service Managed Microsoft AD (Active Directory) or self-hosted AD on Amazon EC2.
+        :param pulumi.Input[_builtins.str] credentials_parameter: Authorization credential option to use. The authorization credential options can be provided using either the ARN of an AWS Secrets Manager secret or AWS Systems Manager Parameter Store parameter. The ARNs refer to the stored credentials.
+        :param pulumi.Input[_builtins.str] domain: Fully qualified domain name hosted by an AWS Directory Service Managed Microsoft AD (Active Directory) or self-hosted AD on Amazon EC2.
         """
         pulumi.set(__self__, "credentials_parameter", credentials_parameter)
         pulumi.set(__self__, "domain", domain)
@@ -5135,7 +7432,7 @@ class TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationAuthorizationCo
     @pulumi.getter(name="credentialsParameter")
     def credentials_parameter(self) -> pulumi.Input[_builtins.str]:
         """
-        The authorization credential option to use. The authorization credential options can be provided using either the Amazon Resource Name (ARN) of an AWS Secrets Manager secret or AWS Systems Manager Parameter Store parameter. The ARNs refer to the stored credentials.
+        Authorization credential option to use. The authorization credential options can be provided using either the ARN of an AWS Secrets Manager secret or AWS Systems Manager Parameter Store parameter. The ARNs refer to the stored credentials.
         """
         return pulumi.get(self, "credentials_parameter")
 
@@ -5147,7 +7444,7 @@ class TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationAuthorizationCo
     @pulumi.getter
     def domain(self) -> pulumi.Input[_builtins.str]:
         """
-        A fully qualified domain name hosted by an AWS Directory Service Managed Microsoft AD (Active Directory) or self-hosted AD on Amazon EC2.
+        Fully qualified domain name hosted by an AWS Directory Service Managed Microsoft AD (Active Directory) or self-hosted AD on Amazon EC2.
         """
         return pulumi.get(self, "domain")
 
@@ -5156,18 +7453,106 @@ class TaskDefinitionVolumeFsxWindowsFileServerVolumeConfigurationAuthorizationCo
         pulumi.set(self, "domain", value)
 
 
+class TaskDefinitionVolumeS3filesVolumeConfigurationArgsDict(TypedDict):
+    file_system_arn: pulumi.Input[_builtins.str]
+    """
+    Full ARN of the S3 Files file system to mount.
+    """
+    access_point_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Full ARN of the S3 Files access point to use. If configured, `root_directory` must either be omitted or set to `"/"`.
+    """
+    root_directory: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Directory within the Amazon S3 Files file system to mount as the root directory.
+    """
+    transit_encryption_port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Port to use for sending encrypted data between the ECS host and the S3 Files file system.
+    """
+
+@pulumi.input_type
+class TaskDefinitionVolumeS3filesVolumeConfigurationArgs:
+    def __init__(__self__, *,
+                 file_system_arn: pulumi.Input[_builtins.str],
+                 access_point_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 root_directory: pulumi.Input[Optional[_builtins.str]] = None,
+                 transit_encryption_port: pulumi.Input[Optional[_builtins.int]] = None):
+        """
+        :param pulumi.Input[_builtins.str] file_system_arn: Full ARN of the S3 Files file system to mount.
+        :param pulumi.Input[_builtins.str] access_point_arn: Full ARN of the S3 Files access point to use. If configured, `root_directory` must either be omitted or set to `"/"`.
+        :param pulumi.Input[_builtins.str] root_directory: Directory within the Amazon S3 Files file system to mount as the root directory.
+        :param pulumi.Input[_builtins.int] transit_encryption_port: Port to use for sending encrypted data between the ECS host and the S3 Files file system.
+        """
+        pulumi.set(__self__, "file_system_arn", file_system_arn)
+        if access_point_arn is not None:
+            pulumi.set(__self__, "access_point_arn", access_point_arn)
+        if root_directory is not None:
+            pulumi.set(__self__, "root_directory", root_directory)
+        if transit_encryption_port is not None:
+            pulumi.set(__self__, "transit_encryption_port", transit_encryption_port)
+
+    @_builtins.property
+    @pulumi.getter(name="fileSystemArn")
+    def file_system_arn(self) -> pulumi.Input[_builtins.str]:
+        """
+        Full ARN of the S3 Files file system to mount.
+        """
+        return pulumi.get(self, "file_system_arn")
+
+    @file_system_arn.setter
+    def file_system_arn(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "file_system_arn", value)
+
+    @_builtins.property
+    @pulumi.getter(name="accessPointArn")
+    def access_point_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Full ARN of the S3 Files access point to use. If configured, `root_directory` must either be omitted or set to `"/"`.
+        """
+        return pulumi.get(self, "access_point_arn")
+
+    @access_point_arn.setter
+    def access_point_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "access_point_arn", value)
+
+    @_builtins.property
+    @pulumi.getter(name="rootDirectory")
+    def root_directory(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Directory within the Amazon S3 Files file system to mount as the root directory.
+        """
+        return pulumi.get(self, "root_directory")
+
+    @root_directory.setter
+    def root_directory(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "root_directory", value)
+
+    @_builtins.property
+    @pulumi.getter(name="transitEncryptionPort")
+    def transit_encryption_port(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Port to use for sending encrypted data between the ECS host and the S3 Files file system.
+        """
+        return pulumi.get(self, "transit_encryption_port")
+
+    @transit_encryption_port.setter
+    def transit_encryption_port(self, value: pulumi.Input[Optional[_builtins.int]]):
+        pulumi.set(self, "transit_encryption_port", value)
+
+
 class TaskSetCapacityProviderStrategyArgsDict(TypedDict):
     capacity_provider: pulumi.Input[_builtins.str]
     """
-    The short name or full Amazon Resource Name (ARN) of the capacity provider.
+    Short name or full ARN of the capacity provider.
     """
     weight: pulumi.Input[_builtins.int]
     """
-    The relative percentage of the total number of launched tasks that should use the specified capacity provider.
+    Relative percentage of the total number of launched tasks that should use the specified capacity provider.
     """
-    base: NotRequired[pulumi.Input[_builtins.int]]
+    base: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined.
+    Number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined.
     """
 
 @pulumi.input_type
@@ -5175,11 +7560,11 @@ class TaskSetCapacityProviderStrategyArgs:
     def __init__(__self__, *,
                  capacity_provider: pulumi.Input[_builtins.str],
                  weight: pulumi.Input[_builtins.int],
-                 base: Optional[pulumi.Input[_builtins.int]] = None):
+                 base: pulumi.Input[Optional[_builtins.int]] = None):
         """
-        :param pulumi.Input[_builtins.str] capacity_provider: The short name or full Amazon Resource Name (ARN) of the capacity provider.
-        :param pulumi.Input[_builtins.int] weight: The relative percentage of the total number of launched tasks that should use the specified capacity provider.
-        :param pulumi.Input[_builtins.int] base: The number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined.
+        :param pulumi.Input[_builtins.str] capacity_provider: Short name or full ARN of the capacity provider.
+        :param pulumi.Input[_builtins.int] weight: Relative percentage of the total number of launched tasks that should use the specified capacity provider.
+        :param pulumi.Input[_builtins.int] base: Number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined.
         """
         pulumi.set(__self__, "capacity_provider", capacity_provider)
         pulumi.set(__self__, "weight", weight)
@@ -5190,7 +7575,7 @@ class TaskSetCapacityProviderStrategyArgs:
     @pulumi.getter(name="capacityProvider")
     def capacity_provider(self) -> pulumi.Input[_builtins.str]:
         """
-        The short name or full Amazon Resource Name (ARN) of the capacity provider.
+        Short name or full ARN of the capacity provider.
         """
         return pulumi.get(self, "capacity_provider")
 
@@ -5202,7 +7587,7 @@ class TaskSetCapacityProviderStrategyArgs:
     @pulumi.getter
     def weight(self) -> pulumi.Input[_builtins.int]:
         """
-        The relative percentage of the total number of launched tasks that should use the specified capacity provider.
+        Relative percentage of the total number of launched tasks that should use the specified capacity provider.
         """
         return pulumi.get(self, "weight")
 
@@ -5212,51 +7597,51 @@ class TaskSetCapacityProviderStrategyArgs:
 
     @_builtins.property
     @pulumi.getter
-    def base(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def base(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined.
+        Number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined.
         """
         return pulumi.get(self, "base")
 
     @base.setter
-    def base(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def base(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "base", value)
 
 
 class TaskSetLoadBalancerArgsDict(TypedDict):
     container_name: pulumi.Input[_builtins.str]
     """
-    The name of the container to associate with the load balancer (as it appears in a container definition).
+    Name of the container to associate with the load balancer (as it appears in a container definition).
     """
-    container_port: NotRequired[pulumi.Input[_builtins.int]]
+    container_port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The port on the container to associate with the load balancer. Defaults to `0` if not specified.
+    Port on the container to associate with the load balancer. Defaults to `0` if not specified.
+    """
+    load_balancer_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    Name of the ELB (Classic) to associate with the service.
+    """
+    target_group_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    ARN of the Load Balancer target group to associate with the service.
 
     > **Note:** Specifying multiple `load_balancer` configurations is still not supported by AWS for ECS task set.
-    """
-    load_balancer_name: NotRequired[pulumi.Input[_builtins.str]]
-    """
-    The name of the ELB (Classic) to associate with the service.
-    """
-    target_group_arn: NotRequired[pulumi.Input[_builtins.str]]
-    """
-    The ARN of the Load Balancer target group to associate with the service.
     """
 
 @pulumi.input_type
 class TaskSetLoadBalancerArgs:
     def __init__(__self__, *,
                  container_name: pulumi.Input[_builtins.str],
-                 container_port: Optional[pulumi.Input[_builtins.int]] = None,
-                 load_balancer_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 target_group_arn: Optional[pulumi.Input[_builtins.str]] = None):
+                 container_port: pulumi.Input[Optional[_builtins.int]] = None,
+                 load_balancer_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 target_group_arn: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] container_name: The name of the container to associate with the load balancer (as it appears in a container definition).
-        :param pulumi.Input[_builtins.int] container_port: The port on the container to associate with the load balancer. Defaults to `0` if not specified.
+        :param pulumi.Input[_builtins.str] container_name: Name of the container to associate with the load balancer (as it appears in a container definition).
+        :param pulumi.Input[_builtins.int] container_port: Port on the container to associate with the load balancer. Defaults to `0` if not specified.
+        :param pulumi.Input[_builtins.str] load_balancer_name: Name of the ELB (Classic) to associate with the service.
+        :param pulumi.Input[_builtins.str] target_group_arn: ARN of the Load Balancer target group to associate with the service.
                
                > **Note:** Specifying multiple `load_balancer` configurations is still not supported by AWS for ECS task set.
-        :param pulumi.Input[_builtins.str] load_balancer_name: The name of the ELB (Classic) to associate with the service.
-        :param pulumi.Input[_builtins.str] target_group_arn: The ARN of the Load Balancer target group to associate with the service.
         """
         pulumi.set(__self__, "container_name", container_name)
         if container_port is not None:
@@ -5270,7 +7655,7 @@ class TaskSetLoadBalancerArgs:
     @pulumi.getter(name="containerName")
     def container_name(self) -> pulumi.Input[_builtins.str]:
         """
-        The name of the container to associate with the load balancer (as it appears in a container definition).
+        Name of the container to associate with the load balancer (as it appears in a container definition).
         """
         return pulumi.get(self, "container_name")
 
@@ -5280,71 +7665,67 @@ class TaskSetLoadBalancerArgs:
 
     @_builtins.property
     @pulumi.getter(name="containerPort")
-    def container_port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def container_port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The port on the container to associate with the load balancer. Defaults to `0` if not specified.
-
-        > **Note:** Specifying multiple `load_balancer` configurations is still not supported by AWS for ECS task set.
+        Port on the container to associate with the load balancer. Defaults to `0` if not specified.
         """
         return pulumi.get(self, "container_port")
 
     @container_port.setter
-    def container_port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def container_port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "container_port", value)
 
     @_builtins.property
     @pulumi.getter(name="loadBalancerName")
-    def load_balancer_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def load_balancer_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The name of the ELB (Classic) to associate with the service.
+        Name of the ELB (Classic) to associate with the service.
         """
         return pulumi.get(self, "load_balancer_name")
 
     @load_balancer_name.setter
-    def load_balancer_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def load_balancer_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "load_balancer_name", value)
 
     @_builtins.property
     @pulumi.getter(name="targetGroupArn")
-    def target_group_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def target_group_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The ARN of the Load Balancer target group to associate with the service.
+        ARN of the Load Balancer target group to associate with the service.
+
+        > **Note:** Specifying multiple `load_balancer` configurations is still not supported by AWS for ECS task set.
         """
         return pulumi.get(self, "target_group_arn")
 
     @target_group_arn.setter
-    def target_group_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def target_group_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "target_group_arn", value)
 
 
 class TaskSetNetworkConfigurationArgsDict(TypedDict):
     subnets: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
     """
-    The subnets associated with the task or service. Maximum of 16.
+    Subnets associated with the task or service. Maximum of 16.
     """
-    assign_public_ip: NotRequired[pulumi.Input[_builtins.bool]]
+    assign_public_ip: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Whether to assign a public IP address to the ENI (`FARGATE` launch type only). Valid values are `true` or `false`. Default `false`.
-
-    For more information, see [Task Networking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html).
     """
-    security_groups: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    security_groups: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    The security groups associated with the task or service. If you do not specify a security group, the default security group for the VPC is used. Maximum of 5.
+    Security groups associated with the task or service. If you do not specify a security group, the default security group for the VPC is used. Maximum of 5.
     """
 
 @pulumi.input_type
 class TaskSetNetworkConfigurationArgs:
     def __init__(__self__, *,
                  subnets: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
-                 assign_public_ip: Optional[pulumi.Input[_builtins.bool]] = None,
-                 security_groups: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 assign_public_ip: pulumi.Input[Optional[_builtins.bool]] = None,
+                 security_groups: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnets: The subnets associated with the task or service. Maximum of 16.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnets: Subnets associated with the task or service. Maximum of 16.
         :param pulumi.Input[_builtins.bool] assign_public_ip: Whether to assign a public IP address to the ENI (`FARGATE` launch type only). Valid values are `true` or `false`. Default `false`.
-               
-               For more information, see [Task Networking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html).
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_groups: The security groups associated with the task or service. If you do not specify a security group, the default security group for the VPC is used. Maximum of 5.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_groups: Security groups associated with the task or service. If you do not specify a security group, the default security group for the VPC is used. Maximum of 5.
         """
         pulumi.set(__self__, "subnets", subnets)
         if assign_public_ip is not None:
@@ -5356,7 +7737,7 @@ class TaskSetNetworkConfigurationArgs:
     @pulumi.getter
     def subnets(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
         """
-        The subnets associated with the task or service. Maximum of 16.
+        Subnets associated with the task or service. Maximum of 16.
         """
         return pulumi.get(self, "subnets")
 
@@ -5366,49 +7747,47 @@ class TaskSetNetworkConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="assignPublicIp")
-    def assign_public_ip(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def assign_public_ip(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to assign a public IP address to the ENI (`FARGATE` launch type only). Valid values are `true` or `false`. Default `false`.
-
-        For more information, see [Task Networking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html).
         """
         return pulumi.get(self, "assign_public_ip")
 
     @assign_public_ip.setter
-    def assign_public_ip(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def assign_public_ip(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "assign_public_ip", value)
 
     @_builtins.property
     @pulumi.getter(name="securityGroups")
-    def security_groups(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def security_groups(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        The security groups associated with the task or service. If you do not specify a security group, the default security group for the VPC is used. Maximum of 5.
+        Security groups associated with the task or service. If you do not specify a security group, the default security group for the VPC is used. Maximum of 5.
         """
         return pulumi.get(self, "security_groups")
 
     @security_groups.setter
-    def security_groups(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def security_groups(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "security_groups", value)
 
 
 class TaskSetScaleArgsDict(TypedDict):
-    unit: NotRequired[pulumi.Input[_builtins.str]]
+    unit: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The unit of measure for the scale value. Default: `PERCENT`.
+    Unit of measure for the scale value. Default: `PERCENT`.
     """
-    value: NotRequired[pulumi.Input[_builtins.float]]
+    value: NotRequired[pulumi.Input[Optional[_builtins.float]]]
     """
-    The value, specified as a percent total of a service's `desiredCount`, to scale the task set. Defaults to `0` if not specified. Accepted values are numbers between 0.0 and 100.0.
+    Value, specified as a percent total of a service's `desiredCount`, to scale the task set. Defaults to `0` if not specified. Accepted values are numbers between 0.0 and 100.0.
     """
 
 @pulumi.input_type
 class TaskSetScaleArgs:
     def __init__(__self__, *,
-                 unit: Optional[pulumi.Input[_builtins.str]] = None,
-                 value: Optional[pulumi.Input[_builtins.float]] = None):
+                 unit: pulumi.Input[Optional[_builtins.str]] = None,
+                 value: pulumi.Input[Optional[_builtins.float]] = None):
         """
-        :param pulumi.Input[_builtins.str] unit: The unit of measure for the scale value. Default: `PERCENT`.
-        :param pulumi.Input[_builtins.float] value: The value, specified as a percent total of a service's `desiredCount`, to scale the task set. Defaults to `0` if not specified. Accepted values are numbers between 0.0 and 100.0.
+        :param pulumi.Input[_builtins.str] unit: Unit of measure for the scale value. Default: `PERCENT`.
+        :param pulumi.Input[_builtins.float] value: Value, specified as a percent total of a service's `desiredCount`, to scale the task set. Defaults to `0` if not specified. Accepted values are numbers between 0.0 and 100.0.
         """
         if unit is not None:
             pulumi.set(__self__, "unit", unit)
@@ -5417,59 +7796,59 @@ class TaskSetScaleArgs:
 
     @_builtins.property
     @pulumi.getter
-    def unit(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def unit(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The unit of measure for the scale value. Default: `PERCENT`.
+        Unit of measure for the scale value. Default: `PERCENT`.
         """
         return pulumi.get(self, "unit")
 
     @unit.setter
-    def unit(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def unit(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "unit", value)
 
     @_builtins.property
     @pulumi.getter
-    def value(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def value(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
-        The value, specified as a percent total of a service's `desiredCount`, to scale the task set. Defaults to `0` if not specified. Accepted values are numbers between 0.0 and 100.0.
+        Value, specified as a percent total of a service's `desiredCount`, to scale the task set. Defaults to `0` if not specified. Accepted values are numbers between 0.0 and 100.0.
         """
         return pulumi.get(self, "value")
 
     @value.setter
-    def value(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def value(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "value", value)
 
 
 class TaskSetServiceRegistriesArgsDict(TypedDict):
     registry_arn: pulumi.Input[_builtins.str]
     """
-    The ARN of the Service Registry. The currently supported service registry is Amazon Route 53 Auto Naming Service(`servicediscovery.Service` resource). For more information, see [Service](https://docs.aws.amazon.com/Route53/latest/APIReference/API_autonaming_Service.html).
+    ARN of the Service Registry. The currently supported service registry is Amazon Route 53 Auto Naming Service (`servicediscovery.Service` resource). For more information, see [Service](https://docs.aws.amazon.com/Route53/latest/APIReference/API_autonaming_Service.html).
     """
-    container_name: NotRequired[pulumi.Input[_builtins.str]]
+    container_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The container name value, already specified in the task definition, to be used for your service discovery service.
+    Container name value, already specified in the task definition, to be used for your service discovery service.
     """
-    container_port: NotRequired[pulumi.Input[_builtins.int]]
+    container_port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The port value, already specified in the task definition, to be used for your service discovery service.
+    Port value, already specified in the task definition, to be used for your service discovery service.
     """
-    port: NotRequired[pulumi.Input[_builtins.int]]
+    port: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
-    The port value used if your Service Discovery service specified an SRV record.
+    Port value used if your Service Discovery service specified an SRV record.
     """
 
 @pulumi.input_type
 class TaskSetServiceRegistriesArgs:
     def __init__(__self__, *,
                  registry_arn: pulumi.Input[_builtins.str],
-                 container_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 container_port: Optional[pulumi.Input[_builtins.int]] = None,
-                 port: Optional[pulumi.Input[_builtins.int]] = None):
+                 container_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 container_port: pulumi.Input[Optional[_builtins.int]] = None,
+                 port: pulumi.Input[Optional[_builtins.int]] = None):
         """
-        :param pulumi.Input[_builtins.str] registry_arn: The ARN of the Service Registry. The currently supported service registry is Amazon Route 53 Auto Naming Service(`servicediscovery.Service` resource). For more information, see [Service](https://docs.aws.amazon.com/Route53/latest/APIReference/API_autonaming_Service.html).
-        :param pulumi.Input[_builtins.str] container_name: The container name value, already specified in the task definition, to be used for your service discovery service.
-        :param pulumi.Input[_builtins.int] container_port: The port value, already specified in the task definition, to be used for your service discovery service.
-        :param pulumi.Input[_builtins.int] port: The port value used if your Service Discovery service specified an SRV record.
+        :param pulumi.Input[_builtins.str] registry_arn: ARN of the Service Registry. The currently supported service registry is Amazon Route 53 Auto Naming Service (`servicediscovery.Service` resource). For more information, see [Service](https://docs.aws.amazon.com/Route53/latest/APIReference/API_autonaming_Service.html).
+        :param pulumi.Input[_builtins.str] container_name: Container name value, already specified in the task definition, to be used for your service discovery service.
+        :param pulumi.Input[_builtins.int] container_port: Port value, already specified in the task definition, to be used for your service discovery service.
+        :param pulumi.Input[_builtins.int] port: Port value used if your Service Discovery service specified an SRV record.
         """
         pulumi.set(__self__, "registry_arn", registry_arn)
         if container_name is not None:
@@ -5483,7 +7862,7 @@ class TaskSetServiceRegistriesArgs:
     @pulumi.getter(name="registryArn")
     def registry_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The ARN of the Service Registry. The currently supported service registry is Amazon Route 53 Auto Naming Service(`servicediscovery.Service` resource). For more information, see [Service](https://docs.aws.amazon.com/Route53/latest/APIReference/API_autonaming_Service.html).
+        ARN of the Service Registry. The currently supported service registry is Amazon Route 53 Auto Naming Service (`servicediscovery.Service` resource). For more information, see [Service](https://docs.aws.amazon.com/Route53/latest/APIReference/API_autonaming_Service.html).
         """
         return pulumi.get(self, "registry_arn")
 
@@ -5493,38 +7872,38 @@ class TaskSetServiceRegistriesArgs:
 
     @_builtins.property
     @pulumi.getter(name="containerName")
-    def container_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def container_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The container name value, already specified in the task definition, to be used for your service discovery service.
+        Container name value, already specified in the task definition, to be used for your service discovery service.
         """
         return pulumi.get(self, "container_name")
 
     @container_name.setter
-    def container_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def container_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "container_name", value)
 
     @_builtins.property
     @pulumi.getter(name="containerPort")
-    def container_port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def container_port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The port value, already specified in the task definition, to be used for your service discovery service.
+        Port value, already specified in the task definition, to be used for your service discovery service.
         """
         return pulumi.get(self, "container_port")
 
     @container_port.setter
-    def container_port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def container_port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "container_port", value)
 
     @_builtins.property
     @pulumi.getter
-    def port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The port value used if your Service Discovery service specified an SRV record.
+        Port value used if your Service Discovery service specified an SRV record.
         """
         return pulumi.get(self, "port")
 
     @port.setter
-    def port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "port", value)
 
 
@@ -5535,11 +7914,11 @@ class GetTaskExecutionCapacityProviderStrategyArgsDict(TypedDict):
     """
     base: NotRequired[_builtins.int]
     """
-    The number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. Defaults to `0`.
+    Number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. Defaults to `0`.
     """
     weight: NotRequired[_builtins.int]
     """
-    The relative percentage of the total number of launched tasks that should use the specified capacity provider. The `weight` value is taken into consideration after the `base` count of tasks has been satisfied. Defaults to `0`.
+    Relative percentage of the total number of launched tasks that should use the specified capacity provider. The `weight` value is taken into consideration after the `base` count of tasks has been satisfied. Defaults to `0`.
     """
 
 @pulumi.input_type
@@ -5550,8 +7929,8 @@ class GetTaskExecutionCapacityProviderStrategyArgs:
                  weight: Optional[_builtins.int] = None):
         """
         :param _builtins.str capacity_provider: Name of the capacity provider.
-        :param _builtins.int base: The number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. Defaults to `0`.
-        :param _builtins.int weight: The relative percentage of the total number of launched tasks that should use the specified capacity provider. The `weight` value is taken into consideration after the `base` count of tasks has been satisfied. Defaults to `0`.
+        :param _builtins.int base: Number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. Defaults to `0`.
+        :param _builtins.int weight: Relative percentage of the total number of launched tasks that should use the specified capacity provider. The `weight` value is taken into consideration after the `base` count of tasks has been satisfied. Defaults to `0`.
         """
         pulumi.set(__self__, "capacity_provider", capacity_provider)
         if base is not None:
@@ -5575,7 +7954,7 @@ class GetTaskExecutionCapacityProviderStrategyArgs:
     @pulumi.getter
     def base(self) -> Optional[_builtins.int]:
         """
-        The number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. Defaults to `0`.
+        Number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. Defaults to `0`.
         """
         return pulumi.get(self, "base")
 
@@ -5587,7 +7966,7 @@ class GetTaskExecutionCapacityProviderStrategyArgs:
     @pulumi.getter
     def weight(self) -> Optional[_builtins.int]:
         """
-        The relative percentage of the total number of launched tasks that should use the specified capacity provider. The `weight` value is taken into consideration after the `base` count of tasks has been satisfied. Defaults to `0`.
+        Relative percentage of the total number of launched tasks that should use the specified capacity provider. The `weight` value is taken into consideration after the `base` count of tasks has been satisfied. Defaults to `0`.
         """
         return pulumi.get(self, "weight")
 
@@ -5604,8 +7983,6 @@ class GetTaskExecutionNetworkConfigurationArgsDict(TypedDict):
     assign_public_ip: NotRequired[_builtins.bool]
     """
     Assign a public IP address to the ENI (Fargate launch type only). Valid values are `true` or `false`. Default `false`.
-
-    For more information, see the [Task Networking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html) documentation.
     """
     security_groups: NotRequired[Sequence[_builtins.str]]
     """
@@ -5621,8 +7998,6 @@ class GetTaskExecutionNetworkConfigurationArgs:
         """
         :param Sequence[_builtins.str] subnets: Subnets associated with the task or service.
         :param _builtins.bool assign_public_ip: Assign a public IP address to the ENI (Fargate launch type only). Valid values are `true` or `false`. Default `false`.
-               
-               For more information, see the [Task Networking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html) documentation.
         :param Sequence[_builtins.str] security_groups: Security groups associated with the task or service. If you do not specify a security group, the default security group for the VPC is used.
         """
         pulumi.set(__self__, "subnets", subnets)
@@ -5648,8 +8023,6 @@ class GetTaskExecutionNetworkConfigurationArgs:
     def assign_public_ip(self) -> Optional[_builtins.bool]:
         """
         Assign a public IP address to the ENI (Fargate launch type only). Valid values are `true` or `false`. Default `false`.
-
-        For more information, see the [Task Networking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html) documentation.
         """
         return pulumi.get(self, "assign_public_ip")
 
@@ -5677,19 +8050,19 @@ class GetTaskExecutionOverridesArgsDict(TypedDict):
     """
     cpu: NotRequired[_builtins.str]
     """
-    The CPU override for the task.
+    CPU override for the task.
     """
     execution_role_arn: NotRequired[_builtins.str]
     """
-    Amazon Resource Name (ARN) of the task execution role override for the task.
+    ARN of the task execution role override for the task.
     """
     memory: NotRequired[_builtins.str]
     """
-    The memory override for the task.
+    Memory override for the task.
     """
     task_role_arn: NotRequired[_builtins.str]
     """
-    Amazon Resource Name (ARN) of the role that containers in this task can assume.
+    ARN of the role that containers in this task can assume.
     """
 
 @pulumi.input_type
@@ -5702,10 +8075,10 @@ class GetTaskExecutionOverridesArgs:
                  task_role_arn: Optional[_builtins.str] = None):
         """
         :param Sequence['GetTaskExecutionOverridesContainerOverrideArgs'] container_overrides: One or more container overrides that are sent to a task. See below.
-        :param _builtins.str cpu: The CPU override for the task.
-        :param _builtins.str execution_role_arn: Amazon Resource Name (ARN) of the task execution role override for the task.
-        :param _builtins.str memory: The memory override for the task.
-        :param _builtins.str task_role_arn: Amazon Resource Name (ARN) of the role that containers in this task can assume.
+        :param _builtins.str cpu: CPU override for the task.
+        :param _builtins.str execution_role_arn: ARN of the task execution role override for the task.
+        :param _builtins.str memory: Memory override for the task.
+        :param _builtins.str task_role_arn: ARN of the role that containers in this task can assume.
         """
         if container_overrides is not None:
             pulumi.set(__self__, "container_overrides", container_overrides)
@@ -5734,7 +8107,7 @@ class GetTaskExecutionOverridesArgs:
     @pulumi.getter
     def cpu(self) -> Optional[_builtins.str]:
         """
-        The CPU override for the task.
+        CPU override for the task.
         """
         return pulumi.get(self, "cpu")
 
@@ -5746,7 +8119,7 @@ class GetTaskExecutionOverridesArgs:
     @pulumi.getter(name="executionRoleArn")
     def execution_role_arn(self) -> Optional[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the task execution role override for the task.
+        ARN of the task execution role override for the task.
         """
         return pulumi.get(self, "execution_role_arn")
 
@@ -5758,7 +8131,7 @@ class GetTaskExecutionOverridesArgs:
     @pulumi.getter
     def memory(self) -> Optional[_builtins.str]:
         """
-        The memory override for the task.
+        Memory override for the task.
         """
         return pulumi.get(self, "memory")
 
@@ -5770,7 +8143,7 @@ class GetTaskExecutionOverridesArgs:
     @pulumi.getter(name="taskRoleArn")
     def task_role_arn(self) -> Optional[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the role that containers in this task can assume.
+        ARN of the role that containers in this task can assume.
         """
         return pulumi.get(self, "task_role_arn")
 
@@ -5782,31 +8155,31 @@ class GetTaskExecutionOverridesArgs:
 class GetTaskExecutionOverridesContainerOverrideArgsDict(TypedDict):
     name: _builtins.str
     """
-    The name of the container that receives the override. This parameter is required if any override is specified.
+    Name of the container that receives the override. This parameter is required if any override is specified.
     """
     commands: NotRequired[Sequence[_builtins.str]]
     """
-    The command to send to the container that overrides the default command from the Docker image or the task definition.
+    Command to send to the container that overrides the default command from the Docker image or the task definition.
     """
     cpu: NotRequired[_builtins.int]
     """
-    The number of cpu units reserved for the container, instead of the default value from the task definition.
+    Number of cpu units reserved for the container, instead of the default value from the task definition.
     """
     environments: NotRequired[Sequence['GetTaskExecutionOverridesContainerOverrideEnvironmentArgsDict']]
     """
-    The environment variables to send to the container. You can add new environment variables, which are added to the container at launch, or you can override the existing environment variables from the Docker image or the task definition. See below.
+    Environment variables to send to the container. You can add new environment variables, which are added to the container at launch, or you can override the existing environment variables from the Docker image or the task definition. See below.
     """
     memory: NotRequired[_builtins.int]
     """
-    The hard limit (in MiB) of memory to present to the container, instead of the default value from the task definition. If your container attempts to exceed the memory specified here, the container is killed.
+    Hard limit (in MiB) of memory to present to the container, instead of the default value from the task definition. If your container attempts to exceed the memory specified here, the container is killed.
     """
     memory_reservation: NotRequired[_builtins.int]
     """
-    The soft limit (in MiB) of memory to reserve for the container, instead of the default value from the task definition.
+    Soft limit (in MiB) of memory to reserve for the container, instead of the default value from the task definition.
     """
     resource_requirements: NotRequired[Sequence['GetTaskExecutionOverridesContainerOverrideResourceRequirementArgsDict']]
     """
-    The type and amount of a resource to assign to a container, instead of the default value from the task definition. The only supported resource is a GPU. See below.
+    Type and amount of a resource to assign to a container, instead of the default value from the task definition. The only supported resource is a GPU. See below.
     """
 
 @pulumi.input_type
@@ -5820,13 +8193,13 @@ class GetTaskExecutionOverridesContainerOverrideArgs:
                  memory_reservation: Optional[_builtins.int] = None,
                  resource_requirements: Optional[Sequence['GetTaskExecutionOverridesContainerOverrideResourceRequirementArgs']] = None):
         """
-        :param _builtins.str name: The name of the container that receives the override. This parameter is required if any override is specified.
-        :param Sequence[_builtins.str] commands: The command to send to the container that overrides the default command from the Docker image or the task definition.
-        :param _builtins.int cpu: The number of cpu units reserved for the container, instead of the default value from the task definition.
-        :param Sequence['GetTaskExecutionOverridesContainerOverrideEnvironmentArgs'] environments: The environment variables to send to the container. You can add new environment variables, which are added to the container at launch, or you can override the existing environment variables from the Docker image or the task definition. See below.
-        :param _builtins.int memory: The hard limit (in MiB) of memory to present to the container, instead of the default value from the task definition. If your container attempts to exceed the memory specified here, the container is killed.
-        :param _builtins.int memory_reservation: The soft limit (in MiB) of memory to reserve for the container, instead of the default value from the task definition.
-        :param Sequence['GetTaskExecutionOverridesContainerOverrideResourceRequirementArgs'] resource_requirements: The type and amount of a resource to assign to a container, instead of the default value from the task definition. The only supported resource is a GPU. See below.
+        :param _builtins.str name: Name of the container that receives the override. This parameter is required if any override is specified.
+        :param Sequence[_builtins.str] commands: Command to send to the container that overrides the default command from the Docker image or the task definition.
+        :param _builtins.int cpu: Number of cpu units reserved for the container, instead of the default value from the task definition.
+        :param Sequence['GetTaskExecutionOverridesContainerOverrideEnvironmentArgs'] environments: Environment variables to send to the container. You can add new environment variables, which are added to the container at launch, or you can override the existing environment variables from the Docker image or the task definition. See below.
+        :param _builtins.int memory: Hard limit (in MiB) of memory to present to the container, instead of the default value from the task definition. If your container attempts to exceed the memory specified here, the container is killed.
+        :param _builtins.int memory_reservation: Soft limit (in MiB) of memory to reserve for the container, instead of the default value from the task definition.
+        :param Sequence['GetTaskExecutionOverridesContainerOverrideResourceRequirementArgs'] resource_requirements: Type and amount of a resource to assign to a container, instead of the default value from the task definition. The only supported resource is a GPU. See below.
         """
         pulumi.set(__self__, "name", name)
         if commands is not None:
@@ -5846,7 +8219,7 @@ class GetTaskExecutionOverridesContainerOverrideArgs:
     @pulumi.getter
     def name(self) -> _builtins.str:
         """
-        The name of the container that receives the override. This parameter is required if any override is specified.
+        Name of the container that receives the override. This parameter is required if any override is specified.
         """
         return pulumi.get(self, "name")
 
@@ -5858,7 +8231,7 @@ class GetTaskExecutionOverridesContainerOverrideArgs:
     @pulumi.getter
     def commands(self) -> Optional[Sequence[_builtins.str]]:
         """
-        The command to send to the container that overrides the default command from the Docker image or the task definition.
+        Command to send to the container that overrides the default command from the Docker image or the task definition.
         """
         return pulumi.get(self, "commands")
 
@@ -5870,7 +8243,7 @@ class GetTaskExecutionOverridesContainerOverrideArgs:
     @pulumi.getter
     def cpu(self) -> Optional[_builtins.int]:
         """
-        The number of cpu units reserved for the container, instead of the default value from the task definition.
+        Number of cpu units reserved for the container, instead of the default value from the task definition.
         """
         return pulumi.get(self, "cpu")
 
@@ -5882,7 +8255,7 @@ class GetTaskExecutionOverridesContainerOverrideArgs:
     @pulumi.getter
     def environments(self) -> Optional[Sequence['GetTaskExecutionOverridesContainerOverrideEnvironmentArgs']]:
         """
-        The environment variables to send to the container. You can add new environment variables, which are added to the container at launch, or you can override the existing environment variables from the Docker image or the task definition. See below.
+        Environment variables to send to the container. You can add new environment variables, which are added to the container at launch, or you can override the existing environment variables from the Docker image or the task definition. See below.
         """
         return pulumi.get(self, "environments")
 
@@ -5894,7 +8267,7 @@ class GetTaskExecutionOverridesContainerOverrideArgs:
     @pulumi.getter
     def memory(self) -> Optional[_builtins.int]:
         """
-        The hard limit (in MiB) of memory to present to the container, instead of the default value from the task definition. If your container attempts to exceed the memory specified here, the container is killed.
+        Hard limit (in MiB) of memory to present to the container, instead of the default value from the task definition. If your container attempts to exceed the memory specified here, the container is killed.
         """
         return pulumi.get(self, "memory")
 
@@ -5906,7 +8279,7 @@ class GetTaskExecutionOverridesContainerOverrideArgs:
     @pulumi.getter(name="memoryReservation")
     def memory_reservation(self) -> Optional[_builtins.int]:
         """
-        The soft limit (in MiB) of memory to reserve for the container, instead of the default value from the task definition.
+        Soft limit (in MiB) of memory to reserve for the container, instead of the default value from the task definition.
         """
         return pulumi.get(self, "memory_reservation")
 
@@ -5918,7 +8291,7 @@ class GetTaskExecutionOverridesContainerOverrideArgs:
     @pulumi.getter(name="resourceRequirements")
     def resource_requirements(self) -> Optional[Sequence['GetTaskExecutionOverridesContainerOverrideResourceRequirementArgs']]:
         """
-        The type and amount of a resource to assign to a container, instead of the default value from the task definition. The only supported resource is a GPU. See below.
+        Type and amount of a resource to assign to a container, instead of the default value from the task definition. The only supported resource is a GPU. See below.
         """
         return pulumi.get(self, "resource_requirements")
 
@@ -5930,11 +8303,11 @@ class GetTaskExecutionOverridesContainerOverrideArgs:
 class GetTaskExecutionOverridesContainerOverrideEnvironmentArgsDict(TypedDict):
     key: _builtins.str
     """
-    The name of the key-value pair. For environment variables, this is the name of the environment variable.
+    Name of the key-value pair. For environment variables, this is the name of the environment variable.
     """
     value: _builtins.str
     """
-    The value of the key-value pair. For environment variables, this is the value of the environment variable.
+    Value of the key-value pair. For environment variables, this is the value of the environment variable.
     """
 
 @pulumi.input_type
@@ -5943,8 +8316,8 @@ class GetTaskExecutionOverridesContainerOverrideEnvironmentArgs:
                  key: _builtins.str,
                  value: _builtins.str):
         """
-        :param _builtins.str key: The name of the key-value pair. For environment variables, this is the name of the environment variable.
-        :param _builtins.str value: The value of the key-value pair. For environment variables, this is the value of the environment variable.
+        :param _builtins.str key: Name of the key-value pair. For environment variables, this is the name of the environment variable.
+        :param _builtins.str value: Value of the key-value pair. For environment variables, this is the value of the environment variable.
         """
         pulumi.set(__self__, "key", key)
         pulumi.set(__self__, "value", value)
@@ -5953,7 +8326,7 @@ class GetTaskExecutionOverridesContainerOverrideEnvironmentArgs:
     @pulumi.getter
     def key(self) -> _builtins.str:
         """
-        The name of the key-value pair. For environment variables, this is the name of the environment variable.
+        Name of the key-value pair. For environment variables, this is the name of the environment variable.
         """
         return pulumi.get(self, "key")
 
@@ -5965,7 +8338,7 @@ class GetTaskExecutionOverridesContainerOverrideEnvironmentArgs:
     @pulumi.getter
     def value(self) -> _builtins.str:
         """
-        The value of the key-value pair. For environment variables, this is the value of the environment variable.
+        Value of the key-value pair. For environment variables, this is the value of the environment variable.
         """
         return pulumi.get(self, "value")
 
@@ -5977,11 +8350,11 @@ class GetTaskExecutionOverridesContainerOverrideEnvironmentArgs:
 class GetTaskExecutionOverridesContainerOverrideResourceRequirementArgsDict(TypedDict):
     type: _builtins.str
     """
-    The type of resource to assign to a container. Valid values are `GPU`.
+    Type of resource to assign to a container. Valid values are `GPU`.
     """
     value: _builtins.str
     """
-    The value for the specified resource type. If the `GPU` type is used, the value is the number of physical GPUs the Amazon ECS container agent reserves for the container. The number of GPUs that's reserved for all containers in a task can't exceed the number of available GPUs on the container instance that the task is launched on.
+    Value for the specified resource type. If the `GPU` type is used, the value is the number of physical GPUs the Amazon ECS container agent reserves for the container. The number of GPUs that's reserved for all containers in a task can't exceed the number of available GPUs on the container instance that the task is launched on.
     """
 
 @pulumi.input_type
@@ -5990,8 +8363,8 @@ class GetTaskExecutionOverridesContainerOverrideResourceRequirementArgs:
                  type: _builtins.str,
                  value: _builtins.str):
         """
-        :param _builtins.str type: The type of resource to assign to a container. Valid values are `GPU`.
-        :param _builtins.str value: The value for the specified resource type. If the `GPU` type is used, the value is the number of physical GPUs the Amazon ECS container agent reserves for the container. The number of GPUs that's reserved for all containers in a task can't exceed the number of available GPUs on the container instance that the task is launched on.
+        :param _builtins.str type: Type of resource to assign to a container. Valid values are `GPU`.
+        :param _builtins.str value: Value for the specified resource type. If the `GPU` type is used, the value is the number of physical GPUs the Amazon ECS container agent reserves for the container. The number of GPUs that's reserved for all containers in a task can't exceed the number of available GPUs on the container instance that the task is launched on.
         """
         pulumi.set(__self__, "type", type)
         pulumi.set(__self__, "value", value)
@@ -6000,7 +8373,7 @@ class GetTaskExecutionOverridesContainerOverrideResourceRequirementArgs:
     @pulumi.getter
     def type(self) -> _builtins.str:
         """
-        The type of resource to assign to a container. Valid values are `GPU`.
+        Type of resource to assign to a container. Valid values are `GPU`.
         """
         return pulumi.get(self, "type")
 
@@ -6012,7 +8385,7 @@ class GetTaskExecutionOverridesContainerOverrideResourceRequirementArgs:
     @pulumi.getter
     def value(self) -> _builtins.str:
         """
-        The value for the specified resource type. If the `GPU` type is used, the value is the number of physical GPUs the Amazon ECS container agent reserves for the container. The number of GPUs that's reserved for all containers in a task can't exceed the number of available GPUs on the container instance that the task is launched on.
+        Value for the specified resource type. If the `GPU` type is used, the value is the number of physical GPUs the Amazon ECS container agent reserves for the container. The number of GPUs that's reserved for all containers in a task can't exceed the number of available GPUs on the container instance that the task is launched on.
         """
         return pulumi.get(self, "value")
 
@@ -6024,11 +8397,11 @@ class GetTaskExecutionOverridesContainerOverrideResourceRequirementArgs:
 class GetTaskExecutionPlacementConstraintArgsDict(TypedDict):
     type: _builtins.str
     """
-    The type of constraint. Valid values are `distinctInstance` or `memberOf`. Use `distinctInstance` to ensure that each task in a particular group is running on a different container instance. Use `memberOf` to restrict the selection to a group of valid candidates.
+    Type of constraint. Valid values are `distinctInstance` or `memberOf`. Use `distinctInstance` to ensure that each task in a particular group is running on a different container instance. Use `memberOf` to restrict the selection to a group of valid candidates.
     """
     expression: NotRequired[_builtins.str]
     """
-    A cluster query language expression to apply to the constraint. The expression can have a maximum length of 2000 characters. You can't specify an expression if the constraint type is `distinctInstance`.
+    Cluster query language expression to apply to the constraint. The expression can have a maximum length of 2000 characters. You can't specify an expression if the constraint type is `distinctInstance`.
     """
 
 @pulumi.input_type
@@ -6037,8 +8410,8 @@ class GetTaskExecutionPlacementConstraintArgs:
                  type: _builtins.str,
                  expression: Optional[_builtins.str] = None):
         """
-        :param _builtins.str type: The type of constraint. Valid values are `distinctInstance` or `memberOf`. Use `distinctInstance` to ensure that each task in a particular group is running on a different container instance. Use `memberOf` to restrict the selection to a group of valid candidates.
-        :param _builtins.str expression: A cluster query language expression to apply to the constraint. The expression can have a maximum length of 2000 characters. You can't specify an expression if the constraint type is `distinctInstance`.
+        :param _builtins.str type: Type of constraint. Valid values are `distinctInstance` or `memberOf`. Use `distinctInstance` to ensure that each task in a particular group is running on a different container instance. Use `memberOf` to restrict the selection to a group of valid candidates.
+        :param _builtins.str expression: Cluster query language expression to apply to the constraint. The expression can have a maximum length of 2000 characters. You can't specify an expression if the constraint type is `distinctInstance`.
         """
         pulumi.set(__self__, "type", type)
         if expression is not None:
@@ -6048,7 +8421,7 @@ class GetTaskExecutionPlacementConstraintArgs:
     @pulumi.getter
     def type(self) -> _builtins.str:
         """
-        The type of constraint. Valid values are `distinctInstance` or `memberOf`. Use `distinctInstance` to ensure that each task in a particular group is running on a different container instance. Use `memberOf` to restrict the selection to a group of valid candidates.
+        Type of constraint. Valid values are `distinctInstance` or `memberOf`. Use `distinctInstance` to ensure that each task in a particular group is running on a different container instance. Use `memberOf` to restrict the selection to a group of valid candidates.
         """
         return pulumi.get(self, "type")
 
@@ -6060,7 +8433,7 @@ class GetTaskExecutionPlacementConstraintArgs:
     @pulumi.getter
     def expression(self) -> Optional[_builtins.str]:
         """
-        A cluster query language expression to apply to the constraint. The expression can have a maximum length of 2000 characters. You can't specify an expression if the constraint type is `distinctInstance`.
+        Cluster query language expression to apply to the constraint. The expression can have a maximum length of 2000 characters. You can't specify an expression if the constraint type is `distinctInstance`.
         """
         return pulumi.get(self, "expression")
 
@@ -6072,13 +8445,11 @@ class GetTaskExecutionPlacementConstraintArgs:
 class GetTaskExecutionPlacementStrategyArgsDict(TypedDict):
     type: _builtins.str
     """
-    The type of placement strategy. Valid values are `random`, `spread`, and `binpack`.
-
-    For more information, see the [Placement Strategy](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_PlacementStrategy.html) documentation.
+    Type of placement strategy. Valid values are `random`, `spread`, and `binpack`.
     """
     field: NotRequired[_builtins.str]
     """
-    The field to apply the placement strategy against.
+    Field to apply the placement strategy against.
     """
 
 @pulumi.input_type
@@ -6087,10 +8458,8 @@ class GetTaskExecutionPlacementStrategyArgs:
                  type: _builtins.str,
                  field: Optional[_builtins.str] = None):
         """
-        :param _builtins.str type: The type of placement strategy. Valid values are `random`, `spread`, and `binpack`.
-               
-               For more information, see the [Placement Strategy](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_PlacementStrategy.html) documentation.
-        :param _builtins.str field: The field to apply the placement strategy against.
+        :param _builtins.str type: Type of placement strategy. Valid values are `random`, `spread`, and `binpack`.
+        :param _builtins.str field: Field to apply the placement strategy against.
         """
         pulumi.set(__self__, "type", type)
         if field is not None:
@@ -6100,9 +8469,7 @@ class GetTaskExecutionPlacementStrategyArgs:
     @pulumi.getter
     def type(self) -> _builtins.str:
         """
-        The type of placement strategy. Valid values are `random`, `spread`, and `binpack`.
-
-        For more information, see the [Placement Strategy](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_PlacementStrategy.html) documentation.
+        Type of placement strategy. Valid values are `random`, `spread`, and `binpack`.
         """
         return pulumi.get(self, "type")
 
@@ -6114,7 +8481,7 @@ class GetTaskExecutionPlacementStrategyArgs:
     @pulumi.getter
     def field(self) -> Optional[_builtins.str]:
         """
-        The field to apply the placement strategy against.
+        Field to apply the placement strategy against.
         """
         return pulumi.get(self, "field")
 

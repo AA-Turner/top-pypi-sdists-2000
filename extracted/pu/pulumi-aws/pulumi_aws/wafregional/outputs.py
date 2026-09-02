@@ -156,10 +156,8 @@ class GeoMatchSetGeoMatchConstraint(dict):
                  type: _builtins.str,
                  value: _builtins.str):
         """
-        :param _builtins.str type: The type of geographical area you want AWS WAF to search for. Currently Country is the only valid value.
-        :param _builtins.str value: The country that you want AWS WAF to search for.
-               This is the two-letter country code, e.g., `US`, `CA`, `RU`, `CN`, etc.
-               See [docs](https://docs.aws.amazon.com/waf/latest/APIReference/API_GeoMatchConstraint.html) for all supported values.
+        :param _builtins.str type: Type of geographical area you want AWS WAF to search for. Currently `Country` is the only valid value.
+        :param _builtins.str value: Two-letter country code that you want AWS WAF to search for, e.g., `US`, `CA`, `RU`, `CN`. See [docs](https://docs.aws.amazon.com/waf/latest/APIReference/API_GeoMatchConstraint.html) for all supported values.
         """
         pulumi.set(__self__, "type", type)
         pulumi.set(__self__, "value", value)
@@ -168,7 +166,7 @@ class GeoMatchSetGeoMatchConstraint(dict):
     @pulumi.getter
     def type(self) -> _builtins.str:
         """
-        The type of geographical area you want AWS WAF to search for. Currently Country is the only valid value.
+        Type of geographical area you want AWS WAF to search for. Currently `Country` is the only valid value.
         """
         return pulumi.get(self, "type")
 
@@ -176,9 +174,7 @@ class GeoMatchSetGeoMatchConstraint(dict):
     @pulumi.getter
     def value(self) -> _builtins.str:
         """
-        The country that you want AWS WAF to search for.
-        This is the two-letter country code, e.g., `US`, `CA`, `RU`, `CN`, etc.
-        See [docs](https://docs.aws.amazon.com/waf/latest/APIReference/API_GeoMatchConstraint.html) for all supported values.
+        Two-letter country code that you want AWS WAF to search for, e.g., `US`, `CA`, `RU`, `CN`. See [docs](https://docs.aws.amazon.com/waf/latest/APIReference/API_GeoMatchConstraint.html) for all supported values.
         """
         return pulumi.get(self, "value")
 
@@ -480,6 +476,11 @@ class RulePredicate(dict):
                  data_id: _builtins.str,
                  negated: _builtins.bool,
                  type: _builtins.str):
+        """
+        :param _builtins.str data_id: The unique identifier of a predicate, such as the ID of a `ByteMatchSet` or `IPSet`.
+        :param _builtins.bool negated: Whether to use the settings or the negated settings that you specified in the objects.
+        :param _builtins.str type: The type of predicate in a rule. Valid values: `ByteMatch`, `GeoMatch`, `IPMatch`, `RegexMatch`, `SizeConstraint`, `SqlInjectionMatch`, or `XssMatch`
+        """
         pulumi.set(__self__, "data_id", data_id)
         pulumi.set(__self__, "negated", negated)
         pulumi.set(__self__, "type", type)
@@ -487,16 +488,25 @@ class RulePredicate(dict):
     @_builtins.property
     @pulumi.getter(name="dataId")
     def data_id(self) -> _builtins.str:
+        """
+        The unique identifier of a predicate, such as the ID of a `ByteMatchSet` or `IPSet`.
+        """
         return pulumi.get(self, "data_id")
 
     @_builtins.property
     @pulumi.getter
     def negated(self) -> _builtins.bool:
+        """
+        Whether to use the settings or the negated settings that you specified in the objects.
+        """
         return pulumi.get(self, "negated")
 
     @_builtins.property
     @pulumi.getter
     def type(self) -> _builtins.str:
+        """
+        The type of predicate in a rule. Valid values: `ByteMatch`, `GeoMatch`, `IPMatch`, `RegexMatch`, `SizeConstraint`, `SqlInjectionMatch`, or `XssMatch`
+        """
         return pulumi.get(self, "type")
 
 
@@ -763,7 +773,7 @@ class WebAclLoggingConfiguration(dict):
                  log_destination: _builtins.str,
                  redacted_fields: Optional['outputs.WebAclLoggingConfigurationRedactedFields'] = None):
         """
-        :param _builtins.str log_destination: Amazon Resource Name (ARN) of Kinesis Firehose Delivery Stream
+        :param _builtins.str log_destination: ARN of Kinesis Firehose Delivery Stream
         :param 'WebAclLoggingConfigurationRedactedFieldsArgs' redacted_fields: Configuration block containing parts of the request that you want redacted from the logs. Detailed below.
         """
         pulumi.set(__self__, "log_destination", log_destination)
@@ -774,7 +784,7 @@ class WebAclLoggingConfiguration(dict):
     @pulumi.getter(name="logDestination")
     def log_destination(self) -> _builtins.str:
         """
-        Amazon Resource Name (ARN) of Kinesis Firehose Delivery Stream
+        ARN of Kinesis Firehose Delivery Stream
         """
         return pulumi.get(self, "log_destination")
 

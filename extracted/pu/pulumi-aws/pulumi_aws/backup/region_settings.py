@@ -20,10 +20,11 @@ __all__ = ['RegionSettingsArgs', 'RegionSettings']
 class RegionSettingsArgs:
     def __init__(__self__, *,
                  resource_type_opt_in_preference: pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]],
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_type_management_preference: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_type_management_preference: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.bool]]]] = None):
         """
         The set of arguments for constructing a RegionSettings resource.
+
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]] resource_type_opt_in_preference: A map of service names to their opt-in preferences for the Region. See [AWS Documentation on which services support backup](https://docs.aws.amazon.com/aws-backup/latest/devguide/backup-feature-availability.html).
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]] resource_type_management_preference: A map of service names to their full management preferences for the Region. For more information, see the AWS Documentation on [what full management is](https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#full-management) and [which services support full management](https://docs.aws.amazon.com/aws-backup/latest/devguide/backup-feature-availability.html#features-by-resource).
@@ -48,37 +49,38 @@ class RegionSettingsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceTypeManagementPreference")
-    def resource_type_management_preference(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]]]:
+    def resource_type_management_preference(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.bool]]]]:
         """
         A map of service names to their full management preferences for the Region. For more information, see the AWS Documentation on [what full management is](https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#full-management) and [which services support full management](https://docs.aws.amazon.com/aws-backup/latest/devguide/backup-feature-availability.html#features-by-resource).
         """
         return pulumi.get(self, "resource_type_management_preference")
 
     @resource_type_management_preference.setter
-    def resource_type_management_preference(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]]]):
+    def resource_type_management_preference(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.bool]]]]):
         pulumi.set(self, "resource_type_management_preference", value)
 
 
 @pulumi.input_type
 class _RegionSettingsState:
     def __init__(__self__, *,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_type_management_preference: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]]] = None,
-                 resource_type_opt_in_preference: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_type_management_preference: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.bool]]]] = None,
+                 resource_type_opt_in_preference: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.bool]]]] = None):
         """
         Input properties used for looking up and filtering RegionSettings resources.
+
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]] resource_type_management_preference: A map of service names to their full management preferences for the Region. For more information, see the AWS Documentation on [what full management is](https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#full-management) and [which services support full management](https://docs.aws.amazon.com/aws-backup/latest/devguide/backup-feature-availability.html#features-by-resource).
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]] resource_type_opt_in_preference: A map of service names to their opt-in preferences for the Region. See [AWS Documentation on which services support backup](https://docs.aws.amazon.com/aws-backup/latest/devguide/backup-feature-availability.html).
@@ -92,38 +94,38 @@ class _RegionSettingsState:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceTypeManagementPreference")
-    def resource_type_management_preference(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]]]:
+    def resource_type_management_preference(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.bool]]]]:
         """
         A map of service names to their full management preferences for the Region. For more information, see the AWS Documentation on [what full management is](https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#full-management) and [which services support full management](https://docs.aws.amazon.com/aws-backup/latest/devguide/backup-feature-availability.html#features-by-resource).
         """
         return pulumi.get(self, "resource_type_management_preference")
 
     @resource_type_management_preference.setter
-    def resource_type_management_preference(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]]]):
+    def resource_type_management_preference(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.bool]]]]):
         pulumi.set(self, "resource_type_management_preference", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceTypeOptInPreference")
-    def resource_type_opt_in_preference(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]]]:
+    def resource_type_opt_in_preference(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.bool]]]]:
         """
         A map of service names to their opt-in preferences for the Region. See [AWS Documentation on which services support backup](https://docs.aws.amazon.com/aws-backup/latest/devguide/backup-feature-availability.html).
         """
         return pulumi.get(self, "resource_type_opt_in_preference")
 
     @resource_type_opt_in_preference.setter
-    def resource_type_opt_in_preference(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]]]):
+    def resource_type_opt_in_preference(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.bool]]]]):
         pulumi.set(self, "resource_type_opt_in_preference", value)
 
 
@@ -133,9 +135,9 @@ class RegionSettings(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_type_management_preference: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]]] = None,
-                 resource_type_opt_in_preference: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_type_management_preference: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.bool]]]] = None,
+                 resource_type_opt_in_preference: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.bool]]]] = None,
                  __props__=None):
         """
         Provides an AWS Backup Region Settings resource.
@@ -176,11 +178,19 @@ class RegionSettings(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
         Using `pulumi import`, import Backup Region Settings using the `region`. For example:
 
         ```sh
         $ pulumi import aws:backup/regionSettings:RegionSettings test us-west-2
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -233,11 +243,19 @@ class RegionSettings(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
         Using `pulumi import`, import Backup Region Settings using the `region`. For example:
 
         ```sh
         $ pulumi import aws:backup/regionSettings:RegionSettings test us-west-2
         ```
+
 
         :param str resource_name: The name of the resource.
         :param RegionSettingsArgs args: The arguments to use to populate this resource's properties.
@@ -254,9 +272,9 @@ class RegionSettings(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_type_management_preference: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]]] = None,
-                 resource_type_opt_in_preference: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_type_management_preference: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.bool]]]] = None,
+                 resource_type_opt_in_preference: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.bool]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -281,9 +299,9 @@ class RegionSettings(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            resource_type_management_preference: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]]] = None,
-            resource_type_opt_in_preference: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.bool]]]] = None) -> 'RegionSettings':
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            resource_type_management_preference: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.bool]]]] = None,
+            resource_type_opt_in_preference: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.bool]]]] = None) -> 'RegionSettings':
         """
         Get an existing RegionSettings resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

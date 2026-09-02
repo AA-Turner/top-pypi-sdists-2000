@@ -22,12 +22,13 @@ __all__ = ['AnalyzerArgs', 'Analyzer']
 class AnalyzerArgs:
     def __init__(__self__, *,
                  analyzer_name: pulumi.Input[_builtins.str],
-                 configuration: Optional[pulumi.Input['AnalyzerConfigurationArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None):
+                 configuration: pulumi.Input[Optional['AnalyzerConfigurationArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a Analyzer resource.
+
         :param pulumi.Input[_builtins.str] analyzer_name: Name of the Analyzer.
                
                The following arguments are optional:
@@ -62,65 +63,66 @@ class AnalyzerArgs:
 
     @_builtins.property
     @pulumi.getter
-    def configuration(self) -> Optional[pulumi.Input['AnalyzerConfigurationArgs']]:
+    def configuration(self) -> pulumi.Input[Optional['AnalyzerConfigurationArgs']]:
         """
         A block that specifies the configuration of the analyzer. See `configuration` Block for details.
         """
         return pulumi.get(self, "configuration")
 
     @configuration.setter
-    def configuration(self, value: Optional[pulumi.Input['AnalyzerConfigurationArgs']]):
+    def configuration(self, value: pulumi.Input[Optional['AnalyzerConfigurationArgs']]):
         pulumi.set(self, "configuration", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Type that represents the zone of trust or scope for the analyzer. Valid values are `ACCOUNT`, `ACCOUNT_INTERNAL_ACCESS`, `ACCOUNT_UNUSED_ACCESS`, `ORGANIZATION`, `ORGANIZATION_INTERNAL_ACCESS`, `ORGANIZATION_UNUSED_ACCESS`. Defaults to `ACCOUNT`.
         """
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
 
 @pulumi.input_type
 class _AnalyzerState:
     def __init__(__self__, *,
-                 analyzer_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 configuration: Optional[pulumi.Input['AnalyzerConfigurationArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None):
+                 analyzer_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 configuration: pulumi.Input[Optional['AnalyzerConfigurationArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering Analyzer resources.
+
         :param pulumi.Input[_builtins.str] analyzer_name: Name of the Analyzer.
                
                The following arguments are optional:
@@ -148,7 +150,7 @@ class _AnalyzerState:
 
     @_builtins.property
     @pulumi.getter(name="analyzerName")
-    def analyzer_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def analyzer_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the Analyzer.
 
@@ -157,79 +159,79 @@ class _AnalyzerState:
         return pulumi.get(self, "analyzer_name")
 
     @analyzer_name.setter
-    def analyzer_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def analyzer_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "analyzer_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the Analyzer.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def configuration(self) -> Optional[pulumi.Input['AnalyzerConfigurationArgs']]:
+    def configuration(self) -> pulumi.Input[Optional['AnalyzerConfigurationArgs']]:
         """
         A block that specifies the configuration of the analyzer. See `configuration` Block for details.
         """
         return pulumi.get(self, "configuration")
 
     @configuration.setter
-    def configuration(self, value: Optional[pulumi.Input['AnalyzerConfigurationArgs']]):
+    def configuration(self, value: pulumi.Input[Optional['AnalyzerConfigurationArgs']]):
         pulumi.set(self, "configuration", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Type that represents the zone of trust or scope for the analyzer. Valid values are `ACCOUNT`, `ACCOUNT_INTERNAL_ACCESS`, `ACCOUNT_UNUSED_ACCESS`, `ORGANIZATION`, `ORGANIZATION_INTERNAL_ACCESS`, `ORGANIZATION_UNUSED_ACCESS`. Defaults to `ACCOUNT`.
         """
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
 
@@ -239,11 +241,11 @@ class Analyzer(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 analyzer_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 configuration: Optional[pulumi.Input[Union['AnalyzerConfigurationArgs', 'AnalyzerConfigurationArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None,
+                 analyzer_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 configuration: pulumi.Input[Optional[Union['AnalyzerConfigurationArgs', 'AnalyzerConfigurationArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Manages an Access Analyzer Analyzer. More information can be found in the [Access Analyzer User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html).
@@ -279,11 +281,8 @@ class Analyzer(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.accessanalyzer.Analyzer("example",
-            analyzer_name="example",
-            type="ORGANIZATION_UNUSED_ACCESS",
             configuration={
                 "unused_access": {
-                    "unused_access_age": 180,
                     "analysis_rule": {
                         "exclusions": [
                             {
@@ -304,8 +303,11 @@ class Analyzer(pulumi.CustomResource):
                             },
                         ],
                     },
+                    "unused_access_age": 180,
                 },
-            })
+            },
+            analyzer_name="example",
+            type="ORGANIZATION_UNUSED_ACCESS")
         ```
 
         ### Account Internal Access Analyzer by Resource Types
@@ -315,8 +317,6 @@ class Analyzer(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.accessanalyzer.Analyzer("test",
-            analyzer_name="example",
-            type="ORGANIZATION_INTERNAL_ACCESS",
             configuration={
                 "internal_access": {
                     "analysis_rule": {
@@ -329,7 +329,9 @@ class Analyzer(pulumi.CustomResource):
                         }],
                     },
                 },
-            })
+            },
+            analyzer_name="example",
+            type="ORGANIZATION_INTERNAL_ACCESS")
         ```
 
         ### Organization Internal Access Analyzer by Account ID and Resource ARN
@@ -339,8 +341,6 @@ class Analyzer(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.accessanalyzer.Analyzer("test",
-            analyzer_name="example",
-            type="ORGANIZATION_INTERNAL_ACCESS",
             configuration={
                 "internal_access": {
                     "analysis_rule": {
@@ -350,7 +350,9 @@ class Analyzer(pulumi.CustomResource):
                         }],
                     },
                 },
-            })
+            },
+            analyzer_name="example",
+            type="ORGANIZATION_INTERNAL_ACCESS")
         ```
 
         ## Import
@@ -360,6 +362,7 @@ class Analyzer(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:accessanalyzer/analyzer:Analyzer example example
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -411,11 +414,8 @@ class Analyzer(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.accessanalyzer.Analyzer("example",
-            analyzer_name="example",
-            type="ORGANIZATION_UNUSED_ACCESS",
             configuration={
                 "unused_access": {
-                    "unused_access_age": 180,
                     "analysis_rule": {
                         "exclusions": [
                             {
@@ -436,8 +436,11 @@ class Analyzer(pulumi.CustomResource):
                             },
                         ],
                     },
+                    "unused_access_age": 180,
                 },
-            })
+            },
+            analyzer_name="example",
+            type="ORGANIZATION_UNUSED_ACCESS")
         ```
 
         ### Account Internal Access Analyzer by Resource Types
@@ -447,8 +450,6 @@ class Analyzer(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.accessanalyzer.Analyzer("test",
-            analyzer_name="example",
-            type="ORGANIZATION_INTERNAL_ACCESS",
             configuration={
                 "internal_access": {
                     "analysis_rule": {
@@ -461,7 +462,9 @@ class Analyzer(pulumi.CustomResource):
                         }],
                     },
                 },
-            })
+            },
+            analyzer_name="example",
+            type="ORGANIZATION_INTERNAL_ACCESS")
         ```
 
         ### Organization Internal Access Analyzer by Account ID and Resource ARN
@@ -471,8 +474,6 @@ class Analyzer(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.accessanalyzer.Analyzer("test",
-            analyzer_name="example",
-            type="ORGANIZATION_INTERNAL_ACCESS",
             configuration={
                 "internal_access": {
                     "analysis_rule": {
@@ -482,7 +483,9 @@ class Analyzer(pulumi.CustomResource):
                         }],
                     },
                 },
-            })
+            },
+            analyzer_name="example",
+            type="ORGANIZATION_INTERNAL_ACCESS")
         ```
 
         ## Import
@@ -492,6 +495,7 @@ class Analyzer(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:accessanalyzer/analyzer:Analyzer example example
         ```
+
 
         :param str resource_name: The name of the resource.
         :param AnalyzerArgs args: The arguments to use to populate this resource's properties.
@@ -508,11 +512,11 @@ class Analyzer(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 analyzer_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 configuration: Optional[pulumi.Input[Union['AnalyzerConfigurationArgs', 'AnalyzerConfigurationArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None,
+                 analyzer_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 configuration: pulumi.Input[Optional[Union['AnalyzerConfigurationArgs', 'AnalyzerConfigurationArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -541,13 +545,13 @@ class Analyzer(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            analyzer_name: Optional[pulumi.Input[_builtins.str]] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            configuration: Optional[pulumi.Input[Union['AnalyzerConfigurationArgs', 'AnalyzerConfigurationArgsDict']]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            type: Optional[pulumi.Input[_builtins.str]] = None) -> 'Analyzer':
+            analyzer_name: pulumi.Input[Optional[_builtins.str]] = None,
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            configuration: pulumi.Input[Optional[Union['AnalyzerConfigurationArgs', 'AnalyzerConfigurationArgsDict']]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            type: pulumi.Input[Optional[_builtins.str]] = None) -> 'Analyzer':
         """
         Get an existing Analyzer resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

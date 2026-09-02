@@ -71,7 +71,7 @@ class GetResolverFirewallRuleGroupResult:
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        The ARN (Amazon Resource Name) of the rule group.
+        ARN of the rule group.
         """
         return pulumi.get(self, "arn")
 
@@ -230,8 +230,8 @@ def get_resolver_firewall_rule_group(firewall_rule_group_id: Optional[_builtins.
         share_status=pulumi.get(__ret__, 'share_status'),
         status=pulumi.get(__ret__, 'status'),
         status_message=pulumi.get(__ret__, 'status_message'))
-def get_resolver_firewall_rule_group_output(firewall_rule_group_id: Optional[pulumi.Input[_builtins.str]] = None,
-                                            region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_resolver_firewall_rule_group_output(firewall_rule_group_id: pulumi.Input[Optional[_builtins.str]] = None,
+                                            region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                             opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetResolverFirewallRuleGroupResult]:
     """
     `route53.ResolverFirewallRuleGroup` Retrieves the specified firewall rule group.

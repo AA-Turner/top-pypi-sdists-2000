@@ -21,9 +21,10 @@ class VpcEndpointConnectionAccepterArgs:
     def __init__(__self__, *,
                  vpc_endpoint_id: pulumi.Input[_builtins.str],
                  vpc_endpoint_service_id: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a VpcEndpointConnectionAccepter resource.
+
         :param pulumi.Input[_builtins.str] vpc_endpoint_id: AWS VPC Endpoint ID.
         :param pulumi.Input[_builtins.str] vpc_endpoint_service_id: AWS VPC Endpoint Service ID.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -59,26 +60,27 @@ class VpcEndpointConnectionAccepterArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _VpcEndpointConnectionAccepterState:
     def __init__(__self__, *,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_service_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_state: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_service_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_state: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering VpcEndpointConnectionAccepter resources.
+
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[_builtins.str] vpc_endpoint_id: AWS VPC Endpoint ID.
         :param pulumi.Input[_builtins.str] vpc_endpoint_service_id: AWS VPC Endpoint Service ID.
@@ -95,50 +97,50 @@ class _VpcEndpointConnectionAccepterState:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcEndpointId")
-    def vpc_endpoint_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def vpc_endpoint_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         AWS VPC Endpoint ID.
         """
         return pulumi.get(self, "vpc_endpoint_id")
 
     @vpc_endpoint_id.setter
-    def vpc_endpoint_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def vpc_endpoint_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "vpc_endpoint_id", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcEndpointServiceId")
-    def vpc_endpoint_service_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def vpc_endpoint_service_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         AWS VPC Endpoint Service ID.
         """
         return pulumi.get(self, "vpc_endpoint_service_id")
 
     @vpc_endpoint_service_id.setter
-    def vpc_endpoint_service_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def vpc_endpoint_service_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "vpc_endpoint_service_id", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcEndpointState")
-    def vpc_endpoint_state(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def vpc_endpoint_state(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         State of the VPC Endpoint.
         """
         return pulumi.get(self, "vpc_endpoint_state")
 
     @vpc_endpoint_state.setter
-    def vpc_endpoint_state(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def vpc_endpoint_state(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "vpc_endpoint_state", value)
 
 
@@ -148,9 +150,9 @@ class VpcEndpointConnectionAccepter(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_service_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_service_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides a resource to accept a pending VPC Endpoint Connection accept request to VPC Endpoint Service.
@@ -168,10 +170,10 @@ class VpcEndpointConnectionAccepter(pulumi.CustomResource):
             network_load_balancer_arns=[example_aws_lb["arn"]])
         example_vpc_endpoint = aws.ec2.VpcEndpoint("example",
             vpc_id=test_alternate["id"],
-            service_name=test_aws_vpc_endpoint_service["serviceName"],
+            service_name=test["serviceName"],
             vpc_endpoint_type="Interface",
             private_dns_enabled=False,
-            security_group_ids=[test["id"]])
+            security_group_ids=[test_aws_security_group["id"]])
         example_vpc_endpoint_connection_accepter = aws.ec2.VpcEndpointConnectionAccepter("example",
             vpc_endpoint_service_id=example.id,
             vpc_endpoint_id=example_vpc_endpoint.id)
@@ -184,6 +186,7 @@ class VpcEndpointConnectionAccepter(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:ec2/vpcEndpointConnectionAccepter:VpcEndpointConnectionAccepter foo vpce-svc-0f97a19d3fa8220bc_vpce-010601a6db371e263
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -213,10 +216,10 @@ class VpcEndpointConnectionAccepter(pulumi.CustomResource):
             network_load_balancer_arns=[example_aws_lb["arn"]])
         example_vpc_endpoint = aws.ec2.VpcEndpoint("example",
             vpc_id=test_alternate["id"],
-            service_name=test_aws_vpc_endpoint_service["serviceName"],
+            service_name=test["serviceName"],
             vpc_endpoint_type="Interface",
             private_dns_enabled=False,
-            security_group_ids=[test["id"]])
+            security_group_ids=[test_aws_security_group["id"]])
         example_vpc_endpoint_connection_accepter = aws.ec2.VpcEndpointConnectionAccepter("example",
             vpc_endpoint_service_id=example.id,
             vpc_endpoint_id=example_vpc_endpoint.id)
@@ -229,6 +232,7 @@ class VpcEndpointConnectionAccepter(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:ec2/vpcEndpointConnectionAccepter:VpcEndpointConnectionAccepter foo vpce-svc-0f97a19d3fa8220bc_vpce-010601a6db371e263
         ```
+
 
         :param str resource_name: The name of the resource.
         :param VpcEndpointConnectionAccepterArgs args: The arguments to use to populate this resource's properties.
@@ -245,9 +249,9 @@ class VpcEndpointConnectionAccepter(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_service_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_service_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -275,10 +279,10 @@ class VpcEndpointConnectionAccepter(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            vpc_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None,
-            vpc_endpoint_service_id: Optional[pulumi.Input[_builtins.str]] = None,
-            vpc_endpoint_state: Optional[pulumi.Input[_builtins.str]] = None) -> 'VpcEndpointConnectionAccepter':
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            vpc_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None,
+            vpc_endpoint_service_id: pulumi.Input[Optional[_builtins.str]] = None,
+            vpc_endpoint_state: pulumi.Input[Optional[_builtins.str]] = None) -> 'VpcEndpointConnectionAccepter':
         """
         Get an existing VpcEndpointConnectionAccepter resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

@@ -31,6 +31,8 @@ __all__ = [
     'PipelineStageArgsDict',
     'PipelineStageActionArgs',
     'PipelineStageActionArgsDict',
+    'PipelineStageActionOutputArtifactsForComputeActionArgs',
+    'PipelineStageActionOutputArtifactsForComputeActionArgsDict',
     'PipelineStageBeforeEntryArgs',
     'PipelineStageBeforeEntryArgsDict',
     'PipelineStageBeforeEntryConditionArgs',
@@ -118,15 +120,15 @@ class CustomActionTypeConfigurationPropertyArgsDict(TypedDict):
     """
     Whether the configuration property is secret.
     """
-    description: NotRequired[pulumi.Input[_builtins.str]]
+    description: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The description of the action configuration property.
     """
-    queryable: NotRequired[pulumi.Input[_builtins.bool]]
+    queryable: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
     """
     Indicates that the property will be used in conjunction with PollForJobs.
     """
-    type: NotRequired[pulumi.Input[_builtins.str]]
+    type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The type of the configuration property. Valid values: `String`, `Number`, `Boolean`
     """
@@ -138,9 +140,9 @@ class CustomActionTypeConfigurationPropertyArgs:
                  name: pulumi.Input[_builtins.str],
                  required: pulumi.Input[_builtins.bool],
                  secret: pulumi.Input[_builtins.bool],
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 queryable: Optional[pulumi.Input[_builtins.bool]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None):
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 queryable: pulumi.Input[Optional[_builtins.bool]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.bool] key: Whether the configuration property is a key.
         :param pulumi.Input[_builtins.str] name: The name of the action configuration property.
@@ -211,38 +213,38 @@ class CustomActionTypeConfigurationPropertyArgs:
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The description of the action configuration property.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def queryable(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def queryable(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Indicates that the property will be used in conjunction with PollForJobs.
         """
         return pulumi.get(self, "queryable")
 
     @queryable.setter
-    def queryable(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def queryable(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "queryable", value)
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The type of the configuration property. Valid values: `String`, `Number`, `Boolean`
         """
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
 
@@ -341,19 +343,19 @@ class CustomActionTypeOutputArtifactDetailsArgs:
 
 
 class CustomActionTypeSettingsArgsDict(TypedDict):
-    entity_url_template: NotRequired[pulumi.Input[_builtins.str]]
+    entity_url_template: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The URL returned to the AWS CodePipeline console that provides a deep link to the resources of the external system.
     """
-    execution_url_template: NotRequired[pulumi.Input[_builtins.str]]
+    execution_url_template: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The URL returned to the AWS CodePipeline console that contains a link to the top-level landing page for the external system.
     """
-    revision_url_template: NotRequired[pulumi.Input[_builtins.str]]
+    revision_url_template: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The URL returned to the AWS CodePipeline console that contains a link to the page where customers can update or change the configuration of the external action.
     """
-    third_party_configuration_url: NotRequired[pulumi.Input[_builtins.str]]
+    third_party_configuration_url: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The URL of a sign-up page where users can sign up for an external service and perform initial configuration of the action provided by that service.
     """
@@ -361,10 +363,10 @@ class CustomActionTypeSettingsArgsDict(TypedDict):
 @pulumi.input_type
 class CustomActionTypeSettingsArgs:
     def __init__(__self__, *,
-                 entity_url_template: Optional[pulumi.Input[_builtins.str]] = None,
-                 execution_url_template: Optional[pulumi.Input[_builtins.str]] = None,
-                 revision_url_template: Optional[pulumi.Input[_builtins.str]] = None,
-                 third_party_configuration_url: Optional[pulumi.Input[_builtins.str]] = None):
+                 entity_url_template: pulumi.Input[Optional[_builtins.str]] = None,
+                 execution_url_template: pulumi.Input[Optional[_builtins.str]] = None,
+                 revision_url_template: pulumi.Input[Optional[_builtins.str]] = None,
+                 third_party_configuration_url: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] entity_url_template: The URL returned to the AWS CodePipeline console that provides a deep link to the resources of the external system.
         :param pulumi.Input[_builtins.str] execution_url_template: The URL returned to the AWS CodePipeline console that contains a link to the top-level landing page for the external system.
@@ -382,50 +384,50 @@ class CustomActionTypeSettingsArgs:
 
     @_builtins.property
     @pulumi.getter(name="entityUrlTemplate")
-    def entity_url_template(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def entity_url_template(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The URL returned to the AWS CodePipeline console that provides a deep link to the resources of the external system.
         """
         return pulumi.get(self, "entity_url_template")
 
     @entity_url_template.setter
-    def entity_url_template(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def entity_url_template(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "entity_url_template", value)
 
     @_builtins.property
     @pulumi.getter(name="executionUrlTemplate")
-    def execution_url_template(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def execution_url_template(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The URL returned to the AWS CodePipeline console that contains a link to the top-level landing page for the external system.
         """
         return pulumi.get(self, "execution_url_template")
 
     @execution_url_template.setter
-    def execution_url_template(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def execution_url_template(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "execution_url_template", value)
 
     @_builtins.property
     @pulumi.getter(name="revisionUrlTemplate")
-    def revision_url_template(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def revision_url_template(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The URL returned to the AWS CodePipeline console that contains a link to the page where customers can update or change the configuration of the external action.
         """
         return pulumi.get(self, "revision_url_template")
 
     @revision_url_template.setter
-    def revision_url_template(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def revision_url_template(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "revision_url_template", value)
 
     @_builtins.property
     @pulumi.getter(name="thirdPartyConfigurationUrl")
-    def third_party_configuration_url(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def third_party_configuration_url(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The URL of a sign-up page where users can sign up for an external service and perform initial configuration of the action provided by that service.
         """
         return pulumi.get(self, "third_party_configuration_url")
 
     @third_party_configuration_url.setter
-    def third_party_configuration_url(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def third_party_configuration_url(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "third_party_configuration_url", value)
 
 
@@ -438,11 +440,11 @@ class PipelineArtifactStoreArgsDict(TypedDict):
     """
     The type of the artifact store, such as Amazon S3
     """
-    encryption_key: NotRequired[pulumi.Input['PipelineArtifactStoreEncryptionKeyArgsDict']]
+    encryption_key: NotRequired[pulumi.Input[Optional['PipelineArtifactStoreEncryptionKeyArgsDict']]]
     """
-    The encryption key block AWS CodePipeline uses to encrypt the data in the artifact store, such as an AWS Key Management Service (AWS KMS) key. If you don't specify a key, AWS CodePipeline uses the default key for Amazon Simple Storage Service (Amazon S3). An `encryption_key` block is documented below.
+    Encryption key block AWS CodePipeline uses to encrypt the data in the artifact store, such as a KMS key. If you don't specify a key, AWS CodePipeline uses the default key for S3. An `encryption_key` block is documented below.
     """
-    region: NotRequired[pulumi.Input[_builtins.str]]
+    region: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The region where the artifact store is located. Required for a cross-region CodePipeline, do not provide for a single-region CodePipeline.
     """
@@ -452,12 +454,12 @@ class PipelineArtifactStoreArgs:
     def __init__(__self__, *,
                  location: pulumi.Input[_builtins.str],
                  type: pulumi.Input[_builtins.str],
-                 encryption_key: Optional[pulumi.Input['PipelineArtifactStoreEncryptionKeyArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 encryption_key: pulumi.Input[Optional['PipelineArtifactStoreEncryptionKeyArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] location: The location where AWS CodePipeline stores artifacts for a pipeline; currently only `S3` is supported.
         :param pulumi.Input[_builtins.str] type: The type of the artifact store, such as Amazon S3
-        :param pulumi.Input['PipelineArtifactStoreEncryptionKeyArgs'] encryption_key: The encryption key block AWS CodePipeline uses to encrypt the data in the artifact store, such as an AWS Key Management Service (AWS KMS) key. If you don't specify a key, AWS CodePipeline uses the default key for Amazon Simple Storage Service (Amazon S3). An `encryption_key` block is documented below.
+        :param pulumi.Input['PipelineArtifactStoreEncryptionKeyArgs'] encryption_key: Encryption key block AWS CodePipeline uses to encrypt the data in the artifact store, such as a KMS key. If you don't specify a key, AWS CodePipeline uses the default key for S3. An `encryption_key` block is documented below.
         :param pulumi.Input[_builtins.str] region: The region where the artifact store is located. Required for a cross-region CodePipeline, do not provide for a single-region CodePipeline.
         """
         pulumi.set(__self__, "location", location)
@@ -493,26 +495,26 @@ class PipelineArtifactStoreArgs:
 
     @_builtins.property
     @pulumi.getter(name="encryptionKey")
-    def encryption_key(self) -> Optional[pulumi.Input['PipelineArtifactStoreEncryptionKeyArgs']]:
+    def encryption_key(self) -> pulumi.Input[Optional['PipelineArtifactStoreEncryptionKeyArgs']]:
         """
-        The encryption key block AWS CodePipeline uses to encrypt the data in the artifact store, such as an AWS Key Management Service (AWS KMS) key. If you don't specify a key, AWS CodePipeline uses the default key for Amazon Simple Storage Service (Amazon S3). An `encryption_key` block is documented below.
+        Encryption key block AWS CodePipeline uses to encrypt the data in the artifact store, such as a KMS key. If you don't specify a key, AWS CodePipeline uses the default key for S3. An `encryption_key` block is documented below.
         """
         return pulumi.get(self, "encryption_key")
 
     @encryption_key.setter
-    def encryption_key(self, value: Optional[pulumi.Input['PipelineArtifactStoreEncryptionKeyArgs']]):
+    def encryption_key(self, value: pulumi.Input[Optional['PipelineArtifactStoreEncryptionKeyArgs']]):
         pulumi.set(self, "encryption_key", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The region where the artifact store is located. Required for a cross-region CodePipeline, do not provide for a single-region CodePipeline.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -572,15 +574,15 @@ class PipelineStageArgsDict(TypedDict):
     """
     The name of the stage.
     """
-    before_entry: NotRequired[pulumi.Input['PipelineStageBeforeEntryArgsDict']]
+    before_entry: NotRequired[pulumi.Input[Optional['PipelineStageBeforeEntryArgsDict']]]
     """
     The method to use when a stage allows entry. For example, configuring this field for conditions will allow entry to the stage when the conditions are met.
     """
-    on_failure: NotRequired[pulumi.Input['PipelineStageOnFailureArgsDict']]
+    on_failure: NotRequired[pulumi.Input[Optional['PipelineStageOnFailureArgsDict']]]
     """
     The method to use when a stage has not completed successfully. For example, configuring this field for rollback will roll back a failed stage automatically to the last successful pipeline execution in the stage.
     """
-    on_success: NotRequired[pulumi.Input['PipelineStageOnSuccessArgsDict']]
+    on_success: NotRequired[pulumi.Input[Optional['PipelineStageOnSuccessArgsDict']]]
     """
     The method to use when a stage has succeeded. For example, configuring this field for conditions will allow the stage to succeed when the conditions are met.
     """
@@ -590,9 +592,9 @@ class PipelineStageArgs:
     def __init__(__self__, *,
                  actions: pulumi.Input[Sequence[pulumi.Input['PipelineStageActionArgs']]],
                  name: pulumi.Input[_builtins.str],
-                 before_entry: Optional[pulumi.Input['PipelineStageBeforeEntryArgs']] = None,
-                 on_failure: Optional[pulumi.Input['PipelineStageOnFailureArgs']] = None,
-                 on_success: Optional[pulumi.Input['PipelineStageOnSuccessArgs']] = None):
+                 before_entry: pulumi.Input[Optional['PipelineStageBeforeEntryArgs']] = None,
+                 on_failure: pulumi.Input[Optional['PipelineStageOnFailureArgs']] = None,
+                 on_success: pulumi.Input[Optional['PipelineStageOnSuccessArgs']] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input['PipelineStageActionArgs']]] actions: The action(s) to include in the stage. Defined as an `action` block below
         :param pulumi.Input[_builtins.str] name: The name of the stage.
@@ -635,45 +637,45 @@ class PipelineStageArgs:
 
     @_builtins.property
     @pulumi.getter(name="beforeEntry")
-    def before_entry(self) -> Optional[pulumi.Input['PipelineStageBeforeEntryArgs']]:
+    def before_entry(self) -> pulumi.Input[Optional['PipelineStageBeforeEntryArgs']]:
         """
         The method to use when a stage allows entry. For example, configuring this field for conditions will allow entry to the stage when the conditions are met.
         """
         return pulumi.get(self, "before_entry")
 
     @before_entry.setter
-    def before_entry(self, value: Optional[pulumi.Input['PipelineStageBeforeEntryArgs']]):
+    def before_entry(self, value: pulumi.Input[Optional['PipelineStageBeforeEntryArgs']]):
         pulumi.set(self, "before_entry", value)
 
     @_builtins.property
     @pulumi.getter(name="onFailure")
-    def on_failure(self) -> Optional[pulumi.Input['PipelineStageOnFailureArgs']]:
+    def on_failure(self) -> pulumi.Input[Optional['PipelineStageOnFailureArgs']]:
         """
         The method to use when a stage has not completed successfully. For example, configuring this field for rollback will roll back a failed stage automatically to the last successful pipeline execution in the stage.
         """
         return pulumi.get(self, "on_failure")
 
     @on_failure.setter
-    def on_failure(self, value: Optional[pulumi.Input['PipelineStageOnFailureArgs']]):
+    def on_failure(self, value: pulumi.Input[Optional['PipelineStageOnFailureArgs']]):
         pulumi.set(self, "on_failure", value)
 
     @_builtins.property
     @pulumi.getter(name="onSuccess")
-    def on_success(self) -> Optional[pulumi.Input['PipelineStageOnSuccessArgs']]:
+    def on_success(self) -> pulumi.Input[Optional['PipelineStageOnSuccessArgs']]:
         """
         The method to use when a stage has succeeded. For example, configuring this field for conditions will allow the stage to succeed when the conditions are met.
         """
         return pulumi.get(self, "on_success")
 
     @on_success.setter
-    def on_success(self, value: Optional[pulumi.Input['PipelineStageOnSuccessArgs']]):
+    def on_success(self, value: pulumi.Input[Optional['PipelineStageOnSuccessArgs']]):
         pulumi.set(self, "on_success", value)
 
 
 class PipelineStageActionArgsDict(TypedDict):
     category: pulumi.Input[_builtins.str]
     """
-    A category defines what kind of action can be taken in the stage, and constrains the provider type for the action. Possible values are `Approval`, `Build`, `Deploy`, `Invoke`, `Source` and `Test`.
+    A category defines what kind of action can be taken in the stage, and constrains the provider type for the action. Possible values are `Approval`, `Build`, `Deploy`, `Invoke`, `Source`, `Compute` and `Test`.
     """
     name: pulumi.Input[_builtins.str]
     """
@@ -691,35 +693,47 @@ class PipelineStageActionArgsDict(TypedDict):
     """
     A string that identifies the action type.
     """
-    configuration: NotRequired[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]
+    commands: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
+    """
+    A list of shell commands to run with the compute action.
+    """
+    configuration: NotRequired[pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]]
     """
     A map of the action declaration's configuration. Configurations options for action types and providers can be found in the [Pipeline Structure Reference](http://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#action-requirements) and [Action Structure Reference](https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference.html) documentation. Note: The `DetectChanges` parameter (optional, default value is true) in the `configuration` section causes CodePipeline to automatically start your pipeline upon new commits. Please refer to AWS Documentation for more details: https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference-CodestarConnectionSource.html#action-reference-CodestarConnectionSource-config.
     """
-    input_artifacts: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    input_artifacts: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of artifact names to be worked on.
     """
-    namespace: NotRequired[pulumi.Input[_builtins.str]]
+    namespace: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The namespace all output variables will be accessed from.
     """
-    output_artifacts: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    output_artifacts: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    A list of artifact names to output. Output artifact names must be unique within a pipeline.
+    A list of artifact names to output. Output artifact names must be unique within a pipeline. If the action is `Compute`, this argument is ignored.
     """
-    region: NotRequired[pulumi.Input[_builtins.str]]
+    output_artifacts_for_compute_actions: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['PipelineStageActionOutputArtifactsForComputeActionArgsDict']]]]]
+    """
+    A block of output artifacts for the compute action. If the action is not `Compute`, this argument is ignored.
+    """
+    output_variables: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
+    """
+    A list of variables that are to be exported from the compute action.
+    """
+    region: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The region in which to run the action.
     """
-    role_arn: NotRequired[pulumi.Input[_builtins.str]]
+    role_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The ARN of the IAM service role that will perform the declared action. This is assumed through the roleArn for the pipeline.
     """
-    run_order: NotRequired[pulumi.Input[_builtins.int]]
+    run_order: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     The order in which actions are run.
     """
-    timeout_in_minutes: NotRequired[pulumi.Input[_builtins.int]]
+    timeout_in_minutes: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     The action timeout for the rule.
     """
@@ -732,24 +746,30 @@ class PipelineStageActionArgs:
                  owner: pulumi.Input[_builtins.str],
                  provider: pulumi.Input[_builtins.str],
                  version: pulumi.Input[_builtins.str],
-                 configuration: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 input_artifacts: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 namespace: Optional[pulumi.Input[_builtins.str]] = None,
-                 output_artifacts: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 run_order: Optional[pulumi.Input[_builtins.int]] = None,
-                 timeout_in_minutes: Optional[pulumi.Input[_builtins.int]] = None):
+                 commands: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 configuration: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 input_artifacts: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 namespace: pulumi.Input[Optional[_builtins.str]] = None,
+                 output_artifacts: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 output_artifacts_for_compute_actions: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineStageActionOutputArtifactsForComputeActionArgs']]]] = None,
+                 output_variables: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 run_order: pulumi.Input[Optional[_builtins.int]] = None,
+                 timeout_in_minutes: pulumi.Input[Optional[_builtins.int]] = None):
         """
-        :param pulumi.Input[_builtins.str] category: A category defines what kind of action can be taken in the stage, and constrains the provider type for the action. Possible values are `Approval`, `Build`, `Deploy`, `Invoke`, `Source` and `Test`.
+        :param pulumi.Input[_builtins.str] category: A category defines what kind of action can be taken in the stage, and constrains the provider type for the action. Possible values are `Approval`, `Build`, `Deploy`, `Invoke`, `Source`, `Compute` and `Test`.
         :param pulumi.Input[_builtins.str] name: The action declaration's name.
         :param pulumi.Input[_builtins.str] owner: The creator of the action being called. Possible values are `AWS`, `Custom` and `ThirdParty`.
         :param pulumi.Input[_builtins.str] provider: The provider of the service being called by the action. Valid providers are determined by the action category. Provider names are listed in the [Action Structure Reference](https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference.html) documentation.
         :param pulumi.Input[_builtins.str] version: A string that identifies the action type.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] commands: A list of shell commands to run with the compute action.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] configuration: A map of the action declaration's configuration. Configurations options for action types and providers can be found in the [Pipeline Structure Reference](http://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#action-requirements) and [Action Structure Reference](https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference.html) documentation. Note: The `DetectChanges` parameter (optional, default value is true) in the `configuration` section causes CodePipeline to automatically start your pipeline upon new commits. Please refer to AWS Documentation for more details: https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference-CodestarConnectionSource.html#action-reference-CodestarConnectionSource-config.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] input_artifacts: A list of artifact names to be worked on.
         :param pulumi.Input[_builtins.str] namespace: The namespace all output variables will be accessed from.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] output_artifacts: A list of artifact names to output. Output artifact names must be unique within a pipeline.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] output_artifacts: A list of artifact names to output. Output artifact names must be unique within a pipeline. If the action is `Compute`, this argument is ignored.
+        :param pulumi.Input[Sequence[pulumi.Input['PipelineStageActionOutputArtifactsForComputeActionArgs']]] output_artifacts_for_compute_actions: A block of output artifacts for the compute action. If the action is not `Compute`, this argument is ignored.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] output_variables: A list of variables that are to be exported from the compute action.
         :param pulumi.Input[_builtins.str] region: The region in which to run the action.
         :param pulumi.Input[_builtins.str] role_arn: The ARN of the IAM service role that will perform the declared action. This is assumed through the roleArn for the pipeline.
         :param pulumi.Input[_builtins.int] run_order: The order in which actions are run.
@@ -760,6 +780,8 @@ class PipelineStageActionArgs:
         pulumi.set(__self__, "owner", owner)
         pulumi.set(__self__, "provider", provider)
         pulumi.set(__self__, "version", version)
+        if commands is not None:
+            pulumi.set(__self__, "commands", commands)
         if configuration is not None:
             pulumi.set(__self__, "configuration", configuration)
         if input_artifacts is not None:
@@ -768,6 +790,10 @@ class PipelineStageActionArgs:
             pulumi.set(__self__, "namespace", namespace)
         if output_artifacts is not None:
             pulumi.set(__self__, "output_artifacts", output_artifacts)
+        if output_artifacts_for_compute_actions is not None:
+            pulumi.set(__self__, "output_artifacts_for_compute_actions", output_artifacts_for_compute_actions)
+        if output_variables is not None:
+            pulumi.set(__self__, "output_variables", output_variables)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if role_arn is not None:
@@ -781,7 +807,7 @@ class PipelineStageActionArgs:
     @pulumi.getter
     def category(self) -> pulumi.Input[_builtins.str]:
         """
-        A category defines what kind of action can be taken in the stage, and constrains the provider type for the action. Possible values are `Approval`, `Build`, `Deploy`, `Invoke`, `Source` and `Test`.
+        A category defines what kind of action can be taken in the stage, and constrains the provider type for the action. Possible values are `Approval`, `Build`, `Deploy`, `Invoke`, `Source`, `Compute` and `Test`.
         """
         return pulumi.get(self, "category")
 
@@ -839,99 +865,183 @@ class PipelineStageActionArgs:
 
     @_builtins.property
     @pulumi.getter
-    def configuration(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def commands(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
+        """
+        A list of shell commands to run with the compute action.
+        """
+        return pulumi.get(self, "commands")
+
+    @commands.setter
+    def commands(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "commands", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def configuration(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of the action declaration's configuration. Configurations options for action types and providers can be found in the [Pipeline Structure Reference](http://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#action-requirements) and [Action Structure Reference](https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference.html) documentation. Note: The `DetectChanges` parameter (optional, default value is true) in the `configuration` section causes CodePipeline to automatically start your pipeline upon new commits. Please refer to AWS Documentation for more details: https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference-CodestarConnectionSource.html#action-reference-CodestarConnectionSource-config.
         """
         return pulumi.get(self, "configuration")
 
     @configuration.setter
-    def configuration(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def configuration(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="inputArtifacts")
-    def input_artifacts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def input_artifacts(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of artifact names to be worked on.
         """
         return pulumi.get(self, "input_artifacts")
 
     @input_artifacts.setter
-    def input_artifacts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def input_artifacts(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "input_artifacts", value)
 
     @_builtins.property
     @pulumi.getter
-    def namespace(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def namespace(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The namespace all output variables will be accessed from.
         """
         return pulumi.get(self, "namespace")
 
     @namespace.setter
-    def namespace(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def namespace(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "namespace", value)
 
     @_builtins.property
     @pulumi.getter(name="outputArtifacts")
-    def output_artifacts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def output_artifacts(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        A list of artifact names to output. Output artifact names must be unique within a pipeline.
+        A list of artifact names to output. Output artifact names must be unique within a pipeline. If the action is `Compute`, this argument is ignored.
         """
         return pulumi.get(self, "output_artifacts")
 
     @output_artifacts.setter
-    def output_artifacts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def output_artifacts(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "output_artifacts", value)
 
     @_builtins.property
+    @pulumi.getter(name="outputArtifactsForComputeActions")
+    def output_artifacts_for_compute_actions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PipelineStageActionOutputArtifactsForComputeActionArgs']]]]:
+        """
+        A block of output artifacts for the compute action. If the action is not `Compute`, this argument is ignored.
+        """
+        return pulumi.get(self, "output_artifacts_for_compute_actions")
+
+    @output_artifacts_for_compute_actions.setter
+    def output_artifacts_for_compute_actions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineStageActionOutputArtifactsForComputeActionArgs']]]]):
+        pulumi.set(self, "output_artifacts_for_compute_actions", value)
+
+    @_builtins.property
+    @pulumi.getter(name="outputVariables")
+    def output_variables(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
+        """
+        A list of variables that are to be exported from the compute action.
+        """
+        return pulumi.get(self, "output_variables")
+
+    @output_variables.setter
+    def output_variables(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "output_variables", value)
+
+    @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The region in which to run the action.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="roleArn")
-    def role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of the IAM service role that will perform the declared action. This is assumed through the roleArn for the pipeline.
         """
         return pulumi.get(self, "role_arn")
 
     @role_arn.setter
-    def role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "role_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="runOrder")
-    def run_order(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def run_order(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         The order in which actions are run.
         """
         return pulumi.get(self, "run_order")
 
     @run_order.setter
-    def run_order(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def run_order(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "run_order", value)
 
     @_builtins.property
     @pulumi.getter(name="timeoutInMinutes")
-    def timeout_in_minutes(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def timeout_in_minutes(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         The action timeout for the rule.
         """
         return pulumi.get(self, "timeout_in_minutes")
 
     @timeout_in_minutes.setter
-    def timeout_in_minutes(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def timeout_in_minutes(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "timeout_in_minutes", value)
+
+
+class PipelineStageActionOutputArtifactsForComputeActionArgsDict(TypedDict):
+    name: pulumi.Input[_builtins.str]
+    """
+    The name of the output artifact.
+    """
+    files: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
+    """
+    A list of the files to associate with the output artifact that will be exported from the compute action.
+    """
+
+@pulumi.input_type
+class PipelineStageActionOutputArtifactsForComputeActionArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[_builtins.str],
+                 files: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
+        """
+        :param pulumi.Input[_builtins.str] name: The name of the output artifact.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] files: A list of the files to associate with the output artifact that will be exported from the compute action.
+        """
+        pulumi.set(__self__, "name", name)
+        if files is not None:
+            pulumi.set(__self__, "files", files)
+
+    @_builtins.property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[_builtins.str]:
+        """
+        The name of the output artifact.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "name", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def files(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
+        """
+        A list of the files to associate with the output artifact that will be exported from the compute action.
+        """
+        return pulumi.get(self, "files")
+
+    @files.setter
+    def files(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "files", value)
 
 
 class PipelineStageBeforeEntryArgsDict(TypedDict):
@@ -967,7 +1077,7 @@ class PipelineStageBeforeEntryConditionArgsDict(TypedDict):
     """
     The rules that make up the condition. Defined as a `rule` block below.
     """
-    result: NotRequired[pulumi.Input[_builtins.str]]
+    result: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The action to be done when the condition is met. For example, rolling back an execution for a failure condition. Possible values are `ROLLBACK`, `FAIL`, `RETRY` and `SKIP`.
     """
@@ -976,7 +1086,7 @@ class PipelineStageBeforeEntryConditionArgsDict(TypedDict):
 class PipelineStageBeforeEntryConditionArgs:
     def __init__(__self__, *,
                  rules: pulumi.Input[Sequence[pulumi.Input['PipelineStageBeforeEntryConditionRuleArgs']]],
-                 result: Optional[pulumi.Input[_builtins.str]] = None):
+                 result: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input['PipelineStageBeforeEntryConditionRuleArgs']]] rules: The rules that make up the condition. Defined as a `rule` block below.
         :param pulumi.Input[_builtins.str] result: The action to be done when the condition is met. For example, rolling back an execution for a failure condition. Possible values are `ROLLBACK`, `FAIL`, `RETRY` and `SKIP`.
@@ -999,14 +1109,14 @@ class PipelineStageBeforeEntryConditionArgs:
 
     @_builtins.property
     @pulumi.getter
-    def result(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def result(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The action to be done when the condition is met. For example, rolling back an execution for a failure condition. Possible values are `ROLLBACK`, `FAIL`, `RETRY` and `SKIP`.
         """
         return pulumi.get(self, "result")
 
     @result.setter
-    def result(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def result(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "result", value)
 
 
@@ -1019,27 +1129,27 @@ class PipelineStageBeforeEntryConditionRuleArgsDict(TypedDict):
     """
     The ID for the rule type, which is made up of the combined values for `category`, `owner`, `provider`, and `version`. Defined as an `rule_type_id` block below.
     """
-    commands: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    commands: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     The shell commands to run with your commands rule in CodePipeline. All commands are supported except multi-line formats.
     """
-    configuration: NotRequired[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]
+    configuration: NotRequired[pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]]
     """
     The action configuration fields for the rule. Configurations options for rule types and providers can be found in the [Rule structure reference](https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference.html).
     """
-    input_artifacts: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    input_artifacts: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     The list of the input artifacts fields for the rule, such as specifying an input file for the rule.
     """
-    region: NotRequired[pulumi.Input[_builtins.str]]
+    region: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The Region for the condition associated with the rule.
     """
-    role_arn: NotRequired[pulumi.Input[_builtins.str]]
+    role_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The pipeline role ARN associated with the rule.
     """
-    timeout_in_minutes: NotRequired[pulumi.Input[_builtins.int]]
+    timeout_in_minutes: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     The action timeout for the rule.
     """
@@ -1049,12 +1159,12 @@ class PipelineStageBeforeEntryConditionRuleArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str],
                  rule_type_id: pulumi.Input['PipelineStageBeforeEntryConditionRuleRuleTypeIdArgs'],
-                 commands: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 configuration: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 input_artifacts: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeout_in_minutes: Optional[pulumi.Input[_builtins.int]] = None):
+                 commands: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 configuration: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 input_artifacts: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeout_in_minutes: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.str] name: The name of the rule that is created for the condition, such as `VariableCheck`.
         :param pulumi.Input['PipelineStageBeforeEntryConditionRuleRuleTypeIdArgs'] rule_type_id: The ID for the rule type, which is made up of the combined values for `category`, `owner`, `provider`, and `version`. Defined as an `rule_type_id` block below.
@@ -1106,74 +1216,74 @@ class PipelineStageBeforeEntryConditionRuleArgs:
 
     @_builtins.property
     @pulumi.getter
-    def commands(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def commands(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         The shell commands to run with your commands rule in CodePipeline. All commands are supported except multi-line formats.
         """
         return pulumi.get(self, "commands")
 
     @commands.setter
-    def commands(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def commands(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "commands", value)
 
     @_builtins.property
     @pulumi.getter
-    def configuration(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def configuration(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         The action configuration fields for the rule. Configurations options for rule types and providers can be found in the [Rule structure reference](https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference.html).
         """
         return pulumi.get(self, "configuration")
 
     @configuration.setter
-    def configuration(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def configuration(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="inputArtifacts")
-    def input_artifacts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def input_artifacts(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         The list of the input artifacts fields for the rule, such as specifying an input file for the rule.
         """
         return pulumi.get(self, "input_artifacts")
 
     @input_artifacts.setter
-    def input_artifacts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def input_artifacts(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "input_artifacts", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The Region for the condition associated with the rule.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="roleArn")
-    def role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The pipeline role ARN associated with the rule.
         """
         return pulumi.get(self, "role_arn")
 
     @role_arn.setter
-    def role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "role_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="timeoutInMinutes")
-    def timeout_in_minutes(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def timeout_in_minutes(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         The action timeout for the rule.
         """
         return pulumi.get(self, "timeout_in_minutes")
 
     @timeout_in_minutes.setter
-    def timeout_in_minutes(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def timeout_in_minutes(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "timeout_in_minutes", value)
 
 
@@ -1186,11 +1296,11 @@ class PipelineStageBeforeEntryConditionRuleRuleTypeIdArgsDict(TypedDict):
     """
     The rule provider, such as the DeploymentWindow rule. For a list of rule provider names, see the rules listed in the [AWS CodePipeline rule reference](https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference.html).
     """
-    owner: NotRequired[pulumi.Input[_builtins.str]]
+    owner: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The creator of the rule being called. The valid value for the Owner field in the rule category is `AWS`.
     """
-    version: NotRequired[pulumi.Input[_builtins.str]]
+    version: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that describes the rule version.
     """
@@ -1200,8 +1310,8 @@ class PipelineStageBeforeEntryConditionRuleRuleTypeIdArgs:
     def __init__(__self__, *,
                  category: pulumi.Input[_builtins.str],
                  provider: pulumi.Input[_builtins.str],
-                 owner: Optional[pulumi.Input[_builtins.str]] = None,
-                 version: Optional[pulumi.Input[_builtins.str]] = None):
+                 owner: pulumi.Input[Optional[_builtins.str]] = None,
+                 version: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] category: A category defines what kind of rule can be run in the stage, and constrains the provider type for the rule. The valid category is `Rule`.
         :param pulumi.Input[_builtins.str] provider: The rule provider, such as the DeploymentWindow rule. For a list of rule provider names, see the rules listed in the [AWS CodePipeline rule reference](https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference.html).
@@ -1241,39 +1351,39 @@ class PipelineStageBeforeEntryConditionRuleRuleTypeIdArgs:
 
     @_builtins.property
     @pulumi.getter
-    def owner(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def owner(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The creator of the rule being called. The valid value for the Owner field in the rule category is `AWS`.
         """
         return pulumi.get(self, "owner")
 
     @owner.setter
-    def owner(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def owner(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "owner", value)
 
     @_builtins.property
     @pulumi.getter
-    def version(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def version(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that describes the rule version.
         """
         return pulumi.get(self, "version")
 
     @version.setter
-    def version(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def version(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "version", value)
 
 
 class PipelineStageOnFailureArgsDict(TypedDict):
-    condition: NotRequired[pulumi.Input['PipelineStageOnFailureConditionArgsDict']]
+    condition: NotRequired[pulumi.Input[Optional['PipelineStageOnFailureConditionArgsDict']]]
     """
     The conditions that are failure conditions. Defined as a `condition` block below.
     """
-    result: NotRequired[pulumi.Input[_builtins.str]]
+    result: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The conditions that are configured as failure conditions. Possible values are `ROLLBACK`,  `FAIL`, `RETRY` and `SKIP`.
     """
-    retry_configuration: NotRequired[pulumi.Input['PipelineStageOnFailureRetryConfigurationArgsDict']]
+    retry_configuration: NotRequired[pulumi.Input[Optional['PipelineStageOnFailureRetryConfigurationArgsDict']]]
     """
     The retry configuration specifies automatic retry for a failed stage, along with the configured retry mode. Defined as a `retry_configuration` block below.
     """
@@ -1281,9 +1391,9 @@ class PipelineStageOnFailureArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineStageOnFailureArgs:
     def __init__(__self__, *,
-                 condition: Optional[pulumi.Input['PipelineStageOnFailureConditionArgs']] = None,
-                 result: Optional[pulumi.Input[_builtins.str]] = None,
-                 retry_configuration: Optional[pulumi.Input['PipelineStageOnFailureRetryConfigurationArgs']] = None):
+                 condition: pulumi.Input[Optional['PipelineStageOnFailureConditionArgs']] = None,
+                 result: pulumi.Input[Optional[_builtins.str]] = None,
+                 retry_configuration: pulumi.Input[Optional['PipelineStageOnFailureRetryConfigurationArgs']] = None):
         """
         :param pulumi.Input['PipelineStageOnFailureConditionArgs'] condition: The conditions that are failure conditions. Defined as a `condition` block below.
         :param pulumi.Input[_builtins.str] result: The conditions that are configured as failure conditions. Possible values are `ROLLBACK`,  `FAIL`, `RETRY` and `SKIP`.
@@ -1298,38 +1408,38 @@ class PipelineStageOnFailureArgs:
 
     @_builtins.property
     @pulumi.getter
-    def condition(self) -> Optional[pulumi.Input['PipelineStageOnFailureConditionArgs']]:
+    def condition(self) -> pulumi.Input[Optional['PipelineStageOnFailureConditionArgs']]:
         """
         The conditions that are failure conditions. Defined as a `condition` block below.
         """
         return pulumi.get(self, "condition")
 
     @condition.setter
-    def condition(self, value: Optional[pulumi.Input['PipelineStageOnFailureConditionArgs']]):
+    def condition(self, value: pulumi.Input[Optional['PipelineStageOnFailureConditionArgs']]):
         pulumi.set(self, "condition", value)
 
     @_builtins.property
     @pulumi.getter
-    def result(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def result(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The conditions that are configured as failure conditions. Possible values are `ROLLBACK`,  `FAIL`, `RETRY` and `SKIP`.
         """
         return pulumi.get(self, "result")
 
     @result.setter
-    def result(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def result(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "result", value)
 
     @_builtins.property
     @pulumi.getter(name="retryConfiguration")
-    def retry_configuration(self) -> Optional[pulumi.Input['PipelineStageOnFailureRetryConfigurationArgs']]:
+    def retry_configuration(self) -> pulumi.Input[Optional['PipelineStageOnFailureRetryConfigurationArgs']]:
         """
         The retry configuration specifies automatic retry for a failed stage, along with the configured retry mode. Defined as a `retry_configuration` block below.
         """
         return pulumi.get(self, "retry_configuration")
 
     @retry_configuration.setter
-    def retry_configuration(self, value: Optional[pulumi.Input['PipelineStageOnFailureRetryConfigurationArgs']]):
+    def retry_configuration(self, value: pulumi.Input[Optional['PipelineStageOnFailureRetryConfigurationArgs']]):
         pulumi.set(self, "retry_configuration", value)
 
 
@@ -1338,7 +1448,7 @@ class PipelineStageOnFailureConditionArgsDict(TypedDict):
     """
     The rules that make up the condition. Defined as a `rule` block below.
     """
-    result: NotRequired[pulumi.Input[_builtins.str]]
+    result: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The action to be done when the condition is met. For example, rolling back an execution for a failure condition. Possible values are `ROLLBACK`, `FAIL`, `RETRY` and `SKIP`.
     """
@@ -1347,7 +1457,7 @@ class PipelineStageOnFailureConditionArgsDict(TypedDict):
 class PipelineStageOnFailureConditionArgs:
     def __init__(__self__, *,
                  rules: pulumi.Input[Sequence[pulumi.Input['PipelineStageOnFailureConditionRuleArgs']]],
-                 result: Optional[pulumi.Input[_builtins.str]] = None):
+                 result: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input['PipelineStageOnFailureConditionRuleArgs']]] rules: The rules that make up the condition. Defined as a `rule` block below.
         :param pulumi.Input[_builtins.str] result: The action to be done when the condition is met. For example, rolling back an execution for a failure condition. Possible values are `ROLLBACK`, `FAIL`, `RETRY` and `SKIP`.
@@ -1370,14 +1480,14 @@ class PipelineStageOnFailureConditionArgs:
 
     @_builtins.property
     @pulumi.getter
-    def result(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def result(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The action to be done when the condition is met. For example, rolling back an execution for a failure condition. Possible values are `ROLLBACK`, `FAIL`, `RETRY` and `SKIP`.
         """
         return pulumi.get(self, "result")
 
     @result.setter
-    def result(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def result(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "result", value)
 
 
@@ -1390,27 +1500,27 @@ class PipelineStageOnFailureConditionRuleArgsDict(TypedDict):
     """
     The ID for the rule type, which is made up of the combined values for `category`, `owner`, `provider`, and `version`. Defined as an `rule_type_id` block below.
     """
-    commands: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    commands: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     The shell commands to run with your commands rule in CodePipeline. All commands are supported except multi-line formats.
     """
-    configuration: NotRequired[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]
+    configuration: NotRequired[pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]]
     """
     The action configuration fields for the rule. Configurations options for rule types and providers can be found in the [Rule structure reference](https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference.html).
     """
-    input_artifacts: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    input_artifacts: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     The list of the input artifacts fields for the rule, such as specifying an input file for the rule.
     """
-    region: NotRequired[pulumi.Input[_builtins.str]]
+    region: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The Region for the condition associated with the rule.
     """
-    role_arn: NotRequired[pulumi.Input[_builtins.str]]
+    role_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The pipeline role ARN associated with the rule.
     """
-    timeout_in_minutes: NotRequired[pulumi.Input[_builtins.int]]
+    timeout_in_minutes: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     The action timeout for the rule.
     """
@@ -1420,12 +1530,12 @@ class PipelineStageOnFailureConditionRuleArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str],
                  rule_type_id: pulumi.Input['PipelineStageOnFailureConditionRuleRuleTypeIdArgs'],
-                 commands: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 configuration: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 input_artifacts: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeout_in_minutes: Optional[pulumi.Input[_builtins.int]] = None):
+                 commands: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 configuration: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 input_artifacts: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeout_in_minutes: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.str] name: The name of the rule that is created for the condition, such as `VariableCheck`.
         :param pulumi.Input['PipelineStageOnFailureConditionRuleRuleTypeIdArgs'] rule_type_id: The ID for the rule type, which is made up of the combined values for `category`, `owner`, `provider`, and `version`. Defined as an `rule_type_id` block below.
@@ -1477,74 +1587,74 @@ class PipelineStageOnFailureConditionRuleArgs:
 
     @_builtins.property
     @pulumi.getter
-    def commands(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def commands(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         The shell commands to run with your commands rule in CodePipeline. All commands are supported except multi-line formats.
         """
         return pulumi.get(self, "commands")
 
     @commands.setter
-    def commands(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def commands(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "commands", value)
 
     @_builtins.property
     @pulumi.getter
-    def configuration(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def configuration(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         The action configuration fields for the rule. Configurations options for rule types and providers can be found in the [Rule structure reference](https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference.html).
         """
         return pulumi.get(self, "configuration")
 
     @configuration.setter
-    def configuration(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def configuration(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="inputArtifacts")
-    def input_artifacts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def input_artifacts(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         The list of the input artifacts fields for the rule, such as specifying an input file for the rule.
         """
         return pulumi.get(self, "input_artifacts")
 
     @input_artifacts.setter
-    def input_artifacts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def input_artifacts(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "input_artifacts", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The Region for the condition associated with the rule.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="roleArn")
-    def role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The pipeline role ARN associated with the rule.
         """
         return pulumi.get(self, "role_arn")
 
     @role_arn.setter
-    def role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "role_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="timeoutInMinutes")
-    def timeout_in_minutes(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def timeout_in_minutes(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         The action timeout for the rule.
         """
         return pulumi.get(self, "timeout_in_minutes")
 
     @timeout_in_minutes.setter
-    def timeout_in_minutes(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def timeout_in_minutes(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "timeout_in_minutes", value)
 
 
@@ -1557,11 +1667,11 @@ class PipelineStageOnFailureConditionRuleRuleTypeIdArgsDict(TypedDict):
     """
     The rule provider, such as the DeploymentWindow rule. For a list of rule provider names, see the rules listed in the [AWS CodePipeline rule reference](https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference.html).
     """
-    owner: NotRequired[pulumi.Input[_builtins.str]]
+    owner: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The creator of the rule being called. The valid value for the Owner field in the rule category is `AWS`.
     """
-    version: NotRequired[pulumi.Input[_builtins.str]]
+    version: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that describes the rule version.
     """
@@ -1571,8 +1681,8 @@ class PipelineStageOnFailureConditionRuleRuleTypeIdArgs:
     def __init__(__self__, *,
                  category: pulumi.Input[_builtins.str],
                  provider: pulumi.Input[_builtins.str],
-                 owner: Optional[pulumi.Input[_builtins.str]] = None,
-                 version: Optional[pulumi.Input[_builtins.str]] = None):
+                 owner: pulumi.Input[Optional[_builtins.str]] = None,
+                 version: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] category: A category defines what kind of rule can be run in the stage, and constrains the provider type for the rule. The valid category is `Rule`.
         :param pulumi.Input[_builtins.str] provider: The rule provider, such as the DeploymentWindow rule. For a list of rule provider names, see the rules listed in the [AWS CodePipeline rule reference](https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference.html).
@@ -1612,31 +1722,31 @@ class PipelineStageOnFailureConditionRuleRuleTypeIdArgs:
 
     @_builtins.property
     @pulumi.getter
-    def owner(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def owner(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The creator of the rule being called. The valid value for the Owner field in the rule category is `AWS`.
         """
         return pulumi.get(self, "owner")
 
     @owner.setter
-    def owner(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def owner(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "owner", value)
 
     @_builtins.property
     @pulumi.getter
-    def version(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def version(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that describes the rule version.
         """
         return pulumi.get(self, "version")
 
     @version.setter
-    def version(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def version(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "version", value)
 
 
 class PipelineStageOnFailureRetryConfigurationArgsDict(TypedDict):
-    retry_mode: NotRequired[pulumi.Input[_builtins.str]]
+    retry_mode: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The method that you want to configure for automatic stage retry on stage failure. You can specify to retry only failed action in the stage or all actions in the stage. Possible values are `FAILED_ACTIONS` and `ALL_ACTIONS`.
     """
@@ -1644,7 +1754,7 @@ class PipelineStageOnFailureRetryConfigurationArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineStageOnFailureRetryConfigurationArgs:
     def __init__(__self__, *,
-                 retry_mode: Optional[pulumi.Input[_builtins.str]] = None):
+                 retry_mode: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] retry_mode: The method that you want to configure for automatic stage retry on stage failure. You can specify to retry only failed action in the stage or all actions in the stage. Possible values are `FAILED_ACTIONS` and `ALL_ACTIONS`.
         """
@@ -1653,14 +1763,14 @@ class PipelineStageOnFailureRetryConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="retryMode")
-    def retry_mode(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def retry_mode(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The method that you want to configure for automatic stage retry on stage failure. You can specify to retry only failed action in the stage or all actions in the stage. Possible values are `FAILED_ACTIONS` and `ALL_ACTIONS`.
         """
         return pulumi.get(self, "retry_mode")
 
     @retry_mode.setter
-    def retry_mode(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def retry_mode(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "retry_mode", value)
 
 
@@ -1697,7 +1807,7 @@ class PipelineStageOnSuccessConditionArgsDict(TypedDict):
     """
     The rules that make up the condition. Defined as a `rule` block below.
     """
-    result: NotRequired[pulumi.Input[_builtins.str]]
+    result: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The action to be done when the condition is met. For example, rolling back an execution for a failure condition. Possible values are `ROLLBACK`, `FAIL`, `RETRY` and `SKIP`.
     """
@@ -1706,7 +1816,7 @@ class PipelineStageOnSuccessConditionArgsDict(TypedDict):
 class PipelineStageOnSuccessConditionArgs:
     def __init__(__self__, *,
                  rules: pulumi.Input[Sequence[pulumi.Input['PipelineStageOnSuccessConditionRuleArgs']]],
-                 result: Optional[pulumi.Input[_builtins.str]] = None):
+                 result: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input['PipelineStageOnSuccessConditionRuleArgs']]] rules: The rules that make up the condition. Defined as a `rule` block below.
         :param pulumi.Input[_builtins.str] result: The action to be done when the condition is met. For example, rolling back an execution for a failure condition. Possible values are `ROLLBACK`, `FAIL`, `RETRY` and `SKIP`.
@@ -1729,14 +1839,14 @@ class PipelineStageOnSuccessConditionArgs:
 
     @_builtins.property
     @pulumi.getter
-    def result(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def result(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The action to be done when the condition is met. For example, rolling back an execution for a failure condition. Possible values are `ROLLBACK`, `FAIL`, `RETRY` and `SKIP`.
         """
         return pulumi.get(self, "result")
 
     @result.setter
-    def result(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def result(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "result", value)
 
 
@@ -1749,27 +1859,27 @@ class PipelineStageOnSuccessConditionRuleArgsDict(TypedDict):
     """
     The ID for the rule type, which is made up of the combined values for `category`, `owner`, `provider`, and `version`. Defined as an `rule_type_id` block below.
     """
-    commands: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    commands: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     The shell commands to run with your commands rule in CodePipeline. All commands are supported except multi-line formats.
     """
-    configuration: NotRequired[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]
+    configuration: NotRequired[pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]]
     """
     The action configuration fields for the rule. Configurations options for rule types and providers can be found in the [Rule structure reference](https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference.html).
     """
-    input_artifacts: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    input_artifacts: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     The list of the input artifacts fields for the rule, such as specifying an input file for the rule.
     """
-    region: NotRequired[pulumi.Input[_builtins.str]]
+    region: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The Region for the condition associated with the rule.
     """
-    role_arn: NotRequired[pulumi.Input[_builtins.str]]
+    role_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The pipeline role ARN associated with the rule.
     """
-    timeout_in_minutes: NotRequired[pulumi.Input[_builtins.int]]
+    timeout_in_minutes: NotRequired[pulumi.Input[Optional[_builtins.int]]]
     """
     The action timeout for the rule.
     """
@@ -1779,12 +1889,12 @@ class PipelineStageOnSuccessConditionRuleArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str],
                  rule_type_id: pulumi.Input['PipelineStageOnSuccessConditionRuleRuleTypeIdArgs'],
-                 commands: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 configuration: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 input_artifacts: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeout_in_minutes: Optional[pulumi.Input[_builtins.int]] = None):
+                 commands: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 configuration: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 input_artifacts: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeout_in_minutes: pulumi.Input[Optional[_builtins.int]] = None):
         """
         :param pulumi.Input[_builtins.str] name: The name of the rule that is created for the condition, such as `VariableCheck`.
         :param pulumi.Input['PipelineStageOnSuccessConditionRuleRuleTypeIdArgs'] rule_type_id: The ID for the rule type, which is made up of the combined values for `category`, `owner`, `provider`, and `version`. Defined as an `rule_type_id` block below.
@@ -1836,74 +1946,74 @@ class PipelineStageOnSuccessConditionRuleArgs:
 
     @_builtins.property
     @pulumi.getter
-    def commands(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def commands(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         The shell commands to run with your commands rule in CodePipeline. All commands are supported except multi-line formats.
         """
         return pulumi.get(self, "commands")
 
     @commands.setter
-    def commands(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def commands(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "commands", value)
 
     @_builtins.property
     @pulumi.getter
-    def configuration(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def configuration(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         The action configuration fields for the rule. Configurations options for rule types and providers can be found in the [Rule structure reference](https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference.html).
         """
         return pulumi.get(self, "configuration")
 
     @configuration.setter
-    def configuration(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def configuration(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="inputArtifacts")
-    def input_artifacts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def input_artifacts(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         The list of the input artifacts fields for the rule, such as specifying an input file for the rule.
         """
         return pulumi.get(self, "input_artifacts")
 
     @input_artifacts.setter
-    def input_artifacts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def input_artifacts(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "input_artifacts", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The Region for the condition associated with the rule.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="roleArn")
-    def role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The pipeline role ARN associated with the rule.
         """
         return pulumi.get(self, "role_arn")
 
     @role_arn.setter
-    def role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "role_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="timeoutInMinutes")
-    def timeout_in_minutes(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def timeout_in_minutes(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         The action timeout for the rule.
         """
         return pulumi.get(self, "timeout_in_minutes")
 
     @timeout_in_minutes.setter
-    def timeout_in_minutes(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def timeout_in_minutes(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "timeout_in_minutes", value)
 
 
@@ -1916,11 +2026,11 @@ class PipelineStageOnSuccessConditionRuleRuleTypeIdArgsDict(TypedDict):
     """
     The rule provider, such as the DeploymentWindow rule. For a list of rule provider names, see the rules listed in the [AWS CodePipeline rule reference](https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference.html).
     """
-    owner: NotRequired[pulumi.Input[_builtins.str]]
+    owner: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The creator of the rule being called. The valid value for the Owner field in the rule category is `AWS`.
     """
-    version: NotRequired[pulumi.Input[_builtins.str]]
+    version: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that describes the rule version.
     """
@@ -1930,8 +2040,8 @@ class PipelineStageOnSuccessConditionRuleRuleTypeIdArgs:
     def __init__(__self__, *,
                  category: pulumi.Input[_builtins.str],
                  provider: pulumi.Input[_builtins.str],
-                 owner: Optional[pulumi.Input[_builtins.str]] = None,
-                 version: Optional[pulumi.Input[_builtins.str]] = None):
+                 owner: pulumi.Input[Optional[_builtins.str]] = None,
+                 version: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] category: A category defines what kind of rule can be run in the stage, and constrains the provider type for the rule. The valid category is `Rule`.
         :param pulumi.Input[_builtins.str] provider: The rule provider, such as the DeploymentWindow rule. For a list of rule provider names, see the rules listed in the [AWS CodePipeline rule reference](https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference.html).
@@ -1971,26 +2081,26 @@ class PipelineStageOnSuccessConditionRuleRuleTypeIdArgs:
 
     @_builtins.property
     @pulumi.getter
-    def owner(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def owner(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The creator of the rule being called. The valid value for the Owner field in the rule category is `AWS`.
         """
         return pulumi.get(self, "owner")
 
     @owner.setter
-    def owner(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def owner(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "owner", value)
 
     @_builtins.property
     @pulumi.getter
-    def version(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def version(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that describes the rule version.
         """
         return pulumi.get(self, "version")
 
     @version.setter
-    def version(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def version(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "version", value)
 
 
@@ -2042,11 +2152,11 @@ class PipelineTriggerArgs:
 
 
 class PipelineTriggerAllArgsDict(TypedDict):
-    git_configurations: NotRequired[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationArgsDict']]]]
+    git_configurations: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationArgsDict']]]]]
     """
     Provides the filter criteria and the source stage for the repository event that starts the pipeline. For more information, refer to the [AWS documentation](https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-filter.html). A `git_configuration` block is documented below.
     """
-    provider_type: NotRequired[pulumi.Input[_builtins.str]]
+    provider_type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The source provider for the event. Possible value is `CodeStarSourceConnection`.
     """
@@ -2054,8 +2164,8 @@ class PipelineTriggerAllArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineTriggerAllArgs:
     def __init__(__self__, *,
-                 git_configurations: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationArgs']]]] = None,
-                 provider_type: Optional[pulumi.Input[_builtins.str]] = None):
+                 git_configurations: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationArgs']]]] = None,
+                 provider_type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationArgs']]] git_configurations: Provides the filter criteria and the source stage for the repository event that starts the pipeline. For more information, refer to the [AWS documentation](https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-filter.html). A `git_configuration` block is documented below.
         :param pulumi.Input[_builtins.str] provider_type: The source provider for the event. Possible value is `CodeStarSourceConnection`.
@@ -2067,39 +2177,39 @@ class PipelineTriggerAllArgs:
 
     @_builtins.property
     @pulumi.getter(name="gitConfigurations")
-    def git_configurations(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationArgs']]]]:
+    def git_configurations(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationArgs']]]]:
         """
         Provides the filter criteria and the source stage for the repository event that starts the pipeline. For more information, refer to the [AWS documentation](https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-filter.html). A `git_configuration` block is documented below.
         """
         return pulumi.get(self, "git_configurations")
 
     @git_configurations.setter
-    def git_configurations(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationArgs']]]]):
+    def git_configurations(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationArgs']]]]):
         pulumi.set(self, "git_configurations", value)
 
     @_builtins.property
     @pulumi.getter(name="providerType")
-    def provider_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def provider_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The source provider for the event. Possible value is `CodeStarSourceConnection`.
         """
         return pulumi.get(self, "provider_type")
 
     @provider_type.setter
-    def provider_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def provider_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "provider_type", value)
 
 
 class PipelineTriggerAllGitConfigurationArgsDict(TypedDict):
-    pull_requests: NotRequired[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestArgsDict']]]]
+    pull_requests: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestArgsDict']]]]]
     """
     The field where the repository event that will start the pipeline is specified as pull requests. A `pull_request` block is documented below.
     """
-    pushes: NotRequired[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushArgsDict']]]]
+    pushes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushArgsDict']]]]]
     """
     The field where the repository event that will start the pipeline, such as pushing Git tags, is specified with details. A `push` block is documented below.
     """
-    source_action_name: NotRequired[pulumi.Input[_builtins.str]]
+    source_action_name: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The name of the pipeline source action where the trigger configuration, such as Git tags, is specified. The trigger configuration will start the pipeline upon the specified change only.
     """
@@ -2107,9 +2217,9 @@ class PipelineTriggerAllGitConfigurationArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineTriggerAllGitConfigurationArgs:
     def __init__(__self__, *,
-                 pull_requests: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestArgs']]]] = None,
-                 pushes: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushArgs']]]] = None,
-                 source_action_name: Optional[pulumi.Input[_builtins.str]] = None):
+                 pull_requests: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestArgs']]]] = None,
+                 pushes: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushArgs']]]] = None,
+                 source_action_name: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestArgs']]] pull_requests: The field where the repository event that will start the pipeline is specified as pull requests. A `pull_request` block is documented below.
         :param pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushArgs']]] pushes: The field where the repository event that will start the pipeline, such as pushing Git tags, is specified with details. A `push` block is documented below.
@@ -2124,51 +2234,51 @@ class PipelineTriggerAllGitConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="pullRequests")
-    def pull_requests(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestArgs']]]]:
+    def pull_requests(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestArgs']]]]:
         """
         The field where the repository event that will start the pipeline is specified as pull requests. A `pull_request` block is documented below.
         """
         return pulumi.get(self, "pull_requests")
 
     @pull_requests.setter
-    def pull_requests(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestArgs']]]]):
+    def pull_requests(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestArgs']]]]):
         pulumi.set(self, "pull_requests", value)
 
     @_builtins.property
     @pulumi.getter
-    def pushes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushArgs']]]]:
+    def pushes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushArgs']]]]:
         """
         The field where the repository event that will start the pipeline, such as pushing Git tags, is specified with details. A `push` block is documented below.
         """
         return pulumi.get(self, "pushes")
 
     @pushes.setter
-    def pushes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushArgs']]]]):
+    def pushes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushArgs']]]]):
         pulumi.set(self, "pushes", value)
 
     @_builtins.property
     @pulumi.getter(name="sourceActionName")
-    def source_action_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def source_action_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the pipeline source action where the trigger configuration, such as Git tags, is specified. The trigger configuration will start the pipeline upon the specified change only.
         """
         return pulumi.get(self, "source_action_name")
 
     @source_action_name.setter
-    def source_action_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def source_action_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "source_action_name", value)
 
 
 class PipelineTriggerAllGitConfigurationPullRequestArgsDict(TypedDict):
-    branches: NotRequired[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestBranchArgsDict']]]]
+    branches: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestBranchArgsDict']]]]]
     """
     The field that specifies to filter on branches for the pull request trigger configuration. A `branches` block is documented below.
     """
-    events: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    events: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    A list that specifies which pull request events to filter on (opened, updated, closed) for the trigger configuration. Possible values are `OPEN`, `UPDATED ` and `CLOSED`.
+    A list that specifies which pull request events to filter on (opened, updated, closed) for the trigger configuration. Possible values are `OPEN`, ` UPDATED  ` and `CLOSED`.
     """
-    file_paths: NotRequired[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestFilePathArgsDict']]]]
+    file_paths: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestFilePathArgsDict']]]]]
     """
     The field that specifies to filter on file paths for the pull request trigger configuration. A `file_paths` block is documented below.
     """
@@ -2176,12 +2286,12 @@ class PipelineTriggerAllGitConfigurationPullRequestArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineTriggerAllGitConfigurationPullRequestArgs:
     def __init__(__self__, *,
-                 branches: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestBranchArgs']]]] = None,
-                 events: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 file_paths: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestFilePathArgs']]]] = None):
+                 branches: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestBranchArgs']]]] = None,
+                 events: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 file_paths: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestFilePathArgs']]]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestBranchArgs']]] branches: The field that specifies to filter on branches for the pull request trigger configuration. A `branches` block is documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] events: A list that specifies which pull request events to filter on (opened, updated, closed) for the trigger configuration. Possible values are `OPEN`, `UPDATED ` and `CLOSED`.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] events: A list that specifies which pull request events to filter on (opened, updated, closed) for the trigger configuration. Possible values are `OPEN`, ` UPDATED  ` and `CLOSED`.
         :param pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestFilePathArgs']]] file_paths: The field that specifies to filter on file paths for the pull request trigger configuration. A `file_paths` block is documented below.
         """
         if branches is not None:
@@ -2193,47 +2303,47 @@ class PipelineTriggerAllGitConfigurationPullRequestArgs:
 
     @_builtins.property
     @pulumi.getter
-    def branches(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestBranchArgs']]]]:
+    def branches(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestBranchArgs']]]]:
         """
         The field that specifies to filter on branches for the pull request trigger configuration. A `branches` block is documented below.
         """
         return pulumi.get(self, "branches")
 
     @branches.setter
-    def branches(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestBranchArgs']]]]):
+    def branches(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestBranchArgs']]]]):
         pulumi.set(self, "branches", value)
 
     @_builtins.property
     @pulumi.getter
-    def events(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def events(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        A list that specifies which pull request events to filter on (opened, updated, closed) for the trigger configuration. Possible values are `OPEN`, `UPDATED ` and `CLOSED`.
+        A list that specifies which pull request events to filter on (opened, updated, closed) for the trigger configuration. Possible values are `OPEN`, ` UPDATED  ` and `CLOSED`.
         """
         return pulumi.get(self, "events")
 
     @events.setter
-    def events(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def events(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "events", value)
 
     @_builtins.property
     @pulumi.getter(name="filePaths")
-    def file_paths(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestFilePathArgs']]]]:
+    def file_paths(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestFilePathArgs']]]]:
         """
         The field that specifies to filter on file paths for the pull request trigger configuration. A `file_paths` block is documented below.
         """
         return pulumi.get(self, "file_paths")
 
     @file_paths.setter
-    def file_paths(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestFilePathArgs']]]]):
+    def file_paths(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPullRequestFilePathArgs']]]]):
         pulumi.set(self, "file_paths", value)
 
 
 class PipelineTriggerAllGitConfigurationPullRequestBranchArgsDict(TypedDict):
-    excludes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    excludes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git branches that, when a commit is pushed, are to be excluded from starting the pipeline.
     """
-    includes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    includes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git branches that, when a commit is pushed, are to be included as criteria that starts the pipeline.
     """
@@ -2241,8 +2351,8 @@ class PipelineTriggerAllGitConfigurationPullRequestBranchArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineTriggerAllGitConfigurationPullRequestBranchArgs:
     def __init__(__self__, *,
-                 excludes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 includes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 excludes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 includes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] excludes: A list of patterns of Git branches that, when a commit is pushed, are to be excluded from starting the pipeline.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] includes: A list of patterns of Git branches that, when a commit is pushed, are to be included as criteria that starts the pipeline.
@@ -2254,35 +2364,35 @@ class PipelineTriggerAllGitConfigurationPullRequestBranchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def excludes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def excludes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git branches that, when a commit is pushed, are to be excluded from starting the pipeline.
         """
         return pulumi.get(self, "excludes")
 
     @excludes.setter
-    def excludes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def excludes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "excludes", value)
 
     @_builtins.property
     @pulumi.getter
-    def includes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def includes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git branches that, when a commit is pushed, are to be included as criteria that starts the pipeline.
         """
         return pulumi.get(self, "includes")
 
     @includes.setter
-    def includes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def includes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "includes", value)
 
 
 class PipelineTriggerAllGitConfigurationPullRequestFilePathArgsDict(TypedDict):
-    excludes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    excludes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git repository file paths that, when a commit is pushed, are to be excluded from starting the pipeline.
     """
-    includes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    includes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git repository file paths that, when a commit is pushed, are to be included as criteria that starts the pipeline.
     """
@@ -2290,8 +2400,8 @@ class PipelineTriggerAllGitConfigurationPullRequestFilePathArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineTriggerAllGitConfigurationPullRequestFilePathArgs:
     def __init__(__self__, *,
-                 excludes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 includes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 excludes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 includes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] excludes: A list of patterns of Git repository file paths that, when a commit is pushed, are to be excluded from starting the pipeline.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] includes: A list of patterns of Git repository file paths that, when a commit is pushed, are to be included as criteria that starts the pipeline.
@@ -2303,39 +2413,39 @@ class PipelineTriggerAllGitConfigurationPullRequestFilePathArgs:
 
     @_builtins.property
     @pulumi.getter
-    def excludes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def excludes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git repository file paths that, when a commit is pushed, are to be excluded from starting the pipeline.
         """
         return pulumi.get(self, "excludes")
 
     @excludes.setter
-    def excludes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def excludes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "excludes", value)
 
     @_builtins.property
     @pulumi.getter
-    def includes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def includes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git repository file paths that, when a commit is pushed, are to be included as criteria that starts the pipeline.
         """
         return pulumi.get(self, "includes")
 
     @includes.setter
-    def includes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def includes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "includes", value)
 
 
 class PipelineTriggerAllGitConfigurationPushArgsDict(TypedDict):
-    branches: NotRequired[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushBranchArgsDict']]]]
+    branches: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushBranchArgsDict']]]]]
     """
     The field that specifies to filter on branches for the push trigger configuration. A `branches` block is documented below.
     """
-    file_paths: NotRequired[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushFilePathArgsDict']]]]
+    file_paths: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushFilePathArgsDict']]]]]
     """
     The field that specifies to filter on file paths for the push trigger configuration. A `file_paths` block is documented below.
     """
-    tags: NotRequired[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushTagArgsDict']]]]
+    tags: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushTagArgsDict']]]]]
     """
     The field that contains the details for the Git tags trigger configuration. A `tags` block is documented below.
     """
@@ -2343,9 +2453,9 @@ class PipelineTriggerAllGitConfigurationPushArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineTriggerAllGitConfigurationPushArgs:
     def __init__(__self__, *,
-                 branches: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushBranchArgs']]]] = None,
-                 file_paths: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushFilePathArgs']]]] = None,
-                 tags: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushTagArgs']]]] = None):
+                 branches: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushBranchArgs']]]] = None,
+                 file_paths: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushFilePathArgs']]]] = None,
+                 tags: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushTagArgs']]]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushBranchArgs']]] branches: The field that specifies to filter on branches for the push trigger configuration. A `branches` block is documented below.
         :param pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushFilePathArgs']]] file_paths: The field that specifies to filter on file paths for the push trigger configuration. A `file_paths` block is documented below.
@@ -2360,47 +2470,47 @@ class PipelineTriggerAllGitConfigurationPushArgs:
 
     @_builtins.property
     @pulumi.getter
-    def branches(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushBranchArgs']]]]:
+    def branches(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushBranchArgs']]]]:
         """
         The field that specifies to filter on branches for the push trigger configuration. A `branches` block is documented below.
         """
         return pulumi.get(self, "branches")
 
     @branches.setter
-    def branches(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushBranchArgs']]]]):
+    def branches(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushBranchArgs']]]]):
         pulumi.set(self, "branches", value)
 
     @_builtins.property
     @pulumi.getter(name="filePaths")
-    def file_paths(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushFilePathArgs']]]]:
+    def file_paths(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushFilePathArgs']]]]:
         """
         The field that specifies to filter on file paths for the push trigger configuration. A `file_paths` block is documented below.
         """
         return pulumi.get(self, "file_paths")
 
     @file_paths.setter
-    def file_paths(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushFilePathArgs']]]]):
+    def file_paths(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushFilePathArgs']]]]):
         pulumi.set(self, "file_paths", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushTagArgs']]]]:
+    def tags(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushTagArgs']]]]:
         """
         The field that contains the details for the Git tags trigger configuration. A `tags` block is documented below.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushTagArgs']]]]):
+    def tags(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerAllGitConfigurationPushTagArgs']]]]):
         pulumi.set(self, "tags", value)
 
 
 class PipelineTriggerAllGitConfigurationPushBranchArgsDict(TypedDict):
-    excludes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    excludes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git branches that, when a commit is pushed, are to be excluded from starting the pipeline.
     """
-    includes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    includes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git branches that, when a commit is pushed, are to be included as criteria that starts the pipeline.
     """
@@ -2408,8 +2518,8 @@ class PipelineTriggerAllGitConfigurationPushBranchArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineTriggerAllGitConfigurationPushBranchArgs:
     def __init__(__self__, *,
-                 excludes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 includes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 excludes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 includes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] excludes: A list of patterns of Git branches that, when a commit is pushed, are to be excluded from starting the pipeline.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] includes: A list of patterns of Git branches that, when a commit is pushed, are to be included as criteria that starts the pipeline.
@@ -2421,35 +2531,35 @@ class PipelineTriggerAllGitConfigurationPushBranchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def excludes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def excludes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git branches that, when a commit is pushed, are to be excluded from starting the pipeline.
         """
         return pulumi.get(self, "excludes")
 
     @excludes.setter
-    def excludes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def excludes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "excludes", value)
 
     @_builtins.property
     @pulumi.getter
-    def includes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def includes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git branches that, when a commit is pushed, are to be included as criteria that starts the pipeline.
         """
         return pulumi.get(self, "includes")
 
     @includes.setter
-    def includes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def includes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "includes", value)
 
 
 class PipelineTriggerAllGitConfigurationPushFilePathArgsDict(TypedDict):
-    excludes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    excludes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git repository file paths that, when a commit is pushed, are to be excluded from starting the pipeline.
     """
-    includes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    includes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git repository file paths that, when a commit is pushed, are to be included as criteria that starts the pipeline.
     """
@@ -2457,8 +2567,8 @@ class PipelineTriggerAllGitConfigurationPushFilePathArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineTriggerAllGitConfigurationPushFilePathArgs:
     def __init__(__self__, *,
-                 excludes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 includes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 excludes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 includes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] excludes: A list of patterns of Git repository file paths that, when a commit is pushed, are to be excluded from starting the pipeline.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] includes: A list of patterns of Git repository file paths that, when a commit is pushed, are to be included as criteria that starts the pipeline.
@@ -2470,35 +2580,35 @@ class PipelineTriggerAllGitConfigurationPushFilePathArgs:
 
     @_builtins.property
     @pulumi.getter
-    def excludes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def excludes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git repository file paths that, when a commit is pushed, are to be excluded from starting the pipeline.
         """
         return pulumi.get(self, "excludes")
 
     @excludes.setter
-    def excludes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def excludes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "excludes", value)
 
     @_builtins.property
     @pulumi.getter
-    def includes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def includes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git repository file paths that, when a commit is pushed, are to be included as criteria that starts the pipeline.
         """
         return pulumi.get(self, "includes")
 
     @includes.setter
-    def includes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def includes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "includes", value)
 
 
 class PipelineTriggerAllGitConfigurationPushTagArgsDict(TypedDict):
-    excludes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    excludes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git tags that, when pushed, are to be excluded from starting the pipeline.
     """
-    includes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    includes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git tags that, when pushed, are to be included as criteria that starts the pipeline.
     """
@@ -2506,8 +2616,8 @@ class PipelineTriggerAllGitConfigurationPushTagArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineTriggerAllGitConfigurationPushTagArgs:
     def __init__(__self__, *,
-                 excludes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 includes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 excludes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 includes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] excludes: A list of patterns of Git tags that, when pushed, are to be excluded from starting the pipeline.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] includes: A list of patterns of Git tags that, when pushed, are to be included as criteria that starts the pipeline.
@@ -2519,26 +2629,26 @@ class PipelineTriggerAllGitConfigurationPushTagArgs:
 
     @_builtins.property
     @pulumi.getter
-    def excludes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def excludes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git tags that, when pushed, are to be excluded from starting the pipeline.
         """
         return pulumi.get(self, "excludes")
 
     @excludes.setter
-    def excludes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def excludes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "excludes", value)
 
     @_builtins.property
     @pulumi.getter
-    def includes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def includes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git tags that, when pushed, are to be included as criteria that starts the pipeline.
         """
         return pulumi.get(self, "includes")
 
     @includes.setter
-    def includes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def includes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "includes", value)
 
 
@@ -2547,11 +2657,11 @@ class PipelineTriggerGitConfigurationArgsDict(TypedDict):
     """
     The name of the pipeline source action where the trigger configuration, such as Git tags, is specified. The trigger configuration will start the pipeline upon the specified change only.
     """
-    pull_requests: NotRequired[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPullRequestArgsDict']]]]
+    pull_requests: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPullRequestArgsDict']]]]]
     """
     The field where the repository event that will start the pipeline is specified as pull requests. A `pull_request` block is documented below.
     """
-    pushes: NotRequired[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPushArgsDict']]]]
+    pushes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPushArgsDict']]]]]
     """
     The field where the repository event that will start the pipeline, such as pushing Git tags, is specified with details. A `push` block is documented below.
     """
@@ -2560,8 +2670,8 @@ class PipelineTriggerGitConfigurationArgsDict(TypedDict):
 class PipelineTriggerGitConfigurationArgs:
     def __init__(__self__, *,
                  source_action_name: pulumi.Input[_builtins.str],
-                 pull_requests: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPullRequestArgs']]]] = None,
-                 pushes: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPushArgs']]]] = None):
+                 pull_requests: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPullRequestArgs']]]] = None,
+                 pushes: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPushArgs']]]] = None):
         """
         :param pulumi.Input[_builtins.str] source_action_name: The name of the pipeline source action where the trigger configuration, such as Git tags, is specified. The trigger configuration will start the pipeline upon the specified change only.
         :param pulumi.Input[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPullRequestArgs']]] pull_requests: The field where the repository event that will start the pipeline is specified as pull requests. A `pull_request` block is documented below.
@@ -2587,39 +2697,39 @@ class PipelineTriggerGitConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="pullRequests")
-    def pull_requests(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPullRequestArgs']]]]:
+    def pull_requests(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPullRequestArgs']]]]:
         """
         The field where the repository event that will start the pipeline is specified as pull requests. A `pull_request` block is documented below.
         """
         return pulumi.get(self, "pull_requests")
 
     @pull_requests.setter
-    def pull_requests(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPullRequestArgs']]]]):
+    def pull_requests(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPullRequestArgs']]]]):
         pulumi.set(self, "pull_requests", value)
 
     @_builtins.property
     @pulumi.getter
-    def pushes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPushArgs']]]]:
+    def pushes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPushArgs']]]]:
         """
         The field where the repository event that will start the pipeline, such as pushing Git tags, is specified with details. A `push` block is documented below.
         """
         return pulumi.get(self, "pushes")
 
     @pushes.setter
-    def pushes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPushArgs']]]]):
+    def pushes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PipelineTriggerGitConfigurationPushArgs']]]]):
         pulumi.set(self, "pushes", value)
 
 
 class PipelineTriggerGitConfigurationPullRequestArgsDict(TypedDict):
-    branches: NotRequired[pulumi.Input['PipelineTriggerGitConfigurationPullRequestBranchesArgsDict']]
+    branches: NotRequired[pulumi.Input[Optional['PipelineTriggerGitConfigurationPullRequestBranchesArgsDict']]]
     """
     The field that specifies to filter on branches for the pull request trigger configuration. A `branches` block is documented below.
     """
-    events: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    events: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
-    A list that specifies which pull request events to filter on (opened, updated, closed) for the trigger configuration. Possible values are `OPEN`, `UPDATED ` and `CLOSED`.
+    A list that specifies which pull request events to filter on (opened, updated, closed) for the trigger configuration. Possible values are `OPEN`, ` UPDATED  ` and `CLOSED`.
     """
-    file_paths: NotRequired[pulumi.Input['PipelineTriggerGitConfigurationPullRequestFilePathsArgsDict']]
+    file_paths: NotRequired[pulumi.Input[Optional['PipelineTriggerGitConfigurationPullRequestFilePathsArgsDict']]]
     """
     The field that specifies to filter on file paths for the pull request trigger configuration. A `file_paths` block is documented below.
     """
@@ -2627,12 +2737,12 @@ class PipelineTriggerGitConfigurationPullRequestArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineTriggerGitConfigurationPullRequestArgs:
     def __init__(__self__, *,
-                 branches: Optional[pulumi.Input['PipelineTriggerGitConfigurationPullRequestBranchesArgs']] = None,
-                 events: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 file_paths: Optional[pulumi.Input['PipelineTriggerGitConfigurationPullRequestFilePathsArgs']] = None):
+                 branches: pulumi.Input[Optional['PipelineTriggerGitConfigurationPullRequestBranchesArgs']] = None,
+                 events: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 file_paths: pulumi.Input[Optional['PipelineTriggerGitConfigurationPullRequestFilePathsArgs']] = None):
         """
         :param pulumi.Input['PipelineTriggerGitConfigurationPullRequestBranchesArgs'] branches: The field that specifies to filter on branches for the pull request trigger configuration. A `branches` block is documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] events: A list that specifies which pull request events to filter on (opened, updated, closed) for the trigger configuration. Possible values are `OPEN`, `UPDATED ` and `CLOSED`.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] events: A list that specifies which pull request events to filter on (opened, updated, closed) for the trigger configuration. Possible values are `OPEN`, ` UPDATED  ` and `CLOSED`.
         :param pulumi.Input['PipelineTriggerGitConfigurationPullRequestFilePathsArgs'] file_paths: The field that specifies to filter on file paths for the pull request trigger configuration. A `file_paths` block is documented below.
         """
         if branches is not None:
@@ -2644,47 +2754,47 @@ class PipelineTriggerGitConfigurationPullRequestArgs:
 
     @_builtins.property
     @pulumi.getter
-    def branches(self) -> Optional[pulumi.Input['PipelineTriggerGitConfigurationPullRequestBranchesArgs']]:
+    def branches(self) -> pulumi.Input[Optional['PipelineTriggerGitConfigurationPullRequestBranchesArgs']]:
         """
         The field that specifies to filter on branches for the pull request trigger configuration. A `branches` block is documented below.
         """
         return pulumi.get(self, "branches")
 
     @branches.setter
-    def branches(self, value: Optional[pulumi.Input['PipelineTriggerGitConfigurationPullRequestBranchesArgs']]):
+    def branches(self, value: pulumi.Input[Optional['PipelineTriggerGitConfigurationPullRequestBranchesArgs']]):
         pulumi.set(self, "branches", value)
 
     @_builtins.property
     @pulumi.getter
-    def events(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def events(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        A list that specifies which pull request events to filter on (opened, updated, closed) for the trigger configuration. Possible values are `OPEN`, `UPDATED ` and `CLOSED`.
+        A list that specifies which pull request events to filter on (opened, updated, closed) for the trigger configuration. Possible values are `OPEN`, ` UPDATED  ` and `CLOSED`.
         """
         return pulumi.get(self, "events")
 
     @events.setter
-    def events(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def events(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "events", value)
 
     @_builtins.property
     @pulumi.getter(name="filePaths")
-    def file_paths(self) -> Optional[pulumi.Input['PipelineTriggerGitConfigurationPullRequestFilePathsArgs']]:
+    def file_paths(self) -> pulumi.Input[Optional['PipelineTriggerGitConfigurationPullRequestFilePathsArgs']]:
         """
         The field that specifies to filter on file paths for the pull request trigger configuration. A `file_paths` block is documented below.
         """
         return pulumi.get(self, "file_paths")
 
     @file_paths.setter
-    def file_paths(self, value: Optional[pulumi.Input['PipelineTriggerGitConfigurationPullRequestFilePathsArgs']]):
+    def file_paths(self, value: pulumi.Input[Optional['PipelineTriggerGitConfigurationPullRequestFilePathsArgs']]):
         pulumi.set(self, "file_paths", value)
 
 
 class PipelineTriggerGitConfigurationPullRequestBranchesArgsDict(TypedDict):
-    excludes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    excludes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git branches that, when a commit is pushed, are to be excluded from starting the pipeline.
     """
-    includes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    includes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git branches that, when a commit is pushed, are to be included as criteria that starts the pipeline.
     """
@@ -2692,8 +2802,8 @@ class PipelineTriggerGitConfigurationPullRequestBranchesArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineTriggerGitConfigurationPullRequestBranchesArgs:
     def __init__(__self__, *,
-                 excludes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 includes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 excludes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 includes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] excludes: A list of patterns of Git branches that, when a commit is pushed, are to be excluded from starting the pipeline.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] includes: A list of patterns of Git branches that, when a commit is pushed, are to be included as criteria that starts the pipeline.
@@ -2705,35 +2815,35 @@ class PipelineTriggerGitConfigurationPullRequestBranchesArgs:
 
     @_builtins.property
     @pulumi.getter
-    def excludes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def excludes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git branches that, when a commit is pushed, are to be excluded from starting the pipeline.
         """
         return pulumi.get(self, "excludes")
 
     @excludes.setter
-    def excludes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def excludes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "excludes", value)
 
     @_builtins.property
     @pulumi.getter
-    def includes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def includes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git branches that, when a commit is pushed, are to be included as criteria that starts the pipeline.
         """
         return pulumi.get(self, "includes")
 
     @includes.setter
-    def includes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def includes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "includes", value)
 
 
 class PipelineTriggerGitConfigurationPullRequestFilePathsArgsDict(TypedDict):
-    excludes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    excludes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git repository file paths that, when a commit is pushed, are to be excluded from starting the pipeline.
     """
-    includes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    includes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git repository file paths that, when a commit is pushed, are to be included as criteria that starts the pipeline.
     """
@@ -2741,8 +2851,8 @@ class PipelineTriggerGitConfigurationPullRequestFilePathsArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineTriggerGitConfigurationPullRequestFilePathsArgs:
     def __init__(__self__, *,
-                 excludes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 includes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 excludes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 includes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] excludes: A list of patterns of Git repository file paths that, when a commit is pushed, are to be excluded from starting the pipeline.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] includes: A list of patterns of Git repository file paths that, when a commit is pushed, are to be included as criteria that starts the pipeline.
@@ -2754,39 +2864,39 @@ class PipelineTriggerGitConfigurationPullRequestFilePathsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def excludes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def excludes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git repository file paths that, when a commit is pushed, are to be excluded from starting the pipeline.
         """
         return pulumi.get(self, "excludes")
 
     @excludes.setter
-    def excludes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def excludes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "excludes", value)
 
     @_builtins.property
     @pulumi.getter
-    def includes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def includes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git repository file paths that, when a commit is pushed, are to be included as criteria that starts the pipeline.
         """
         return pulumi.get(self, "includes")
 
     @includes.setter
-    def includes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def includes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "includes", value)
 
 
 class PipelineTriggerGitConfigurationPushArgsDict(TypedDict):
-    branches: NotRequired[pulumi.Input['PipelineTriggerGitConfigurationPushBranchesArgsDict']]
+    branches: NotRequired[pulumi.Input[Optional['PipelineTriggerGitConfigurationPushBranchesArgsDict']]]
     """
     The field that specifies to filter on branches for the push trigger configuration. A `branches` block is documented below.
     """
-    file_paths: NotRequired[pulumi.Input['PipelineTriggerGitConfigurationPushFilePathsArgsDict']]
+    file_paths: NotRequired[pulumi.Input[Optional['PipelineTriggerGitConfigurationPushFilePathsArgsDict']]]
     """
     The field that specifies to filter on file paths for the push trigger configuration. A `file_paths` block is documented below.
     """
-    tags: NotRequired[pulumi.Input['PipelineTriggerGitConfigurationPushTagsArgsDict']]
+    tags: NotRequired[pulumi.Input[Optional['PipelineTriggerGitConfigurationPushTagsArgsDict']]]
     """
     The field that contains the details for the Git tags trigger configuration. A `tags` block is documented below.
     """
@@ -2794,9 +2904,9 @@ class PipelineTriggerGitConfigurationPushArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineTriggerGitConfigurationPushArgs:
     def __init__(__self__, *,
-                 branches: Optional[pulumi.Input['PipelineTriggerGitConfigurationPushBranchesArgs']] = None,
-                 file_paths: Optional[pulumi.Input['PipelineTriggerGitConfigurationPushFilePathsArgs']] = None,
-                 tags: Optional[pulumi.Input['PipelineTriggerGitConfigurationPushTagsArgs']] = None):
+                 branches: pulumi.Input[Optional['PipelineTriggerGitConfigurationPushBranchesArgs']] = None,
+                 file_paths: pulumi.Input[Optional['PipelineTriggerGitConfigurationPushFilePathsArgs']] = None,
+                 tags: pulumi.Input[Optional['PipelineTriggerGitConfigurationPushTagsArgs']] = None):
         """
         :param pulumi.Input['PipelineTriggerGitConfigurationPushBranchesArgs'] branches: The field that specifies to filter on branches for the push trigger configuration. A `branches` block is documented below.
         :param pulumi.Input['PipelineTriggerGitConfigurationPushFilePathsArgs'] file_paths: The field that specifies to filter on file paths for the push trigger configuration. A `file_paths` block is documented below.
@@ -2811,47 +2921,47 @@ class PipelineTriggerGitConfigurationPushArgs:
 
     @_builtins.property
     @pulumi.getter
-    def branches(self) -> Optional[pulumi.Input['PipelineTriggerGitConfigurationPushBranchesArgs']]:
+    def branches(self) -> pulumi.Input[Optional['PipelineTriggerGitConfigurationPushBranchesArgs']]:
         """
         The field that specifies to filter on branches for the push trigger configuration. A `branches` block is documented below.
         """
         return pulumi.get(self, "branches")
 
     @branches.setter
-    def branches(self, value: Optional[pulumi.Input['PipelineTriggerGitConfigurationPushBranchesArgs']]):
+    def branches(self, value: pulumi.Input[Optional['PipelineTriggerGitConfigurationPushBranchesArgs']]):
         pulumi.set(self, "branches", value)
 
     @_builtins.property
     @pulumi.getter(name="filePaths")
-    def file_paths(self) -> Optional[pulumi.Input['PipelineTriggerGitConfigurationPushFilePathsArgs']]:
+    def file_paths(self) -> pulumi.Input[Optional['PipelineTriggerGitConfigurationPushFilePathsArgs']]:
         """
         The field that specifies to filter on file paths for the push trigger configuration. A `file_paths` block is documented below.
         """
         return pulumi.get(self, "file_paths")
 
     @file_paths.setter
-    def file_paths(self, value: Optional[pulumi.Input['PipelineTriggerGitConfigurationPushFilePathsArgs']]):
+    def file_paths(self, value: pulumi.Input[Optional['PipelineTriggerGitConfigurationPushFilePathsArgs']]):
         pulumi.set(self, "file_paths", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['PipelineTriggerGitConfigurationPushTagsArgs']]:
+    def tags(self) -> pulumi.Input[Optional['PipelineTriggerGitConfigurationPushTagsArgs']]:
         """
         The field that contains the details for the Git tags trigger configuration. A `tags` block is documented below.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['PipelineTriggerGitConfigurationPushTagsArgs']]):
+    def tags(self, value: pulumi.Input[Optional['PipelineTriggerGitConfigurationPushTagsArgs']]):
         pulumi.set(self, "tags", value)
 
 
 class PipelineTriggerGitConfigurationPushBranchesArgsDict(TypedDict):
-    excludes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    excludes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git branches that, when a commit is pushed, are to be excluded from starting the pipeline.
     """
-    includes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    includes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git branches that, when a commit is pushed, are to be included as criteria that starts the pipeline.
     """
@@ -2859,8 +2969,8 @@ class PipelineTriggerGitConfigurationPushBranchesArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineTriggerGitConfigurationPushBranchesArgs:
     def __init__(__self__, *,
-                 excludes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 includes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 excludes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 includes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] excludes: A list of patterns of Git branches that, when a commit is pushed, are to be excluded from starting the pipeline.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] includes: A list of patterns of Git branches that, when a commit is pushed, are to be included as criteria that starts the pipeline.
@@ -2872,35 +2982,35 @@ class PipelineTriggerGitConfigurationPushBranchesArgs:
 
     @_builtins.property
     @pulumi.getter
-    def excludes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def excludes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git branches that, when a commit is pushed, are to be excluded from starting the pipeline.
         """
         return pulumi.get(self, "excludes")
 
     @excludes.setter
-    def excludes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def excludes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "excludes", value)
 
     @_builtins.property
     @pulumi.getter
-    def includes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def includes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git branches that, when a commit is pushed, are to be included as criteria that starts the pipeline.
         """
         return pulumi.get(self, "includes")
 
     @includes.setter
-    def includes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def includes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "includes", value)
 
 
 class PipelineTriggerGitConfigurationPushFilePathsArgsDict(TypedDict):
-    excludes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    excludes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git repository file paths that, when a commit is pushed, are to be excluded from starting the pipeline.
     """
-    includes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    includes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git repository file paths that, when a commit is pushed, are to be included as criteria that starts the pipeline.
     """
@@ -2908,8 +3018,8 @@ class PipelineTriggerGitConfigurationPushFilePathsArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineTriggerGitConfigurationPushFilePathsArgs:
     def __init__(__self__, *,
-                 excludes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 includes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 excludes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 includes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] excludes: A list of patterns of Git repository file paths that, when a commit is pushed, are to be excluded from starting the pipeline.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] includes: A list of patterns of Git repository file paths that, when a commit is pushed, are to be included as criteria that starts the pipeline.
@@ -2921,35 +3031,35 @@ class PipelineTriggerGitConfigurationPushFilePathsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def excludes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def excludes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git repository file paths that, when a commit is pushed, are to be excluded from starting the pipeline.
         """
         return pulumi.get(self, "excludes")
 
     @excludes.setter
-    def excludes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def excludes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "excludes", value)
 
     @_builtins.property
     @pulumi.getter
-    def includes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def includes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git repository file paths that, when a commit is pushed, are to be included as criteria that starts the pipeline.
         """
         return pulumi.get(self, "includes")
 
     @includes.setter
-    def includes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def includes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "includes", value)
 
 
 class PipelineTriggerGitConfigurationPushTagsArgsDict(TypedDict):
-    excludes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    excludes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git tags that, when pushed, are to be excluded from starting the pipeline.
     """
-    includes: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    includes: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     A list of patterns of Git tags that, when pushed, are to be included as criteria that starts the pipeline.
     """
@@ -2957,8 +3067,8 @@ class PipelineTriggerGitConfigurationPushTagsArgsDict(TypedDict):
 @pulumi.input_type
 class PipelineTriggerGitConfigurationPushTagsArgs:
     def __init__(__self__, *,
-                 excludes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 includes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 excludes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 includes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] excludes: A list of patterns of Git tags that, when pushed, are to be excluded from starting the pipeline.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] includes: A list of patterns of Git tags that, when pushed, are to be included as criteria that starts the pipeline.
@@ -2970,26 +3080,26 @@ class PipelineTriggerGitConfigurationPushTagsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def excludes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def excludes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git tags that, when pushed, are to be excluded from starting the pipeline.
         """
         return pulumi.get(self, "excludes")
 
     @excludes.setter
-    def excludes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def excludes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "excludes", value)
 
     @_builtins.property
     @pulumi.getter
-    def includes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def includes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of patterns of Git tags that, when pushed, are to be included as criteria that starts the pipeline.
         """
         return pulumi.get(self, "includes")
 
     @includes.setter
-    def includes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def includes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "includes", value)
 
 
@@ -2998,11 +3108,11 @@ class PipelineVariableArgsDict(TypedDict):
     """
     The name of a pipeline-level variable.
     """
-    default_value: NotRequired[pulumi.Input[_builtins.str]]
+    default_value: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The default value of a pipeline-level variable.
     """
-    description: NotRequired[pulumi.Input[_builtins.str]]
+    description: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The description of a pipeline-level variable.
     """
@@ -3011,8 +3121,8 @@ class PipelineVariableArgsDict(TypedDict):
 class PipelineVariableArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[_builtins.str],
-                 default_value: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None):
+                 default_value: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] name: The name of a pipeline-level variable.
         :param pulumi.Input[_builtins.str] default_value: The default value of a pipeline-level variable.
@@ -3038,35 +3148,35 @@ class PipelineVariableArgs:
 
     @_builtins.property
     @pulumi.getter(name="defaultValue")
-    def default_value(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def default_value(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The default value of a pipeline-level variable.
         """
         return pulumi.get(self, "default_value")
 
     @default_value.setter
-    def default_value(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def default_value(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "default_value", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The description of a pipeline-level variable.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
 
 class WebhookAuthenticationConfigurationArgsDict(TypedDict):
-    allowed_ip_range: NotRequired[pulumi.Input[_builtins.str]]
+    allowed_ip_range: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A valid CIDR block for `IP` filtering. Required for `IP`.
     """
-    secret_token: NotRequired[pulumi.Input[_builtins.str]]
+    secret_token: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The shared secret for the GitHub repository webhook. Set this as `secret` in your `github_repository_webhook`'s `configuration` block. Required for `GITHUB_HMAC`.
     """
@@ -3074,8 +3184,8 @@ class WebhookAuthenticationConfigurationArgsDict(TypedDict):
 @pulumi.input_type
 class WebhookAuthenticationConfigurationArgs:
     def __init__(__self__, *,
-                 allowed_ip_range: Optional[pulumi.Input[_builtins.str]] = None,
-                 secret_token: Optional[pulumi.Input[_builtins.str]] = None):
+                 allowed_ip_range: pulumi.Input[Optional[_builtins.str]] = None,
+                 secret_token: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] allowed_ip_range: A valid CIDR block for `IP` filtering. Required for `IP`.
         :param pulumi.Input[_builtins.str] secret_token: The shared secret for the GitHub repository webhook. Set this as `secret` in your `github_repository_webhook`'s `configuration` block. Required for `GITHUB_HMAC`.
@@ -3087,26 +3197,26 @@ class WebhookAuthenticationConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="allowedIpRange")
-    def allowed_ip_range(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def allowed_ip_range(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A valid CIDR block for `IP` filtering. Required for `IP`.
         """
         return pulumi.get(self, "allowed_ip_range")
 
     @allowed_ip_range.setter
-    def allowed_ip_range(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def allowed_ip_range(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "allowed_ip_range", value)
 
     @_builtins.property
     @pulumi.getter(name="secretToken")
-    def secret_token(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def secret_token(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The shared secret for the GitHub repository webhook. Set this as `secret` in your `github_repository_webhook`'s `configuration` block. Required for `GITHUB_HMAC`.
         """
         return pulumi.get(self, "secret_token")
 
     @secret_token.setter
-    def secret_token(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def secret_token(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "secret_token", value)
 
 

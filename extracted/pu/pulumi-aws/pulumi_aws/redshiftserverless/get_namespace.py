@@ -73,7 +73,7 @@ class GetNamespaceResult:
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        Amazon Resource Name (ARN) of the Redshift Serverless Namespace.
+        ARN of the Redshift Serverless Namespace.
         """
         return pulumi.get(self, "arn")
 
@@ -89,7 +89,7 @@ class GetNamespaceResult:
     @pulumi.getter(name="defaultIamRoleArn")
     def default_iam_role_arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) of the IAM role to set as a default in the namespace. When specifying `default_iam_role_arn`, it also must be part of `iam_roles`.
+        ARN of the IAM role to set as a default in the namespace. When specifying `default_iam_role_arn`, it also must be part of `iam_roles`.
         """
         return pulumi.get(self, "default_iam_role_arn")
 
@@ -113,7 +113,7 @@ class GetNamespaceResult:
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> _builtins.str:
         """
-        The ARN of the Amazon Web Services Key Management Service key used to encrypt your data.
+        ARN of the Amazon Web Services KMS key used to encrypt your data.
         """
         return pulumi.get(self, "kms_key_id")
 
@@ -200,8 +200,8 @@ def get_namespace(namespace_name: Optional[_builtins.str] = None,
         namespace_id=pulumi.get(__ret__, 'namespace_id'),
         namespace_name=pulumi.get(__ret__, 'namespace_name'),
         region=pulumi.get(__ret__, 'region'))
-def get_namespace_output(namespace_name: Optional[pulumi.Input[_builtins.str]] = None,
-                         region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_namespace_output(namespace_name: pulumi.Input[Optional[_builtins.str]] = None,
+                         region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                          opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetNamespaceResult]:
     """
     Data source for managing an AWS Redshift Serverless Namespace.

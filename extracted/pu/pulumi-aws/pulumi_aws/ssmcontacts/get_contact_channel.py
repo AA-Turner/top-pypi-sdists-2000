@@ -70,7 +70,7 @@ class GetContactChannelResult:
     @pulumi.getter(name="contactId")
     def contact_id(self) -> _builtins.str:
         """
-        Amazon Resource Name (ARN) of the AWS SSM Contact that the contact channel belongs to.
+        ARN of the AWS SSM Contact that the contact channel belongs to.
         """
         return pulumi.get(self, "contact_id")
 
@@ -146,7 +146,7 @@ def get_contact_channel(arn: Optional[_builtins.str] = None,
     ```
 
 
-    :param _builtins.str arn: Amazon Resource Name (ARN) of the contact channel.
+    :param _builtins.str arn: ARN of the contact channel.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     """
     __args__ = dict()
@@ -164,8 +164,8 @@ def get_contact_channel(arn: Optional[_builtins.str] = None,
         name=pulumi.get(__ret__, 'name'),
         region=pulumi.get(__ret__, 'region'),
         type=pulumi.get(__ret__, 'type'))
-def get_contact_channel_output(arn: Optional[pulumi.Input[_builtins.str]] = None,
-                               region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_contact_channel_output(arn: pulumi.Input[Optional[_builtins.str]] = None,
+                               region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetContactChannelResult]:
     """
     Data source for managing an AWS SSM Contacts Contact Channel.
@@ -182,7 +182,7 @@ def get_contact_channel_output(arn: Optional[pulumi.Input[_builtins.str]] = None
     ```
 
 
-    :param _builtins.str arn: Amazon Resource Name (ARN) of the contact channel.
+    :param _builtins.str arn: ARN of the contact channel.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     """
     __args__ = dict()

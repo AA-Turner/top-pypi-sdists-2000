@@ -14,16 +14,85 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+from re import compile
+
 import numpy as np
 
 import cvxpy.interface as intf
 import cvxpy.settings as s
 from cvxpy.error import SolverError
 from cvxpy.reductions.solution import Solution, failure_solution
+from cvxpy.reductions.solvers import utilities
 from cvxpy.reductions.solvers.conic_solvers.conic_solver import (
     ConicSolver,
     dims_to_solver_dict,
 )
+from cvxpy.utilities.citations import CITATION_DICT
+
+PYTHON_LIST_SLICE_PATTERN = compile(r", \d+:\d+")
+VALID_COLUMN_NAME_PATTERN = compile(
+    r"^(?!st$|bounds$|min$|max$|bin$|binary$|gen$|semi$|end$)[a-df-zA-DF-Z\"!#$%&/}{,;?@_‘’'`|~]{1}[a-zA-Z0-9\"!#$%&/}{,;?@_‘’'`|~.=()<>]{,254}$"
+)
+INVALID_COLUMN_NAME_MESSAGE_TEMPLATE = (
+    "Invalid column name: {name}"
+    "\nA column name must:"
+    "\n- not be equal to one of the keywords: st, bounds, min, max, bin, binary, gen, semi or end"
+    "\n- not begin with a number, the letter e or E or any of the following characters: .=()<>[]"
+    "\n- be alphanumeric (a-z, A-Z, 0-9) or one of these symbols: \"!#$%&/}}{{,;?@_‘’'`|~.=()<>"
+    "\n- be no longer than 255 characters."
+)
+
+
+def validate_column_name(name: str) -> None:
+    """Check if the name is a valid column name."""
+    if not VALID_COLUMN_NAME_PATTERN.match(name):
+        raise ValueError(INVALID_COLUMN_NAME_MESSAGE_TEMPLATE.format(name=name))
+
+
+def strip_column_name_of_python_list_slice_notation(name: str) -> str:
+    """Strip python list slice notation -- i.e., the part after the comma in [0, 0:#]
+    - space and colon characters are not allowed in column names and
+    - 0:# part is not needed in X[0, 0:#] because we label X[0][0] ... X[0][#] individually
+    """
+    return PYTHON_LIST_SLICE_PATTERN.sub("", name)
+
+
+def sanitize_column_name(name: str) -> str:
+    """Replace square brackets with parentheses for HiGHS LP file compatibility.
+
+    HiGHS does not allow square brackets in column names in LP files because
+    they are used to define quadratic objectives.
+    """
+    return name.replace("[", "(").replace("]", ")")
+
+
+def collect_column_names(variable, column_names):
+    """Recursively collect variable names."""
+    if variable.ndim == 0:  # scalar
+        column_names.append(sanitize_column_name(variable.name()))
+    elif variable.ndim == 1:  # simple array
+        var_name_prefix = strip_column_name_of_python_list_slice_notation(variable.name())
+        var_name_prefix = sanitize_column_name(var_name_prefix)
+        column_names.extend([f"{var_name_prefix}({v})" for v in range(variable.size)])
+    else:  # multi-dimensional array
+        for var in variable:
+            collect_column_names(var, column_names)  # recursive call
+    # Checking the validity of only the last inserted name is sufficient because all var
+    # names are derived from the same var name prefix and the last one is the longest
+    validate_column_name(column_names[-1])
+
+
+def set_column_names_from_variables(lp, variables):
+    """Set column names on HiGHS LP model from CVXPY variables.
+
+    Args:
+        lp: HiGHS LP model (model.lp_)
+        variables: List of CVXPY variables from data[s.PARAM_PROB].variables
+    """
+    column_names = []
+    for variable in variables:
+        collect_column_names(variable, column_names)
+    lp.col_names_ = column_names
 
 
 def unpack_highs_options_inplace(solver_opts) -> None:
@@ -41,6 +110,7 @@ class HIGHS(ConicSolver):
 
     # Solver capabilities.
     MIP_CAPABLE = True
+    BOUNDED_VARIABLES = True
     SUPPORTED_CONSTRAINTS = ConicSolver.SUPPORTED_CONSTRAINTS
     MI_SUPPORTED_CONSTRAINTS = SUPPORTED_CONSTRAINTS
 
@@ -64,9 +134,7 @@ class HIGHS(ConicSolver):
         return s.HIGHS
 
     def import_solver(self) -> None:
-        import highspy
-
-        highspy
+        import highspy  # noqa: F401
 
     def accepts(self, problem) -> bool:
         """Can HiGHS solve the problem?"""
@@ -103,14 +171,26 @@ class HIGHS(ConicSolver):
         if status in s.SOLUTION_PRESENT:
             opt_val = results["info"].objective_function_value + inverse_data[s.OFFSET]
             primal_vars = {
+                # inverse_data[HIGHS.VAR_ID]: ...
+                # I don't understand how the line below works, the other conif solvers have
+                # something similar to the commented line above for the "key".
                 HIGHS.VAR_ID: intf.DEFAULT_INTF.const_to_matrix(
                     np.array(results["solution"].col_value)
                 )
             }
             # add duals if not a MIP.
             dual_vars = None
-            if not inverse_data["is_mip"]:
-                dual_vars = {HIGHS.DUAL_VAR_ID: -np.array(results["solution"].row_dual)}
+            if not inverse_data['is_mip']:
+                # The dual values are retrieved in the order that the
+                # constraints were added in solve_via_data() below. We
+                # must be careful to map them to inverse_data[EQ_CONSTR]
+                # followed by inverse_data[NEQ_CONSTR] accordingly.
+                y = -np.array(results["solution"].row_dual)
+                dual_vars = utilities.get_dual_values(
+                    y,
+                    utilities.extract_dual_value,
+                    inverse_data[HIGHS.EQ_CONSTR] + inverse_data[HIGHS.NEQ_CONSTR])
+
             attr[s.NUM_ITERS] = (
                 results["info"].ipm_iteration_count
                 + results["info"].crossover_iteration_count
@@ -120,7 +200,17 @@ class HIGHS(ConicSolver):
             )
             sol = Solution(status, opt_val, primal_vars, dual_vars, attr)
         else:
-            sol = failure_solution(status, attr)
+            if status == s.INFEASIBLE:
+                dual_ray = -np.array(results["dual_ray"][2])
+                dual_vars = utilities.get_dual_values(
+                    dual_ray,
+                    utilities.extract_dual_value,
+                    inverse_data[HIGHS.EQ_CONSTR] + inverse_data[HIGHS.NEQ_CONSTR])
+            else:
+                # E.g., could be UNBOUNDED. TODO: Later we might propagate the primal ray for
+                # unbounded problems.
+                dual_vars = {}
+            sol = failure_solution(status, attr, dual_vars)
         return sol
 
     def solve_via_data(
@@ -193,8 +283,10 @@ class HIGHS(ConicSolver):
         lp.a_matrix_.value_ = A.data
 
         # Define Variable bounds
-        col_lower = -inf * np.ones(shape=lp.num_col_, dtype=c.dtype)
-        col_upper = inf * np.ones(shape=lp.num_col_, dtype=c.dtype)
+        lb = data[s.LOWER_BOUNDS]
+        ub = data[s.UPPER_BOUNDS]
+        col_lower = np.full(lp.num_col_, -inf, dtype=c.dtype) if lb is None else lb.copy()
+        col_upper = np.full(lp.num_col_, inf, dtype=c.dtype) if ub is None else ub.copy()
         # update col_lower and col_upper to account for boolean variables,
         # also set integrality_ for boolean or integers variables
         if data[s.BOOL_IDX] or data[s.INT_IDX]:
@@ -204,24 +296,38 @@ class HIGHS(ConicSolver):
                 for ind in data[s.BOOL_IDX]:
                     integrality[ind] = hp.HighsVarType.kInteger
                 bool_mask = np.array(data[s.BOOL_IDX], dtype=int)
-                col_lower[bool_mask] = 0
-                col_upper[bool_mask] = 1
+                col_lower[bool_mask] = np.maximum(col_lower[bool_mask], 0)
+                col_upper[bool_mask] = np.minimum(col_upper[bool_mask], 1)
             for ind in data[s.INT_IDX]:
                 integrality[ind] = hp.HighsVarType.kInteger
             lp.integrality_ = integrality
         lp.col_lower_ = col_lower
         lp.col_upper_ = col_upper
 
+        solver = hp.Highs()
+
         # setup options
         unpack_highs_options_inplace(solver_opts)
-        options = hp.HighsOptions()
-        options.log_to_console = verbose
-        for key, value in solver_opts.items():
-            setattr(options, key, value)
+        write_model_file = solver_opts.pop("write_model_file", None)
+        solver.setOptionValue("log_to_console", verbose)
+        for name, value in solver_opts.items():
+            # note that calling setOptionValue directly on the solver
+            # allows one to pass advanced options that aren't available
+            # on the HighOptions class (e.g., presolve_rule_off)
+            if solver.setOptionValue(name, value) == hp.HighsStatus.kError:
+                raise ValueError(
+                    f"HIGHS returned status kError for option (name, value): ({name}, {value})"
+                )
 
-        solver = hp.Highs()
-        solver.passOptions(options)
+        if write_model_file:
+            # TODO: Names can be collected upstream more systematically
+            # (or in the parent class) to be used by all solvers.
+            set_column_names_from_variables(lp, data[s.PARAM_PROB].variables)
+
         solver.passModel(model)
+
+        if write_model_file:
+            solver.writeModel(write_model_file)
 
         if warm_start and solver_cache is not None and self.name() in solver_cache:
             old_solver, old_data, old_result = solver_cache[self.name()]
@@ -239,6 +345,8 @@ class HIGHS(ConicSolver):
                 "model_status": solver.getModelStatus().name,
                 "run_time": solver.getRunTime(),
             }
+            if results["model_status"] == "kInfeasible":
+                results["dual_ray"] = solver.getDualRay()
         except ValueError as e:
             raise SolverError(e)
 
@@ -246,3 +354,13 @@ class HIGHS(ConicSolver):
             solver_cache[self.name()] = (solver, data, results)
 
         return results
+
+    def cite(self, data):
+        """Returns bibtex citation for the solver.
+
+        Parameters
+        ----------
+        data : dict
+            Data generated via an apply call.
+        """
+        return CITATION_DICT["HIGHS"]

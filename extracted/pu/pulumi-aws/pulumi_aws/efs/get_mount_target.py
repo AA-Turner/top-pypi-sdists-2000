@@ -112,7 +112,7 @@ class GetMountTargetResult:
     @pulumi.getter(name="fileSystemArn")
     def file_system_arn(self) -> _builtins.str:
         """
-        Amazon Resource Name of the file system for which the mount target is intended.
+        ARN of the file system for which the mount target is intended.
         """
         return pulumi.get(self, "file_system_arn")
 
@@ -282,10 +282,10 @@ def get_mount_target(access_point_id: Optional[_builtins.str] = None,
         region=pulumi.get(__ret__, 'region'),
         security_groups=pulumi.get(__ret__, 'security_groups'),
         subnet_id=pulumi.get(__ret__, 'subnet_id'))
-def get_mount_target_output(access_point_id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                            file_system_id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                            mount_target_id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                            region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_mount_target_output(access_point_id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                            file_system_id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                            mount_target_id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                            region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                             opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetMountTargetResult]:
     """
     Provides information about an Elastic File System Mount Target (EFS).

@@ -26,17 +26,18 @@ class ChannelArgs:
                  encoder_settings: pulumi.Input['ChannelEncoderSettingsArgs'],
                  input_attachments: pulumi.Input[Sequence[pulumi.Input['ChannelInputAttachmentArgs']]],
                  input_specification: pulumi.Input['ChannelInputSpecificationArgs'],
-                 cdi_input_specification: Optional[pulumi.Input['ChannelCdiInputSpecificationArgs']] = None,
-                 log_level: Optional[pulumi.Input[_builtins.str]] = None,
-                 maintenance: Optional[pulumi.Input['ChannelMaintenanceArgs']] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 start_channel: Optional[pulumi.Input[_builtins.bool]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 vpc: Optional[pulumi.Input['ChannelVpcArgs']] = None):
+                 cdi_input_specification: pulumi.Input[Optional['ChannelCdiInputSpecificationArgs']] = None,
+                 log_level: pulumi.Input[Optional[_builtins.str]] = None,
+                 maintenance: pulumi.Input[Optional['ChannelMaintenanceArgs']] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 start_channel: pulumi.Input[Optional[_builtins.bool]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 vpc: pulumi.Input[Optional['ChannelVpcArgs']] = None):
         """
         The set of arguments for constructing a Channel resource.
+
         :param pulumi.Input[_builtins.str] channel_class: Concise argument description.
         :param pulumi.Input[Sequence[pulumi.Input['ChannelDestinationArgs']]] destinations: Destinations for channel. See Destinations for more details.
         :param pulumi.Input['ChannelEncoderSettingsArgs'] encoder_settings: Encoder settings. See Encoder Settings for more details.
@@ -140,43 +141,43 @@ class ChannelArgs:
 
     @_builtins.property
     @pulumi.getter(name="cdiInputSpecification")
-    def cdi_input_specification(self) -> Optional[pulumi.Input['ChannelCdiInputSpecificationArgs']]:
+    def cdi_input_specification(self) -> pulumi.Input[Optional['ChannelCdiInputSpecificationArgs']]:
         """
         Specification of CDI inputs for this channel. See CDI Input Specification for more details.
         """
         return pulumi.get(self, "cdi_input_specification")
 
     @cdi_input_specification.setter
-    def cdi_input_specification(self, value: Optional[pulumi.Input['ChannelCdiInputSpecificationArgs']]):
+    def cdi_input_specification(self, value: pulumi.Input[Optional['ChannelCdiInputSpecificationArgs']]):
         pulumi.set(self, "cdi_input_specification", value)
 
     @_builtins.property
     @pulumi.getter(name="logLevel")
-    def log_level(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def log_level(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The log level to write to Cloudwatch logs.
         """
         return pulumi.get(self, "log_level")
 
     @log_level.setter
-    def log_level(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def log_level(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "log_level", value)
 
     @_builtins.property
     @pulumi.getter
-    def maintenance(self) -> Optional[pulumi.Input['ChannelMaintenanceArgs']]:
+    def maintenance(self) -> pulumi.Input[Optional['ChannelMaintenanceArgs']]:
         """
         Maintenance settings for this channel. See Maintenance for more details.
         """
         return pulumi.get(self, "maintenance")
 
     @maintenance.setter
-    def maintenance(self, value: Optional[pulumi.Input['ChannelMaintenanceArgs']]):
+    def maintenance(self, value: pulumi.Input[Optional['ChannelMaintenanceArgs']]):
         pulumi.set(self, "maintenance", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the Channel.
 
@@ -185,92 +186,93 @@ class ChannelArgs:
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="roleArn")
-    def role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Concise argument description.
         """
         return pulumi.get(self, "role_arn")
 
     @role_arn.setter
-    def role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "role_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="startChannel")
-    def start_channel(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def start_channel(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to start/stop channel. Default: `false`
         """
         return pulumi.get(self, "start_channel")
 
     @start_channel.setter
-    def start_channel(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def start_channel(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "start_channel", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags to assign to the channel. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter
-    def vpc(self) -> Optional[pulumi.Input['ChannelVpcArgs']]:
+    def vpc(self) -> pulumi.Input[Optional['ChannelVpcArgs']]:
         """
         Settings for the VPC outputs. See VPC for more details.
         """
         return pulumi.get(self, "vpc")
 
     @vpc.setter
-    def vpc(self, value: Optional[pulumi.Input['ChannelVpcArgs']]):
+    def vpc(self, value: pulumi.Input[Optional['ChannelVpcArgs']]):
         pulumi.set(self, "vpc", value)
 
 
 @pulumi.input_type
 class _ChannelState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 cdi_input_specification: Optional[pulumi.Input['ChannelCdiInputSpecificationArgs']] = None,
-                 channel_class: Optional[pulumi.Input[_builtins.str]] = None,
-                 channel_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 destinations: Optional[pulumi.Input[Sequence[pulumi.Input['ChannelDestinationArgs']]]] = None,
-                 encoder_settings: Optional[pulumi.Input['ChannelEncoderSettingsArgs']] = None,
-                 input_attachments: Optional[pulumi.Input[Sequence[pulumi.Input['ChannelInputAttachmentArgs']]]] = None,
-                 input_specification: Optional[pulumi.Input['ChannelInputSpecificationArgs']] = None,
-                 log_level: Optional[pulumi.Input[_builtins.str]] = None,
-                 maintenance: Optional[pulumi.Input['ChannelMaintenanceArgs']] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 start_channel: Optional[pulumi.Input[_builtins.bool]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 vpc: Optional[pulumi.Input['ChannelVpcArgs']] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 cdi_input_specification: pulumi.Input[Optional['ChannelCdiInputSpecificationArgs']] = None,
+                 channel_class: pulumi.Input[Optional[_builtins.str]] = None,
+                 channel_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 destinations: pulumi.Input[Optional[Sequence[pulumi.Input['ChannelDestinationArgs']]]] = None,
+                 encoder_settings: pulumi.Input[Optional['ChannelEncoderSettingsArgs']] = None,
+                 input_attachments: pulumi.Input[Optional[Sequence[pulumi.Input['ChannelInputAttachmentArgs']]]] = None,
+                 input_specification: pulumi.Input[Optional['ChannelInputSpecificationArgs']] = None,
+                 log_level: pulumi.Input[Optional[_builtins.str]] = None,
+                 maintenance: pulumi.Input[Optional['ChannelMaintenanceArgs']] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 start_channel: pulumi.Input[Optional[_builtins.bool]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 vpc: pulumi.Input[Optional['ChannelVpcArgs']] = None):
         """
         Input properties used for looking up and filtering Channel resources.
+
         :param pulumi.Input[_builtins.str] arn: ARN of the Channel.
         :param pulumi.Input['ChannelCdiInputSpecificationArgs'] cdi_input_specification: Specification of CDI inputs for this channel. See CDI Input Specification for more details.
         :param pulumi.Input[_builtins.str] channel_class: Concise argument description.
@@ -327,127 +329,127 @@ class _ChannelState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the Channel.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="cdiInputSpecification")
-    def cdi_input_specification(self) -> Optional[pulumi.Input['ChannelCdiInputSpecificationArgs']]:
+    def cdi_input_specification(self) -> pulumi.Input[Optional['ChannelCdiInputSpecificationArgs']]:
         """
         Specification of CDI inputs for this channel. See CDI Input Specification for more details.
         """
         return pulumi.get(self, "cdi_input_specification")
 
     @cdi_input_specification.setter
-    def cdi_input_specification(self, value: Optional[pulumi.Input['ChannelCdiInputSpecificationArgs']]):
+    def cdi_input_specification(self, value: pulumi.Input[Optional['ChannelCdiInputSpecificationArgs']]):
         pulumi.set(self, "cdi_input_specification", value)
 
     @_builtins.property
     @pulumi.getter(name="channelClass")
-    def channel_class(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def channel_class(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Concise argument description.
         """
         return pulumi.get(self, "channel_class")
 
     @channel_class.setter
-    def channel_class(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def channel_class(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "channel_class", value)
 
     @_builtins.property
     @pulumi.getter(name="channelId")
-    def channel_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def channel_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ID of the Channel.
         """
         return pulumi.get(self, "channel_id")
 
     @channel_id.setter
-    def channel_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def channel_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "channel_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def destinations(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ChannelDestinationArgs']]]]:
+    def destinations(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ChannelDestinationArgs']]]]:
         """
         Destinations for channel. See Destinations for more details.
         """
         return pulumi.get(self, "destinations")
 
     @destinations.setter
-    def destinations(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ChannelDestinationArgs']]]]):
+    def destinations(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ChannelDestinationArgs']]]]):
         pulumi.set(self, "destinations", value)
 
     @_builtins.property
     @pulumi.getter(name="encoderSettings")
-    def encoder_settings(self) -> Optional[pulumi.Input['ChannelEncoderSettingsArgs']]:
+    def encoder_settings(self) -> pulumi.Input[Optional['ChannelEncoderSettingsArgs']]:
         """
         Encoder settings. See Encoder Settings for more details.
         """
         return pulumi.get(self, "encoder_settings")
 
     @encoder_settings.setter
-    def encoder_settings(self, value: Optional[pulumi.Input['ChannelEncoderSettingsArgs']]):
+    def encoder_settings(self, value: pulumi.Input[Optional['ChannelEncoderSettingsArgs']]):
         pulumi.set(self, "encoder_settings", value)
 
     @_builtins.property
     @pulumi.getter(name="inputAttachments")
-    def input_attachments(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ChannelInputAttachmentArgs']]]]:
+    def input_attachments(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['ChannelInputAttachmentArgs']]]]:
         """
         Input attachments for the channel. See Input Attachments for more details.
         """
         return pulumi.get(self, "input_attachments")
 
     @input_attachments.setter
-    def input_attachments(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ChannelInputAttachmentArgs']]]]):
+    def input_attachments(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['ChannelInputAttachmentArgs']]]]):
         pulumi.set(self, "input_attachments", value)
 
     @_builtins.property
     @pulumi.getter(name="inputSpecification")
-    def input_specification(self) -> Optional[pulumi.Input['ChannelInputSpecificationArgs']]:
+    def input_specification(self) -> pulumi.Input[Optional['ChannelInputSpecificationArgs']]:
         """
         Specification of network and file inputs for the channel.
         """
         return pulumi.get(self, "input_specification")
 
     @input_specification.setter
-    def input_specification(self, value: Optional[pulumi.Input['ChannelInputSpecificationArgs']]):
+    def input_specification(self, value: pulumi.Input[Optional['ChannelInputSpecificationArgs']]):
         pulumi.set(self, "input_specification", value)
 
     @_builtins.property
     @pulumi.getter(name="logLevel")
-    def log_level(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def log_level(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The log level to write to Cloudwatch logs.
         """
         return pulumi.get(self, "log_level")
 
     @log_level.setter
-    def log_level(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def log_level(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "log_level", value)
 
     @_builtins.property
     @pulumi.getter
-    def maintenance(self) -> Optional[pulumi.Input['ChannelMaintenanceArgs']]:
+    def maintenance(self) -> pulumi.Input[Optional['ChannelMaintenanceArgs']]:
         """
         Maintenance settings for this channel. See Maintenance for more details.
         """
         return pulumi.get(self, "maintenance")
 
     @maintenance.setter
-    def maintenance(self, value: Optional[pulumi.Input['ChannelMaintenanceArgs']]):
+    def maintenance(self, value: pulumi.Input[Optional['ChannelMaintenanceArgs']]):
         pulumi.set(self, "maintenance", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the Channel.
 
@@ -456,76 +458,76 @@ class _ChannelState:
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="roleArn")
-    def role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Concise argument description.
         """
         return pulumi.get(self, "role_arn")
 
     @role_arn.setter
-    def role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "role_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="startChannel")
-    def start_channel(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def start_channel(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to start/stop channel. Default: `false`
         """
         return pulumi.get(self, "start_channel")
 
     @start_channel.setter
-    def start_channel(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def start_channel(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "start_channel", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags to assign to the channel. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter
-    def vpc(self) -> Optional[pulumi.Input['ChannelVpcArgs']]:
+    def vpc(self) -> pulumi.Input[Optional['ChannelVpcArgs']]:
         """
         Settings for the VPC outputs. See VPC for more details.
         """
         return pulumi.get(self, "vpc")
 
     @vpc.setter
-    def vpc(self, value: Optional[pulumi.Input['ChannelVpcArgs']]):
+    def vpc(self, value: pulumi.Input[Optional['ChannelVpcArgs']]):
         pulumi.set(self, "vpc", value)
 
 
@@ -535,20 +537,20 @@ class Channel(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 cdi_input_specification: Optional[pulumi.Input[Union['ChannelCdiInputSpecificationArgs', 'ChannelCdiInputSpecificationArgsDict']]] = None,
-                 channel_class: Optional[pulumi.Input[_builtins.str]] = None,
-                 destinations: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ChannelDestinationArgs', 'ChannelDestinationArgsDict']]]]] = None,
-                 encoder_settings: Optional[pulumi.Input[Union['ChannelEncoderSettingsArgs', 'ChannelEncoderSettingsArgsDict']]] = None,
-                 input_attachments: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ChannelInputAttachmentArgs', 'ChannelInputAttachmentArgsDict']]]]] = None,
-                 input_specification: Optional[pulumi.Input[Union['ChannelInputSpecificationArgs', 'ChannelInputSpecificationArgsDict']]] = None,
-                 log_level: Optional[pulumi.Input[_builtins.str]] = None,
-                 maintenance: Optional[pulumi.Input[Union['ChannelMaintenanceArgs', 'ChannelMaintenanceArgsDict']]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 start_channel: Optional[pulumi.Input[_builtins.bool]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 vpc: Optional[pulumi.Input[Union['ChannelVpcArgs', 'ChannelVpcArgsDict']]] = None,
+                 cdi_input_specification: pulumi.Input[Optional[Union['ChannelCdiInputSpecificationArgs', 'ChannelCdiInputSpecificationArgsDict']]] = None,
+                 channel_class: pulumi.Input[Optional[_builtins.str]] = None,
+                 destinations: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ChannelDestinationArgs', 'ChannelDestinationArgsDict']]]]] = None,
+                 encoder_settings: pulumi.Input[Optional[Union['ChannelEncoderSettingsArgs', 'ChannelEncoderSettingsArgsDict']]] = None,
+                 input_attachments: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ChannelInputAttachmentArgs', 'ChannelInputAttachmentArgsDict']]]]] = None,
+                 input_specification: pulumi.Input[Optional[Union['ChannelInputSpecificationArgs', 'ChannelInputSpecificationArgsDict']]] = None,
+                 log_level: pulumi.Input[Optional[_builtins.str]] = None,
+                 maintenance: pulumi.Input[Optional[Union['ChannelMaintenanceArgs', 'ChannelMaintenanceArgsDict']]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 start_channel: pulumi.Input[Optional[_builtins.bool]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 vpc: pulumi.Input[Optional[Union['ChannelVpcArgs', 'ChannelVpcArgsDict']]] = None,
                  __props__=None):
         """
         Resource for managing an AWS MediaLive Channel.
@@ -562,29 +564,11 @@ class Channel(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.medialive.Channel("example",
-            name="example-channel",
-            channel_class="STANDARD",
-            role_arn=example_aws_iam_role["arn"],
             input_specification={
                 "codec": "AVC",
                 "input_resolution": "HD",
                 "maximum_bitrate": "MAX_20_MBPS",
             },
-            input_attachments=[{
-                "input_attachment_name": "example-input",
-                "input_id": example_aws_medialive_input["id"],
-            }],
-            destinations=[{
-                "id": "destination",
-                "settings": [
-                    {
-                        "url": f"s3://{main['id']}/test1",
-                    },
-                    {
-                        "url": f"s3://{main2['id']}/test2",
-                    },
-                ],
-            }],
             encoder_settings={
                 "timecode_config": {
                     "source": "EMBEDDED",
@@ -592,9 +576,6 @@ class Channel(pulumi.CustomResource):
                 "audio_descriptions": [{
                     "audio_selector_name": "example audio selector",
                     "name": "audio-selector",
-                }],
-                "video_descriptions": [{
-                    "name": "example-video",
                 }],
                 "output_groups": [{
                     "output_group_settings": {
@@ -605,13 +586,8 @@ class Channel(pulumi.CustomResource):
                         }],
                     },
                     "outputs": [{
-                        "output_name": "example-name",
-                        "video_description_name": "example-video",
-                        "audio_description_names": ["audio-selector"],
                         "output_settings": {
                             "archive_output_settings": {
-                                "name_modifier": "_1",
-                                "extension": "m2ts",
                                 "container_settings": {
                                     "m2ts_settings": {
                                         "audio_buffer_model": "ATSC",
@@ -619,20 +595,58 @@ class Channel(pulumi.CustomResource):
                                         "rate_mode": "CBR",
                                     },
                                 },
+                                "name_modifier": "_1",
+                                "extension": "m2ts",
                             },
                         },
+                        "output_name": "example-name",
+                        "video_description_name": "example-video",
+                        "audio_description_names": ["audio-selector"],
                     }],
                 }],
-            })
+                "video_descriptions": [{
+                    "name": "example-video",
+                }],
+            },
+            destinations=[{
+                "settings": [
+                    {
+                        "url": f"s3://{main['id']}/test1",
+                    },
+                    {
+                        "url": f"s3://{main2['id']}/test2",
+                    },
+                ],
+                "id": "destination",
+            }],
+            input_attachments=[{
+                "input_attachment_name": "example-input",
+                "input_id": example_aws_medialive_input["id"],
+            }],
+            name="example-channel",
+            channel_class="STANDARD",
+            role_arn=example_aws_iam_role["arn"])
         ```
 
         ## Import
+
+        ### Identity Schema
+
+        #### Required
+
+        * `channel_id` (String) ID of the MediaLive Channel.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
 
         Using `pulumi import`, import MediaLive Channel using the `channel_id`. For example:
 
         ```sh
         $ pulumi import aws:medialive/channel:Channel example 1234567
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -671,29 +685,11 @@ class Channel(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.medialive.Channel("example",
-            name="example-channel",
-            channel_class="STANDARD",
-            role_arn=example_aws_iam_role["arn"],
             input_specification={
                 "codec": "AVC",
                 "input_resolution": "HD",
                 "maximum_bitrate": "MAX_20_MBPS",
             },
-            input_attachments=[{
-                "input_attachment_name": "example-input",
-                "input_id": example_aws_medialive_input["id"],
-            }],
-            destinations=[{
-                "id": "destination",
-                "settings": [
-                    {
-                        "url": f"s3://{main['id']}/test1",
-                    },
-                    {
-                        "url": f"s3://{main2['id']}/test2",
-                    },
-                ],
-            }],
             encoder_settings={
                 "timecode_config": {
                     "source": "EMBEDDED",
@@ -701,9 +697,6 @@ class Channel(pulumi.CustomResource):
                 "audio_descriptions": [{
                     "audio_selector_name": "example audio selector",
                     "name": "audio-selector",
-                }],
-                "video_descriptions": [{
-                    "name": "example-video",
                 }],
                 "output_groups": [{
                     "output_group_settings": {
@@ -714,13 +707,8 @@ class Channel(pulumi.CustomResource):
                         }],
                     },
                     "outputs": [{
-                        "output_name": "example-name",
-                        "video_description_name": "example-video",
-                        "audio_description_names": ["audio-selector"],
                         "output_settings": {
                             "archive_output_settings": {
-                                "name_modifier": "_1",
-                                "extension": "m2ts",
                                 "container_settings": {
                                     "m2ts_settings": {
                                         "audio_buffer_model": "ATSC",
@@ -728,20 +716,58 @@ class Channel(pulumi.CustomResource):
                                         "rate_mode": "CBR",
                                     },
                                 },
+                                "name_modifier": "_1",
+                                "extension": "m2ts",
                             },
                         },
+                        "output_name": "example-name",
+                        "video_description_name": "example-video",
+                        "audio_description_names": ["audio-selector"],
                     }],
                 }],
-            })
+                "video_descriptions": [{
+                    "name": "example-video",
+                }],
+            },
+            destinations=[{
+                "settings": [
+                    {
+                        "url": f"s3://{main['id']}/test1",
+                    },
+                    {
+                        "url": f"s3://{main2['id']}/test2",
+                    },
+                ],
+                "id": "destination",
+            }],
+            input_attachments=[{
+                "input_attachment_name": "example-input",
+                "input_id": example_aws_medialive_input["id"],
+            }],
+            name="example-channel",
+            channel_class="STANDARD",
+            role_arn=example_aws_iam_role["arn"])
         ```
 
         ## Import
+
+        ### Identity Schema
+
+        #### Required
+
+        * `channel_id` (String) ID of the MediaLive Channel.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
 
         Using `pulumi import`, import MediaLive Channel using the `channel_id`. For example:
 
         ```sh
         $ pulumi import aws:medialive/channel:Channel example 1234567
         ```
+
 
         :param str resource_name: The name of the resource.
         :param ChannelArgs args: The arguments to use to populate this resource's properties.
@@ -758,20 +784,20 @@ class Channel(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 cdi_input_specification: Optional[pulumi.Input[Union['ChannelCdiInputSpecificationArgs', 'ChannelCdiInputSpecificationArgsDict']]] = None,
-                 channel_class: Optional[pulumi.Input[_builtins.str]] = None,
-                 destinations: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ChannelDestinationArgs', 'ChannelDestinationArgsDict']]]]] = None,
-                 encoder_settings: Optional[pulumi.Input[Union['ChannelEncoderSettingsArgs', 'ChannelEncoderSettingsArgsDict']]] = None,
-                 input_attachments: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ChannelInputAttachmentArgs', 'ChannelInputAttachmentArgsDict']]]]] = None,
-                 input_specification: Optional[pulumi.Input[Union['ChannelInputSpecificationArgs', 'ChannelInputSpecificationArgsDict']]] = None,
-                 log_level: Optional[pulumi.Input[_builtins.str]] = None,
-                 maintenance: Optional[pulumi.Input[Union['ChannelMaintenanceArgs', 'ChannelMaintenanceArgsDict']]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 start_channel: Optional[pulumi.Input[_builtins.bool]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 vpc: Optional[pulumi.Input[Union['ChannelVpcArgs', 'ChannelVpcArgsDict']]] = None,
+                 cdi_input_specification: pulumi.Input[Optional[Union['ChannelCdiInputSpecificationArgs', 'ChannelCdiInputSpecificationArgsDict']]] = None,
+                 channel_class: pulumi.Input[Optional[_builtins.str]] = None,
+                 destinations: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ChannelDestinationArgs', 'ChannelDestinationArgsDict']]]]] = None,
+                 encoder_settings: pulumi.Input[Optional[Union['ChannelEncoderSettingsArgs', 'ChannelEncoderSettingsArgsDict']]] = None,
+                 input_attachments: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ChannelInputAttachmentArgs', 'ChannelInputAttachmentArgsDict']]]]] = None,
+                 input_specification: pulumi.Input[Optional[Union['ChannelInputSpecificationArgs', 'ChannelInputSpecificationArgsDict']]] = None,
+                 log_level: pulumi.Input[Optional[_builtins.str]] = None,
+                 maintenance: pulumi.Input[Optional[Union['ChannelMaintenanceArgs', 'ChannelMaintenanceArgsDict']]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 start_channel: pulumi.Input[Optional[_builtins.bool]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 vpc: pulumi.Input[Optional[Union['ChannelVpcArgs', 'ChannelVpcArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -818,23 +844,23 @@ class Channel(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            cdi_input_specification: Optional[pulumi.Input[Union['ChannelCdiInputSpecificationArgs', 'ChannelCdiInputSpecificationArgsDict']]] = None,
-            channel_class: Optional[pulumi.Input[_builtins.str]] = None,
-            channel_id: Optional[pulumi.Input[_builtins.str]] = None,
-            destinations: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ChannelDestinationArgs', 'ChannelDestinationArgsDict']]]]] = None,
-            encoder_settings: Optional[pulumi.Input[Union['ChannelEncoderSettingsArgs', 'ChannelEncoderSettingsArgsDict']]] = None,
-            input_attachments: Optional[pulumi.Input[Sequence[pulumi.Input[Union['ChannelInputAttachmentArgs', 'ChannelInputAttachmentArgsDict']]]]] = None,
-            input_specification: Optional[pulumi.Input[Union['ChannelInputSpecificationArgs', 'ChannelInputSpecificationArgsDict']]] = None,
-            log_level: Optional[pulumi.Input[_builtins.str]] = None,
-            maintenance: Optional[pulumi.Input[Union['ChannelMaintenanceArgs', 'ChannelMaintenanceArgsDict']]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            start_channel: Optional[pulumi.Input[_builtins.bool]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            vpc: Optional[pulumi.Input[Union['ChannelVpcArgs', 'ChannelVpcArgsDict']]] = None) -> 'Channel':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            cdi_input_specification: pulumi.Input[Optional[Union['ChannelCdiInputSpecificationArgs', 'ChannelCdiInputSpecificationArgsDict']]] = None,
+            channel_class: pulumi.Input[Optional[_builtins.str]] = None,
+            channel_id: pulumi.Input[Optional[_builtins.str]] = None,
+            destinations: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ChannelDestinationArgs', 'ChannelDestinationArgsDict']]]]] = None,
+            encoder_settings: pulumi.Input[Optional[Union['ChannelEncoderSettingsArgs', 'ChannelEncoderSettingsArgsDict']]] = None,
+            input_attachments: pulumi.Input[Optional[Sequence[pulumi.Input[Union['ChannelInputAttachmentArgs', 'ChannelInputAttachmentArgsDict']]]]] = None,
+            input_specification: pulumi.Input[Optional[Union['ChannelInputSpecificationArgs', 'ChannelInputSpecificationArgsDict']]] = None,
+            log_level: pulumi.Input[Optional[_builtins.str]] = None,
+            maintenance: pulumi.Input[Optional[Union['ChannelMaintenanceArgs', 'ChannelMaintenanceArgsDict']]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            start_channel: pulumi.Input[Optional[_builtins.bool]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            vpc: pulumi.Input[Optional[Union['ChannelVpcArgs', 'ChannelVpcArgsDict']]] = None) -> 'Channel':
         """
         Get an existing Channel resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

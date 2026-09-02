@@ -32,15 +32,42 @@ _SKIP(test_validation)
 #endif
 
 /* solve SDPs, requires blas / lapack */
-#if defined(USE_LAPACK) && NO_READ_WRITE == 0
-#include "problems/random_prob.h"
-#include "problems/rob_gauss_cov_est.h"
+#if defined(USE_LAPACK)
+#include "problems/complex_PSD.h"
+#include "problems/sd_and_complex_sd.h"
 #else
-_SKIP(rob_gauss_cov_est)
-_SKIP(random_prob)
+_SKIP(complex_PSD)
+_SKIP(sd_and_complex_sd)
 #endif
 
-#if NO_READ_WRITE == 0 /* reads / writes */
+/* solve SDPs from data files, requires blas / lapack */
+#if defined(USE_LAPACK) && NO_READ_WRITE == 0
+#include "problems/random_prob.h"
+#include "problems/rob_gauss_cov_est.h" /* tests writing to data file */
+#else
+_SKIP(random_prob)
+_SKIP(rob_gauss_cov_est)
+#endif
+
+/* solve SDPs with spectral cones, requires blas / lapack */
+#if defined(USE_SPECTRAL_CONES)
+#include "spectral_cones_problems/exp_design.h"
+#include "spectral_cones_problems/graph_partitioning.h"
+#include "spectral_cones_problems/robust_pca.h"
+#include "spectral_cones_problems/several_logdet_cones.h"
+#include "spectral_cones_problems/several_nuc_cone.h"
+#include "spectral_cones_problems/several_sum_largest.h"
+#else
+_SKIP(exp_design)
+_SKIP(robust_pca)
+_SKIP(graph_partitioning)
+_SKIP(several_sum_largest)
+_SKIP(several_nuc_cone)
+_SKIP(several_logdet_cones)
+#endif
+
+/* solves problems from data files */
+#if NO_READ_WRITE == 0
 #include "problems/hs21_tiny_qp_rw.h"
 #include "problems/max_ent.h"
 #include "problems/mpc_bug.h"
@@ -56,6 +83,8 @@ static const char *all_tests(void) {
   mu_run_test(small_lp);
   mu_run_test(small_qp);
   mu_run_test(rob_gauss_cov_est);
+  mu_run_test(complex_PSD);
+  mu_run_test(sd_and_complex_sd);
   mu_run_test(hs21_tiny_qp);
   mu_run_test(hs21_tiny_qp_rw);
   mu_run_test(qafiro_tiny_qp);
@@ -65,6 +94,12 @@ static const char *all_tests(void) {
   mu_run_test(max_ent);
   mu_run_test(mpc_bug);
   mu_run_test(test_exp_cone);
+  mu_run_test(exp_design);
+  mu_run_test(robust_pca);
+  mu_run_test(graph_partitioning);
+  mu_run_test(several_sum_largest);
+  mu_run_test(several_nuc_cone);
+  mu_run_test(several_logdet_cones);
   return 0;
 }
 int main(void) {

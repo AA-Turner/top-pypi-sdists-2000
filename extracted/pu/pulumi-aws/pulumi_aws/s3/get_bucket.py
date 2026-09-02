@@ -91,7 +91,7 @@ class GetBucketResult:
     @pulumi.getter(name="bucketRegionalDomainName")
     def bucket_regional_domain_name(self) -> _builtins.str:
         """
-        The bucket region-specific domain name. The bucket domain name including the region name. Please refer to the [S3 endpoints reference](https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_region) for format. Note: AWS CloudFront allows specifying an S3 region-specific endpoint when creating an S3 origin. This will prevent redirect issues from CloudFront to the S3 Origin URL. For more information, see the [Virtual Hosted-Style Requests for Other Regions](https://docs.aws.amazon.com/AmazonS3/latest/userguide/VirtualHosting.html#deprecated-global-endpoint) section in the AWS S3 User Guide.
+        Bucket region-specific domain name. The bucket domain name including the region name. Please refer to the [S3 endpoints reference](https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_region) for format. Note: AWS CloudFront allows specifying an S3 region-specific endpoint when creating an S3 origin. This will prevent redirect issues from CloudFront to the S3 Origin URL. For more information, see the [Virtual Hosted-Style Requests for Other Regions](https://docs.aws.amazon.com/AmazonS3/latest/userguide/VirtualHosting.html#deprecated-global-endpoint) section in the AWS S3 User Guide.
         """
         return pulumi.get(self, "bucket_regional_domain_name")
 
@@ -99,7 +99,7 @@ class GetBucketResult:
     @pulumi.getter(name="hostedZoneId")
     def hosted_zone_id(self) -> _builtins.str:
         """
-        The [Route 53 Hosted Zone ID](https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_website_region_endpoints) for this bucket's region.
+        [Route 53 Hosted Zone ID](https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_website_region_endpoints) for this bucket's region.
         """
         return pulumi.get(self, "hosted_zone_id")
 
@@ -171,13 +171,13 @@ def get_bucket(bucket: Optional[_builtins.str] = None,
     selected = aws.s3.get_bucket(bucket="bucket.test.com")
     test_zone = aws.route53.get_zone(name="test.com.")
     example = aws.route53.Record("example",
-        zone_id=test_zone.id,
-        name="bucket",
-        type=aws.route53.RecordType.A,
         aliases=[{
             "name": selected.website_domain,
             "zone_id": selected.hosted_zone_id,
-        }])
+        }],
+        zone_id=test_zone.id,
+        name="bucket",
+        type=aws.route53.RecordType.A)
     ```
 
     ### CloudFront Origin
@@ -214,8 +214,8 @@ def get_bucket(bucket: Optional[_builtins.str] = None,
         region=pulumi.get(__ret__, 'region'),
         website_domain=pulumi.get(__ret__, 'website_domain'),
         website_endpoint=pulumi.get(__ret__, 'website_endpoint'))
-def get_bucket_output(bucket: Optional[pulumi.Input[_builtins.str]] = None,
-                      region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_bucket_output(bucket: pulumi.Input[Optional[_builtins.str]] = None,
+                      region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                       opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetBucketResult]:
     """
     Provides details about a specific S3 bucket.
@@ -234,13 +234,13 @@ def get_bucket_output(bucket: Optional[pulumi.Input[_builtins.str]] = None,
     selected = aws.s3.get_bucket(bucket="bucket.test.com")
     test_zone = aws.route53.get_zone(name="test.com.")
     example = aws.route53.Record("example",
-        zone_id=test_zone.id,
-        name="bucket",
-        type=aws.route53.RecordType.A,
         aliases=[{
             "name": selected.website_domain,
             "zone_id": selected.hosted_zone_id,
-        }])
+        }],
+        zone_id=test_zone.id,
+        name="bucket",
+        type=aws.route53.RecordType.A)
     ```
 
     ### CloudFront Origin

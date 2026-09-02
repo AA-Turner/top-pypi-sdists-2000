@@ -113,6 +113,7 @@ class Checkpointer(
       *,
       multiprocessing_options: options_lib.MultiprocessingOptions = options_lib.MultiprocessingOptions(),
       file_options: options_lib.FileOptions = options_lib.FileOptions(),
+      atomicity_options: Optional[options_lib.AtomicityOptions] = None,
       checkpoint_metadata_store: Optional[checkpoint.MetadataStore] = None,
       temporary_path_class: Optional[
           Type[atomicity_types.TemporaryPath]
@@ -136,6 +137,7 @@ class Checkpointer(
         barrier_sync_key_prefix=self._barrier_sync_key_prefix,
     )
     self._file_options = file_options
+    self._atomicity_options = atomicity_options
     self._temporary_path_class = temporary_path_class
 
     # If not provided then use checkpoint_metadata_store with blocking writes.
@@ -153,7 +155,9 @@ class Checkpointer(
   ) -> atomicity_types.TemporaryPath:
     temporary_path_class = (
         self._temporary_path_class
-        or atomicity_defaults.get_default_temporary_path_class(directory)
+        or atomicity_defaults.get_default_temporary_path_class(
+            directory, atomicity_options=self._atomicity_options
+        )
     )
     tmpdir = temporary_path_class.from_final(
         directory,
@@ -233,7 +237,7 @@ class Checkpointer(
         directory,
         operation_type=event_tracking.OperationType.SAVE,
         async_origin=False,
-        primary_host=self._primary_host,
+        primary_host=self._primary_host,  # pyrefly: ignore[bad-argument-type]
     )
     operation_recorder.record_start(checkpoint_start_time)
     self.synchronize_next_awaitable_signal_operation_id()
@@ -273,6 +277,7 @@ class Checkpointer(
 
     # Ensure save operation atomicity and record time saved by checkpoint.
     if multihost.is_primary_host(self._primary_host):
+      finalize_start_time = time.time()
       # finalize does a final StepMetadata update.
       self._handler.finalize(tmpdir.get())
       asyncio_utils.run_sync(
@@ -280,6 +285,10 @@ class Checkpointer(
               tmpdir,
               checkpoint_start_time=checkpoint_start_time,
           )
+      )
+      jax.monitoring.record_event_duration_secs(
+          '/jax/orbax/write/finalize_duration_secs',
+          time.time() - finalize_start_time,
       )
     multihost.sync_global_processes(
         multihost.unique_barrier_key(
@@ -299,12 +308,16 @@ class Checkpointer(
         directory,
         operation_type=event_tracking.OperationType.LOAD,
         async_origin=False,
-        primary_host=self._primary_host,
+        primary_host=self._primary_host,  # pyrefly: ignore[bad-argument-type]
     )
     operation_recorder.record_start(restore_start_time)
     if not directory.exists():
       raise FileNotFoundError(f'Checkpoint at {directory} not found.')
-    if not step_lib.is_path_finalized(directory):
+    if not step_lib.is_path_finalized(
+        directory,
+        temporary_path_cls=self._temporary_path_class,
+        atomicity_options=self._atomicity_options,
+    ):
       raise ValueError(f'Found incomplete checkpoint at {directory}.')
     logging.info('Restoring checkpoint from %s.', directory)
     ckpt_args = construct_checkpoint_args(self._handler, False, *args, **kwargs)
@@ -381,7 +394,7 @@ class Checkpointer(
             directory,
         )
       else:
-        update_dict['item_handlers'] = partial_metadata.item_handlers
+        update_dict['item_handlers'] = partial_metadata.item_handlers  # pyrefly: ignore[bad-assignment]
     else:
       try:
         item_handler = self._handler.typestr()
@@ -394,7 +407,7 @@ class Checkpointer(
         item_handler = (
             f'{self._handler.__module__}.{self._handler.__class__.__qualname__}'
         )
-      update_dict['item_handlers'] = item_handler
+      update_dict['item_handlers'] = item_handler  # pyrefly: ignore[bad-assignment]
     self._metadata_store.update(
         file_path=checkpoint.step_metadata_file_path(directory),
         **step_metadata_serialization.serialize_for_update(**update_dict),

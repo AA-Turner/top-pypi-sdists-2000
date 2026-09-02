@@ -22,10 +22,11 @@ class FrameworkShareArgs:
                  destination_account: pulumi.Input[_builtins.str],
                  destination_region: pulumi.Input[_builtins.str],
                  framework_id: pulumi.Input[_builtins.str],
-                 comment: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 comment: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a FrameworkShare resource.
+
         :param pulumi.Input[_builtins.str] destination_account: Amazon Web Services account of the recipient.
         :param pulumi.Input[_builtins.str] destination_region: Amazon Web Services region of the recipient.
         :param pulumi.Input[_builtins.str] framework_id: Unique identifier for the shared custom framework.
@@ -82,40 +83,41 @@ class FrameworkShareArgs:
 
     @_builtins.property
     @pulumi.getter
-    def comment(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def comment(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Comment from the sender about the share request.
         """
         return pulumi.get(self, "comment")
 
     @comment.setter
-    def comment(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def comment(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "comment", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _FrameworkShareState:
     def __init__(__self__, *,
-                 comment: Optional[pulumi.Input[_builtins.str]] = None,
-                 destination_account: Optional[pulumi.Input[_builtins.str]] = None,
-                 destination_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 framework_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None):
+                 comment: pulumi.Input[Optional[_builtins.str]] = None,
+                 destination_account: pulumi.Input[Optional[_builtins.str]] = None,
+                 destination_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 framework_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering FrameworkShare resources.
+
         :param pulumi.Input[_builtins.str] comment: Comment from the sender about the share request.
         :param pulumi.Input[_builtins.str] destination_account: Amazon Web Services account of the recipient.
         :param pulumi.Input[_builtins.str] destination_region: Amazon Web Services region of the recipient.
@@ -140,43 +142,43 @@ class _FrameworkShareState:
 
     @_builtins.property
     @pulumi.getter
-    def comment(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def comment(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Comment from the sender about the share request.
         """
         return pulumi.get(self, "comment")
 
     @comment.setter
-    def comment(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def comment(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "comment", value)
 
     @_builtins.property
     @pulumi.getter(name="destinationAccount")
-    def destination_account(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def destination_account(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Amazon Web Services account of the recipient.
         """
         return pulumi.get(self, "destination_account")
 
     @destination_account.setter
-    def destination_account(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def destination_account(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "destination_account", value)
 
     @_builtins.property
     @pulumi.getter(name="destinationRegion")
-    def destination_region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def destination_region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Amazon Web Services region of the recipient.
         """
         return pulumi.get(self, "destination_region")
 
     @destination_region.setter
-    def destination_region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def destination_region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "destination_region", value)
 
     @_builtins.property
     @pulumi.getter(name="frameworkId")
-    def framework_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def framework_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique identifier for the shared custom framework.
 
@@ -185,31 +187,31 @@ class _FrameworkShareState:
         return pulumi.get(self, "framework_id")
 
     @framework_id.setter
-    def framework_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def framework_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "framework_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Status of the share request.
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
 
@@ -219,11 +221,11 @@ class FrameworkShare(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 comment: Optional[pulumi.Input[_builtins.str]] = None,
-                 destination_account: Optional[pulumi.Input[_builtins.str]] = None,
-                 destination_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 framework_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 comment: pulumi.Input[Optional[_builtins.str]] = None,
+                 destination_account: pulumi.Input[Optional[_builtins.str]] = None,
+                 destination_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 framework_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing an AWS Audit Manager Framework Share.
@@ -244,11 +246,23 @@ class FrameworkShare(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `id` (String) Unique identifier for the framework share request.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
         Using `pulumi import`, import Audit Manager Framework Share using the `id`. For example:
 
         ```sh
         $ pulumi import aws:auditmanager/frameworkShare:FrameworkShare example abcdef-123456
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -285,11 +299,23 @@ class FrameworkShare(pulumi.CustomResource):
 
         ## Import
 
+        ### Identity Schema
+
+        #### Required
+
+        * `id` (String) Unique identifier for the framework share request.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
         Using `pulumi import`, import Audit Manager Framework Share using the `id`. For example:
 
         ```sh
         $ pulumi import aws:auditmanager/frameworkShare:FrameworkShare example abcdef-123456
         ```
+
 
         :param str resource_name: The name of the resource.
         :param FrameworkShareArgs args: The arguments to use to populate this resource's properties.
@@ -306,11 +332,11 @@ class FrameworkShare(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 comment: Optional[pulumi.Input[_builtins.str]] = None,
-                 destination_account: Optional[pulumi.Input[_builtins.str]] = None,
-                 destination_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 framework_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 comment: pulumi.Input[Optional[_builtins.str]] = None,
+                 destination_account: pulumi.Input[Optional[_builtins.str]] = None,
+                 destination_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 framework_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -342,12 +368,12 @@ class FrameworkShare(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            comment: Optional[pulumi.Input[_builtins.str]] = None,
-            destination_account: Optional[pulumi.Input[_builtins.str]] = None,
-            destination_region: Optional[pulumi.Input[_builtins.str]] = None,
-            framework_id: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            status: Optional[pulumi.Input[_builtins.str]] = None) -> 'FrameworkShare':
+            comment: pulumi.Input[Optional[_builtins.str]] = None,
+            destination_account: pulumi.Input[Optional[_builtins.str]] = None,
+            destination_region: pulumi.Input[Optional[_builtins.str]] = None,
+            framework_id: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            status: pulumi.Input[Optional[_builtins.str]] = None) -> 'FrameworkShare':
         """
         Get an existing FrameworkShare resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

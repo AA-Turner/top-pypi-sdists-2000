@@ -21,9 +21,10 @@ class RestApiPolicyArgs:
     def __init__(__self__, *,
                  policy: pulumi.Input[_builtins.str],
                  rest_api_id: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a RestApiPolicy resource.
+
         :param pulumi.Input[_builtins.str] policy: JSON formatted policy document that controls access to the API Gateway.
         :param pulumi.Input[_builtins.str] rest_api_id: ID of the REST API.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -59,25 +60,26 @@ class RestApiPolicyArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _RestApiPolicyState:
     def __init__(__self__, *,
-                 policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rest_api_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rest_api_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering RestApiPolicy resources.
+
         :param pulumi.Input[_builtins.str] policy: JSON formatted policy document that controls access to the API Gateway.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[_builtins.str] rest_api_id: ID of the REST API.
@@ -91,38 +93,38 @@ class _RestApiPolicyState:
 
     @_builtins.property
     @pulumi.getter
-    def policy(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def policy(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         JSON formatted policy document that controls access to the API Gateway.
         """
         return pulumi.get(self, "policy")
 
     @policy.setter
-    def policy(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def policy(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "policy", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="restApiId")
-    def rest_api_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def rest_api_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ID of the REST API.
         """
         return pulumi.get(self, "rest_api_id")
 
     @rest_api_id.setter
-    def rest_api_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def rest_api_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "rest_api_id", value)
 
 
@@ -132,9 +134,9 @@ class RestApiPolicy(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rest_api_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rest_api_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides an API Gateway REST API Policy.
@@ -151,18 +153,18 @@ class RestApiPolicy(pulumi.CustomResource):
 
         test_rest_api = aws.apigateway.RestApi("test", name="example-rest-api")
         test = aws.iam.get_policy_document_output(statements=[{
-            "effect": "Allow",
-            "principals": [{
-                "type": "AWS",
-                "identifiers": ["*"],
-            }],
-            "actions": ["execute-api:Invoke"],
-            "resources": [test_rest_api.execution_arn.apply(lambda execution_arn: f"{execution_arn}/*")],
             "conditions": [{
                 "test": "IpAddress",
                 "variable": "aws:SourceIp",
                 "values": ["123.123.123.123/32"],
             }],
+            "principals": [{
+                "type": "AWS",
+                "identifiers": ["*"],
+            }],
+            "effect": "Allow",
+            "actions": ["execute-api:Invoke"],
+            "resources": [test_rest_api.execution_arn.apply(lambda execution_arn: f"{execution_arn}/*")],
         }])
         test_rest_api_policy = aws.apigateway.RestApiPolicy("test",
             rest_api_id=test_rest_api.id,
@@ -176,6 +178,7 @@ class RestApiPolicy(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:apigateway/restApiPolicy:RestApiPolicy example 12345abcde
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -204,18 +207,18 @@ class RestApiPolicy(pulumi.CustomResource):
 
         test_rest_api = aws.apigateway.RestApi("test", name="example-rest-api")
         test = aws.iam.get_policy_document_output(statements=[{
-            "effect": "Allow",
-            "principals": [{
-                "type": "AWS",
-                "identifiers": ["*"],
-            }],
-            "actions": ["execute-api:Invoke"],
-            "resources": [test_rest_api.execution_arn.apply(lambda execution_arn: f"{execution_arn}/*")],
             "conditions": [{
                 "test": "IpAddress",
                 "variable": "aws:SourceIp",
                 "values": ["123.123.123.123/32"],
             }],
+            "principals": [{
+                "type": "AWS",
+                "identifiers": ["*"],
+            }],
+            "effect": "Allow",
+            "actions": ["execute-api:Invoke"],
+            "resources": [test_rest_api.execution_arn.apply(lambda execution_arn: f"{execution_arn}/*")],
         }])
         test_rest_api_policy = aws.apigateway.RestApiPolicy("test",
             rest_api_id=test_rest_api.id,
@@ -229,6 +232,7 @@ class RestApiPolicy(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:apigateway/restApiPolicy:RestApiPolicy example 12345abcde
         ```
+
 
         :param str resource_name: The name of the resource.
         :param RestApiPolicyArgs args: The arguments to use to populate this resource's properties.
@@ -245,9 +249,9 @@ class RestApiPolicy(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 policy: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rest_api_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 policy: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rest_api_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -274,9 +278,9 @@ class RestApiPolicy(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            policy: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            rest_api_id: Optional[pulumi.Input[_builtins.str]] = None) -> 'RestApiPolicy':
+            policy: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            rest_api_id: pulumi.Input[Optional[_builtins.str]] = None) -> 'RestApiPolicy':
         """
         Get an existing RestApiPolicy resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

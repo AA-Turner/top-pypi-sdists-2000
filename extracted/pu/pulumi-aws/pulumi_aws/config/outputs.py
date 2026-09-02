@@ -244,8 +244,10 @@ class Endpoints(dict):
     def __init__(__self__, *,
                  accessanalyzer: Optional[_builtins.str] = None,
                  account: Optional[_builtins.str] = None,
+                 accountaccess: Optional[_builtins.str] = None,
                  acm: Optional[_builtins.str] = None,
                  acmpca: Optional[_builtins.str] = None,
+                 agentregistry: Optional[_builtins.str] = None,
                  amg: Optional[_builtins.str] = None,
                  amp: Optional[_builtins.str] = None,
                  amplify: Optional[_builtins.str] = None,
@@ -340,9 +342,11 @@ class Endpoints(dict):
                  deploy: Optional[_builtins.str] = None,
                  detective: Optional[_builtins.str] = None,
                  devicefarm: Optional[_builtins.str] = None,
+                 devopsagent: Optional[_builtins.str] = None,
                  devopsguru: Optional[_builtins.str] = None,
                  directconnect: Optional[_builtins.str] = None,
                  directoryservice: Optional[_builtins.str] = None,
+                 directoryservicedata: Optional[_builtins.str] = None,
                  dlm: Optional[_builtins.str] = None,
                  dms: Optional[_builtins.str] = None,
                  docdb: Optional[_builtins.str] = None,
@@ -395,6 +399,7 @@ class Endpoints(dict):
                  inspector: Optional[_builtins.str] = None,
                  inspector2: Optional[_builtins.str] = None,
                  inspectorv2: Optional[_builtins.str] = None,
+                 interconnect: Optional[_builtins.str] = None,
                  internetmonitor: Optional[_builtins.str] = None,
                  invoicing: Optional[_builtins.str] = None,
                  iot: Optional[_builtins.str] = None,
@@ -411,6 +416,8 @@ class Endpoints(dict):
                  kms: Optional[_builtins.str] = None,
                  lakeformation: Optional[_builtins.str] = None,
                  lambda_: Optional[_builtins.str] = None,
+                 lambdacore: Optional[_builtins.str] = None,
+                 lambdamicrovms: Optional[_builtins.str] = None,
                  launchwizard: Optional[_builtins.str] = None,
                  lex: Optional[_builtins.str] = None,
                  lexmodelbuilding: Optional[_builtins.str] = None,
@@ -425,6 +432,7 @@ class Endpoints(dict):
                  logs: Optional[_builtins.str] = None,
                  m2: Optional[_builtins.str] = None,
                  macie2: Optional[_builtins.str] = None,
+                 mailmanager: Optional[_builtins.str] = None,
                  managedgrafana: Optional[_builtins.str] = None,
                  mediaconnect: Optional[_builtins.str] = None,
                  mediaconvert: Optional[_builtins.str] = None,
@@ -483,6 +491,7 @@ class Endpoints(dict):
                  redshiftserverless: Optional[_builtins.str] = None,
                  rekognition: Optional[_builtins.str] = None,
                  resiliencehub: Optional[_builtins.str] = None,
+                 resiliencehubv2: Optional[_builtins.str] = None,
                  resourceexplorer2: Optional[_builtins.str] = None,
                  resourcegroups: Optional[_builtins.str] = None,
                  resourcegroupstagging: Optional[_builtins.str] = None,
@@ -498,6 +507,7 @@ class Endpoints(dict):
                  s3: Optional[_builtins.str] = None,
                  s3api: Optional[_builtins.str] = None,
                  s3control: Optional[_builtins.str] = None,
+                 s3files: Optional[_builtins.str] = None,
                  s3outposts: Optional[_builtins.str] = None,
                  s3tables: Optional[_builtins.str] = None,
                  s3vectors: Optional[_builtins.str] = None,
@@ -541,6 +551,7 @@ class Endpoints(dict):
                  transcribe: Optional[_builtins.str] = None,
                  transcribeservice: Optional[_builtins.str] = None,
                  transfer: Optional[_builtins.str] = None,
+                 uxc: Optional[_builtins.str] = None,
                  verifiedpermissions: Optional[_builtins.str] = None,
                  vpclattice: Optional[_builtins.str] = None,
                  waf: Optional[_builtins.str] = None,
@@ -554,8 +565,10 @@ class Endpoints(dict):
         """
         :param _builtins.str accessanalyzer: Use this to override the default service endpoint URL
         :param _builtins.str account: Use this to override the default service endpoint URL
+        :param _builtins.str accountaccess: Use this to override the default service endpoint URL
         :param _builtins.str acm: Use this to override the default service endpoint URL
         :param _builtins.str acmpca: Use this to override the default service endpoint URL
+        :param _builtins.str agentregistry: Use this to override the default service endpoint URL
         :param _builtins.str amg: Use this to override the default service endpoint URL
         :param _builtins.str amp: Use this to override the default service endpoint URL
         :param _builtins.str amplify: Use this to override the default service endpoint URL
@@ -650,9 +663,11 @@ class Endpoints(dict):
         :param _builtins.str deploy: Use this to override the default service endpoint URL
         :param _builtins.str detective: Use this to override the default service endpoint URL
         :param _builtins.str devicefarm: Use this to override the default service endpoint URL
+        :param _builtins.str devopsagent: Use this to override the default service endpoint URL
         :param _builtins.str devopsguru: Use this to override the default service endpoint URL
         :param _builtins.str directconnect: Use this to override the default service endpoint URL
         :param _builtins.str directoryservice: Use this to override the default service endpoint URL
+        :param _builtins.str directoryservicedata: Use this to override the default service endpoint URL
         :param _builtins.str dlm: Use this to override the default service endpoint URL
         :param _builtins.str dms: Use this to override the default service endpoint URL
         :param _builtins.str docdb: Use this to override the default service endpoint URL
@@ -705,6 +720,7 @@ class Endpoints(dict):
         :param _builtins.str inspector: Use this to override the default service endpoint URL
         :param _builtins.str inspector2: Use this to override the default service endpoint URL
         :param _builtins.str inspectorv2: Use this to override the default service endpoint URL
+        :param _builtins.str interconnect: Use this to override the default service endpoint URL
         :param _builtins.str internetmonitor: Use this to override the default service endpoint URL
         :param _builtins.str invoicing: Use this to override the default service endpoint URL
         :param _builtins.str iot: Use this to override the default service endpoint URL
@@ -721,6 +737,8 @@ class Endpoints(dict):
         :param _builtins.str kms: Use this to override the default service endpoint URL
         :param _builtins.str lakeformation: Use this to override the default service endpoint URL
         :param _builtins.str lambda_: Use this to override the default service endpoint URL
+        :param _builtins.str lambdacore: Use this to override the default service endpoint URL
+        :param _builtins.str lambdamicrovms: Use this to override the default service endpoint URL
         :param _builtins.str launchwizard: Use this to override the default service endpoint URL
         :param _builtins.str lex: Use this to override the default service endpoint URL
         :param _builtins.str lexmodelbuilding: Use this to override the default service endpoint URL
@@ -735,6 +753,7 @@ class Endpoints(dict):
         :param _builtins.str logs: Use this to override the default service endpoint URL
         :param _builtins.str m2: Use this to override the default service endpoint URL
         :param _builtins.str macie2: Use this to override the default service endpoint URL
+        :param _builtins.str mailmanager: Use this to override the default service endpoint URL
         :param _builtins.str managedgrafana: Use this to override the default service endpoint URL
         :param _builtins.str mediaconnect: Use this to override the default service endpoint URL
         :param _builtins.str mediaconvert: Use this to override the default service endpoint URL
@@ -793,6 +812,7 @@ class Endpoints(dict):
         :param _builtins.str redshiftserverless: Use this to override the default service endpoint URL
         :param _builtins.str rekognition: Use this to override the default service endpoint URL
         :param _builtins.str resiliencehub: Use this to override the default service endpoint URL
+        :param _builtins.str resiliencehubv2: Use this to override the default service endpoint URL
         :param _builtins.str resourceexplorer2: Use this to override the default service endpoint URL
         :param _builtins.str resourcegroups: Use this to override the default service endpoint URL
         :param _builtins.str resourcegroupstagging: Use this to override the default service endpoint URL
@@ -808,6 +828,7 @@ class Endpoints(dict):
         :param _builtins.str s3: Use this to override the default service endpoint URL
         :param _builtins.str s3api: Use this to override the default service endpoint URL
         :param _builtins.str s3control: Use this to override the default service endpoint URL
+        :param _builtins.str s3files: Use this to override the default service endpoint URL
         :param _builtins.str s3outposts: Use this to override the default service endpoint URL
         :param _builtins.str s3tables: Use this to override the default service endpoint URL
         :param _builtins.str s3vectors: Use this to override the default service endpoint URL
@@ -851,6 +872,7 @@ class Endpoints(dict):
         :param _builtins.str transcribe: Use this to override the default service endpoint URL
         :param _builtins.str transcribeservice: Use this to override the default service endpoint URL
         :param _builtins.str transfer: Use this to override the default service endpoint URL
+        :param _builtins.str uxc: Use this to override the default service endpoint URL
         :param _builtins.str verifiedpermissions: Use this to override the default service endpoint URL
         :param _builtins.str vpclattice: Use this to override the default service endpoint URL
         :param _builtins.str waf: Use this to override the default service endpoint URL
@@ -866,10 +888,14 @@ class Endpoints(dict):
             pulumi.set(__self__, "accessanalyzer", accessanalyzer)
         if account is not None:
             pulumi.set(__self__, "account", account)
+        if accountaccess is not None:
+            pulumi.set(__self__, "accountaccess", accountaccess)
         if acm is not None:
             pulumi.set(__self__, "acm", acm)
         if acmpca is not None:
             pulumi.set(__self__, "acmpca", acmpca)
+        if agentregistry is not None:
+            pulumi.set(__self__, "agentregistry", agentregistry)
         if amg is not None:
             pulumi.set(__self__, "amg", amg)
         if amp is not None:
@@ -1058,12 +1084,16 @@ class Endpoints(dict):
             pulumi.set(__self__, "detective", detective)
         if devicefarm is not None:
             pulumi.set(__self__, "devicefarm", devicefarm)
+        if devopsagent is not None:
+            pulumi.set(__self__, "devopsagent", devopsagent)
         if devopsguru is not None:
             pulumi.set(__self__, "devopsguru", devopsguru)
         if directconnect is not None:
             pulumi.set(__self__, "directconnect", directconnect)
         if directoryservice is not None:
             pulumi.set(__self__, "directoryservice", directoryservice)
+        if directoryservicedata is not None:
+            pulumi.set(__self__, "directoryservicedata", directoryservicedata)
         if dlm is not None:
             pulumi.set(__self__, "dlm", dlm)
         if dms is not None:
@@ -1168,6 +1198,8 @@ class Endpoints(dict):
             pulumi.set(__self__, "inspector2", inspector2)
         if inspectorv2 is not None:
             pulumi.set(__self__, "inspectorv2", inspectorv2)
+        if interconnect is not None:
+            pulumi.set(__self__, "interconnect", interconnect)
         if internetmonitor is not None:
             pulumi.set(__self__, "internetmonitor", internetmonitor)
         if invoicing is not None:
@@ -1200,6 +1232,10 @@ class Endpoints(dict):
             pulumi.set(__self__, "lakeformation", lakeformation)
         if lambda_ is not None:
             pulumi.set(__self__, "lambda_", lambda_)
+        if lambdacore is not None:
+            pulumi.set(__self__, "lambdacore", lambdacore)
+        if lambdamicrovms is not None:
+            pulumi.set(__self__, "lambdamicrovms", lambdamicrovms)
         if launchwizard is not None:
             pulumi.set(__self__, "launchwizard", launchwizard)
         if lex is not None:
@@ -1228,6 +1264,8 @@ class Endpoints(dict):
             pulumi.set(__self__, "m2", m2)
         if macie2 is not None:
             pulumi.set(__self__, "macie2", macie2)
+        if mailmanager is not None:
+            pulumi.set(__self__, "mailmanager", mailmanager)
         if managedgrafana is not None:
             pulumi.set(__self__, "managedgrafana", managedgrafana)
         if mediaconnect is not None:
@@ -1344,6 +1382,8 @@ class Endpoints(dict):
             pulumi.set(__self__, "rekognition", rekognition)
         if resiliencehub is not None:
             pulumi.set(__self__, "resiliencehub", resiliencehub)
+        if resiliencehubv2 is not None:
+            pulumi.set(__self__, "resiliencehubv2", resiliencehubv2)
         if resourceexplorer2 is not None:
             pulumi.set(__self__, "resourceexplorer2", resourceexplorer2)
         if resourcegroups is not None:
@@ -1374,6 +1414,8 @@ class Endpoints(dict):
             pulumi.set(__self__, "s3api", s3api)
         if s3control is not None:
             pulumi.set(__self__, "s3control", s3control)
+        if s3files is not None:
+            pulumi.set(__self__, "s3files", s3files)
         if s3outposts is not None:
             pulumi.set(__self__, "s3outposts", s3outposts)
         if s3tables is not None:
@@ -1460,6 +1502,8 @@ class Endpoints(dict):
             pulumi.set(__self__, "transcribeservice", transcribeservice)
         if transfer is not None:
             pulumi.set(__self__, "transfer", transfer)
+        if uxc is not None:
+            pulumi.set(__self__, "uxc", uxc)
         if verifiedpermissions is not None:
             pulumi.set(__self__, "verifiedpermissions", verifiedpermissions)
         if vpclattice is not None:
@@ -1499,6 +1543,14 @@ class Endpoints(dict):
 
     @_builtins.property
     @pulumi.getter
+    def accountaccess(self) -> Optional[_builtins.str]:
+        """
+        Use this to override the default service endpoint URL
+        """
+        return pulumi.get(self, "accountaccess")
+
+    @_builtins.property
+    @pulumi.getter
     def acm(self) -> Optional[_builtins.str]:
         """
         Use this to override the default service endpoint URL
@@ -1512,6 +1564,14 @@ class Endpoints(dict):
         Use this to override the default service endpoint URL
         """
         return pulumi.get(self, "acmpca")
+
+    @_builtins.property
+    @pulumi.getter
+    def agentregistry(self) -> Optional[_builtins.str]:
+        """
+        Use this to override the default service endpoint URL
+        """
+        return pulumi.get(self, "agentregistry")
 
     @_builtins.property
     @pulumi.getter
@@ -2267,6 +2327,14 @@ class Endpoints(dict):
 
     @_builtins.property
     @pulumi.getter
+    def devopsagent(self) -> Optional[_builtins.str]:
+        """
+        Use this to override the default service endpoint URL
+        """
+        return pulumi.get(self, "devopsagent")
+
+    @_builtins.property
+    @pulumi.getter
     def devopsguru(self) -> Optional[_builtins.str]:
         """
         Use this to override the default service endpoint URL
@@ -2288,6 +2356,14 @@ class Endpoints(dict):
         Use this to override the default service endpoint URL
         """
         return pulumi.get(self, "directoryservice")
+
+    @_builtins.property
+    @pulumi.getter
+    def directoryservicedata(self) -> Optional[_builtins.str]:
+        """
+        Use this to override the default service endpoint URL
+        """
+        return pulumi.get(self, "directoryservicedata")
 
     @_builtins.property
     @pulumi.getter
@@ -2707,6 +2783,14 @@ class Endpoints(dict):
 
     @_builtins.property
     @pulumi.getter
+    def interconnect(self) -> Optional[_builtins.str]:
+        """
+        Use this to override the default service endpoint URL
+        """
+        return pulumi.get(self, "interconnect")
+
+    @_builtins.property
+    @pulumi.getter
     def internetmonitor(self) -> Optional[_builtins.str]:
         """
         Use this to override the default service endpoint URL
@@ -2835,6 +2919,22 @@ class Endpoints(dict):
 
     @_builtins.property
     @pulumi.getter
+    def lambdacore(self) -> Optional[_builtins.str]:
+        """
+        Use this to override the default service endpoint URL
+        """
+        return pulumi.get(self, "lambdacore")
+
+    @_builtins.property
+    @pulumi.getter
+    def lambdamicrovms(self) -> Optional[_builtins.str]:
+        """
+        Use this to override the default service endpoint URL
+        """
+        return pulumi.get(self, "lambdamicrovms")
+
+    @_builtins.property
+    @pulumi.getter
     def launchwizard(self) -> Optional[_builtins.str]:
         """
         Use this to override the default service endpoint URL
@@ -2944,6 +3044,14 @@ class Endpoints(dict):
         Use this to override the default service endpoint URL
         """
         return pulumi.get(self, "macie2")
+
+    @_builtins.property
+    @pulumi.getter
+    def mailmanager(self) -> Optional[_builtins.str]:
+        """
+        Use this to override the default service endpoint URL
+        """
+        return pulumi.get(self, "mailmanager")
 
     @_builtins.property
     @pulumi.getter
@@ -3411,6 +3519,14 @@ class Endpoints(dict):
 
     @_builtins.property
     @pulumi.getter
+    def resiliencehubv2(self) -> Optional[_builtins.str]:
+        """
+        Use this to override the default service endpoint URL
+        """
+        return pulumi.get(self, "resiliencehubv2")
+
+    @_builtins.property
+    @pulumi.getter
     def resourceexplorer2(self) -> Optional[_builtins.str]:
         """
         Use this to override the default service endpoint URL
@@ -3528,6 +3644,14 @@ class Endpoints(dict):
         Use this to override the default service endpoint URL
         """
         return pulumi.get(self, "s3control")
+
+    @_builtins.property
+    @pulumi.getter
+    def s3files(self) -> Optional[_builtins.str]:
+        """
+        Use this to override the default service endpoint URL
+        """
+        return pulumi.get(self, "s3files")
 
     @_builtins.property
     @pulumi.getter
@@ -3872,6 +3996,14 @@ class Endpoints(dict):
         Use this to override the default service endpoint URL
         """
         return pulumi.get(self, "transfer")
+
+    @_builtins.property
+    @pulumi.getter
+    def uxc(self) -> Optional[_builtins.str]:
+        """
+        Use this to override the default service endpoint URL
+        """
+        return pulumi.get(self, "uxc")
 
     @_builtins.property
     @pulumi.getter

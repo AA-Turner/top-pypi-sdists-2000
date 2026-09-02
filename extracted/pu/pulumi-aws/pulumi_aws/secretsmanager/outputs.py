@@ -16,7 +16,9 @@ from .. import _utilities
 
 __all__ = [
     'SecretReplica',
+    'SecretRotationExternalSecretRotationMetadata',
     'SecretRotationRotationRules',
+    'GetSecretRotationExternalSecretRotationMetadataResult',
     'GetSecretRotationRotationRuleResult',
     'GetSecretVersionsVersionResult',
     'GetSecretsFilterResult',
@@ -110,6 +112,35 @@ class SecretReplica(dict):
 
 
 @pulumi.output_type
+class SecretRotationExternalSecretRotationMetadata(dict):
+    def __init__(__self__, *,
+                 key: _builtins.str,
+                 value: _builtins.str):
+        """
+        :param _builtins.str key: Metadata key name. Partner-specific keys are required for each external secret type. See [partner documentation](https://docs.aws.amazon.com/secretsmanager/latest/userguide/mes-partners.html) for required keys.
+        :param _builtins.str value: Metadata value for the specified key.
+        """
+        pulumi.set(__self__, "key", key)
+        pulumi.set(__self__, "value", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def key(self) -> _builtins.str:
+        """
+        Metadata key name. Partner-specific keys are required for each external secret type. See [partner documentation](https://docs.aws.amazon.com/secretsmanager/latest/userguide/mes-partners.html) for required keys.
+        """
+        return pulumi.get(self, "key")
+
+    @_builtins.property
+    @pulumi.getter
+    def value(self) -> _builtins.str:
+        """
+        Metadata value for the specified key.
+        """
+        return pulumi.get(self, "value")
+
+
+@pulumi.output_type
 class SecretRotationRotationRules(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -135,9 +166,9 @@ class SecretRotationRotationRules(dict):
                  duration: Optional[_builtins.str] = None,
                  schedule_expression: Optional[_builtins.str] = None):
         """
-        :param _builtins.int automatically_after_days: Specifies the number of days between automatic scheduled rotations of the secret. Either `automatically_after_days` or `schedule_expression` must be specified.
+        :param _builtins.int automatically_after_days: Number of days between automatic scheduled rotations of the secret. Either `automatically_after_days` or `schedule_expression` must be specified.
         :param _builtins.str duration: The length of the rotation window in hours. For example, `3h` for a three hour window.
-        :param _builtins.str schedule_expression: A `cron()` or `rate()` expression that defines the schedule for rotating your secret. Either `automatically_after_days` or `schedule_expression` must be specified.
+        :param _builtins.str schedule_expression: `cron()` or `rate()` expression that defines the schedule for rotating your secret. Either `automatically_after_days` or `schedule_expression` must be specified.
         """
         if automatically_after_days is not None:
             pulumi.set(__self__, "automatically_after_days", automatically_after_days)
@@ -150,7 +181,7 @@ class SecretRotationRotationRules(dict):
     @pulumi.getter(name="automaticallyAfterDays")
     def automatically_after_days(self) -> Optional[_builtins.int]:
         """
-        Specifies the number of days between automatic scheduled rotations of the secret. Either `automatically_after_days` or `schedule_expression` must be specified.
+        Number of days between automatic scheduled rotations of the secret. Either `automatically_after_days` or `schedule_expression` must be specified.
         """
         return pulumi.get(self, "automatically_after_days")
 
@@ -166,9 +197,38 @@ class SecretRotationRotationRules(dict):
     @pulumi.getter(name="scheduleExpression")
     def schedule_expression(self) -> Optional[_builtins.str]:
         """
-        A `cron()` or `rate()` expression that defines the schedule for rotating your secret. Either `automatically_after_days` or `schedule_expression` must be specified.
+        `cron()` or `rate()` expression that defines the schedule for rotating your secret. Either `automatically_after_days` or `schedule_expression` must be specified.
         """
         return pulumi.get(self, "schedule_expression")
+
+
+@pulumi.output_type
+class GetSecretRotationExternalSecretRotationMetadataResult(dict):
+    def __init__(__self__, *,
+                 key: _builtins.str,
+                 value: _builtins.str):
+        """
+        :param _builtins.str key: Metadata key name.
+        :param _builtins.str value: Metadata value for the specified key.
+        """
+        pulumi.set(__self__, "key", key)
+        pulumi.set(__self__, "value", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def key(self) -> _builtins.str:
+        """
+        Metadata key name.
+        """
+        return pulumi.get(self, "key")
+
+    @_builtins.property
+    @pulumi.getter
+    def value(self) -> _builtins.str:
+        """
+        Metadata value for the specified key.
+        """
+        return pulumi.get(self, "value")
 
 
 @pulumi.output_type
@@ -180,7 +240,7 @@ class GetSecretRotationRotationRuleResult(dict):
         """
         :param _builtins.int automatically_after_days: Number of days between automatic scheduled rotations of the secret.
         :param _builtins.str duration: Length of the rotation window in hours.
-        :param _builtins.str schedule_expression: A `cron()` or `rate()` expression that defines the schedule for rotating the secret.
+        :param _builtins.str schedule_expression: `cron()` or `rate()` expression that defines the schedule for rotating the secret.
         """
         pulumi.set(__self__, "automatically_after_days", automatically_after_days)
         pulumi.set(__self__, "duration", duration)
@@ -206,7 +266,7 @@ class GetSecretRotationRotationRuleResult(dict):
     @pulumi.getter(name="scheduleExpression")
     def schedule_expression(self) -> _builtins.str:
         """
-        A `cron()` or `rate()` expression that defines the schedule for rotating the secret.
+        `cron()` or `rate()` expression that defines the schedule for rotating the secret.
         """
         return pulumi.get(self, "schedule_expression")
 

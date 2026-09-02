@@ -22,11 +22,12 @@ __all__ = ['ResourceCollectionArgs', 'ResourceCollection']
 class ResourceCollectionArgs:
     def __init__(__self__, *,
                  type: pulumi.Input[_builtins.str],
-                 cloudformation: Optional[pulumi.Input['ResourceCollectionCloudformationArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input['ResourceCollectionTagsArgs']] = None):
+                 cloudformation: pulumi.Input[Optional['ResourceCollectionCloudformationArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional['ResourceCollectionTagsArgs']] = None):
         """
         The set of arguments for constructing a ResourceCollection resource.
+
         :param pulumi.Input[_builtins.str] type: Type of AWS resource collection to create. Valid values are `AWS_CLOUD_FORMATION`, `AWS_SERVICE`, and `AWS_TAGS`.
                
                The following arguments are optional:
@@ -58,50 +59,51 @@ class ResourceCollectionArgs:
 
     @_builtins.property
     @pulumi.getter
-    def cloudformation(self) -> Optional[pulumi.Input['ResourceCollectionCloudformationArgs']]:
+    def cloudformation(self) -> pulumi.Input[Optional['ResourceCollectionCloudformationArgs']]:
         """
         A collection of AWS CloudFormation stacks. See `cloudformation` below for additional details.
         """
         return pulumi.get(self, "cloudformation")
 
     @cloudformation.setter
-    def cloudformation(self, value: Optional[pulumi.Input['ResourceCollectionCloudformationArgs']]):
+    def cloudformation(self, value: pulumi.Input[Optional['ResourceCollectionCloudformationArgs']]):
         pulumi.set(self, "cloudformation", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['ResourceCollectionTagsArgs']]:
+    def tags(self) -> pulumi.Input[Optional['ResourceCollectionTagsArgs']]:
         """
         AWS tags used to filter the resources in the resource collection. See `tags` below for additional details.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['ResourceCollectionTagsArgs']]):
+    def tags(self, value: pulumi.Input[Optional['ResourceCollectionTagsArgs']]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _ResourceCollectionState:
     def __init__(__self__, *,
-                 cloudformation: Optional[pulumi.Input['ResourceCollectionCloudformationArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input['ResourceCollectionTagsArgs']] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None):
+                 cloudformation: pulumi.Input[Optional['ResourceCollectionCloudformationArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional['ResourceCollectionTagsArgs']] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering ResourceCollection resources.
+
         :param pulumi.Input['ResourceCollectionCloudformationArgs'] cloudformation: A collection of AWS CloudFormation stacks. See `cloudformation` below for additional details.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input['ResourceCollectionTagsArgs'] tags: AWS tags used to filter the resources in the resource collection. See `tags` below for additional details.
@@ -120,43 +122,43 @@ class _ResourceCollectionState:
 
     @_builtins.property
     @pulumi.getter
-    def cloudformation(self) -> Optional[pulumi.Input['ResourceCollectionCloudformationArgs']]:
+    def cloudformation(self) -> pulumi.Input[Optional['ResourceCollectionCloudformationArgs']]:
         """
         A collection of AWS CloudFormation stacks. See `cloudformation` below for additional details.
         """
         return pulumi.get(self, "cloudformation")
 
     @cloudformation.setter
-    def cloudformation(self, value: Optional[pulumi.Input['ResourceCollectionCloudformationArgs']]):
+    def cloudformation(self, value: pulumi.Input[Optional['ResourceCollectionCloudformationArgs']]):
         pulumi.set(self, "cloudformation", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input['ResourceCollectionTagsArgs']]:
+    def tags(self) -> pulumi.Input[Optional['ResourceCollectionTagsArgs']]:
         """
         AWS tags used to filter the resources in the resource collection. See `tags` below for additional details.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input['ResourceCollectionTagsArgs']]):
+    def tags(self, value: pulumi.Input[Optional['ResourceCollectionTagsArgs']]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Type of AWS resource collection to create. Valid values are `AWS_CLOUD_FORMATION`, `AWS_SERVICE`, and `AWS_TAGS`.
 
@@ -165,7 +167,7 @@ class _ResourceCollectionState:
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
 
@@ -175,10 +177,10 @@ class ResourceCollection(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 cloudformation: Optional[pulumi.Input[Union['ResourceCollectionCloudformationArgs', 'ResourceCollectionCloudformationArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Union['ResourceCollectionTagsArgs', 'ResourceCollectionTagsArgsDict']]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None,
+                 cloudformation: pulumi.Input[Optional[Union['ResourceCollectionCloudformationArgs', 'ResourceCollectionCloudformationArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Union['ResourceCollectionTagsArgs', 'ResourceCollectionTagsArgsDict']]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing an AWS DevOps Guru Resource Collection.
@@ -194,10 +196,10 @@ class ResourceCollection(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.devopsguru.ResourceCollection("example",
-            type="AWS_SERVICE",
             cloudformation={
                 "stack_names": ["*"],
-            })
+            },
+            type="AWS_SERVICE")
         ```
 
         ### CloudFormation Stacks
@@ -207,10 +209,10 @@ class ResourceCollection(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.devopsguru.ResourceCollection("example",
-            type="AWS_CLOUD_FORMATION",
             cloudformation={
                 "stack_names": ["ExampleStack"],
-            })
+            },
+            type="AWS_CLOUD_FORMATION")
         ```
 
         ### Tags
@@ -220,11 +222,11 @@ class ResourceCollection(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.devopsguru.ResourceCollection("example",
-            type="AWS_TAGS",
             tags={
                 "app_boundary_key": "DevOps-Guru-Example",
                 "tag_values": ["Example-Value"],
-            })
+            },
+            type="AWS_TAGS")
         ```
 
         ### Tags All Resources
@@ -236,11 +238,11 @@ class ResourceCollection(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.devopsguru.ResourceCollection("example",
-            type="AWS_TAGS",
             tags={
                 "app_boundary_key": "DevOps-Guru-Example",
                 "tag_values": ["*"],
-            })
+            },
+            type="AWS_TAGS")
         ```
 
         ## Import
@@ -250,6 +252,7 @@ class ResourceCollection(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:devopsguru/resourceCollection:ResourceCollection example AWS_CLOUD_FORMATION
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -280,10 +283,10 @@ class ResourceCollection(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.devopsguru.ResourceCollection("example",
-            type="AWS_SERVICE",
             cloudformation={
                 "stack_names": ["*"],
-            })
+            },
+            type="AWS_SERVICE")
         ```
 
         ### CloudFormation Stacks
@@ -293,10 +296,10 @@ class ResourceCollection(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.devopsguru.ResourceCollection("example",
-            type="AWS_CLOUD_FORMATION",
             cloudformation={
                 "stack_names": ["ExampleStack"],
-            })
+            },
+            type="AWS_CLOUD_FORMATION")
         ```
 
         ### Tags
@@ -306,11 +309,11 @@ class ResourceCollection(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.devopsguru.ResourceCollection("example",
-            type="AWS_TAGS",
             tags={
                 "app_boundary_key": "DevOps-Guru-Example",
                 "tag_values": ["Example-Value"],
-            })
+            },
+            type="AWS_TAGS")
         ```
 
         ### Tags All Resources
@@ -322,11 +325,11 @@ class ResourceCollection(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.devopsguru.ResourceCollection("example",
-            type="AWS_TAGS",
             tags={
                 "app_boundary_key": "DevOps-Guru-Example",
                 "tag_values": ["*"],
-            })
+            },
+            type="AWS_TAGS")
         ```
 
         ## Import
@@ -336,6 +339,7 @@ class ResourceCollection(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:devopsguru/resourceCollection:ResourceCollection example AWS_CLOUD_FORMATION
         ```
+
 
         :param str resource_name: The name of the resource.
         :param ResourceCollectionArgs args: The arguments to use to populate this resource's properties.
@@ -352,10 +356,10 @@ class ResourceCollection(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 cloudformation: Optional[pulumi.Input[Union['ResourceCollectionCloudformationArgs', 'ResourceCollectionCloudformationArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Union['ResourceCollectionTagsArgs', 'ResourceCollectionTagsArgsDict']]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None,
+                 cloudformation: pulumi.Input[Optional[Union['ResourceCollectionCloudformationArgs', 'ResourceCollectionCloudformationArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Union['ResourceCollectionTagsArgs', 'ResourceCollectionTagsArgsDict']]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -381,10 +385,10 @@ class ResourceCollection(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            cloudformation: Optional[pulumi.Input[Union['ResourceCollectionCloudformationArgs', 'ResourceCollectionCloudformationArgsDict']]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Union['ResourceCollectionTagsArgs', 'ResourceCollectionTagsArgsDict']]] = None,
-            type: Optional[pulumi.Input[_builtins.str]] = None) -> 'ResourceCollection':
+            cloudformation: pulumi.Input[Optional[Union['ResourceCollectionCloudformationArgs', 'ResourceCollectionCloudformationArgsDict']]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Union['ResourceCollectionTagsArgs', 'ResourceCollectionTagsArgsDict']]] = None,
+            type: pulumi.Input[Optional[_builtins.str]] = None) -> 'ResourceCollection':
         """
         Get an existing ResourceCollection resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

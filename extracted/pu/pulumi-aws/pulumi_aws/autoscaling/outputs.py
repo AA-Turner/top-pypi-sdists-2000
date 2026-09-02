@@ -21,6 +21,8 @@ __all__ = [
     'GroupCapacityReservationSpecification',
     'GroupCapacityReservationSpecificationCapacityReservationTarget',
     'GroupInitialLifecycleHook',
+    'GroupInstanceLifecyclePolicy',
+    'GroupInstanceLifecyclePolicyRetentionTriggers',
     'GroupInstanceMaintenancePolicy',
     'GroupInstanceRefresh',
     'GroupInstanceRefreshPreferences',
@@ -124,7 +126,7 @@ class GroupAvailabilityZoneDistribution(dict):
     def __init__(__self__, *,
                  capacity_distribution_strategy: Optional[_builtins.str] = None):
         """
-        :param _builtins.str capacity_distribution_strategy: The strategy to use for distributing capacity across the Availability Zones. Valid values are `balanced-only` and `balanced-best-effort`. Default is `balanced-best-effort`.
+        :param _builtins.str capacity_distribution_strategy: The strategy to use for distributing capacity across the Availability Zones. Valid values are `balanced-only`, `balanced-best-effort`, and `reservations-then-balanced`. Default is `balanced-best-effort`. When `reservations-then-balanced` is set, you must also specify Capacity Reservations to prioritize through `capacity_reservation_specification` (or via a launch template) using a Capacity Reservation ID or Capacity Reservation resource group ARN.
         """
         if capacity_distribution_strategy is not None:
             pulumi.set(__self__, "capacity_distribution_strategy", capacity_distribution_strategy)
@@ -133,7 +135,7 @@ class GroupAvailabilityZoneDistribution(dict):
     @pulumi.getter(name="capacityDistributionStrategy")
     def capacity_distribution_strategy(self) -> Optional[_builtins.str]:
         """
-        The strategy to use for distributing capacity across the Availability Zones. Valid values are `balanced-only` and `balanced-best-effort`. Default is `balanced-best-effort`.
+        The strategy to use for distributing capacity across the Availability Zones. Valid values are `balanced-only`, `balanced-best-effort`, and `reservations-then-balanced`. Default is `balanced-best-effort`. When `reservations-then-balanced` is set, you must also specify Capacity Reservations to prioritize through `capacity_reservation_specification` (or via a launch template) using a Capacity Reservation ID or Capacity Reservation resource group ARN.
         """
         return pulumi.get(self, "capacity_distribution_strategy")
 
@@ -328,6 +330,78 @@ class GroupInitialLifecycleHook(dict):
     @pulumi.getter(name="roleArn")
     def role_arn(self) -> Optional[_builtins.str]:
         return pulumi.get(self, "role_arn")
+
+
+@pulumi.output_type
+class GroupInstanceLifecyclePolicy(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "retentionTriggers":
+            suggest = "retention_triggers"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in GroupInstanceLifecyclePolicy. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        GroupInstanceLifecyclePolicy.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        GroupInstanceLifecyclePolicy.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 retention_triggers: Optional['outputs.GroupInstanceLifecyclePolicyRetentionTriggers'] = None):
+        """
+        :param 'GroupInstanceLifecyclePolicyRetentionTriggersArgs' retention_triggers: Conditions that trigger instance retention behavior. Defined below.
+        """
+        if retention_triggers is not None:
+            pulumi.set(__self__, "retention_triggers", retention_triggers)
+
+    @_builtins.property
+    @pulumi.getter(name="retentionTriggers")
+    def retention_triggers(self) -> Optional['outputs.GroupInstanceLifecyclePolicyRetentionTriggers']:
+        """
+        Conditions that trigger instance retention behavior. Defined below.
+        """
+        return pulumi.get(self, "retention_triggers")
+
+
+@pulumi.output_type
+class GroupInstanceLifecyclePolicyRetentionTriggers(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "terminateHookAbandon":
+            suggest = "terminate_hook_abandon"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in GroupInstanceLifecyclePolicyRetentionTriggers. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        GroupInstanceLifecyclePolicyRetentionTriggers.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        GroupInstanceLifecyclePolicyRetentionTriggers.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 terminate_hook_abandon: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str terminate_hook_abandon: Action to take when a termination lifecycle hook is abandoned due to failure, timeout, or explicit abandonment. Valid values are `retain` and `terminate`. Set to `retain` to move instances to a retained state instead of terminating them. Retained instances don't count toward desired capacity and remain until you terminate them.
+        """
+        if terminate_hook_abandon is not None:
+            pulumi.set(__self__, "terminate_hook_abandon", terminate_hook_abandon)
+
+    @_builtins.property
+    @pulumi.getter(name="terminateHookAbandon")
+    def terminate_hook_abandon(self) -> Optional[_builtins.str]:
+        """
+        Action to take when a termination lifecycle hook is abandoned due to failure, timeout, or explicit abandonment. Valid values are `retain` and `terminate`. Set to `retain` to move instances to a retained state instead of terminating them. Retained instances don't count toward desired capacity and remain until you terminate them.
+        """
+        return pulumi.get(self, "terminate_hook_abandon")
 
 
 @pulumi.output_type
@@ -1128,7 +1202,7 @@ class GroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirements(dict):
         :param _builtins.str burstable_performance: Indicate whether burstable performance instance types should be `included`, `excluded`, or `required`. Default is `excluded`.
         :param Sequence[_builtins.str] cpu_manufacturers: List of CPU manufacturer names. Default is any manufacturer.
                
-               > **NOTE:** Don't confuse the CPU hardware manufacturer with the CPU hardware architecture. Instances will be launched with a compatible CPU architecture based on the Amazon Machine Image (AMI) that you specify in your launch template.
+               > **NOTE:** Don't confuse the CPU hardware manufacturer with the CPU hardware architecture. Instances will be launched with a compatible CPU architecture based on the AMI that you specify in your launch template.
                
                ```
                Valid names:
@@ -1324,7 +1398,7 @@ class GroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirements(dict):
         """
         List of CPU manufacturer names. Default is any manufacturer.
 
-        > **NOTE:** Don't confuse the CPU hardware manufacturer with the CPU hardware architecture. Instances will be launched with a compatible CPU architecture based on the Amazon Machine Image (AMI) that you specify in your launch template.
+        > **NOTE:** Don't confuse the CPU hardware manufacturer with the CPU hardware architecture. Instances will be launched with a compatible CPU architecture based on the AMI that you specify in your launch template.
 
         ```
         Valid names:
@@ -1786,7 +1860,7 @@ class GroupTrafficSource(dict):
                  identifier: _builtins.str,
                  type: Optional[_builtins.str] = None):
         """
-        :param _builtins.str identifier: Identifies the traffic source. For Application Load Balancers, Gateway Load Balancers, Network Load Balancers, and VPC Lattice, this will be the Amazon Resource Name (ARN) for a target group in this account and Region. For Classic Load Balancers, this will be the name of the Classic Load Balancer in this account and Region.
+        :param _builtins.str identifier: Identifies the traffic source. For Application Load Balancers, Gateway Load Balancers, Network Load Balancers, and VPC Lattice, this will be the ARN for a target group in this account and Region. For Classic Load Balancers, this will be the name of the Classic Load Balancer in this account and Region.
         :param _builtins.str type: Provides additional context for the value of Identifier.
                The following lists the valid values:
                `elb` if `identifier` is the name of a Classic Load Balancer.
@@ -1801,7 +1875,7 @@ class GroupTrafficSource(dict):
     @pulumi.getter
     def identifier(self) -> _builtins.str:
         """
-        Identifies the traffic source. For Application Load Balancers, Gateway Load Balancers, Network Load Balancers, and VPC Lattice, this will be the Amazon Resource Name (ARN) for a target group in this account and Region. For Classic Load Balancers, this will be the name of the Classic Load Balancer in this account and Region.
+        Identifies the traffic source. For Application Load Balancers, Gateway Load Balancers, Network Load Balancers, and VPC Lattice, this will be the ARN for a target group in this account and Region. For Classic Load Balancers, this will be the name of the Classic Load Balancer in this account and Region.
         """
         return pulumi.get(self, "identifier")
 
@@ -3669,7 +3743,7 @@ class TrafficSourceAttachmentTrafficSource(dict):
                  identifier: _builtins.str,
                  type: _builtins.str):
         """
-        :param _builtins.str identifier: Identifies the traffic source. For Application Load Balancers, Gateway Load Balancers, Network Load Balancers, and VPC Lattice, this will be the Amazon Resource Name (ARN) for a target group in this account and Region. For Classic Load Balancers, this will be the name of the Classic Load Balancer in this account and Region.
+        :param _builtins.str identifier: Identifies the traffic source. For Application Load Balancers, Gateway Load Balancers, Network Load Balancers, and VPC Lattice, this will be the ARN for a target group in this account and Region. For Classic Load Balancers, this will be the name of the Classic Load Balancer in this account and Region.
         :param _builtins.str type: Provides additional context for the value of `identifier`.
                The following lists the valid values:
                `elb` if `identifier` is the name of a Classic Load Balancer.
@@ -3683,7 +3757,7 @@ class TrafficSourceAttachmentTrafficSource(dict):
     @pulumi.getter
     def identifier(self) -> _builtins.str:
         """
-        Identifies the traffic source. For Application Load Balancers, Gateway Load Balancers, Network Load Balancers, and VPC Lattice, this will be the Amazon Resource Name (ARN) for a target group in this account and Region. For Classic Load Balancers, this will be the name of the Classic Load Balancer in this account and Region.
+        Identifies the traffic source. For Application Load Balancers, Gateway Load Balancers, Network Load Balancers, and VPC Lattice, this will be the ARN for a target group in this account and Region. For Classic Load Balancers, this will be the name of the Classic Load Balancer in this account and Region.
         """
         return pulumi.get(self, "identifier")
 
@@ -3735,8 +3809,8 @@ class GetGroupInstanceMaintenancePolicyResult(dict):
                  max_healthy_percentage: _builtins.int,
                  min_healthy_percentage: _builtins.int):
         """
-        :param _builtins.int max_healthy_percentage: Specifies the upper limit on the number of instances that are in the InService or Pending state with a healthy status during an instance replacement activity.
-        :param _builtins.int min_healthy_percentage: Specifies the lower limit on the number of instances that must be in the InService state with a healthy status during an instance replacement activity.
+        :param _builtins.int max_healthy_percentage: Upper limit on the number of instances that are in the InService or Pending state with a healthy status during an instance replacement activity.
+        :param _builtins.int min_healthy_percentage: Lower limit on the number of instances that must be in the InService state with a healthy status during an instance replacement activity.
         """
         pulumi.set(__self__, "max_healthy_percentage", max_healthy_percentage)
         pulumi.set(__self__, "min_healthy_percentage", min_healthy_percentage)
@@ -3745,7 +3819,7 @@ class GetGroupInstanceMaintenancePolicyResult(dict):
     @pulumi.getter(name="maxHealthyPercentage")
     def max_healthy_percentage(self) -> _builtins.int:
         """
-        Specifies the upper limit on the number of instances that are in the InService or Pending state with a healthy status during an instance replacement activity.
+        Upper limit on the number of instances that are in the InService or Pending state with a healthy status during an instance replacement activity.
         """
         return pulumi.get(self, "max_healthy_percentage")
 
@@ -3753,7 +3827,7 @@ class GetGroupInstanceMaintenancePolicyResult(dict):
     @pulumi.getter(name="minHealthyPercentage")
     def min_healthy_percentage(self) -> _builtins.int:
         """
-        Specifies the lower limit on the number of instances that must be in the InService state with a healthy status during an instance replacement activity.
+        Lower limit on the number of instances that must be in the InService state with a healthy status during an instance replacement activity.
         """
         return pulumi.get(self, "min_healthy_percentage")
 
@@ -3839,6 +3913,7 @@ class GetGroupMixedInstancesPolicyInstancesDistributionResult(dict):
         """
         :param _builtins.str on_demand_allocation_strategy: Strategy used when launching on-demand instances.
         :param _builtins.int on_demand_base_capacity: Absolute minimum amount of desired capacity that must be fulfilled by on-demand instances.
+        :param _builtins.int on_demand_percentage_above_base_capacity: Percentages of On-Demand Instances and Spot Instances for your additional capacity beyond `on_demand_base_capacity`.
         :param _builtins.str spot_allocation_strategy: Strategy used when launching Spot instances.
         :param _builtins.int spot_instance_pools: Number of Spot pools per availability zone to allocate capacity.
         :param _builtins.str spot_max_price: Maximum price per unit hour that the user is willing to pay for the Spot instances.
@@ -3869,6 +3944,9 @@ class GetGroupMixedInstancesPolicyInstancesDistributionResult(dict):
     @_builtins.property
     @pulumi.getter(name="onDemandPercentageAboveBaseCapacity")
     def on_demand_percentage_above_base_capacity(self) -> _builtins.int:
+        """
+        Percentages of On-Demand Instances and Spot Instances for your additional capacity beyond `on_demand_base_capacity`.
+        """
         return pulumi.get(self, "on_demand_percentage_above_base_capacity")
 
     @_builtins.property
@@ -3974,7 +4052,6 @@ class GetGroupMixedInstancesPolicyLaunchTemplateOverrideResult(dict):
                  weighted_capacity: _builtins.str):
         """
         :param Sequence['GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementArgs'] instance_requirements: List of instance requirements objects.
-               * `accelerator_count - List of objects describing the minimum and maximum number of accelerators for an instance type.
         :param _builtins.str instance_type: Overriding instance type.
         :param Sequence['GetGroupMixedInstancesPolicyLaunchTemplateOverrideLaunchTemplateSpecificationArgs'] launch_template_specifications: List of overriding launch template specification objects.
         :param _builtins.str weighted_capacity: Number of capacity units, which gives the instance type a proportional weight to other instance types.
@@ -3989,7 +4066,6 @@ class GetGroupMixedInstancesPolicyLaunchTemplateOverrideResult(dict):
     def instance_requirements(self) -> Sequence['outputs.GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementResult']:
         """
         List of instance requirements objects.
-        * `accelerator_count - List of objects describing the minimum and maximum number of accelerators for an instance type.
         """
         return pulumi.get(self, "instance_requirements")
 
@@ -4046,18 +4122,19 @@ class GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementResul
                  total_local_storage_gbs: Sequence['outputs.GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementTotalLocalStorageGbResult'],
                  vcpu_counts: Sequence['outputs.GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementVcpuCountResult']):
         """
+        :param Sequence['GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementAcceleratorCountArgs'] accelerator_counts: List of objects describing the minimum and maximum number of accelerators for an instance type.
         :param Sequence[_builtins.str] accelerator_manufacturers: List of accelerator manufacturer names.
         :param Sequence[_builtins.str] accelerator_names: List of accelerator names.
         :param Sequence['GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementAcceleratorTotalMemoryMibArgs'] accelerator_total_memory_mibs: List of objects describing the minimum and maximum total memory of the accelerators.
         :param Sequence[_builtins.str] accelerator_types: List of accelerator types.
         :param Sequence[_builtins.str] allowed_instance_types: List of instance types to apply the specified attributes against.
-        :param _builtins.str bare_metal: Indicates whether bare metal instances are included, excluded, or required.
+        :param _builtins.str bare_metal: Whether bare metal instances are included, excluded, or required.
         :param Sequence['GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementBaselineEbsBandwidthMbpArgs'] baseline_ebs_bandwidth_mbps: List of objects describing the minimum and maximum baseline EBS bandwidth (Mbps).
-        :param _builtins.str burstable_performance: Indicates whether burstable performance instance types are included, excluded, or required.
+        :param _builtins.str burstable_performance: Whether burstable performance instance types are included, excluded, or required.
         :param Sequence[_builtins.str] cpu_manufacturers: List of CPU manufacturer names.
         :param Sequence[_builtins.str] excluded_instance_types: List of excluded instance types.
         :param Sequence[_builtins.str] instance_generations: List of instance generation names.
-        :param _builtins.str local_storage: Indicates whether instance types with instance store volumes are included, excluded, or required.
+        :param _builtins.str local_storage: Whether instance types with instance store volumes are included, excluded, or required.
         :param Sequence[_builtins.str] local_storage_types: List of local storage type names.
         :param _builtins.int max_spot_price_as_percentage_of_optimal_on_demand_price: Price protection threshold for Spot Instances.
         :param Sequence['GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementMemoryGibPerVcpusArgs'] memory_gib_per_vcpus: List of objects describing the minimum and maximum amount of memory (GiB) per vCPU.
@@ -4065,7 +4142,7 @@ class GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementResul
         :param Sequence['GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementNetworkBandwidthGbpArgs'] network_bandwidth_gbps: List of objects describing the minimum and maximum amount of network bandwidth (Gbps).
         :param Sequence['GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementNetworkInterfaceCountArgs'] network_interface_counts: List of objects describing the minimum and maximum amount of network interfaces.
         :param _builtins.int on_demand_max_price_percentage_over_lowest_price: Price protection threshold for On-Demand Instances.
-        :param _builtins.bool require_hibernate_support: Indicates whether instance types must support On-Demand Instance Hibernation.
+        :param _builtins.bool require_hibernate_support: Whether instance types must support On-Demand Instance Hibernation.
         :param _builtins.int spot_max_price_percentage_over_lowest_price: Price protection threshold for Spot Instances.
         :param Sequence['GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementTotalLocalStorageGbArgs'] total_local_storage_gbs: List of objects describing the minimum and maximum total storage (GB).
         :param Sequence['GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementVcpuCountArgs'] vcpu_counts: List of objects describing the minimum and maximum number of vCPUs.
@@ -4098,6 +4175,9 @@ class GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementResul
     @_builtins.property
     @pulumi.getter(name="acceleratorCounts")
     def accelerator_counts(self) -> Sequence['outputs.GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementAcceleratorCountResult']:
+        """
+        List of objects describing the minimum and maximum number of accelerators for an instance type.
+        """
         return pulumi.get(self, "accelerator_counts")
 
     @_builtins.property
@@ -4144,7 +4224,7 @@ class GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementResul
     @pulumi.getter(name="bareMetal")
     def bare_metal(self) -> _builtins.str:
         """
-        Indicates whether bare metal instances are included, excluded, or required.
+        Whether bare metal instances are included, excluded, or required.
         """
         return pulumi.get(self, "bare_metal")
 
@@ -4160,7 +4240,7 @@ class GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementResul
     @pulumi.getter(name="burstablePerformance")
     def burstable_performance(self) -> _builtins.str:
         """
-        Indicates whether burstable performance instance types are included, excluded, or required.
+        Whether burstable performance instance types are included, excluded, or required.
         """
         return pulumi.get(self, "burstable_performance")
 
@@ -4192,7 +4272,7 @@ class GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementResul
     @pulumi.getter(name="localStorage")
     def local_storage(self) -> _builtins.str:
         """
-        Indicates whether instance types with instance store volumes are included, excluded, or required.
+        Whether instance types with instance store volumes are included, excluded, or required.
         """
         return pulumi.get(self, "local_storage")
 
@@ -4256,7 +4336,7 @@ class GetGroupMixedInstancesPolicyLaunchTemplateOverrideInstanceRequirementResul
     @pulumi.getter(name="requireHibernateSupport")
     def require_hibernate_support(self) -> _builtins.bool:
         """
-        Indicates whether instance types must support On-Demand Instance Hibernation.
+        Whether instance types must support On-Demand Instance Hibernation.
         """
         return pulumi.get(self, "require_hibernate_support")
 
@@ -4632,7 +4712,7 @@ class GetGroupTrafficSourceResult(dict):
                  identifier: _builtins.str,
                  type: _builtins.str):
         """
-        :param _builtins.str identifier: Identifies the traffic source. For Application Load Balancers, Gateway Load Balancers, Network Load Balancers, and VPC Lattice, this will be the Amazon Resource Name (ARN) for a target group in this account and Region. For Classic Load Balancers, this will be the name of the Classic Load Balancer in this account and Region.
+        :param _builtins.str identifier: Identifier of the traffic source. For Application Load Balancers, Gateway Load Balancers, Network Load Balancers, and VPC Lattice, this will be the ARN for a target group in this account and Region. For Classic Load Balancers, this will be the name of the Classic Load Balancer in this account and Region.
         :param _builtins.str type: Traffic source type.
         """
         pulumi.set(__self__, "identifier", identifier)
@@ -4642,7 +4722,7 @@ class GetGroupTrafficSourceResult(dict):
     @pulumi.getter
     def identifier(self) -> _builtins.str:
         """
-        Identifies the traffic source. For Application Load Balancers, Gateway Load Balancers, Network Load Balancers, and VPC Lattice, this will be the Amazon Resource Name (ARN) for a target group in this account and Region. For Classic Load Balancers, this will be the name of the Classic Load Balancer in this account and Region.
+        Identifier of the traffic source. For Application Load Balancers, Gateway Load Balancers, Network Load Balancers, and VPC Lattice, this will be the ARN for a target group in this account and Region. For Classic Load Balancers, this will be the name of the Classic Load Balancer in this account and Region.
         """
         return pulumi.get(self, "identifier")
 
@@ -4664,6 +4744,7 @@ class GetGroupWarmPoolResult(dict):
                  pool_state: _builtins.str):
         """
         :param Sequence['GetGroupWarmPoolInstanceReusePolicyArgs'] instance_reuse_policies: List of instance reuse policy objects.
+        :param _builtins.int max_group_prepared_capacity: Total maximum number of instances that are allowed to be in the warm pool or in any state except Terminated for the Auto Scaling group.
         :param _builtins.int min_size: Minimum number of instances to maintain in the warm pool.
         :param _builtins.str pool_state: Instance state to transition to after the lifecycle actions are complete.
         """
@@ -4683,6 +4764,9 @@ class GetGroupWarmPoolResult(dict):
     @_builtins.property
     @pulumi.getter(name="maxGroupPreparedCapacity")
     def max_group_prepared_capacity(self) -> _builtins.int:
+        """
+        Total maximum number of instances that are allowed to be in the warm pool or in any state except Terminated for the Auto Scaling group.
+        """
         return pulumi.get(self, "max_group_prepared_capacity")
 
     @_builtins.property
@@ -4707,7 +4791,7 @@ class GetGroupWarmPoolInstanceReusePolicyResult(dict):
     def __init__(__self__, *,
                  reuse_on_scale_in: _builtins.bool):
         """
-        :param _builtins.bool reuse_on_scale_in: Indicates whether instances in the Auto Scaling group can be returned to the warm pool on scale in.
+        :param _builtins.bool reuse_on_scale_in: Whether instances in the Auto Scaling group can be returned to the warm pool on scale in.
         """
         pulumi.set(__self__, "reuse_on_scale_in", reuse_on_scale_in)
 
@@ -4715,7 +4799,7 @@ class GetGroupWarmPoolInstanceReusePolicyResult(dict):
     @pulumi.getter(name="reuseOnScaleIn")
     def reuse_on_scale_in(self) -> _builtins.bool:
         """
-        Indicates whether instances in the Auto Scaling group can be returned to the warm pool on scale in.
+        Whether instances in the Auto Scaling group can be returned to the warm pool on scale in.
         """
         return pulumi.get(self, "reuse_on_scale_in")
 

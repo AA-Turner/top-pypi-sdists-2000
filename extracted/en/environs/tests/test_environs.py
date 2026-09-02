@@ -71,6 +71,12 @@ class TestCasting:
         assert env("NOT_SET", "mydefault") == "mydefault"
         assert env("NOT_SET", None) is None
 
+    def test_missing_variable_raises_not_set_error(self, env: environs.Env):
+        with pytest.raises(environs.EnvNotSetError) as excinfo:
+            env.str("NOT_SET")
+
+        assert isinstance(excinfo.value, environs.EnvError)
+
     def test_basic(self, set_env, env: environs.Env):
         set_env({"STR": "foo"})
         assert env.str("STR") == "foo"
@@ -672,7 +678,7 @@ class TestCustomTypes:
 
         assert env.https_url("URL") == "https://test.test/"
 
-        with pytest.raises(environs.EnvError) as excinfo:
+        with pytest.raises(environs.EnvNotSetError) as excinfo:
             env.https_url("NOT_SET")
         assert excinfo.value.args[0] == 'Environment variable "NOT_SET" not set'
 
@@ -974,6 +980,20 @@ class TestDeferredValidation:
         assert "INT" in exc.error_messages
         assert "DTIME" in exc.error_messages
 
+    def test_invalid_value_returns_none(self, env: environs.Env, set_env):
+        set_env(
+            {
+                "INT": "not-an-int",
+                "TTL": "-2",
+                "MYLIST": "a,b,c",
+            },
+        )
+        assert env.int("INT") is None
+        assert env.int("TTL", validate=validate.Range(min=0, max=100)) is None
+        assert env.list("MYLIST", validate=validate.Length(min=10)) is None
+        with pytest.raises(environs.EnvValidationError):
+            env.seal()
+
     def test_deferred_required_validation(self, env: environs.Env):
         env.int("STR")
         env.int("INT")
@@ -1082,7 +1102,7 @@ class TestDeferredValidation:
         def always_fail(value):
             raise environs.EnvError("Invalid!")
 
-        env.always_fail("MY_VAR")
+        assert env.always_fail("MY_VAR") is None
 
         with pytest.raises(environs.EnvValidationError) as excinfo:
             env.seal()

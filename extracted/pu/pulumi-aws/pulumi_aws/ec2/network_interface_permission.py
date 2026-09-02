@@ -24,10 +24,11 @@ class NetworkInterfacePermissionArgs:
                  aws_account_id: pulumi.Input[_builtins.str],
                  network_interface_id: pulumi.Input[_builtins.str],
                  permission: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['NetworkInterfacePermissionTimeoutsArgs']] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['NetworkInterfacePermissionTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a NetworkInterfacePermission resource.
+
         :param pulumi.Input[_builtins.str] aws_account_id: The Amazon Web Services account ID.
         :param pulumi.Input[_builtins.str] network_interface_id: The ID of the network interface.
         :param pulumi.Input[_builtins.str] permission: The type of permission to grant. Valid values are `INSTANCE-ATTACH` or `EIP-ASSOCIATE`.
@@ -79,37 +80,38 @@ class NetworkInterfacePermissionArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['NetworkInterfacePermissionTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['NetworkInterfacePermissionTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['NetworkInterfacePermissionTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['NetworkInterfacePermissionTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _NetworkInterfacePermissionState:
     def __init__(__self__, *,
-                 aws_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 network_interface_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 network_interface_permission_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 permission: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['NetworkInterfacePermissionTimeoutsArgs']] = None):
+                 aws_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 network_interface_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 network_interface_permission_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 permission: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['NetworkInterfacePermissionTimeoutsArgs']] = None):
         """
         Input properties used for looking up and filtering NetworkInterfacePermission resources.
+
         :param pulumi.Input[_builtins.str] aws_account_id: The Amazon Web Services account ID.
         :param pulumi.Input[_builtins.str] network_interface_id: The ID of the network interface.
         :param pulumi.Input[_builtins.str] network_interface_permission_id: ENI permission ID.
@@ -131,71 +133,71 @@ class _NetworkInterfacePermissionState:
 
     @_builtins.property
     @pulumi.getter(name="awsAccountId")
-    def aws_account_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def aws_account_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The Amazon Web Services account ID.
         """
         return pulumi.get(self, "aws_account_id")
 
     @aws_account_id.setter
-    def aws_account_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def aws_account_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "aws_account_id", value)
 
     @_builtins.property
     @pulumi.getter(name="networkInterfaceId")
-    def network_interface_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def network_interface_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the network interface.
         """
         return pulumi.get(self, "network_interface_id")
 
     @network_interface_id.setter
-    def network_interface_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def network_interface_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "network_interface_id", value)
 
     @_builtins.property
     @pulumi.getter(name="networkInterfacePermissionId")
-    def network_interface_permission_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def network_interface_permission_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ENI permission ID.
         """
         return pulumi.get(self, "network_interface_permission_id")
 
     @network_interface_permission_id.setter
-    def network_interface_permission_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def network_interface_permission_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "network_interface_permission_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def permission(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def permission(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The type of permission to grant. Valid values are `INSTANCE-ATTACH` or `EIP-ASSOCIATE`.
         """
         return pulumi.get(self, "permission")
 
     @permission.setter
-    def permission(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def permission(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "permission", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['NetworkInterfacePermissionTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['NetworkInterfacePermissionTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['NetworkInterfacePermissionTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['NetworkInterfacePermissionTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
@@ -205,11 +207,11 @@ class NetworkInterfacePermission(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 aws_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 network_interface_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 permission: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['NetworkInterfacePermissionTimeoutsArgs', 'NetworkInterfacePermissionTimeoutsArgsDict']]] = None,
+                 aws_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 network_interface_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 permission: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['NetworkInterfacePermissionTimeoutsArgs', 'NetworkInterfacePermissionTimeoutsArgsDict']]] = None,
                  __props__=None):
         """
         Grant cross-account access to an Elastic network interface (ENI).
@@ -221,13 +223,13 @@ class NetworkInterfacePermission(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.ec2.NetworkInterface("example",
-            subnet_id=example_aws_subnet["id"],
-            private_ips=["10.0.0.50"],
-            security_groups=[example_aws_security_group["id"]],
             attachments=[{
                 "instance": example_aws_instance["id"],
                 "device_index": 1,
-            }])
+            }],
+            subnet_id=example_aws_subnet["id"],
+            private_ips=["10.0.0.50"],
+            security_groups=[example_aws_security_group["id"]])
         example_network_interface_permission = aws.ec2.NetworkInterfacePermission("example",
             network_interface_id=example.id,
             aws_account_id="123456789012",
@@ -241,6 +243,7 @@ class NetworkInterfacePermission(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:ec2/networkInterfacePermission:NetworkInterfacePermission example eni-perm-056ad97ce2ac377ed
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -265,13 +268,13 @@ class NetworkInterfacePermission(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.ec2.NetworkInterface("example",
-            subnet_id=example_aws_subnet["id"],
-            private_ips=["10.0.0.50"],
-            security_groups=[example_aws_security_group["id"]],
             attachments=[{
                 "instance": example_aws_instance["id"],
                 "device_index": 1,
-            }])
+            }],
+            subnet_id=example_aws_subnet["id"],
+            private_ips=["10.0.0.50"],
+            security_groups=[example_aws_security_group["id"]])
         example_network_interface_permission = aws.ec2.NetworkInterfacePermission("example",
             network_interface_id=example.id,
             aws_account_id="123456789012",
@@ -285,6 +288,7 @@ class NetworkInterfacePermission(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:ec2/networkInterfacePermission:NetworkInterfacePermission example eni-perm-056ad97ce2ac377ed
         ```
+
 
         :param str resource_name: The name of the resource.
         :param NetworkInterfacePermissionArgs args: The arguments to use to populate this resource's properties.
@@ -301,11 +305,11 @@ class NetworkInterfacePermission(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 aws_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 network_interface_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 permission: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['NetworkInterfacePermissionTimeoutsArgs', 'NetworkInterfacePermissionTimeoutsArgsDict']]] = None,
+                 aws_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 network_interface_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 permission: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['NetworkInterfacePermissionTimeoutsArgs', 'NetworkInterfacePermissionTimeoutsArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -337,12 +341,12 @@ class NetworkInterfacePermission(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            aws_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-            network_interface_id: Optional[pulumi.Input[_builtins.str]] = None,
-            network_interface_permission_id: Optional[pulumi.Input[_builtins.str]] = None,
-            permission: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            timeouts: Optional[pulumi.Input[Union['NetworkInterfacePermissionTimeoutsArgs', 'NetworkInterfacePermissionTimeoutsArgsDict']]] = None) -> 'NetworkInterfacePermission':
+            aws_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+            network_interface_id: pulumi.Input[Optional[_builtins.str]] = None,
+            network_interface_permission_id: pulumi.Input[Optional[_builtins.str]] = None,
+            permission: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            timeouts: pulumi.Input[Optional[Union['NetworkInterfacePermissionTimeoutsArgs', 'NetworkInterfacePermissionTimeoutsArgsDict']]] = None) -> 'NetworkInterfacePermission':
         """
         Get an existing NetworkInterfacePermission resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

@@ -27,23 +27,24 @@ class ReplicationConfigArgs:
                  source_endpoint_arn: pulumi.Input[_builtins.str],
                  table_mappings: pulumi.Input[_builtins.str],
                  target_endpoint_arn: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 replication_settings: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 start_replication: Optional[pulumi.Input[_builtins.bool]] = None,
-                 supplemental_settings: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 replication_settings: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 start_replication: pulumi.Input[Optional[_builtins.bool]] = None,
+                 supplemental_settings: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a ReplicationConfig resource.
+
         :param pulumi.Input['ReplicationConfigComputeConfigArgs'] compute_config: Configuration block for provisioning an DMS Serverless replication.
         :param pulumi.Input[_builtins.str] replication_config_identifier: Unique identifier that you want to use to create the config.
         :param pulumi.Input[_builtins.str] replication_type: The migration type. Can be one of `full-load | cdc | full-load-and-cdc`.
-        :param pulumi.Input[_builtins.str] source_endpoint_arn: The Amazon Resource Name (ARN) string that uniquely identifies the source endpoint.
+        :param pulumi.Input[_builtins.str] source_endpoint_arn: ARN string that uniquely identifies the source endpoint.
         :param pulumi.Input[_builtins.str] table_mappings: An escaped JSON string that contains the table mappings. For information on table mapping see [Using Table Mapping with an AWS Database Migration Service Task to Select and Filter Data](http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TableMapping.html)
-        :param pulumi.Input[_builtins.str] target_endpoint_arn: The Amazon Resource Name (ARN) string that uniquely identifies the target endpoint.
+        :param pulumi.Input[_builtins.str] target_endpoint_arn: ARN string that uniquely identifies the target endpoint.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[_builtins.str] replication_settings: An escaped JSON string that are used to provision this replication configuration. For example, [Change processing tuning settings](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.ChangeProcessingTuning.html)
-        :param pulumi.Input[_builtins.str] resource_identifier: Unique value or name that you set for a given resource that can be used to construct an Amazon Resource Name (ARN) for that resource. For more information, see [Fine-grained access control using resource names and tags](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#CHAP_Security.FineGrainedAccess)
+        :param pulumi.Input[_builtins.str] resource_identifier: Unique value or name that you set for a given resource that can be used to construct an ARN for that resource. For more information, see [Fine-grained access control using resource names and tags](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#CHAP_Security.FineGrainedAccess)
         :param pulumi.Input[_builtins.bool] start_replication: Whether to run or stop the serverless replication, default is false.
         :param pulumi.Input[_builtins.str] supplemental_settings: JSON settings for specifying supplemental data. For more information see [Specifying supplemental data for task settings](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.TaskData.html)
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
@@ -107,7 +108,7 @@ class ReplicationConfigArgs:
     @pulumi.getter(name="sourceEndpointArn")
     def source_endpoint_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) string that uniquely identifies the source endpoint.
+        ARN string that uniquely identifies the source endpoint.
         """
         return pulumi.get(self, "source_endpoint_arn")
 
@@ -131,7 +132,7 @@ class ReplicationConfigArgs:
     @pulumi.getter(name="targetEndpointArn")
     def target_endpoint_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) string that uniquely identifies the target endpoint.
+        ARN string that uniquely identifies the target endpoint.
         """
         return pulumi.get(self, "target_endpoint_arn")
 
@@ -141,110 +142,111 @@ class ReplicationConfigArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="replicationSettings")
-    def replication_settings(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def replication_settings(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         An escaped JSON string that are used to provision this replication configuration. For example, [Change processing tuning settings](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.ChangeProcessingTuning.html)
         """
         return pulumi.get(self, "replication_settings")
 
     @replication_settings.setter
-    def replication_settings(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def replication_settings(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "replication_settings", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceIdentifier")
-    def resource_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def resource_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Unique value or name that you set for a given resource that can be used to construct an Amazon Resource Name (ARN) for that resource. For more information, see [Fine-grained access control using resource names and tags](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#CHAP_Security.FineGrainedAccess)
+        Unique value or name that you set for a given resource that can be used to construct an ARN for that resource. For more information, see [Fine-grained access control using resource names and tags](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#CHAP_Security.FineGrainedAccess)
         """
         return pulumi.get(self, "resource_identifier")
 
     @resource_identifier.setter
-    def resource_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def resource_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "resource_identifier", value)
 
     @_builtins.property
     @pulumi.getter(name="startReplication")
-    def start_replication(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def start_replication(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to run or stop the serverless replication, default is false.
         """
         return pulumi.get(self, "start_replication")
 
     @start_replication.setter
-    def start_replication(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def start_replication(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "start_replication", value)
 
     @_builtins.property
     @pulumi.getter(name="supplementalSettings")
-    def supplemental_settings(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def supplemental_settings(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         JSON settings for specifying supplemental data. For more information see [Specifying supplemental data for task settings](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.TaskData.html)
         """
         return pulumi.get(self, "supplemental_settings")
 
     @supplemental_settings.setter
-    def supplemental_settings(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def supplemental_settings(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "supplemental_settings", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _ReplicationConfigState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 compute_config: Optional[pulumi.Input['ReplicationConfigComputeConfigArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 replication_config_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 replication_settings: Optional[pulumi.Input[_builtins.str]] = None,
-                 replication_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 source_endpoint_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 start_replication: Optional[pulumi.Input[_builtins.bool]] = None,
-                 supplemental_settings: Optional[pulumi.Input[_builtins.str]] = None,
-                 table_mappings: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 target_endpoint_arn: Optional[pulumi.Input[_builtins.str]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 compute_config: pulumi.Input[Optional['ReplicationConfigComputeConfigArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 replication_config_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 replication_settings: pulumi.Input[Optional[_builtins.str]] = None,
+                 replication_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 source_endpoint_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 start_replication: pulumi.Input[Optional[_builtins.bool]] = None,
+                 supplemental_settings: pulumi.Input[Optional[_builtins.str]] = None,
+                 table_mappings: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 target_endpoint_arn: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering ReplicationConfig resources.
-        :param pulumi.Input[_builtins.str] arn: The Amazon Resource Name (ARN) for the serverless replication config.
+
+        :param pulumi.Input[_builtins.str] arn: ARN for the serverless replication config.
         :param pulumi.Input['ReplicationConfigComputeConfigArgs'] compute_config: Configuration block for provisioning an DMS Serverless replication.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[_builtins.str] replication_config_identifier: Unique identifier that you want to use to create the config.
         :param pulumi.Input[_builtins.str] replication_settings: An escaped JSON string that are used to provision this replication configuration. For example, [Change processing tuning settings](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.ChangeProcessingTuning.html)
         :param pulumi.Input[_builtins.str] replication_type: The migration type. Can be one of `full-load | cdc | full-load-and-cdc`.
-        :param pulumi.Input[_builtins.str] resource_identifier: Unique value or name that you set for a given resource that can be used to construct an Amazon Resource Name (ARN) for that resource. For more information, see [Fine-grained access control using resource names and tags](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#CHAP_Security.FineGrainedAccess)
-        :param pulumi.Input[_builtins.str] source_endpoint_arn: The Amazon Resource Name (ARN) string that uniquely identifies the source endpoint.
+        :param pulumi.Input[_builtins.str] resource_identifier: Unique value or name that you set for a given resource that can be used to construct an ARN for that resource. For more information, see [Fine-grained access control using resource names and tags](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#CHAP_Security.FineGrainedAccess)
+        :param pulumi.Input[_builtins.str] source_endpoint_arn: ARN string that uniquely identifies the source endpoint.
         :param pulumi.Input[_builtins.bool] start_replication: Whether to run or stop the serverless replication, default is false.
         :param pulumi.Input[_builtins.str] supplemental_settings: JSON settings for specifying supplemental data. For more information see [Specifying supplemental data for task settings](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.TaskData.html)
         :param pulumi.Input[_builtins.str] table_mappings: An escaped JSON string that contains the table mappings. For information on table mapping see [Using Table Mapping with an AWS Database Migration Service Task to Select and Filter Data](http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TableMapping.html)
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
-        :param pulumi.Input[_builtins.str] target_endpoint_arn: The Amazon Resource Name (ARN) string that uniquely identifies the target endpoint.
+        :param pulumi.Input[_builtins.str] target_endpoint_arn: ARN string that uniquely identifies the target endpoint.
         """
         if arn is not None:
             pulumi.set(__self__, "arn", arn)
@@ -277,170 +279,170 @@ class _ReplicationConfigState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) for the serverless replication config.
+        ARN for the serverless replication config.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="computeConfig")
-    def compute_config(self) -> Optional[pulumi.Input['ReplicationConfigComputeConfigArgs']]:
+    def compute_config(self) -> pulumi.Input[Optional['ReplicationConfigComputeConfigArgs']]:
         """
         Configuration block for provisioning an DMS Serverless replication.
         """
         return pulumi.get(self, "compute_config")
 
     @compute_config.setter
-    def compute_config(self, value: Optional[pulumi.Input['ReplicationConfigComputeConfigArgs']]):
+    def compute_config(self, value: pulumi.Input[Optional['ReplicationConfigComputeConfigArgs']]):
         pulumi.set(self, "compute_config", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="replicationConfigIdentifier")
-    def replication_config_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def replication_config_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique identifier that you want to use to create the config.
         """
         return pulumi.get(self, "replication_config_identifier")
 
     @replication_config_identifier.setter
-    def replication_config_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def replication_config_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "replication_config_identifier", value)
 
     @_builtins.property
     @pulumi.getter(name="replicationSettings")
-    def replication_settings(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def replication_settings(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         An escaped JSON string that are used to provision this replication configuration. For example, [Change processing tuning settings](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.ChangeProcessingTuning.html)
         """
         return pulumi.get(self, "replication_settings")
 
     @replication_settings.setter
-    def replication_settings(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def replication_settings(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "replication_settings", value)
 
     @_builtins.property
     @pulumi.getter(name="replicationType")
-    def replication_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def replication_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The migration type. Can be one of `full-load | cdc | full-load-and-cdc`.
         """
         return pulumi.get(self, "replication_type")
 
     @replication_type.setter
-    def replication_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def replication_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "replication_type", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceIdentifier")
-    def resource_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def resource_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Unique value or name that you set for a given resource that can be used to construct an Amazon Resource Name (ARN) for that resource. For more information, see [Fine-grained access control using resource names and tags](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#CHAP_Security.FineGrainedAccess)
+        Unique value or name that you set for a given resource that can be used to construct an ARN for that resource. For more information, see [Fine-grained access control using resource names and tags](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#CHAP_Security.FineGrainedAccess)
         """
         return pulumi.get(self, "resource_identifier")
 
     @resource_identifier.setter
-    def resource_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def resource_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "resource_identifier", value)
 
     @_builtins.property
     @pulumi.getter(name="sourceEndpointArn")
-    def source_endpoint_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def source_endpoint_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) string that uniquely identifies the source endpoint.
+        ARN string that uniquely identifies the source endpoint.
         """
         return pulumi.get(self, "source_endpoint_arn")
 
     @source_endpoint_arn.setter
-    def source_endpoint_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def source_endpoint_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "source_endpoint_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="startReplication")
-    def start_replication(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def start_replication(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether to run or stop the serverless replication, default is false.
         """
         return pulumi.get(self, "start_replication")
 
     @start_replication.setter
-    def start_replication(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def start_replication(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "start_replication", value)
 
     @_builtins.property
     @pulumi.getter(name="supplementalSettings")
-    def supplemental_settings(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def supplemental_settings(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         JSON settings for specifying supplemental data. For more information see [Specifying supplemental data for task settings](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.TaskData.html)
         """
         return pulumi.get(self, "supplemental_settings")
 
     @supplemental_settings.setter
-    def supplemental_settings(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def supplemental_settings(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "supplemental_settings", value)
 
     @_builtins.property
     @pulumi.getter(name="tableMappings")
-    def table_mappings(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def table_mappings(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         An escaped JSON string that contains the table mappings. For information on table mapping see [Using Table Mapping with an AWS Database Migration Service Task to Select and Filter Data](http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TableMapping.html)
         """
         return pulumi.get(self, "table_mappings")
 
     @table_mappings.setter
-    def table_mappings(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def table_mappings(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "table_mappings", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter(name="targetEndpointArn")
-    def target_endpoint_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def target_endpoint_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) string that uniquely identifies the target endpoint.
+        ARN string that uniquely identifies the target endpoint.
         """
         return pulumi.get(self, "target_endpoint_arn")
 
     @target_endpoint_arn.setter
-    def target_endpoint_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def target_endpoint_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "target_endpoint_arn", value)
 
 
@@ -450,18 +452,18 @@ class ReplicationConfig(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 compute_config: Optional[pulumi.Input[Union['ReplicationConfigComputeConfigArgs', 'ReplicationConfigComputeConfigArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 replication_config_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 replication_settings: Optional[pulumi.Input[_builtins.str]] = None,
-                 replication_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 source_endpoint_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 start_replication: Optional[pulumi.Input[_builtins.bool]] = None,
-                 supplemental_settings: Optional[pulumi.Input[_builtins.str]] = None,
-                 table_mappings: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 target_endpoint_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 compute_config: pulumi.Input[Optional[Union['ReplicationConfigComputeConfigArgs', 'ReplicationConfigComputeConfigArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 replication_config_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 replication_settings: pulumi.Input[Optional[_builtins.str]] = None,
+                 replication_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 source_endpoint_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 start_replication: pulumi.Input[Optional[_builtins.bool]] = None,
+                 supplemental_settings: pulumi.Input[Optional[_builtins.str]] = None,
+                 table_mappings: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 target_endpoint_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides a DMS Serverless replication config resource.
@@ -475,6 +477,12 @@ class ReplicationConfig(pulumi.CustomResource):
         import pulumi_aws as aws
 
         name = aws.dms.ReplicationConfig("name",
+            compute_config={
+                "replication_subnet_group_id": default["replicationSubnetGroupId"],
+                "max_capacity_units": 64,
+                "min_capacity_units": 2,
+                "preferred_maintenance_window": "sun:23:45-mon:00:30",
+            },
             replication_config_identifier="test-dms-serverless-replication-tf",
             resource_identifier="test-dms-serverless-replication-tf",
             replication_type="cdc",
@@ -484,13 +492,7 @@ class ReplicationConfig(pulumi.CustomResource):
             \\"rules\\":[{\\"rule-type\\":\\"selection\\",\\"rule-id\\":\\"1\\",\\"rule-name\\":\\"1\\",\\"rule-action\\":\\"include\\",\\"object-locator\\":{\\"schema-name\\":\\"%%\\",\\"table-name\\":\\"%%\\"}}]
           }
         \"\"\",
-            start_replication=True,
-            compute_config={
-                "replication_subnet_group_id": default["replicationSubnetGroupId"],
-                "max_capacity_units": 64,
-                "min_capacity_units": 2,
-                "preferred_maintenance_window": "sun:23:45-mon:00:30",
-            })
+            start_replication=True)
         ```
 
         ## Import
@@ -499,13 +501,14 @@ class ReplicationConfig(pulumi.CustomResource):
 
         #### Required
 
-        - `arn` (String) Amazon Resource Name (ARN) of the DMS replication configuration.
+        - `arn` (String) ARN of the DMS replication configuration.
 
         Using `pulumi import`, import a replication config using the `arn`. For example:
 
         ```sh
         $ pulumi import aws:dms/replicationConfig:ReplicationConfig example arn:aws:dms:us-east-1:123456789012:replication-config:UX6OL6MHMMJKFFOXE3H7LLJCMEKBDUG4ZV7DRSI
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -514,13 +517,13 @@ class ReplicationConfig(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] replication_config_identifier: Unique identifier that you want to use to create the config.
         :param pulumi.Input[_builtins.str] replication_settings: An escaped JSON string that are used to provision this replication configuration. For example, [Change processing tuning settings](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.ChangeProcessingTuning.html)
         :param pulumi.Input[_builtins.str] replication_type: The migration type. Can be one of `full-load | cdc | full-load-and-cdc`.
-        :param pulumi.Input[_builtins.str] resource_identifier: Unique value or name that you set for a given resource that can be used to construct an Amazon Resource Name (ARN) for that resource. For more information, see [Fine-grained access control using resource names and tags](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#CHAP_Security.FineGrainedAccess)
-        :param pulumi.Input[_builtins.str] source_endpoint_arn: The Amazon Resource Name (ARN) string that uniquely identifies the source endpoint.
+        :param pulumi.Input[_builtins.str] resource_identifier: Unique value or name that you set for a given resource that can be used to construct an ARN for that resource. For more information, see [Fine-grained access control using resource names and tags](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#CHAP_Security.FineGrainedAccess)
+        :param pulumi.Input[_builtins.str] source_endpoint_arn: ARN string that uniquely identifies the source endpoint.
         :param pulumi.Input[_builtins.bool] start_replication: Whether to run or stop the serverless replication, default is false.
         :param pulumi.Input[_builtins.str] supplemental_settings: JSON settings for specifying supplemental data. For more information see [Specifying supplemental data for task settings](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.TaskData.html)
         :param pulumi.Input[_builtins.str] table_mappings: An escaped JSON string that contains the table mappings. For information on table mapping see [Using Table Mapping with an AWS Database Migration Service Task to Select and Filter Data](http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TableMapping.html)
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[_builtins.str] target_endpoint_arn: The Amazon Resource Name (ARN) string that uniquely identifies the target endpoint.
+        :param pulumi.Input[_builtins.str] target_endpoint_arn: ARN string that uniquely identifies the target endpoint.
         """
         ...
     @overload
@@ -540,6 +543,12 @@ class ReplicationConfig(pulumi.CustomResource):
         import pulumi_aws as aws
 
         name = aws.dms.ReplicationConfig("name",
+            compute_config={
+                "replication_subnet_group_id": default["replicationSubnetGroupId"],
+                "max_capacity_units": 64,
+                "min_capacity_units": 2,
+                "preferred_maintenance_window": "sun:23:45-mon:00:30",
+            },
             replication_config_identifier="test-dms-serverless-replication-tf",
             resource_identifier="test-dms-serverless-replication-tf",
             replication_type="cdc",
@@ -549,13 +558,7 @@ class ReplicationConfig(pulumi.CustomResource):
             \\"rules\\":[{\\"rule-type\\":\\"selection\\",\\"rule-id\\":\\"1\\",\\"rule-name\\":\\"1\\",\\"rule-action\\":\\"include\\",\\"object-locator\\":{\\"schema-name\\":\\"%%\\",\\"table-name\\":\\"%%\\"}}]
           }
         \"\"\",
-            start_replication=True,
-            compute_config={
-                "replication_subnet_group_id": default["replicationSubnetGroupId"],
-                "max_capacity_units": 64,
-                "min_capacity_units": 2,
-                "preferred_maintenance_window": "sun:23:45-mon:00:30",
-            })
+            start_replication=True)
         ```
 
         ## Import
@@ -564,13 +567,14 @@ class ReplicationConfig(pulumi.CustomResource):
 
         #### Required
 
-        - `arn` (String) Amazon Resource Name (ARN) of the DMS replication configuration.
+        - `arn` (String) ARN of the DMS replication configuration.
 
         Using `pulumi import`, import a replication config using the `arn`. For example:
 
         ```sh
         $ pulumi import aws:dms/replicationConfig:ReplicationConfig example arn:aws:dms:us-east-1:123456789012:replication-config:UX6OL6MHMMJKFFOXE3H7LLJCMEKBDUG4ZV7DRSI
         ```
+
 
         :param str resource_name: The name of the resource.
         :param ReplicationConfigArgs args: The arguments to use to populate this resource's properties.
@@ -587,18 +591,18 @@ class ReplicationConfig(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 compute_config: Optional[pulumi.Input[Union['ReplicationConfigComputeConfigArgs', 'ReplicationConfigComputeConfigArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 replication_config_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 replication_settings: Optional[pulumi.Input[_builtins.str]] = None,
-                 replication_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 source_endpoint_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 start_replication: Optional[pulumi.Input[_builtins.bool]] = None,
-                 supplemental_settings: Optional[pulumi.Input[_builtins.str]] = None,
-                 table_mappings: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 target_endpoint_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 compute_config: pulumi.Input[Optional[Union['ReplicationConfigComputeConfigArgs', 'ReplicationConfigComputeConfigArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 replication_config_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 replication_settings: pulumi.Input[Optional[_builtins.str]] = None,
+                 replication_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 source_endpoint_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 start_replication: pulumi.Input[Optional[_builtins.bool]] = None,
+                 supplemental_settings: pulumi.Input[Optional[_builtins.str]] = None,
+                 table_mappings: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 target_endpoint_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -644,20 +648,20 @@ class ReplicationConfig(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            compute_config: Optional[pulumi.Input[Union['ReplicationConfigComputeConfigArgs', 'ReplicationConfigComputeConfigArgsDict']]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            replication_config_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-            replication_settings: Optional[pulumi.Input[_builtins.str]] = None,
-            replication_type: Optional[pulumi.Input[_builtins.str]] = None,
-            resource_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-            source_endpoint_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            start_replication: Optional[pulumi.Input[_builtins.bool]] = None,
-            supplemental_settings: Optional[pulumi.Input[_builtins.str]] = None,
-            table_mappings: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            target_endpoint_arn: Optional[pulumi.Input[_builtins.str]] = None) -> 'ReplicationConfig':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            compute_config: pulumi.Input[Optional[Union['ReplicationConfigComputeConfigArgs', 'ReplicationConfigComputeConfigArgsDict']]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            replication_config_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+            replication_settings: pulumi.Input[Optional[_builtins.str]] = None,
+            replication_type: pulumi.Input[Optional[_builtins.str]] = None,
+            resource_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+            source_endpoint_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            start_replication: pulumi.Input[Optional[_builtins.bool]] = None,
+            supplemental_settings: pulumi.Input[Optional[_builtins.str]] = None,
+            table_mappings: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            target_endpoint_arn: pulumi.Input[Optional[_builtins.str]] = None) -> 'ReplicationConfig':
         """
         Get an existing ReplicationConfig resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -665,20 +669,20 @@ class ReplicationConfig(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] arn: The Amazon Resource Name (ARN) for the serverless replication config.
+        :param pulumi.Input[_builtins.str] arn: ARN for the serverless replication config.
         :param pulumi.Input[Union['ReplicationConfigComputeConfigArgs', 'ReplicationConfigComputeConfigArgsDict']] compute_config: Configuration block for provisioning an DMS Serverless replication.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[_builtins.str] replication_config_identifier: Unique identifier that you want to use to create the config.
         :param pulumi.Input[_builtins.str] replication_settings: An escaped JSON string that are used to provision this replication configuration. For example, [Change processing tuning settings](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.ChangeProcessingTuning.html)
         :param pulumi.Input[_builtins.str] replication_type: The migration type. Can be one of `full-load | cdc | full-load-and-cdc`.
-        :param pulumi.Input[_builtins.str] resource_identifier: Unique value or name that you set for a given resource that can be used to construct an Amazon Resource Name (ARN) for that resource. For more information, see [Fine-grained access control using resource names and tags](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#CHAP_Security.FineGrainedAccess)
-        :param pulumi.Input[_builtins.str] source_endpoint_arn: The Amazon Resource Name (ARN) string that uniquely identifies the source endpoint.
+        :param pulumi.Input[_builtins.str] resource_identifier: Unique value or name that you set for a given resource that can be used to construct an ARN for that resource. For more information, see [Fine-grained access control using resource names and tags](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#CHAP_Security.FineGrainedAccess)
+        :param pulumi.Input[_builtins.str] source_endpoint_arn: ARN string that uniquely identifies the source endpoint.
         :param pulumi.Input[_builtins.bool] start_replication: Whether to run or stop the serverless replication, default is false.
         :param pulumi.Input[_builtins.str] supplemental_settings: JSON settings for specifying supplemental data. For more information see [Specifying supplemental data for task settings](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.TaskData.html)
         :param pulumi.Input[_builtins.str] table_mappings: An escaped JSON string that contains the table mappings. For information on table mapping see [Using Table Mapping with an AWS Database Migration Service Task to Select and Filter Data](http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TableMapping.html)
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
-        :param pulumi.Input[_builtins.str] target_endpoint_arn: The Amazon Resource Name (ARN) string that uniquely identifies the target endpoint.
+        :param pulumi.Input[_builtins.str] target_endpoint_arn: ARN string that uniquely identifies the target endpoint.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -704,7 +708,7 @@ class ReplicationConfig(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) for the serverless replication config.
+        ARN for the serverless replication config.
         """
         return pulumi.get(self, "arn")
 
@@ -752,7 +756,7 @@ class ReplicationConfig(pulumi.CustomResource):
     @pulumi.getter(name="resourceIdentifier")
     def resource_identifier(self) -> pulumi.Output[_builtins.str]:
         """
-        Unique value or name that you set for a given resource that can be used to construct an Amazon Resource Name (ARN) for that resource. For more information, see [Fine-grained access control using resource names and tags](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#CHAP_Security.FineGrainedAccess)
+        Unique value or name that you set for a given resource that can be used to construct an ARN for that resource. For more information, see [Fine-grained access control using resource names and tags](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#CHAP_Security.FineGrainedAccess)
         """
         return pulumi.get(self, "resource_identifier")
 
@@ -760,7 +764,7 @@ class ReplicationConfig(pulumi.CustomResource):
     @pulumi.getter(name="sourceEndpointArn")
     def source_endpoint_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) string that uniquely identifies the source endpoint.
+        ARN string that uniquely identifies the source endpoint.
         """
         return pulumi.get(self, "source_endpoint_arn")
 
@@ -808,7 +812,7 @@ class ReplicationConfig(pulumi.CustomResource):
     @pulumi.getter(name="targetEndpointArn")
     def target_endpoint_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) string that uniquely identifies the target endpoint.
+        ARN string that uniquely identifies the target endpoint.
         """
         return pulumi.get(self, "target_endpoint_arn")
 

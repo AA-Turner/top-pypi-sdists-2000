@@ -15,11 +15,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 """
+import importlib
+
+from numpy import int32
+from scipy import sparse
+
 import cvxpy.settings as s
 from cvxpy.constraints import SOC
 from cvxpy.reductions.solution import Solution, failure_solution
 from cvxpy.reductions.solvers import utilities
 from cvxpy.reductions.solvers.conic_solvers.conic_solver import ConicSolver
+from cvxpy.utilities.citations import CITATION_DICT
 
 # QOCO standard form.
 # minimize   (1/2)x'Px + c'x
@@ -70,7 +76,7 @@ class QOCO(ConicSolver):
         import qoco  # noqa F401
 
     def supports_quad_obj(self) -> bool:
-        """QOCO supports quadratic objective with second order 
+        """QOCO supports quadratic objective with second order
         cone constraints.
         """
         return True
@@ -81,8 +87,22 @@ class QOCO(ConicSolver):
 
         attr = {}
         status = self.STATUS_MAP[str(solution.status)]
-        attr[s.SOLVE_TIME] = solution.solve_time_sec + solution.setup_time_sec
+        attr[s.SOLVE_TIME] = solution.solve_time_sec
+        attr[s.SETUP_TIME] = solution.setup_time_sec
         attr[s.NUM_ITERS] = solution.iters
+
+        attr[s.EXTRA_STATS] = {
+                "pres": solution.pres,
+                "dres": solution.dres,
+                "gap": solution.gap,
+                "status": solution.status
+        }
+
+        if hasattr(solution, "ir_iters"):
+            attr[s.EXTRA_STATS]["ir_iters"] = solution.ir_iters
+
+        if hasattr(solution, "analysis_time_sec"):
+            attr[s.EXTRA_STATS]["analysis_time_sec"] = solution.analysis_time_sec
 
         if status in s.SOLUTION_PRESENT:
             primal_val = solution.obj
@@ -176,12 +196,73 @@ class QOCO(ConicSolver):
         A = data[s.A] if p > 0 else None
         G = data[s.G] if m > 0 else None
 
-        solver = qoco.QOCO()
-        solver.setup(n, m, p, P, data[s.C], A, data[s.B], G, data[s.H], num_nno, nsoc, q,
-        verbose=verbose, **solver_opts)
+        # Cast row indices and column pointer arrays to int32.
+        if P is not None:
+            P.indices = P.indices.astype(int32)
+            P.indptr = P.indptr.astype(int32)
+        if A is not None:
+            A.indices = A.indices.astype(int32)
+            A.indptr = A.indptr.astype(int32)
+        if G is not None:
+            G.indices = G.indices.astype(int32)
+            G.indptr = G.indptr.astype(int32)
+
+        version_tuple = importlib.metadata.version("qoco").split(".")
+        major_version = int(version_tuple[0])
+        minor_version = int(version_tuple[1])
+
+        def new_solver():
+            # CUDA backend only available v0.2.0 and onwards.
+            if major_version >= 0 and minor_version >= 2 and "algebra" in solver_opts:
+                solver = qoco.QOCO(algebra=solver_opts["algebra"])
+            else:
+                solver = qoco.QOCO()
+            solver.setup(n, m, p, P, data[s.C], A, data[s.B], G, data[s.H], num_nno, nsoc, q,
+                verbose=verbose, **solver_opts)
+            return solver
+
+        def updated_solver():
+            if (solver_cache is None) or (self.name() not in solver_cache) or (not warm_start):
+                return None
+
+            solver = solver_cache[self.name()]
+
+            if not hasattr(solver, "update_vector_data") and \
+               not hasattr(solver, "update_matrix_data"):
+                return None
+            else:
+                # Overwrites all data in the solver but will not reallocate internal memory or redo
+                # the symbolic factorization. Note that if an existing solver object is used and if
+                # a solve is performed verbosely, the solver output will still claim there is some
+                # setup time. However, this is merely the setup time for the initial solve.
+                # Will raise ValueError if dimensions or sparsity has changed
+                solver.update_vector_data(c=data[s.C], b=data[s.B], h=data[s.H])
+                P_data = sparse.triu(P, format="csc").data if P is not None else None
+                A_data = A.data if A is not None else None
+                G_data = G.data if G is not None else None
+                solver.update_matrix_data(P=P_data, A=A_data, G=G_data)
+                return solver
+
+        # Try to get allocated solver object if available.
+        solver = updated_solver()
+
+        # If not available, allocate new solver object.
+        if solver is None:
+            solver = new_solver()
+
         results = solver.solve()
 
         if solver_cache is not None:
-            solver_cache[self.name()] = results
+            solver_cache[self.name()] = solver
 
         return results
+
+    def cite(self, data):
+        """Returns bibtex citation for the solver.
+
+        Parameters
+        ----------
+        data : dict
+            Data generated via an apply call.
+        """
+        return CITATION_DICT["QOCO"]

@@ -27,7 +27,7 @@ class GetBrokerResult:
     """
     A collection of values returned by getBroker.
     """
-    def __init__(__self__, arn=None, authentication_strategy=None, auto_minor_version_upgrade=None, broker_id=None, broker_name=None, configuration=None, deployment_mode=None, encryption_options=None, engine_type=None, engine_version=None, host_instance_type=None, id=None, instances=None, ldap_server_metadatas=None, logs=None, maintenance_window_start_time=None, publicly_accessible=None, region=None, security_groups=None, storage_type=None, subnet_ids=None, tags=None, users=None):
+    def __init__(__self__, arn=None, authentication_strategy=None, auto_minor_version_upgrade=None, broker_id=None, broker_name=None, configuration=None, deployment_mode=None, encryption_options=None, engine_type=None, engine_version=None, host_instance_type=None, id=None, instances=None, ldap_server_metadatas=None, logs=None, maintenance_window_start_time=None, publicly_accessible=None, region=None, resource_share_arns=None, security_groups=None, shared_resources=None, storage_type=None, subnet_ids=None, tags=None, users=None):
         if arn and not isinstance(arn, str):
             raise TypeError("Expected argument 'arn' to be a str")
         pulumi.set(__self__, "arn", arn)
@@ -82,9 +82,15 @@ class GetBrokerResult:
         if region and not isinstance(region, str):
             raise TypeError("Expected argument 'region' to be a str")
         pulumi.set(__self__, "region", region)
+        if resource_share_arns and not isinstance(resource_share_arns, list):
+            raise TypeError("Expected argument 'resource_share_arns' to be a list")
+        pulumi.set(__self__, "resource_share_arns", resource_share_arns)
         if security_groups and not isinstance(security_groups, list):
             raise TypeError("Expected argument 'security_groups' to be a list")
         pulumi.set(__self__, "security_groups", security_groups)
+        if shared_resources and not isinstance(shared_resources, list):
+            raise TypeError("Expected argument 'shared_resources' to be a list")
+        pulumi.set(__self__, "shared_resources", shared_resources)
         if storage_type and not isinstance(storage_type, str):
             raise TypeError("Expected argument 'storage_type' to be a str")
         pulumi.set(__self__, "storage_type", storage_type)
@@ -136,7 +142,7 @@ class GetBrokerResult:
     @pulumi.getter
     def configuration(self) -> 'outputs.GetBrokerConfigurationResult':
         """
-        Configuration block for broker configuration. See Configuration below.
+        Configuration block for broker configuration. See `configuration` Block below.
         """
         return pulumi.get(self, "configuration")
 
@@ -152,7 +158,7 @@ class GetBrokerResult:
     @pulumi.getter(name="encryptionOptions")
     def encryption_options(self) -> Sequence['outputs.GetBrokerEncryptionOptionResult']:
         """
-        Configuration block containing encryption options. See Encryption Options below.
+        Configuration block containing encryption options. See `encryption_options` Block below.
         """
         return pulumi.get(self, "encryption_options")
 
@@ -192,7 +198,7 @@ class GetBrokerResult:
     @pulumi.getter
     def instances(self) -> Sequence['outputs.GetBrokerInstanceResult']:
         """
-        List of information about allocated brokers (both active & standby). See Instances below.
+        List of information about allocated brokers (both active & standby). See `instances` Block below.
         """
         return pulumi.get(self, "instances")
 
@@ -200,7 +206,7 @@ class GetBrokerResult:
     @pulumi.getter(name="ldapServerMetadatas")
     def ldap_server_metadatas(self) -> Sequence['outputs.GetBrokerLdapServerMetadataResult']:
         """
-        Configuration block for the LDAP server used to authenticate and authorize connections to the broker. See LDAP Server Metadata below.
+        Configuration block for the LDAP server used to authenticate and authorize connections to the broker. See `ldap_server_metadata` Block below.
         """
         return pulumi.get(self, "ldap_server_metadatas")
 
@@ -208,7 +214,7 @@ class GetBrokerResult:
     @pulumi.getter
     def logs(self) -> 'outputs.GetBrokerLogsResult':
         """
-        Configuration block for the logging configuration of the broker. See Logs below.
+        Configuration block for the logging configuration of the broker. See `logs` Block below.
         """
         return pulumi.get(self, "logs")
 
@@ -216,7 +222,7 @@ class GetBrokerResult:
     @pulumi.getter(name="maintenanceWindowStartTime")
     def maintenance_window_start_time(self) -> 'outputs.GetBrokerMaintenanceWindowStartTimeResult':
         """
-        Configuration block for the maintenance window start time. See Maintenance Window Start Time below.
+        Configuration block for the maintenance window start time. See `maintenance_window_start_time` Block below.
         """
         return pulumi.get(self, "maintenance_window_start_time")
 
@@ -234,12 +240,28 @@ class GetBrokerResult:
         return pulumi.get(self, "region")
 
     @_builtins.property
+    @pulumi.getter(name="resourceShareArns")
+    def resource_share_arns(self) -> Sequence[_builtins.str]:
+        """
+        Set of AWS RAM resource share ARNs that grant the broker access to shared resources for private networking. Only populated for `engine_type` of `RabbitMQ`.
+        """
+        return pulumi.get(self, "resource_share_arns")
+
+    @_builtins.property
     @pulumi.getter(name="securityGroups")
     def security_groups(self) -> Sequence[_builtins.str]:
         """
         List of security group IDs assigned to the broker.
         """
         return pulumi.get(self, "security_groups")
+
+    @_builtins.property
+    @pulumi.getter(name="sharedResources")
+    def shared_resources(self) -> Sequence['outputs.GetBrokerSharedResourceResult']:
+        """
+        List of resources shared with the broker. See `shared_resources` Block below. Only populated for `engine_type` of `RabbitMQ`.
+        """
+        return pulumi.get(self, "shared_resources")
 
     @_builtins.property
     @pulumi.getter(name="storageType")
@@ -269,7 +291,7 @@ class GetBrokerResult:
     @pulumi.getter
     def users(self) -> Sequence['outputs.GetBrokerUserResult']:
         """
-        Configuration block for broker users. See User below.
+        Configuration block for broker users. See `user` Block below.
         """
         return pulumi.get(self, "users")
 
@@ -298,7 +320,9 @@ class AwaitableGetBrokerResult(GetBrokerResult):
             maintenance_window_start_time=self.maintenance_window_start_time,
             publicly_accessible=self.publicly_accessible,
             region=self.region,
+            resource_share_arns=self.resource_share_arns,
             security_groups=self.security_groups,
+            shared_resources=self.shared_resources,
             storage_type=self.storage_type,
             subnet_ids=self.subnet_ids,
             tags=self.tags,
@@ -347,15 +371,17 @@ def get_broker(broker_id: Optional[_builtins.str] = None,
         maintenance_window_start_time=pulumi.get(__ret__, 'maintenance_window_start_time'),
         publicly_accessible=pulumi.get(__ret__, 'publicly_accessible'),
         region=pulumi.get(__ret__, 'region'),
+        resource_share_arns=pulumi.get(__ret__, 'resource_share_arns'),
         security_groups=pulumi.get(__ret__, 'security_groups'),
+        shared_resources=pulumi.get(__ret__, 'shared_resources'),
         storage_type=pulumi.get(__ret__, 'storage_type'),
         subnet_ids=pulumi.get(__ret__, 'subnet_ids'),
         tags=pulumi.get(__ret__, 'tags'),
         users=pulumi.get(__ret__, 'users'))
-def get_broker_output(broker_id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                      broker_name: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                      region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                      tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_broker_output(broker_id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                      broker_name: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                      region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                      tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                       opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetBrokerResult]:
     """
     Provides details about an existing Amazon MQ broker. Use this data source to retrieve configuration and metadata for an Amazon MQ broker by ID or name.
@@ -393,7 +419,9 @@ def get_broker_output(broker_id: Optional[pulumi.Input[Optional[_builtins.str]]]
         maintenance_window_start_time=pulumi.get(__response__, 'maintenance_window_start_time'),
         publicly_accessible=pulumi.get(__response__, 'publicly_accessible'),
         region=pulumi.get(__response__, 'region'),
+        resource_share_arns=pulumi.get(__response__, 'resource_share_arns'),
         security_groups=pulumi.get(__response__, 'security_groups'),
+        shared_resources=pulumi.get(__response__, 'shared_resources'),
         storage_type=pulumi.get(__response__, 'storage_type'),
         subnet_ids=pulumi.get(__response__, 'subnet_ids'),
         tags=pulumi.get(__response__, 'tags'),

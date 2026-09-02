@@ -23,19 +23,20 @@ class PermissionsArgs:
     def __init__(__self__, *,
                  permissions: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
                  principal: pulumi.Input[_builtins.str],
-                 catalog_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 catalog_resource: Optional[pulumi.Input[_builtins.bool]] = None,
-                 data_cells_filter: Optional[pulumi.Input['PermissionsDataCellsFilterArgs']] = None,
-                 data_location: Optional[pulumi.Input['PermissionsDataLocationArgs']] = None,
-                 database: Optional[pulumi.Input['PermissionsDatabaseArgs']] = None,
-                 lf_tag: Optional[pulumi.Input['PermissionsLfTagArgs']] = None,
-                 lf_tag_policy: Optional[pulumi.Input['PermissionsLfTagPolicyArgs']] = None,
-                 permissions_with_grant_options: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 table: Optional[pulumi.Input['PermissionsTableArgs']] = None,
-                 table_with_columns: Optional[pulumi.Input['PermissionsTableWithColumnsArgs']] = None):
+                 catalog_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 catalog_resource: pulumi.Input[Optional[_builtins.bool]] = None,
+                 data_cells_filter: pulumi.Input[Optional['PermissionsDataCellsFilterArgs']] = None,
+                 data_location: pulumi.Input[Optional['PermissionsDataLocationArgs']] = None,
+                 database: pulumi.Input[Optional['PermissionsDatabaseArgs']] = None,
+                 lf_tag: pulumi.Input[Optional['PermissionsLfTagArgs']] = None,
+                 lf_tag_policy: pulumi.Input[Optional['PermissionsLfTagPolicyArgs']] = None,
+                 permissions_with_grant_options: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 table: pulumi.Input[Optional['PermissionsTableArgs']] = None,
+                 table_with_columns: pulumi.Input[Optional['PermissionsTableWithColumnsArgs']] = None):
         """
         The set of arguments for constructing a Permissions resource.
+
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] permissions: List of permissions granted to the principal. Valid values may include `ALL`, `ALTER`, `ASSOCIATE`, `CREATE_DATABASE`, `CREATE_TABLE`, `DATA_LOCATION_ACCESS`, `DELETE`, `DESCRIBE`, `DROP`, `INSERT`, and `SELECT`. For details on each permission, see [Lake Formation Permissions Reference](https://docs.aws.amazon.com/lake-formation/latest/dg/lf-permissions-reference.html).
         :param pulumi.Input[_builtins.str] principal: Principal to be granted the permissions on the resource. Supported principals include `IAM_ALLOWED_PRINCIPALS` (see Default Behavior and `IAMAllowedPrincipals` above), IAM roles, users, groups, Federated Users, SAML groups and users, QuickSight groups, OUs, and organizations as well as AWS account IDs for cross-account permissions. For more information, see [Lake Formation Permissions Reference](https://docs.aws.amazon.com/lake-formation/latest/dg/lf-permissions-reference.html).
                
@@ -111,127 +112,127 @@ class PermissionsArgs:
 
     @_builtins.property
     @pulumi.getter(name="catalogId")
-    def catalog_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def catalog_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your Lake Formation environment.
         """
         return pulumi.get(self, "catalog_id")
 
     @catalog_id.setter
-    def catalog_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def catalog_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "catalog_id", value)
 
     @_builtins.property
     @pulumi.getter(name="catalogResource")
-    def catalog_resource(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def catalog_resource(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the permissions are to be granted for the Data Catalog. Defaults to `false`.
         """
         return pulumi.get(self, "catalog_resource")
 
     @catalog_resource.setter
-    def catalog_resource(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def catalog_resource(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "catalog_resource", value)
 
     @_builtins.property
     @pulumi.getter(name="dataCellsFilter")
-    def data_cells_filter(self) -> Optional[pulumi.Input['PermissionsDataCellsFilterArgs']]:
+    def data_cells_filter(self) -> pulumi.Input[Optional['PermissionsDataCellsFilterArgs']]:
         """
         Configuration block for a data cells filter resource. Detailed below.
         """
         return pulumi.get(self, "data_cells_filter")
 
     @data_cells_filter.setter
-    def data_cells_filter(self, value: Optional[pulumi.Input['PermissionsDataCellsFilterArgs']]):
+    def data_cells_filter(self, value: pulumi.Input[Optional['PermissionsDataCellsFilterArgs']]):
         pulumi.set(self, "data_cells_filter", value)
 
     @_builtins.property
     @pulumi.getter(name="dataLocation")
-    def data_location(self) -> Optional[pulumi.Input['PermissionsDataLocationArgs']]:
+    def data_location(self) -> pulumi.Input[Optional['PermissionsDataLocationArgs']]:
         """
         Configuration block for a data location resource. Detailed below.
         """
         return pulumi.get(self, "data_location")
 
     @data_location.setter
-    def data_location(self, value: Optional[pulumi.Input['PermissionsDataLocationArgs']]):
+    def data_location(self, value: pulumi.Input[Optional['PermissionsDataLocationArgs']]):
         pulumi.set(self, "data_location", value)
 
     @_builtins.property
     @pulumi.getter
-    def database(self) -> Optional[pulumi.Input['PermissionsDatabaseArgs']]:
+    def database(self) -> pulumi.Input[Optional['PermissionsDatabaseArgs']]:
         """
         Configuration block for a database resource. Detailed below.
         """
         return pulumi.get(self, "database")
 
     @database.setter
-    def database(self, value: Optional[pulumi.Input['PermissionsDatabaseArgs']]):
+    def database(self, value: pulumi.Input[Optional['PermissionsDatabaseArgs']]):
         pulumi.set(self, "database", value)
 
     @_builtins.property
     @pulumi.getter(name="lfTag")
-    def lf_tag(self) -> Optional[pulumi.Input['PermissionsLfTagArgs']]:
+    def lf_tag(self) -> pulumi.Input[Optional['PermissionsLfTagArgs']]:
         """
         Configuration block for an LF-tag resource. Detailed below.
         """
         return pulumi.get(self, "lf_tag")
 
     @lf_tag.setter
-    def lf_tag(self, value: Optional[pulumi.Input['PermissionsLfTagArgs']]):
+    def lf_tag(self, value: pulumi.Input[Optional['PermissionsLfTagArgs']]):
         pulumi.set(self, "lf_tag", value)
 
     @_builtins.property
     @pulumi.getter(name="lfTagPolicy")
-    def lf_tag_policy(self) -> Optional[pulumi.Input['PermissionsLfTagPolicyArgs']]:
+    def lf_tag_policy(self) -> pulumi.Input[Optional['PermissionsLfTagPolicyArgs']]:
         """
         Configuration block for an LF-tag policy resource. Detailed below.
         """
         return pulumi.get(self, "lf_tag_policy")
 
     @lf_tag_policy.setter
-    def lf_tag_policy(self, value: Optional[pulumi.Input['PermissionsLfTagPolicyArgs']]):
+    def lf_tag_policy(self, value: pulumi.Input[Optional['PermissionsLfTagPolicyArgs']]):
         pulumi.set(self, "lf_tag_policy", value)
 
     @_builtins.property
     @pulumi.getter(name="permissionsWithGrantOptions")
-    def permissions_with_grant_options(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def permissions_with_grant_options(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         Subset of `permissions` which the principal can pass.
         """
         return pulumi.get(self, "permissions_with_grant_options")
 
     @permissions_with_grant_options.setter
-    def permissions_with_grant_options(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def permissions_with_grant_options(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "permissions_with_grant_options", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def table(self) -> Optional[pulumi.Input['PermissionsTableArgs']]:
+    def table(self) -> pulumi.Input[Optional['PermissionsTableArgs']]:
         """
         Configuration block for a table resource. Detailed below.
         """
         return pulumi.get(self, "table")
 
     @table.setter
-    def table(self, value: Optional[pulumi.Input['PermissionsTableArgs']]):
+    def table(self, value: pulumi.Input[Optional['PermissionsTableArgs']]):
         pulumi.set(self, "table", value)
 
     @_builtins.property
     @pulumi.getter(name="tableWithColumns")
-    def table_with_columns(self) -> Optional[pulumi.Input['PermissionsTableWithColumnsArgs']]:
+    def table_with_columns(self) -> pulumi.Input[Optional['PermissionsTableWithColumnsArgs']]:
         """
         Configuration block for a table with columns resource. Detailed below.
 
@@ -240,28 +241,29 @@ class PermissionsArgs:
         return pulumi.get(self, "table_with_columns")
 
     @table_with_columns.setter
-    def table_with_columns(self, value: Optional[pulumi.Input['PermissionsTableWithColumnsArgs']]):
+    def table_with_columns(self, value: pulumi.Input[Optional['PermissionsTableWithColumnsArgs']]):
         pulumi.set(self, "table_with_columns", value)
 
 
 @pulumi.input_type
 class _PermissionsState:
     def __init__(__self__, *,
-                 catalog_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 catalog_resource: Optional[pulumi.Input[_builtins.bool]] = None,
-                 data_cells_filter: Optional[pulumi.Input['PermissionsDataCellsFilterArgs']] = None,
-                 data_location: Optional[pulumi.Input['PermissionsDataLocationArgs']] = None,
-                 database: Optional[pulumi.Input['PermissionsDatabaseArgs']] = None,
-                 lf_tag: Optional[pulumi.Input['PermissionsLfTagArgs']] = None,
-                 lf_tag_policy: Optional[pulumi.Input['PermissionsLfTagPolicyArgs']] = None,
-                 permissions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 permissions_with_grant_options: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 principal: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 table: Optional[pulumi.Input['PermissionsTableArgs']] = None,
-                 table_with_columns: Optional[pulumi.Input['PermissionsTableWithColumnsArgs']] = None):
+                 catalog_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 catalog_resource: pulumi.Input[Optional[_builtins.bool]] = None,
+                 data_cells_filter: pulumi.Input[Optional['PermissionsDataCellsFilterArgs']] = None,
+                 data_location: pulumi.Input[Optional['PermissionsDataLocationArgs']] = None,
+                 database: pulumi.Input[Optional['PermissionsDatabaseArgs']] = None,
+                 lf_tag: pulumi.Input[Optional['PermissionsLfTagArgs']] = None,
+                 lf_tag_policy: pulumi.Input[Optional['PermissionsLfTagPolicyArgs']] = None,
+                 permissions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 permissions_with_grant_options: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 principal: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 table: pulumi.Input[Optional['PermissionsTableArgs']] = None,
+                 table_with_columns: pulumi.Input[Optional['PermissionsTableWithColumnsArgs']] = None):
         """
         Input properties used for looking up and filtering Permissions resources.
+
         :param pulumi.Input[_builtins.str] catalog_id: Identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your Lake Formation environment.
         :param pulumi.Input[_builtins.bool] catalog_resource: Whether the permissions are to be granted for the Data Catalog. Defaults to `false`.
         :param pulumi.Input['PermissionsDataCellsFilterArgs'] data_cells_filter: Configuration block for a data cells filter resource. Detailed below.
@@ -311,115 +313,115 @@ class _PermissionsState:
 
     @_builtins.property
     @pulumi.getter(name="catalogId")
-    def catalog_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def catalog_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your Lake Formation environment.
         """
         return pulumi.get(self, "catalog_id")
 
     @catalog_id.setter
-    def catalog_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def catalog_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "catalog_id", value)
 
     @_builtins.property
     @pulumi.getter(name="catalogResource")
-    def catalog_resource(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def catalog_resource(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the permissions are to be granted for the Data Catalog. Defaults to `false`.
         """
         return pulumi.get(self, "catalog_resource")
 
     @catalog_resource.setter
-    def catalog_resource(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def catalog_resource(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "catalog_resource", value)
 
     @_builtins.property
     @pulumi.getter(name="dataCellsFilter")
-    def data_cells_filter(self) -> Optional[pulumi.Input['PermissionsDataCellsFilterArgs']]:
+    def data_cells_filter(self) -> pulumi.Input[Optional['PermissionsDataCellsFilterArgs']]:
         """
         Configuration block for a data cells filter resource. Detailed below.
         """
         return pulumi.get(self, "data_cells_filter")
 
     @data_cells_filter.setter
-    def data_cells_filter(self, value: Optional[pulumi.Input['PermissionsDataCellsFilterArgs']]):
+    def data_cells_filter(self, value: pulumi.Input[Optional['PermissionsDataCellsFilterArgs']]):
         pulumi.set(self, "data_cells_filter", value)
 
     @_builtins.property
     @pulumi.getter(name="dataLocation")
-    def data_location(self) -> Optional[pulumi.Input['PermissionsDataLocationArgs']]:
+    def data_location(self) -> pulumi.Input[Optional['PermissionsDataLocationArgs']]:
         """
         Configuration block for a data location resource. Detailed below.
         """
         return pulumi.get(self, "data_location")
 
     @data_location.setter
-    def data_location(self, value: Optional[pulumi.Input['PermissionsDataLocationArgs']]):
+    def data_location(self, value: pulumi.Input[Optional['PermissionsDataLocationArgs']]):
         pulumi.set(self, "data_location", value)
 
     @_builtins.property
     @pulumi.getter
-    def database(self) -> Optional[pulumi.Input['PermissionsDatabaseArgs']]:
+    def database(self) -> pulumi.Input[Optional['PermissionsDatabaseArgs']]:
         """
         Configuration block for a database resource. Detailed below.
         """
         return pulumi.get(self, "database")
 
     @database.setter
-    def database(self, value: Optional[pulumi.Input['PermissionsDatabaseArgs']]):
+    def database(self, value: pulumi.Input[Optional['PermissionsDatabaseArgs']]):
         pulumi.set(self, "database", value)
 
     @_builtins.property
     @pulumi.getter(name="lfTag")
-    def lf_tag(self) -> Optional[pulumi.Input['PermissionsLfTagArgs']]:
+    def lf_tag(self) -> pulumi.Input[Optional['PermissionsLfTagArgs']]:
         """
         Configuration block for an LF-tag resource. Detailed below.
         """
         return pulumi.get(self, "lf_tag")
 
     @lf_tag.setter
-    def lf_tag(self, value: Optional[pulumi.Input['PermissionsLfTagArgs']]):
+    def lf_tag(self, value: pulumi.Input[Optional['PermissionsLfTagArgs']]):
         pulumi.set(self, "lf_tag", value)
 
     @_builtins.property
     @pulumi.getter(name="lfTagPolicy")
-    def lf_tag_policy(self) -> Optional[pulumi.Input['PermissionsLfTagPolicyArgs']]:
+    def lf_tag_policy(self) -> pulumi.Input[Optional['PermissionsLfTagPolicyArgs']]:
         """
         Configuration block for an LF-tag policy resource. Detailed below.
         """
         return pulumi.get(self, "lf_tag_policy")
 
     @lf_tag_policy.setter
-    def lf_tag_policy(self, value: Optional[pulumi.Input['PermissionsLfTagPolicyArgs']]):
+    def lf_tag_policy(self, value: pulumi.Input[Optional['PermissionsLfTagPolicyArgs']]):
         pulumi.set(self, "lf_tag_policy", value)
 
     @_builtins.property
     @pulumi.getter
-    def permissions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def permissions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of permissions granted to the principal. Valid values may include `ALL`, `ALTER`, `ASSOCIATE`, `CREATE_DATABASE`, `CREATE_TABLE`, `DATA_LOCATION_ACCESS`, `DELETE`, `DESCRIBE`, `DROP`, `INSERT`, and `SELECT`. For details on each permission, see [Lake Formation Permissions Reference](https://docs.aws.amazon.com/lake-formation/latest/dg/lf-permissions-reference.html).
         """
         return pulumi.get(self, "permissions")
 
     @permissions.setter
-    def permissions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def permissions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "permissions", value)
 
     @_builtins.property
     @pulumi.getter(name="permissionsWithGrantOptions")
-    def permissions_with_grant_options(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def permissions_with_grant_options(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         Subset of `permissions` which the principal can pass.
         """
         return pulumi.get(self, "permissions_with_grant_options")
 
     @permissions_with_grant_options.setter
-    def permissions_with_grant_options(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def permissions_with_grant_options(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "permissions_with_grant_options", value)
 
     @_builtins.property
     @pulumi.getter
-    def principal(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def principal(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Principal to be granted the permissions on the resource. Supported principals include `IAM_ALLOWED_PRINCIPALS` (see Default Behavior and `IAMAllowedPrincipals` above), IAM roles, users, groups, Federated Users, SAML groups and users, QuickSight groups, OUs, and organizations as well as AWS account IDs for cross-account permissions. For more information, see [Lake Formation Permissions Reference](https://docs.aws.amazon.com/lake-formation/latest/dg/lf-permissions-reference.html).
 
@@ -430,36 +432,36 @@ class _PermissionsState:
         return pulumi.get(self, "principal")
 
     @principal.setter
-    def principal(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def principal(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "principal", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def table(self) -> Optional[pulumi.Input['PermissionsTableArgs']]:
+    def table(self) -> pulumi.Input[Optional['PermissionsTableArgs']]:
         """
         Configuration block for a table resource. Detailed below.
         """
         return pulumi.get(self, "table")
 
     @table.setter
-    def table(self, value: Optional[pulumi.Input['PermissionsTableArgs']]):
+    def table(self, value: pulumi.Input[Optional['PermissionsTableArgs']]):
         pulumi.set(self, "table", value)
 
     @_builtins.property
     @pulumi.getter(name="tableWithColumns")
-    def table_with_columns(self) -> Optional[pulumi.Input['PermissionsTableWithColumnsArgs']]:
+    def table_with_columns(self) -> pulumi.Input[Optional['PermissionsTableWithColumnsArgs']]:
         """
         Configuration block for a table with columns resource. Detailed below.
 
@@ -468,7 +470,7 @@ class _PermissionsState:
         return pulumi.get(self, "table_with_columns")
 
     @table_with_columns.setter
-    def table_with_columns(self, value: Optional[pulumi.Input['PermissionsTableWithColumnsArgs']]):
+    def table_with_columns(self, value: pulumi.Input[Optional['PermissionsTableWithColumnsArgs']]):
         pulumi.set(self, "table_with_columns", value)
 
 
@@ -478,28 +480,30 @@ class Permissions(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 catalog_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 catalog_resource: Optional[pulumi.Input[_builtins.bool]] = None,
-                 data_cells_filter: Optional[pulumi.Input[Union['PermissionsDataCellsFilterArgs', 'PermissionsDataCellsFilterArgsDict']]] = None,
-                 data_location: Optional[pulumi.Input[Union['PermissionsDataLocationArgs', 'PermissionsDataLocationArgsDict']]] = None,
-                 database: Optional[pulumi.Input[Union['PermissionsDatabaseArgs', 'PermissionsDatabaseArgsDict']]] = None,
-                 lf_tag: Optional[pulumi.Input[Union['PermissionsLfTagArgs', 'PermissionsLfTagArgsDict']]] = None,
-                 lf_tag_policy: Optional[pulumi.Input[Union['PermissionsLfTagPolicyArgs', 'PermissionsLfTagPolicyArgsDict']]] = None,
-                 permissions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 permissions_with_grant_options: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 principal: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 table: Optional[pulumi.Input[Union['PermissionsTableArgs', 'PermissionsTableArgsDict']]] = None,
-                 table_with_columns: Optional[pulumi.Input[Union['PermissionsTableWithColumnsArgs', 'PermissionsTableWithColumnsArgsDict']]] = None,
+                 catalog_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 catalog_resource: pulumi.Input[Optional[_builtins.bool]] = None,
+                 data_cells_filter: pulumi.Input[Optional[Union['PermissionsDataCellsFilterArgs', 'PermissionsDataCellsFilterArgsDict']]] = None,
+                 data_location: pulumi.Input[Optional[Union['PermissionsDataLocationArgs', 'PermissionsDataLocationArgsDict']]] = None,
+                 database: pulumi.Input[Optional[Union['PermissionsDatabaseArgs', 'PermissionsDatabaseArgsDict']]] = None,
+                 lf_tag: pulumi.Input[Optional[Union['PermissionsLfTagArgs', 'PermissionsLfTagArgsDict']]] = None,
+                 lf_tag_policy: pulumi.Input[Optional[Union['PermissionsLfTagPolicyArgs', 'PermissionsLfTagPolicyArgsDict']]] = None,
+                 permissions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 permissions_with_grant_options: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 principal: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 table: pulumi.Input[Optional[Union['PermissionsTableArgs', 'PermissionsTableArgsDict']]] = None,
+                 table_with_columns: pulumi.Input[Optional[Union['PermissionsTableWithColumnsArgs', 'PermissionsTableWithColumnsArgsDict']]] = None,
                  __props__=None):
         """
         Grants permissions to the principal to access metadata in the Data Catalog and data organized in underlying data storage such as Amazon S3. Permissions are granted to a principal, in a Data Catalog, relative to a Lake Formation resource, which includes the Data Catalog, databases, tables, LF-tags, and LF-tag policies. For more information, see [Security and Access Control to Metadata and Data in Lake Formation](https://docs.aws.amazon.com/lake-formation/latest/dg/security-data-access.html).
 
-        !> **WARNING:** Lake Formation permissions are not in effect by default within AWS. Using this resource will not secure your data and will result in errors if you do not change the security settings for existing resources and the default security settings for new resources. See Default Behavior and `IAMAllowedPrincipals` for additional details.
+        > **WARNING:** Lake Formation permissions are not in effect by default within AWS. Using this resource will not secure your data and will result in errors if you do not change the security settings for existing resources and the default security settings for new resources. See Default Behavior and `IAMAllowedPrincipals` for additional details.
 
         > **NOTE:** In general, the `principal` should _NOT_ be a Lake Formation administrator or the entity (e.g., IAM role) that is running the deployment. Administrators have implicit permissions. These should be managed by granting or not granting administrator rights using `lakeformation.DataLakeSettings`, _not_ with this resource.
 
-        ## Default Behavior and `IAMAllowedPrincipals`
+        ## Example Usage
+
+        ### Default Behavior and `IAMAllowedPrincipals`
 
         **_Lake Formation permissions are not in effect by default within AWS._** `IAMAllowedPrincipals` (i.e., `IAM_ALLOWED_PRINCIPALS`) conflicts with individual Lake Formation permissions (i.e., non-`IAMAllowedPrincipals` permissions), will cause unexpected behavior, and may result in errors.
 
@@ -540,22 +544,22 @@ class Permissions(pulumi.CustomResource):
 
         example = aws.glue.CatalogDatabase("example", name="sadabate")
         example_catalog_table = aws.glue.CatalogTable("example",
-            name="abelt",
-            database_name=test["name"],
             storage_descriptor={
                 "columns": [{
                     "name": "event",
                     "type": "string",
                 }],
-            })
+            },
+            name="abelt",
+            database_name=test["name"])
         example_permissions = aws.lakeformation.Permissions("example",
-            permissions=["SELECT"],
-            principal="arn:aws:iam:us-east-1:123456789012:user/SanHolo",
             table_with_columns={
                 "database_name": example_catalog_table.database_name,
                 "name": example_catalog_table.name,
                 "column_names": ["event"],
-            })
+            },
+            permissions=["SELECT"],
+            principal="arn:aws:iam:us-east-1:123456789012:user/SanHolo")
         ```
 
         The resulting permissions depend on whether the table had `IAMAllowedPrincipals` (IAP) permissions or not.
@@ -564,7 +568,7 @@ class Permissions(pulumi.CustomResource):
         | ---- | ---- |
         | `SELECT` column wildcard (i.e., all columns) | `SELECT` on `"event"` (as expected) |
 
-        ## `ALLIAMPrincipals` group
+        ### `ALLIAMPrincipals` group
 
         AllIAMPrincipals is a pseudo-entity group that acts like a Lake Formation principal. The group includes all IAMs in the account that is defined.
 
@@ -573,24 +577,22 @@ class Permissions(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lakeformation.Permissions("example",
-            permissions=["SELECT"],
-            principal="123456789012:IAMPrincipals",
             table_with_columns={
                 "database_name": example_aws_glue_catalog_table["databaseName"],
                 "name": example_aws_glue_catalog_table["name"],
                 "column_names": ["event"],
-            })
+            },
+            permissions=["SELECT"],
+            principal="123456789012:IAMPrincipals")
         ```
 
-        ## Using Lake Formation Permissions
+        ### Using Lake Formation Permissions
 
         Lake Formation grants implicit permissions to data lake administrators, database creators, and table creators. These implicit permissions cannot be revoked _per se_. If this resource reads implicit permissions, it will attempt to revoke them, which causes an error when the resource is destroyed.
 
         There are two ways to avoid these errors. First, and the way we recommend, is to avoid using this resource with principals that have implicit permissions. A second, error-prone option, is to grant explicit permissions (and `permissions_with_grant_option`) to "overwrite" a principal's implicit permissions, which you can then revoke with this resource. For more information, see [Implicit Lake Formation Permissions](https://docs.aws.amazon.com/lake-formation/latest/dg/implicit-permissions.html).
 
         If the `principal` is also a data lake administrator, AWS grants implicit permissions that can cause errors using this resource. For example, AWS implicitly grants a `principal`/administrator `permissions` and `permissions_with_grant_option` of `ALL`, `ALTER`, `DELETE`, `DESCRIBE`, `DROP`, `INSERT`, and `SELECT` on a table. If you use this resource to explicitly grant the `principal`/administrator `permissions` but _not_ `permissions_with_grant_option` of `ALL`, `ALTER`, `DELETE`, `DESCRIBE`, `DROP`, `INSERT`, and `SELECT` on the table, this resource will read the implicit `permissions_with_grant_option` and attempt to revoke them when the resource is destroyed. Doing so will cause an `InvalidInputException: No permissions revoked` error because you cannot revoke implicit permissions _per se_. To workaround this problem, explicitly grant the `principal`/administrator `permissions` _and_ `permissions_with_grant_option`, which can then be revoked. Similarly, granting a `principal`/administrator permissions on a table with columns and providing `column_names`, will result in a `InvalidInputException: Permissions modification is invalid` error because you are narrowing the implicit permissions. Instead, set `wildcard` to `true` and remove the `column_names`.
-
-        ## Example Usage
 
         ### Grant Permissions For A Lake Formation S3 Resource
 
@@ -599,11 +601,11 @@ class Permissions(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lakeformation.Permissions("example",
-            principal=workflow_role["arn"],
-            permissions=["DATA_LOCATION_ACCESS"],
             data_location={
                 "arn": example_aws_lakeformation_resource["arn"],
-            })
+            },
+            principal=workflow_role["arn"],
+            permissions=["DATA_LOCATION_ACCESS"])
         ```
 
         ### Grant Permissions For A Glue Catalog Database
@@ -613,16 +615,16 @@ class Permissions(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lakeformation.Permissions("example",
+            database={
+                "name": example_aws_glue_catalog_database["name"],
+                "catalog_id": "110376042874",
+            },
             principal=workflow_role["arn"],
             permissions=[
                 "CREATE_TABLE",
                 "ALTER",
                 "DROP",
-            ],
-            database={
-                "name": example_aws_glue_catalog_database["name"],
-                "catalog_id": "110376042874",
-            })
+            ])
         ```
 
         ### Grant Permissions Using Tag-Based Access Control
@@ -632,14 +634,7 @@ class Permissions(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.lakeformation.Permissions("test",
-            principal=sales_role["arn"],
-            permissions=[
-                "CREATE_TABLE",
-                "ALTER",
-                "DROP",
-            ],
             lf_tag_policy={
-                "resource_type": "DATABASE",
                 "expressions": [
                     {
                         "key": "Team",
@@ -653,8 +648,16 @@ class Permissions(pulumi.CustomResource):
                         ],
                     },
                 ],
-            })
+                "resource_type": "DATABASE",
+            },
+            principal=sales_role["arn"],
+            permissions=[
+                "CREATE_TABLE",
+                "ALTER",
+                "DROP",
+            ])
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -687,11 +690,13 @@ class Permissions(pulumi.CustomResource):
         """
         Grants permissions to the principal to access metadata in the Data Catalog and data organized in underlying data storage such as Amazon S3. Permissions are granted to a principal, in a Data Catalog, relative to a Lake Formation resource, which includes the Data Catalog, databases, tables, LF-tags, and LF-tag policies. For more information, see [Security and Access Control to Metadata and Data in Lake Formation](https://docs.aws.amazon.com/lake-formation/latest/dg/security-data-access.html).
 
-        !> **WARNING:** Lake Formation permissions are not in effect by default within AWS. Using this resource will not secure your data and will result in errors if you do not change the security settings for existing resources and the default security settings for new resources. See Default Behavior and `IAMAllowedPrincipals` for additional details.
+        > **WARNING:** Lake Formation permissions are not in effect by default within AWS. Using this resource will not secure your data and will result in errors if you do not change the security settings for existing resources and the default security settings for new resources. See Default Behavior and `IAMAllowedPrincipals` for additional details.
 
         > **NOTE:** In general, the `principal` should _NOT_ be a Lake Formation administrator or the entity (e.g., IAM role) that is running the deployment. Administrators have implicit permissions. These should be managed by granting or not granting administrator rights using `lakeformation.DataLakeSettings`, _not_ with this resource.
 
-        ## Default Behavior and `IAMAllowedPrincipals`
+        ## Example Usage
+
+        ### Default Behavior and `IAMAllowedPrincipals`
 
         **_Lake Formation permissions are not in effect by default within AWS._** `IAMAllowedPrincipals` (i.e., `IAM_ALLOWED_PRINCIPALS`) conflicts with individual Lake Formation permissions (i.e., non-`IAMAllowedPrincipals` permissions), will cause unexpected behavior, and may result in errors.
 
@@ -732,22 +737,22 @@ class Permissions(pulumi.CustomResource):
 
         example = aws.glue.CatalogDatabase("example", name="sadabate")
         example_catalog_table = aws.glue.CatalogTable("example",
-            name="abelt",
-            database_name=test["name"],
             storage_descriptor={
                 "columns": [{
                     "name": "event",
                     "type": "string",
                 }],
-            })
+            },
+            name="abelt",
+            database_name=test["name"])
         example_permissions = aws.lakeformation.Permissions("example",
-            permissions=["SELECT"],
-            principal="arn:aws:iam:us-east-1:123456789012:user/SanHolo",
             table_with_columns={
                 "database_name": example_catalog_table.database_name,
                 "name": example_catalog_table.name,
                 "column_names": ["event"],
-            })
+            },
+            permissions=["SELECT"],
+            principal="arn:aws:iam:us-east-1:123456789012:user/SanHolo")
         ```
 
         The resulting permissions depend on whether the table had `IAMAllowedPrincipals` (IAP) permissions or not.
@@ -756,7 +761,7 @@ class Permissions(pulumi.CustomResource):
         | ---- | ---- |
         | `SELECT` column wildcard (i.e., all columns) | `SELECT` on `"event"` (as expected) |
 
-        ## `ALLIAMPrincipals` group
+        ### `ALLIAMPrincipals` group
 
         AllIAMPrincipals is a pseudo-entity group that acts like a Lake Formation principal. The group includes all IAMs in the account that is defined.
 
@@ -765,24 +770,22 @@ class Permissions(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lakeformation.Permissions("example",
-            permissions=["SELECT"],
-            principal="123456789012:IAMPrincipals",
             table_with_columns={
                 "database_name": example_aws_glue_catalog_table["databaseName"],
                 "name": example_aws_glue_catalog_table["name"],
                 "column_names": ["event"],
-            })
+            },
+            permissions=["SELECT"],
+            principal="123456789012:IAMPrincipals")
         ```
 
-        ## Using Lake Formation Permissions
+        ### Using Lake Formation Permissions
 
         Lake Formation grants implicit permissions to data lake administrators, database creators, and table creators. These implicit permissions cannot be revoked _per se_. If this resource reads implicit permissions, it will attempt to revoke them, which causes an error when the resource is destroyed.
 
         There are two ways to avoid these errors. First, and the way we recommend, is to avoid using this resource with principals that have implicit permissions. A second, error-prone option, is to grant explicit permissions (and `permissions_with_grant_option`) to "overwrite" a principal's implicit permissions, which you can then revoke with this resource. For more information, see [Implicit Lake Formation Permissions](https://docs.aws.amazon.com/lake-formation/latest/dg/implicit-permissions.html).
 
         If the `principal` is also a data lake administrator, AWS grants implicit permissions that can cause errors using this resource. For example, AWS implicitly grants a `principal`/administrator `permissions` and `permissions_with_grant_option` of `ALL`, `ALTER`, `DELETE`, `DESCRIBE`, `DROP`, `INSERT`, and `SELECT` on a table. If you use this resource to explicitly grant the `principal`/administrator `permissions` but _not_ `permissions_with_grant_option` of `ALL`, `ALTER`, `DELETE`, `DESCRIBE`, `DROP`, `INSERT`, and `SELECT` on the table, this resource will read the implicit `permissions_with_grant_option` and attempt to revoke them when the resource is destroyed. Doing so will cause an `InvalidInputException: No permissions revoked` error because you cannot revoke implicit permissions _per se_. To workaround this problem, explicitly grant the `principal`/administrator `permissions` _and_ `permissions_with_grant_option`, which can then be revoked. Similarly, granting a `principal`/administrator permissions on a table with columns and providing `column_names`, will result in a `InvalidInputException: Permissions modification is invalid` error because you are narrowing the implicit permissions. Instead, set `wildcard` to `true` and remove the `column_names`.
-
-        ## Example Usage
 
         ### Grant Permissions For A Lake Formation S3 Resource
 
@@ -791,11 +794,11 @@ class Permissions(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lakeformation.Permissions("example",
-            principal=workflow_role["arn"],
-            permissions=["DATA_LOCATION_ACCESS"],
             data_location={
                 "arn": example_aws_lakeformation_resource["arn"],
-            })
+            },
+            principal=workflow_role["arn"],
+            permissions=["DATA_LOCATION_ACCESS"])
         ```
 
         ### Grant Permissions For A Glue Catalog Database
@@ -805,16 +808,16 @@ class Permissions(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lakeformation.Permissions("example",
+            database={
+                "name": example_aws_glue_catalog_database["name"],
+                "catalog_id": "110376042874",
+            },
             principal=workflow_role["arn"],
             permissions=[
                 "CREATE_TABLE",
                 "ALTER",
                 "DROP",
-            ],
-            database={
-                "name": example_aws_glue_catalog_database["name"],
-                "catalog_id": "110376042874",
-            })
+            ])
         ```
 
         ### Grant Permissions Using Tag-Based Access Control
@@ -824,14 +827,7 @@ class Permissions(pulumi.CustomResource):
         import pulumi_aws as aws
 
         test = aws.lakeformation.Permissions("test",
-            principal=sales_role["arn"],
-            permissions=[
-                "CREATE_TABLE",
-                "ALTER",
-                "DROP",
-            ],
             lf_tag_policy={
-                "resource_type": "DATABASE",
                 "expressions": [
                     {
                         "key": "Team",
@@ -845,8 +841,16 @@ class Permissions(pulumi.CustomResource):
                         ],
                     },
                 ],
-            })
+                "resource_type": "DATABASE",
+            },
+            principal=sales_role["arn"],
+            permissions=[
+                "CREATE_TABLE",
+                "ALTER",
+                "DROP",
+            ])
         ```
+
 
         :param str resource_name: The name of the resource.
         :param PermissionsArgs args: The arguments to use to populate this resource's properties.
@@ -863,19 +867,19 @@ class Permissions(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 catalog_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 catalog_resource: Optional[pulumi.Input[_builtins.bool]] = None,
-                 data_cells_filter: Optional[pulumi.Input[Union['PermissionsDataCellsFilterArgs', 'PermissionsDataCellsFilterArgsDict']]] = None,
-                 data_location: Optional[pulumi.Input[Union['PermissionsDataLocationArgs', 'PermissionsDataLocationArgsDict']]] = None,
-                 database: Optional[pulumi.Input[Union['PermissionsDatabaseArgs', 'PermissionsDatabaseArgsDict']]] = None,
-                 lf_tag: Optional[pulumi.Input[Union['PermissionsLfTagArgs', 'PermissionsLfTagArgsDict']]] = None,
-                 lf_tag_policy: Optional[pulumi.Input[Union['PermissionsLfTagPolicyArgs', 'PermissionsLfTagPolicyArgsDict']]] = None,
-                 permissions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 permissions_with_grant_options: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 principal: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 table: Optional[pulumi.Input[Union['PermissionsTableArgs', 'PermissionsTableArgsDict']]] = None,
-                 table_with_columns: Optional[pulumi.Input[Union['PermissionsTableWithColumnsArgs', 'PermissionsTableWithColumnsArgsDict']]] = None,
+                 catalog_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 catalog_resource: pulumi.Input[Optional[_builtins.bool]] = None,
+                 data_cells_filter: pulumi.Input[Optional[Union['PermissionsDataCellsFilterArgs', 'PermissionsDataCellsFilterArgsDict']]] = None,
+                 data_location: pulumi.Input[Optional[Union['PermissionsDataLocationArgs', 'PermissionsDataLocationArgsDict']]] = None,
+                 database: pulumi.Input[Optional[Union['PermissionsDatabaseArgs', 'PermissionsDatabaseArgsDict']]] = None,
+                 lf_tag: pulumi.Input[Optional[Union['PermissionsLfTagArgs', 'PermissionsLfTagArgsDict']]] = None,
+                 lf_tag_policy: pulumi.Input[Optional[Union['PermissionsLfTagPolicyArgs', 'PermissionsLfTagPolicyArgsDict']]] = None,
+                 permissions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 permissions_with_grant_options: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 principal: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 table: pulumi.Input[Optional[Union['PermissionsTableArgs', 'PermissionsTableArgsDict']]] = None,
+                 table_with_columns: pulumi.Input[Optional[Union['PermissionsTableWithColumnsArgs', 'PermissionsTableWithColumnsArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -912,19 +916,19 @@ class Permissions(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            catalog_id: Optional[pulumi.Input[_builtins.str]] = None,
-            catalog_resource: Optional[pulumi.Input[_builtins.bool]] = None,
-            data_cells_filter: Optional[pulumi.Input[Union['PermissionsDataCellsFilterArgs', 'PermissionsDataCellsFilterArgsDict']]] = None,
-            data_location: Optional[pulumi.Input[Union['PermissionsDataLocationArgs', 'PermissionsDataLocationArgsDict']]] = None,
-            database: Optional[pulumi.Input[Union['PermissionsDatabaseArgs', 'PermissionsDatabaseArgsDict']]] = None,
-            lf_tag: Optional[pulumi.Input[Union['PermissionsLfTagArgs', 'PermissionsLfTagArgsDict']]] = None,
-            lf_tag_policy: Optional[pulumi.Input[Union['PermissionsLfTagPolicyArgs', 'PermissionsLfTagPolicyArgsDict']]] = None,
-            permissions: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            permissions_with_grant_options: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            principal: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            table: Optional[pulumi.Input[Union['PermissionsTableArgs', 'PermissionsTableArgsDict']]] = None,
-            table_with_columns: Optional[pulumi.Input[Union['PermissionsTableWithColumnsArgs', 'PermissionsTableWithColumnsArgsDict']]] = None) -> 'Permissions':
+            catalog_id: pulumi.Input[Optional[_builtins.str]] = None,
+            catalog_resource: pulumi.Input[Optional[_builtins.bool]] = None,
+            data_cells_filter: pulumi.Input[Optional[Union['PermissionsDataCellsFilterArgs', 'PermissionsDataCellsFilterArgsDict']]] = None,
+            data_location: pulumi.Input[Optional[Union['PermissionsDataLocationArgs', 'PermissionsDataLocationArgsDict']]] = None,
+            database: pulumi.Input[Optional[Union['PermissionsDatabaseArgs', 'PermissionsDatabaseArgsDict']]] = None,
+            lf_tag: pulumi.Input[Optional[Union['PermissionsLfTagArgs', 'PermissionsLfTagArgsDict']]] = None,
+            lf_tag_policy: pulumi.Input[Optional[Union['PermissionsLfTagPolicyArgs', 'PermissionsLfTagPolicyArgsDict']]] = None,
+            permissions: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            permissions_with_grant_options: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            principal: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            table: pulumi.Input[Optional[Union['PermissionsTableArgs', 'PermissionsTableArgsDict']]] = None,
+            table_with_columns: pulumi.Input[Optional[Union['PermissionsTableWithColumnsArgs', 'PermissionsTableWithColumnsArgsDict']]] = None) -> 'Permissions':
         """
         Get an existing Permissions resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

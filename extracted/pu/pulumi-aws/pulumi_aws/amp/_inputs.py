@@ -15,6 +15,18 @@ else:
 from .. import _utilities
 
 __all__ = [
+    'AnomalyDetectorConfigurationArgs',
+    'AnomalyDetectorConfigurationArgsDict',
+    'AnomalyDetectorConfigurationRandomCutForestArgs',
+    'AnomalyDetectorConfigurationRandomCutForestArgsDict',
+    'AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromAboveArgs',
+    'AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromAboveArgsDict',
+    'AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromBelowArgs',
+    'AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromBelowArgsDict',
+    'AnomalyDetectorMissingDataActionArgs',
+    'AnomalyDetectorMissingDataActionArgsDict',
+    'AnomalyDetectorTimeoutsArgs',
+    'AnomalyDetectorTimeoutsArgsDict',
     'QueryLoggingConfigurationDestinationArgs',
     'QueryLoggingConfigurationDestinationArgsDict',
     'QueryLoggingConfigurationDestinationCloudwatchLogsArgs',
@@ -29,12 +41,26 @@ __all__ = [
     'ScraperDestinationArgsDict',
     'ScraperDestinationAmpArgs',
     'ScraperDestinationAmpArgsDict',
+    'ScraperDestinationCloudwatchArgs',
+    'ScraperDestinationCloudwatchArgsDict',
+    'ScraperExporterArgs',
+    'ScraperExporterArgsDict',
+    'ScraperExporterOpensearchArgs',
+    'ScraperExporterOpensearchArgsDict',
+    'ScraperLoggingConfigurationLoggingDestinationArgs',
+    'ScraperLoggingConfigurationLoggingDestinationArgsDict',
+    'ScraperLoggingConfigurationLoggingDestinationCloudwatchLogsArgs',
+    'ScraperLoggingConfigurationLoggingDestinationCloudwatchLogsArgsDict',
+    'ScraperLoggingConfigurationTimeoutsArgs',
+    'ScraperLoggingConfigurationTimeoutsArgsDict',
     'ScraperRoleConfigurationArgs',
     'ScraperRoleConfigurationArgsDict',
     'ScraperSourceArgs',
     'ScraperSourceArgsDict',
     'ScraperSourceEksArgs',
     'ScraperSourceEksArgsDict',
+    'ScraperSourceVpcArgs',
+    'ScraperSourceVpcArgsDict',
     'ScraperTimeoutsArgs',
     'ScraperTimeoutsArgsDict',
     'WorkspaceConfigurationLimitsPerLabelSetArgs',
@@ -46,6 +72,358 @@ __all__ = [
     'WorkspaceLoggingConfigurationArgs',
     'WorkspaceLoggingConfigurationArgsDict',
 ]
+
+class AnomalyDetectorConfigurationArgsDict(TypedDict):
+    random_cut_forest: pulumi.Input['AnomalyDetectorConfigurationRandomCutForestArgsDict']
+    """
+    Configuration block for the Random Cut Forest anomaly detection algorithm. See `random_cut_forest` below.
+    """
+
+@pulumi.input_type
+class AnomalyDetectorConfigurationArgs:
+    def __init__(__self__, *,
+                 random_cut_forest: pulumi.Input['AnomalyDetectorConfigurationRandomCutForestArgs']):
+        """
+        :param pulumi.Input['AnomalyDetectorConfigurationRandomCutForestArgs'] random_cut_forest: Configuration block for the Random Cut Forest anomaly detection algorithm. See `random_cut_forest` below.
+        """
+        pulumi.set(__self__, "random_cut_forest", random_cut_forest)
+
+    @_builtins.property
+    @pulumi.getter(name="randomCutForest")
+    def random_cut_forest(self) -> pulumi.Input['AnomalyDetectorConfigurationRandomCutForestArgs']:
+        """
+        Configuration block for the Random Cut Forest anomaly detection algorithm. See `random_cut_forest` below.
+        """
+        return pulumi.get(self, "random_cut_forest")
+
+    @random_cut_forest.setter
+    def random_cut_forest(self, value: pulumi.Input['AnomalyDetectorConfigurationRandomCutForestArgs']):
+        pulumi.set(self, "random_cut_forest", value)
+
+
+class AnomalyDetectorConfigurationRandomCutForestArgsDict(TypedDict):
+    query: pulumi.Input[_builtins.str]
+    """
+    PromQL query used to select the time series for anomaly detection.
+    """
+    ignore_near_expected_from_above: NotRequired[pulumi.Input[Optional['AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromAboveArgsDict']]]
+    """
+    Configuration block for suppressing anomalies when the observed value is slightly above the expected value. See `ignore_near_expected_from_above` below.
+    """
+    ignore_near_expected_from_below: NotRequired[pulumi.Input[Optional['AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromBelowArgsDict']]]
+    """
+    Configuration block for suppressing anomalies when the observed value is slightly below the expected value. See `ignore_near_expected_from_below` below.
+    """
+    sample_size: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Number of data points used to train the model. Must be at least `256`.
+    """
+    shingle_size: NotRequired[pulumi.Input[Optional[_builtins.int]]]
+    """
+    Number of consecutive data points that form a single input to the model. Must be at least `2`.
+    """
+
+@pulumi.input_type
+class AnomalyDetectorConfigurationRandomCutForestArgs:
+    def __init__(__self__, *,
+                 query: pulumi.Input[_builtins.str],
+                 ignore_near_expected_from_above: pulumi.Input[Optional['AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromAboveArgs']] = None,
+                 ignore_near_expected_from_below: pulumi.Input[Optional['AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromBelowArgs']] = None,
+                 sample_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 shingle_size: pulumi.Input[Optional[_builtins.int]] = None):
+        """
+        :param pulumi.Input[_builtins.str] query: PromQL query used to select the time series for anomaly detection.
+        :param pulumi.Input['AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromAboveArgs'] ignore_near_expected_from_above: Configuration block for suppressing anomalies when the observed value is slightly above the expected value. See `ignore_near_expected_from_above` below.
+        :param pulumi.Input['AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromBelowArgs'] ignore_near_expected_from_below: Configuration block for suppressing anomalies when the observed value is slightly below the expected value. See `ignore_near_expected_from_below` below.
+        :param pulumi.Input[_builtins.int] sample_size: Number of data points used to train the model. Must be at least `256`.
+        :param pulumi.Input[_builtins.int] shingle_size: Number of consecutive data points that form a single input to the model. Must be at least `2`.
+        """
+        pulumi.set(__self__, "query", query)
+        if ignore_near_expected_from_above is not None:
+            pulumi.set(__self__, "ignore_near_expected_from_above", ignore_near_expected_from_above)
+        if ignore_near_expected_from_below is not None:
+            pulumi.set(__self__, "ignore_near_expected_from_below", ignore_near_expected_from_below)
+        if sample_size is not None:
+            pulumi.set(__self__, "sample_size", sample_size)
+        if shingle_size is not None:
+            pulumi.set(__self__, "shingle_size", shingle_size)
+
+    @_builtins.property
+    @pulumi.getter
+    def query(self) -> pulumi.Input[_builtins.str]:
+        """
+        PromQL query used to select the time series for anomaly detection.
+        """
+        return pulumi.get(self, "query")
+
+    @query.setter
+    def query(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "query", value)
+
+    @_builtins.property
+    @pulumi.getter(name="ignoreNearExpectedFromAbove")
+    def ignore_near_expected_from_above(self) -> pulumi.Input[Optional['AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromAboveArgs']]:
+        """
+        Configuration block for suppressing anomalies when the observed value is slightly above the expected value. See `ignore_near_expected_from_above` below.
+        """
+        return pulumi.get(self, "ignore_near_expected_from_above")
+
+    @ignore_near_expected_from_above.setter
+    def ignore_near_expected_from_above(self, value: pulumi.Input[Optional['AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromAboveArgs']]):
+        pulumi.set(self, "ignore_near_expected_from_above", value)
+
+    @_builtins.property
+    @pulumi.getter(name="ignoreNearExpectedFromBelow")
+    def ignore_near_expected_from_below(self) -> pulumi.Input[Optional['AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromBelowArgs']]:
+        """
+        Configuration block for suppressing anomalies when the observed value is slightly below the expected value. See `ignore_near_expected_from_below` below.
+        """
+        return pulumi.get(self, "ignore_near_expected_from_below")
+
+    @ignore_near_expected_from_below.setter
+    def ignore_near_expected_from_below(self, value: pulumi.Input[Optional['AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromBelowArgs']]):
+        pulumi.set(self, "ignore_near_expected_from_below", value)
+
+    @_builtins.property
+    @pulumi.getter(name="sampleSize")
+    def sample_size(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Number of data points used to train the model. Must be at least `256`.
+        """
+        return pulumi.get(self, "sample_size")
+
+    @sample_size.setter
+    def sample_size(self, value: pulumi.Input[Optional[_builtins.int]]):
+        pulumi.set(self, "sample_size", value)
+
+    @_builtins.property
+    @pulumi.getter(name="shingleSize")
+    def shingle_size(self) -> pulumi.Input[Optional[_builtins.int]]:
+        """
+        Number of consecutive data points that form a single input to the model. Must be at least `2`.
+        """
+        return pulumi.get(self, "shingle_size")
+
+    @shingle_size.setter
+    def shingle_size(self, value: pulumi.Input[Optional[_builtins.int]]):
+        pulumi.set(self, "shingle_size", value)
+
+
+class AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromAboveArgsDict(TypedDict):
+    amount: NotRequired[pulumi.Input[Optional[_builtins.float]]]
+    """
+    Absolute amount by which the observed value may exceed the expected value before being reported as an anomaly. Conflicts with `ratio`.
+    """
+    ratio: NotRequired[pulumi.Input[Optional[_builtins.float]]]
+    """
+    Ratio by which the observed value may exceed the expected value before being reported as an anomaly. Must be at least `0`. Conflicts with `amount`.
+    """
+
+@pulumi.input_type
+class AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromAboveArgs:
+    def __init__(__self__, *,
+                 amount: pulumi.Input[Optional[_builtins.float]] = None,
+                 ratio: pulumi.Input[Optional[_builtins.float]] = None):
+        """
+        :param pulumi.Input[_builtins.float] amount: Absolute amount by which the observed value may exceed the expected value before being reported as an anomaly. Conflicts with `ratio`.
+        :param pulumi.Input[_builtins.float] ratio: Ratio by which the observed value may exceed the expected value before being reported as an anomaly. Must be at least `0`. Conflicts with `amount`.
+        """
+        if amount is not None:
+            pulumi.set(__self__, "amount", amount)
+        if ratio is not None:
+            pulumi.set(__self__, "ratio", ratio)
+
+    @_builtins.property
+    @pulumi.getter
+    def amount(self) -> pulumi.Input[Optional[_builtins.float]]:
+        """
+        Absolute amount by which the observed value may exceed the expected value before being reported as an anomaly. Conflicts with `ratio`.
+        """
+        return pulumi.get(self, "amount")
+
+    @amount.setter
+    def amount(self, value: pulumi.Input[Optional[_builtins.float]]):
+        pulumi.set(self, "amount", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def ratio(self) -> pulumi.Input[Optional[_builtins.float]]:
+        """
+        Ratio by which the observed value may exceed the expected value before being reported as an anomaly. Must be at least `0`. Conflicts with `amount`.
+        """
+        return pulumi.get(self, "ratio")
+
+    @ratio.setter
+    def ratio(self, value: pulumi.Input[Optional[_builtins.float]]):
+        pulumi.set(self, "ratio", value)
+
+
+class AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromBelowArgsDict(TypedDict):
+    amount: NotRequired[pulumi.Input[Optional[_builtins.float]]]
+    """
+    Absolute amount by which the observed value may exceed the expected value before being reported as an anomaly. Conflicts with `ratio`.
+    """
+    ratio: NotRequired[pulumi.Input[Optional[_builtins.float]]]
+    """
+    Ratio by which the observed value may exceed the expected value before being reported as an anomaly. Must be at least `0`. Conflicts with `amount`.
+    """
+
+@pulumi.input_type
+class AnomalyDetectorConfigurationRandomCutForestIgnoreNearExpectedFromBelowArgs:
+    def __init__(__self__, *,
+                 amount: pulumi.Input[Optional[_builtins.float]] = None,
+                 ratio: pulumi.Input[Optional[_builtins.float]] = None):
+        """
+        :param pulumi.Input[_builtins.float] amount: Absolute amount by which the observed value may exceed the expected value before being reported as an anomaly. Conflicts with `ratio`.
+        :param pulumi.Input[_builtins.float] ratio: Ratio by which the observed value may exceed the expected value before being reported as an anomaly. Must be at least `0`. Conflicts with `amount`.
+        """
+        if amount is not None:
+            pulumi.set(__self__, "amount", amount)
+        if ratio is not None:
+            pulumi.set(__self__, "ratio", ratio)
+
+    @_builtins.property
+    @pulumi.getter
+    def amount(self) -> pulumi.Input[Optional[_builtins.float]]:
+        """
+        Absolute amount by which the observed value may exceed the expected value before being reported as an anomaly. Conflicts with `ratio`.
+        """
+        return pulumi.get(self, "amount")
+
+    @amount.setter
+    def amount(self, value: pulumi.Input[Optional[_builtins.float]]):
+        pulumi.set(self, "amount", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def ratio(self) -> pulumi.Input[Optional[_builtins.float]]:
+        """
+        Ratio by which the observed value may exceed the expected value before being reported as an anomaly. Must be at least `0`. Conflicts with `amount`.
+        """
+        return pulumi.get(self, "ratio")
+
+    @ratio.setter
+    def ratio(self, value: pulumi.Input[Optional[_builtins.float]]):
+        pulumi.set(self, "ratio", value)
+
+
+class AnomalyDetectorMissingDataActionArgsDict(TypedDict):
+    mark_as_anomaly: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
+    """
+    Whether to treat missing data points as anomalies. Must be set to `true`. Conflicts with `skip`.
+    """
+    skip: NotRequired[pulumi.Input[Optional[_builtins.bool]]]
+    """
+    Whether to skip missing data points without reporting them as anomalies. Must be set to `true`. Conflicts with `mark_as_anomaly`.
+    """
+
+@pulumi.input_type
+class AnomalyDetectorMissingDataActionArgs:
+    def __init__(__self__, *,
+                 mark_as_anomaly: pulumi.Input[Optional[_builtins.bool]] = None,
+                 skip: pulumi.Input[Optional[_builtins.bool]] = None):
+        """
+        :param pulumi.Input[_builtins.bool] mark_as_anomaly: Whether to treat missing data points as anomalies. Must be set to `true`. Conflicts with `skip`.
+        :param pulumi.Input[_builtins.bool] skip: Whether to skip missing data points without reporting them as anomalies. Must be set to `true`. Conflicts with `mark_as_anomaly`.
+        """
+        if mark_as_anomaly is not None:
+            pulumi.set(__self__, "mark_as_anomaly", mark_as_anomaly)
+        if skip is not None:
+            pulumi.set(__self__, "skip", skip)
+
+    @_builtins.property
+    @pulumi.getter(name="markAsAnomaly")
+    def mark_as_anomaly(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        Whether to treat missing data points as anomalies. Must be set to `true`. Conflicts with `skip`.
+        """
+        return pulumi.get(self, "mark_as_anomaly")
+
+    @mark_as_anomaly.setter
+    def mark_as_anomaly(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "mark_as_anomaly", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def skip(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        Whether to skip missing data points without reporting them as anomalies. Must be set to `true`. Conflicts with `mark_as_anomaly`.
+        """
+        return pulumi.get(self, "skip")
+
+    @skip.setter
+    def skip(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "skip", value)
+
+
+class AnomalyDetectorTimeoutsArgsDict(TypedDict):
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+    """
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+    """
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+    """
+
+@pulumi.input_type
+class AnomalyDetectorTimeoutsArgs:
+    def __init__(__self__, *,
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
+        """
+        :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        :param pulumi.Input[_builtins.str] update: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        if create is not None:
+            pulumi.set(__self__, "create", create)
+        if delete is not None:
+            pulumi.set(__self__, "delete", delete)
+        if update is not None:
+            pulumi.set(__self__, "update", update)
+
+    @_builtins.property
+    @pulumi.getter
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "create")
+
+    @create.setter
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "create", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        return pulumi.get(self, "delete")
+
+    @delete.setter
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "delete", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "update")
+
+    @update.setter
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "update", value)
+
 
 class QueryLoggingConfigurationDestinationArgsDict(TypedDict):
     cloudwatch_logs: pulumi.Input['QueryLoggingConfigurationDestinationCloudwatchLogsArgsDict']
@@ -151,15 +529,15 @@ class QueryLoggingConfigurationDestinationFiltersArgs:
 
 
 class QueryLoggingConfigurationTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
-    update: NotRequired[pulumi.Input[_builtins.str]]
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -167,9 +545,9 @@ class QueryLoggingConfigurationTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class QueryLoggingConfigurationTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None,
-                 update: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -184,51 +562,51 @@ class QueryLoggingConfigurationTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def update(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "update")
 
     @update.setter
-    def update(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update", value)
 
 
 class ResourcePolicyTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
-    update: NotRequired[pulumi.Input[_builtins.str]]
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -236,9 +614,9 @@ class ResourcePolicyTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class ResourcePolicyTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None,
-                 update: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -253,74 +631,100 @@ class ResourcePolicyTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def update(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "update")
 
     @update.setter
-    def update(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update", value)
 
 
 class ScraperDestinationArgsDict(TypedDict):
-    amp: NotRequired[pulumi.Input['ScraperDestinationAmpArgsDict']]
+    amp: NotRequired[pulumi.Input[Optional['ScraperDestinationAmpArgsDict']]]
     """
-    Configuration block for an Amazon Managed Prometheus workspace destination. See `amp`.
+    Configuration block for an Amazon Managed Prometheus workspace destination. See `amp` Block for details.
+    """
+    cloudwatch: NotRequired[pulumi.Input[Optional['ScraperDestinationCloudwatchArgsDict']]]
+    """
+    Configuration block for a CloudWatch Metrics destination. See `cloudwatch` Block for details.
+
+    > **NOTE:** Either `amp` or `cloudwatch` must be specified, but not both.
     """
 
 @pulumi.input_type
 class ScraperDestinationArgs:
     def __init__(__self__, *,
-                 amp: Optional[pulumi.Input['ScraperDestinationAmpArgs']] = None):
+                 amp: pulumi.Input[Optional['ScraperDestinationAmpArgs']] = None,
+                 cloudwatch: pulumi.Input[Optional['ScraperDestinationCloudwatchArgs']] = None):
         """
-        :param pulumi.Input['ScraperDestinationAmpArgs'] amp: Configuration block for an Amazon Managed Prometheus workspace destination. See `amp`.
+        :param pulumi.Input['ScraperDestinationAmpArgs'] amp: Configuration block for an Amazon Managed Prometheus workspace destination. See `amp` Block for details.
+        :param pulumi.Input['ScraperDestinationCloudwatchArgs'] cloudwatch: Configuration block for a CloudWatch Metrics destination. See `cloudwatch` Block for details.
+               
+               > **NOTE:** Either `amp` or `cloudwatch` must be specified, but not both.
         """
         if amp is not None:
             pulumi.set(__self__, "amp", amp)
+        if cloudwatch is not None:
+            pulumi.set(__self__, "cloudwatch", cloudwatch)
 
     @_builtins.property
     @pulumi.getter
-    def amp(self) -> Optional[pulumi.Input['ScraperDestinationAmpArgs']]:
+    def amp(self) -> pulumi.Input[Optional['ScraperDestinationAmpArgs']]:
         """
-        Configuration block for an Amazon Managed Prometheus workspace destination. See `amp`.
+        Configuration block for an Amazon Managed Prometheus workspace destination. See `amp` Block for details.
         """
         return pulumi.get(self, "amp")
 
     @amp.setter
-    def amp(self, value: Optional[pulumi.Input['ScraperDestinationAmpArgs']]):
+    def amp(self, value: pulumi.Input[Optional['ScraperDestinationAmpArgs']]):
         pulumi.set(self, "amp", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def cloudwatch(self) -> pulumi.Input[Optional['ScraperDestinationCloudwatchArgs']]:
+        """
+        Configuration block for a CloudWatch Metrics destination. See `cloudwatch` Block for details.
+
+        > **NOTE:** Either `amp` or `cloudwatch` must be specified, but not both.
+        """
+        return pulumi.get(self, "cloudwatch")
+
+    @cloudwatch.setter
+    def cloudwatch(self, value: pulumi.Input[Optional['ScraperDestinationCloudwatchArgs']]):
+        pulumi.set(self, "cloudwatch", value)
 
 
 class ScraperDestinationAmpArgsDict(TypedDict):
     workspace_arn: pulumi.Input[_builtins.str]
     """
-    The Amazon Resource Name (ARN) of the prometheus workspace.
+    ARN of the prometheus workspace.
     """
 
 @pulumi.input_type
@@ -328,7 +732,7 @@ class ScraperDestinationAmpArgs:
     def __init__(__self__, *,
                  workspace_arn: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] workspace_arn: The Amazon Resource Name (ARN) of the prometheus workspace.
+        :param pulumi.Input[_builtins.str] workspace_arn: ARN of the prometheus workspace.
         """
         pulumi.set(__self__, "workspace_arn", workspace_arn)
 
@@ -336,7 +740,7 @@ class ScraperDestinationAmpArgs:
     @pulumi.getter(name="workspaceArn")
     def workspace_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the prometheus workspace.
+        ARN of the prometheus workspace.
         """
         return pulumi.get(self, "workspace_arn")
 
@@ -345,24 +749,233 @@ class ScraperDestinationAmpArgs:
         pulumi.set(self, "workspace_arn", value)
 
 
+class ScraperDestinationCloudwatchArgsDict(TypedDict):
+    dataset_arn: pulumi.Input[_builtins.str]
+    """
+    ARN of the CloudWatch dataset. Use `arn:aws:cloudwatch:{region}:{account}:dataset/default` for the default dataset.
+    """
+
+@pulumi.input_type
+class ScraperDestinationCloudwatchArgs:
+    def __init__(__self__, *,
+                 dataset_arn: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] dataset_arn: ARN of the CloudWatch dataset. Use `arn:aws:cloudwatch:{region}:{account}:dataset/default` for the default dataset.
+        """
+        pulumi.set(__self__, "dataset_arn", dataset_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="datasetArn")
+    def dataset_arn(self) -> pulumi.Input[_builtins.str]:
+        """
+        ARN of the CloudWatch dataset. Use `arn:aws:cloudwatch:{region}:{account}:dataset/default` for the default dataset.
+        """
+        return pulumi.get(self, "dataset_arn")
+
+    @dataset_arn.setter
+    def dataset_arn(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "dataset_arn", value)
+
+
+class ScraperExporterArgsDict(TypedDict):
+    opensearch: pulumi.Input['ScraperExporterOpensearchArgsDict']
+    """
+    Configuration block for an OpenSearch exporter. See `opensearch` Block for details.
+    """
+
+@pulumi.input_type
+class ScraperExporterArgs:
+    def __init__(__self__, *,
+                 opensearch: pulumi.Input['ScraperExporterOpensearchArgs']):
+        """
+        :param pulumi.Input['ScraperExporterOpensearchArgs'] opensearch: Configuration block for an OpenSearch exporter. See `opensearch` Block for details.
+        """
+        pulumi.set(__self__, "opensearch", opensearch)
+
+    @_builtins.property
+    @pulumi.getter
+    def opensearch(self) -> pulumi.Input['ScraperExporterOpensearchArgs']:
+        """
+        Configuration block for an OpenSearch exporter. See `opensearch` Block for details.
+        """
+        return pulumi.get(self, "opensearch")
+
+    @opensearch.setter
+    def opensearch(self, value: pulumi.Input['ScraperExporterOpensearchArgs']):
+        pulumi.set(self, "opensearch", value)
+
+
+class ScraperExporterOpensearchArgsDict(TypedDict):
+    domain_arn: pulumi.Input[_builtins.str]
+    """
+    ARN of the OpenSearch domain.
+    """
+
+@pulumi.input_type
+class ScraperExporterOpensearchArgs:
+    def __init__(__self__, *,
+                 domain_arn: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] domain_arn: ARN of the OpenSearch domain.
+        """
+        pulumi.set(__self__, "domain_arn", domain_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="domainArn")
+    def domain_arn(self) -> pulumi.Input[_builtins.str]:
+        """
+        ARN of the OpenSearch domain.
+        """
+        return pulumi.get(self, "domain_arn")
+
+    @domain_arn.setter
+    def domain_arn(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "domain_arn", value)
+
+
+class ScraperLoggingConfigurationLoggingDestinationArgsDict(TypedDict):
+    cloudwatch_logs: pulumi.Input['ScraperLoggingConfigurationLoggingDestinationCloudwatchLogsArgsDict']
+    """
+    Configuration block for CloudWatch Logs destination. See `cloudwatch_logs` Block below.
+    """
+
+@pulumi.input_type
+class ScraperLoggingConfigurationLoggingDestinationArgs:
+    def __init__(__self__, *,
+                 cloudwatch_logs: pulumi.Input['ScraperLoggingConfigurationLoggingDestinationCloudwatchLogsArgs']):
+        """
+        :param pulumi.Input['ScraperLoggingConfigurationLoggingDestinationCloudwatchLogsArgs'] cloudwatch_logs: Configuration block for CloudWatch Logs destination. See `cloudwatch_logs` Block below.
+        """
+        pulumi.set(__self__, "cloudwatch_logs", cloudwatch_logs)
+
+    @_builtins.property
+    @pulumi.getter(name="cloudwatchLogs")
+    def cloudwatch_logs(self) -> pulumi.Input['ScraperLoggingConfigurationLoggingDestinationCloudwatchLogsArgs']:
+        """
+        Configuration block for CloudWatch Logs destination. See `cloudwatch_logs` Block below.
+        """
+        return pulumi.get(self, "cloudwatch_logs")
+
+    @cloudwatch_logs.setter
+    def cloudwatch_logs(self, value: pulumi.Input['ScraperLoggingConfigurationLoggingDestinationCloudwatchLogsArgs']):
+        pulumi.set(self, "cloudwatch_logs", value)
+
+
+class ScraperLoggingConfigurationLoggingDestinationCloudwatchLogsArgsDict(TypedDict):
+    log_group_arn: pulumi.Input[_builtins.str]
+    """
+    ARN of the CloudWatch Logs log group. Must end with `:*`.
+    """
+
+@pulumi.input_type
+class ScraperLoggingConfigurationLoggingDestinationCloudwatchLogsArgs:
+    def __init__(__self__, *,
+                 log_group_arn: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] log_group_arn: ARN of the CloudWatch Logs log group. Must end with `:*`.
+        """
+        pulumi.set(__self__, "log_group_arn", log_group_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="logGroupArn")
+    def log_group_arn(self) -> pulumi.Input[_builtins.str]:
+        """
+        ARN of the CloudWatch Logs log group. Must end with `:*`.
+        """
+        return pulumi.get(self, "log_group_arn")
+
+    @log_group_arn.setter
+    def log_group_arn(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "log_group_arn", value)
+
+
+class ScraperLoggingConfigurationTimeoutsArgsDict(TypedDict):
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+    """
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+    """
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
+    """
+    A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+    """
+
+@pulumi.input_type
+class ScraperLoggingConfigurationTimeoutsArgs:
+    def __init__(__self__, *,
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
+        """
+        :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        :param pulumi.Input[_builtins.str] update: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        if create is not None:
+            pulumi.set(__self__, "create", create)
+        if delete is not None:
+            pulumi.set(__self__, "delete", delete)
+        if update is not None:
+            pulumi.set(__self__, "update", update)
+
+    @_builtins.property
+    @pulumi.getter
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "create")
+
+    @create.setter
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "create", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        return pulumi.get(self, "delete")
+
+    @delete.setter
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "delete", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "update")
+
+    @update.setter
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "update", value)
+
+
 class ScraperRoleConfigurationArgsDict(TypedDict):
-    source_role_arn: NotRequired[pulumi.Input[_builtins.str]]
+    source_role_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The Amazon Resource Name (ARN) of the source role configuration. Must be an IAM role ARN.
+    ARN of the source role configuration. Must be an IAM role ARN.
     """
-    target_role_arn: NotRequired[pulumi.Input[_builtins.str]]
+    target_role_arn: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
-    The Amazon Resource Name (ARN) of the target role configuration. Must be an IAM role ARN.
+    ARN of the target role configuration. Must be an IAM role ARN.
     """
 
 @pulumi.input_type
 class ScraperRoleConfigurationArgs:
     def __init__(__self__, *,
-                 source_role_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 target_role_arn: Optional[pulumi.Input[_builtins.str]] = None):
+                 source_role_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 target_role_arn: pulumi.Input[Optional[_builtins.str]] = None):
         """
-        :param pulumi.Input[_builtins.str] source_role_arn: The Amazon Resource Name (ARN) of the source role configuration. Must be an IAM role ARN.
-        :param pulumi.Input[_builtins.str] target_role_arn: The Amazon Resource Name (ARN) of the target role configuration. Must be an IAM role ARN.
+        :param pulumi.Input[_builtins.str] source_role_arn: ARN of the source role configuration. Must be an IAM role ARN.
+        :param pulumi.Input[_builtins.str] target_role_arn: ARN of the target role configuration. Must be an IAM role ARN.
         """
         if source_role_arn is not None:
             pulumi.set(__self__, "source_role_arn", source_role_arn)
@@ -371,64 +984,94 @@ class ScraperRoleConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="sourceRoleArn")
-    def source_role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def source_role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the source role configuration. Must be an IAM role ARN.
+        ARN of the source role configuration. Must be an IAM role ARN.
         """
         return pulumi.get(self, "source_role_arn")
 
     @source_role_arn.setter
-    def source_role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def source_role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "source_role_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="targetRoleArn")
-    def target_role_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def target_role_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the target role configuration. Must be an IAM role ARN.
+        ARN of the target role configuration. Must be an IAM role ARN.
         """
         return pulumi.get(self, "target_role_arn")
 
     @target_role_arn.setter
-    def target_role_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def target_role_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "target_role_arn", value)
 
 
 class ScraperSourceArgsDict(TypedDict):
-    eks: pulumi.Input['ScraperSourceEksArgsDict']
+    eks: NotRequired[pulumi.Input[Optional['ScraperSourceEksArgsDict']]]
     """
-    Configuration block for an EKS cluster source. See `eks`.
+    Configuration block for an EKS cluster source. See `eks` Block for details.
+    """
+    vpc: NotRequired[pulumi.Input[Optional['ScraperSourceVpcArgsDict']]]
+    """
+    Configuration block for a VPC source. See `vpc` Block for details.
+
+    > **NOTE:** Either `eks` or `vpc` must be specified, but not both.
     """
 
 @pulumi.input_type
 class ScraperSourceArgs:
     def __init__(__self__, *,
-                 eks: pulumi.Input['ScraperSourceEksArgs']):
+                 eks: pulumi.Input[Optional['ScraperSourceEksArgs']] = None,
+                 vpc: pulumi.Input[Optional['ScraperSourceVpcArgs']] = None):
         """
-        :param pulumi.Input['ScraperSourceEksArgs'] eks: Configuration block for an EKS cluster source. See `eks`.
+        :param pulumi.Input['ScraperSourceEksArgs'] eks: Configuration block for an EKS cluster source. See `eks` Block for details.
+        :param pulumi.Input['ScraperSourceVpcArgs'] vpc: Configuration block for a VPC source. See `vpc` Block for details.
+               
+               > **NOTE:** Either `eks` or `vpc` must be specified, but not both.
         """
-        pulumi.set(__self__, "eks", eks)
+        if eks is not None:
+            pulumi.set(__self__, "eks", eks)
+        if vpc is not None:
+            pulumi.set(__self__, "vpc", vpc)
 
     @_builtins.property
     @pulumi.getter
-    def eks(self) -> pulumi.Input['ScraperSourceEksArgs']:
+    def eks(self) -> pulumi.Input[Optional['ScraperSourceEksArgs']]:
         """
-        Configuration block for an EKS cluster source. See `eks`.
+        Configuration block for an EKS cluster source. See `eks` Block for details.
         """
         return pulumi.get(self, "eks")
 
     @eks.setter
-    def eks(self, value: pulumi.Input['ScraperSourceEksArgs']):
+    def eks(self, value: pulumi.Input[Optional['ScraperSourceEksArgs']]):
         pulumi.set(self, "eks", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def vpc(self) -> pulumi.Input[Optional['ScraperSourceVpcArgs']]:
+        """
+        Configuration block for a VPC source. See `vpc` Block for details.
+
+        > **NOTE:** Either `eks` or `vpc` must be specified, but not both.
+        """
+        return pulumi.get(self, "vpc")
+
+    @vpc.setter
+    def vpc(self, value: pulumi.Input[Optional['ScraperSourceVpcArgs']]):
+        pulumi.set(self, "vpc", value)
 
 
 class ScraperSourceEksArgsDict(TypedDict):
     cluster_arn: pulumi.Input[_builtins.str]
+    """
+    ARN of the source EKS cluster.
+    """
     subnet_ids: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
     """
     List of subnet IDs. Must be in at least two different availability zones.
     """
-    security_group_ids: NotRequired[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]
+    security_group_ids: NotRequired[pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]]
     """
     List of the security group IDs for the Amazon EKS cluster VPC configuration.
     """
@@ -438,8 +1081,9 @@ class ScraperSourceEksArgs:
     def __init__(__self__, *,
                  cluster_arn: pulumi.Input[_builtins.str],
                  subnet_ids: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
-                 security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 security_group_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
+        :param pulumi.Input[_builtins.str] cluster_arn: ARN of the source EKS cluster.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnet_ids: List of subnet IDs. Must be in at least two different availability zones.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_group_ids: List of the security group IDs for the Amazon EKS cluster VPC configuration.
         """
@@ -451,6 +1095,9 @@ class ScraperSourceEksArgs:
     @_builtins.property
     @pulumi.getter(name="clusterArn")
     def cluster_arn(self) -> pulumi.Input[_builtins.str]:
+        """
+        ARN of the source EKS cluster.
+        """
         return pulumi.get(self, "cluster_arn")
 
     @cluster_arn.setter
@@ -471,27 +1118,74 @@ class ScraperSourceEksArgs:
 
     @_builtins.property
     @pulumi.getter(name="securityGroupIds")
-    def security_group_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def security_group_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of the security group IDs for the Amazon EKS cluster VPC configuration.
         """
         return pulumi.get(self, "security_group_ids")
 
     @security_group_ids.setter
-    def security_group_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def security_group_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "security_group_ids", value)
 
 
+class ScraperSourceVpcArgsDict(TypedDict):
+    security_group_ids: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
+    """
+    List of security group IDs for the VPC configuration.
+    """
+    subnet_ids: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]
+    """
+    List of subnet IDs. Must be in at least two different availability zones.
+    """
+
+@pulumi.input_type
+class ScraperSourceVpcArgs:
+    def __init__(__self__, *,
+                 security_group_ids: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
+                 subnet_ids: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] security_group_ids: List of security group IDs for the VPC configuration.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] subnet_ids: List of subnet IDs. Must be in at least two different availability zones.
+        """
+        pulumi.set(__self__, "security_group_ids", security_group_ids)
+        pulumi.set(__self__, "subnet_ids", subnet_ids)
+
+    @_builtins.property
+    @pulumi.getter(name="securityGroupIds")
+    def security_group_ids(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
+        """
+        List of security group IDs for the VPC configuration.
+        """
+        return pulumi.get(self, "security_group_ids")
+
+    @security_group_ids.setter
+    def security_group_ids(self, value: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]):
+        pulumi.set(self, "security_group_ids", value)
+
+    @_builtins.property
+    @pulumi.getter(name="subnetIds")
+    def subnet_ids(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
+        """
+        List of subnet IDs. Must be in at least two different availability zones.
+        """
+        return pulumi.get(self, "subnet_ids")
+
+    @subnet_ids.setter
+    def subnet_ids(self, value: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]):
+        pulumi.set(self, "subnet_ids", value)
+
+
 class ScraperTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    delete: NotRequired[pulumi.Input[_builtins.str]]
+    delete: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
     """
-    update: NotRequired[pulumi.Input[_builtins.str]]
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -499,9 +1193,9 @@ class ScraperTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class ScraperTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete: Optional[pulumi.Input[_builtins.str]] = None,
-                 update: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
@@ -516,38 +1210,38 @@ class ScraperTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def delete(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def delete(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
         """
         return pulumi.get(self, "delete")
 
     @delete.setter
-    def delete(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def delete(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def update(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "update")
 
     @update.setter
-    def update(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update", value)
 
 
@@ -627,11 +1321,11 @@ class WorkspaceConfigurationLimitsPerLabelSetLimitsArgs:
 
 
 class WorkspaceConfigurationTimeoutsArgsDict(TypedDict):
-    create: NotRequired[pulumi.Input[_builtins.str]]
+    create: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
-    update: NotRequired[pulumi.Input[_builtins.str]]
+    update: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
     """
@@ -639,8 +1333,8 @@ class WorkspaceConfigurationTimeoutsArgsDict(TypedDict):
 @pulumi.input_type
 class WorkspaceConfigurationTimeoutsArgs:
     def __init__(__self__, *,
-                 create: Optional[pulumi.Input[_builtins.str]] = None,
-                 update: Optional[pulumi.Input[_builtins.str]] = None):
+                 create: pulumi.Input[Optional[_builtins.str]] = None,
+                 update: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         :param pulumi.Input[_builtins.str] update: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
@@ -652,26 +1346,26 @@ class WorkspaceConfigurationTimeoutsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def create(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def create(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "create")
 
     @create.setter
-    def create(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def create(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "create", value)
 
     @_builtins.property
     @pulumi.getter
-    def update(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def update(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
         """
         return pulumi.get(self, "update")
 
     @update.setter
-    def update(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def update(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "update", value)
 
 

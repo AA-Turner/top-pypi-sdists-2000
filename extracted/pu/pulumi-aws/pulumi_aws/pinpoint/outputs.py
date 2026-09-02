@@ -21,7 +21,12 @@ __all__ = [
     'AppQuietTime',
     'EmailTemplateEmailTemplate',
     'EmailTemplateEmailTemplateHeader',
+    'Smsvoicev2EventDestinationCloudwatchLogsDestination',
+    'Smsvoicev2EventDestinationKinesisFirehoseDestination',
+    'Smsvoicev2EventDestinationSnsDestination',
     'Smsvoicev2PhoneNumberTimeouts',
+    'Smsvoicev2PoolTimeouts',
+    'Smsvoicev2SenderIdTimeouts',
 ]
 
 @pulumi.output_type
@@ -50,9 +55,9 @@ class AppCampaignHook(dict):
                  mode: Optional[_builtins.str] = None,
                  web_url: Optional[_builtins.str] = None):
         """
-        :param _builtins.str lambda_function_name: Lambda function name or ARN to be called for delivery. Conflicts with `web_url`
+        :param _builtins.str lambda_function_name: Lambda function name or ARN to be called for delivery. Conflicts with `web_url`.
         :param _builtins.str mode: What mode Lambda should be invoked in. Valid values for this parameter are `DELIVERY`, `FILTER`.
-        :param _builtins.str web_url: Web URL to call for hook. If the URL has authentication specified it will be added as authentication to the request. Conflicts with `lambda_function_name`
+        :param _builtins.str web_url: Web URL to call for hook. If the URL has authentication specified it will be added as authentication to the request. Conflicts with `lambda_function_name`.
         """
         if lambda_function_name is not None:
             pulumi.set(__self__, "lambda_function_name", lambda_function_name)
@@ -65,7 +70,7 @@ class AppCampaignHook(dict):
     @pulumi.getter(name="lambdaFunctionName")
     def lambda_function_name(self) -> Optional[_builtins.str]:
         """
-        Lambda function name or ARN to be called for delivery. Conflicts with `web_url`
+        Lambda function name or ARN to be called for delivery. Conflicts with `web_url`.
         """
         return pulumi.get(self, "lambda_function_name")
 
@@ -81,7 +86,7 @@ class AppCampaignHook(dict):
     @pulumi.getter(name="webUrl")
     def web_url(self) -> Optional[_builtins.str]:
         """
-        Web URL to call for hook. If the URL has authentication specified it will be added as authentication to the request. Conflicts with `lambda_function_name`
+        Web URL to call for hook. If the URL has authentication specified it will be added as authentication to the request. Conflicts with `lambda_function_name`.
         """
         return pulumi.get(self, "web_url")
 
@@ -113,10 +118,10 @@ class AppLimits(dict):
                  messages_per_second: Optional[_builtins.int] = None,
                  total: Optional[_builtins.int] = None):
         """
-        :param _builtins.int daily: The maximum number of messages that the campaign can send daily.
-        :param _builtins.int maximum_duration: The length of time (in seconds) that the campaign can run before it ends and message deliveries stop. This duration begins at the scheduled start time for the campaign. The minimum value is 60.
-        :param _builtins.int messages_per_second: The number of messages that the campaign can send per second. The minimum value is 50, and the maximum is 20000.
-        :param _builtins.int total: The maximum total number of messages that the campaign can send.
+        :param _builtins.int daily: Maximum number of messages that the campaign can send daily.
+        :param _builtins.int maximum_duration: Length of time (in seconds) that the campaign can run before it ends and message deliveries stop. This duration begins at the scheduled start time for the campaign. Minimum value is 60.
+        :param _builtins.int messages_per_second: Number of messages that the campaign can send per second. Minimum value is 50, and the maximum is 20000.
+        :param _builtins.int total: Maximum total number of messages that the campaign can send.
         """
         if daily is not None:
             pulumi.set(__self__, "daily", daily)
@@ -131,7 +136,7 @@ class AppLimits(dict):
     @pulumi.getter
     def daily(self) -> Optional[_builtins.int]:
         """
-        The maximum number of messages that the campaign can send daily.
+        Maximum number of messages that the campaign can send daily.
         """
         return pulumi.get(self, "daily")
 
@@ -139,7 +144,7 @@ class AppLimits(dict):
     @pulumi.getter(name="maximumDuration")
     def maximum_duration(self) -> Optional[_builtins.int]:
         """
-        The length of time (in seconds) that the campaign can run before it ends and message deliveries stop. This duration begins at the scheduled start time for the campaign. The minimum value is 60.
+        Length of time (in seconds) that the campaign can run before it ends and message deliveries stop. This duration begins at the scheduled start time for the campaign. Minimum value is 60.
         """
         return pulumi.get(self, "maximum_duration")
 
@@ -147,7 +152,7 @@ class AppLimits(dict):
     @pulumi.getter(name="messagesPerSecond")
     def messages_per_second(self) -> Optional[_builtins.int]:
         """
-        The number of messages that the campaign can send per second. The minimum value is 50, and the maximum is 20000.
+        Number of messages that the campaign can send per second. Minimum value is 50, and the maximum is 20000.
         """
         return pulumi.get(self, "messages_per_second")
 
@@ -155,7 +160,7 @@ class AppLimits(dict):
     @pulumi.getter
     def total(self) -> Optional[_builtins.int]:
         """
-        The maximum total number of messages that the campaign can send.
+        Maximum total number of messages that the campaign can send.
         """
         return pulumi.get(self, "total")
 
@@ -166,8 +171,8 @@ class AppQuietTime(dict):
                  end: Optional[_builtins.str] = None,
                  start: Optional[_builtins.str] = None):
         """
-        :param _builtins.str end: The default end time for quiet time in ISO 8601 format. Required if `start` is set
-        :param _builtins.str start: The default start time for quiet time in ISO 8601 format. Required if `end` is set
+        :param _builtins.str end: Default end time for quiet time in ISO 8601 format. Required if `start` is set.
+        :param _builtins.str start: Default start time for quiet time in ISO 8601 format. Required if `end` is set.
         """
         if end is not None:
             pulumi.set(__self__, "end", end)
@@ -178,7 +183,7 @@ class AppQuietTime(dict):
     @pulumi.getter
     def end(self) -> Optional[_builtins.str]:
         """
-        The default end time for quiet time in ISO 8601 format. Required if `start` is set
+        Default end time for quiet time in ISO 8601 format. Required if `start` is set.
         """
         return pulumi.get(self, "end")
 
@@ -186,7 +191,7 @@ class AppQuietTime(dict):
     @pulumi.getter
     def start(self) -> Optional[_builtins.str]:
         """
-        The default start time for quiet time in ISO 8601 format. Required if `end` is set
+        Default start time for quiet time in ISO 8601 format. Required if `end` is set.
         """
         return pulumi.get(self, "start")
 
@@ -226,8 +231,10 @@ class EmailTemplateEmailTemplate(dict):
                  text_part: Optional[_builtins.str] = None):
         """
         :param _builtins.str default_substitutions: JSON object that specifies the default values to use for message variables in the message template. This object is a set of key-value pairs. Each key defines a message variable in the template. The corresponding value defines the default value for that variable. When you create a message that's based on the template, you can override these defaults with message-specific and address-specific variables and values.
-        :param _builtins.str html_part: The message body, in HTML format, to use in email messages that are based on the message template. We recommend using HTML format for email clients that render HTML content. You can include links, formatted text, and more in an HTML message.
-        :param _builtins.str recommender_id: The unique identifier for the recommender model to use for the message template. Amazon Pinpoint uses this value to determine how to retrieve and process data from a recommender model when it sends messages that use the template, if the template contains message variables for recommendation data.
+        :param _builtins.str description: Custom description of the message template.
+        :param Sequence['EmailTemplateEmailTemplateHeaderArgs'] headers: List of [MessageHeaders](https://docs.aws.amazon.com/pinpoint/latest/apireference/templates-template-name-email.html#templates-template-name-email-model-messageheader) for the email. You can have up to 15 Headers. See below.
+        :param _builtins.str html_part: Message body, in HTML format, to use in email messages that are based on the message template. We recommend using HTML format for email clients that render HTML content. You can include links, formatted text, and more in an HTML message.
+        :param _builtins.str recommender_id: Unique identifier for the recommender model to use for the message template. AWS End User Messaging uses this value to determine how to retrieve and process data from a recommender model when it sends messages that use the template, if the template contains message variables for recommendation data.
         :param _builtins.str subject: Subject line, or title, to use in email messages that are based on the message template.
         :param _builtins.str text_part: Message body, in plain text format, to use in email messages that are based on the message template. We recommend using plain text format for email clients that don't render HTML content and clients that are connected to high-latency networks, such as mobile devices.
         """
@@ -257,18 +264,24 @@ class EmailTemplateEmailTemplate(dict):
     @_builtins.property
     @pulumi.getter
     def description(self) -> Optional[_builtins.str]:
+        """
+        Custom description of the message template.
+        """
         return pulumi.get(self, "description")
 
     @_builtins.property
     @pulumi.getter
     def headers(self) -> Optional[Sequence['outputs.EmailTemplateEmailTemplateHeader']]:
+        """
+        List of [MessageHeaders](https://docs.aws.amazon.com/pinpoint/latest/apireference/templates-template-name-email.html#templates-template-name-email-model-messageheader) for the email. You can have up to 15 Headers. See below.
+        """
         return pulumi.get(self, "headers")
 
     @_builtins.property
     @pulumi.getter(name="htmlPart")
     def html_part(self) -> Optional[_builtins.str]:
         """
-        The message body, in HTML format, to use in email messages that are based on the message template. We recommend using HTML format for email clients that render HTML content. You can include links, formatted text, and more in an HTML message.
+        Message body, in HTML format, to use in email messages that are based on the message template. We recommend using HTML format for email clients that render HTML content. You can include links, formatted text, and more in an HTML message.
         """
         return pulumi.get(self, "html_part")
 
@@ -276,7 +289,7 @@ class EmailTemplateEmailTemplate(dict):
     @pulumi.getter(name="recommenderId")
     def recommender_id(self) -> Optional[_builtins.str]:
         """
-        The unique identifier for the recommender model to use for the message template. Amazon Pinpoint uses this value to determine how to retrieve and process data from a recommender model when it sends messages that use the template, if the template contains message variables for recommendation data.
+        Unique identifier for the recommender model to use for the message template. AWS End User Messaging uses this value to determine how to retrieve and process data from a recommender model when it sends messages that use the template, if the template contains message variables for recommendation data.
         """
         return pulumi.get(self, "recommender_id")
 
@@ -329,7 +342,224 @@ class EmailTemplateEmailTemplateHeader(dict):
 
 
 @pulumi.output_type
+class Smsvoicev2EventDestinationCloudwatchLogsDestination(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "iamRoleArn":
+            suggest = "iam_role_arn"
+        elif key == "logGroupArn":
+            suggest = "log_group_arn"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in Smsvoicev2EventDestinationCloudwatchLogsDestination. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        Smsvoicev2EventDestinationCloudwatchLogsDestination.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        Smsvoicev2EventDestinationCloudwatchLogsDestination.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 iam_role_arn: _builtins.str,
+                 log_group_arn: _builtins.str):
+        """
+        :param _builtins.str iam_role_arn: ARN of the IAM role that End User Messaging SMS assumes to write to the log group.
+        :param _builtins.str log_group_arn: ARN of the Amazon CloudWatch log group that receives the events.
+        """
+        pulumi.set(__self__, "iam_role_arn", iam_role_arn)
+        pulumi.set(__self__, "log_group_arn", log_group_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="iamRoleArn")
+    def iam_role_arn(self) -> _builtins.str:
+        """
+        ARN of the IAM role that End User Messaging SMS assumes to write to the log group.
+        """
+        return pulumi.get(self, "iam_role_arn")
+
+    @_builtins.property
+    @pulumi.getter(name="logGroupArn")
+    def log_group_arn(self) -> _builtins.str:
+        """
+        ARN of the Amazon CloudWatch log group that receives the events.
+        """
+        return pulumi.get(self, "log_group_arn")
+
+
+@pulumi.output_type
+class Smsvoicev2EventDestinationKinesisFirehoseDestination(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "deliveryStreamArn":
+            suggest = "delivery_stream_arn"
+        elif key == "iamRoleArn":
+            suggest = "iam_role_arn"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in Smsvoicev2EventDestinationKinesisFirehoseDestination. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        Smsvoicev2EventDestinationKinesisFirehoseDestination.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        Smsvoicev2EventDestinationKinesisFirehoseDestination.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 delivery_stream_arn: _builtins.str,
+                 iam_role_arn: _builtins.str):
+        """
+        :param _builtins.str delivery_stream_arn: ARN of the Amazon Data Firehose delivery stream that receives the events.
+        :param _builtins.str iam_role_arn: ARN of the IAM role that End User Messaging SMS assumes to write to the delivery stream.
+        """
+        pulumi.set(__self__, "delivery_stream_arn", delivery_stream_arn)
+        pulumi.set(__self__, "iam_role_arn", iam_role_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="deliveryStreamArn")
+    def delivery_stream_arn(self) -> _builtins.str:
+        """
+        ARN of the Amazon Data Firehose delivery stream that receives the events.
+        """
+        return pulumi.get(self, "delivery_stream_arn")
+
+    @_builtins.property
+    @pulumi.getter(name="iamRoleArn")
+    def iam_role_arn(self) -> _builtins.str:
+        """
+        ARN of the IAM role that End User Messaging SMS assumes to write to the delivery stream.
+        """
+        return pulumi.get(self, "iam_role_arn")
+
+
+@pulumi.output_type
+class Smsvoicev2EventDestinationSnsDestination(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "topicArn":
+            suggest = "topic_arn"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in Smsvoicev2EventDestinationSnsDestination. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        Smsvoicev2EventDestinationSnsDestination.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        Smsvoicev2EventDestinationSnsDestination.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 topic_arn: _builtins.str):
+        """
+        :param _builtins.str topic_arn: ARN of the Amazon SNS topic that receives the events.
+        """
+        pulumi.set(__self__, "topic_arn", topic_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="topicArn")
+    def topic_arn(self) -> _builtins.str:
+        """
+        ARN of the Amazon SNS topic that receives the events.
+        """
+        return pulumi.get(self, "topic_arn")
+
+
+@pulumi.output_type
 class Smsvoicev2PhoneNumberTimeouts(dict):
+    def __init__(__self__, *,
+                 create: Optional[_builtins.str] = None,
+                 delete: Optional[_builtins.str] = None,
+                 update: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        :param _builtins.str delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        :param _builtins.str update: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        if create is not None:
+            pulumi.set(__self__, "create", create)
+        if delete is not None:
+            pulumi.set(__self__, "delete", delete)
+        if update is not None:
+            pulumi.set(__self__, "update", update)
+
+    @_builtins.property
+    @pulumi.getter
+    def create(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "create")
+
+    @_builtins.property
+    @pulumi.getter
+    def delete(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        return pulumi.get(self, "delete")
+
+    @_builtins.property
+    @pulumi.getter
+    def update(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "update")
+
+
+@pulumi.output_type
+class Smsvoicev2PoolTimeouts(dict):
+    def __init__(__self__, *,
+                 create: Optional[_builtins.str] = None,
+                 delete: Optional[_builtins.str] = None,
+                 update: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        :param _builtins.str delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        :param _builtins.str update: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        if create is not None:
+            pulumi.set(__self__, "create", create)
+        if delete is not None:
+            pulumi.set(__self__, "delete", delete)
+        if update is not None:
+            pulumi.set(__self__, "update", update)
+
+    @_builtins.property
+    @pulumi.getter
+    def create(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "create")
+
+    @_builtins.property
+    @pulumi.getter
+    def delete(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        return pulumi.get(self, "delete")
+
+    @_builtins.property
+    @pulumi.getter
+    def update(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "update")
+
+
+@pulumi.output_type
+class Smsvoicev2SenderIdTimeouts(dict):
     def __init__(__self__, *,
                  create: Optional[_builtins.str] = None,
                  delete: Optional[_builtins.str] = None,

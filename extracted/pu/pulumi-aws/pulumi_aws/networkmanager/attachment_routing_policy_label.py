@@ -24,6 +24,7 @@ class AttachmentRoutingPolicyLabelArgs:
                  routing_policy_label: pulumi.Input[_builtins.str]):
         """
         The set of arguments for constructing a AttachmentRoutingPolicyLabel resource.
+
         :param pulumi.Input[_builtins.str] attachment_id: The ID of the attachment to apply the routing policy label to.
         :param pulumi.Input[_builtins.str] core_network_id: The ID of the core network containing the attachment.
         :param pulumi.Input[_builtins.str] routing_policy_label: The routing policy label to apply to the attachment.
@@ -72,11 +73,12 @@ class AttachmentRoutingPolicyLabelArgs:
 @pulumi.input_type
 class _AttachmentRoutingPolicyLabelState:
     def __init__(__self__, *,
-                 attachment_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 core_network_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 routing_policy_label: Optional[pulumi.Input[_builtins.str]] = None):
+                 attachment_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 core_network_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 routing_policy_label: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering AttachmentRoutingPolicyLabel resources.
+
         :param pulumi.Input[_builtins.str] attachment_id: The ID of the attachment to apply the routing policy label to.
         :param pulumi.Input[_builtins.str] core_network_id: The ID of the core network containing the attachment.
         :param pulumi.Input[_builtins.str] routing_policy_label: The routing policy label to apply to the attachment.
@@ -90,38 +92,38 @@ class _AttachmentRoutingPolicyLabelState:
 
     @_builtins.property
     @pulumi.getter(name="attachmentId")
-    def attachment_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def attachment_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the attachment to apply the routing policy label to.
         """
         return pulumi.get(self, "attachment_id")
 
     @attachment_id.setter
-    def attachment_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def attachment_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "attachment_id", value)
 
     @_builtins.property
     @pulumi.getter(name="coreNetworkId")
-    def core_network_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def core_network_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the core network containing the attachment.
         """
         return pulumi.get(self, "core_network_id")
 
     @core_network_id.setter
-    def core_network_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def core_network_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "core_network_id", value)
 
     @_builtins.property
     @pulumi.getter(name="routingPolicyLabel")
-    def routing_policy_label(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def routing_policy_label(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The routing policy label to apply to the attachment.
         """
         return pulumi.get(self, "routing_policy_label")
 
     @routing_policy_label.setter
-    def routing_policy_label(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def routing_policy_label(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "routing_policy_label", value)
 
 
@@ -131,9 +133,9 @@ class AttachmentRoutingPolicyLabel(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 attachment_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 core_network_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 routing_policy_label: Optional[pulumi.Input[_builtins.str]] = None,
+                 attachment_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 core_network_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 routing_policy_label: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Associates a routing policy label to a Network Manager Cloud WAN's attachment outside of the attachment creation. This is useful in multi-account environments where only the Cloud WAN core network owner account can apply a routing policy label.
@@ -157,6 +159,7 @@ class AttachmentRoutingPolicyLabel(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:networkmanager/attachmentRoutingPolicyLabel:AttachmentRoutingPolicyLabel example core-network-0fab1c1e1e1e1e1e1,attachment-0fab2c2e2e2e2e2e2
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -193,6 +196,7 @@ class AttachmentRoutingPolicyLabel(pulumi.CustomResource):
         $ pulumi import aws:networkmanager/attachmentRoutingPolicyLabel:AttachmentRoutingPolicyLabel example core-network-0fab1c1e1e1e1e1e1,attachment-0fab2c2e2e2e2e2e2
         ```
 
+
         :param str resource_name: The name of the resource.
         :param AttachmentRoutingPolicyLabelArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -208,9 +212,9 @@ class AttachmentRoutingPolicyLabel(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 attachment_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 core_network_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 routing_policy_label: Optional[pulumi.Input[_builtins.str]] = None,
+                 attachment_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 core_network_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 routing_policy_label: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -239,9 +243,9 @@ class AttachmentRoutingPolicyLabel(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            attachment_id: Optional[pulumi.Input[_builtins.str]] = None,
-            core_network_id: Optional[pulumi.Input[_builtins.str]] = None,
-            routing_policy_label: Optional[pulumi.Input[_builtins.str]] = None) -> 'AttachmentRoutingPolicyLabel':
+            attachment_id: pulumi.Input[Optional[_builtins.str]] = None,
+            core_network_id: pulumi.Input[Optional[_builtins.str]] = None,
+            routing_policy_label: pulumi.Input[Optional[_builtins.str]] = None) -> 'AttachmentRoutingPolicyLabel':
         """
         Get an existing AttachmentRoutingPolicyLabel resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

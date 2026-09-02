@@ -23,19 +23,24 @@ class LandingZoneArgs:
     def __init__(__self__, *,
                  manifest_json: pulumi.Input[_builtins.str],
                  version: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 remediation_types: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a LandingZone resource.
+
         :param pulumi.Input[_builtins.str] manifest_json: The manifest JSON file is a text file that describes your AWS resources. For examples, review [Launch your landing zone](https://docs.aws.amazon.com/controltower/latest/userguide/lz-api-launch).
         :param pulumi.Input[_builtins.str] version: The landing zone version.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] remediation_types: Specifies list of remediation actions to apply. Currently only supports the `INHERITANCE_DRIFT` value.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Tags to apply to the landing zone. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         pulumi.set(__self__, "manifest_json", manifest_json)
         pulumi.set(__self__, "version", version)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if remediation_types is not None:
+            pulumi.set(__self__, "remediation_types", remediation_types)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
 
@@ -65,47 +70,62 @@ class LandingZoneArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
+    @pulumi.getter(name="remediationTypes")
+    def remediation_types(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
+        """
+        Specifies list of remediation actions to apply. Currently only supports the `INHERITANCE_DRIFT` value.
+        """
+        return pulumi.get(self, "remediation_types")
+
+    @remediation_types.setter
+    def remediation_types(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "remediation_types", value)
+
+    @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Tags to apply to the landing zone. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _LandingZoneState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 drift_statuses: Optional[pulumi.Input[Sequence[pulumi.Input['LandingZoneDriftStatusArgs']]]] = None,
-                 latest_available_version: Optional[pulumi.Input[_builtins.str]] = None,
-                 manifest_json: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 version: Optional[pulumi.Input[_builtins.str]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 drift_statuses: pulumi.Input[Optional[Sequence[pulumi.Input['LandingZoneDriftStatusArgs']]]] = None,
+                 latest_available_version: pulumi.Input[Optional[_builtins.str]] = None,
+                 manifest_json: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 remediation_types: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 version: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering LandingZone resources.
+
         :param pulumi.Input[_builtins.str] arn: The ARN of the landing zone.
         :param pulumi.Input[Sequence[pulumi.Input['LandingZoneDriftStatusArgs']]] drift_statuses: The drift status summary of the landing zone.
         :param pulumi.Input[_builtins.str] latest_available_version: The latest available version of the landing zone.
         :param pulumi.Input[_builtins.str] manifest_json: The manifest JSON file is a text file that describes your AWS resources. For examples, review [Launch your landing zone](https://docs.aws.amazon.com/controltower/latest/userguide/lz-api-launch).
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] remediation_types: Specifies list of remediation actions to apply. Currently only supports the `INHERITANCE_DRIFT` value.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Tags to apply to the landing zone. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the landing zone, including those inherited from the provider `default_tags` configuration block.
         :param pulumi.Input[_builtins.str] version: The landing zone version.
@@ -120,6 +140,8 @@ class _LandingZoneState:
             pulumi.set(__self__, "manifest_json", manifest_json)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if remediation_types is not None:
+            pulumi.set(__self__, "remediation_types", remediation_types)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
         if tags_all is not None:
@@ -129,98 +151,110 @@ class _LandingZoneState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of the landing zone.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="driftStatuses")
-    def drift_statuses(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['LandingZoneDriftStatusArgs']]]]:
+    def drift_statuses(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['LandingZoneDriftStatusArgs']]]]:
         """
         The drift status summary of the landing zone.
         """
         return pulumi.get(self, "drift_statuses")
 
     @drift_statuses.setter
-    def drift_statuses(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['LandingZoneDriftStatusArgs']]]]):
+    def drift_statuses(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['LandingZoneDriftStatusArgs']]]]):
         pulumi.set(self, "drift_statuses", value)
 
     @_builtins.property
     @pulumi.getter(name="latestAvailableVersion")
-    def latest_available_version(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def latest_available_version(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The latest available version of the landing zone.
         """
         return pulumi.get(self, "latest_available_version")
 
     @latest_available_version.setter
-    def latest_available_version(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def latest_available_version(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "latest_available_version", value)
 
     @_builtins.property
     @pulumi.getter(name="manifestJson")
-    def manifest_json(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def manifest_json(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The manifest JSON file is a text file that describes your AWS resources. For examples, review [Launch your landing zone](https://docs.aws.amazon.com/controltower/latest/userguide/lz-api-launch).
         """
         return pulumi.get(self, "manifest_json")
 
     @manifest_json.setter
-    def manifest_json(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def manifest_json(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "manifest_json", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
+    @pulumi.getter(name="remediationTypes")
+    def remediation_types(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
+        """
+        Specifies list of remediation actions to apply. Currently only supports the `INHERITANCE_DRIFT` value.
+        """
+        return pulumi.get(self, "remediation_types")
+
+    @remediation_types.setter
+    def remediation_types(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "remediation_types", value)
+
+    @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Tags to apply to the landing zone. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags assigned to the landing zone, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter
-    def version(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def version(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The landing zone version.
         """
         return pulumi.get(self, "version")
 
     @version.setter
-    def version(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def version(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "version", value)
 
 
@@ -230,10 +264,11 @@ class LandingZone(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 manifest_json: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 version: Optional[pulumi.Input[_builtins.str]] = None,
+                 manifest_json: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 remediation_types: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 version: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Creates a new landing zone using Control Tower. For more information on usage, please see the
@@ -247,10 +282,12 @@ class LandingZone(pulumi.CustomResource):
         $ pulumi import aws:controltower/landingZone:LandingZone example 1A2B3C4D5E6F7G8H
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.str] manifest_json: The manifest JSON file is a text file that describes your AWS resources. For examples, review [Launch your landing zone](https://docs.aws.amazon.com/controltower/latest/userguide/lz-api-launch).
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] remediation_types: Specifies list of remediation actions to apply. Currently only supports the `INHERITANCE_DRIFT` value.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Tags to apply to the landing zone. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[_builtins.str] version: The landing zone version.
         """
@@ -272,6 +309,7 @@ class LandingZone(pulumi.CustomResource):
         $ pulumi import aws:controltower/landingZone:LandingZone example 1A2B3C4D5E6F7G8H
         ```
 
+
         :param str resource_name: The name of the resource.
         :param LandingZoneArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -287,10 +325,11 @@ class LandingZone(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 manifest_json: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 version: Optional[pulumi.Input[_builtins.str]] = None,
+                 manifest_json: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 remediation_types: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 version: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -304,6 +343,7 @@ class LandingZone(pulumi.CustomResource):
                 raise TypeError("Missing required property 'manifest_json'")
             __props__.__dict__["manifest_json"] = manifest_json
             __props__.__dict__["region"] = region
+            __props__.__dict__["remediation_types"] = remediation_types
             __props__.__dict__["tags"] = tags
             if version is None and not opts.urn:
                 raise TypeError("Missing required property 'version'")
@@ -322,14 +362,15 @@ class LandingZone(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            drift_statuses: Optional[pulumi.Input[Sequence[pulumi.Input[Union['LandingZoneDriftStatusArgs', 'LandingZoneDriftStatusArgsDict']]]]] = None,
-            latest_available_version: Optional[pulumi.Input[_builtins.str]] = None,
-            manifest_json: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            version: Optional[pulumi.Input[_builtins.str]] = None) -> 'LandingZone':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            drift_statuses: pulumi.Input[Optional[Sequence[pulumi.Input[Union['LandingZoneDriftStatusArgs', 'LandingZoneDriftStatusArgsDict']]]]] = None,
+            latest_available_version: pulumi.Input[Optional[_builtins.str]] = None,
+            manifest_json: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            remediation_types: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            version: pulumi.Input[Optional[_builtins.str]] = None) -> 'LandingZone':
         """
         Get an existing LandingZone resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -342,6 +383,7 @@ class LandingZone(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] latest_available_version: The latest available version of the landing zone.
         :param pulumi.Input[_builtins.str] manifest_json: The manifest JSON file is a text file that describes your AWS resources. For examples, review [Launch your landing zone](https://docs.aws.amazon.com/controltower/latest/userguide/lz-api-launch).
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] remediation_types: Specifies list of remediation actions to apply. Currently only supports the `INHERITANCE_DRIFT` value.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Tags to apply to the landing zone. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the landing zone, including those inherited from the provider `default_tags` configuration block.
         :param pulumi.Input[_builtins.str] version: The landing zone version.
@@ -355,6 +397,7 @@ class LandingZone(pulumi.CustomResource):
         __props__.__dict__["latest_available_version"] = latest_available_version
         __props__.__dict__["manifest_json"] = manifest_json
         __props__.__dict__["region"] = region
+        __props__.__dict__["remediation_types"] = remediation_types
         __props__.__dict__["tags"] = tags
         __props__.__dict__["tags_all"] = tags_all
         __props__.__dict__["version"] = version
@@ -399,6 +442,14 @@ class LandingZone(pulumi.CustomResource):
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
+
+    @_builtins.property
+    @pulumi.getter(name="remediationTypes")
+    def remediation_types(self) -> pulumi.Output[Optional[Sequence[_builtins.str]]]:
+        """
+        Specifies list of remediation actions to apply. Currently only supports the `INHERITANCE_DRIFT` value.
+        """
+        return pulumi.get(self, "remediation_types")
 
     @_builtins.property
     @pulumi.getter

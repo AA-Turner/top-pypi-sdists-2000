@@ -32,6 +32,7 @@ __all__ = [
     'ContinuousDeploymentPolicyTrafficConfigSingleHeaderConfig',
     'ContinuousDeploymentPolicyTrafficConfigSingleWeightConfig',
     'ContinuousDeploymentPolicyTrafficConfigSingleWeightConfigSessionStickinessConfig',
+    'DistributionCacheTagConfig',
     'DistributionConnectionFunctionAssociation',
     'DistributionCustomErrorResponse',
     'DistributionDefaultCacheBehavior',
@@ -50,6 +51,7 @@ __all__ = [
     'DistributionOrigin',
     'DistributionOriginCustomHeader',
     'DistributionOriginCustomOriginConfig',
+    'DistributionOriginCustomOriginConfigOriginMtlsConfig',
     'DistributionOriginGroup',
     'DistributionOriginGroupFailoverCriteria',
     'DistributionOriginGroupMember',
@@ -102,6 +104,7 @@ __all__ = [
     'MultitenantDistributionOrigin',
     'MultitenantDistributionOriginCustomHeader',
     'MultitenantDistributionOriginCustomOriginConfig',
+    'MultitenantDistributionOriginCustomOriginConfigOriginMtlsConfig',
     'MultitenantDistributionOriginGroup',
     'MultitenantDistributionOriginGroupFailoverCriteria',
     'MultitenantDistributionOriginGroupMember',
@@ -845,6 +848,41 @@ class ContinuousDeploymentPolicyTrafficConfigSingleWeightConfigSessionStickiness
         The maximum amount of time in seconds to consider requests from the viewer as being part of the same session. Valid values are `300` - `3600` (5–60 minutes). The value must be greater than or equal to `idle_ttl`.
         """
         return pulumi.get(self, "maximum_ttl")
+
+
+@pulumi.output_type
+class DistributionCacheTagConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "headerName":
+            suggest = "header_name"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in DistributionCacheTagConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        DistributionCacheTagConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        DistributionCacheTagConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 header_name: _builtins.str):
+        """
+        :param _builtins.str header_name: Name of the HTTP header to extract cache tags. The header value must contain comma-separated tag values.
+        """
+        pulumi.set(__self__, "header_name", header_name)
+
+    @_builtins.property
+    @pulumi.getter(name="headerName")
+    def header_name(self) -> _builtins.str:
+        """
+        Name of the HTTP header to extract cache tags. The header value must contain comma-separated tag values.
+        """
+        return pulumi.get(self, "header_name")
 
 
 @pulumi.output_type
@@ -2163,7 +2201,7 @@ class DistributionOrigin(dict):
         :param _builtins.int connection_timeout: Number of seconds that CloudFront waits when trying to establish a connection to the origin. Must be between 1-10. Defaults to 10.
         :param Sequence['DistributionOriginCustomHeaderArgs'] custom_headers: One or more sub-resources with `name` and `value` parameters that specify header data that will be sent to the origin (multiples allowed).
         :param 'DistributionOriginCustomOriginConfigArgs' custom_origin_config: The CloudFront custom origin configuration information. If an S3 origin is required, use `origin_access_control_id` or `s3_origin_config` instead.
-        :param _builtins.str origin_access_control_id: Unique identifier of a [CloudFront origin access control][8] for this origin.
+        :param _builtins.str origin_access_control_id: Unique identifier of a CloudFront origin access control for this origin.
         :param _builtins.str origin_path: Optional element that causes CloudFront to request your content from a directory in your Amazon S3 bucket or your custom origin.
         :param 'DistributionOriginOriginShieldArgs' origin_shield: CloudFront Origin Shield configuration information. Using Origin Shield can help reduce the load on your origin. For more information, see [Using Origin Shield](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/origin-shield.html) in the Amazon CloudFront Developer Guide.
         :param _builtins.int response_completion_timeout: Time (in seconds) that a request from CloudFront to the origin can stay open and wait for a response. Must be integer greater than or equal to the value of `origin_read_timeout`. If omitted or explicitly set to `0`, no maximum value is enforced.
@@ -2242,7 +2280,7 @@ class DistributionOrigin(dict):
     @pulumi.getter(name="originAccessControlId")
     def origin_access_control_id(self) -> Optional[_builtins.str]:
         """
-        Unique identifier of a [CloudFront origin access control][8] for this origin.
+        Unique identifier of a CloudFront origin access control for this origin.
         """
         return pulumi.get(self, "origin_access_control_id")
 
@@ -2323,6 +2361,8 @@ class DistributionOriginCustomOriginConfig(dict):
             suggest = "ip_address_type"
         elif key == "originKeepaliveTimeout":
             suggest = "origin_keepalive_timeout"
+        elif key == "originMtlsConfig":
+            suggest = "origin_mtls_config"
         elif key == "originReadTimeout":
             suggest = "origin_read_timeout"
 
@@ -2344,6 +2384,7 @@ class DistributionOriginCustomOriginConfig(dict):
                  origin_ssl_protocols: Sequence[_builtins.str],
                  ip_address_type: Optional[_builtins.str] = None,
                  origin_keepalive_timeout: Optional[_builtins.int] = None,
+                 origin_mtls_config: Optional['outputs.DistributionOriginCustomOriginConfigOriginMtlsConfig'] = None,
                  origin_read_timeout: Optional[_builtins.int] = None):
         """
         :param _builtins.int http_port: HTTP port the custom origin listens on.
@@ -2351,6 +2392,7 @@ class DistributionOriginCustomOriginConfig(dict):
         :param _builtins.str origin_protocol_policy: Origin protocol policy to apply to your origin. One of `http-only`, `https-only`, or `match-viewer`.
         :param Sequence[_builtins.str] origin_ssl_protocols: List of SSL/TLS protocols that CloudFront can use when connecting to your origin over HTTPS. Valid values: `SSLv3`, `TLSv1`, `TLSv1.1`, `TLSv1.2`. For more information, see [Minimum Origin SSL Protocol](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginSSLProtocols) in the Amazon CloudFront Developer Guide.
         :param _builtins.str ip_address_type: IP protocol CloudFront uses when connecting to your origin. Valid values: `ipv4`, `ipv6`, `dualstack`.
+        :param 'DistributionOriginCustomOriginConfigOriginMtlsConfigArgs' origin_mtls_config: The origin mTLS configuration for mutual TLS authentication between CloudFront and your origin.
         """
         pulumi.set(__self__, "http_port", http_port)
         pulumi.set(__self__, "https_port", https_port)
@@ -2360,6 +2402,8 @@ class DistributionOriginCustomOriginConfig(dict):
             pulumi.set(__self__, "ip_address_type", ip_address_type)
         if origin_keepalive_timeout is not None:
             pulumi.set(__self__, "origin_keepalive_timeout", origin_keepalive_timeout)
+        if origin_mtls_config is not None:
+            pulumi.set(__self__, "origin_mtls_config", origin_mtls_config)
         if origin_read_timeout is not None:
             pulumi.set(__self__, "origin_read_timeout", origin_read_timeout)
 
@@ -2409,9 +2453,52 @@ class DistributionOriginCustomOriginConfig(dict):
         return pulumi.get(self, "origin_keepalive_timeout")
 
     @_builtins.property
+    @pulumi.getter(name="originMtlsConfig")
+    def origin_mtls_config(self) -> Optional['outputs.DistributionOriginCustomOriginConfigOriginMtlsConfig']:
+        """
+        The origin mTLS configuration for mutual TLS authentication between CloudFront and your origin.
+        """
+        return pulumi.get(self, "origin_mtls_config")
+
+    @_builtins.property
     @pulumi.getter(name="originReadTimeout")
     def origin_read_timeout(self) -> Optional[_builtins.int]:
         return pulumi.get(self, "origin_read_timeout")
+
+
+@pulumi.output_type
+class DistributionOriginCustomOriginConfigOriginMtlsConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "clientCertificateArn":
+            suggest = "client_certificate_arn"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in DistributionOriginCustomOriginConfigOriginMtlsConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        DistributionOriginCustomOriginConfigOriginMtlsConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        DistributionOriginCustomOriginConfigOriginMtlsConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 client_certificate_arn: _builtins.str):
+        """
+        :param _builtins.str client_certificate_arn: ARN of the ACM certificate to use for mutual TLS authentication with the origin. The certificate must have Extended Key Usage set to TLS Client Authentication.
+        """
+        pulumi.set(__self__, "client_certificate_arn", client_certificate_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="clientCertificateArn")
+    def client_certificate_arn(self) -> _builtins.str:
+        """
+        ARN of the ACM certificate to use for mutual TLS authentication with the origin. The certificate must have Extended Key Usage set to TLS Client Authentication.
+        """
+        return pulumi.get(self, "client_certificate_arn")
 
 
 @pulumi.output_type
@@ -2737,7 +2824,7 @@ class DistributionRestrictionsGeoRestriction(dict):
                  locations: Optional[Sequence[_builtins.str]] = None):
         """
         :param _builtins.str restriction_type: Method that you want to use to restrict distribution of your content by country: `none`, `whitelist`, or `blacklist`.
-        :param Sequence[_builtins.str] locations: [ISO 3166-1-alpha-2 codes][4] for which you want CloudFront either to distribute your content (`whitelist`) or not distribute your content (`blacklist`). If the type is specified as `none` an empty array can be used.
+        :param Sequence[_builtins.str] locations: [ISO 3166-1-alpha-2 codes](http://www.iso.org/iso/country_codes/iso_3166_code_lists/country_names_and_code_elements.htm) for which you want CloudFront either to distribute your content (`whitelist`) or not distribute your content (`blacklist`). If the type is specified as `none` an empty array can be used.
         """
         pulumi.set(__self__, "restriction_type", restriction_type)
         if locations is not None:
@@ -2755,7 +2842,7 @@ class DistributionRestrictionsGeoRestriction(dict):
     @pulumi.getter
     def locations(self) -> Optional[Sequence[_builtins.str]]:
         """
-        [ISO 3166-1-alpha-2 codes][4] for which you want CloudFront either to distribute your content (`whitelist`) or not distribute your content (`blacklist`). If the type is specified as `none` an empty array can be used.
+        [ISO 3166-1-alpha-2 codes](http://www.iso.org/iso/country_codes/iso_3166_code_lists/country_names_and_code_elements.htm) for which you want CloudFront either to distribute your content (`whitelist`) or not distribute your content (`blacklist`). If the type is specified as `none` an empty array can be used.
         """
         return pulumi.get(self, "locations")
 
@@ -2980,7 +3067,7 @@ class DistributionTenantManagedCertificateRequest(dict):
         """
         :param _builtins.str certificate_transparency_logging_preference: Certificate transparency logging preference. Valid values: `enabled`, `disabled`.
         :param _builtins.str primary_domain_name: Primary domain name for the certificate.
-        :param _builtins.str validation_token_host: Host for validation token. Valid values: `cloudfront`, `domain`.
+        :param _builtins.str validation_token_host: Host for validation token. Valid values: `cloudfront`, `self-hosted`.
         """
         if certificate_transparency_logging_preference is not None:
             pulumi.set(__self__, "certificate_transparency_logging_preference", certificate_transparency_logging_preference)
@@ -3009,7 +3096,7 @@ class DistributionTenantManagedCertificateRequest(dict):
     @pulumi.getter(name="validationTokenHost")
     def validation_token_host(self) -> Optional[_builtins.str]:
         """
-        Host for validation token. Valid values: `cloudfront`, `domain`.
+        Host for validation token. Valid values: `cloudfront`, `self-hosted`.
         """
         return pulumi.get(self, "validation_token_host")
 
@@ -4836,7 +4923,7 @@ class MultitenantDistributionOrigin(dict):
         :param _builtins.str origin_access_control_id: CloudFront origin access control identifier to associate with the origin.
         :param _builtins.str origin_path: Optional element that causes CloudFront to request your content from a directory in your Amazon S3 bucket or your custom origin.
         :param Sequence['MultitenantDistributionOriginOriginShieldArgs'] origin_shields: CloudFront Origin Shield configuration information. See Origin Shield below.
-        :param _builtins.int response_completion_timeout: Number of seconds that CloudFront waits for a response after forwarding a request to the origin. Default: 30.
+        :param _builtins.int response_completion_timeout: Number of seconds that CloudFront waits for a response after forwarding a request to the origin. Must be integer greater than or equal to the value of `origin_read_timeout` in Custom Origin Config. If omitted, no maximum value is enforced.
         :param Sequence['MultitenantDistributionOriginVpcOriginConfigArgs'] vpc_origin_configs: CloudFront VPC origin configuration. See VPC Origin Config below.
         """
         pulumi.set(__self__, "domain_name", domain_name)
@@ -4936,7 +5023,7 @@ class MultitenantDistributionOrigin(dict):
     @pulumi.getter(name="responseCompletionTimeout")
     def response_completion_timeout(self) -> Optional[_builtins.int]:
         """
-        Number of seconds that CloudFront waits for a response after forwarding a request to the origin. Default: 30.
+        Number of seconds that CloudFront waits for a response after forwarding a request to the origin. Must be integer greater than or equal to the value of `origin_read_timeout` in Custom Origin Config. If omitted, no maximum value is enforced.
         """
         return pulumi.get(self, "response_completion_timeout")
 
@@ -5014,6 +5101,8 @@ class MultitenantDistributionOriginCustomOriginConfig(dict):
             suggest = "ip_address_type"
         elif key == "originKeepaliveTimeout":
             suggest = "origin_keepalive_timeout"
+        elif key == "originMtlsConfig":
+            suggest = "origin_mtls_config"
         elif key == "originReadTimeout":
             suggest = "origin_read_timeout"
 
@@ -5035,6 +5124,7 @@ class MultitenantDistributionOriginCustomOriginConfig(dict):
                  origin_ssl_protocols: Sequence[_builtins.str],
                  ip_address_type: Optional[_builtins.str] = None,
                  origin_keepalive_timeout: Optional[_builtins.int] = None,
+                 origin_mtls_config: Optional['outputs.MultitenantDistributionOriginCustomOriginConfigOriginMtlsConfig'] = None,
                  origin_read_timeout: Optional[_builtins.int] = None):
         """
         :param _builtins.int http_port: HTTP port the custom origin listens on.
@@ -5043,6 +5133,7 @@ class MultitenantDistributionOriginCustomOriginConfig(dict):
         :param Sequence[_builtins.str] origin_ssl_protocols: List of SSL/TLS protocols that you want CloudFront to use when communicating with your origin over HTTPS.
         :param _builtins.str ip_address_type: Type of IP addresses used by your origins. Valid values are `ipv4` and `dualstack`.
         :param _builtins.int origin_keepalive_timeout: Custom keep-alive timeout, in seconds. Default: 5.
+        :param 'MultitenantDistributionOriginCustomOriginConfigOriginMtlsConfigArgs' origin_mtls_config: Origin mTLS configuration for mutual TLS authentication between CloudFront and your origin. See Origin mTLS Config below.
         :param _builtins.int origin_read_timeout: Custom read timeout, in seconds. Default: 30.
         """
         pulumi.set(__self__, "http_port", http_port)
@@ -5053,6 +5144,8 @@ class MultitenantDistributionOriginCustomOriginConfig(dict):
             pulumi.set(__self__, "ip_address_type", ip_address_type)
         if origin_keepalive_timeout is not None:
             pulumi.set(__self__, "origin_keepalive_timeout", origin_keepalive_timeout)
+        if origin_mtls_config is not None:
+            pulumi.set(__self__, "origin_mtls_config", origin_mtls_config)
         if origin_read_timeout is not None:
             pulumi.set(__self__, "origin_read_timeout", origin_read_timeout)
 
@@ -5105,12 +5198,55 @@ class MultitenantDistributionOriginCustomOriginConfig(dict):
         return pulumi.get(self, "origin_keepalive_timeout")
 
     @_builtins.property
+    @pulumi.getter(name="originMtlsConfig")
+    def origin_mtls_config(self) -> Optional['outputs.MultitenantDistributionOriginCustomOriginConfigOriginMtlsConfig']:
+        """
+        Origin mTLS configuration for mutual TLS authentication between CloudFront and your origin. See Origin mTLS Config below.
+        """
+        return pulumi.get(self, "origin_mtls_config")
+
+    @_builtins.property
     @pulumi.getter(name="originReadTimeout")
     def origin_read_timeout(self) -> Optional[_builtins.int]:
         """
         Custom read timeout, in seconds. Default: 30.
         """
         return pulumi.get(self, "origin_read_timeout")
+
+
+@pulumi.output_type
+class MultitenantDistributionOriginCustomOriginConfigOriginMtlsConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "clientCertificateArn":
+            suggest = "client_certificate_arn"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in MultitenantDistributionOriginCustomOriginConfigOriginMtlsConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        MultitenantDistributionOriginCustomOriginConfigOriginMtlsConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        MultitenantDistributionOriginCustomOriginConfigOriginMtlsConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 client_certificate_arn: _builtins.str):
+        """
+        :param _builtins.str client_certificate_arn: ARN of the ACM certificate to use for mutual TLS authentication with the origin. The certificate must have Extended Key Usage set to TLS Client Authentication.
+        """
+        pulumi.set(__self__, "client_certificate_arn", client_certificate_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="clientCertificateArn")
+    def client_certificate_arn(self) -> _builtins.str:
+        """
+        ARN of the ACM certificate to use for mutual TLS authentication with the origin. The certificate must have Extended Key Usage set to TLS Client Authentication.
+        """
+        return pulumi.get(self, "client_certificate_arn")
 
 
 @pulumi.output_type
@@ -7170,7 +7306,7 @@ class GetDistributionTenantCustomizationCertificateResult(dict):
     def __init__(__self__, *,
                  arn: _builtins.str):
         """
-        :param _builtins.str arn: ARN (Amazon Resource Name) for the distribution tenant.
+        :param _builtins.str arn: ARN for the distribution tenant.
         """
         pulumi.set(__self__, "arn", arn)
 
@@ -7178,7 +7314,7 @@ class GetDistributionTenantCustomizationCertificateResult(dict):
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        ARN (Amazon Resource Name) for the distribution tenant.
+        ARN for the distribution tenant.
         """
         return pulumi.get(self, "arn")
 
@@ -7208,7 +7344,7 @@ class GetDistributionTenantCustomizationWebAclResult(dict):
                  action: _builtins.str,
                  arn: _builtins.str):
         """
-        :param _builtins.str arn: ARN (Amazon Resource Name) for the distribution tenant.
+        :param _builtins.str arn: ARN for the distribution tenant.
         """
         pulumi.set(__self__, "action", action)
         pulumi.set(__self__, "arn", arn)
@@ -7222,7 +7358,7 @@ class GetDistributionTenantCustomizationWebAclResult(dict):
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        ARN (Amazon Resource Name) for the distribution tenant.
+        ARN for the distribution tenant.
         """
         return pulumi.get(self, "arn")
 

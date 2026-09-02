@@ -26,12 +26,13 @@ class AutomationRuleArgs:
                  description: pulumi.Input[_builtins.str],
                  rule_name: pulumi.Input[_builtins.str],
                  rule_order: pulumi.Input[_builtins.int],
-                 is_terminal: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rule_status: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 is_terminal: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rule_status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a AutomationRule resource.
+
         :param pulumi.Input[Sequence[pulumi.Input['AutomationRuleActionArgs']]] actions: A block that specifies one or more actions to update finding fields if a finding matches the conditions specified in `Criteria`. Documented below.
         :param pulumi.Input['AutomationRuleCriteriaArgs'] criteria: A block that specifies a set of ASFF finding field attributes and corresponding expected values that Security Hub uses to filter findings. Documented below.
         :param pulumi.Input[_builtins.str] description: The description of the rule.
@@ -117,66 +118,67 @@ class AutomationRuleArgs:
 
     @_builtins.property
     @pulumi.getter(name="isTerminal")
-    def is_terminal(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def is_terminal(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Specifies whether a rule is the last to be applied with respect to a finding that matches the rule criteria. Defaults to `false`.
         """
         return pulumi.get(self, "is_terminal")
 
     @is_terminal.setter
-    def is_terminal(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def is_terminal(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "is_terminal", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="ruleStatus")
-    def rule_status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def rule_status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Whether the rule is active after it is created.
         """
         return pulumi.get(self, "rule_status")
 
     @rule_status.setter
-    def rule_status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def rule_status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "rule_status", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _AutomationRuleState:
     def __init__(__self__, *,
-                 actions: Optional[pulumi.Input[Sequence[pulumi.Input['AutomationRuleActionArgs']]]] = None,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 criteria: Optional[pulumi.Input['AutomationRuleCriteriaArgs']] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 is_terminal: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rule_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 rule_order: Optional[pulumi.Input[_builtins.int]] = None,
-                 rule_status: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 actions: pulumi.Input[Optional[Sequence[pulumi.Input['AutomationRuleActionArgs']]]] = None,
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 criteria: pulumi.Input[Optional['AutomationRuleCriteriaArgs']] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 is_terminal: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rule_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 rule_order: pulumi.Input[Optional[_builtins.int]] = None,
+                 rule_status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         Input properties used for looking up and filtering AutomationRule resources.
+
         :param pulumi.Input[Sequence[pulumi.Input['AutomationRuleActionArgs']]] actions: A block that specifies one or more actions to update finding fields if a finding matches the conditions specified in `Criteria`. Documented below.
         :param pulumi.Input[_builtins.str] arn: The ARN of the Security Hub automation rule.
         :param pulumi.Input['AutomationRuleCriteriaArgs'] criteria: A block that specifies a set of ASFF finding field attributes and corresponding expected values that Security Hub uses to filter findings. Documented below.
@@ -212,128 +214,128 @@ class _AutomationRuleState:
 
     @_builtins.property
     @pulumi.getter
-    def actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['AutomationRuleActionArgs']]]]:
+    def actions(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['AutomationRuleActionArgs']]]]:
         """
         A block that specifies one or more actions to update finding fields if a finding matches the conditions specified in `Criteria`. Documented below.
         """
         return pulumi.get(self, "actions")
 
     @actions.setter
-    def actions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['AutomationRuleActionArgs']]]]):
+    def actions(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['AutomationRuleActionArgs']]]]):
         pulumi.set(self, "actions", value)
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of the Security Hub automation rule.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def criteria(self) -> Optional[pulumi.Input['AutomationRuleCriteriaArgs']]:
+    def criteria(self) -> pulumi.Input[Optional['AutomationRuleCriteriaArgs']]:
         """
         A block that specifies a set of ASFF finding field attributes and corresponding expected values that Security Hub uses to filter findings. Documented below.
         """
         return pulumi.get(self, "criteria")
 
     @criteria.setter
-    def criteria(self, value: Optional[pulumi.Input['AutomationRuleCriteriaArgs']]):
+    def criteria(self, value: pulumi.Input[Optional['AutomationRuleCriteriaArgs']]):
         pulumi.set(self, "criteria", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The description of the rule.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="isTerminal")
-    def is_terminal(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def is_terminal(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Specifies whether a rule is the last to be applied with respect to a finding that matches the rule criteria. Defaults to `false`.
         """
         return pulumi.get(self, "is_terminal")
 
     @is_terminal.setter
-    def is_terminal(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def is_terminal(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "is_terminal", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="ruleName")
-    def rule_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def rule_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the rule.
         """
         return pulumi.get(self, "rule_name")
 
     @rule_name.setter
-    def rule_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def rule_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "rule_name", value)
 
     @_builtins.property
     @pulumi.getter(name="ruleOrder")
-    def rule_order(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def rule_order(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         An integer ranging from 1 to 1000 that represents the order in which the rule action is applied to findings. Security Hub applies rules with lower values for this parameter first.
         """
         return pulumi.get(self, "rule_order")
 
     @rule_order.setter
-    def rule_order(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def rule_order(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "rule_order", value)
 
     @_builtins.property
     @pulumi.getter(name="ruleStatus")
-    def rule_status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def rule_status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Whether the rule is active after it is created.
         """
         return pulumi.get(self, "rule_status")
 
     @rule_status.setter
-    def rule_status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def rule_status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "rule_status", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
 
@@ -343,15 +345,15 @@ class AutomationRule(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['AutomationRuleActionArgs', 'AutomationRuleActionArgsDict']]]]] = None,
-                 criteria: Optional[pulumi.Input[Union['AutomationRuleCriteriaArgs', 'AutomationRuleCriteriaArgsDict']]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 is_terminal: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rule_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 rule_order: Optional[pulumi.Input[_builtins.int]] = None,
-                 rule_status: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['AutomationRuleActionArgs', 'AutomationRuleActionArgsDict']]]]] = None,
+                 criteria: pulumi.Input[Optional[Union['AutomationRuleCriteriaArgs', 'AutomationRuleCriteriaArgsDict']]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 is_terminal: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rule_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 rule_order: pulumi.Input[Optional[_builtins.int]] = None,
+                 rule_status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Resource for managing an AWS Security Hub Automation Rule.
@@ -365,14 +367,17 @@ class AutomationRule(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.securityhub.AutomationRule("example",
-            description="Elevate finding severity to CRITICAL when specific resources such as an S3 bucket is at risk",
-            rule_name="Elevate severity of findings that relate to important resources",
-            rule_order=1,
+            criteria={
+                "resource_ids": [{
+                    "comparison": "EQUALS",
+                    "value": "arn:aws:s3:::examplebucket/*",
+                }],
+            },
             actions=[{
                 "finding_fields_update": {
                     "severity": {
                         "label": "CRITICAL",
-                        "product": 0,
+                        "product": float(0),
                     },
                     "note": {
                         "text": "This is a critical resource. Please review ASAP.",
@@ -385,12 +390,9 @@ class AutomationRule(pulumi.CustomResource):
                 },
                 "type": "FINDING_FIELDS_UPDATE",
             }],
-            criteria={
-                "resource_ids": [{
-                    "comparison": "EQUALS",
-                    "value": "arn:aws:s3:::examplebucket/*",
-                }],
-            })
+            description="Elevate finding severity to CRITICAL when specific resources such as an S3 bucket is at risk",
+            rule_name="Elevate severity of findings that relate to important resources",
+            rule_order=1)
         ```
 
         ## Import
@@ -399,13 +401,14 @@ class AutomationRule(pulumi.CustomResource):
 
         #### Required
 
-        - `arn` (String) Amazon Resource Name (ARN) of the Security Hub automation rule.
+        - `arn` (String) ARN of the Security Hub automation rule.
 
-        Using `pulumi import`, import Security Hub automation rule using their ARN. For example:
+        Using `pulumi import`, import Security Hub automation rules using `arn`. For example:
 
         ```sh
         $ pulumi import aws:securityhub/automationRule:AutomationRule example arn:aws:securityhub:us-west-2:123456789012:automation-rule/473eddde-f5c4-4ae5-85c7-e922f271fffc
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -436,14 +439,17 @@ class AutomationRule(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.securityhub.AutomationRule("example",
-            description="Elevate finding severity to CRITICAL when specific resources such as an S3 bucket is at risk",
-            rule_name="Elevate severity of findings that relate to important resources",
-            rule_order=1,
+            criteria={
+                "resource_ids": [{
+                    "comparison": "EQUALS",
+                    "value": "arn:aws:s3:::examplebucket/*",
+                }],
+            },
             actions=[{
                 "finding_fields_update": {
                     "severity": {
                         "label": "CRITICAL",
-                        "product": 0,
+                        "product": float(0),
                     },
                     "note": {
                         "text": "This is a critical resource. Please review ASAP.",
@@ -456,12 +462,9 @@ class AutomationRule(pulumi.CustomResource):
                 },
                 "type": "FINDING_FIELDS_UPDATE",
             }],
-            criteria={
-                "resource_ids": [{
-                    "comparison": "EQUALS",
-                    "value": "arn:aws:s3:::examplebucket/*",
-                }],
-            })
+            description="Elevate finding severity to CRITICAL when specific resources such as an S3 bucket is at risk",
+            rule_name="Elevate severity of findings that relate to important resources",
+            rule_order=1)
         ```
 
         ## Import
@@ -470,13 +473,14 @@ class AutomationRule(pulumi.CustomResource):
 
         #### Required
 
-        - `arn` (String) Amazon Resource Name (ARN) of the Security Hub automation rule.
+        - `arn` (String) ARN of the Security Hub automation rule.
 
-        Using `pulumi import`, import Security Hub automation rule using their ARN. For example:
+        Using `pulumi import`, import Security Hub automation rules using `arn`. For example:
 
         ```sh
         $ pulumi import aws:securityhub/automationRule:AutomationRule example arn:aws:securityhub:us-west-2:123456789012:automation-rule/473eddde-f5c4-4ae5-85c7-e922f271fffc
         ```
+
 
         :param str resource_name: The name of the resource.
         :param AutomationRuleArgs args: The arguments to use to populate this resource's properties.
@@ -493,15 +497,15 @@ class AutomationRule(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['AutomationRuleActionArgs', 'AutomationRuleActionArgsDict']]]]] = None,
-                 criteria: Optional[pulumi.Input[Union['AutomationRuleCriteriaArgs', 'AutomationRuleCriteriaArgsDict']]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 is_terminal: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 rule_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 rule_order: Optional[pulumi.Input[_builtins.int]] = None,
-                 rule_status: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['AutomationRuleActionArgs', 'AutomationRuleActionArgsDict']]]]] = None,
+                 criteria: pulumi.Input[Optional[Union['AutomationRuleCriteriaArgs', 'AutomationRuleCriteriaArgsDict']]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 is_terminal: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 rule_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 rule_order: pulumi.Input[Optional[_builtins.int]] = None,
+                 rule_status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -542,17 +546,17 @@ class AutomationRule(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            actions: Optional[pulumi.Input[Sequence[pulumi.Input[Union['AutomationRuleActionArgs', 'AutomationRuleActionArgsDict']]]]] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            criteria: Optional[pulumi.Input[Union['AutomationRuleCriteriaArgs', 'AutomationRuleCriteriaArgsDict']]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            is_terminal: Optional[pulumi.Input[_builtins.bool]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            rule_name: Optional[pulumi.Input[_builtins.str]] = None,
-            rule_order: Optional[pulumi.Input[_builtins.int]] = None,
-            rule_status: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'AutomationRule':
+            actions: pulumi.Input[Optional[Sequence[pulumi.Input[Union['AutomationRuleActionArgs', 'AutomationRuleActionArgsDict']]]]] = None,
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            criteria: pulumi.Input[Optional[Union['AutomationRuleCriteriaArgs', 'AutomationRuleCriteriaArgsDict']]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            is_terminal: pulumi.Input[Optional[_builtins.bool]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            rule_name: pulumi.Input[Optional[_builtins.str]] = None,
+            rule_order: pulumi.Input[Optional[_builtins.int]] = None,
+            rule_status: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'AutomationRule':
         """
         Get an existing AutomationRule resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

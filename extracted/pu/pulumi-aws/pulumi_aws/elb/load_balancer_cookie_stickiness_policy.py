@@ -21,11 +21,12 @@ class LoadBalancerCookieStickinessPolicyArgs:
     def __init__(__self__, *,
                  lb_port: pulumi.Input[_builtins.int],
                  load_balancer: pulumi.Input[_builtins.str],
-                 cookie_expiration_period: Optional[pulumi.Input[_builtins.int]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 cookie_expiration_period: pulumi.Input[Optional[_builtins.int]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a LoadBalancerCookieStickinessPolicy resource.
+
         :param pulumi.Input[_builtins.int] lb_port: The load balancer port to which the policy
                should be applied. This must be an active listener on the load
                balancer.
@@ -74,7 +75,7 @@ class LoadBalancerCookieStickinessPolicyArgs:
 
     @_builtins.property
     @pulumi.getter(name="cookieExpirationPeriod")
-    def cookie_expiration_period(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def cookie_expiration_period(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         The time period after which
         the session cookie should be considered stale, expressed in seconds.
@@ -82,44 +83,45 @@ class LoadBalancerCookieStickinessPolicyArgs:
         return pulumi.get(self, "cookie_expiration_period")
 
     @cookie_expiration_period.setter
-    def cookie_expiration_period(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def cookie_expiration_period(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "cookie_expiration_period", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the stickiness policy.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _LoadBalancerCookieStickinessPolicyState:
     def __init__(__self__, *,
-                 cookie_expiration_period: Optional[pulumi.Input[_builtins.int]] = None,
-                 lb_port: Optional[pulumi.Input[_builtins.int]] = None,
-                 load_balancer: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 cookie_expiration_period: pulumi.Input[Optional[_builtins.int]] = None,
+                 lb_port: pulumi.Input[Optional[_builtins.int]] = None,
+                 load_balancer: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering LoadBalancerCookieStickinessPolicy resources.
+
         :param pulumi.Input[_builtins.int] cookie_expiration_period: The time period after which
                the session cookie should be considered stale, expressed in seconds.
         :param pulumi.Input[_builtins.int] lb_port: The load balancer port to which the policy
@@ -143,7 +145,7 @@ class _LoadBalancerCookieStickinessPolicyState:
 
     @_builtins.property
     @pulumi.getter(name="cookieExpirationPeriod")
-    def cookie_expiration_period(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def cookie_expiration_period(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         The time period after which
         the session cookie should be considered stale, expressed in seconds.
@@ -151,12 +153,12 @@ class _LoadBalancerCookieStickinessPolicyState:
         return pulumi.get(self, "cookie_expiration_period")
 
     @cookie_expiration_period.setter
-    def cookie_expiration_period(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def cookie_expiration_period(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "cookie_expiration_period", value)
 
     @_builtins.property
     @pulumi.getter(name="lbPort")
-    def lb_port(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def lb_port(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         The load balancer port to which the policy
         should be applied. This must be an active listener on the load
@@ -165,12 +167,12 @@ class _LoadBalancerCookieStickinessPolicyState:
         return pulumi.get(self, "lb_port")
 
     @lb_port.setter
-    def lb_port(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def lb_port(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "lb_port", value)
 
     @_builtins.property
     @pulumi.getter(name="loadBalancer")
-    def load_balancer(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def load_balancer(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The load balancer to which the policy
         should be attached.
@@ -178,31 +180,31 @@ class _LoadBalancerCookieStickinessPolicyState:
         return pulumi.get(self, "load_balancer")
 
     @load_balancer.setter
-    def load_balancer(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def load_balancer(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "load_balancer", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the stickiness policy.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -212,11 +214,11 @@ class LoadBalancerCookieStickinessPolicy(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 cookie_expiration_period: Optional[pulumi.Input[_builtins.int]] = None,
-                 lb_port: Optional[pulumi.Input[_builtins.int]] = None,
-                 load_balancer: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 cookie_expiration_period: pulumi.Input[Optional[_builtins.int]] = None,
+                 lb_port: pulumi.Input[Optional[_builtins.int]] = None,
+                 load_balancer: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides a load balancer cookie stickiness policy, which allows an ELB to control the sticky session lifetime of the browser.
@@ -228,20 +230,21 @@ class LoadBalancerCookieStickinessPolicy(pulumi.CustomResource):
         import pulumi_aws as aws
 
         lb = aws.elb.LoadBalancer("lb",
-            name="test-lb",
-            availability_zones=["us-east-1a"],
             listeners=[{
                 "instance_port": 8000,
                 "instance_protocol": "http",
                 "lb_port": 80,
                 "lb_protocol": "http",
-            }])
+            }],
+            name="test-lb",
+            availability_zones=["us-east-1a"])
         foo = aws.elb.LoadBalancerCookieStickinessPolicy("foo",
             name="foo-policy",
             load_balancer=lb.id,
             lb_port=80,
             cookie_expiration_period=600)
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -271,20 +274,21 @@ class LoadBalancerCookieStickinessPolicy(pulumi.CustomResource):
         import pulumi_aws as aws
 
         lb = aws.elb.LoadBalancer("lb",
-            name="test-lb",
-            availability_zones=["us-east-1a"],
             listeners=[{
                 "instance_port": 8000,
                 "instance_protocol": "http",
                 "lb_port": 80,
                 "lb_protocol": "http",
-            }])
+            }],
+            name="test-lb",
+            availability_zones=["us-east-1a"])
         foo = aws.elb.LoadBalancerCookieStickinessPolicy("foo",
             name="foo-policy",
             load_balancer=lb.id,
             lb_port=80,
             cookie_expiration_period=600)
         ```
+
 
         :param str resource_name: The name of the resource.
         :param LoadBalancerCookieStickinessPolicyArgs args: The arguments to use to populate this resource's properties.
@@ -301,11 +305,11 @@ class LoadBalancerCookieStickinessPolicy(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 cookie_expiration_period: Optional[pulumi.Input[_builtins.int]] = None,
-                 lb_port: Optional[pulumi.Input[_builtins.int]] = None,
-                 load_balancer: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 cookie_expiration_period: pulumi.Input[Optional[_builtins.int]] = None,
+                 lb_port: pulumi.Input[Optional[_builtins.int]] = None,
+                 load_balancer: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -336,11 +340,11 @@ class LoadBalancerCookieStickinessPolicy(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            cookie_expiration_period: Optional[pulumi.Input[_builtins.int]] = None,
-            lb_port: Optional[pulumi.Input[_builtins.int]] = None,
-            load_balancer: Optional[pulumi.Input[_builtins.str]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'LoadBalancerCookieStickinessPolicy':
+            cookie_expiration_period: pulumi.Input[Optional[_builtins.int]] = None,
+            lb_port: pulumi.Input[Optional[_builtins.int]] = None,
+            load_balancer: pulumi.Input[Optional[_builtins.str]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'LoadBalancerCookieStickinessPolicy':
         """
         Get an existing LoadBalancerCookieStickinessPolicy resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

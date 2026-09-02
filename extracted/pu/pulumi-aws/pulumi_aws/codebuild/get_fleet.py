@@ -148,7 +148,7 @@ class GetFleetResult:
     @pulumi.getter(name="imageId")
     def image_id(self) -> _builtins.str:
         """
-        The Amazon Machine Image (AMI) of the compute fleet.
+        AMI of the compute fleet.
         """
         return pulumi.get(self, "image_id")
 
@@ -250,19 +250,19 @@ def get_fleet(name: Optional[_builtins.str] = None,
     import pulumi_aws as aws
 
     test_fleet = aws.codebuild.Fleet("test",
-        base_capacity=2,
-        compute_type="BUILD_GENERAL1_SMALL",
-        environment_type="LINUX_CONTAINER",
-        name="full-example-codebuild-fleet",
-        overflow_behavior="QUEUE",
         scaling_configuration={
-            "max_capacity": 5,
-            "scaling_type": "TARGET_TRACKING_SCALING",
             "target_tracking_scaling_configs": [{
                 "metric_type": "FLEET_UTILIZATION_RATE",
                 "target_value": 97.5,
             }],
-        })
+            "max_capacity": 5,
+            "scaling_type": "TARGET_TRACKING_SCALING",
+        },
+        base_capacity=2,
+        compute_type="BUILD_GENERAL1_SMALL",
+        environment_type="LINUX_CONTAINER",
+        name="full-example-codebuild-fleet",
+        overflow_behavior="QUEUE")
     test = aws.codebuild.get_fleet_output(name=test_fleet.name)
     ```
 
@@ -305,9 +305,9 @@ def get_fleet(name: Optional[_builtins.str] = None,
         statuses=pulumi.get(__ret__, 'statuses'),
         tags=pulumi.get(__ret__, 'tags'),
         vpc_configs=pulumi.get(__ret__, 'vpc_configs'))
-def get_fleet_output(name: Optional[pulumi.Input[_builtins.str]] = None,
-                     region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                     tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_fleet_output(name: pulumi.Input[Optional[_builtins.str]] = None,
+                     region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                     tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                      opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetFleetResult]:
     """
     Retrieve information about an CodeBuild Fleet.
@@ -319,19 +319,19 @@ def get_fleet_output(name: Optional[pulumi.Input[_builtins.str]] = None,
     import pulumi_aws as aws
 
     test_fleet = aws.codebuild.Fleet("test",
-        base_capacity=2,
-        compute_type="BUILD_GENERAL1_SMALL",
-        environment_type="LINUX_CONTAINER",
-        name="full-example-codebuild-fleet",
-        overflow_behavior="QUEUE",
         scaling_configuration={
-            "max_capacity": 5,
-            "scaling_type": "TARGET_TRACKING_SCALING",
             "target_tracking_scaling_configs": [{
                 "metric_type": "FLEET_UTILIZATION_RATE",
                 "target_value": 97.5,
             }],
-        })
+            "max_capacity": 5,
+            "scaling_type": "TARGET_TRACKING_SCALING",
+        },
+        base_capacity=2,
+        compute_type="BUILD_GENERAL1_SMALL",
+        environment_type="LINUX_CONTAINER",
+        name="full-example-codebuild-fleet",
+        overflow_behavior="QUEUE")
     test = aws.codebuild.get_fleet_output(name=test_fleet.name)
     ```
 

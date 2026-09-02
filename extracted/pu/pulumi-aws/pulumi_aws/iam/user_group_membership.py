@@ -23,6 +23,7 @@ class UserGroupMembershipArgs:
                  user: pulumi.Input[_builtins.str]):
         """
         The set of arguments for constructing a UserGroupMembership resource.
+
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] groups: A list of IAM Groups to add the user to
         :param pulumi.Input[_builtins.str] user: The name of the IAM User to add to groups
         """
@@ -57,10 +58,11 @@ class UserGroupMembershipArgs:
 @pulumi.input_type
 class _UserGroupMembershipState:
     def __init__(__self__, *,
-                 groups: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 user: Optional[pulumi.Input[_builtins.str]] = None):
+                 groups: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 user: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering UserGroupMembership resources.
+
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] groups: A list of IAM Groups to add the user to
         :param pulumi.Input[_builtins.str] user: The name of the IAM User to add to groups
         """
@@ -71,26 +73,26 @@ class _UserGroupMembershipState:
 
     @_builtins.property
     @pulumi.getter
-    def groups(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def groups(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         A list of IAM Groups to add the user to
         """
         return pulumi.get(self, "groups")
 
     @groups.setter
-    def groups(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def groups(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "groups", value)
 
     @_builtins.property
     @pulumi.getter
-    def user(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def user(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the IAM User to add to groups
         """
         return pulumi.get(self, "user")
 
     @user.setter
-    def user(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def user(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "user", value)
 
 
@@ -100,8 +102,8 @@ class UserGroupMembership(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 groups: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 user: Optional[pulumi.Input[_builtins.str]] = None,
+                 groups: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 user: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides a resource for adding an IAM User to IAM Groups. This
@@ -139,6 +141,7 @@ class UserGroupMembership(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:iam/userGroupMembership:UserGroupMembership example1 user1/group1/group2
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -188,6 +191,7 @@ class UserGroupMembership(pulumi.CustomResource):
         $ pulumi import aws:iam/userGroupMembership:UserGroupMembership example1 user1/group1/group2
         ```
 
+
         :param str resource_name: The name of the resource.
         :param UserGroupMembershipArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -203,8 +207,8 @@ class UserGroupMembership(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 groups: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 user: Optional[pulumi.Input[_builtins.str]] = None,
+                 groups: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 user: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -230,8 +234,8 @@ class UserGroupMembership(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            groups: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            user: Optional[pulumi.Input[_builtins.str]] = None) -> 'UserGroupMembership':
+            groups: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            user: pulumi.Input[Optional[_builtins.str]] = None) -> 'UserGroupMembership':
         """
         Get an existing UserGroupMembership resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

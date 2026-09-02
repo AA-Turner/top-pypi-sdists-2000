@@ -24,10 +24,11 @@ class ManagedPolicyAttachmentsExclusiveArgs:
                  instance_arn: pulumi.Input[_builtins.str],
                  managed_policy_arns: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
                  permission_set_arn: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['ManagedPolicyAttachmentsExclusiveTimeoutsArgs']] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['ManagedPolicyAttachmentsExclusiveTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a ManagedPolicyAttachmentsExclusive resource.
+
         :param pulumi.Input[_builtins.str] instance_arn: ARN of the SSO Instance.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] managed_policy_arns: Set of ARNs of IAM managed policies to attach to the Permission Set.
         :param pulumi.Input[_builtins.str] permission_set_arn: ARN of the Permission Set.
@@ -83,36 +84,37 @@ class ManagedPolicyAttachmentsExclusiveArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['ManagedPolicyAttachmentsExclusiveTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['ManagedPolicyAttachmentsExclusiveTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['ManagedPolicyAttachmentsExclusiveTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['ManagedPolicyAttachmentsExclusiveTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _ManagedPolicyAttachmentsExclusiveState:
     def __init__(__self__, *,
-                 instance_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 managed_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 permission_set_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['ManagedPolicyAttachmentsExclusiveTimeoutsArgs']] = None):
+                 instance_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 managed_policy_arns: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 permission_set_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['ManagedPolicyAttachmentsExclusiveTimeoutsArgs']] = None):
         """
         Input properties used for looking up and filtering ManagedPolicyAttachmentsExclusive resources.
+
         :param pulumi.Input[_builtins.str] instance_arn: ARN of the SSO Instance.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] managed_policy_arns: Set of ARNs of IAM managed policies to attach to the Permission Set.
         :param pulumi.Input[_builtins.str] permission_set_arn: ARN of the Permission Set.
@@ -133,31 +135,31 @@ class _ManagedPolicyAttachmentsExclusiveState:
 
     @_builtins.property
     @pulumi.getter(name="instanceArn")
-    def instance_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def instance_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the SSO Instance.
         """
         return pulumi.get(self, "instance_arn")
 
     @instance_arn.setter
-    def instance_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def instance_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "instance_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="managedPolicyArns")
-    def managed_policy_arns(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def managed_policy_arns(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         Set of ARNs of IAM managed policies to attach to the Permission Set.
         """
         return pulumi.get(self, "managed_policy_arns")
 
     @managed_policy_arns.setter
-    def managed_policy_arns(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def managed_policy_arns(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "managed_policy_arns", value)
 
     @_builtins.property
     @pulumi.getter(name="permissionSetArn")
-    def permission_set_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def permission_set_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the Permission Set.
 
@@ -166,28 +168,28 @@ class _ManagedPolicyAttachmentsExclusiveState:
         return pulumi.get(self, "permission_set_arn")
 
     @permission_set_arn.setter
-    def permission_set_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def permission_set_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "permission_set_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['ManagedPolicyAttachmentsExclusiveTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['ManagedPolicyAttachmentsExclusiveTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['ManagedPolicyAttachmentsExclusiveTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['ManagedPolicyAttachmentsExclusiveTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
@@ -197,18 +199,18 @@ class ManagedPolicyAttachmentsExclusive(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 instance_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 managed_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 permission_set_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['ManagedPolicyAttachmentsExclusiveTimeoutsArgs', 'ManagedPolicyAttachmentsExclusiveTimeoutsArgsDict']]] = None,
+                 instance_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 managed_policy_arns: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 permission_set_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['ManagedPolicyAttachmentsExclusiveTimeoutsArgs', 'ManagedPolicyAttachmentsExclusiveTimeoutsArgsDict']]] = None,
                  __props__=None):
         """
         Resource for managing exclusive AWS SSO Admin Managed Policy Attachments.
 
         This resource is designed to manage all managed policy attachments for an SSO permission set. Using this resource, Terraform will remove any managed policies attached to the permission set that are not defined in the configuration.
 
-        !> **WARNING:** Do not use this resource together with the `ssoadmin.ManagedPolicyAttachment` resource for the same permission set. Doing so will cause a conflict and will lead to managed policies being removed.
+        > **WARNING:** Do not use this resource together with the `ssoadmin.ManagedPolicyAttachment` resource for the same permission set. Doing so will cause a conflict and will lead to managed policies being removed.
 
         > Destruction of this resource means Terraform will no longer manage the managed policy attachments, **but will not detach any policies**. The permission set will retain all managed policies that were attached at the time of destruction.
 
@@ -257,6 +259,7 @@ class ManagedPolicyAttachmentsExclusive(pulumi.CustomResource):
 
         #### Optional
 
+        * `account_id` (String) Account ID where this resource is managed.
         * `region` (String) Region where this resource is managed.
 
         Using `pulumi import`, import SSO Admin Managed Policy Attachments Exclusive using the `instance_arn` and `permission_set_arn` arguments, separated by a comma (`,`). For example:
@@ -264,6 +267,7 @@ class ManagedPolicyAttachmentsExclusive(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:ssoadmin/managedPolicyAttachmentsExclusive:ManagedPolicyAttachmentsExclusive example arn:aws:sso:::instance/ssoins-1234567890abcdef,arn:aws:sso:::permissionSet/ssoins-1234567890abcdef/ps-1234567890abcdef
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -285,7 +289,7 @@ class ManagedPolicyAttachmentsExclusive(pulumi.CustomResource):
 
         This resource is designed to manage all managed policy attachments for an SSO permission set. Using this resource, Terraform will remove any managed policies attached to the permission set that are not defined in the configuration.
 
-        !> **WARNING:** Do not use this resource together with the `ssoadmin.ManagedPolicyAttachment` resource for the same permission set. Doing so will cause a conflict and will lead to managed policies being removed.
+        > **WARNING:** Do not use this resource together with the `ssoadmin.ManagedPolicyAttachment` resource for the same permission set. Doing so will cause a conflict and will lead to managed policies being removed.
 
         > Destruction of this resource means Terraform will no longer manage the managed policy attachments, **but will not detach any policies**. The permission set will retain all managed policies that were attached at the time of destruction.
 
@@ -334,6 +338,7 @@ class ManagedPolicyAttachmentsExclusive(pulumi.CustomResource):
 
         #### Optional
 
+        * `account_id` (String) Account ID where this resource is managed.
         * `region` (String) Region where this resource is managed.
 
         Using `pulumi import`, import SSO Admin Managed Policy Attachments Exclusive using the `instance_arn` and `permission_set_arn` arguments, separated by a comma (`,`). For example:
@@ -341,6 +346,7 @@ class ManagedPolicyAttachmentsExclusive(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:ssoadmin/managedPolicyAttachmentsExclusive:ManagedPolicyAttachmentsExclusive example arn:aws:sso:::instance/ssoins-1234567890abcdef,arn:aws:sso:::permissionSet/ssoins-1234567890abcdef/ps-1234567890abcdef
         ```
+
 
         :param str resource_name: The name of the resource.
         :param ManagedPolicyAttachmentsExclusiveArgs args: The arguments to use to populate this resource's properties.
@@ -357,11 +363,11 @@ class ManagedPolicyAttachmentsExclusive(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 instance_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 managed_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 permission_set_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['ManagedPolicyAttachmentsExclusiveTimeoutsArgs', 'ManagedPolicyAttachmentsExclusiveTimeoutsArgsDict']]] = None,
+                 instance_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 managed_policy_arns: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 permission_set_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['ManagedPolicyAttachmentsExclusiveTimeoutsArgs', 'ManagedPolicyAttachmentsExclusiveTimeoutsArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -392,11 +398,11 @@ class ManagedPolicyAttachmentsExclusive(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            instance_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            managed_policy_arns: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            permission_set_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            timeouts: Optional[pulumi.Input[Union['ManagedPolicyAttachmentsExclusiveTimeoutsArgs', 'ManagedPolicyAttachmentsExclusiveTimeoutsArgsDict']]] = None) -> 'ManagedPolicyAttachmentsExclusive':
+            instance_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            managed_policy_arns: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            permission_set_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            timeouts: pulumi.Input[Optional[Union['ManagedPolicyAttachmentsExclusiveTimeoutsArgs', 'ManagedPolicyAttachmentsExclusiveTimeoutsArgsDict']]] = None) -> 'ManagedPolicyAttachmentsExclusive':
         """
         Get an existing ManagedPolicyAttachmentsExclusive resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

@@ -24,17 +24,18 @@ class EnvironmentArgs:
                  domain_identifier: pulumi.Input[_builtins.str],
                  profile_identifier: pulumi.Input[_builtins.str],
                  project_identifier: pulumi.Input[_builtins.str],
-                 account_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 account_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 blueprint_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 glossary_terms: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['EnvironmentTimeoutsArgs']] = None,
-                 user_parameters: Optional[pulumi.Input[Sequence[pulumi.Input['EnvironmentUserParameterArgs']]]] = None):
+                 account_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 account_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 blueprint_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 glossary_terms: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['EnvironmentTimeoutsArgs']] = None,
+                 user_parameters: pulumi.Input[Optional[Sequence[pulumi.Input['EnvironmentUserParameterArgs']]]] = None):
         """
         The set of arguments for constructing a Environment resource.
+
         :param pulumi.Input[_builtins.str] domain_identifier: The ID of the domain where the environment exists.
         :param pulumi.Input[_builtins.str] profile_identifier: The ID of the profile with which the environment is created.
         :param pulumi.Input[_builtins.str] project_identifier: The ID of the project where the environment exists.
@@ -113,100 +114,100 @@ class EnvironmentArgs:
 
     @_builtins.property
     @pulumi.getter(name="accountIdentifier")
-    def account_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def account_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the Amazon Web Services account where the environment exists
         """
         return pulumi.get(self, "account_identifier")
 
     @account_identifier.setter
-    def account_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def account_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "account_identifier", value)
 
     @_builtins.property
     @pulumi.getter(name="accountRegion")
-    def account_region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def account_region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The Amazon Web Services region where the environment exists.
         """
         return pulumi.get(self, "account_region")
 
     @account_region.setter
-    def account_region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def account_region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "account_region", value)
 
     @_builtins.property
     @pulumi.getter(name="blueprintIdentifier")
-    def blueprint_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def blueprint_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The blueprint with which the environment is created.
         """
         return pulumi.get(self, "blueprint_identifier")
 
     @blueprint_identifier.setter
-    def blueprint_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def blueprint_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "blueprint_identifier", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The description of the environment.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="glossaryTerms")
-    def glossary_terms(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def glossary_terms(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         The business glossary terms that can be used in this environment.
         """
         return pulumi.get(self, "glossary_terms")
 
     @glossary_terms.setter
-    def glossary_terms(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def glossary_terms(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "glossary_terms", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the environment.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['EnvironmentTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['EnvironmentTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['EnvironmentTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['EnvironmentTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter(name="userParameters")
-    def user_parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['EnvironmentUserParameterArgs']]]]:
+    def user_parameters(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['EnvironmentUserParameterArgs']]]]:
         """
         The user parameters that are used in the environment.
         See User Parameters for more information.
@@ -215,32 +216,33 @@ class EnvironmentArgs:
         return pulumi.get(self, "user_parameters")
 
     @user_parameters.setter
-    def user_parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['EnvironmentUserParameterArgs']]]]):
+    def user_parameters(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['EnvironmentUserParameterArgs']]]]):
         pulumi.set(self, "user_parameters", value)
 
 
 @pulumi.input_type
 class _EnvironmentState:
     def __init__(__self__, *,
-                 account_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 account_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 blueprint_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 created_at: Optional[pulumi.Input[_builtins.str]] = None,
-                 created_by: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 glossary_terms: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 last_deployments: Optional[pulumi.Input[Sequence[pulumi.Input['EnvironmentLastDeploymentArgs']]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 profile_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 project_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 provider_environment: Optional[pulumi.Input[_builtins.str]] = None,
-                 provisioned_resources: Optional[pulumi.Input[Sequence[pulumi.Input['EnvironmentProvisionedResourceArgs']]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input['EnvironmentTimeoutsArgs']] = None,
-                 user_parameters: Optional[pulumi.Input[Sequence[pulumi.Input['EnvironmentUserParameterArgs']]]] = None):
+                 account_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 account_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 blueprint_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 created_at: pulumi.Input[Optional[_builtins.str]] = None,
+                 created_by: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 glossary_terms: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 last_deployments: pulumi.Input[Optional[Sequence[pulumi.Input['EnvironmentLastDeploymentArgs']]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 profile_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 project_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 provider_environment: pulumi.Input[Optional[_builtins.str]] = None,
+                 provisioned_resources: pulumi.Input[Optional[Sequence[pulumi.Input['EnvironmentProvisionedResourceArgs']]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional['EnvironmentTimeoutsArgs']] = None,
+                 user_parameters: pulumi.Input[Optional[Sequence[pulumi.Input['EnvironmentUserParameterArgs']]]] = None):
         """
         Input properties used for looking up and filtering Environment resources.
+
         :param pulumi.Input[_builtins.str] account_identifier: The ID of the Amazon Web Services account where the environment exists
         :param pulumi.Input[_builtins.str] account_region: The Amazon Web Services region where the environment exists.
         :param pulumi.Input[_builtins.str] blueprint_identifier: The blueprint with which the environment is created.
@@ -298,139 +300,139 @@ class _EnvironmentState:
 
     @_builtins.property
     @pulumi.getter(name="accountIdentifier")
-    def account_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def account_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the Amazon Web Services account where the environment exists
         """
         return pulumi.get(self, "account_identifier")
 
     @account_identifier.setter
-    def account_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def account_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "account_identifier", value)
 
     @_builtins.property
     @pulumi.getter(name="accountRegion")
-    def account_region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def account_region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The Amazon Web Services region where the environment exists.
         """
         return pulumi.get(self, "account_region")
 
     @account_region.setter
-    def account_region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def account_region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "account_region", value)
 
     @_builtins.property
     @pulumi.getter(name="blueprintIdentifier")
-    def blueprint_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def blueprint_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The blueprint with which the environment is created.
         """
         return pulumi.get(self, "blueprint_identifier")
 
     @blueprint_identifier.setter
-    def blueprint_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def blueprint_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "blueprint_identifier", value)
 
     @_builtins.property
     @pulumi.getter(name="createdAt")
-    def created_at(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def created_at(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The time the environment was created.
         """
         return pulumi.get(self, "created_at")
 
     @created_at.setter
-    def created_at(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def created_at(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "created_at", value)
 
     @_builtins.property
     @pulumi.getter(name="createdBy")
-    def created_by(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def created_by(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The user who created the environment.
         """
         return pulumi.get(self, "created_by")
 
     @created_by.setter
-    def created_by(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def created_by(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "created_by", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The description of the environment.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="domainIdentifier")
-    def domain_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def domain_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the domain where the environment exists.
         """
         return pulumi.get(self, "domain_identifier")
 
     @domain_identifier.setter
-    def domain_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def domain_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "domain_identifier", value)
 
     @_builtins.property
     @pulumi.getter(name="glossaryTerms")
-    def glossary_terms(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def glossary_terms(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         The business glossary terms that can be used in this environment.
         """
         return pulumi.get(self, "glossary_terms")
 
     @glossary_terms.setter
-    def glossary_terms(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def glossary_terms(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "glossary_terms", value)
 
     @_builtins.property
     @pulumi.getter(name="lastDeployments")
-    def last_deployments(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['EnvironmentLastDeploymentArgs']]]]:
+    def last_deployments(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['EnvironmentLastDeploymentArgs']]]]:
         """
         The details of the last deployment of the environment.
         """
         return pulumi.get(self, "last_deployments")
 
     @last_deployments.setter
-    def last_deployments(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['EnvironmentLastDeploymentArgs']]]]):
+    def last_deployments(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['EnvironmentLastDeploymentArgs']]]]):
         pulumi.set(self, "last_deployments", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the environment.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="profileIdentifier")
-    def profile_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def profile_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the profile with which the environment is created.
         """
         return pulumi.get(self, "profile_identifier")
 
     @profile_identifier.setter
-    def profile_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def profile_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "profile_identifier", value)
 
     @_builtins.property
     @pulumi.getter(name="projectIdentifier")
-    def project_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def project_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the project where the environment exists.
 
@@ -439,54 +441,54 @@ class _EnvironmentState:
         return pulumi.get(self, "project_identifier")
 
     @project_identifier.setter
-    def project_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def project_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "project_identifier", value)
 
     @_builtins.property
     @pulumi.getter(name="providerEnvironment")
-    def provider_environment(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def provider_environment(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The provider of the environment.
         """
         return pulumi.get(self, "provider_environment")
 
     @provider_environment.setter
-    def provider_environment(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def provider_environment(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "provider_environment", value)
 
     @_builtins.property
     @pulumi.getter(name="provisionedResources")
-    def provisioned_resources(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['EnvironmentProvisionedResourceArgs']]]]:
+    def provisioned_resources(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['EnvironmentProvisionedResourceArgs']]]]:
         return pulumi.get(self, "provisioned_resources")
 
     @provisioned_resources.setter
-    def provisioned_resources(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['EnvironmentProvisionedResourceArgs']]]]):
+    def provisioned_resources(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['EnvironmentProvisionedResourceArgs']]]]):
         pulumi.set(self, "provisioned_resources", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['EnvironmentTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['EnvironmentTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['EnvironmentTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['EnvironmentTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter(name="userParameters")
-    def user_parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['EnvironmentUserParameterArgs']]]]:
+    def user_parameters(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['EnvironmentUserParameterArgs']]]]:
         """
         The user parameters that are used in the environment.
         See User Parameters for more information.
@@ -495,7 +497,7 @@ class _EnvironmentState:
         return pulumi.get(self, "user_parameters")
 
     @user_parameters.setter
-    def user_parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['EnvironmentUserParameterArgs']]]]):
+    def user_parameters(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['EnvironmentUserParameterArgs']]]]):
         pulumi.set(self, "user_parameters", value)
 
 
@@ -505,18 +507,18 @@ class Environment(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 account_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 account_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 blueprint_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 glossary_terms: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 profile_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 project_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['EnvironmentTimeoutsArgs', 'EnvironmentTimeoutsArgsDict']]] = None,
-                 user_parameters: Optional[pulumi.Input[Sequence[pulumi.Input[Union['EnvironmentUserParameterArgs', 'EnvironmentUserParameterArgsDict']]]]] = None,
+                 account_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 account_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 blueprint_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 glossary_terms: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 profile_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 project_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['EnvironmentTimeoutsArgs', 'EnvironmentTimeoutsArgsDict']]] = None,
+                 user_parameters: pulumi.Input[Optional[Sequence[pulumi.Input[Union['EnvironmentUserParameterArgs', 'EnvironmentUserParameterArgsDict']]]]] = None,
                  __props__=None):
         """
         Resource for managing an AWS DataZone Environment.
@@ -530,11 +532,6 @@ class Environment(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.datazone.Environment("example",
-            name="example",
-            blueprint_identifier=test["environmentBlueprintId"],
-            profile_identifier=test_aws_datazone_environment_profile["id"],
-            project_identifier=test_aws_datazone_project["id"],
-            domain_identifier=test_aws_datazone_domain["id"],
             user_parameters=[
                 {
                     "name": "consumerGlueDbName",
@@ -548,16 +545,34 @@ class Environment(pulumi.CustomResource):
                     "name": "workgroupName",
                     "value": "workgroup",
                 },
-            ])
+            ],
+            name="example",
+            blueprint_identifier=test["environmentBlueprintId"],
+            profile_identifier=test_aws_datazone_environment_profile["id"],
+            project_identifier=test_aws_datazone_project["id"],
+            domain_identifier=test_aws_datazone_domain["id"])
         ```
 
         ## Import
+
+        ### Identity Schema
+
+        #### Required
+
+        * `domain_identifier` - (String) Identifier of the DataZone domain.
+        * `id` - (String) ID of the environment.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
 
         Using `pulumi import`, import DataZone Environment using the `domain_idntifier,id`. For example:
 
         ```sh
         $ pulumi import aws:datazone/environment:Environment example dzd_d2i7tzk3tnjjf4,5vpywijpwryec0
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -595,11 +610,6 @@ class Environment(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.datazone.Environment("example",
-            name="example",
-            blueprint_identifier=test["environmentBlueprintId"],
-            profile_identifier=test_aws_datazone_environment_profile["id"],
-            project_identifier=test_aws_datazone_project["id"],
-            domain_identifier=test_aws_datazone_domain["id"],
             user_parameters=[
                 {
                     "name": "consumerGlueDbName",
@@ -613,16 +623,34 @@ class Environment(pulumi.CustomResource):
                     "name": "workgroupName",
                     "value": "workgroup",
                 },
-            ])
+            ],
+            name="example",
+            blueprint_identifier=test["environmentBlueprintId"],
+            profile_identifier=test_aws_datazone_environment_profile["id"],
+            project_identifier=test_aws_datazone_project["id"],
+            domain_identifier=test_aws_datazone_domain["id"])
         ```
 
         ## Import
+
+        ### Identity Schema
+
+        #### Required
+
+        * `domain_identifier` - (String) Identifier of the DataZone domain.
+        * `id` - (String) ID of the environment.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
 
         Using `pulumi import`, import DataZone Environment using the `domain_idntifier,id`. For example:
 
         ```sh
         $ pulumi import aws:datazone/environment:Environment example dzd_d2i7tzk3tnjjf4,5vpywijpwryec0
         ```
+
 
         :param str resource_name: The name of the resource.
         :param EnvironmentArgs args: The arguments to use to populate this resource's properties.
@@ -639,18 +667,18 @@ class Environment(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 account_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 account_region: Optional[pulumi.Input[_builtins.str]] = None,
-                 blueprint_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 glossary_terms: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 profile_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 project_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 timeouts: Optional[pulumi.Input[Union['EnvironmentTimeoutsArgs', 'EnvironmentTimeoutsArgsDict']]] = None,
-                 user_parameters: Optional[pulumi.Input[Sequence[pulumi.Input[Union['EnvironmentUserParameterArgs', 'EnvironmentUserParameterArgsDict']]]]] = None,
+                 account_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 account_region: pulumi.Input[Optional[_builtins.str]] = None,
+                 blueprint_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 glossary_terms: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 profile_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 project_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 timeouts: pulumi.Input[Optional[Union['EnvironmentTimeoutsArgs', 'EnvironmentTimeoutsArgsDict']]] = None,
+                 user_parameters: pulumi.Input[Optional[Sequence[pulumi.Input[Union['EnvironmentUserParameterArgs', 'EnvironmentUserParameterArgsDict']]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -693,23 +721,23 @@ class Environment(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            account_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-            account_region: Optional[pulumi.Input[_builtins.str]] = None,
-            blueprint_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-            created_at: Optional[pulumi.Input[_builtins.str]] = None,
-            created_by: Optional[pulumi.Input[_builtins.str]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            domain_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-            glossary_terms: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            last_deployments: Optional[pulumi.Input[Sequence[pulumi.Input[Union['EnvironmentLastDeploymentArgs', 'EnvironmentLastDeploymentArgsDict']]]]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            profile_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-            project_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-            provider_environment: Optional[pulumi.Input[_builtins.str]] = None,
-            provisioned_resources: Optional[pulumi.Input[Sequence[pulumi.Input[Union['EnvironmentProvisionedResourceArgs', 'EnvironmentProvisionedResourceArgsDict']]]]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            timeouts: Optional[pulumi.Input[Union['EnvironmentTimeoutsArgs', 'EnvironmentTimeoutsArgsDict']]] = None,
-            user_parameters: Optional[pulumi.Input[Sequence[pulumi.Input[Union['EnvironmentUserParameterArgs', 'EnvironmentUserParameterArgsDict']]]]] = None) -> 'Environment':
+            account_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+            account_region: pulumi.Input[Optional[_builtins.str]] = None,
+            blueprint_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+            created_at: pulumi.Input[Optional[_builtins.str]] = None,
+            created_by: pulumi.Input[Optional[_builtins.str]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            domain_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+            glossary_terms: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            last_deployments: pulumi.Input[Optional[Sequence[pulumi.Input[Union['EnvironmentLastDeploymentArgs', 'EnvironmentLastDeploymentArgsDict']]]]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            profile_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+            project_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+            provider_environment: pulumi.Input[Optional[_builtins.str]] = None,
+            provisioned_resources: pulumi.Input[Optional[Sequence[pulumi.Input[Union['EnvironmentProvisionedResourceArgs', 'EnvironmentProvisionedResourceArgsDict']]]]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            timeouts: pulumi.Input[Optional[Union['EnvironmentTimeoutsArgs', 'EnvironmentTimeoutsArgsDict']]] = None,
+            user_parameters: pulumi.Input[Optional[Sequence[pulumi.Input[Union['EnvironmentUserParameterArgs', 'EnvironmentUserParameterArgsDict']]]]] = None) -> 'Environment':
         """
         Get an existing Environment resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

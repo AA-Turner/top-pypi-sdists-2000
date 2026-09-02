@@ -21,24 +21,26 @@ class RouteArgs:
     def __init__(__self__, *,
                  client_vpn_endpoint_id: pulumi.Input[_builtins.str],
                  destination_cidr_block: pulumi.Input[_builtins.str],
-                 target_vpc_subnet_id: pulumi.Input[_builtins.str],
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 target_vpc_subnet_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a Route resource.
+
         :param pulumi.Input[_builtins.str] client_vpn_endpoint_id: The ID of the Client VPN endpoint.
         :param pulumi.Input[_builtins.str] destination_cidr_block: The IPv4 or IPv6 address range, in CIDR notation, of the route destination.
-        :param pulumi.Input[_builtins.str] target_vpc_subnet_id: The ID of the Subnet to route the traffic through. It must already be attached to the Client VPN.
         :param pulumi.Input[_builtins.str] description: A brief description of the route.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[_builtins.str] target_vpc_subnet_id: The ID of the Subnet to route the traffic through. It must already be attached to the Client VPN. Required for VPC-based Client VPN endpoints. Not applicable for Transit Gateway-based Client VPN endpoints.
         """
         pulumi.set(__self__, "client_vpn_endpoint_id", client_vpn_endpoint_id)
         pulumi.set(__self__, "destination_cidr_block", destination_cidr_block)
-        pulumi.set(__self__, "target_vpc_subnet_id", target_vpc_subnet_id)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if target_vpc_subnet_id is not None:
+            pulumi.set(__self__, "target_vpc_subnet_id", target_vpc_subnet_id)
 
     @_builtins.property
     @pulumi.getter(name="clientVpnEndpointId")
@@ -65,60 +67,63 @@ class RouteArgs:
         pulumi.set(self, "destination_cidr_block", value)
 
     @_builtins.property
-    @pulumi.getter(name="targetVpcSubnetId")
-    def target_vpc_subnet_id(self) -> pulumi.Input[_builtins.str]:
-        """
-        The ID of the Subnet to route the traffic through. It must already be attached to the Client VPN.
-        """
-        return pulumi.get(self, "target_vpc_subnet_id")
-
-    @target_vpc_subnet_id.setter
-    def target_vpc_subnet_id(self, value: pulumi.Input[_builtins.str]):
-        pulumi.set(self, "target_vpc_subnet_id", value)
-
-    @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A brief description of the route.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
+
+    @_builtins.property
+    @pulumi.getter(name="targetVpcSubnetId")
+    def target_vpc_subnet_id(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        The ID of the Subnet to route the traffic through. It must already be attached to the Client VPN. Required for VPC-based Client VPN endpoints. Not applicable for Transit Gateway-based Client VPN endpoints.
+        """
+        return pulumi.get(self, "target_vpc_subnet_id")
+
+    @target_vpc_subnet_id.setter
+    def target_vpc_subnet_id(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "target_vpc_subnet_id", value)
 
 
 @pulumi.input_type
 class _RouteState:
     def __init__(__self__, *,
-                 client_vpn_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 destination_cidr_block: Optional[pulumi.Input[_builtins.str]] = None,
-                 origin: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 target_vpc_subnet_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None):
+                 client_vpn_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 destination_cidr_block: pulumi.Input[Optional[_builtins.str]] = None,
+                 origin: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 target_vpc_subnet_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 transit_gateway_attachment_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering Route resources.
+
         :param pulumi.Input[_builtins.str] client_vpn_endpoint_id: The ID of the Client VPN endpoint.
         :param pulumi.Input[_builtins.str] description: A brief description of the route.
         :param pulumi.Input[_builtins.str] destination_cidr_block: The IPv4 or IPv6 address range, in CIDR notation, of the route destination.
         :param pulumi.Input[_builtins.str] origin: Indicates how the Client VPN route was added. Will be `add-route` for routes created by this resource.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] target_vpc_subnet_id: The ID of the Subnet to route the traffic through. It must already be attached to the Client VPN.
+        :param pulumi.Input[_builtins.str] target_vpc_subnet_id: The ID of the Subnet to route the traffic through. It must already be attached to the Client VPN. Required for VPC-based Client VPN endpoints. Not applicable for Transit Gateway-based Client VPN endpoints.
+        :param pulumi.Input[_builtins.str] transit_gateway_attachment_id: The ID of the Transit Gateway attachment, if the route targets a Transit Gateway-based Client VPN endpoint.
         :param pulumi.Input[_builtins.str] type: The type of the route.
         """
         if client_vpn_endpoint_id is not None:
@@ -133,91 +138,105 @@ class _RouteState:
             pulumi.set(__self__, "region", region)
         if target_vpc_subnet_id is not None:
             pulumi.set(__self__, "target_vpc_subnet_id", target_vpc_subnet_id)
+        if transit_gateway_attachment_id is not None:
+            pulumi.set(__self__, "transit_gateway_attachment_id", transit_gateway_attachment_id)
         if type is not None:
             pulumi.set(__self__, "type", type)
 
     @_builtins.property
     @pulumi.getter(name="clientVpnEndpointId")
-    def client_vpn_endpoint_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def client_vpn_endpoint_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the Client VPN endpoint.
         """
         return pulumi.get(self, "client_vpn_endpoint_id")
 
     @client_vpn_endpoint_id.setter
-    def client_vpn_endpoint_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def client_vpn_endpoint_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "client_vpn_endpoint_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A brief description of the route.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="destinationCidrBlock")
-    def destination_cidr_block(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def destination_cidr_block(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The IPv4 or IPv6 address range, in CIDR notation, of the route destination.
         """
         return pulumi.get(self, "destination_cidr_block")
 
     @destination_cidr_block.setter
-    def destination_cidr_block(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def destination_cidr_block(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "destination_cidr_block", value)
 
     @_builtins.property
     @pulumi.getter
-    def origin(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def origin(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Indicates how the Client VPN route was added. Will be `add-route` for routes created by this resource.
         """
         return pulumi.get(self, "origin")
 
     @origin.setter
-    def origin(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def origin(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "origin", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="targetVpcSubnetId")
-    def target_vpc_subnet_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def target_vpc_subnet_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The ID of the Subnet to route the traffic through. It must already be attached to the Client VPN.
+        The ID of the Subnet to route the traffic through. It must already be attached to the Client VPN. Required for VPC-based Client VPN endpoints. Not applicable for Transit Gateway-based Client VPN endpoints.
         """
         return pulumi.get(self, "target_vpc_subnet_id")
 
     @target_vpc_subnet_id.setter
-    def target_vpc_subnet_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def target_vpc_subnet_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "target_vpc_subnet_id", value)
 
     @_builtins.property
+    @pulumi.getter(name="transitGatewayAttachmentId")
+    def transit_gateway_attachment_id(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        The ID of the Transit Gateway attachment, if the route targets a Transit Gateway-based Client VPN endpoint.
+        """
+        return pulumi.get(self, "transit_gateway_attachment_id")
+
+    @transit_gateway_attachment_id.setter
+    def transit_gateway_attachment_id(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "transit_gateway_attachment_id", value)
+
+    @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The type of the route.
         """
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
 
@@ -227,11 +246,11 @@ class Route(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 client_vpn_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 destination_cidr_block: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 target_vpc_subnet_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 client_vpn_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 destination_cidr_block: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 target_vpc_subnet_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides additional routes for AWS Client VPN endpoints. For more information on usage, please see the
@@ -244,16 +263,16 @@ class Route(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example_endpoint = aws.ec2clientvpn.Endpoint("example",
-            description="Example Client VPN endpoint",
-            server_certificate_arn=example_aws_acm_certificate["arn"],
-            client_cidr_block="10.0.0.0/16",
+            connection_log_options={
+                "enabled": False,
+            },
             authentication_options=[{
                 "type": "certificate-authentication",
                 "root_certificate_chain_arn": example_aws_acm_certificate["arn"],
             }],
-            connection_log_options={
-                "enabled": False,
-            })
+            description="Example Client VPN endpoint",
+            server_certificate_arn=example_aws_acm_certificate["arn"],
+            client_cidr_block="10.0.0.0/16")
         example_network_association = aws.ec2clientvpn.NetworkAssociation("example",
             client_vpn_endpoint_id=example_endpoint.id,
             subnet_id=example_aws_subnet["id"])
@@ -271,13 +290,14 @@ class Route(pulumi.CustomResource):
         $ pulumi import aws:ec2clientvpn/route:Route example cvpn-endpoint-1234567890abcdef,subnet-9876543210fedcba,10.1.0.0/24
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.str] client_vpn_endpoint_id: The ID of the Client VPN endpoint.
         :param pulumi.Input[_builtins.str] description: A brief description of the route.
         :param pulumi.Input[_builtins.str] destination_cidr_block: The IPv4 or IPv6 address range, in CIDR notation, of the route destination.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] target_vpc_subnet_id: The ID of the Subnet to route the traffic through. It must already be attached to the Client VPN.
+        :param pulumi.Input[_builtins.str] target_vpc_subnet_id: The ID of the Subnet to route the traffic through. It must already be attached to the Client VPN. Required for VPC-based Client VPN endpoints. Not applicable for Transit Gateway-based Client VPN endpoints.
         """
         ...
     @overload
@@ -296,16 +316,16 @@ class Route(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example_endpoint = aws.ec2clientvpn.Endpoint("example",
-            description="Example Client VPN endpoint",
-            server_certificate_arn=example_aws_acm_certificate["arn"],
-            client_cidr_block="10.0.0.0/16",
+            connection_log_options={
+                "enabled": False,
+            },
             authentication_options=[{
                 "type": "certificate-authentication",
                 "root_certificate_chain_arn": example_aws_acm_certificate["arn"],
             }],
-            connection_log_options={
-                "enabled": False,
-            })
+            description="Example Client VPN endpoint",
+            server_certificate_arn=example_aws_acm_certificate["arn"],
+            client_cidr_block="10.0.0.0/16")
         example_network_association = aws.ec2clientvpn.NetworkAssociation("example",
             client_vpn_endpoint_id=example_endpoint.id,
             subnet_id=example_aws_subnet["id"])
@@ -323,6 +343,7 @@ class Route(pulumi.CustomResource):
         $ pulumi import aws:ec2clientvpn/route:Route example cvpn-endpoint-1234567890abcdef,subnet-9876543210fedcba,10.1.0.0/24
         ```
 
+
         :param str resource_name: The name of the resource.
         :param RouteArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -338,11 +359,11 @@ class Route(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 client_vpn_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 destination_cidr_block: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 target_vpc_subnet_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 client_vpn_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 destination_cidr_block: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 target_vpc_subnet_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -360,10 +381,9 @@ class Route(pulumi.CustomResource):
                 raise TypeError("Missing required property 'destination_cidr_block'")
             __props__.__dict__["destination_cidr_block"] = destination_cidr_block
             __props__.__dict__["region"] = region
-            if target_vpc_subnet_id is None and not opts.urn:
-                raise TypeError("Missing required property 'target_vpc_subnet_id'")
             __props__.__dict__["target_vpc_subnet_id"] = target_vpc_subnet_id
             __props__.__dict__["origin"] = None
+            __props__.__dict__["transit_gateway_attachment_id"] = None
             __props__.__dict__["type"] = None
         super(Route, __self__).__init__(
             'aws:ec2clientvpn/route:Route',
@@ -375,13 +395,14 @@ class Route(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            client_vpn_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            destination_cidr_block: Optional[pulumi.Input[_builtins.str]] = None,
-            origin: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            target_vpc_subnet_id: Optional[pulumi.Input[_builtins.str]] = None,
-            type: Optional[pulumi.Input[_builtins.str]] = None) -> 'Route':
+            client_vpn_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            destination_cidr_block: pulumi.Input[Optional[_builtins.str]] = None,
+            origin: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            target_vpc_subnet_id: pulumi.Input[Optional[_builtins.str]] = None,
+            transit_gateway_attachment_id: pulumi.Input[Optional[_builtins.str]] = None,
+            type: pulumi.Input[Optional[_builtins.str]] = None) -> 'Route':
         """
         Get an existing Route resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -394,7 +415,8 @@ class Route(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] destination_cidr_block: The IPv4 or IPv6 address range, in CIDR notation, of the route destination.
         :param pulumi.Input[_builtins.str] origin: Indicates how the Client VPN route was added. Will be `add-route` for routes created by this resource.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] target_vpc_subnet_id: The ID of the Subnet to route the traffic through. It must already be attached to the Client VPN.
+        :param pulumi.Input[_builtins.str] target_vpc_subnet_id: The ID of the Subnet to route the traffic through. It must already be attached to the Client VPN. Required for VPC-based Client VPN endpoints. Not applicable for Transit Gateway-based Client VPN endpoints.
+        :param pulumi.Input[_builtins.str] transit_gateway_attachment_id: The ID of the Transit Gateway attachment, if the route targets a Transit Gateway-based Client VPN endpoint.
         :param pulumi.Input[_builtins.str] type: The type of the route.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -407,6 +429,7 @@ class Route(pulumi.CustomResource):
         __props__.__dict__["origin"] = origin
         __props__.__dict__["region"] = region
         __props__.__dict__["target_vpc_subnet_id"] = target_vpc_subnet_id
+        __props__.__dict__["transit_gateway_attachment_id"] = transit_gateway_attachment_id
         __props__.__dict__["type"] = type
         return Route(resource_name, opts=opts, __props__=__props__)
 
@@ -452,11 +475,19 @@ class Route(pulumi.CustomResource):
 
     @_builtins.property
     @pulumi.getter(name="targetVpcSubnetId")
-    def target_vpc_subnet_id(self) -> pulumi.Output[_builtins.str]:
+    def target_vpc_subnet_id(self) -> pulumi.Output[Optional[_builtins.str]]:
         """
-        The ID of the Subnet to route the traffic through. It must already be attached to the Client VPN.
+        The ID of the Subnet to route the traffic through. It must already be attached to the Client VPN. Required for VPC-based Client VPN endpoints. Not applicable for Transit Gateway-based Client VPN endpoints.
         """
         return pulumi.get(self, "target_vpc_subnet_id")
+
+    @_builtins.property
+    @pulumi.getter(name="transitGatewayAttachmentId")
+    def transit_gateway_attachment_id(self) -> pulumi.Output[_builtins.str]:
+        """
+        The ID of the Transit Gateway attachment, if the route targets a Transit Gateway-based Client VPN endpoint.
+        """
+        return pulumi.get(self, "transit_gateway_attachment_id")
 
     @_builtins.property
     @pulumi.getter

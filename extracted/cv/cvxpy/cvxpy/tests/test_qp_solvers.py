@@ -14,12 +14,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
+import tempfile
+import unittest
 
 import numpy as np
 import scipy.sparse as sp
 from scipy.linalg import lstsq
 
 import cvxpy as cp
+import cvxpy.tests.solver_test_helpers as sths
 from cvxpy import Maximize, Minimize, Parameter, Problem
 from cvxpy.atoms import (
     QuadForm,
@@ -33,13 +36,24 @@ from cvxpy.atoms import (
     sum_squares,
 )
 from cvxpy.expressions.variable import Variable
-from cvxpy.reductions.solvers.defines import INSTALLED_SOLVERS, QP_SOLVERS
+from cvxpy.reductions.solvers.defines import (
+    INSTALLED_CONIC_SOLVERS,
+    INSTALLED_SOLVERS,
+    QP_SOLVERS,
+    SOLVER_MAP_CONIC,
+    SOLVER_MAP_QP,
+)
 from cvxpy.tests.base_test import BaseTest
-from cvxpy.tests.solver_test_helpers import StandardTestLPs
+from cvxpy.tests.solver_test_helpers import (
+    SolverTestHelper,
+    StandardTestInfeasibleProblems,
+    StandardTestLPs,
+    StandardTestQPs,
+)
 
 
-class TestQp(BaseTest):
-    """ Unit tests for the domain module. """
+class QPTestBase(BaseTest):
+    """Base class with shared test helpers for QP-style problems."""
 
     def setUp(self) -> None:
         self.a = Variable(name='a')
@@ -68,45 +82,97 @@ class TestQp(BaseTest):
         self.xsr = Variable(50, name='xsr')
         self.xef = Variable(80, name='xef')
 
-        # Check for all installed QP solvers
-        self.solvers = [x for x in QP_SOLVERS if x in INSTALLED_SOLVERS]
-        if 'MOSEK' in INSTALLED_SOLVERS:
-            self.solvers.append('MOSEK')
-
     def solve_QP(self, problem, solver_name):
-        return problem.solve(solver=solver_name, verbose=False)
+        """Override in subclasses."""
+        raise NotImplementedError
 
-    def test_all_solvers(self) -> None:
-        for solver in self.solvers:
-            self.quad_over_lin(solver)
-            self.power(solver)
-            self.power_matrix(solver)
-            self.square_affine(solver)
-            self.quad_form(solver)
-            self.affine_problem(solver)
-            self.maximize_problem(solver)
-            self.abs(solver)
+    # License checking helpers - shared by subclasses
+    @staticmethod
+    def is_mosek_available():
+        """Check if MOSEK is installed and a license is available."""
+        if 'MOSEK' not in INSTALLED_SOLVERS:
+            return False
+        try:
+            import mosek  # type: ignore
+            env = mosek.Env()
+            status = env.getlicense()
+            return status == mosek.rescode.ok
+        except Exception:
+            return False
 
-            # Do we need the following functionality?
-            # self.norm_2(solver)
-            # self.mat_norm_2(solver)
+    @staticmethod
+    def is_knitro_available():
+        """Check if KNITRO is installed and a license is available."""
+        if 'KNITRO' not in INSTALLED_SOLVERS:
+            return False
+        try:
+            import knitro  # type: ignore
+            kc = knitro.KN_new()
+            if kc is None:
+                return False
+            knitro.KN_free(kc)
+            return True
+        except Exception:
+            return False
 
-            self.quad_form_coeff(solver)
-            self.quad_form_bound(solver)
-            self.regression_1(solver)
-            self.regression_2(solver)
-            self.rep_quad_form(solver)
+    @staticmethod
+    def is_xpress_available():
+        """Check if XPRESS is installed and a usable license can be acquired.
 
-            # slow tests:
-            self.control(solver)
-            self.sparse_system(solver)
-            self.smooth_ridge(solver)
-            self.huber_small(solver)
-            self.huber(solver)
-            self.equivalent_forms_1(solver)
-            self.equivalent_forms_2(solver)
-            self.equivalent_forms_3(solver)
+        The Community license bundled with the ``xpress`` package is sufficient
+        for the small problems in this suite. Creating a problem object is where
+        modern XPRESS acquires the license; the old ``xpress.env().getlicense()``
+        API was removed in xpress 9.x.
+        """
+        if 'XPRESS' not in INSTALLED_SOLVERS:
+            return False
+        try:
+            import xpress  # type: ignore
+            xpress.problem()
+            return True
+        except Exception:
+            return False
 
+    @staticmethod
+    def _skip_if_xpress_community_limit(solver_name, exc):
+        """Skip tests that exceed the XPRESS Community license size limit."""
+        if solver_name == cp.XPRESS and "too many rows and columns" in str(exc):
+            raise unittest.SkipTest(
+                "XPRESS Community license problem-size limit (200 rows+cols)"
+            ) from exc
+
+    def _solve_problem(self, problem, solver_name, **kwargs):
+        try:
+            return problem.solve(solver=solver_name, verbose=False, **kwargs)
+        except Exception as exc:
+            self._skip_if_xpress_community_limit(solver_name, exc)
+            raise
+
+    def filter_licensed_solvers(self, solvers):
+        """Remove solvers that don't have valid licenses."""
+        result = list(solvers)
+        if 'XPRESS' in result and not self.is_xpress_available():
+            result.remove('XPRESS')
+        if 'MOSEK' in result and not self.is_mosek_available():
+            result.remove('MOSEK')
+        if 'KNITRO' in result and not self.is_knitro_available():
+            result.remove('KNITRO')
+        return result
+
+    def _check_kkt(self, problem, places=4):
+        """Verify KKT conditions for a solved problem."""
+        obj_pair = (problem.objective, None)
+        var_pairs = [(v, None) for v in problem.variables()]
+        con_pairs = [(c, None) for c in problem.constraints]
+        sth = SolverTestHelper(obj_pair, var_pairs, con_pairs)
+        # Problem already solved, just use the same problem object
+        sth.prob = problem
+        sth.check_primal_feasibility(places)
+        sth.check_complementarity(places)
+        sth.check_dual_domains(places)
+        sth.check_stationary_lagrangian(places)
+
+    # Test helper methods - shared by all subclasses
     def quad_over_lin(self, solver) -> None:
         p = Problem(Minimize(0.5 * quad_over_lin(abs(self.x-1), 1)),
                     [self.x <= -1])
@@ -117,6 +183,7 @@ class TestQp(BaseTest):
         for con in p.constraints:
             self.assertItemsAlmostEqual(np.array([2., 2.]),
                                         con.dual_value, places=4)
+        self._check_kkt(p, places=3)
 
     def abs(self, solver) -> None:
         u = Variable(2)
@@ -176,6 +243,7 @@ class TestQp(BaseTest):
             self.assertItemsAlmostEqual(z, var.value, places=4)
 
     def affine_problem(self, solver) -> None:
+        np.random.seed(0)
         A = np.random.randn(5, 2)
         A = np.maximum(A, 0)
         b = np.random.randn(5)
@@ -184,8 +252,10 @@ class TestQp(BaseTest):
         self.solve_QP(p, solver)
         for var in p.variables():
             self.assertItemsAlmostEqual([0., 0.], var.value, places=3)
+        self._check_kkt(p, places=3)
 
     def maximize_problem(self, solver) -> None:
+        np.random.seed(0)
         A = np.random.randn(5, 2)
         A = np.maximum(A, 0)
         b = np.random.randn(5)
@@ -194,6 +264,7 @@ class TestQp(BaseTest):
         self.solve_QP(p, solver)
         for var in p.variables():
             self.assertItemsAlmostEqual([0., 0.], var.value, places=3)
+        self._check_kkt(p, places=3)
 
     def norm_2(self, solver) -> None:
         A = np.random.randn(10, 5)
@@ -234,6 +305,7 @@ class TestQp(BaseTest):
         self.solve_QP(p, solver)
         for var in p.variables():
             self.assertItemsAlmostEqual(y_star, var.value, places=4)
+        self._check_kkt(p)
 
     def regression_1(self, solver) -> None:
         np.random.seed(1)
@@ -310,13 +382,17 @@ class TestQp(BaseTest):
         p = Problem(Minimize(.01 * sum_squares(self.force)), constraints)
         self.solve_QP(p, solver)
         self.assertAlmostEqual(1059.616, p.value, places=1)
+        # KKT check skipped: check_stationary_lagrangian fails for 2D matrix
+        # variables due to inconsistent gradient ordering (sum_squares uses
+        # C order, constraint terms use F order). TODO fix this
+        # self._check_kkt(p, places=3)
 
     def sparse_system(self, solver) -> None:
         m = 100
         n = 80
         np.random.seed(1)
         density = 0.4
-        A = sp.rand(m, n, density)
+        A = sp.random_array((m, n), density=density)
         b = np.random.randn(m)
 
         p = Problem(Minimize(sum_squares(A @ self.xs - b)), [self.xs == 0])
@@ -337,7 +413,7 @@ class TestQp(BaseTest):
         self.solve_QP(p, solver)
         self.assertAlmostEqual(0, p.value, places=4)
 
-    def huber_small(self, solver) -> None:
+    def huber_small(self, solver, places=4) -> None:
         # Solve the Huber regression problem
         x = Variable(3)
         objective = sum(huber(x))
@@ -345,17 +421,18 @@ class TestQp(BaseTest):
         # Solve problem with QP
         p = Problem(Minimize(objective), [x[2] >= 3])
         self.solve_QP(p, solver)
-        self.assertAlmostEqual(3, x.value[2], places=4)
-        self.assertAlmostEqual(5, objective.value, places=4)
+        self.assertAlmostEqual(3, x.value[2], places=places)
+        self.assertAlmostEqual(5, objective.value, places=places)
+        self._check_kkt(p, places=places)
 
     def huber(self, solver) -> None:
         # Generate problem data
         n = 3
         m = 5
-        data = [0.89, 0.39, 0.96, 0.34, 0.68, 0.18, 0.63 ,0.42, 0.51, 0.66, 0.43, 0.77]
+        data = [0.89, 0.39, 0.96, 0.34, 0.68, 0.18, 0.63, 0.42, 0.51, 0.66, 0.43, 0.77]
         indices = [0, 1, 2, 3, 4, 2, 3, 0, 1, 2, 3, 4]
         indptr = [0, 5, 7, 12]
-        A = sp.csc_matrix((data, indices, indptr), shape=(m,n))
+        A = sp.csc_array((data, indices, indptr), shape=(m, n))
         x_true = np.random.randn(n) / np.sqrt(n)
         ind95 = (np.random.rand(m) < 0.95).astype(float)
         b = A.dot(x_true) + np.multiply(0.5*np.random.randn(m), ind95) \
@@ -389,6 +466,7 @@ class TestQp(BaseTest):
         p1 = Problem(Minimize(obj1), cons)
         self.solve_QP(p1, solver)
         self.assertAlmostEqual(p1.value, 68.1119420108, places=4)
+        self._check_kkt(p1, places=4)
 
     def equivalent_forms_2(self, solver) -> None:
         m = 100
@@ -411,6 +489,7 @@ class TestQp(BaseTest):
         p2 = Problem(Minimize(obj2), cons)
         self.solve_QP(p2, solver)
         self.assertAlmostEqual(p2.value, 68.1119420108, places=4)
+        self._check_kkt(p2, places=4)
 
     def equivalent_forms_3(self, solver) -> None:
         m = 100
@@ -433,7 +512,74 @@ class TestQp(BaseTest):
 
         p3 = Problem(Minimize(obj3), cons)
         self.solve_QP(p3, solver)
+        print(solver)
         self.assertAlmostEqual(p3.value, 68.1119420108, places=4)
+        self._check_kkt(p3, places=4)
+
+
+class TestQp(QPTestBase):
+    """Test native QP solvers."""
+
+    def setUp(self) -> None:
+        super().setUp()
+
+        # Check for all installed QP solvers
+        self.solvers = [x for x in QP_SOLVERS if x in INSTALLED_SOLVERS]
+        self.solvers = self.filter_licensed_solvers(self.solvers)
+
+    def solve_QP(self, problem, solver_name):
+        return self._solve_problem(problem, solver_name)
+
+    def test_xpress_duplicate_variable_names_qp(self) -> None:
+        """Two variables sharing a name() must not crash the QP interface."""
+        if not self.is_xpress_available():
+            self.skipTest("XPRESS license not available")
+
+        x = cp.Variable(3, name="dup")
+        y = cp.Variable(3, name="dup")
+        prob = cp.Problem(cp.Minimize(cp.sum_squares(x - 1) + cp.sum_squares(y - 2)))
+        prob.solve(solver=cp.XPRESS)
+        self.assertIn(prob.status, (cp.OPTIMAL, cp.OPTIMAL_INACCURATE))
+        self.assertItemsAlmostEqual(x.value, np.ones(3), places=4)
+        self.assertItemsAlmostEqual(y.value, 2 * np.ones(3), places=4)
+
+    def test_all_solvers(self) -> None:
+        for solver in self.solvers:
+            self.quad_over_lin(solver)
+            self.power(solver)
+            self.power_matrix(solver)
+            self.square_affine(solver)
+            self.quad_form(solver)
+            self.affine_problem(solver)
+            self.maximize_problem(solver)
+            self.abs(solver)
+
+            # Do we need the following functionality?
+            # self.norm_2(solver)
+            # self.mat_norm_2(solver)
+
+            self.quad_form_coeff(solver)
+            self.quad_form_bound(solver)
+            self.regression_1(solver)
+            self.regression_2(solver)
+            self.rep_quad_form(solver)
+
+            # slow tests:
+            self.control(solver)
+            self.sparse_system(solver)
+            self.smooth_ridge(solver)
+            self.huber_small(solver)
+            self.huber(solver)
+            self.equivalent_forms_1(solver)
+            self.equivalent_forms_2(solver)
+            if solver != cp.KNITRO:
+                self.equivalent_forms_3(solver)
+
+    def test_qp_bound_attr(self) -> None:
+        for solver in self.solvers:
+            solver_cls = SOLVER_MAP_QP.get(solver)
+            if solver_cls is not None and getattr(solver_cls, 'BOUNDED_VARIABLES', False):
+                StandardTestQPs.test_qp_bound_attr(solver=solver)
 
     def test_warm_start(self) -> None:
         """Test warm start.
@@ -456,6 +602,29 @@ class TestQp(BaseTest):
         result = prob.solve(solver="OSQP", warm_start=True)
         result2 = prob.solve(solver="OSQP", warm_start=False)
         self.assertAlmostEqual(result, result2)
+
+    def test_qpalm_warmstart(self) -> None:
+        """Test warm start.
+        """
+        if cp.QPALM in INSTALLED_SOLVERS:
+            m = 200
+            n = 100
+            np.random.seed(1)
+            A = np.random.randn(m, n)
+            b = Parameter(m)
+
+            # Construct the problem.
+            x = Variable(n)
+            prob = Problem(Minimize(sum_squares(A @ x - b)))
+
+            b.value = np.random.randn(m)
+            result = prob.solve(solver=cp.QPALM, warm_start=False)
+            result2 = prob.solve(solver=cp.QPALM, warm_start=True)
+            self.assertAlmostEqual(result, result2)
+            b.value = np.random.randn(m)
+            result = prob.solve(solver=cp.QPALM, warm_start=True)
+            result2 = prob.solve(solver=cp.QPALM, warm_start=False)
+            self.assertAlmostEqual(result, result2)
 
     def test_gurobi_warmstart(self) -> None:
         """Test Gurobi warm start with a user provided point.
@@ -482,6 +651,33 @@ class TestQp(BaseTest):
                 assert X_vals[row, col] + 1 == model_x[i].start
                 assert np.isclose(X.value[row, col], model_x[i].x)
 
+    def test_xpress_warmstart(self) -> None:
+        """Test XPRESS warm start with a user provided point.
+        """
+        if cp.XPRESS in INSTALLED_SOLVERS:
+            m = 20
+            n = 10
+            np.random.seed(1)
+            A = np.random.randn(m, n)
+            b = Parameter(m)
+
+            # Construct the problem.
+            x = Variable(n, integer=True)
+            prob = Problem(Minimize(sum_squares(A @ x - b)))
+
+            b.value = np.random.randn(m)
+            result = prob.solve(solver=cp.XPRESS, warm_start=False)
+            result2 = prob.solve(solver=cp.XPRESS, warm_start=True)
+            self.assertAlmostEqual(result, result2)
+            x.value = x.value.astype(np.int64)
+
+            xprime = Variable(n, integer=True)
+            prob = Problem(Minimize(sum_squares(A @ xprime - b)))
+            xprime.value = x.value
+            result = prob.solve(solver=cp.XPRESS, warm_start=True)
+            result2 = prob.solve(solver=cp.XPRESS, warm_start=False)
+            self.assertAlmostEqual(result, result2)
+
     def test_highs_warmstart(self) -> None:
         """Test warm start.
         """
@@ -505,6 +701,33 @@ class TestQp(BaseTest):
             result2 = prob.solve(solver=cp.HIGHS, warm_start=False)
             self.assertAlmostEqual(result, result2)
 
+    def test_highs_cvar(self) -> None:
+        """Test problem with CVaR constraint from
+        https://github.com/cvxpy/cvxpy/issues/2836
+        """
+        if cp.HIGHS in INSTALLED_SOLVERS:
+            # Generate data
+            num_stocks = 5
+            num_samples = 25
+            np.random.seed(1)
+            pnl_samples = np.random.uniform(low=0.0, high=1.0, size=(num_samples, num_stocks))
+            pnl_expected = pnl_samples.mean(axis=0)
+
+            # Prepare to solve
+            quantile = 0.05
+            w = cp.Variable(num_stocks, nonneg=True)
+            cvar = cp.cvar(pnl_samples @ w, 1 - quantile)
+            pnl = w @ pnl_expected
+
+            # Solve
+            objective = cp.Maximize(pnl)
+            constraints = [cvar <= 0.5]
+            problem = cp.Problem(objective, constraints)
+            problem.solve(
+                solver=cp.HIGHS,
+            )
+            assert problem.status == cp.OPTIMAL
+
     def test_piqp_warmstart(self) -> None:
         """Test warm start.
         """
@@ -526,6 +749,29 @@ class TestQp(BaseTest):
             b.value = np.random.randn(m)
             result = prob.solve(solver=cp.PIQP, warm_start=True)
             result2 = prob.solve(solver=cp.PIQP, warm_start=False)
+            self.assertAlmostEqual(result, result2)
+
+    def test_copt_warmstart(self) -> None:
+        """Test warm start.
+        """
+        if cp.COPT in INSTALLED_SOLVERS:
+            m = 200
+            n = 100
+            np.random.seed(1)
+            A = np.random.randn(m, n)
+            b = Parameter(m)
+
+            # Construct the problem.
+            x = Variable(n)
+            prob = Problem(Minimize(sum_squares(A @ x - b)))
+
+            b.value = np.random.randn(m)
+            result = prob.solve(solver=cp.COPT, warm_start=False)
+            result2 = prob.solve(solver=cp.COPT, warm_start=True)
+            self.assertAlmostEqual(result, result2)
+            b.value = np.random.randn(m)
+            result = prob.solve(solver=cp.COPT, warm_start=True)
+            result2 = prob.solve(solver=cp.COPT, warm_start=False)
             self.assertAlmostEqual(result, result2)
 
     def test_parametric(self) -> None:
@@ -652,3 +898,326 @@ class TestQp(BaseTest):
                 prob = Problem(Minimize(norm(self.x, 1)), [self.x == 0])
                 prob.solve(solver=GUROBI, TimeLimit=0)
             self.assertEqual(str(cm.exception), "The solver %s is not installed." % GUROBI)
+
+    def test_osqp_infeasible_lp_ineq_constraints(self):
+        StandardTestInfeasibleProblems.test_lp_ineq_constraints(solver=cp.OSQP)
+
+    def test_osqp_infeasible_lp_eq_constraints(self):
+        StandardTestInfeasibleProblems.test_lp_eq_constraints(solver=cp.OSQP)
+
+    def test_highs_infeasible_lp_ineq_constraints(self):
+        StandardTestInfeasibleProblems.test_lp_ineq_constraints(solver=cp.HIGHS)
+
+    def test_highs_infeasible_lp_eq_constraints(self):
+        StandardTestInfeasibleProblems.test_lp_eq_constraints(solver=cp.HIGHS)
+
+    def test_highs_dense_quad_form(self) -> None:
+        """Regression test for https://github.com/cvxpy/cvxpy/issues/3301
+        and a related silent wrong-answer bug on highspy < 1.14.0.
+
+        A dense quad_form applied to a linear expression (not a raw Variable)
+        produces a Hessian whose upper and lower triangles may differ by
+        floating-point epsilon after canonicalization. We pass it to HiGHS
+        in triangular format. HiGHS < 1.14.0 only honors the lower triangle
+        in that format and silently returns wrong solutions when given the
+        upper triangle, hence the `highspy >= 1.14.0` minimum in
+        pyproject.toml. Cross-check the objective against CLARABEL because
+        status alone (`kOptimal`) does not detect a wrong-QP solve.
+        """
+        if cp.HIGHS not in INSTALLED_SOLVERS:
+            return
+
+        rng = np.random.default_rng(42)
+        n_vars, n_nodes = 60, 20
+
+        # Sparse mapping from decision variables to a smaller space.
+        rows, cols, vals = [], [], []
+        for i in range(n_vars):
+            j, k = rng.choice(n_nodes, size=2, replace=False)
+            rows += [i, i]
+            cols += [j, k]
+            vals += [1.0, -1.0]
+        M = sp.csr_matrix((vals, (rows, cols)), shape=(n_vars, n_nodes))
+
+        # Dense PSD matrix via eigenvalue clamping (typical in practice).
+        A = rng.standard_normal((n_nodes, n_nodes))
+        raw = A @ A.T + rng.standard_normal((n_nodes, n_nodes)) * 0.01
+        sym = 0.5 * (raw + raw.T)
+        eigvals, eigvecs = np.linalg.eigh(sym)
+        eigvals = np.maximum(eigvals, 0.0)
+        Sigma = eigvecs @ np.diag(eigvals) @ eigvecs.T
+
+        x = cp.Variable(n_vars, nonneg=True)
+        y = x @ M
+        prob = cp.Problem(
+            cp.Maximize(
+                cp.sum(x) - 0.1 * cp.quad_form(y, Sigma)
+            ),
+            [x <= 10],
+        )
+        prob.solve(solver=cp.HIGHS)
+        self.assertEqual(prob.status, cp.OPTIMAL)
+        highs_value = prob.value
+
+        prob.solve(solver=cp.CLARABEL)
+        self.assertEqual(prob.status, cp.OPTIMAL)
+        self.assertAlmostEqual(highs_value, prob.value, places=4)
+
+
+class TestConicQuadObj(QPTestBase):
+    """Test conic solvers with use_quad_obj=True."""
+
+    def setUp(self) -> None:
+        super().setUp()
+
+        # Conic solvers that support quadratic objectives
+        # Exclude KNITRO - its conic interface with use_quad_obj is unstable in CI
+        self.solvers = [
+            solver for solver in INSTALLED_CONIC_SOLVERS
+            if solver in SOLVER_MAP_CONIC
+            and SOLVER_MAP_CONIC[solver].supports_quad_obj()
+            and solver != cp.KNITRO
+        ]
+        self.solvers = self.filter_licensed_solvers(self.solvers)
+
+    def solve_QP(self, problem, solver_name):
+        """Solve with use_quad_obj=True and verify no SOC cones are introduced."""
+        data, _, _ = problem.get_problem_data(
+            solver_name,
+            solver_opts={"use_quad_obj": True}
+        )
+        self.assertEqual(data["dims"].soc, [],
+            f"Problem should have no SOC cones for QP canonicalization with {solver_name}")
+        return self._solve_problem(problem, solver_name, use_quad_obj=True)
+
+    def test_all_solvers(self) -> None:
+        """Test conic solvers with use_quad_obj=True.
+
+        Only runs tests that have constraints (filtering out unconstrained
+        problems for solvers with REQUIRES_CONSTR=True).
+
+        Tests with m=0 after canonicalization (skip for REQUIRES_CONSTR solvers):
+        - power, quad_form, quad_form_coeff, rep_quad_form
+        """
+        for solver in self.solvers:
+            requires_constr = SOLVER_MAP_CONIC[solver].REQUIRES_CONSTR
+
+            self.quad_over_lin(solver)
+            if not requires_constr:
+                self.power(solver)
+            self.power_matrix(solver)
+            self.square_affine(solver)
+            if not requires_constr:
+                self.quad_form(solver)
+            self.affine_problem(solver)
+            self.maximize_problem(solver)
+            self.abs(solver)
+            if not requires_constr:
+                self.quad_form_coeff(solver)
+            self.quad_form_bound(solver)
+            self.regression_1(solver)
+            self.regression_2(solver)
+            if not requires_constr:
+                self.rep_quad_form(solver)
+            self.control(solver)
+            self.sparse_system(solver)
+            self.smooth_ridge(solver)
+            self.huber_small(solver, places=3)
+            self.huber(solver)
+            self.equivalent_forms_1(solver)
+            self.equivalent_forms_2(solver)
+            self.equivalent_forms_3(solver)
+
+
+@unittest.skipUnless('MPAX' in INSTALLED_SOLVERS, 'MPAX is not installed.')
+class TestMPAX(unittest.TestCase):
+
+    def test_mpax_lp_0(self) -> None:
+        StandardTestLPs.test_lp_0(solver='MPAX')
+
+    def test_mpax_lp_1(self) -> None:
+        StandardTestLPs.test_lp_1(solver='MPAX')
+
+    def test_mpax_lp_2(self) -> None:
+        StandardTestLPs.test_lp_2(solver='MPAX')
+
+    def test_mpax_lp_3(self) -> None:
+        sth = sths.lp_3()
+        with self.assertWarns(Warning):
+            sth.prob.solve(solver='MPAX')
+            self.assertEqual(sth.prob.status, cp.settings.INFEASIBLE_OR_UNBOUNDED)
+
+    def test_mpax_lp_4(self) -> None:
+            sth = sths.lp_4()
+            with self.assertWarns(Warning):
+                sth.prob.solve(solver='MPAX')
+                self.assertEqual(sth.prob.status, cp.settings.INFEASIBLE_OR_UNBOUNDED)
+
+    def test_mpax_lp_5(self) -> None:
+        StandardTestLPs.test_lp_5(solver='MPAX')
+
+    def test_mpax_lp_6(self) -> None:
+        StandardTestLPs.test_lp_6(solver='MPAX')
+
+    def test_mpax_warmstart(self) -> None:
+        x = cp.Variable(shape=(2,), name='x')
+        objective = cp.Minimize(-4 * x[0] - 5 * x[1])
+        constraints = [2 * x[0] + x[1] <= 3,
+                    x[0] + 2 * x[1] <= 3,
+                    x[0] >= 0,
+                    x[1] >= 0]
+        prob = cp.Problem(objective, constraints)
+        result1 = prob.solve(solver='MPAX', warm_start=False)
+        self.assertAlmostEqual(result1, -9, places=4)
+        result2 = prob.solve(solver='MPAX', warm_start=True)
+        self.assertAlmostEqual(result2, -9, places=4)
+
+    def test_MPAX_qp_0(self) -> None:
+        StandardTestQPs.test_qp_0(solver='MPAX')
+
+
+class TestQpSolverValidation(unittest.TestCase):
+    """Test QP solver validation of unsupported cone types."""
+
+    def _apply_reductions(self, problem):
+        """Apply the full reduction chain to get a ParamConeProg."""
+        from cvxpy.reductions.cvx_attr2constr import CvxAttr2Constr
+        from cvxpy.reductions.dcp2cone.cone_matrix_stuffing import ConeMatrixStuffing
+        from cvxpy.reductions.dcp2cone.dcp2cone import Dcp2Cone
+        from cvxpy.reductions.flip_objective import FlipObjective
+
+        reductions = []
+        if isinstance(problem.objective, cp.Maximize):
+            reductions.append(FlipObjective())
+        reductions.extend([Dcp2Cone(), CvxAttr2Constr(), ConeMatrixStuffing()])
+
+        reduced = problem
+        for reduction in reductions:
+            reduced = reduction.apply(reduced)[0]
+        return reduced
+
+    def test_qp_solver_rejects_exponential_cones(self) -> None:
+        """Test that QP solver rejects problems with exponential cones."""
+        from cvxpy.error import SolverError
+        from cvxpy.reductions.solvers.qp_solvers.osqp_qpif import OSQP
+
+        # Create a problem with exponential cone (log)
+        x = cp.Variable()
+        prob = cp.Problem(cp.Maximize(cp.log(x)), [x <= 1])
+
+        # Apply reductions to get ParamConeProg
+        param_cone_prog = self._apply_reductions(prob)
+
+        # Test accepts() returns False
+        osqp_solver = OSQP()
+        self.assertFalse(osqp_solver.accepts(param_cone_prog))
+
+        # Test apply() raises SolverError with helpful message
+        with self.assertRaises(SolverError) as cm:
+            osqp_solver.apply(param_cone_prog)
+        self.assertIn("exponential cones", str(cm.exception))
+        self.assertIn("OSQP", str(cm.exception))
+
+    def test_qp_solver_rejects_psd_cones(self) -> None:
+        """Test that QP solver rejects problems with PSD cones."""
+        from cvxpy.error import SolverError
+        from cvxpy.reductions.solvers.qp_solvers.osqp_qpif import OSQP
+
+        # Create a problem with PSD cone
+        X = cp.Variable((2, 2), symmetric=True)
+        prob = cp.Problem(cp.Minimize(cp.trace(X)), [X >> 0, X[0, 0] >= 1])
+
+        # Apply reductions to get ParamConeProg
+        param_cone_prog = self._apply_reductions(prob)
+
+        # Test accepts() returns False
+        osqp_solver = OSQP()
+        self.assertFalse(osqp_solver.accepts(param_cone_prog))
+
+        # Test apply() raises SolverError with helpful message
+        with self.assertRaises(SolverError) as cm:
+            osqp_solver.apply(param_cone_prog)
+        self.assertIn("PSD cones", str(cm.exception))
+
+    def test_qp_solver_rejects_soc_cones(self) -> None:
+        """Test that QP solver rejects problems with second-order cones."""
+        from cvxpy.error import SolverError
+        from cvxpy.reductions.solvers.qp_solvers.osqp_qpif import OSQP
+
+        # Create a problem with SOC (norm)
+        x = cp.Variable(3)
+        prob = cp.Problem(cp.Minimize(cp.norm(x)), [cp.sum(x) == 1])
+
+        # Apply reductions to get ParamConeProg
+        param_cone_prog = self._apply_reductions(prob)
+
+        # Test accepts() returns False
+        osqp_solver = OSQP()
+        self.assertFalse(osqp_solver.accepts(param_cone_prog))
+
+        # Test apply() raises SolverError with helpful message
+        with self.assertRaises(SolverError) as cm:
+            osqp_solver.apply(param_cone_prog)
+        self.assertIn("second-order cones", str(cm.exception))
+
+
+@unittest.skipUnless('PIQP' in INSTALLED_SOLVERS, 'PIQP is not installed.')
+class TestPiqpInterface(unittest.TestCase):
+    """Focused tests for PIQP solver-interface options."""
+
+    def test_piqp_dense_backend(self) -> None:
+        """The dense backend should agree with the default sparse backend."""
+        x = cp.Variable(2)
+        prob = cp.Problem(cp.Minimize(cp.sum_squares(x - 3)), [x[0] + x[1] <= 4])
+        prob.solve(solver=cp.PIQP, backend='dense')
+        self.assertEqual(prob.status, cp.OPTIMAL)
+        np.testing.assert_allclose(x.value, [2., 2.], atol=1e-4)
+
+    def test_piqp_invalid_backend(self) -> None:
+        """An unrecognized backend is rejected before solving."""
+        x = cp.Variable(2)
+        prob = cp.Problem(cp.Minimize(cp.sum_squares(x)), [x >= 1])
+        with self.assertRaisesRegex(ValueError, "backend must be either dense or sparse"):
+            prob.solve(solver=cp.PIQP, backend='tridiagonal')
+
+    def test_piqp_unknown_setting(self) -> None:
+        """An unknown solver setting raises a clear TypeError."""
+        x = cp.Variable(2)
+        prob = cp.Problem(cp.Minimize(cp.sum_squares(x)), [x >= 1])
+        with self.assertRaisesRegex(TypeError, "Unrecognized solver setting"):
+            prob.solve(solver=cp.PIQP, not_a_real_setting=1.0)
+
+
+@unittest.skipUnless('COPT' in INSTALLED_SOLVERS, 'COPT is not installed.')
+class TestCoptQpInterface(unittest.TestCase):
+    """Focused tests for COPT QP solver-interface options."""
+
+    def test_copt_mixed_integer(self) -> None:
+        """A mixed boolean/integer QP exercises the MIP variable-type path."""
+        xb = cp.Variable(boolean=True)
+        xi = cp.Variable(integer=True)
+        prob = cp.Problem(cp.Minimize((xb - 0.7) ** 2 + (xi - 2.4) ** 2),
+                          [xi >= 0, xi <= 5])
+        prob.solve(solver=cp.COPT)
+        self.assertEqual(prob.status, cp.OPTIMAL)
+        self.assertTrue(np.isclose(xb.value, 1.0))
+        self.assertTrue(np.isclose(xi.value, 2.0))
+
+    def test_copt_solver_opts_passthrough(self) -> None:
+        """Non-interface solver options are forwarded to COPT via setParam."""
+        x = cp.Variable(2)
+        prob = cp.Problem(cp.Minimize(cp.sum_squares(x - 1)), [x >= 0])
+        prob.solve(solver=cp.COPT, RelGap=1e-7)
+        self.assertEqual(prob.status, cp.OPTIMAL)
+        np.testing.assert_allclose(x.value, [1., 1.], atol=1e-4)
+
+    def test_copt_save_file(self) -> None:
+        """The save_file option writes the model to disk before solving."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            out = f"{tmpdir}/model.mps"
+            x = cp.Variable(2)
+            prob = cp.Problem(cp.Minimize(cp.sum_squares(x - 1)), [x >= 0])
+            prob.solve(solver=cp.COPT, save_file=out)
+            self.assertEqual(prob.status, cp.OPTIMAL)
+            with open(out, "rb") as file:
+                self.assertGreater(len(file.read()), 0)

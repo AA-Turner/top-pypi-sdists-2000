@@ -21,19 +21,20 @@ class OrganizationCustomRuleArgs:
     def __init__(__self__, *,
                  lambda_function_arn: pulumi.Input[_builtins.str],
                  trigger_types: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 excluded_accounts: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 input_parameters: Optional[pulumi.Input[_builtins.str]] = None,
-                 maximum_execution_frequency: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_id_scope: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_types_scopes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 tag_key_scope: Optional[pulumi.Input[_builtins.str]] = None,
-                 tag_value_scope: Optional[pulumi.Input[_builtins.str]] = None):
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 excluded_accounts: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 input_parameters: pulumi.Input[Optional[_builtins.str]] = None,
+                 maximum_execution_frequency: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_id_scope: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_types_scopes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 tag_key_scope: pulumi.Input[Optional[_builtins.str]] = None,
+                 tag_value_scope: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a OrganizationCustomRule resource.
-        :param pulumi.Input[_builtins.str] lambda_function_arn: Amazon Resource Name (ARN) of the rule Lambda Function
+
+        :param pulumi.Input[_builtins.str] lambda_function_arn: ARN of the rule Lambda Function
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] trigger_types: List of notification types that trigger AWS Config to run an evaluation for the rule. Valid values: `ConfigurationItemChangeNotification`, `OversizedConfigurationItemChangeNotification`, and `ScheduledNotification`
         :param pulumi.Input[_builtins.str] description: Description of the rule
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] excluded_accounts: List of AWS account identifiers to exclude from the rule
@@ -73,7 +74,7 @@ class OrganizationCustomRuleArgs:
     @pulumi.getter(name="lambdaFunctionArn")
     def lambda_function_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the rule Lambda Function
+        ARN of the rule Lambda Function
         """
         return pulumi.get(self, "lambda_function_arn")
 
@@ -95,148 +96,149 @@ class OrganizationCustomRuleArgs:
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the rule
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="excludedAccounts")
-    def excluded_accounts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def excluded_accounts(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of AWS account identifiers to exclude from the rule
         """
         return pulumi.get(self, "excluded_accounts")
 
     @excluded_accounts.setter
-    def excluded_accounts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def excluded_accounts(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "excluded_accounts", value)
 
     @_builtins.property
     @pulumi.getter(name="inputParameters")
-    def input_parameters(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def input_parameters(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string in JSON format that is passed to the AWS Config Rule Lambda Function
         """
         return pulumi.get(self, "input_parameters")
 
     @input_parameters.setter
-    def input_parameters(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def input_parameters(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "input_parameters", value)
 
     @_builtins.property
     @pulumi.getter(name="maximumExecutionFrequency")
-    def maximum_execution_frequency(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def maximum_execution_frequency(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The maximum frequency with which AWS Config runs evaluations for a rule, if the rule is triggered at a periodic frequency. Defaults to `TwentyFour_Hours` for periodic frequency triggered rules. Valid values: `One_Hour`, `Three_Hours`, `Six_Hours`, `Twelve_Hours`, or `TwentyFour_Hours`.
         """
         return pulumi.get(self, "maximum_execution_frequency")
 
     @maximum_execution_frequency.setter
-    def maximum_execution_frequency(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def maximum_execution_frequency(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "maximum_execution_frequency", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the rule
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceIdScope")
-    def resource_id_scope(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def resource_id_scope(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Identifier of the AWS resource to evaluate
         """
         return pulumi.get(self, "resource_id_scope")
 
     @resource_id_scope.setter
-    def resource_id_scope(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def resource_id_scope(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "resource_id_scope", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceTypesScopes")
-    def resource_types_scopes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def resource_types_scopes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of types of AWS resources to evaluate
         """
         return pulumi.get(self, "resource_types_scopes")
 
     @resource_types_scopes.setter
-    def resource_types_scopes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def resource_types_scopes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "resource_types_scopes", value)
 
     @_builtins.property
     @pulumi.getter(name="tagKeyScope")
-    def tag_key_scope(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def tag_key_scope(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Tag key of AWS resources to evaluate
         """
         return pulumi.get(self, "tag_key_scope")
 
     @tag_key_scope.setter
-    def tag_key_scope(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def tag_key_scope(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "tag_key_scope", value)
 
     @_builtins.property
     @pulumi.getter(name="tagValueScope")
-    def tag_value_scope(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def tag_value_scope(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Tag value of AWS resources to evaluate
         """
         return pulumi.get(self, "tag_value_scope")
 
     @tag_value_scope.setter
-    def tag_value_scope(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def tag_value_scope(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "tag_value_scope", value)
 
 
 @pulumi.input_type
 class _OrganizationCustomRuleState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 excluded_accounts: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 input_parameters: Optional[pulumi.Input[_builtins.str]] = None,
-                 lambda_function_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 maximum_execution_frequency: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_id_scope: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_types_scopes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 tag_key_scope: Optional[pulumi.Input[_builtins.str]] = None,
-                 tag_value_scope: Optional[pulumi.Input[_builtins.str]] = None,
-                 trigger_types: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 excluded_accounts: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 input_parameters: pulumi.Input[Optional[_builtins.str]] = None,
+                 lambda_function_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 maximum_execution_frequency: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_id_scope: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_types_scopes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 tag_key_scope: pulumi.Input[Optional[_builtins.str]] = None,
+                 tag_value_scope: pulumi.Input[Optional[_builtins.str]] = None,
+                 trigger_types: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         Input properties used for looking up and filtering OrganizationCustomRule resources.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name (ARN) of the rule
+
+        :param pulumi.Input[_builtins.str] arn: ARN of the rule
         :param pulumi.Input[_builtins.str] description: Description of the rule
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] excluded_accounts: List of AWS account identifiers to exclude from the rule
         :param pulumi.Input[_builtins.str] input_parameters: A string in JSON format that is passed to the AWS Config Rule Lambda Function
-        :param pulumi.Input[_builtins.str] lambda_function_arn: Amazon Resource Name (ARN) of the rule Lambda Function
+        :param pulumi.Input[_builtins.str] lambda_function_arn: ARN of the rule Lambda Function
         :param pulumi.Input[_builtins.str] maximum_execution_frequency: The maximum frequency with which AWS Config runs evaluations for a rule, if the rule is triggered at a periodic frequency. Defaults to `TwentyFour_Hours` for periodic frequency triggered rules. Valid values: `One_Hour`, `Three_Hours`, `Six_Hours`, `Twelve_Hours`, or `TwentyFour_Hours`.
         :param pulumi.Input[_builtins.str] name: The name of the rule
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -275,158 +277,158 @@ class _OrganizationCustomRuleState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Amazon Resource Name (ARN) of the rule
+        ARN of the rule
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the rule
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="excludedAccounts")
-    def excluded_accounts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def excluded_accounts(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of AWS account identifiers to exclude from the rule
         """
         return pulumi.get(self, "excluded_accounts")
 
     @excluded_accounts.setter
-    def excluded_accounts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def excluded_accounts(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "excluded_accounts", value)
 
     @_builtins.property
     @pulumi.getter(name="inputParameters")
-    def input_parameters(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def input_parameters(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         A string in JSON format that is passed to the AWS Config Rule Lambda Function
         """
         return pulumi.get(self, "input_parameters")
 
     @input_parameters.setter
-    def input_parameters(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def input_parameters(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "input_parameters", value)
 
     @_builtins.property
     @pulumi.getter(name="lambdaFunctionArn")
-    def lambda_function_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def lambda_function_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        Amazon Resource Name (ARN) of the rule Lambda Function
+        ARN of the rule Lambda Function
         """
         return pulumi.get(self, "lambda_function_arn")
 
     @lambda_function_arn.setter
-    def lambda_function_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def lambda_function_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "lambda_function_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="maximumExecutionFrequency")
-    def maximum_execution_frequency(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def maximum_execution_frequency(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The maximum frequency with which AWS Config runs evaluations for a rule, if the rule is triggered at a periodic frequency. Defaults to `TwentyFour_Hours` for periodic frequency triggered rules. Valid values: `One_Hour`, `Three_Hours`, `Six_Hours`, `Twelve_Hours`, or `TwentyFour_Hours`.
         """
         return pulumi.get(self, "maximum_execution_frequency")
 
     @maximum_execution_frequency.setter
-    def maximum_execution_frequency(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def maximum_execution_frequency(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "maximum_execution_frequency", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the rule
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceIdScope")
-    def resource_id_scope(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def resource_id_scope(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Identifier of the AWS resource to evaluate
         """
         return pulumi.get(self, "resource_id_scope")
 
     @resource_id_scope.setter
-    def resource_id_scope(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def resource_id_scope(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "resource_id_scope", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceTypesScopes")
-    def resource_types_scopes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def resource_types_scopes(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of types of AWS resources to evaluate
         """
         return pulumi.get(self, "resource_types_scopes")
 
     @resource_types_scopes.setter
-    def resource_types_scopes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def resource_types_scopes(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "resource_types_scopes", value)
 
     @_builtins.property
     @pulumi.getter(name="tagKeyScope")
-    def tag_key_scope(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def tag_key_scope(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Tag key of AWS resources to evaluate
         """
         return pulumi.get(self, "tag_key_scope")
 
     @tag_key_scope.setter
-    def tag_key_scope(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def tag_key_scope(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "tag_key_scope", value)
 
     @_builtins.property
     @pulumi.getter(name="tagValueScope")
-    def tag_value_scope(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def tag_value_scope(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Tag value of AWS resources to evaluate
         """
         return pulumi.get(self, "tag_value_scope")
 
     @tag_value_scope.setter
-    def tag_value_scope(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def tag_value_scope(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "tag_value_scope", value)
 
     @_builtins.property
     @pulumi.getter(name="triggerTypes")
-    def trigger_types(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def trigger_types(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         List of notification types that trigger AWS Config to run an evaluation for the rule. Valid values: `ConfigurationItemChangeNotification`, `OversizedConfigurationItemChangeNotification`, and `ScheduledNotification`
         """
         return pulumi.get(self, "trigger_types")
 
     @trigger_types.setter
-    def trigger_types(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def trigger_types(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "trigger_types", value)
 
 
@@ -436,21 +438,21 @@ class OrganizationCustomRule(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 excluded_accounts: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 input_parameters: Optional[pulumi.Input[_builtins.str]] = None,
-                 lambda_function_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 maximum_execution_frequency: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_id_scope: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_types_scopes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 tag_key_scope: Optional[pulumi.Input[_builtins.str]] = None,
-                 tag_value_scope: Optional[pulumi.Input[_builtins.str]] = None,
-                 trigger_types: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 excluded_accounts: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 input_parameters: pulumi.Input[Optional[_builtins.str]] = None,
+                 lambda_function_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 maximum_execution_frequency: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_id_scope: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_types_scopes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 tag_key_scope: pulumi.Input[Optional[_builtins.str]] = None,
+                 tag_value_scope: pulumi.Input[Optional[_builtins.str]] = None,
+                 trigger_types: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
-        Manages a Config Organization Custom Rule. More information about these rules can be found in the [Enabling AWS Config Rules Across all Accounts in Your Organization](https://docs.aws.amazon.com/config/latest/developerguide/config-rule-multi-account-deployment.html) and [AWS Config Managed Rules](https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html) documentation. For working with Organization Managed Rules (those invoking an AWS managed rule), see the `aws_config_organization_managed__rule` resource.
+        Manages a Config Organization Custom Rule. More information about these rules can be found in the [Enabling AWS Config Rules Across all Accounts in Your Organization](https://docs.aws.amazon.com/config/latest/developerguide/config-rule-multi-account-deployment.html) and [AWS Config Managed Rules](https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html) documentation. For working with Organization Managed Rules (those invoking an AWS managed rule), see the `cfg.OrganizationManagedRule` resource.
 
         > **NOTE:** This resource must be created in the Organization master account and rules will include the master account unless its ID is added to the `excluded_accounts` argument.
 
@@ -482,18 +484,30 @@ class OrganizationCustomRule(pulumi.CustomResource):
 
         ## Import
 
-        Using `pulumi import`, import Config Organization Custom Rules using the name. For example:
+        ### Identity Schema
+
+        #### Required
+
+        * `name` (String) Name of the rule.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
+        Using `pulumi import`, import Config Organization Custom Rules using the `name`. For example:
 
         ```sh
         $ pulumi import aws:cfg/organizationCustomRule:OrganizationCustomRule example example
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.str] description: Description of the rule
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] excluded_accounts: List of AWS account identifiers to exclude from the rule
         :param pulumi.Input[_builtins.str] input_parameters: A string in JSON format that is passed to the AWS Config Rule Lambda Function
-        :param pulumi.Input[_builtins.str] lambda_function_arn: Amazon Resource Name (ARN) of the rule Lambda Function
+        :param pulumi.Input[_builtins.str] lambda_function_arn: ARN of the rule Lambda Function
         :param pulumi.Input[_builtins.str] maximum_execution_frequency: The maximum frequency with which AWS Config runs evaluations for a rule, if the rule is triggered at a periodic frequency. Defaults to `TwentyFour_Hours` for periodic frequency triggered rules. Valid values: `One_Hour`, `Three_Hours`, `Six_Hours`, `Twelve_Hours`, or `TwentyFour_Hours`.
         :param pulumi.Input[_builtins.str] name: The name of the rule
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -510,7 +524,7 @@ class OrganizationCustomRule(pulumi.CustomResource):
                  args: OrganizationCustomRuleArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a Config Organization Custom Rule. More information about these rules can be found in the [Enabling AWS Config Rules Across all Accounts in Your Organization](https://docs.aws.amazon.com/config/latest/developerguide/config-rule-multi-account-deployment.html) and [AWS Config Managed Rules](https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html) documentation. For working with Organization Managed Rules (those invoking an AWS managed rule), see the `aws_config_organization_managed__rule` resource.
+        Manages a Config Organization Custom Rule. More information about these rules can be found in the [Enabling AWS Config Rules Across all Accounts in Your Organization](https://docs.aws.amazon.com/config/latest/developerguide/config-rule-multi-account-deployment.html) and [AWS Config Managed Rules](https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html) documentation. For working with Organization Managed Rules (those invoking an AWS managed rule), see the `cfg.OrganizationManagedRule` resource.
 
         > **NOTE:** This resource must be created in the Organization master account and rules will include the master account unless its ID is added to the `excluded_accounts` argument.
 
@@ -542,11 +556,23 @@ class OrganizationCustomRule(pulumi.CustomResource):
 
         ## Import
 
-        Using `pulumi import`, import Config Organization Custom Rules using the name. For example:
+        ### Identity Schema
+
+        #### Required
+
+        * `name` (String) Name of the rule.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
+        Using `pulumi import`, import Config Organization Custom Rules using the `name`. For example:
 
         ```sh
         $ pulumi import aws:cfg/organizationCustomRule:OrganizationCustomRule example example
         ```
+
 
         :param str resource_name: The name of the resource.
         :param OrganizationCustomRuleArgs args: The arguments to use to populate this resource's properties.
@@ -563,18 +589,18 @@ class OrganizationCustomRule(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 excluded_accounts: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 input_parameters: Optional[pulumi.Input[_builtins.str]] = None,
-                 lambda_function_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 maximum_execution_frequency: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_id_scope: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_types_scopes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 tag_key_scope: Optional[pulumi.Input[_builtins.str]] = None,
-                 tag_value_scope: Optional[pulumi.Input[_builtins.str]] = None,
-                 trigger_types: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 excluded_accounts: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 input_parameters: pulumi.Input[Optional[_builtins.str]] = None,
+                 lambda_function_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 maximum_execution_frequency: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_id_scope: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_types_scopes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 tag_key_scope: pulumi.Input[Optional[_builtins.str]] = None,
+                 tag_value_scope: pulumi.Input[Optional[_builtins.str]] = None,
+                 trigger_types: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -611,19 +637,19 @@ class OrganizationCustomRule(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            excluded_accounts: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            input_parameters: Optional[pulumi.Input[_builtins.str]] = None,
-            lambda_function_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            maximum_execution_frequency: Optional[pulumi.Input[_builtins.str]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            resource_id_scope: Optional[pulumi.Input[_builtins.str]] = None,
-            resource_types_scopes: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            tag_key_scope: Optional[pulumi.Input[_builtins.str]] = None,
-            tag_value_scope: Optional[pulumi.Input[_builtins.str]] = None,
-            trigger_types: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None) -> 'OrganizationCustomRule':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            excluded_accounts: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            input_parameters: pulumi.Input[Optional[_builtins.str]] = None,
+            lambda_function_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            maximum_execution_frequency: pulumi.Input[Optional[_builtins.str]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            resource_id_scope: pulumi.Input[Optional[_builtins.str]] = None,
+            resource_types_scopes: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            tag_key_scope: pulumi.Input[Optional[_builtins.str]] = None,
+            tag_value_scope: pulumi.Input[Optional[_builtins.str]] = None,
+            trigger_types: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None) -> 'OrganizationCustomRule':
         """
         Get an existing OrganizationCustomRule resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -631,11 +657,11 @@ class OrganizationCustomRule(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] arn: Amazon Resource Name (ARN) of the rule
+        :param pulumi.Input[_builtins.str] arn: ARN of the rule
         :param pulumi.Input[_builtins.str] description: Description of the rule
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] excluded_accounts: List of AWS account identifiers to exclude from the rule
         :param pulumi.Input[_builtins.str] input_parameters: A string in JSON format that is passed to the AWS Config Rule Lambda Function
-        :param pulumi.Input[_builtins.str] lambda_function_arn: Amazon Resource Name (ARN) of the rule Lambda Function
+        :param pulumi.Input[_builtins.str] lambda_function_arn: ARN of the rule Lambda Function
         :param pulumi.Input[_builtins.str] maximum_execution_frequency: The maximum frequency with which AWS Config runs evaluations for a rule, if the rule is triggered at a periodic frequency. Defaults to `TwentyFour_Hours` for periodic frequency triggered rules. Valid values: `One_Hour`, `Three_Hours`, `Six_Hours`, `Twelve_Hours`, or `TwentyFour_Hours`.
         :param pulumi.Input[_builtins.str] name: The name of the rule
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -668,7 +694,7 @@ class OrganizationCustomRule(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the rule
+        ARN of the rule
         """
         return pulumi.get(self, "arn")
 
@@ -700,7 +726,7 @@ class OrganizationCustomRule(pulumi.CustomResource):
     @pulumi.getter(name="lambdaFunctionArn")
     def lambda_function_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the rule Lambda Function
+        ARN of the rule Lambda Function
         """
         return pulumi.get(self, "lambda_function_arn")
 

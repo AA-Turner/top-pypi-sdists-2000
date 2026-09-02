@@ -25,15 +25,18 @@ class IngestionDestinationArgs:
                  destination_configuration: pulumi.Input['IngestionDestinationDestinationConfigurationArgs'],
                  ingestion_arn: pulumi.Input[_builtins.str],
                  processing_configuration: pulumi.Input['IngestionDestinationProcessingConfigurationArgs'],
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['IngestionDestinationTimeoutsArgs']] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['IngestionDestinationTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a IngestionDestination resource.
-        :param pulumi.Input[_builtins.str] app_bundle_arn: The Amazon Resource Name (ARN) of the app bundle to use for the request.
-        :param pulumi.Input['IngestionDestinationDestinationConfigurationArgs'] destination_configuration: Contains information about the destination of ingested data.
-        :param pulumi.Input[_builtins.str] ingestion_arn: The Amazon Resource Name (ARN) of the ingestion to use for the request.
-        :param pulumi.Input['IngestionDestinationProcessingConfigurationArgs'] processing_configuration: Contains information about how ingested data is processed.
+
+        :param pulumi.Input[_builtins.str] app_bundle_arn: ARN of the app bundle to use for the request.
+        :param pulumi.Input['IngestionDestinationDestinationConfigurationArgs'] destination_configuration: Configuration for the destination of ingested data. See `destination_configuration` Block below.
+        :param pulumi.Input[_builtins.str] ingestion_arn: ARN of the ingestion to use for the request.
+        :param pulumi.Input['IngestionDestinationProcessingConfigurationArgs'] processing_configuration: Configuration for how ingested data is processed. See `processing_configuration` Block below.
+               
+               The following arguments are optional:
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
@@ -52,7 +55,7 @@ class IngestionDestinationArgs:
     @pulumi.getter(name="appBundleArn")
     def app_bundle_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the app bundle to use for the request.
+        ARN of the app bundle to use for the request.
         """
         return pulumi.get(self, "app_bundle_arn")
 
@@ -64,7 +67,7 @@ class IngestionDestinationArgs:
     @pulumi.getter(name="destinationConfiguration")
     def destination_configuration(self) -> pulumi.Input['IngestionDestinationDestinationConfigurationArgs']:
         """
-        Contains information about the destination of ingested data.
+        Configuration for the destination of ingested data. See `destination_configuration` Block below.
         """
         return pulumi.get(self, "destination_configuration")
 
@@ -76,7 +79,7 @@ class IngestionDestinationArgs:
     @pulumi.getter(name="ingestionArn")
     def ingestion_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the ingestion to use for the request.
+        ARN of the ingestion to use for the request.
         """
         return pulumi.get(self, "ingestion_arn")
 
@@ -88,7 +91,9 @@ class IngestionDestinationArgs:
     @pulumi.getter(name="processingConfiguration")
     def processing_configuration(self) -> pulumi.Input['IngestionDestinationProcessingConfigurationArgs']:
         """
-        Contains information about how ingested data is processed.
+        Configuration for how ingested data is processed. See `processing_configuration` Block below.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "processing_configuration")
 
@@ -98,57 +103,60 @@ class IngestionDestinationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['IngestionDestinationTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['IngestionDestinationTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['IngestionDestinationTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['IngestionDestinationTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _IngestionDestinationState:
     def __init__(__self__, *,
-                 app_bundle_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 destination_configuration: Optional[pulumi.Input['IngestionDestinationDestinationConfigurationArgs']] = None,
-                 ingestion_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 processing_configuration: Optional[pulumi.Input['IngestionDestinationProcessingConfigurationArgs']] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['IngestionDestinationTimeoutsArgs']] = None):
+                 app_bundle_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 destination_configuration: pulumi.Input[Optional['IngestionDestinationDestinationConfigurationArgs']] = None,
+                 ingestion_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 processing_configuration: pulumi.Input[Optional['IngestionDestinationProcessingConfigurationArgs']] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['IngestionDestinationTimeoutsArgs']] = None):
         """
         Input properties used for looking up and filtering IngestionDestination resources.
-        :param pulumi.Input[_builtins.str] app_bundle_arn: The Amazon Resource Name (ARN) of the app bundle to use for the request.
+
+        :param pulumi.Input[_builtins.str] app_bundle_arn: ARN of the app bundle to use for the request.
         :param pulumi.Input[_builtins.str] arn: ARN of the Ingestion Destination.
-        :param pulumi.Input['IngestionDestinationDestinationConfigurationArgs'] destination_configuration: Contains information about the destination of ingested data.
-        :param pulumi.Input[_builtins.str] ingestion_arn: The Amazon Resource Name (ARN) of the ingestion to use for the request.
-        :param pulumi.Input['IngestionDestinationProcessingConfigurationArgs'] processing_configuration: Contains information about how ingested data is processed.
+        :param pulumi.Input['IngestionDestinationDestinationConfigurationArgs'] destination_configuration: Configuration for the destination of ingested data. See `destination_configuration` Block below.
+        :param pulumi.Input[_builtins.str] ingestion_arn: ARN of the ingestion to use for the request.
+        :param pulumi.Input['IngestionDestinationProcessingConfigurationArgs'] processing_configuration: Configuration for how ingested data is processed. See `processing_configuration` Block below.
+               
+               The following arguments are optional:
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
@@ -174,107 +182,109 @@ class _IngestionDestinationState:
 
     @_builtins.property
     @pulumi.getter(name="appBundleArn")
-    def app_bundle_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def app_bundle_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the app bundle to use for the request.
+        ARN of the app bundle to use for the request.
         """
         return pulumi.get(self, "app_bundle_arn")
 
     @app_bundle_arn.setter
-    def app_bundle_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def app_bundle_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "app_bundle_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the Ingestion Destination.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="destinationConfiguration")
-    def destination_configuration(self) -> Optional[pulumi.Input['IngestionDestinationDestinationConfigurationArgs']]:
+    def destination_configuration(self) -> pulumi.Input[Optional['IngestionDestinationDestinationConfigurationArgs']]:
         """
-        Contains information about the destination of ingested data.
+        Configuration for the destination of ingested data. See `destination_configuration` Block below.
         """
         return pulumi.get(self, "destination_configuration")
 
     @destination_configuration.setter
-    def destination_configuration(self, value: Optional[pulumi.Input['IngestionDestinationDestinationConfigurationArgs']]):
+    def destination_configuration(self, value: pulumi.Input[Optional['IngestionDestinationDestinationConfigurationArgs']]):
         pulumi.set(self, "destination_configuration", value)
 
     @_builtins.property
     @pulumi.getter(name="ingestionArn")
-    def ingestion_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def ingestion_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the ingestion to use for the request.
+        ARN of the ingestion to use for the request.
         """
         return pulumi.get(self, "ingestion_arn")
 
     @ingestion_arn.setter
-    def ingestion_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def ingestion_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "ingestion_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="processingConfiguration")
-    def processing_configuration(self) -> Optional[pulumi.Input['IngestionDestinationProcessingConfigurationArgs']]:
+    def processing_configuration(self) -> pulumi.Input[Optional['IngestionDestinationProcessingConfigurationArgs']]:
         """
-        Contains information about how ingested data is processed.
+        Configuration for how ingested data is processed. See `processing_configuration` Block below.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "processing_configuration")
 
     @processing_configuration.setter
-    def processing_configuration(self, value: Optional[pulumi.Input['IngestionDestinationProcessingConfigurationArgs']]):
+    def processing_configuration(self, value: pulumi.Input[Optional['IngestionDestinationProcessingConfigurationArgs']]):
         pulumi.set(self, "processing_configuration", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['IngestionDestinationTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['IngestionDestinationTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['IngestionDestinationTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['IngestionDestinationTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
@@ -284,13 +294,13 @@ class IngestionDestination(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 app_bundle_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 destination_configuration: Optional[pulumi.Input[Union['IngestionDestinationDestinationConfigurationArgs', 'IngestionDestinationDestinationConfigurationArgsDict']]] = None,
-                 ingestion_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 processing_configuration: Optional[pulumi.Input[Union['IngestionDestinationProcessingConfigurationArgs', 'IngestionDestinationProcessingConfigurationArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['IngestionDestinationTimeoutsArgs', 'IngestionDestinationTimeoutsArgsDict']]] = None,
+                 app_bundle_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 destination_configuration: pulumi.Input[Optional[Union['IngestionDestinationDestinationConfigurationArgs', 'IngestionDestinationDestinationConfigurationArgsDict']]] = None,
+                 ingestion_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 processing_configuration: pulumi.Input[Optional[Union['IngestionDestinationProcessingConfigurationArgs', 'IngestionDestinationProcessingConfigurationArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['IngestionDestinationTimeoutsArgs', 'IngestionDestinationTimeoutsArgsDict']]] = None,
                  __props__=None):
         """
         Resource for managing an AWS AppFabric Ingestion Destination.
@@ -304,8 +314,6 @@ class IngestionDestination(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.appfabric.IngestionDestination("example",
-            app_bundle_arn=example_aws_appfabric_app_bundle["arn"],
-            ingestion_arn=example_aws_appfabric_ingestion["arn"],
             processing_configuration={
                 "audit_log": {
                     "format": "json",
@@ -320,15 +328,20 @@ class IngestionDestination(pulumi.CustomResource):
                         },
                     },
                 },
-            })
+            },
+            app_bundle_arn=example_aws_appfabric_app_bundle["arn"],
+            ingestion_arn=example_aws_appfabric_ingestion["arn"])
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] app_bundle_arn: The Amazon Resource Name (ARN) of the app bundle to use for the request.
-        :param pulumi.Input[Union['IngestionDestinationDestinationConfigurationArgs', 'IngestionDestinationDestinationConfigurationArgsDict']] destination_configuration: Contains information about the destination of ingested data.
-        :param pulumi.Input[_builtins.str] ingestion_arn: The Amazon Resource Name (ARN) of the ingestion to use for the request.
-        :param pulumi.Input[Union['IngestionDestinationProcessingConfigurationArgs', 'IngestionDestinationProcessingConfigurationArgsDict']] processing_configuration: Contains information about how ingested data is processed.
+        :param pulumi.Input[_builtins.str] app_bundle_arn: ARN of the app bundle to use for the request.
+        :param pulumi.Input[Union['IngestionDestinationDestinationConfigurationArgs', 'IngestionDestinationDestinationConfigurationArgsDict']] destination_configuration: Configuration for the destination of ingested data. See `destination_configuration` Block below.
+        :param pulumi.Input[_builtins.str] ingestion_arn: ARN of the ingestion to use for the request.
+        :param pulumi.Input[Union['IngestionDestinationProcessingConfigurationArgs', 'IngestionDestinationProcessingConfigurationArgsDict']] processing_configuration: Configuration for how ingested data is processed. See `processing_configuration` Block below.
+               
+               The following arguments are optional:
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
@@ -350,8 +363,6 @@ class IngestionDestination(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.appfabric.IngestionDestination("example",
-            app_bundle_arn=example_aws_appfabric_app_bundle["arn"],
-            ingestion_arn=example_aws_appfabric_ingestion["arn"],
             processing_configuration={
                 "audit_log": {
                     "format": "json",
@@ -366,8 +377,11 @@ class IngestionDestination(pulumi.CustomResource):
                         },
                     },
                 },
-            })
+            },
+            app_bundle_arn=example_aws_appfabric_app_bundle["arn"],
+            ingestion_arn=example_aws_appfabric_ingestion["arn"])
         ```
+
 
         :param str resource_name: The name of the resource.
         :param IngestionDestinationArgs args: The arguments to use to populate this resource's properties.
@@ -384,13 +398,13 @@ class IngestionDestination(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 app_bundle_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 destination_configuration: Optional[pulumi.Input[Union['IngestionDestinationDestinationConfigurationArgs', 'IngestionDestinationDestinationConfigurationArgsDict']]] = None,
-                 ingestion_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 processing_configuration: Optional[pulumi.Input[Union['IngestionDestinationProcessingConfigurationArgs', 'IngestionDestinationProcessingConfigurationArgsDict']]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['IngestionDestinationTimeoutsArgs', 'IngestionDestinationTimeoutsArgsDict']]] = None,
+                 app_bundle_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 destination_configuration: pulumi.Input[Optional[Union['IngestionDestinationDestinationConfigurationArgs', 'IngestionDestinationDestinationConfigurationArgsDict']]] = None,
+                 ingestion_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 processing_configuration: pulumi.Input[Optional[Union['IngestionDestinationProcessingConfigurationArgs', 'IngestionDestinationProcessingConfigurationArgsDict']]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['IngestionDestinationTimeoutsArgs', 'IngestionDestinationTimeoutsArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -427,15 +441,15 @@ class IngestionDestination(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            app_bundle_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            destination_configuration: Optional[pulumi.Input[Union['IngestionDestinationDestinationConfigurationArgs', 'IngestionDestinationDestinationConfigurationArgsDict']]] = None,
-            ingestion_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            processing_configuration: Optional[pulumi.Input[Union['IngestionDestinationProcessingConfigurationArgs', 'IngestionDestinationProcessingConfigurationArgsDict']]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            timeouts: Optional[pulumi.Input[Union['IngestionDestinationTimeoutsArgs', 'IngestionDestinationTimeoutsArgsDict']]] = None) -> 'IngestionDestination':
+            app_bundle_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            destination_configuration: pulumi.Input[Optional[Union['IngestionDestinationDestinationConfigurationArgs', 'IngestionDestinationDestinationConfigurationArgsDict']]] = None,
+            ingestion_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            processing_configuration: pulumi.Input[Optional[Union['IngestionDestinationProcessingConfigurationArgs', 'IngestionDestinationProcessingConfigurationArgsDict']]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            timeouts: pulumi.Input[Optional[Union['IngestionDestinationTimeoutsArgs', 'IngestionDestinationTimeoutsArgsDict']]] = None) -> 'IngestionDestination':
         """
         Get an existing IngestionDestination resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -443,11 +457,13 @@ class IngestionDestination(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] app_bundle_arn: The Amazon Resource Name (ARN) of the app bundle to use for the request.
+        :param pulumi.Input[_builtins.str] app_bundle_arn: ARN of the app bundle to use for the request.
         :param pulumi.Input[_builtins.str] arn: ARN of the Ingestion Destination.
-        :param pulumi.Input[Union['IngestionDestinationDestinationConfigurationArgs', 'IngestionDestinationDestinationConfigurationArgsDict']] destination_configuration: Contains information about the destination of ingested data.
-        :param pulumi.Input[_builtins.str] ingestion_arn: The Amazon Resource Name (ARN) of the ingestion to use for the request.
-        :param pulumi.Input[Union['IngestionDestinationProcessingConfigurationArgs', 'IngestionDestinationProcessingConfigurationArgsDict']] processing_configuration: Contains information about how ingested data is processed.
+        :param pulumi.Input[Union['IngestionDestinationDestinationConfigurationArgs', 'IngestionDestinationDestinationConfigurationArgsDict']] destination_configuration: Configuration for the destination of ingested data. See `destination_configuration` Block below.
+        :param pulumi.Input[_builtins.str] ingestion_arn: ARN of the ingestion to use for the request.
+        :param pulumi.Input[Union['IngestionDestinationProcessingConfigurationArgs', 'IngestionDestinationProcessingConfigurationArgsDict']] processing_configuration: Configuration for how ingested data is processed. See `processing_configuration` Block below.
+               
+               The following arguments are optional:
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
@@ -471,7 +487,7 @@ class IngestionDestination(pulumi.CustomResource):
     @pulumi.getter(name="appBundleArn")
     def app_bundle_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the app bundle to use for the request.
+        ARN of the app bundle to use for the request.
         """
         return pulumi.get(self, "app_bundle_arn")
 
@@ -487,7 +503,7 @@ class IngestionDestination(pulumi.CustomResource):
     @pulumi.getter(name="destinationConfiguration")
     def destination_configuration(self) -> pulumi.Output['outputs.IngestionDestinationDestinationConfiguration']:
         """
-        Contains information about the destination of ingested data.
+        Configuration for the destination of ingested data. See `destination_configuration` Block below.
         """
         return pulumi.get(self, "destination_configuration")
 
@@ -495,7 +511,7 @@ class IngestionDestination(pulumi.CustomResource):
     @pulumi.getter(name="ingestionArn")
     def ingestion_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the ingestion to use for the request.
+        ARN of the ingestion to use for the request.
         """
         return pulumi.get(self, "ingestion_arn")
 
@@ -503,7 +519,9 @@ class IngestionDestination(pulumi.CustomResource):
     @pulumi.getter(name="processingConfiguration")
     def processing_configuration(self) -> pulumi.Output['outputs.IngestionDestinationProcessingConfiguration']:
         """
-        Contains information about how ingested data is processed.
+        Configuration for how ingested data is processed. See `processing_configuration` Block below.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "processing_configuration")
 

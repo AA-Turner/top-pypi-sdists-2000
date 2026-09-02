@@ -26,6 +26,7 @@ from cvxpy.constraints import (
     NonNeg as NonNeg,
     Zero as Zero,
     PowCone3D as PowCone3D,
+    PowCone3DApprox as PowCone3DApprox,
     PowConeND as PowConeND,
     ExpCone as ExpCone,
     OpRelEntrConeQuad as OpRelEntrConeQuad,
@@ -40,6 +41,9 @@ from cvxpy.error import (
     disable_warnings as disable_warnings,
     enable_warnings as enable_warnings,
     warnings_enabled as warnings_enabled,
+)
+from cvxpy.utilities.warn import (
+    CvxpyDeprecationWarning as CvxpyDeprecationWarning,
 )
 from cvxpy.expressions.constants import (
     CallbackParam as CallbackParam,
@@ -59,13 +63,20 @@ from cvxpy.transforms import (
     partial_optimize as partial_optimize,
     suppfunc as suppfunc,
 )
+from cvxpy import logic as logic
+from cvxpy import nlp as nlp
 from cvxpy.reductions.solvers.defines import installed_solvers as installed_solvers
 from cvxpy.settings import (
     CBC as CBC,
     CLARABEL as CLARABEL,
+    CUCLARABEL as CUCLARABEL,
+    PDCS as PDCS,
     COPT as COPT,
+    COSMO as COSMO,
     CPLEX as CPLEX,
+    COO_CANON_BACKEND as COO_CANON_BACKEND,
     CPP_CANON_BACKEND as CPP_CANON_BACKEND,
+    CUOPT as CUOPT,
     CVXOPT as CVXOPT,
     DIFFCP as DIFFCP,
     ECOS as ECOS,
@@ -77,6 +88,8 @@ from cvxpy.settings import (
     INFEASIBLE as INFEASIBLE,
     INFEASIBLE_INACCURATE as INFEASIBLE_INACCURATE,
     MOSEK as MOSEK,
+    MOREAU as MOREAU,
+    MPAX as MPAX,
     NAG as NAG,
     OPTIMAL as OPTIMAL,
     OPTIMAL_INACCURATE as OPTIMAL_INACCURATE,
@@ -86,6 +99,7 @@ from cvxpy.settings import (
     QOCO as QOCO,
     PIQP as PIQP,
     PROXQP as PROXQP,
+    QPALM as QPALM,
     ROBUST_KKTSOLVER as ROBUST_KKTSOLVER,
     RUST_CANON_BACKEND as RUST_CANON_BACKEND,
     SCIP as SCIP,
@@ -96,9 +110,12 @@ from cvxpy.settings import (
     SOLVER_ERROR as SOLVER_ERROR,
     UNBOUNDED as UNBOUNDED,
     UNBOUNDED_INACCURATE as UNBOUNDED_INACCURATE,
+    UNO as UNO,
     USER_LIMIT as USER_LIMIT,
     XPRESS as XPRESS,
     HIGHS as HIGHS,
+    IPOPT as IPOPT,
+    KNITRO as KNITRO,
     get_num_threads as get_num_threads,
     set_num_threads as set_num_threads,
 )

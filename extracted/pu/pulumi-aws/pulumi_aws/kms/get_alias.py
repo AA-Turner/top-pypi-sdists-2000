@@ -50,7 +50,7 @@ class GetAliasResult:
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        Amazon Resource Name(ARN) of the key alias.
+        ARN of the key alias.
         """
         return pulumi.get(self, "arn")
 
@@ -140,8 +140,8 @@ def get_alias(name: Optional[_builtins.str] = None,
         region=pulumi.get(__ret__, 'region'),
         target_key_arn=pulumi.get(__ret__, 'target_key_arn'),
         target_key_id=pulumi.get(__ret__, 'target_key_id'))
-def get_alias_output(name: Optional[pulumi.Input[_builtins.str]] = None,
-                     region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_alias_output(name: pulumi.Input[Optional[_builtins.str]] = None,
+                     region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                      opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetAliasResult]:
     """
     Use this data source to get the ARN of a KMS key alias.

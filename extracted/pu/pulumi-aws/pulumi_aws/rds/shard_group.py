@@ -24,14 +24,15 @@ class ShardGroupArgs:
                  db_cluster_identifier: pulumi.Input[_builtins.str],
                  db_shard_group_identifier: pulumi.Input[_builtins.str],
                  max_acu: pulumi.Input[_builtins.float],
-                 compute_redundancy: Optional[pulumi.Input[_builtins.int]] = None,
-                 min_acu: Optional[pulumi.Input[_builtins.float]] = None,
-                 publicly_accessible: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['ShardGroupTimeoutsArgs']] = None):
+                 compute_redundancy: pulumi.Input[Optional[_builtins.int]] = None,
+                 min_acu: pulumi.Input[Optional[_builtins.float]] = None,
+                 publicly_accessible: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['ShardGroupTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a ShardGroup resource.
+
         :param pulumi.Input[_builtins.str] db_cluster_identifier: The name of the primary DB cluster for the DB shard group.
         :param pulumi.Input[_builtins.str] db_shard_group_identifier: The name of the DB shard group.
         :param pulumi.Input[_builtins.float] max_acu: The maximum capacity of the DB shard group in Aurora capacity units (ACUs).
@@ -97,55 +98,55 @@ class ShardGroupArgs:
 
     @_builtins.property
     @pulumi.getter(name="computeRedundancy")
-    def compute_redundancy(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def compute_redundancy(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Specifies whether to create standby DB shard groups for the DB shard group. Valid values are:
         """
         return pulumi.get(self, "compute_redundancy")
 
     @compute_redundancy.setter
-    def compute_redundancy(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def compute_redundancy(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "compute_redundancy", value)
 
     @_builtins.property
     @pulumi.getter(name="minAcu")
-    def min_acu(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def min_acu(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
         The minimum capacity of the DB shard group in Aurora capacity units (ACUs).
         """
         return pulumi.get(self, "min_acu")
 
     @min_acu.setter
-    def min_acu(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def min_acu(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "min_acu", value)
 
     @_builtins.property
     @pulumi.getter(name="publiclyAccessible")
-    def publicly_accessible(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def publicly_accessible(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Indicates whether the DB shard group is publicly accessible.
         """
         return pulumi.get(self, "publicly_accessible")
 
     @publicly_accessible.setter
-    def publicly_accessible(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def publicly_accessible(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "publicly_accessible", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
 
@@ -154,37 +155,38 @@ class ShardGroupArgs:
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['ShardGroupTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['ShardGroupTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['ShardGroupTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['ShardGroupTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _ShardGroupState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 compute_redundancy: Optional[pulumi.Input[_builtins.int]] = None,
-                 db_cluster_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 db_shard_group_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 db_shard_group_resource_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 endpoint: Optional[pulumi.Input[_builtins.str]] = None,
-                 max_acu: Optional[pulumi.Input[_builtins.float]] = None,
-                 min_acu: Optional[pulumi.Input[_builtins.float]] = None,
-                 publicly_accessible: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['ShardGroupTimeoutsArgs']] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 compute_redundancy: pulumi.Input[Optional[_builtins.int]] = None,
+                 db_cluster_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 db_shard_group_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 db_shard_group_resource_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 endpoint: pulumi.Input[Optional[_builtins.str]] = None,
+                 max_acu: pulumi.Input[Optional[_builtins.float]] = None,
+                 min_acu: pulumi.Input[Optional[_builtins.float]] = None,
+                 publicly_accessible: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['ShardGroupTimeoutsArgs']] = None):
         """
         Input properties used for looking up and filtering ShardGroup resources.
+
         :param pulumi.Input[_builtins.str] arn: ARN of the shard group.
         :param pulumi.Input[_builtins.int] compute_redundancy: Specifies whether to create standby DB shard groups for the DB shard group. Valid values are:
         :param pulumi.Input[_builtins.str] db_cluster_identifier: The name of the primary DB cluster for the DB shard group.
@@ -229,127 +231,127 @@ class _ShardGroupState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the shard group.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="computeRedundancy")
-    def compute_redundancy(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def compute_redundancy(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Specifies whether to create standby DB shard groups for the DB shard group. Valid values are:
         """
         return pulumi.get(self, "compute_redundancy")
 
     @compute_redundancy.setter
-    def compute_redundancy(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def compute_redundancy(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "compute_redundancy", value)
 
     @_builtins.property
     @pulumi.getter(name="dbClusterIdentifier")
-    def db_cluster_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def db_cluster_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the primary DB cluster for the DB shard group.
         """
         return pulumi.get(self, "db_cluster_identifier")
 
     @db_cluster_identifier.setter
-    def db_cluster_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def db_cluster_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "db_cluster_identifier", value)
 
     @_builtins.property
     @pulumi.getter(name="dbShardGroupIdentifier")
-    def db_shard_group_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def db_shard_group_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the DB shard group.
         """
         return pulumi.get(self, "db_shard_group_identifier")
 
     @db_shard_group_identifier.setter
-    def db_shard_group_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def db_shard_group_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "db_shard_group_identifier", value)
 
     @_builtins.property
     @pulumi.getter(name="dbShardGroupResourceId")
-    def db_shard_group_resource_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def db_shard_group_resource_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The AWS Region-unique, immutable identifier for the DB shard group.
         """
         return pulumi.get(self, "db_shard_group_resource_id")
 
     @db_shard_group_resource_id.setter
-    def db_shard_group_resource_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def db_shard_group_resource_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "db_shard_group_resource_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def endpoint(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def endpoint(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The connection endpoint for the DB shard group.
         """
         return pulumi.get(self, "endpoint")
 
     @endpoint.setter
-    def endpoint(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def endpoint(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "endpoint", value)
 
     @_builtins.property
     @pulumi.getter(name="maxAcu")
-    def max_acu(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def max_acu(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
         The maximum capacity of the DB shard group in Aurora capacity units (ACUs).
         """
         return pulumi.get(self, "max_acu")
 
     @max_acu.setter
-    def max_acu(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def max_acu(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "max_acu", value)
 
     @_builtins.property
     @pulumi.getter(name="minAcu")
-    def min_acu(self) -> Optional[pulumi.Input[_builtins.float]]:
+    def min_acu(self) -> pulumi.Input[Optional[_builtins.float]]:
         """
         The minimum capacity of the DB shard group in Aurora capacity units (ACUs).
         """
         return pulumi.get(self, "min_acu")
 
     @min_acu.setter
-    def min_acu(self, value: Optional[pulumi.Input[_builtins.float]]):
+    def min_acu(self, value: pulumi.Input[Optional[_builtins.float]]):
         pulumi.set(self, "min_acu", value)
 
     @_builtins.property
     @pulumi.getter(name="publiclyAccessible")
-    def publicly_accessible(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def publicly_accessible(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Indicates whether the DB shard group is publicly accessible.
         """
         return pulumi.get(self, "publicly_accessible")
 
     @publicly_accessible.setter
-    def publicly_accessible(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def publicly_accessible(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "publicly_accessible", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
 
@@ -358,28 +360,28 @@ class _ShardGroupState:
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['ShardGroupTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['ShardGroupTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['ShardGroupTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['ShardGroupTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
@@ -389,15 +391,15 @@ class ShardGroup(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 compute_redundancy: Optional[pulumi.Input[_builtins.int]] = None,
-                 db_cluster_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 db_shard_group_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 max_acu: Optional[pulumi.Input[_builtins.float]] = None,
-                 min_acu: Optional[pulumi.Input[_builtins.float]] = None,
-                 publicly_accessible: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['ShardGroupTimeoutsArgs', 'ShardGroupTimeoutsArgsDict']]] = None,
+                 compute_redundancy: pulumi.Input[Optional[_builtins.int]] = None,
+                 db_cluster_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 db_shard_group_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 max_acu: pulumi.Input[Optional[_builtins.float]] = None,
+                 min_acu: pulumi.Input[Optional[_builtins.float]] = None,
+                 publicly_accessible: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['ShardGroupTimeoutsArgs', 'ShardGroupTimeoutsArgsDict']]] = None,
                  __props__=None):
         """
         Resource for managing an Amazon Aurora Limitless Database DB shard group
@@ -427,7 +429,7 @@ class ShardGroup(pulumi.CustomResource):
         example_shard_group = aws.rds.ShardGroup("example",
             db_shard_group_identifier="example-shard-group",
             db_cluster_identifier=example.id,
-            max_acu=1200)
+            max_acu=float(1200))
         ```
 
         ## Import
@@ -437,6 +439,7 @@ class ShardGroup(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:rds/shardGroup:ShardGroup example example-shard-group
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -485,7 +488,7 @@ class ShardGroup(pulumi.CustomResource):
         example_shard_group = aws.rds.ShardGroup("example",
             db_shard_group_identifier="example-shard-group",
             db_cluster_identifier=example.id,
-            max_acu=1200)
+            max_acu=float(1200))
         ```
 
         ## Import
@@ -495,6 +498,7 @@ class ShardGroup(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:rds/shardGroup:ShardGroup example example-shard-group
         ```
+
 
         :param str resource_name: The name of the resource.
         :param ShardGroupArgs args: The arguments to use to populate this resource's properties.
@@ -511,15 +515,15 @@ class ShardGroup(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 compute_redundancy: Optional[pulumi.Input[_builtins.int]] = None,
-                 db_cluster_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 db_shard_group_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 max_acu: Optional[pulumi.Input[_builtins.float]] = None,
-                 min_acu: Optional[pulumi.Input[_builtins.float]] = None,
-                 publicly_accessible: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['ShardGroupTimeoutsArgs', 'ShardGroupTimeoutsArgsDict']]] = None,
+                 compute_redundancy: pulumi.Input[Optional[_builtins.int]] = None,
+                 db_cluster_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 db_shard_group_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 max_acu: pulumi.Input[Optional[_builtins.float]] = None,
+                 min_acu: pulumi.Input[Optional[_builtins.float]] = None,
+                 publicly_accessible: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['ShardGroupTimeoutsArgs', 'ShardGroupTimeoutsArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -558,19 +562,19 @@ class ShardGroup(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            compute_redundancy: Optional[pulumi.Input[_builtins.int]] = None,
-            db_cluster_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-            db_shard_group_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-            db_shard_group_resource_id: Optional[pulumi.Input[_builtins.str]] = None,
-            endpoint: Optional[pulumi.Input[_builtins.str]] = None,
-            max_acu: Optional[pulumi.Input[_builtins.float]] = None,
-            min_acu: Optional[pulumi.Input[_builtins.float]] = None,
-            publicly_accessible: Optional[pulumi.Input[_builtins.bool]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            timeouts: Optional[pulumi.Input[Union['ShardGroupTimeoutsArgs', 'ShardGroupTimeoutsArgsDict']]] = None) -> 'ShardGroup':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            compute_redundancy: pulumi.Input[Optional[_builtins.int]] = None,
+            db_cluster_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+            db_shard_group_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+            db_shard_group_resource_id: pulumi.Input[Optional[_builtins.str]] = None,
+            endpoint: pulumi.Input[Optional[_builtins.str]] = None,
+            max_acu: pulumi.Input[Optional[_builtins.float]] = None,
+            min_acu: pulumi.Input[Optional[_builtins.float]] = None,
+            publicly_accessible: pulumi.Input[Optional[_builtins.bool]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            timeouts: pulumi.Input[Optional[Union['ShardGroupTimeoutsArgs', 'ShardGroupTimeoutsArgsDict']]] = None) -> 'ShardGroup':
         """
         Get an existing ShardGroup resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

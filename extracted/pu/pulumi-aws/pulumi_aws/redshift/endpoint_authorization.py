@@ -21,16 +21,17 @@ class EndpointAuthorizationArgs:
     def __init__(__self__, *,
                  account: pulumi.Input[_builtins.str],
                  cluster_identifier: pulumi.Input[_builtins.str],
-                 force_delete: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 force_delete: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a EndpointAuthorization resource.
+
         :param pulumi.Input[_builtins.str] account: The Amazon Web Services account ID to grant access to.
         :param pulumi.Input[_builtins.str] cluster_identifier: The cluster identifier of the cluster to grant access to.
         :param pulumi.Input[_builtins.bool] force_delete: Indicates whether to force the revoke action. If true, the Redshift-managed VPC endpoints associated with the endpoint authorization are also deleted. Default value is `false`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] vpc_ids: The virtual private cloud (VPC) identifiers to grant access to. If none are specified all VPCs in shared account are allowed.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] vpc_ids: VPC identifiers to grant access to. If none are specified all VPCs in shared account are allowed.
         """
         pulumi.set(__self__, "account", account)
         pulumi.set(__self__, "cluster_identifier", cluster_identifier)
@@ -67,55 +68,56 @@ class EndpointAuthorizationArgs:
 
     @_builtins.property
     @pulumi.getter(name="forceDelete")
-    def force_delete(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def force_delete(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Indicates whether to force the revoke action. If true, the Redshift-managed VPC endpoints associated with the endpoint authorization are also deleted. Default value is `false`.
         """
         return pulumi.get(self, "force_delete")
 
     @force_delete.setter
-    def force_delete(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def force_delete(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "force_delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcIds")
-    def vpc_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def vpc_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        The virtual private cloud (VPC) identifiers to grant access to. If none are specified all VPCs in shared account are allowed.
+        VPC identifiers to grant access to. If none are specified all VPCs in shared account are allowed.
         """
         return pulumi.get(self, "vpc_ids")
 
     @vpc_ids.setter
-    def vpc_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def vpc_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "vpc_ids", value)
 
 
 @pulumi.input_type
 class _EndpointAuthorizationState:
     def __init__(__self__, *,
-                 account: Optional[pulumi.Input[_builtins.str]] = None,
-                 allowed_all_vpcs: Optional[pulumi.Input[_builtins.bool]] = None,
-                 cluster_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 endpoint_count: Optional[pulumi.Input[_builtins.int]] = None,
-                 force_delete: Optional[pulumi.Input[_builtins.bool]] = None,
-                 grantee: Optional[pulumi.Input[_builtins.str]] = None,
-                 grantor: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None):
+                 account: pulumi.Input[Optional[_builtins.str]] = None,
+                 allowed_all_vpcs: pulumi.Input[Optional[_builtins.bool]] = None,
+                 cluster_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 endpoint_count: pulumi.Input[Optional[_builtins.int]] = None,
+                 force_delete: pulumi.Input[Optional[_builtins.bool]] = None,
+                 grantee: pulumi.Input[Optional[_builtins.str]] = None,
+                 grantor: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None):
         """
         Input properties used for looking up and filtering EndpointAuthorization resources.
+
         :param pulumi.Input[_builtins.str] account: The Amazon Web Services account ID to grant access to.
         :param pulumi.Input[_builtins.bool] allowed_all_vpcs: Indicates whether all VPCs in the grantee account are allowed access to the cluster.
         :param pulumi.Input[_builtins.str] cluster_identifier: The cluster identifier of the cluster to grant access to.
@@ -124,7 +126,7 @@ class _EndpointAuthorizationState:
         :param pulumi.Input[_builtins.str] grantee: The Amazon Web Services account ID of the grantee of the cluster.
         :param pulumi.Input[_builtins.str] grantor: The Amazon Web Services account ID of the cluster owner.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] vpc_ids: The virtual private cloud (VPC) identifiers to grant access to. If none are specified all VPCs in shared account are allowed.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] vpc_ids: VPC identifiers to grant access to. If none are specified all VPCs in shared account are allowed.
         """
         if account is not None:
             pulumi.set(__self__, "account", account)
@@ -147,110 +149,110 @@ class _EndpointAuthorizationState:
 
     @_builtins.property
     @pulumi.getter
-    def account(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def account(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The Amazon Web Services account ID to grant access to.
         """
         return pulumi.get(self, "account")
 
     @account.setter
-    def account(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def account(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "account", value)
 
     @_builtins.property
     @pulumi.getter(name="allowedAllVpcs")
-    def allowed_all_vpcs(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def allowed_all_vpcs(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Indicates whether all VPCs in the grantee account are allowed access to the cluster.
         """
         return pulumi.get(self, "allowed_all_vpcs")
 
     @allowed_all_vpcs.setter
-    def allowed_all_vpcs(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def allowed_all_vpcs(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "allowed_all_vpcs", value)
 
     @_builtins.property
     @pulumi.getter(name="clusterIdentifier")
-    def cluster_identifier(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def cluster_identifier(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The cluster identifier of the cluster to grant access to.
         """
         return pulumi.get(self, "cluster_identifier")
 
     @cluster_identifier.setter
-    def cluster_identifier(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def cluster_identifier(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "cluster_identifier", value)
 
     @_builtins.property
     @pulumi.getter(name="endpointCount")
-    def endpoint_count(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def endpoint_count(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         The number of Redshift-managed VPC endpoints created for the authorization.
         """
         return pulumi.get(self, "endpoint_count")
 
     @endpoint_count.setter
-    def endpoint_count(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def endpoint_count(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "endpoint_count", value)
 
     @_builtins.property
     @pulumi.getter(name="forceDelete")
-    def force_delete(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def force_delete(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Indicates whether to force the revoke action. If true, the Redshift-managed VPC endpoints associated with the endpoint authorization are also deleted. Default value is `false`.
         """
         return pulumi.get(self, "force_delete")
 
     @force_delete.setter
-    def force_delete(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def force_delete(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "force_delete", value)
 
     @_builtins.property
     @pulumi.getter
-    def grantee(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def grantee(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The Amazon Web Services account ID of the grantee of the cluster.
         """
         return pulumi.get(self, "grantee")
 
     @grantee.setter
-    def grantee(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def grantee(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "grantee", value)
 
     @_builtins.property
     @pulumi.getter
-    def grantor(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def grantor(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The Amazon Web Services account ID of the cluster owner.
         """
         return pulumi.get(self, "grantor")
 
     @grantor.setter
-    def grantor(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def grantor(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "grantor", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcIds")
-    def vpc_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def vpc_ids(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        The virtual private cloud (VPC) identifiers to grant access to. If none are specified all VPCs in shared account are allowed.
+        VPC identifiers to grant access to. If none are specified all VPCs in shared account are allowed.
         """
         return pulumi.get(self, "vpc_ids")
 
     @vpc_ids.setter
-    def vpc_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def vpc_ids(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "vpc_ids", value)
 
 
@@ -260,11 +262,11 @@ class EndpointAuthorization(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 account: Optional[pulumi.Input[_builtins.str]] = None,
-                 cluster_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 force_delete: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 account: pulumi.Input[Optional[_builtins.str]] = None,
+                 cluster_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 force_delete: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Creates a new Amazon Redshift endpoint authorization.
@@ -288,13 +290,14 @@ class EndpointAuthorization(pulumi.CustomResource):
         $ pulumi import aws:redshift/endpointAuthorization:EndpointAuthorization example 01234567910:cluster-example-id
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.str] account: The Amazon Web Services account ID to grant access to.
         :param pulumi.Input[_builtins.str] cluster_identifier: The cluster identifier of the cluster to grant access to.
         :param pulumi.Input[_builtins.bool] force_delete: Indicates whether to force the revoke action. If true, the Redshift-managed VPC endpoints associated with the endpoint authorization are also deleted. Default value is `false`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] vpc_ids: The virtual private cloud (VPC) identifiers to grant access to. If none are specified all VPCs in shared account are allowed.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] vpc_ids: VPC identifiers to grant access to. If none are specified all VPCs in shared account are allowed.
         """
         ...
     @overload
@@ -324,6 +327,7 @@ class EndpointAuthorization(pulumi.CustomResource):
         $ pulumi import aws:redshift/endpointAuthorization:EndpointAuthorization example 01234567910:cluster-example-id
         ```
 
+
         :param str resource_name: The name of the resource.
         :param EndpointAuthorizationArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -339,11 +343,11 @@ class EndpointAuthorization(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 account: Optional[pulumi.Input[_builtins.str]] = None,
-                 cluster_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-                 force_delete: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 account: pulumi.Input[Optional[_builtins.str]] = None,
+                 cluster_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+                 force_delete: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -376,15 +380,15 @@ class EndpointAuthorization(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            account: Optional[pulumi.Input[_builtins.str]] = None,
-            allowed_all_vpcs: Optional[pulumi.Input[_builtins.bool]] = None,
-            cluster_identifier: Optional[pulumi.Input[_builtins.str]] = None,
-            endpoint_count: Optional[pulumi.Input[_builtins.int]] = None,
-            force_delete: Optional[pulumi.Input[_builtins.bool]] = None,
-            grantee: Optional[pulumi.Input[_builtins.str]] = None,
-            grantor: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            vpc_ids: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None) -> 'EndpointAuthorization':
+            account: pulumi.Input[Optional[_builtins.str]] = None,
+            allowed_all_vpcs: pulumi.Input[Optional[_builtins.bool]] = None,
+            cluster_identifier: pulumi.Input[Optional[_builtins.str]] = None,
+            endpoint_count: pulumi.Input[Optional[_builtins.int]] = None,
+            force_delete: pulumi.Input[Optional[_builtins.bool]] = None,
+            grantee: pulumi.Input[Optional[_builtins.str]] = None,
+            grantor: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            vpc_ids: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None) -> 'EndpointAuthorization':
         """
         Get an existing EndpointAuthorization resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -400,7 +404,7 @@ class EndpointAuthorization(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] grantee: The Amazon Web Services account ID of the grantee of the cluster.
         :param pulumi.Input[_builtins.str] grantor: The Amazon Web Services account ID of the cluster owner.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] vpc_ids: The virtual private cloud (VPC) identifiers to grant access to. If none are specified all VPCs in shared account are allowed.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] vpc_ids: VPC identifiers to grant access to. If none are specified all VPCs in shared account are allowed.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -485,7 +489,7 @@ class EndpointAuthorization(pulumi.CustomResource):
     @pulumi.getter(name="vpcIds")
     def vpc_ids(self) -> pulumi.Output[Optional[Sequence[_builtins.str]]]:
         """
-        The virtual private cloud (VPC) identifiers to grant access to. If none are specified all VPCs in shared account are allowed.
+        VPC identifiers to grant access to. If none are specified all VPCs in shared account are allowed.
         """
         return pulumi.get(self, "vpc_ids")
 

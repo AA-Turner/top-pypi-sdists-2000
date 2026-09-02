@@ -167,14 +167,14 @@ def get_random_password(exclude_characters: Optional[_builtins.str] = None,
 
 
     :param _builtins.str exclude_characters: String of the characters that you don't want in the password.
-    :param _builtins.bool exclude_lowercase: Specifies whether to exclude lowercase letters from the password.
-    :param _builtins.bool exclude_numbers: Specifies whether to exclude numbers from the password.
-    :param _builtins.bool exclude_punctuation: Specifies whether to exclude the following punctuation characters from the password: ``! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ ` { | } ~ .``
-    :param _builtins.bool exclude_uppercase: Specifies whether to exclude uppercase letters from the password.
-    :param _builtins.bool include_space: Specifies whether to include the space character.
+    :param _builtins.bool exclude_lowercase: Whether to exclude lowercase letters from the password.
+    :param _builtins.bool exclude_numbers: Whether to exclude numbers from the password.
+    :param _builtins.bool exclude_punctuation: Whether to exclude the following punctuation characters from the password: ``! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ ` { | } ~ .``
+    :param _builtins.bool exclude_uppercase: Whether to exclude uppercase letters from the password.
+    :param _builtins.bool include_space: Whether to include the space character.
     :param _builtins.int password_length: Length of the password.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param _builtins.bool require_each_included_type: Specifies whether to include at least one upper and lowercase letter, one number, and one punctuation.
+    :param _builtins.bool require_each_included_type: Whether to include at least one upper and lowercase letter, one number, and one punctuation.
     """
     __args__ = dict()
     __args__['excludeCharacters'] = exclude_characters
@@ -201,15 +201,15 @@ def get_random_password(exclude_characters: Optional[_builtins.str] = None,
         random_password=pulumi.get(__ret__, 'random_password'),
         region=pulumi.get(__ret__, 'region'),
         require_each_included_type=pulumi.get(__ret__, 'require_each_included_type'))
-def get_random_password_output(exclude_characters: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                               exclude_lowercase: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                               exclude_numbers: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                               exclude_punctuation: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                               exclude_uppercase: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                               include_space: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                               password_length: Optional[pulumi.Input[Optional[_builtins.int]]] = None,
-                               region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                               require_each_included_type: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
+def get_random_password_output(exclude_characters: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                               exclude_lowercase: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                               exclude_numbers: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                               exclude_punctuation: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                               exclude_uppercase: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                               include_space: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                               password_length: pulumi.Input[Optional[Optional[_builtins.int]]] = None,
+                               region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                               require_each_included_type: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
                                opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetRandomPasswordResult]:
     """
     Generate a random password.
@@ -226,14 +226,14 @@ def get_random_password_output(exclude_characters: Optional[pulumi.Input[Optiona
 
 
     :param _builtins.str exclude_characters: String of the characters that you don't want in the password.
-    :param _builtins.bool exclude_lowercase: Specifies whether to exclude lowercase letters from the password.
-    :param _builtins.bool exclude_numbers: Specifies whether to exclude numbers from the password.
-    :param _builtins.bool exclude_punctuation: Specifies whether to exclude the following punctuation characters from the password: ``! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ ` { | } ~ .``
-    :param _builtins.bool exclude_uppercase: Specifies whether to exclude uppercase letters from the password.
-    :param _builtins.bool include_space: Specifies whether to include the space character.
+    :param _builtins.bool exclude_lowercase: Whether to exclude lowercase letters from the password.
+    :param _builtins.bool exclude_numbers: Whether to exclude numbers from the password.
+    :param _builtins.bool exclude_punctuation: Whether to exclude the following punctuation characters from the password: ``! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ ` { | } ~ .``
+    :param _builtins.bool exclude_uppercase: Whether to exclude uppercase letters from the password.
+    :param _builtins.bool include_space: Whether to include the space character.
     :param _builtins.int password_length: Length of the password.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param _builtins.bool require_each_included_type: Specifies whether to include at least one upper and lowercase letter, one number, and one punctuation.
+    :param _builtins.bool require_each_included_type: Whether to include at least one upper and lowercase letter, one number, and one punctuation.
     """
     __args__ = dict()
     __args__['excludeCharacters'] = exclude_characters

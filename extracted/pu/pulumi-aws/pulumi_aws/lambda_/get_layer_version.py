@@ -26,7 +26,7 @@ class GetLayerVersionResult:
     """
     A collection of values returned by getLayerVersion.
     """
-    def __init__(__self__, arn=None, code_sha256=None, compatible_architecture=None, compatible_architectures=None, compatible_runtime=None, compatible_runtimes=None, created_date=None, description=None, id=None, layer_arn=None, layer_name=None, license_info=None, region=None, signing_job_arn=None, signing_profile_version_arn=None, source_code_hash=None, source_code_size=None, version=None):
+    def __init__(__self__, arn=None, code_sha256=None, compatible_architecture=None, compatible_architectures=None, compatible_runtime=None, compatible_runtimes=None, created_date=None, description=None, id=None, layer_arn=None, layer_name=None, layer_version_arn=None, license_info=None, region=None, signing_job_arn=None, signing_profile_version_arn=None, source_code_hash=None, source_code_size=None, version=None):
         if arn and not isinstance(arn, str):
             raise TypeError("Expected argument 'arn' to be a str")
         pulumi.set(__self__, "arn", arn)
@@ -60,6 +60,9 @@ class GetLayerVersionResult:
         if layer_name and not isinstance(layer_name, str):
             raise TypeError("Expected argument 'layer_name' to be a str")
         pulumi.set(__self__, "layer_name", layer_name)
+        if layer_version_arn and not isinstance(layer_version_arn, str):
+            raise TypeError("Expected argument 'layer_version_arn' to be a str")
+        pulumi.set(__self__, "layer_version_arn", layer_version_arn)
         if license_info and not isinstance(license_info, str):
             raise TypeError("Expected argument 'license_info' to be a str")
         pulumi.set(__self__, "license_info", license_info)
@@ -162,6 +165,11 @@ class GetLayerVersionResult:
         return pulumi.get(self, "layer_name")
 
     @_builtins.property
+    @pulumi.getter(name="layerVersionArn")
+    def layer_version_arn(self) -> _builtins.str:
+        return pulumi.get(self, "layer_version_arn")
+
+    @_builtins.property
     @pulumi.getter(name="licenseInfo")
     def license_info(self) -> _builtins.str:
         """
@@ -210,9 +218,6 @@ class GetLayerVersionResult:
     @_builtins.property
     @pulumi.getter
     def version(self) -> _builtins.int:
-        """
-        Lambda Layer version.
-        """
         return pulumi.get(self, "version")
 
 
@@ -233,6 +238,7 @@ class AwaitableGetLayerVersionResult(GetLayerVersionResult):
             id=self.id,
             layer_arn=self.layer_arn,
             layer_name=self.layer_name,
+            layer_version_arn=self.layer_version_arn,
             license_info=self.license_info,
             region=self.region,
             signing_job_arn=self.signing_job_arn,
@@ -245,6 +251,7 @@ class AwaitableGetLayerVersionResult(GetLayerVersionResult):
 def get_layer_version(compatible_architecture: Optional[_builtins.str] = None,
                       compatible_runtime: Optional[_builtins.str] = None,
                       layer_name: Optional[_builtins.str] = None,
+                      layer_version_arn: Optional[_builtins.str] = None,
                       region: Optional[_builtins.str] = None,
                       version: Optional[_builtins.int] = None,
                       opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetLayerVersionResult:
@@ -259,14 +266,14 @@ def get_layer_version(compatible_architecture: Optional[_builtins.str] = None,
     import pulumi
     import pulumi_aws as aws
 
-    example = aws.lambda.get_layer_version(layer_name="my-shared-utilities")
+    example = aws.lambda_.get_layer_version(layer_name="my-shared-utilities")
     # Use the layer in a Lambda function
     example_function = aws.lambda_.Function("example",
         code=pulumi.FileArchive("function.zip"),
         name="example_function",
         role=lambda_role["arn"],
         handler="index.handler",
-        runtime=aws.lambda_.Runtime.NODE_JS20D_X,
+        runtime=aws.lambda_.Runtime.NODE_JS24D_X,
         layers=[example.arn])
     ```
 
@@ -276,7 +283,7 @@ def get_layer_version(compatible_architecture: Optional[_builtins.str] = None,
     import pulumi
     import pulumi_aws as aws
 
-    example = aws.lambda.get_layer_version(layer_name="production-utilities",
+    example = aws.lambda_.get_layer_version(layer_name="production-utilities",
         version=5)
     pulumi.export("layerInfo", {
         "arn": example.arn,
@@ -292,10 +299,10 @@ def get_layer_version(compatible_architecture: Optional[_builtins.str] = None,
     import pulumi_aws as aws
 
     # Find latest layer version compatible with Python 3.12
-    python_layer = aws.lambda.get_layer_version(layer_name="python-dependencies",
+    python_layer = aws.lambda_.get_layer_version(layer_name="python-dependencies",
         compatible_runtime="python3.12")
     # Find latest layer version compatible with ARM64 architecture
-    arm_layer = aws.lambda.get_layer_version(layer_name="optimized-libraries",
+    arm_layer = aws.lambda_.get_layer_version(layer_name="optimized-libraries",
         compatible_architecture="arm64")
     # Use both layers in a function
     example = aws.lambda_.Function("example",
@@ -318,28 +325,54 @@ def get_layer_version(compatible_architecture: Optional[_builtins.str] = None,
     import pulumi_aws as aws
 
     # Get latest version
-    latest = aws.lambda.get_layer_version(layer_name="shared-layer")
+    latest = aws.lambda_.get_layer_version(layer_name="shared-layer")
     # Get specific version for comparison
-    stable = aws.lambda.get_layer_version(layer_name="shared-layer",
+    stable = aws.lambda_.get_layer_version(layer_name="shared-layer",
         version=3)
-    use_latest_layer = latest.version > 5
+    use_latest_layer = output(latest.version).apply(lambda x: float(x)) > float(5)
     selected_layer = latest.arn if use_latest_layer else stable.arn
     pulumi.export("selectedLayerVersion", latest.version if use_latest_layer else stable.version)
     ```
 
+    ### Cross-Account Layer Access
 
-    :param _builtins.str compatible_architecture: Specific architecture the layer version must support. Conflicts with `version`. If specified, the latest available layer version supporting the provided architecture will be used.
-    :param _builtins.str compatible_runtime: Specific runtime the layer version must support. Conflicts with `version`. If specified, the latest available layer version supporting the provided runtime will be used.
-    :param _builtins.str layer_name: Name of the Lambda layer.
-           
-           The following arguments are optional:
+    ```python
+    import pulumi
+    import pulumi_aws as aws
+
+    # Reference a layer from another AWS account using full ARN with version
+    shared_layer = aws.lambda_.get_layer_version(layer_version_arn="arn:aws:lambda:us-east-1:123456789012:layer:shared-utilities:5")
+    # Use in your Lambda function
+    example = aws.lambda_.Function("example",
+        code=pulumi.FileArchive("function.zip"),
+        name="cross_account_example",
+        role=lambda_role["arn"],
+        handler="index.handler",
+        runtime=aws.lambda_.Runtime.NODE_JS24D_X,
+        layers=[shared_layer.arn])
+    ```
+
+    ```python
+    import pulumi
+    import pulumi_aws as aws
+
+    # Reference a layer ARN without version (requires ListLayerVersions permission)
+    latest_shared = aws.lambda_.get_layer_version(layer_version_arn="arn:aws:lambda:us-east-1:123456789012:layer:shared-utilities")
+    ```
+
+
+    :param _builtins.str compatible_architecture: Specific architecture the layer version must support. Only valid with `layer_name`. Conflicts with `version` and `layer_version_arn`. If specified, the latest available layer version supporting the provided architecture will be used.
+    :param _builtins.str compatible_runtime: Specific runtime the layer version must support. Only valid with `layer_name`. Conflicts with `version` and `layer_version_arn`. If specified, the latest available layer version supporting the provided runtime will be used.
+    :param _builtins.str layer_name: Name of the Lambda layer. One of `layer_name` or `layer_version_arn` is required.
+    :param _builtins.str layer_version_arn: ARN of the Lambda layer version. Can be a full ARN with version (e.g., `arn:aws:lambda:region:account:layer:name:1`) or without version (e.g., `arn:aws:lambda:region:account:layer:name`). When the version is omitted, the latest version will be retrieved (requires `lambda:ListLayerVersions` permission). Use the full ARN with version for cross-account layers where you don't have list permissions. One of `layer_name` or `layer_version_arn` is required.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param _builtins.int version: Specific layer version. Conflicts with `compatible_runtime` and `compatible_architecture`. If omitted, the latest available layer version will be used.
+    :param _builtins.int version: Specific layer version. Only valid with `layer_name`. Conflicts with `compatible_runtime`, `compatible_architecture`, and `layer_version_arn`. If omitted, the latest available layer version will be used.
     """
     __args__ = dict()
     __args__['compatibleArchitecture'] = compatible_architecture
     __args__['compatibleRuntime'] = compatible_runtime
     __args__['layerName'] = layer_name
+    __args__['layerVersionArn'] = layer_version_arn
     __args__['region'] = region
     __args__['version'] = version
     opts = pulumi.InvokeOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
@@ -357,6 +390,7 @@ def get_layer_version(compatible_architecture: Optional[_builtins.str] = None,
         id=pulumi.get(__ret__, 'id'),
         layer_arn=pulumi.get(__ret__, 'layer_arn'),
         layer_name=pulumi.get(__ret__, 'layer_name'),
+        layer_version_arn=pulumi.get(__ret__, 'layer_version_arn'),
         license_info=pulumi.get(__ret__, 'license_info'),
         region=pulumi.get(__ret__, 'region'),
         signing_job_arn=pulumi.get(__ret__, 'signing_job_arn'),
@@ -364,11 +398,12 @@ def get_layer_version(compatible_architecture: Optional[_builtins.str] = None,
         source_code_hash=pulumi.get(__ret__, 'source_code_hash'),
         source_code_size=pulumi.get(__ret__, 'source_code_size'),
         version=pulumi.get(__ret__, 'version'))
-def get_layer_version_output(compatible_architecture: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                             compatible_runtime: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                             layer_name: Optional[pulumi.Input[_builtins.str]] = None,
-                             region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                             version: Optional[pulumi.Input[Optional[_builtins.int]]] = None,
+def get_layer_version_output(compatible_architecture: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                             compatible_runtime: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                             layer_name: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                             layer_version_arn: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                             region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                             version: pulumi.Input[Optional[Optional[_builtins.int]]] = None,
                              opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetLayerVersionResult]:
     """
     Provides details about an AWS Lambda Layer Version. Use this data source to retrieve information about a specific layer version or find the latest version compatible with your runtime and architecture requirements.
@@ -381,14 +416,14 @@ def get_layer_version_output(compatible_architecture: Optional[pulumi.Input[Opti
     import pulumi
     import pulumi_aws as aws
 
-    example = aws.lambda.get_layer_version(layer_name="my-shared-utilities")
+    example = aws.lambda_.get_layer_version(layer_name="my-shared-utilities")
     # Use the layer in a Lambda function
     example_function = aws.lambda_.Function("example",
         code=pulumi.FileArchive("function.zip"),
         name="example_function",
         role=lambda_role["arn"],
         handler="index.handler",
-        runtime=aws.lambda_.Runtime.NODE_JS20D_X,
+        runtime=aws.lambda_.Runtime.NODE_JS24D_X,
         layers=[example.arn])
     ```
 
@@ -398,7 +433,7 @@ def get_layer_version_output(compatible_architecture: Optional[pulumi.Input[Opti
     import pulumi
     import pulumi_aws as aws
 
-    example = aws.lambda.get_layer_version(layer_name="production-utilities",
+    example = aws.lambda_.get_layer_version(layer_name="production-utilities",
         version=5)
     pulumi.export("layerInfo", {
         "arn": example.arn,
@@ -414,10 +449,10 @@ def get_layer_version_output(compatible_architecture: Optional[pulumi.Input[Opti
     import pulumi_aws as aws
 
     # Find latest layer version compatible with Python 3.12
-    python_layer = aws.lambda.get_layer_version(layer_name="python-dependencies",
+    python_layer = aws.lambda_.get_layer_version(layer_name="python-dependencies",
         compatible_runtime="python3.12")
     # Find latest layer version compatible with ARM64 architecture
-    arm_layer = aws.lambda.get_layer_version(layer_name="optimized-libraries",
+    arm_layer = aws.lambda_.get_layer_version(layer_name="optimized-libraries",
         compatible_architecture="arm64")
     # Use both layers in a function
     example = aws.lambda_.Function("example",
@@ -440,28 +475,54 @@ def get_layer_version_output(compatible_architecture: Optional[pulumi.Input[Opti
     import pulumi_aws as aws
 
     # Get latest version
-    latest = aws.lambda.get_layer_version(layer_name="shared-layer")
+    latest = aws.lambda_.get_layer_version(layer_name="shared-layer")
     # Get specific version for comparison
-    stable = aws.lambda.get_layer_version(layer_name="shared-layer",
+    stable = aws.lambda_.get_layer_version(layer_name="shared-layer",
         version=3)
-    use_latest_layer = latest.version > 5
+    use_latest_layer = output(latest.version).apply(lambda x: float(x)) > float(5)
     selected_layer = latest.arn if use_latest_layer else stable.arn
     pulumi.export("selectedLayerVersion", latest.version if use_latest_layer else stable.version)
     ```
 
+    ### Cross-Account Layer Access
 
-    :param _builtins.str compatible_architecture: Specific architecture the layer version must support. Conflicts with `version`. If specified, the latest available layer version supporting the provided architecture will be used.
-    :param _builtins.str compatible_runtime: Specific runtime the layer version must support. Conflicts with `version`. If specified, the latest available layer version supporting the provided runtime will be used.
-    :param _builtins.str layer_name: Name of the Lambda layer.
-           
-           The following arguments are optional:
+    ```python
+    import pulumi
+    import pulumi_aws as aws
+
+    # Reference a layer from another AWS account using full ARN with version
+    shared_layer = aws.lambda_.get_layer_version(layer_version_arn="arn:aws:lambda:us-east-1:123456789012:layer:shared-utilities:5")
+    # Use in your Lambda function
+    example = aws.lambda_.Function("example",
+        code=pulumi.FileArchive("function.zip"),
+        name="cross_account_example",
+        role=lambda_role["arn"],
+        handler="index.handler",
+        runtime=aws.lambda_.Runtime.NODE_JS24D_X,
+        layers=[shared_layer.arn])
+    ```
+
+    ```python
+    import pulumi
+    import pulumi_aws as aws
+
+    # Reference a layer ARN without version (requires ListLayerVersions permission)
+    latest_shared = aws.lambda_.get_layer_version(layer_version_arn="arn:aws:lambda:us-east-1:123456789012:layer:shared-utilities")
+    ```
+
+
+    :param _builtins.str compatible_architecture: Specific architecture the layer version must support. Only valid with `layer_name`. Conflicts with `version` and `layer_version_arn`. If specified, the latest available layer version supporting the provided architecture will be used.
+    :param _builtins.str compatible_runtime: Specific runtime the layer version must support. Only valid with `layer_name`. Conflicts with `version` and `layer_version_arn`. If specified, the latest available layer version supporting the provided runtime will be used.
+    :param _builtins.str layer_name: Name of the Lambda layer. One of `layer_name` or `layer_version_arn` is required.
+    :param _builtins.str layer_version_arn: ARN of the Lambda layer version. Can be a full ARN with version (e.g., `arn:aws:lambda:region:account:layer:name:1`) or without version (e.g., `arn:aws:lambda:region:account:layer:name`). When the version is omitted, the latest version will be retrieved (requires `lambda:ListLayerVersions` permission). Use the full ARN with version for cross-account layers where you don't have list permissions. One of `layer_name` or `layer_version_arn` is required.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param _builtins.int version: Specific layer version. Conflicts with `compatible_runtime` and `compatible_architecture`. If omitted, the latest available layer version will be used.
+    :param _builtins.int version: Specific layer version. Only valid with `layer_name`. Conflicts with `compatible_runtime`, `compatible_architecture`, and `layer_version_arn`. If omitted, the latest available layer version will be used.
     """
     __args__ = dict()
     __args__['compatibleArchitecture'] = compatible_architecture
     __args__['compatibleRuntime'] = compatible_runtime
     __args__['layerName'] = layer_name
+    __args__['layerVersionArn'] = layer_version_arn
     __args__['region'] = region
     __args__['version'] = version
     opts = pulumi.InvokeOutputOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
@@ -478,6 +539,7 @@ def get_layer_version_output(compatible_architecture: Optional[pulumi.Input[Opti
         id=pulumi.get(__response__, 'id'),
         layer_arn=pulumi.get(__response__, 'layer_arn'),
         layer_name=pulumi.get(__response__, 'layer_name'),
+        layer_version_arn=pulumi.get(__response__, 'layer_version_arn'),
         license_info=pulumi.get(__response__, 'license_info'),
         region=pulumi.get(__response__, 'region'),
         signing_job_arn=pulumi.get(__response__, 'signing_job_arn'),

@@ -78,7 +78,7 @@ class ByteMatchSetByteMatchTupleArgsDict(TypedDict):
 
     FieldToMatch(field_to_match) support following:
     """
-    target_string: NotRequired[pulumi.Input[_builtins.str]]
+    target_string: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The value that you want AWS WAF to search for. The maximum length of the value is 50 bytes.
     """
@@ -89,7 +89,7 @@ class ByteMatchSetByteMatchTupleArgs:
                  field_to_match: pulumi.Input['ByteMatchSetByteMatchTupleFieldToMatchArgs'],
                  positional_constraint: pulumi.Input[_builtins.str],
                  text_transformation: pulumi.Input[_builtins.str],
-                 target_string: Optional[pulumi.Input[_builtins.str]] = None):
+                 target_string: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input['ByteMatchSetByteMatchTupleFieldToMatchArgs'] field_to_match: Settings for the ByteMatchTuple. FieldToMatch documented below.
         :param pulumi.Input[_builtins.str] positional_constraint: Within the portion of a web request that you want to search.
@@ -144,14 +144,14 @@ class ByteMatchSetByteMatchTupleArgs:
 
     @_builtins.property
     @pulumi.getter(name="targetString")
-    def target_string(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def target_string(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The value that you want AWS WAF to search for. The maximum length of the value is 50 bytes.
         """
         return pulumi.get(self, "target_string")
 
     @target_string.setter
-    def target_string(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def target_string(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "target_string", value)
 
 
@@ -160,7 +160,7 @@ class ByteMatchSetByteMatchTupleFieldToMatchArgsDict(TypedDict):
     """
     The part of the web request that you want AWS WAF to search for a specified string.
     """
-    data: NotRequired[pulumi.Input[_builtins.str]]
+    data: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     When the value of Type is HEADER, enter the name of the header that you want AWS WAF to search, for example, User-Agent or Referer. If the value of Type is any other value, omit Data.
     """
@@ -169,7 +169,7 @@ class ByteMatchSetByteMatchTupleFieldToMatchArgsDict(TypedDict):
 class ByteMatchSetByteMatchTupleFieldToMatchArgs:
     def __init__(__self__, *,
                  type: pulumi.Input[_builtins.str],
-                 data: Optional[pulumi.Input[_builtins.str]] = None):
+                 data: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] type: The part of the web request that you want AWS WAF to search for a specified string.
         :param pulumi.Input[_builtins.str] data: When the value of Type is HEADER, enter the name of the header that you want AWS WAF to search, for example, User-Agent or Referer. If the value of Type is any other value, omit Data.
@@ -192,27 +192,25 @@ class ByteMatchSetByteMatchTupleFieldToMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def data(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def data(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         When the value of Type is HEADER, enter the name of the header that you want AWS WAF to search, for example, User-Agent or Referer. If the value of Type is any other value, omit Data.
         """
         return pulumi.get(self, "data")
 
     @data.setter
-    def data(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def data(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "data", value)
 
 
 class GeoMatchSetGeoMatchConstraintArgsDict(TypedDict):
     type: pulumi.Input[_builtins.str]
     """
-    The type of geographical area you want AWS WAF to search for. Currently Country is the only valid value.
+    Type of geographical area you want AWS WAF to search for. Currently `Country` is the only valid value.
     """
     value: pulumi.Input[_builtins.str]
     """
-    The country that you want AWS WAF to search for.
-    This is the two-letter country code, e.g., `US`, `CA`, `RU`, `CN`, etc.
-    See [docs](https://docs.aws.amazon.com/waf/latest/APIReference/API_GeoMatchConstraint.html) for all supported values.
+    Two-letter country code that you want AWS WAF to search for, e.g., `US`, `CA`, `RU`, `CN`. See [docs](https://docs.aws.amazon.com/waf/latest/APIReference/API_GeoMatchConstraint.html) for all supported values.
     """
 
 @pulumi.input_type
@@ -221,10 +219,8 @@ class GeoMatchSetGeoMatchConstraintArgs:
                  type: pulumi.Input[_builtins.str],
                  value: pulumi.Input[_builtins.str]):
         """
-        :param pulumi.Input[_builtins.str] type: The type of geographical area you want AWS WAF to search for. Currently Country is the only valid value.
-        :param pulumi.Input[_builtins.str] value: The country that you want AWS WAF to search for.
-               This is the two-letter country code, e.g., `US`, `CA`, `RU`, `CN`, etc.
-               See [docs](https://docs.aws.amazon.com/waf/latest/APIReference/API_GeoMatchConstraint.html) for all supported values.
+        :param pulumi.Input[_builtins.str] type: Type of geographical area you want AWS WAF to search for. Currently `Country` is the only valid value.
+        :param pulumi.Input[_builtins.str] value: Two-letter country code that you want AWS WAF to search for, e.g., `US`, `CA`, `RU`, `CN`. See [docs](https://docs.aws.amazon.com/waf/latest/APIReference/API_GeoMatchConstraint.html) for all supported values.
         """
         pulumi.set(__self__, "type", type)
         pulumi.set(__self__, "value", value)
@@ -233,7 +229,7 @@ class GeoMatchSetGeoMatchConstraintArgs:
     @pulumi.getter
     def type(self) -> pulumi.Input[_builtins.str]:
         """
-        The type of geographical area you want AWS WAF to search for. Currently Country is the only valid value.
+        Type of geographical area you want AWS WAF to search for. Currently `Country` is the only valid value.
         """
         return pulumi.get(self, "type")
 
@@ -245,9 +241,7 @@ class GeoMatchSetGeoMatchConstraintArgs:
     @pulumi.getter
     def value(self) -> pulumi.Input[_builtins.str]:
         """
-        The country that you want AWS WAF to search for.
-        This is the two-letter country code, e.g., `US`, `CA`, `RU`, `CN`, etc.
-        See [docs](https://docs.aws.amazon.com/waf/latest/APIReference/API_GeoMatchConstraint.html) for all supported values.
+        Two-letter country code that you want AWS WAF to search for, e.g., `US`, `CA`, `RU`, `CN`. See [docs](https://docs.aws.amazon.com/waf/latest/APIReference/API_GeoMatchConstraint.html) for all supported values.
         """
         return pulumi.get(self, "value")
 
@@ -461,7 +455,7 @@ class RegexMatchSetRegexMatchTupleFieldToMatchArgsDict(TypedDict):
     See [docs](http://docs.aws.amazon.com/waf/latest/APIReference/API_FieldToMatch.html)
     for all supported values.
     """
-    data: NotRequired[pulumi.Input[_builtins.str]]
+    data: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     When `type` is `HEADER`, enter the name of the header that you want to search, e.g., `User-Agent` or `Referer`.
     If `type` is any other value, omit this field.
@@ -471,7 +465,7 @@ class RegexMatchSetRegexMatchTupleFieldToMatchArgsDict(TypedDict):
 class RegexMatchSetRegexMatchTupleFieldToMatchArgs:
     def __init__(__self__, *,
                  type: pulumi.Input[_builtins.str],
-                 data: Optional[pulumi.Input[_builtins.str]] = None):
+                 data: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] type: The part of the web request that you want AWS WAF to search for a specified string.
                e.g., `HEADER`, `METHOD` or `BODY`.
@@ -501,7 +495,7 @@ class RegexMatchSetRegexMatchTupleFieldToMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def data(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def data(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         When `type` is `HEADER`, enter the name of the header that you want to search, e.g., `User-Agent` or `Referer`.
         If `type` is any other value, omit this field.
@@ -509,7 +503,7 @@ class RegexMatchSetRegexMatchTupleFieldToMatchArgs:
         return pulumi.get(self, "data")
 
     @data.setter
-    def data(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def data(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "data", value)
 
 
@@ -526,7 +520,7 @@ class RuleGroupActivatedRuleArgsDict(TypedDict):
     """
     The ID of a rule
     """
-    type: NotRequired[pulumi.Input[_builtins.str]]
+    type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
 
 @pulumi.input_type
 class RuleGroupActivatedRuleArgs:
@@ -534,7 +528,7 @@ class RuleGroupActivatedRuleArgs:
                  action: pulumi.Input['RuleGroupActivatedRuleActionArgs'],
                  priority: pulumi.Input[_builtins.int],
                  rule_id: pulumi.Input[_builtins.str],
-                 type: Optional[pulumi.Input[_builtins.str]] = None):
+                 type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input['RuleGroupActivatedRuleActionArgs'] action: Specifies the action that CloudFront or AWS WAF takes when a web request matches the conditions in the rule.
         :param pulumi.Input[_builtins.int] priority: Specifies the order in which the rules are evaluated. Rules with a lower value are evaluated before rules with a higher value.
@@ -584,11 +578,11 @@ class RuleGroupActivatedRuleArgs:
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
 
@@ -613,8 +607,17 @@ class RuleGroupActivatedRuleActionArgs:
 
 class RulePredicateArgsDict(TypedDict):
     data_id: pulumi.Input[_builtins.str]
+    """
+    The unique identifier of a predicate, such as the ID of a `ByteMatchSet` or `IPSet`.
+    """
     negated: pulumi.Input[_builtins.bool]
+    """
+    Whether to use the settings or the negated settings that you specified in the objects.
+    """
     type: pulumi.Input[_builtins.str]
+    """
+    The type of predicate in a rule. Valid values: `ByteMatch`, `GeoMatch`, `IPMatch`, `RegexMatch`, `SizeConstraint`, `SqlInjectionMatch`, or `XssMatch`
+    """
 
 @pulumi.input_type
 class RulePredicateArgs:
@@ -622,6 +625,11 @@ class RulePredicateArgs:
                  data_id: pulumi.Input[_builtins.str],
                  negated: pulumi.Input[_builtins.bool],
                  type: pulumi.Input[_builtins.str]):
+        """
+        :param pulumi.Input[_builtins.str] data_id: The unique identifier of a predicate, such as the ID of a `ByteMatchSet` or `IPSet`.
+        :param pulumi.Input[_builtins.bool] negated: Whether to use the settings or the negated settings that you specified in the objects.
+        :param pulumi.Input[_builtins.str] type: The type of predicate in a rule. Valid values: `ByteMatch`, `GeoMatch`, `IPMatch`, `RegexMatch`, `SizeConstraint`, `SqlInjectionMatch`, or `XssMatch`
+        """
         pulumi.set(__self__, "data_id", data_id)
         pulumi.set(__self__, "negated", negated)
         pulumi.set(__self__, "type", type)
@@ -629,6 +637,9 @@ class RulePredicateArgs:
     @_builtins.property
     @pulumi.getter(name="dataId")
     def data_id(self) -> pulumi.Input[_builtins.str]:
+        """
+        The unique identifier of a predicate, such as the ID of a `ByteMatchSet` or `IPSet`.
+        """
         return pulumi.get(self, "data_id")
 
     @data_id.setter
@@ -638,6 +649,9 @@ class RulePredicateArgs:
     @_builtins.property
     @pulumi.getter
     def negated(self) -> pulumi.Input[_builtins.bool]:
+        """
+        Whether to use the settings or the negated settings that you specified in the objects.
+        """
         return pulumi.get(self, "negated")
 
     @negated.setter
@@ -647,6 +661,9 @@ class RulePredicateArgs:
     @_builtins.property
     @pulumi.getter
     def type(self) -> pulumi.Input[_builtins.str]:
+        """
+        The type of predicate in a rule. Valid values: `ByteMatch`, `GeoMatch`, `IPMatch`, `RegexMatch`, `SizeConstraint`, `SqlInjectionMatch`, or `XssMatch`
+        """
         return pulumi.get(self, "type")
 
     @type.setter
@@ -771,7 +788,7 @@ class SizeConstraintSetSizeConstraintFieldToMatchArgsDict(TypedDict):
     See [docs](http://docs.aws.amazon.com/waf/latest/APIReference/API_FieldToMatch.html)
     for all supported values.
     """
-    data: NotRequired[pulumi.Input[_builtins.str]]
+    data: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     When `type` is `HEADER`, enter the name of the header that you want to search, e.g., `User-Agent` or `Referer`.
     If `type` is any other value, omit this field.
@@ -781,7 +798,7 @@ class SizeConstraintSetSizeConstraintFieldToMatchArgsDict(TypedDict):
 class SizeConstraintSetSizeConstraintFieldToMatchArgs:
     def __init__(__self__, *,
                  type: pulumi.Input[_builtins.str],
-                 data: Optional[pulumi.Input[_builtins.str]] = None):
+                 data: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] type: The part of the web request that you want AWS WAF to search for a specified string.
                e.g., `HEADER`, `METHOD` or `BODY`.
@@ -811,7 +828,7 @@ class SizeConstraintSetSizeConstraintFieldToMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def data(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def data(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         When `type` is `HEADER`, enter the name of the header that you want to search, e.g., `User-Agent` or `Referer`.
         If `type` is any other value, omit this field.
@@ -819,7 +836,7 @@ class SizeConstraintSetSizeConstraintFieldToMatchArgs:
         return pulumi.get(self, "data")
 
     @data.setter
-    def data(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def data(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "data", value)
 
 
@@ -890,7 +907,7 @@ class SqlInjectionMatchSetSqlInjectionMatchTupleFieldToMatchArgsDict(TypedDict):
     See [docs](https://docs.aws.amazon.com/waf/latest/APIReference/API_regional_FieldToMatch.html)
     for all supported values.
     """
-    data: NotRequired[pulumi.Input[_builtins.str]]
+    data: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     When `type` is `HEADER`, enter the name of the header that you want to search, e.g., `User-Agent` or `Referer`.
     If `type` is any other value, omit this field.
@@ -900,7 +917,7 @@ class SqlInjectionMatchSetSqlInjectionMatchTupleFieldToMatchArgsDict(TypedDict):
 class SqlInjectionMatchSetSqlInjectionMatchTupleFieldToMatchArgs:
     def __init__(__self__, *,
                  type: pulumi.Input[_builtins.str],
-                 data: Optional[pulumi.Input[_builtins.str]] = None):
+                 data: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] type: The part of the web request that you want AWS WAF to search for a specified string.
                e.g., `HEADER`, `METHOD` or `BODY`.
@@ -930,7 +947,7 @@ class SqlInjectionMatchSetSqlInjectionMatchTupleFieldToMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def data(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def data(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         When `type` is `HEADER`, enter the name of the header that you want to search, e.g., `User-Agent` or `Referer`.
         If `type` is any other value, omit this field.
@@ -938,7 +955,7 @@ class SqlInjectionMatchSetSqlInjectionMatchTupleFieldToMatchArgs:
         return pulumi.get(self, "data")
 
     @data.setter
-    def data(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def data(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "data", value)
 
 
@@ -973,9 +990,9 @@ class WebAclDefaultActionArgs:
 class WebAclLoggingConfigurationArgsDict(TypedDict):
     log_destination: pulumi.Input[_builtins.str]
     """
-    Amazon Resource Name (ARN) of Kinesis Firehose Delivery Stream
+    ARN of Kinesis Firehose Delivery Stream
     """
-    redacted_fields: NotRequired[pulumi.Input['WebAclLoggingConfigurationRedactedFieldsArgsDict']]
+    redacted_fields: NotRequired[pulumi.Input[Optional['WebAclLoggingConfigurationRedactedFieldsArgsDict']]]
     """
     Configuration block containing parts of the request that you want redacted from the logs. Detailed below.
     """
@@ -984,9 +1001,9 @@ class WebAclLoggingConfigurationArgsDict(TypedDict):
 class WebAclLoggingConfigurationArgs:
     def __init__(__self__, *,
                  log_destination: pulumi.Input[_builtins.str],
-                 redacted_fields: Optional[pulumi.Input['WebAclLoggingConfigurationRedactedFieldsArgs']] = None):
+                 redacted_fields: pulumi.Input[Optional['WebAclLoggingConfigurationRedactedFieldsArgs']] = None):
         """
-        :param pulumi.Input[_builtins.str] log_destination: Amazon Resource Name (ARN) of Kinesis Firehose Delivery Stream
+        :param pulumi.Input[_builtins.str] log_destination: ARN of Kinesis Firehose Delivery Stream
         :param pulumi.Input['WebAclLoggingConfigurationRedactedFieldsArgs'] redacted_fields: Configuration block containing parts of the request that you want redacted from the logs. Detailed below.
         """
         pulumi.set(__self__, "log_destination", log_destination)
@@ -997,7 +1014,7 @@ class WebAclLoggingConfigurationArgs:
     @pulumi.getter(name="logDestination")
     def log_destination(self) -> pulumi.Input[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of Kinesis Firehose Delivery Stream
+        ARN of Kinesis Firehose Delivery Stream
         """
         return pulumi.get(self, "log_destination")
 
@@ -1007,14 +1024,14 @@ class WebAclLoggingConfigurationArgs:
 
     @_builtins.property
     @pulumi.getter(name="redactedFields")
-    def redacted_fields(self) -> Optional[pulumi.Input['WebAclLoggingConfigurationRedactedFieldsArgs']]:
+    def redacted_fields(self) -> pulumi.Input[Optional['WebAclLoggingConfigurationRedactedFieldsArgs']]:
         """
         Configuration block containing parts of the request that you want redacted from the logs. Detailed below.
         """
         return pulumi.get(self, "redacted_fields")
 
     @redacted_fields.setter
-    def redacted_fields(self, value: Optional[pulumi.Input['WebAclLoggingConfigurationRedactedFieldsArgs']]):
+    def redacted_fields(self, value: pulumi.Input[Optional['WebAclLoggingConfigurationRedactedFieldsArgs']]):
         pulumi.set(self, "redacted_fields", value)
 
 
@@ -1051,7 +1068,7 @@ class WebAclLoggingConfigurationRedactedFieldsFieldToMatchArgsDict(TypedDict):
     """
     The part of the web request that you want AWS WAF to search for a specified stringE.g., `HEADER` or `METHOD`
     """
-    data: NotRequired[pulumi.Input[_builtins.str]]
+    data: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     When the value of `type` is `HEADER`, enter the name of the header that you want the WAF to search, for example, `User-Agent` or `Referer`. If the value of `type` is any other value, omit `data`.
     """
@@ -1060,7 +1077,7 @@ class WebAclLoggingConfigurationRedactedFieldsFieldToMatchArgsDict(TypedDict):
 class WebAclLoggingConfigurationRedactedFieldsFieldToMatchArgs:
     def __init__(__self__, *,
                  type: pulumi.Input[_builtins.str],
-                 data: Optional[pulumi.Input[_builtins.str]] = None):
+                 data: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] type: The part of the web request that you want AWS WAF to search for a specified stringE.g., `HEADER` or `METHOD`
         :param pulumi.Input[_builtins.str] data: When the value of `type` is `HEADER`, enter the name of the header that you want the WAF to search, for example, `User-Agent` or `Referer`. If the value of `type` is any other value, omit `data`.
@@ -1083,14 +1100,14 @@ class WebAclLoggingConfigurationRedactedFieldsFieldToMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def data(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def data(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         When the value of `type` is `HEADER`, enter the name of the header that you want the WAF to search, for example, `User-Agent` or `Referer`. If the value of `type` is any other value, omit `data`.
         """
         return pulumi.get(self, "data")
 
     @data.setter
-    def data(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def data(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "data", value)
 
 
@@ -1104,15 +1121,15 @@ class WebAclRuleArgsDict(TypedDict):
     """
     ID of the associated WAF (Regional) rule (e.g., `wafregional.Rule`). WAF (Global) rules cannot be used.
     """
-    action: NotRequired[pulumi.Input['WebAclRuleActionArgsDict']]
+    action: NotRequired[pulumi.Input[Optional['WebAclRuleActionArgsDict']]]
     """
     Configuration block of the action that CloudFront or AWS WAF takes when a web request matches the conditions in the rule.  Not used if `type` is `GROUP`. Detailed below.
     """
-    override_action: NotRequired[pulumi.Input['WebAclRuleOverrideActionArgsDict']]
+    override_action: NotRequired[pulumi.Input[Optional['WebAclRuleOverrideActionArgsDict']]]
     """
     Configuration block of the override the action that a group requests CloudFront or AWS WAF takes when a web request matches the conditions in the rule.  Only used if `type` is `GROUP`. Detailed below.
     """
-    type: NotRequired[pulumi.Input[_builtins.str]]
+    type: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     The rule type, either `REGULAR`, as defined by [Rule](http://docs.aws.amazon.com/waf/latest/APIReference/API_Rule.html), `RATE_BASED`, as defined by [RateBasedRule](http://docs.aws.amazon.com/waf/latest/APIReference/API_RateBasedRule.html), or `GROUP`, as defined by [RuleGroup](https://docs.aws.amazon.com/waf/latest/APIReference/API_RuleGroup.html). The default is REGULAR. If you add a RATE_BASED rule, you need to set `type` as `RATE_BASED`. If you add a GROUP rule, you need to set `type` as `GROUP`.
     """
@@ -1122,9 +1139,9 @@ class WebAclRuleArgs:
     def __init__(__self__, *,
                  priority: pulumi.Input[_builtins.int],
                  rule_id: pulumi.Input[_builtins.str],
-                 action: Optional[pulumi.Input['WebAclRuleActionArgs']] = None,
-                 override_action: Optional[pulumi.Input['WebAclRuleOverrideActionArgs']] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None):
+                 action: pulumi.Input[Optional['WebAclRuleActionArgs']] = None,
+                 override_action: pulumi.Input[Optional['WebAclRuleOverrideActionArgs']] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.int] priority: Specifies the order in which the rules in a WebACL are evaluated.
                Rules with a lower value are evaluated before rules with a higher value.
@@ -1169,38 +1186,38 @@ class WebAclRuleArgs:
 
     @_builtins.property
     @pulumi.getter
-    def action(self) -> Optional[pulumi.Input['WebAclRuleActionArgs']]:
+    def action(self) -> pulumi.Input[Optional['WebAclRuleActionArgs']]:
         """
         Configuration block of the action that CloudFront or AWS WAF takes when a web request matches the conditions in the rule.  Not used if `type` is `GROUP`. Detailed below.
         """
         return pulumi.get(self, "action")
 
     @action.setter
-    def action(self, value: Optional[pulumi.Input['WebAclRuleActionArgs']]):
+    def action(self, value: pulumi.Input[Optional['WebAclRuleActionArgs']]):
         pulumi.set(self, "action", value)
 
     @_builtins.property
     @pulumi.getter(name="overrideAction")
-    def override_action(self) -> Optional[pulumi.Input['WebAclRuleOverrideActionArgs']]:
+    def override_action(self) -> pulumi.Input[Optional['WebAclRuleOverrideActionArgs']]:
         """
         Configuration block of the override the action that a group requests CloudFront or AWS WAF takes when a web request matches the conditions in the rule.  Only used if `type` is `GROUP`. Detailed below.
         """
         return pulumi.get(self, "override_action")
 
     @override_action.setter
-    def override_action(self, value: Optional[pulumi.Input['WebAclRuleOverrideActionArgs']]):
+    def override_action(self, value: pulumi.Input[Optional['WebAclRuleOverrideActionArgs']]):
         pulumi.set(self, "override_action", value)
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The rule type, either `REGULAR`, as defined by [Rule](http://docs.aws.amazon.com/waf/latest/APIReference/API_Rule.html), `RATE_BASED`, as defined by [RateBasedRule](http://docs.aws.amazon.com/waf/latest/APIReference/API_RateBasedRule.html), or `GROUP`, as defined by [RuleGroup](https://docs.aws.amazon.com/waf/latest/APIReference/API_RuleGroup.html). The default is REGULAR. If you add a RATE_BASED rule, you need to set `type` as `RATE_BASED`. If you add a GROUP rule, you need to set `type` as `GROUP`.
         """
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
 
@@ -1303,7 +1320,7 @@ class XssMatchSetXssMatchTupleFieldToMatchArgsDict(TypedDict):
     """
     The part of the web request that you want AWS WAF to search for a specified stringE.g., `HEADER` or `METHOD`
     """
-    data: NotRequired[pulumi.Input[_builtins.str]]
+    data: NotRequired[pulumi.Input[Optional[_builtins.str]]]
     """
     When the value of `type` is `HEADER`, enter the name of the header that you want the WAF to search, for example, `User-Agent` or `Referer`. If the value of `type` is any other value, omit `data`.
     """
@@ -1312,7 +1329,7 @@ class XssMatchSetXssMatchTupleFieldToMatchArgsDict(TypedDict):
 class XssMatchSetXssMatchTupleFieldToMatchArgs:
     def __init__(__self__, *,
                  type: pulumi.Input[_builtins.str],
-                 data: Optional[pulumi.Input[_builtins.str]] = None):
+                 data: pulumi.Input[Optional[_builtins.str]] = None):
         """
         :param pulumi.Input[_builtins.str] type: The part of the web request that you want AWS WAF to search for a specified stringE.g., `HEADER` or `METHOD`
         :param pulumi.Input[_builtins.str] data: When the value of `type` is `HEADER`, enter the name of the header that you want the WAF to search, for example, `User-Agent` or `Referer`. If the value of `type` is any other value, omit `data`.
@@ -1335,14 +1352,14 @@ class XssMatchSetXssMatchTupleFieldToMatchArgs:
 
     @_builtins.property
     @pulumi.getter
-    def data(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def data(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         When the value of `type` is `HEADER`, enter the name of the header that you want the WAF to search, for example, `User-Agent` or `Referer`. If the value of `type` is any other value, omit `data`.
         """
         return pulumi.get(self, "data")
 
     @data.setter
-    def data(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def data(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "data", value)
 
 

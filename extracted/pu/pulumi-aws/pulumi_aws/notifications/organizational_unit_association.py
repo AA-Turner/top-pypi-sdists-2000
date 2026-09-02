@@ -23,6 +23,7 @@ class OrganizationalUnitAssociationArgs:
                  organizational_unit_id: pulumi.Input[_builtins.str]):
         """
         The set of arguments for constructing a OrganizationalUnitAssociation resource.
+
         :param pulumi.Input[_builtins.str] notification_configuration_arn: ARN of the notification configuration to associate the organizational unit with.
         :param pulumi.Input[_builtins.str] organizational_unit_id: ID of the organizational unit or ID of the root to associate with the notification configuration. Can be a root ID (e.g., `r-1234`), or an organization ID (e.g., `o-1234567890`).
         """
@@ -57,10 +58,11 @@ class OrganizationalUnitAssociationArgs:
 @pulumi.input_type
 class _OrganizationalUnitAssociationState:
     def __init__(__self__, *,
-                 notification_configuration_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 organizational_unit_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 notification_configuration_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 organizational_unit_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering OrganizationalUnitAssociation resources.
+
         :param pulumi.Input[_builtins.str] notification_configuration_arn: ARN of the notification configuration to associate the organizational unit with.
         :param pulumi.Input[_builtins.str] organizational_unit_id: ID of the organizational unit or ID of the root to associate with the notification configuration. Can be a root ID (e.g., `r-1234`), or an organization ID (e.g., `o-1234567890`).
         """
@@ -71,26 +73,26 @@ class _OrganizationalUnitAssociationState:
 
     @_builtins.property
     @pulumi.getter(name="notificationConfigurationArn")
-    def notification_configuration_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def notification_configuration_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the notification configuration to associate the organizational unit with.
         """
         return pulumi.get(self, "notification_configuration_arn")
 
     @notification_configuration_arn.setter
-    def notification_configuration_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def notification_configuration_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "notification_configuration_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="organizationalUnitId")
-    def organizational_unit_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def organizational_unit_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ID of the organizational unit or ID of the root to associate with the notification configuration. Can be a root ID (e.g., `r-1234`), or an organization ID (e.g., `o-1234567890`).
         """
         return pulumi.get(self, "organizational_unit_id")
 
     @organizational_unit_id.setter
-    def organizational_unit_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def organizational_unit_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "organizational_unit_id", value)
 
 
@@ -100,8 +102,8 @@ class OrganizationalUnitAssociation(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 notification_configuration_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 organizational_unit_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 notification_configuration_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 organizational_unit_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing an AWS User Notifications Organizational Unit Association. This resource associates an organizational unit with a notification configuration.
@@ -123,7 +125,7 @@ class OrganizationalUnitAssociation(pulumi.CustomResource):
             name="example-ou",
             parent_id=example.roots[0].id)
         # Allow time for organizational unit creation to propagate
-        wait = time.index.Sleep("wait", create_duration=5s,
+        wait = time.Sleep("wait", create_duration=5s,
         opts = pulumi.ResourceOptions(depends_on=[
                 example_organizational_unit,
                 example_notification_configuration,
@@ -156,6 +158,7 @@ class OrganizationalUnitAssociation(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:notifications/organizationalUnitAssociation:OrganizationalUnitAssociation example arn:aws:notifications:us-west-2:123456789012:configuration:example-notification-config,ou-1234-12345678
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -188,7 +191,7 @@ class OrganizationalUnitAssociation(pulumi.CustomResource):
             name="example-ou",
             parent_id=example.roots[0].id)
         # Allow time for organizational unit creation to propagate
-        wait = time.index.Sleep("wait", create_duration=5s,
+        wait = time.Sleep("wait", create_duration=5s,
         opts = pulumi.ResourceOptions(depends_on=[
                 example_organizational_unit,
                 example_notification_configuration,
@@ -222,6 +225,7 @@ class OrganizationalUnitAssociation(pulumi.CustomResource):
         $ pulumi import aws:notifications/organizationalUnitAssociation:OrganizationalUnitAssociation example arn:aws:notifications:us-west-2:123456789012:configuration:example-notification-config,ou-1234-12345678
         ```
 
+
         :param str resource_name: The name of the resource.
         :param OrganizationalUnitAssociationArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -237,8 +241,8 @@ class OrganizationalUnitAssociation(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 notification_configuration_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 organizational_unit_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 notification_configuration_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 organizational_unit_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -264,8 +268,8 @@ class OrganizationalUnitAssociation(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            notification_configuration_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            organizational_unit_id: Optional[pulumi.Input[_builtins.str]] = None) -> 'OrganizationalUnitAssociation':
+            notification_configuration_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            organizational_unit_id: pulumi.Input[Optional[_builtins.str]] = None) -> 'OrganizationalUnitAssociation':
         """
         Get an existing OrganizationalUnitAssociation resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

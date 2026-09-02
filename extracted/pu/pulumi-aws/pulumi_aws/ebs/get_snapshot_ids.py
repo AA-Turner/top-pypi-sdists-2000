@@ -114,8 +114,7 @@ def get_snapshot_ids(filters: Optional[Sequence[Union['GetSnapshotIdsFilterArgs'
     import pulumi
     import pulumi_aws as aws
 
-    ebs_volumes = aws.ebs.get_snapshot_ids(owners=["self"],
-        filters=[
+    ebs_volumes = aws.ebs.get_snapshot_ids(filters=[
             {
                 "name": "volume-size",
                 "values": ["40"],
@@ -124,11 +123,12 @@ def get_snapshot_ids(filters: Optional[Sequence[Union['GetSnapshotIdsFilterArgs'
                 "name": "tag:Name",
                 "values": ["Example"],
             },
-        ])
+        ],
+        owners=["self"])
     ```
 
 
-    :param Sequence[Union['GetSnapshotIdsFilterArgs', 'GetSnapshotIdsFilterArgsDict']] filters: One or more name/value pairs to filter off of. There are several valid keys, for a full reference, check out [describe-volumes in the AWS CLI reference][1].
+    :param Sequence[Union['GetSnapshotIdsFilterArgs', 'GetSnapshotIdsFilterArgsDict']] filters: One or more name/value pairs to filter off of. There are several valid keys, for a full reference, check out [describe-volumes in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-snapshots.html).
     :param Sequence[_builtins.str] owners: Returns the snapshots owned by the specified owner id. Multiple owners can be specified.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     :param Sequence[_builtins.str] restorable_by_user_ids: One or more AWS accounts IDs that can create volumes from the snapshot.
@@ -148,10 +148,10 @@ def get_snapshot_ids(filters: Optional[Sequence[Union['GetSnapshotIdsFilterArgs'
         owners=pulumi.get(__ret__, 'owners'),
         region=pulumi.get(__ret__, 'region'),
         restorable_by_user_ids=pulumi.get(__ret__, 'restorable_by_user_ids'))
-def get_snapshot_ids_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['GetSnapshotIdsFilterArgs', 'GetSnapshotIdsFilterArgsDict']]]]] = None,
-                            owners: Optional[pulumi.Input[Optional[Sequence[_builtins.str]]]] = None,
-                            region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                            restorable_by_user_ids: Optional[pulumi.Input[Optional[Sequence[_builtins.str]]]] = None,
+def get_snapshot_ids_output(filters: pulumi.Input[Optional[Optional[Sequence[Union['GetSnapshotIdsFilterArgs', 'GetSnapshotIdsFilterArgsDict']]]]] = None,
+                            owners: pulumi.Input[Optional[Optional[Sequence[_builtins.str]]]] = None,
+                            region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                            restorable_by_user_ids: pulumi.Input[Optional[Optional[Sequence[_builtins.str]]]] = None,
                             opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetSnapshotIdsResult]:
     """
     Use this data source to get a list of EBS Snapshot IDs matching the specified
@@ -163,8 +163,7 @@ def get_snapshot_ids_output(filters: Optional[pulumi.Input[Optional[Sequence[Uni
     import pulumi
     import pulumi_aws as aws
 
-    ebs_volumes = aws.ebs.get_snapshot_ids(owners=["self"],
-        filters=[
+    ebs_volumes = aws.ebs.get_snapshot_ids(filters=[
             {
                 "name": "volume-size",
                 "values": ["40"],
@@ -173,11 +172,12 @@ def get_snapshot_ids_output(filters: Optional[pulumi.Input[Optional[Sequence[Uni
                 "name": "tag:Name",
                 "values": ["Example"],
             },
-        ])
+        ],
+        owners=["self"])
     ```
 
 
-    :param Sequence[Union['GetSnapshotIdsFilterArgs', 'GetSnapshotIdsFilterArgsDict']] filters: One or more name/value pairs to filter off of. There are several valid keys, for a full reference, check out [describe-volumes in the AWS CLI reference][1].
+    :param Sequence[Union['GetSnapshotIdsFilterArgs', 'GetSnapshotIdsFilterArgsDict']] filters: One or more name/value pairs to filter off of. There are several valid keys, for a full reference, check out [describe-volumes in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-snapshots.html).
     :param Sequence[_builtins.str] owners: Returns the snapshots owned by the specified owner id. Multiple owners can be specified.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     :param Sequence[_builtins.str] restorable_by_user_ids: One or more AWS accounts IDs that can create volumes from the snapshot.

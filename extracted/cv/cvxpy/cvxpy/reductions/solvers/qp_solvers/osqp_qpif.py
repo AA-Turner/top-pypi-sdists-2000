@@ -5,7 +5,9 @@ import cvxpy.interface as intf
 import cvxpy.settings as s
 from cvxpy.error import SolverError
 from cvxpy.reductions.solution import Solution, failure_solution
+from cvxpy.reductions.solvers import utilities
 from cvxpy.reductions.solvers.qp_solvers.qp_solver import QpSolver
+from cvxpy.utilities.citations import CITATION_DICT
 
 
 class OSQP(QpSolver):
@@ -15,7 +17,7 @@ class OSQP(QpSolver):
     # Note: Status map has changed in versions >= 1
     STATUS_MAP_PRE_V1 = {1: s.OPTIMAL,
                   2: s.OPTIMAL_INACCURATE,
-                  -2: s.SOLVER_ERROR,           # Maxiter reached
+                  -2: s.USER_LIMIT,           # Maxiter reached
                   -3: s.INFEASIBLE,
                   3: s.INFEASIBLE_INACCURATE,
                   -4: s.UNBOUNDED,
@@ -29,7 +31,7 @@ class OSQP(QpSolver):
                   4: s.INFEASIBLE_INACCURATE,
                   5: s.UNBOUNDED,
                   6: s.UNBOUNDED_INACCURATE,
-                  7: s.SOLVER_ERROR,           # Maxiter reached
+                  7: s.USER_LIMIT,           # Maxiter reached
                   8: s.USER_LIMIT,
                   10: s.SOLVER_ERROR,          # Interrupted by user
                   11: s.SOLVER_ERROR}          # Unsolved
@@ -38,8 +40,23 @@ class OSQP(QpSolver):
         return s.OSQP
 
     def import_solver(self) -> None:
-        import osqp
-        osqp
+        import osqp  # noqa: F401
+
+    def extract_duals_from_solution_attribute(
+            self, solution_attribute, inverse_data
+    ) -> dict[int, np.ndarray]:
+        # Build dual vars dict keyed by constraint IDs
+        # solution_attribute can either be solution.y or solution.prim_inf_cert
+        n_eq = inverse_data[self.DIMS].zero
+        eq_dual = utilities.get_dual_values(
+            solution_attribute[:n_eq],
+            utilities.extract_dual_value,
+            inverse_data[self.EQ_CONSTR])
+        ineq_dual = utilities.get_dual_values(
+            solution_attribute[n_eq:],
+            utilities.extract_dual_value,
+            inverse_data[self.NEQ_CONSTR])
+        return eq_dual | ineq_dual
 
     def invert(self, solution, inverse_data):
         import osqp
@@ -58,18 +75,25 @@ class OSQP(QpSolver):
                 OSQP.VAR_ID:
                 intf.DEFAULT_INTF.const_to_matrix(np.array(solution.x))
             }
-            dual_vars = {OSQP.DUAL_VAR_ID: solution.y}
             attr[s.NUM_ITERS] = solution.info.iter
+
+            # OSQP returns y as [eq_duals; ineq_duals]
+            dual_vars = self.extract_duals_from_solution_attribute(solution.y, inverse_data)
             sol = Solution(status, opt_val, primal_vars, dual_vars, attr)
         else:
-            sol = failure_solution(status, attr)
+            # y does not represent an infeasibility certificate, instead there is an explicit
+            # attribute: prim_inf_cert. OSQP returns prim_inf_cert as [eq_duals; ineq_duals]
+            dual_vars = self.extract_duals_from_solution_attribute(
+                solution.prim_inf_cert, inverse_data
+            )
+            sol = failure_solution(status, attr, dual_vars)
         return sol
 
     def solve_via_data(self, data, warm_start: bool, verbose: bool, solver_opts,
                        solver_cache=None):
         import osqp
         is_pre_v1 = float(osqp.__version__.split('.')[0]) < 1
-        
+
         P = data[s.P]
         q = data[s.Q]
         A = sp.vstack([data[s.A], data[s.F]]).tocsc()
@@ -78,6 +102,11 @@ class OSQP(QpSolver):
         data['u'] = uA
         lA = np.concatenate([data[s.B], -np.inf*np.ones(data[s.G].shape)])
         data['l'] = lA
+
+        if P is not None:
+            P = sp.csc_matrix((P.data, P.indices, P.indptr), shape=P.shape)
+        if A is not None:
+            A = sp.csc_matrix((A.data, A.indices, A.indptr), shape=A.shape)
 
         # Overwrite defaults eps_abs=eps_rel=1e-3, max_iter=4000
         solver_opts['eps_abs'] = solver_opts.get('eps_abs', 1e-5)
@@ -94,7 +123,7 @@ class OSQP(QpSolver):
             factorizing = False
             if P.data.shape != old_data[s.P].data.shape or any(
                     P.data != old_data[s.P].data):
-                P_triu = sp.triu(P).tocsc()
+                P_triu = sp.csc_array(sp.triu(P, format='csc'))
                 new_args['Px'] = P_triu.data
                 factorizing = True
             if A.data.shape != old_data['Ax'].data.shape or any(
@@ -123,8 +152,18 @@ class OSQP(QpSolver):
             except Exception as e:
                 raise SolverError(e)
 
-        results = solver.solve()
+        results = solver.solve(raise_error=False)
 
         if solver_cache is not None:
             solver_cache[self.name()] = (solver, data, results)
         return results
+
+    def cite(self, data):
+        """Returns bibtex citation for the solver.
+
+        Parameters
+        ----------
+        data : dict
+            Data generated via an apply call.
+        """
+        return CITATION_DICT["OSQP"]

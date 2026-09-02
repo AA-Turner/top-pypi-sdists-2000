@@ -20,9 +20,10 @@ __all__ = ['ProductSubscriptionArgs', 'ProductSubscription']
 class ProductSubscriptionArgs:
     def __init__(__self__, *,
                  product_arn: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a ProductSubscription resource.
+
         :param pulumi.Input[_builtins.str] product_arn: The ARN of the product that generates findings that you want to import into Security Hub - see below.
                
                Amazon maintains a list of [Product integrations in AWS Security Hub](https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-findings-providers.html) that changes over time. Any of the products on the linked [Available AWS service integrations](https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-internal-providers.html) or [Available third-party partner product integrations](https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-partner-providers.html) can be configured using `securityhub.ProductSubscription`.
@@ -120,25 +121,26 @@ class ProductSubscriptionArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _ProductSubscriptionState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 product_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 product_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering ProductSubscription resources.
+
         :param pulumi.Input[_builtins.str] arn: The ARN of a resource that represents your subscription to the product that generates the findings that you want to import into Security Hub.
         :param pulumi.Input[_builtins.str] product_arn: The ARN of the product that generates findings that you want to import into Security Hub - see below.
                
@@ -190,19 +192,19 @@ class _ProductSubscriptionState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of a resource that represents your subscription to the product that generates the findings that you want to import into Security Hub.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="productArn")
-    def product_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def product_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of the product that generates findings that you want to import into Security Hub - see below.
 
@@ -247,19 +249,19 @@ class _ProductSubscriptionState:
         return pulumi.get(self, "product_arn")
 
     @product_arn.setter
-    def product_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def product_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "product_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -269,8 +271,8 @@ class ProductSubscription(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 product_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 product_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Subscribes to a Security Hub product.
@@ -289,11 +291,24 @@ class ProductSubscription(pulumi.CustomResource):
 
         ## Import
 
-        Using `pulumi import`, import Security Hub product subscriptions using `product_arn,arn`. For example:
+        ### Identity Schema
+
+        #### Required
+
+        * `arn` (String) Subscription ARN.
+        * `product_arn` (String) Product ARN.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
+        Using `pulumi import`, import Security Hub product subscriptions using `product_arn` and `arn` separated by a comma (`,`). For example:
 
         ```sh
-        $ pulumi import aws:securityhub/productSubscription:ProductSubscription example arn:aws:securityhub:eu-west-1:733251395267:product/alertlogic/althreatmanagement,arn:aws:securityhub:eu-west-1:123456789012:product-subscription/alertlogic/althreatmanagement
+        $ pulumi import aws:securityhub/productSubscription:ProductSubscription example arn:aws:securityhub:eu-west-1::product/alertlogic/althreatmanagement,arn:aws:securityhub:eu-west-1:123456789012:product-subscription/alertlogic/althreatmanagement
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -361,11 +376,24 @@ class ProductSubscription(pulumi.CustomResource):
 
         ## Import
 
-        Using `pulumi import`, import Security Hub product subscriptions using `product_arn,arn`. For example:
+        ### Identity Schema
+
+        #### Required
+
+        * `arn` (String) Subscription ARN.
+        * `product_arn` (String) Product ARN.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
+        Using `pulumi import`, import Security Hub product subscriptions using `product_arn` and `arn` separated by a comma (`,`). For example:
 
         ```sh
-        $ pulumi import aws:securityhub/productSubscription:ProductSubscription example arn:aws:securityhub:eu-west-1:733251395267:product/alertlogic/althreatmanagement,arn:aws:securityhub:eu-west-1:123456789012:product-subscription/alertlogic/althreatmanagement
+        $ pulumi import aws:securityhub/productSubscription:ProductSubscription example arn:aws:securityhub:eu-west-1::product/alertlogic/althreatmanagement,arn:aws:securityhub:eu-west-1:123456789012:product-subscription/alertlogic/althreatmanagement
         ```
+
 
         :param str resource_name: The name of the resource.
         :param ProductSubscriptionArgs args: The arguments to use to populate this resource's properties.
@@ -382,8 +410,8 @@ class ProductSubscription(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 product_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 product_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -408,9 +436,9 @@ class ProductSubscription(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            product_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'ProductSubscription':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            product_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'ProductSubscription':
         """
         Get an existing ProductSubscription resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

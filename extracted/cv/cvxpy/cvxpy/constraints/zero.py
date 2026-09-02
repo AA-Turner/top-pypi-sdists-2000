@@ -31,10 +31,6 @@ class Zero(Constraint):
     def __init__(self, expr, constr_id=None) -> None:
         super(Zero, self).__init__([expr], constr_id)
 
-    def __str__(self):
-        """Returns a string showing the mathematical constraint.
-        """
-        return self.name()
 
     def __repr__(self) -> str:
         """Returns a string with information about the constraint.
@@ -61,6 +57,10 @@ class Zero(Constraint):
             with scopes.dpp_scope():
                 return self.args[0].is_affine()
         return self.args[0].is_affine()
+
+    def is_dnlp(self) -> bool:
+        """A zero constraint is DNLP if its argument is smooth representable."""
+        return self.args[0].is_smooth()
 
     def is_dgp(self, dpp: bool = False) -> bool:
         return False
@@ -103,10 +103,6 @@ class Equality(Constraint):
         self._expr = lhs - rhs
         super(Equality, self).__init__([lhs, rhs], constr_id)
 
-    def __str__(self):
-        """Returns a string showing the mathematical constraint.
-        """
-        return self.name()
 
     def __repr__(self) -> str:
         """Returns a string with information about the constraint.
@@ -140,6 +136,10 @@ class Equality(Constraint):
             with scopes.dpp_scope():
                 return self.expr.is_affine()
         return self.expr.is_affine()
+
+    def is_dnlp(self) -> bool:
+        """An equality constraint is DNLP if its argument is smooth representable."""
+        return self.expr.is_smooth()
 
     def is_dgp(self, dpp: bool = False) -> bool:
         if dpp:

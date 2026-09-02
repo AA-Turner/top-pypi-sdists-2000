@@ -26,16 +26,17 @@ class V2modelsSlotArgs:
                  intent_id: pulumi.Input[_builtins.str],
                  locale_id: pulumi.Input[_builtins.str],
                  value_elicitation_setting: pulumi.Input['V2modelsSlotValueElicitationSettingArgs'],
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 multiple_values_settings: Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotMultipleValuesSettingArgs']]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 obfuscation_settings: Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotObfuscationSettingArgs']]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 slot_type_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 sub_slot_settings: Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotSubSlotSettingArgs']]]] = None,
-                 timeouts: Optional[pulumi.Input['V2modelsSlotTimeoutsArgs']] = None):
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 multiple_values_settings: pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotMultipleValuesSettingArgs']]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 obfuscation_settings: pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotObfuscationSettingArgs']]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 slot_type_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 sub_slot_settings: pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotSubSlotSettingArgs']]]] = None,
+                 timeouts: pulumi.Input[Optional['V2modelsSlotTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a V2modelsSlot resource.
+
         :param pulumi.Input[_builtins.str] bot_id: Identifier of the bot associated with the slot.
         :param pulumi.Input[_builtins.str] bot_version: Version of the bot associated with the slot.
         :param pulumi.Input[_builtins.str] intent_id: Identifier of the intent that contains the slot.
@@ -148,19 +149,19 @@ class V2modelsSlotArgs:
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the slot.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="multipleValuesSettings")
-    def multiple_values_settings(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotMultipleValuesSettingArgs']]]]:
+    def multiple_values_settings(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotMultipleValuesSettingArgs']]]]:
         """
         Whether the slot returns multiple values in one response.
         See the `multiple_values_setting` argument reference below.
@@ -168,24 +169,24 @@ class V2modelsSlotArgs:
         return pulumi.get(self, "multiple_values_settings")
 
     @multiple_values_settings.setter
-    def multiple_values_settings(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotMultipleValuesSettingArgs']]]]):
+    def multiple_values_settings(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotMultipleValuesSettingArgs']]]]):
         pulumi.set(self, "multiple_values_settings", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the slot.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="obfuscationSettings")
-    def obfuscation_settings(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotObfuscationSettingArgs']]]]:
+    def obfuscation_settings(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotObfuscationSettingArgs']]]]:
         """
         Determines how slot values are used in Amazon CloudWatch logs.
         See the `obfuscation_setting` argument reference below.
@@ -193,36 +194,36 @@ class V2modelsSlotArgs:
         return pulumi.get(self, "obfuscation_settings")
 
     @obfuscation_settings.setter
-    def obfuscation_settings(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotObfuscationSettingArgs']]]]):
+    def obfuscation_settings(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotObfuscationSettingArgs']]]]):
         pulumi.set(self, "obfuscation_settings", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="slotTypeId")
-    def slot_type_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def slot_type_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique identifier for the slot type associated with this slot.
         """
         return pulumi.get(self, "slot_type_id")
 
     @slot_type_id.setter
-    def slot_type_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def slot_type_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "slot_type_id", value)
 
     @_builtins.property
     @pulumi.getter(name="subSlotSettings")
-    def sub_slot_settings(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotSubSlotSettingArgs']]]]:
+    def sub_slot_settings(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotSubSlotSettingArgs']]]]:
         """
         Specifications for the constituent sub slots and the expression for the composite slot.
         See the `sub_slot_setting` argument reference below.
@@ -230,38 +231,39 @@ class V2modelsSlotArgs:
         return pulumi.get(self, "sub_slot_settings")
 
     @sub_slot_settings.setter
-    def sub_slot_settings(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotSubSlotSettingArgs']]]]):
+    def sub_slot_settings(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotSubSlotSettingArgs']]]]):
         pulumi.set(self, "sub_slot_settings", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['V2modelsSlotTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['V2modelsSlotTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['V2modelsSlotTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['V2modelsSlotTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _V2modelsSlotState:
     def __init__(__self__, *,
-                 bot_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 bot_version: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 intent_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 locale_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 multiple_values_settings: Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotMultipleValuesSettingArgs']]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 obfuscation_settings: Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotObfuscationSettingArgs']]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 slot_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 slot_type_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 sub_slot_settings: Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotSubSlotSettingArgs']]]] = None,
-                 timeouts: Optional[pulumi.Input['V2modelsSlotTimeoutsArgs']] = None,
-                 value_elicitation_setting: Optional[pulumi.Input['V2modelsSlotValueElicitationSettingArgs']] = None):
+                 bot_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 bot_version: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 intent_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 locale_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 multiple_values_settings: pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotMultipleValuesSettingArgs']]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 obfuscation_settings: pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotObfuscationSettingArgs']]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 slot_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 slot_type_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 sub_slot_settings: pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotSubSlotSettingArgs']]]] = None,
+                 timeouts: pulumi.Input[Optional['V2modelsSlotTimeoutsArgs']] = None,
+                 value_elicitation_setting: pulumi.Input[Optional['V2modelsSlotValueElicitationSettingArgs']] = None):
         """
         Input properties used for looking up and filtering V2modelsSlot resources.
+
         :param pulumi.Input[_builtins.str] bot_id: Identifier of the bot associated with the slot.
         :param pulumi.Input[_builtins.str] bot_version: Version of the bot associated with the slot.
         :param pulumi.Input[_builtins.str] description: Description of the slot.
@@ -316,67 +318,67 @@ class _V2modelsSlotState:
 
     @_builtins.property
     @pulumi.getter(name="botId")
-    def bot_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def bot_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Identifier of the bot associated with the slot.
         """
         return pulumi.get(self, "bot_id")
 
     @bot_id.setter
-    def bot_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def bot_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "bot_id", value)
 
     @_builtins.property
     @pulumi.getter(name="botVersion")
-    def bot_version(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def bot_version(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Version of the bot associated with the slot.
         """
         return pulumi.get(self, "bot_version")
 
     @bot_version.setter
-    def bot_version(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def bot_version(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "bot_version", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Description of the slot.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="intentId")
-    def intent_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def intent_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Identifier of the intent that contains the slot.
         """
         return pulumi.get(self, "intent_id")
 
     @intent_id.setter
-    def intent_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def intent_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "intent_id", value)
 
     @_builtins.property
     @pulumi.getter(name="localeId")
-    def locale_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def locale_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Identifier of the language and locale that the slot will be used in.
         """
         return pulumi.get(self, "locale_id")
 
     @locale_id.setter
-    def locale_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def locale_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "locale_id", value)
 
     @_builtins.property
     @pulumi.getter(name="multipleValuesSettings")
-    def multiple_values_settings(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotMultipleValuesSettingArgs']]]]:
+    def multiple_values_settings(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotMultipleValuesSettingArgs']]]]:
         """
         Whether the slot returns multiple values in one response.
         See the `multiple_values_setting` argument reference below.
@@ -384,24 +386,24 @@ class _V2modelsSlotState:
         return pulumi.get(self, "multiple_values_settings")
 
     @multiple_values_settings.setter
-    def multiple_values_settings(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotMultipleValuesSettingArgs']]]]):
+    def multiple_values_settings(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotMultipleValuesSettingArgs']]]]):
         pulumi.set(self, "multiple_values_settings", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the slot.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter(name="obfuscationSettings")
-    def obfuscation_settings(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotObfuscationSettingArgs']]]]:
+    def obfuscation_settings(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotObfuscationSettingArgs']]]]:
         """
         Determines how slot values are used in Amazon CloudWatch logs.
         See the `obfuscation_setting` argument reference below.
@@ -409,48 +411,48 @@ class _V2modelsSlotState:
         return pulumi.get(self, "obfuscation_settings")
 
     @obfuscation_settings.setter
-    def obfuscation_settings(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotObfuscationSettingArgs']]]]):
+    def obfuscation_settings(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotObfuscationSettingArgs']]]]):
         pulumi.set(self, "obfuscation_settings", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="slotId")
-    def slot_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def slot_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique identifier associated with the slot.
         """
         return pulumi.get(self, "slot_id")
 
     @slot_id.setter
-    def slot_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def slot_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "slot_id", value)
 
     @_builtins.property
     @pulumi.getter(name="slotTypeId")
-    def slot_type_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def slot_type_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Unique identifier for the slot type associated with this slot.
         """
         return pulumi.get(self, "slot_type_id")
 
     @slot_type_id.setter
-    def slot_type_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def slot_type_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "slot_type_id", value)
 
     @_builtins.property
     @pulumi.getter(name="subSlotSettings")
-    def sub_slot_settings(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotSubSlotSettingArgs']]]]:
+    def sub_slot_settings(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotSubSlotSettingArgs']]]]:
         """
         Specifications for the constituent sub slots and the expression for the composite slot.
         See the `sub_slot_setting` argument reference below.
@@ -458,21 +460,21 @@ class _V2modelsSlotState:
         return pulumi.get(self, "sub_slot_settings")
 
     @sub_slot_settings.setter
-    def sub_slot_settings(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['V2modelsSlotSubSlotSettingArgs']]]]):
+    def sub_slot_settings(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['V2modelsSlotSubSlotSettingArgs']]]]):
         pulumi.set(self, "sub_slot_settings", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['V2modelsSlotTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['V2modelsSlotTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['V2modelsSlotTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['V2modelsSlotTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter(name="valueElicitationSetting")
-    def value_elicitation_setting(self) -> Optional[pulumi.Input['V2modelsSlotValueElicitationSettingArgs']]:
+    def value_elicitation_setting(self) -> pulumi.Input[Optional['V2modelsSlotValueElicitationSettingArgs']]:
         """
         Prompts that Amazon Lex sends to the user to elicit a response that provides the value for the slot.
         If you configure this block without `prompt_specification.*.prompt_attempts_specification`, AWS will provide default `prompt_attempts_specification` blocks for the initial prompt (map key `Initial`) and each retry attempt (map keys `Retry1`, `Retry2`, etc.).
@@ -485,7 +487,7 @@ class _V2modelsSlotState:
         return pulumi.get(self, "value_elicitation_setting")
 
     @value_elicitation_setting.setter
-    def value_elicitation_setting(self, value: Optional[pulumi.Input['V2modelsSlotValueElicitationSettingArgs']]):
+    def value_elicitation_setting(self, value: pulumi.Input[Optional['V2modelsSlotValueElicitationSettingArgs']]):
         pulumi.set(self, "value_elicitation_setting", value)
 
 
@@ -495,19 +497,19 @@ class V2modelsSlot(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 bot_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 bot_version: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 intent_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 locale_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 multiple_values_settings: Optional[pulumi.Input[Sequence[pulumi.Input[Union['V2modelsSlotMultipleValuesSettingArgs', 'V2modelsSlotMultipleValuesSettingArgsDict']]]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 obfuscation_settings: Optional[pulumi.Input[Sequence[pulumi.Input[Union['V2modelsSlotObfuscationSettingArgs', 'V2modelsSlotObfuscationSettingArgsDict']]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 slot_type_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 sub_slot_settings: Optional[pulumi.Input[Sequence[pulumi.Input[Union['V2modelsSlotSubSlotSettingArgs', 'V2modelsSlotSubSlotSettingArgsDict']]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['V2modelsSlotTimeoutsArgs', 'V2modelsSlotTimeoutsArgsDict']]] = None,
-                 value_elicitation_setting: Optional[pulumi.Input[Union['V2modelsSlotValueElicitationSettingArgs', 'V2modelsSlotValueElicitationSettingArgsDict']]] = None,
+                 bot_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 bot_version: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 intent_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 locale_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 multiple_values_settings: pulumi.Input[Optional[Sequence[pulumi.Input[Union['V2modelsSlotMultipleValuesSettingArgs', 'V2modelsSlotMultipleValuesSettingArgsDict']]]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 obfuscation_settings: pulumi.Input[Optional[Sequence[pulumi.Input[Union['V2modelsSlotObfuscationSettingArgs', 'V2modelsSlotObfuscationSettingArgsDict']]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 slot_type_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 sub_slot_settings: pulumi.Input[Optional[Sequence[pulumi.Input[Union['V2modelsSlotSubSlotSettingArgs', 'V2modelsSlotSubSlotSettingArgsDict']]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['V2modelsSlotTimeoutsArgs', 'V2modelsSlotTimeoutsArgsDict']]] = None,
+                 value_elicitation_setting: pulumi.Input[Optional[Union['V2modelsSlotValueElicitationSettingArgs', 'V2modelsSlotValueElicitationSettingArgsDict']]] = None,
                  __props__=None):
         """
         Resource for managing an AWS Lex V2 Models Slot.
@@ -539,17 +541,8 @@ class V2modelsSlot(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lex.V2modelsSlot("example",
-            bot_id=test["id"],
-            bot_version=test_aws_lexv2models_bot_locale["botVersion"],
-            intent_id=test_aws_lexv2models_intent["intentId"],
-            locale_id=test_aws_lexv2models_bot_locale["localeId"],
-            name="example",
             value_elicitation_setting={
-                "slot_constraint": "Required",
                 "prompt_specification": {
-                    "allow_interrupt": True,
-                    "max_retries": 1,
-                    "message_selection_strategy": "Random",
                     "message_groups": [{
                         "message": {
                             "plain_text_message": {
@@ -559,38 +552,35 @@ class V2modelsSlot(pulumi.CustomResource):
                     }],
                     "prompt_attempts_specifications": [
                         {
+                            "allowed_input_types": {
+                                "allow_audio_input": True,
+                                "allow_dtmf_input": True,
+                            },
+                            "audio_and_dtmf_input_specification": {
+                                "audio_specification": {
+                                    "end_timeout_ms": 640,
+                                    "max_length_ms": 15000,
+                                },
+                                "dtmf_specification": {
+                                    "deletion_character": "*",
+                                    "end_character": "#",
+                                    "end_timeout_ms": 5000,
+                                    "max_length": 513,
+                                },
+                                "start_timeout_ms": 4000,
+                            },
+                            "text_input_specification": {
+                                "start_timeout_ms": 30000,
+                            },
                             "allow_interrupt": True,
                             "map_block_key": "Initial",
-                            "allowed_input_types": {
-                                "allow_audio_input": True,
-                                "allow_dtmf_input": True,
-                            },
-                            "audio_and_dtmf_input_specification": {
-                                "start_timeout_ms": 4000,
-                                "audio_specification": {
-                                    "end_timeout_ms": 640,
-                                    "max_length_ms": 15000,
-                                },
-                                "dtmf_specification": {
-                                    "deletion_character": "*",
-                                    "end_character": "#",
-                                    "end_timeout_ms": 5000,
-                                    "max_length": 513,
-                                },
-                            },
-                            "text_input_specification": {
-                                "start_timeout_ms": 30000,
-                            },
                         },
                         {
-                            "allow_interrupt": True,
-                            "map_block_key": "Retry1",
                             "allowed_input_types": {
                                 "allow_audio_input": True,
                                 "allow_dtmf_input": True,
                             },
                             "audio_and_dtmf_input_specification": {
-                                "start_timeout_ms": 4000,
                                 "audio_specification": {
                                     "end_timeout_ms": 640,
                                     "max_length_ms": 15000,
@@ -601,14 +591,26 @@ class V2modelsSlot(pulumi.CustomResource):
                                     "end_timeout_ms": 5000,
                                     "max_length": 513,
                                 },
+                                "start_timeout_ms": 4000,
                             },
                             "text_input_specification": {
                                 "start_timeout_ms": 30000,
                             },
+                            "allow_interrupt": True,
+                            "map_block_key": "Retry1",
                         },
                     ],
+                    "allow_interrupt": True,
+                    "max_retries": 1,
+                    "message_selection_strategy": "Random",
                 },
-            })
+                "slot_constraint": "Required",
+            },
+            bot_id=test["id"],
+            bot_version=test_aws_lexv2models_bot_locale["botVersion"],
+            intent_id=test_aws_lexv2models_intent["intentId"],
+            locale_id=test_aws_lexv2models_bot_locale["localeId"],
+            name="example")
         ```
 
         ## Import
@@ -618,6 +620,7 @@ class V2modelsSlot(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:lex/v2modelsSlot:V2modelsSlot example bot-1234,1,intent-5678,en-US,slot-9012
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -679,17 +682,8 @@ class V2modelsSlot(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.lex.V2modelsSlot("example",
-            bot_id=test["id"],
-            bot_version=test_aws_lexv2models_bot_locale["botVersion"],
-            intent_id=test_aws_lexv2models_intent["intentId"],
-            locale_id=test_aws_lexv2models_bot_locale["localeId"],
-            name="example",
             value_elicitation_setting={
-                "slot_constraint": "Required",
                 "prompt_specification": {
-                    "allow_interrupt": True,
-                    "max_retries": 1,
-                    "message_selection_strategy": "Random",
                     "message_groups": [{
                         "message": {
                             "plain_text_message": {
@@ -699,38 +693,35 @@ class V2modelsSlot(pulumi.CustomResource):
                     }],
                     "prompt_attempts_specifications": [
                         {
+                            "allowed_input_types": {
+                                "allow_audio_input": True,
+                                "allow_dtmf_input": True,
+                            },
+                            "audio_and_dtmf_input_specification": {
+                                "audio_specification": {
+                                    "end_timeout_ms": 640,
+                                    "max_length_ms": 15000,
+                                },
+                                "dtmf_specification": {
+                                    "deletion_character": "*",
+                                    "end_character": "#",
+                                    "end_timeout_ms": 5000,
+                                    "max_length": 513,
+                                },
+                                "start_timeout_ms": 4000,
+                            },
+                            "text_input_specification": {
+                                "start_timeout_ms": 30000,
+                            },
                             "allow_interrupt": True,
                             "map_block_key": "Initial",
-                            "allowed_input_types": {
-                                "allow_audio_input": True,
-                                "allow_dtmf_input": True,
-                            },
-                            "audio_and_dtmf_input_specification": {
-                                "start_timeout_ms": 4000,
-                                "audio_specification": {
-                                    "end_timeout_ms": 640,
-                                    "max_length_ms": 15000,
-                                },
-                                "dtmf_specification": {
-                                    "deletion_character": "*",
-                                    "end_character": "#",
-                                    "end_timeout_ms": 5000,
-                                    "max_length": 513,
-                                },
-                            },
-                            "text_input_specification": {
-                                "start_timeout_ms": 30000,
-                            },
                         },
                         {
-                            "allow_interrupt": True,
-                            "map_block_key": "Retry1",
                             "allowed_input_types": {
                                 "allow_audio_input": True,
                                 "allow_dtmf_input": True,
                             },
                             "audio_and_dtmf_input_specification": {
-                                "start_timeout_ms": 4000,
                                 "audio_specification": {
                                     "end_timeout_ms": 640,
                                     "max_length_ms": 15000,
@@ -741,14 +732,26 @@ class V2modelsSlot(pulumi.CustomResource):
                                     "end_timeout_ms": 5000,
                                     "max_length": 513,
                                 },
+                                "start_timeout_ms": 4000,
                             },
                             "text_input_specification": {
                                 "start_timeout_ms": 30000,
                             },
+                            "allow_interrupt": True,
+                            "map_block_key": "Retry1",
                         },
                     ],
+                    "allow_interrupt": True,
+                    "max_retries": 1,
+                    "message_selection_strategy": "Random",
                 },
-            })
+                "slot_constraint": "Required",
+            },
+            bot_id=test["id"],
+            bot_version=test_aws_lexv2models_bot_locale["botVersion"],
+            intent_id=test_aws_lexv2models_intent["intentId"],
+            locale_id=test_aws_lexv2models_bot_locale["localeId"],
+            name="example")
         ```
 
         ## Import
@@ -758,6 +761,7 @@ class V2modelsSlot(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:lex/v2modelsSlot:V2modelsSlot example bot-1234,1,intent-5678,en-US,slot-9012
         ```
+
 
         :param str resource_name: The name of the resource.
         :param V2modelsSlotArgs args: The arguments to use to populate this resource's properties.
@@ -774,19 +778,19 @@ class V2modelsSlot(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 bot_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 bot_version: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 intent_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 locale_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 multiple_values_settings: Optional[pulumi.Input[Sequence[pulumi.Input[Union['V2modelsSlotMultipleValuesSettingArgs', 'V2modelsSlotMultipleValuesSettingArgsDict']]]]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 obfuscation_settings: Optional[pulumi.Input[Sequence[pulumi.Input[Union['V2modelsSlotObfuscationSettingArgs', 'V2modelsSlotObfuscationSettingArgsDict']]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 slot_type_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 sub_slot_settings: Optional[pulumi.Input[Sequence[pulumi.Input[Union['V2modelsSlotSubSlotSettingArgs', 'V2modelsSlotSubSlotSettingArgsDict']]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['V2modelsSlotTimeoutsArgs', 'V2modelsSlotTimeoutsArgsDict']]] = None,
-                 value_elicitation_setting: Optional[pulumi.Input[Union['V2modelsSlotValueElicitationSettingArgs', 'V2modelsSlotValueElicitationSettingArgsDict']]] = None,
+                 bot_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 bot_version: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 intent_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 locale_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 multiple_values_settings: pulumi.Input[Optional[Sequence[pulumi.Input[Union['V2modelsSlotMultipleValuesSettingArgs', 'V2modelsSlotMultipleValuesSettingArgsDict']]]]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 obfuscation_settings: pulumi.Input[Optional[Sequence[pulumi.Input[Union['V2modelsSlotObfuscationSettingArgs', 'V2modelsSlotObfuscationSettingArgsDict']]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 slot_type_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 sub_slot_settings: pulumi.Input[Optional[Sequence[pulumi.Input[Union['V2modelsSlotSubSlotSettingArgs', 'V2modelsSlotSubSlotSettingArgsDict']]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['V2modelsSlotTimeoutsArgs', 'V2modelsSlotTimeoutsArgsDict']]] = None,
+                 value_elicitation_setting: pulumi.Input[Optional[Union['V2modelsSlotValueElicitationSettingArgs', 'V2modelsSlotValueElicitationSettingArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -830,20 +834,20 @@ class V2modelsSlot(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            bot_id: Optional[pulumi.Input[_builtins.str]] = None,
-            bot_version: Optional[pulumi.Input[_builtins.str]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            intent_id: Optional[pulumi.Input[_builtins.str]] = None,
-            locale_id: Optional[pulumi.Input[_builtins.str]] = None,
-            multiple_values_settings: Optional[pulumi.Input[Sequence[pulumi.Input[Union['V2modelsSlotMultipleValuesSettingArgs', 'V2modelsSlotMultipleValuesSettingArgsDict']]]]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            obfuscation_settings: Optional[pulumi.Input[Sequence[pulumi.Input[Union['V2modelsSlotObfuscationSettingArgs', 'V2modelsSlotObfuscationSettingArgsDict']]]]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            slot_id: Optional[pulumi.Input[_builtins.str]] = None,
-            slot_type_id: Optional[pulumi.Input[_builtins.str]] = None,
-            sub_slot_settings: Optional[pulumi.Input[Sequence[pulumi.Input[Union['V2modelsSlotSubSlotSettingArgs', 'V2modelsSlotSubSlotSettingArgsDict']]]]] = None,
-            timeouts: Optional[pulumi.Input[Union['V2modelsSlotTimeoutsArgs', 'V2modelsSlotTimeoutsArgsDict']]] = None,
-            value_elicitation_setting: Optional[pulumi.Input[Union['V2modelsSlotValueElicitationSettingArgs', 'V2modelsSlotValueElicitationSettingArgsDict']]] = None) -> 'V2modelsSlot':
+            bot_id: pulumi.Input[Optional[_builtins.str]] = None,
+            bot_version: pulumi.Input[Optional[_builtins.str]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            intent_id: pulumi.Input[Optional[_builtins.str]] = None,
+            locale_id: pulumi.Input[Optional[_builtins.str]] = None,
+            multiple_values_settings: pulumi.Input[Optional[Sequence[pulumi.Input[Union['V2modelsSlotMultipleValuesSettingArgs', 'V2modelsSlotMultipleValuesSettingArgsDict']]]]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            obfuscation_settings: pulumi.Input[Optional[Sequence[pulumi.Input[Union['V2modelsSlotObfuscationSettingArgs', 'V2modelsSlotObfuscationSettingArgsDict']]]]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            slot_id: pulumi.Input[Optional[_builtins.str]] = None,
+            slot_type_id: pulumi.Input[Optional[_builtins.str]] = None,
+            sub_slot_settings: pulumi.Input[Optional[Sequence[pulumi.Input[Union['V2modelsSlotSubSlotSettingArgs', 'V2modelsSlotSubSlotSettingArgsDict']]]]] = None,
+            timeouts: pulumi.Input[Optional[Union['V2modelsSlotTimeoutsArgs', 'V2modelsSlotTimeoutsArgsDict']]] = None,
+            value_elicitation_setting: pulumi.Input[Optional[Union['V2modelsSlotValueElicitationSettingArgs', 'V2modelsSlotValueElicitationSettingArgsDict']]] = None) -> 'V2modelsSlot':
         """
         Get an existing V2modelsSlot resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

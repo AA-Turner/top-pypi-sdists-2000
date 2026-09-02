@@ -27,7 +27,7 @@ class GetServerlessCacheResult:
     """
     A collection of values returned by getServerlessCache.
     """
-    def __init__(__self__, arn=None, cache_usage_limits=None, create_time=None, daily_snapshot_time=None, description=None, endpoint=None, engine=None, full_engine_version=None, id=None, kms_key_id=None, major_engine_version=None, name=None, reader_endpoint=None, region=None, security_group_ids=None, snapshot_retention_limit=None, status=None, subnet_ids=None, user_group_id=None):
+    def __init__(__self__, arn=None, cache_usage_limits=None, create_time=None, daily_snapshot_time=None, description=None, endpoint=None, engine=None, full_engine_version=None, kms_key_id=None, major_engine_version=None, name=None, reader_endpoint=None, region=None, security_group_ids=None, snapshot_retention_limit=None, status=None, subnet_ids=None, user_group_id=None):
         if arn and not isinstance(arn, str):
             raise TypeError("Expected argument 'arn' to be a str")
         pulumi.set(__self__, "arn", arn)
@@ -52,9 +52,6 @@ class GetServerlessCacheResult:
         if full_engine_version and not isinstance(full_engine_version, str):
             raise TypeError("Expected argument 'full_engine_version' to be a str")
         pulumi.set(__self__, "full_engine_version", full_engine_version)
-        if id and not isinstance(id, str):
-            raise TypeError("Expected argument 'id' to be a str")
-        pulumi.set(__self__, "id", id)
         if kms_key_id and not isinstance(kms_key_id, str):
             raise TypeError("Expected argument 'kms_key_id' to be a str")
         pulumi.set(__self__, "kms_key_id", kms_key_id)
@@ -90,7 +87,7 @@ class GetServerlessCacheResult:
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name (ARN) of the serverless cache.
+        ARN of the serverless cache.
         """
         return pulumi.get(self, "arn")
 
@@ -149,14 +146,6 @@ class GetServerlessCacheResult:
         The name and version number of the engine the serverless cache is compatible with.
         """
         return pulumi.get(self, "full_engine_version")
-
-    @_builtins.property
-    @pulumi.getter
-    def id(self) -> _builtins.str:
-        """
-        The provider-assigned unique ID for this managed resource.
-        """
-        return pulumi.get(self, "id")
 
     @_builtins.property
     @pulumi.getter(name="kmsKeyId")
@@ -228,7 +217,7 @@ class GetServerlessCacheResult:
     @pulumi.getter(name="userGroupId")
     def user_group_id(self) -> _builtins.str:
         """
-        The identifier of the UserGroup associated with the serverless cache. Available for Redis only.
+        The identifier of the UserGroup associated with the serverless cache. Available for Redis and Valkey.
         """
         return pulumi.get(self, "user_group_id")
 
@@ -247,7 +236,6 @@ class AwaitableGetServerlessCacheResult(GetServerlessCacheResult):
             endpoint=self.endpoint,
             engine=self.engine,
             full_engine_version=self.full_engine_version,
-            id=self.id,
             kms_key_id=self.kms_key_id,
             major_engine_version=self.major_engine_version,
             name=self.name,
@@ -294,7 +282,6 @@ def get_serverless_cache(name: Optional[_builtins.str] = None,
         endpoint=pulumi.get(__ret__, 'endpoint'),
         engine=pulumi.get(__ret__, 'engine'),
         full_engine_version=pulumi.get(__ret__, 'full_engine_version'),
-        id=pulumi.get(__ret__, 'id'),
         kms_key_id=pulumi.get(__ret__, 'kms_key_id'),
         major_engine_version=pulumi.get(__ret__, 'major_engine_version'),
         name=pulumi.get(__ret__, 'name'),
@@ -305,8 +292,8 @@ def get_serverless_cache(name: Optional[_builtins.str] = None,
         status=pulumi.get(__ret__, 'status'),
         subnet_ids=pulumi.get(__ret__, 'subnet_ids'),
         user_group_id=pulumi.get(__ret__, 'user_group_id'))
-def get_serverless_cache_output(name: Optional[pulumi.Input[_builtins.str]] = None,
-                                region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_serverless_cache_output(name: pulumi.Input[Optional[_builtins.str]] = None,
+                                region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                 opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetServerlessCacheResult]:
     """
     Use this data source to get information about an ElastiCache Serverless Cache.
@@ -338,7 +325,6 @@ def get_serverless_cache_output(name: Optional[pulumi.Input[_builtins.str]] = No
         endpoint=pulumi.get(__response__, 'endpoint'),
         engine=pulumi.get(__response__, 'engine'),
         full_engine_version=pulumi.get(__response__, 'full_engine_version'),
-        id=pulumi.get(__response__, 'id'),
         kms_key_id=pulumi.get(__response__, 'kms_key_id'),
         major_engine_version=pulumi.get(__response__, 'major_engine_version'),
         name=pulumi.get(__response__, 'name'),

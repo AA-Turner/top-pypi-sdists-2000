@@ -22,6 +22,7 @@ __all__ = [
     'BrokerLdapServerMetadata',
     'BrokerLogs',
     'BrokerMaintenanceWindowStartTime',
+    'BrokerSharedResource',
     'BrokerUser',
     'GetBrokerConfigurationResult',
     'GetBrokerEncryptionOptionResult',
@@ -31,6 +32,7 @@ __all__ = [
     'GetBrokerLdapServerMetadataResult',
     'GetBrokerLogsResult',
     'GetBrokerMaintenanceWindowStartTimeResult',
+    'GetBrokerSharedResourceResult',
     'GetBrokerUserResult',
     'GetInstanceTypeOfferingsBrokerInstanceOptionResult',
     'GetInstanceTypeOfferingsBrokerInstanceOptionAvailabilityZoneResult',
@@ -144,15 +146,7 @@ class BrokerInstance(dict):
                  ip_address: Optional[_builtins.str] = None):
         """
         :param _builtins.str console_url: URL of the [ActiveMQ Web Console](http://activemq.apache.org/web-console.html) or the [RabbitMQ Management UI](https://www.rabbitmq.com/management.html#external-monitoring) depending on `engine_type`.
-        :param Sequence[_builtins.str] endpoints: Broker's wire-level protocol endpoints in the following order & format referenceable e.g., as `instances.0.endpoints.0` (SSL):
-               * For `ActiveMQ`:
-               * `ssl://broker-id.mq.us-west-2.amazonaws.com:61617`
-               * `amqp+ssl://broker-id.mq.us-west-2.amazonaws.com:5671`
-               * `stomp+ssl://broker-id.mq.us-west-2.amazonaws.com:61614`
-               * `mqtt+ssl://broker-id.mq.us-west-2.amazonaws.com:8883`
-               * `wss://broker-id.mq.us-west-2.amazonaws.com:61619`
-               * For `RabbitMQ`:
-               * `amqps://broker-id.mq.us-west-2.amazonaws.com:5671`
+        :param Sequence[_builtins.str] endpoints: `amqps://broker-id.mq.us-west-2.amazonaws.com:5671`
         :param _builtins.str ip_address: IP Address of the broker.
         """
         if console_url is not None:
@@ -174,15 +168,7 @@ class BrokerInstance(dict):
     @pulumi.getter
     def endpoints(self) -> Optional[Sequence[_builtins.str]]:
         """
-        Broker's wire-level protocol endpoints in the following order & format referenceable e.g., as `instances.0.endpoints.0` (SSL):
-        * For `ActiveMQ`:
-        * `ssl://broker-id.mq.us-west-2.amazonaws.com:61617`
-        * `amqp+ssl://broker-id.mq.us-west-2.amazonaws.com:5671`
-        * `stomp+ssl://broker-id.mq.us-west-2.amazonaws.com:61614`
-        * `mqtt+ssl://broker-id.mq.us-west-2.amazonaws.com:8883`
-        * `wss://broker-id.mq.us-west-2.amazonaws.com:61619`
-        * For `RabbitMQ`:
-        * `amqps://broker-id.mq.us-west-2.amazonaws.com:5671`
+        `amqps://broker-id.mq.us-west-2.amazonaws.com:5671`
         """
         return pulumi.get(self, "endpoints")
 
@@ -462,6 +448,80 @@ class BrokerMaintenanceWindowStartTime(dict):
 
 
 @pulumi.output_type
+class BrokerSharedResource(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "dnsNames":
+            suggest = "dns_names"
+        elif key == "resourceArn":
+            suggest = "resource_arn"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in BrokerSharedResource. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        BrokerSharedResource.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        BrokerSharedResource.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 dns_names: Optional[Sequence[_builtins.str]] = None,
+                 resource_arn: Optional[_builtins.str] = None,
+                 status: Optional[_builtins.str] = None,
+                 type: Optional[_builtins.str] = None):
+        """
+        :param Sequence[_builtins.str] dns_names: DNS names through which the broker reaches the shared resource.
+        :param _builtins.str resource_arn: ARN of the shared resource.
+        :param _builtins.str status: Status of the shared resource.
+        :param _builtins.str type: Type of the shared resource, either `RESOURCE_SHARE` or `RESOURCE`.
+        """
+        if dns_names is not None:
+            pulumi.set(__self__, "dns_names", dns_names)
+        if resource_arn is not None:
+            pulumi.set(__self__, "resource_arn", resource_arn)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
+        if type is not None:
+            pulumi.set(__self__, "type", type)
+
+    @_builtins.property
+    @pulumi.getter(name="dnsNames")
+    def dns_names(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        DNS names through which the broker reaches the shared resource.
+        """
+        return pulumi.get(self, "dns_names")
+
+    @_builtins.property
+    @pulumi.getter(name="resourceArn")
+    def resource_arn(self) -> Optional[_builtins.str]:
+        """
+        ARN of the shared resource.
+        """
+        return pulumi.get(self, "resource_arn")
+
+    @_builtins.property
+    @pulumi.getter
+    def status(self) -> Optional[_builtins.str]:
+        """
+        Status of the shared resource.
+        """
+        return pulumi.get(self, "status")
+
+    @_builtins.property
+    @pulumi.getter
+    def type(self) -> Optional[_builtins.str]:
+        """
+        Type of the shared resource, either `RESOURCE_SHARE` or `RESOURCE`.
+        """
+        return pulumi.get(self, "type")
+
+
+@pulumi.output_type
 class BrokerUser(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -584,7 +644,7 @@ class GetBrokerEncryptionOptionResult(dict):
                  kms_key_id: _builtins.str,
                  use_aws_owned_key: _builtins.bool):
         """
-        :param _builtins.str kms_key_id: Amazon Resource Name (ARN) of Key Management Service (KMS) Customer Master Key (CMK) to use for encryption at rest.
+        :param _builtins.str kms_key_id: ARN of KMS Customer Master Key (CMK) to use for encryption at rest.
         :param _builtins.bool use_aws_owned_key: Whether to enable an AWS-owned KMS CMK that is not in your account.
         """
         pulumi.set(__self__, "kms_key_id", kms_key_id)
@@ -594,7 +654,7 @@ class GetBrokerEncryptionOptionResult(dict):
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> _builtins.str:
         """
-        Amazon Resource Name (ARN) of Key Management Service (KMS) Customer Master Key (CMK) to use for encryption at rest.
+        ARN of KMS Customer Master Key (CMK) to use for encryption at rest.
         """
         return pulumi.get(self, "kms_key_id")
 
@@ -614,7 +674,7 @@ class GetBrokerEngineTypesBrokerEngineTypeResult(dict):
                  engine_versions: Sequence['outputs.GetBrokerEngineTypesBrokerEngineTypeEngineVersionResult']):
         """
         :param _builtins.str engine_type: MQ engine type to return version details for.
-        :param Sequence['GetBrokerEngineTypesBrokerEngineTypeEngineVersionArgs'] engine_versions: List of engine versions. See Engine Versions.
+        :param Sequence['GetBrokerEngineTypesBrokerEngineTypeEngineVersionArgs'] engine_versions: List of engine versions. See `engine_versions` Block.
         """
         pulumi.set(__self__, "engine_type", engine_type)
         pulumi.set(__self__, "engine_versions", engine_versions)
@@ -631,7 +691,7 @@ class GetBrokerEngineTypesBrokerEngineTypeResult(dict):
     @pulumi.getter(name="engineVersions")
     def engine_versions(self) -> Sequence['outputs.GetBrokerEngineTypesBrokerEngineTypeEngineVersionResult']:
         """
-        List of engine versions. See Engine Versions.
+        List of engine versions. See `engine_versions` Block.
         """
         return pulumi.get(self, "engine_versions")
 
@@ -892,6 +952,57 @@ class GetBrokerMaintenanceWindowStartTimeResult(dict):
 
 
 @pulumi.output_type
+class GetBrokerSharedResourceResult(dict):
+    def __init__(__self__, *,
+                 dns_names: Sequence[_builtins.str],
+                 resource_arn: _builtins.str,
+                 status: _builtins.str,
+                 type: _builtins.str):
+        """
+        :param Sequence[_builtins.str] dns_names: DNS names through which the broker reaches the shared resource.
+        :param _builtins.str resource_arn: ARN of the shared resource.
+        :param _builtins.str status: Status of the shared resource.
+        :param _builtins.str type: Type of the shared resource, either `RESOURCE_SHARE` or `RESOURCE`.
+        """
+        pulumi.set(__self__, "dns_names", dns_names)
+        pulumi.set(__self__, "resource_arn", resource_arn)
+        pulumi.set(__self__, "status", status)
+        pulumi.set(__self__, "type", type)
+
+    @_builtins.property
+    @pulumi.getter(name="dnsNames")
+    def dns_names(self) -> Sequence[_builtins.str]:
+        """
+        DNS names through which the broker reaches the shared resource.
+        """
+        return pulumi.get(self, "dns_names")
+
+    @_builtins.property
+    @pulumi.getter(name="resourceArn")
+    def resource_arn(self) -> _builtins.str:
+        """
+        ARN of the shared resource.
+        """
+        return pulumi.get(self, "resource_arn")
+
+    @_builtins.property
+    @pulumi.getter
+    def status(self) -> _builtins.str:
+        """
+        Status of the shared resource.
+        """
+        return pulumi.get(self, "status")
+
+    @_builtins.property
+    @pulumi.getter
+    def type(self) -> _builtins.str:
+        """
+        Type of the shared resource, either `RESOURCE_SHARE` or `RESOURCE`.
+        """
+        return pulumi.get(self, "type")
+
+
+@pulumi.output_type
 class GetBrokerUserResult(dict):
     def __init__(__self__, *,
                  console_access: _builtins.bool,
@@ -952,7 +1063,7 @@ class GetInstanceTypeOfferingsBrokerInstanceOptionResult(dict):
                  supported_deployment_modes: Sequence[_builtins.str],
                  supported_engine_versions: Sequence[_builtins.str]):
         """
-        :param Sequence['GetInstanceTypeOfferingsBrokerInstanceOptionAvailabilityZoneArgs'] availability_zones: List of available Availability Zones. See Availability Zones below.
+        :param Sequence['GetInstanceTypeOfferingsBrokerInstanceOptionAvailabilityZoneArgs'] availability_zones: List of available Availability Zones. See `availability_zones` Block below.
         :param _builtins.str engine_type: Filter response by engine type.
         :param _builtins.str host_instance_type: Filter response by host instance type.
         :param _builtins.str storage_type: Filter response by storage type.
@@ -970,7 +1081,7 @@ class GetInstanceTypeOfferingsBrokerInstanceOptionResult(dict):
     @pulumi.getter(name="availabilityZones")
     def availability_zones(self) -> Sequence['outputs.GetInstanceTypeOfferingsBrokerInstanceOptionAvailabilityZoneResult']:
         """
-        List of available Availability Zones. See Availability Zones below.
+        List of available Availability Zones. See `availability_zones` Block below.
         """
         return pulumi.get(self, "availability_zones")
 

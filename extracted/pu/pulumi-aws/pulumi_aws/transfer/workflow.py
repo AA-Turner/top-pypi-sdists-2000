@@ -22,17 +22,18 @@ __all__ = ['WorkflowArgs', 'Workflow']
 class WorkflowArgs:
     def __init__(__self__, *,
                  steps: pulumi.Input[Sequence[pulumi.Input['WorkflowStepArgs']]],
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 on_exception_steps: Optional[pulumi.Input[Sequence[pulumi.Input['WorkflowOnExceptionStepArgs']]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 on_exception_steps: pulumi.Input[Optional[Sequence[pulumi.Input['WorkflowOnExceptionStepArgs']]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a Workflow resource.
-        :param pulumi.Input[Sequence[pulumi.Input['WorkflowStepArgs']]] steps: Specifies the details for the steps that are in the specified workflow. See Workflow Steps below.
-        :param pulumi.Input[_builtins.str] description: A textual description for the workflow.
-        :param pulumi.Input[Sequence[pulumi.Input['WorkflowOnExceptionStepArgs']]] on_exception_steps: Specifies the steps (actions) to take if errors are encountered during execution of the workflow. See Workflow Steps below.
+
+        :param pulumi.Input[Sequence[pulumi.Input['WorkflowStepArgs']]] steps: Details for the steps that are in the specified workflow. See `steps` Block below.
+        :param pulumi.Input[_builtins.str] description: Textual description for the workflow.
+        :param pulumi.Input[Sequence[pulumi.Input['WorkflowOnExceptionStepArgs']]] on_exception_steps: Steps (actions) to take if errors are encountered during execution of the workflow. See `on_exception_steps` Block below.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         pulumi.set(__self__, "steps", steps)
         if description is not None:
@@ -48,7 +49,7 @@ class WorkflowArgs:
     @pulumi.getter
     def steps(self) -> pulumi.Input[Sequence[pulumi.Input['WorkflowStepArgs']]]:
         """
-        Specifies the details for the steps that are in the specified workflow. See Workflow Steps below.
+        Details for the steps that are in the specified workflow. See `steps` Block below.
         """
         return pulumi.get(self, "steps")
 
@@ -58,72 +59,73 @@ class WorkflowArgs:
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        A textual description for the workflow.
+        Textual description for the workflow.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="onExceptionSteps")
-    def on_exception_steps(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['WorkflowOnExceptionStepArgs']]]]:
+    def on_exception_steps(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['WorkflowOnExceptionStepArgs']]]]:
         """
-        Specifies the steps (actions) to take if errors are encountered during execution of the workflow. See Workflow Steps below.
+        Steps (actions) to take if errors are encountered during execution of the workflow. See `on_exception_steps` Block below.
         """
         return pulumi.get(self, "on_exception_steps")
 
     @on_exception_steps.setter
-    def on_exception_steps(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['WorkflowOnExceptionStepArgs']]]]):
+    def on_exception_steps(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['WorkflowOnExceptionStepArgs']]]]):
         pulumi.set(self, "on_exception_steps", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _WorkflowState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 on_exception_steps: Optional[pulumi.Input[Sequence[pulumi.Input['WorkflowOnExceptionStepArgs']]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 steps: Optional[pulumi.Input[Sequence[pulumi.Input['WorkflowStepArgs']]]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 on_exception_steps: pulumi.Input[Optional[Sequence[pulumi.Input['WorkflowOnExceptionStepArgs']]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 steps: pulumi.Input[Optional[Sequence[pulumi.Input['WorkflowStepArgs']]]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         Input properties used for looking up and filtering Workflow resources.
-        :param pulumi.Input[_builtins.str] arn: The Workflow ARN.
-        :param pulumi.Input[_builtins.str] description: A textual description for the workflow.
-        :param pulumi.Input[Sequence[pulumi.Input['WorkflowOnExceptionStepArgs']]] on_exception_steps: Specifies the steps (actions) to take if errors are encountered during execution of the workflow. See Workflow Steps below.
+
+        :param pulumi.Input[_builtins.str] arn: Workflow ARN.
+        :param pulumi.Input[_builtins.str] description: Textual description for the workflow.
+        :param pulumi.Input[Sequence[pulumi.Input['WorkflowOnExceptionStepArgs']]] on_exception_steps: Steps (actions) to take if errors are encountered during execution of the workflow. See `on_exception_steps` Block below.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Sequence[pulumi.Input['WorkflowStepArgs']]] steps: Specifies the details for the steps that are in the specified workflow. See Workflow Steps below.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        :param pulumi.Input[Sequence[pulumi.Input['WorkflowStepArgs']]] steps: Details for the steps that are in the specified workflow. See `steps` Block below.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         if arn is not None:
             pulumi.set(__self__, "arn", arn)
@@ -142,86 +144,86 @@ class _WorkflowState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Workflow ARN.
+        Workflow ARN.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def description(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        A textual description for the workflow.
+        Textual description for the workflow.
         """
         return pulumi.get(self, "description")
 
     @description.setter
-    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def description(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "description", value)
 
     @_builtins.property
     @pulumi.getter(name="onExceptionSteps")
-    def on_exception_steps(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['WorkflowOnExceptionStepArgs']]]]:
+    def on_exception_steps(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['WorkflowOnExceptionStepArgs']]]]:
         """
-        Specifies the steps (actions) to take if errors are encountered during execution of the workflow. See Workflow Steps below.
+        Steps (actions) to take if errors are encountered during execution of the workflow. See `on_exception_steps` Block below.
         """
         return pulumi.get(self, "on_exception_steps")
 
     @on_exception_steps.setter
-    def on_exception_steps(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['WorkflowOnExceptionStepArgs']]]]):
+    def on_exception_steps(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['WorkflowOnExceptionStepArgs']]]]):
         pulumi.set(self, "on_exception_steps", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def steps(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['WorkflowStepArgs']]]]:
+    def steps(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['WorkflowStepArgs']]]]:
         """
-        Specifies the details for the steps that are in the specified workflow. See Workflow Steps below.
+        Details for the steps that are in the specified workflow. See `steps` Block below.
         """
         return pulumi.get(self, "steps")
 
     @steps.setter
-    def steps(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['WorkflowStepArgs']]]]):
+    def steps(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['WorkflowStepArgs']]]]):
         pulumi.set(self, "steps", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
 
@@ -231,11 +233,11 @@ class Workflow(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 on_exception_steps: Optional[pulumi.Input[Sequence[pulumi.Input[Union['WorkflowOnExceptionStepArgs', 'WorkflowOnExceptionStepArgsDict']]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 steps: Optional[pulumi.Input[Sequence[pulumi.Input[Union['WorkflowStepArgs', 'WorkflowStepArgsDict']]]]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 on_exception_steps: pulumi.Input[Optional[Sequence[pulumi.Input[Union['WorkflowOnExceptionStepArgs', 'WorkflowOnExceptionStepArgsDict']]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 steps: pulumi.Input[Optional[Sequence[pulumi.Input[Union['WorkflowStepArgs', 'WorkflowStepArgsDict']]]]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Provides a AWS Transfer Workflow resource.
@@ -275,12 +277,12 @@ class Workflow(pulumi.CustomResource):
             },
             {
                 "tag_step_details": {
-                    "name": "example",
-                    "source_file_location": "${original.file}",
                     "tags": [{
                         "key": "Name",
                         "value": "Hello World",
                     }],
+                    "name": "example",
+                    "source_file_location": "${original.file}",
                 },
                 "type": "TAG",
             },
@@ -295,13 +297,14 @@ class Workflow(pulumi.CustomResource):
         $ pulumi import aws:transfer/workflow:Workflow example example
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] description: A textual description for the workflow.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['WorkflowOnExceptionStepArgs', 'WorkflowOnExceptionStepArgsDict']]]] on_exception_steps: Specifies the steps (actions) to take if errors are encountered during execution of the workflow. See Workflow Steps below.
+        :param pulumi.Input[_builtins.str] description: Textual description for the workflow.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['WorkflowOnExceptionStepArgs', 'WorkflowOnExceptionStepArgsDict']]]] on_exception_steps: Steps (actions) to take if errors are encountered during execution of the workflow. See `on_exception_steps` Block below.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['WorkflowStepArgs', 'WorkflowStepArgsDict']]]] steps: Specifies the details for the steps that are in the specified workflow. See Workflow Steps below.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['WorkflowStepArgs', 'WorkflowStepArgsDict']]]] steps: Details for the steps that are in the specified workflow. See `steps` Block below.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         ...
     @overload
@@ -347,12 +350,12 @@ class Workflow(pulumi.CustomResource):
             },
             {
                 "tag_step_details": {
-                    "name": "example",
-                    "source_file_location": "${original.file}",
                     "tags": [{
                         "key": "Name",
                         "value": "Hello World",
                     }],
+                    "name": "example",
+                    "source_file_location": "${original.file}",
                 },
                 "type": "TAG",
             },
@@ -366,6 +369,7 @@ class Workflow(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:transfer/workflow:Workflow example example
         ```
+
 
         :param str resource_name: The name of the resource.
         :param WorkflowArgs args: The arguments to use to populate this resource's properties.
@@ -382,11 +386,11 @@ class Workflow(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 description: Optional[pulumi.Input[_builtins.str]] = None,
-                 on_exception_steps: Optional[pulumi.Input[Sequence[pulumi.Input[Union['WorkflowOnExceptionStepArgs', 'WorkflowOnExceptionStepArgsDict']]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 steps: Optional[pulumi.Input[Sequence[pulumi.Input[Union['WorkflowStepArgs', 'WorkflowStepArgsDict']]]]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 description: pulumi.Input[Optional[_builtins.str]] = None,
+                 on_exception_steps: pulumi.Input[Optional[Sequence[pulumi.Input[Union['WorkflowOnExceptionStepArgs', 'WorkflowOnExceptionStepArgsDict']]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 steps: pulumi.Input[Optional[Sequence[pulumi.Input[Union['WorkflowStepArgs', 'WorkflowStepArgsDict']]]]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -415,13 +419,13 @@ class Workflow(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            description: Optional[pulumi.Input[_builtins.str]] = None,
-            on_exception_steps: Optional[pulumi.Input[Sequence[pulumi.Input[Union['WorkflowOnExceptionStepArgs', 'WorkflowOnExceptionStepArgsDict']]]]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            steps: Optional[pulumi.Input[Sequence[pulumi.Input[Union['WorkflowStepArgs', 'WorkflowStepArgsDict']]]]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'Workflow':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            description: pulumi.Input[Optional[_builtins.str]] = None,
+            on_exception_steps: pulumi.Input[Optional[Sequence[pulumi.Input[Union['WorkflowOnExceptionStepArgs', 'WorkflowOnExceptionStepArgsDict']]]]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            steps: pulumi.Input[Optional[Sequence[pulumi.Input[Union['WorkflowStepArgs', 'WorkflowStepArgsDict']]]]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'Workflow':
         """
         Get an existing Workflow resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -429,13 +433,13 @@ class Workflow(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] arn: The Workflow ARN.
-        :param pulumi.Input[_builtins.str] description: A textual description for the workflow.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['WorkflowOnExceptionStepArgs', 'WorkflowOnExceptionStepArgsDict']]]] on_exception_steps: Specifies the steps (actions) to take if errors are encountered during execution of the workflow. See Workflow Steps below.
+        :param pulumi.Input[_builtins.str] arn: Workflow ARN.
+        :param pulumi.Input[_builtins.str] description: Textual description for the workflow.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['WorkflowOnExceptionStepArgs', 'WorkflowOnExceptionStepArgsDict']]]] on_exception_steps: Steps (actions) to take if errors are encountered during execution of the workflow. See `on_exception_steps` Block below.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Sequence[pulumi.Input[Union['WorkflowStepArgs', 'WorkflowStepArgsDict']]]] steps: Specifies the details for the steps that are in the specified workflow. See Workflow Steps below.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: A map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        :param pulumi.Input[Sequence[pulumi.Input[Union['WorkflowStepArgs', 'WorkflowStepArgsDict']]]] steps: Details for the steps that are in the specified workflow. See `steps` Block below.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -454,7 +458,7 @@ class Workflow(pulumi.CustomResource):
     @pulumi.getter
     def arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Workflow ARN.
+        Workflow ARN.
         """
         return pulumi.get(self, "arn")
 
@@ -462,7 +466,7 @@ class Workflow(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[_builtins.str]]:
         """
-        A textual description for the workflow.
+        Textual description for the workflow.
         """
         return pulumi.get(self, "description")
 
@@ -470,7 +474,7 @@ class Workflow(pulumi.CustomResource):
     @pulumi.getter(name="onExceptionSteps")
     def on_exception_steps(self) -> pulumi.Output[Optional[Sequence['outputs.WorkflowOnExceptionStep']]]:
         """
-        Specifies the steps (actions) to take if errors are encountered during execution of the workflow. See Workflow Steps below.
+        Steps (actions) to take if errors are encountered during execution of the workflow. See `on_exception_steps` Block below.
         """
         return pulumi.get(self, "on_exception_steps")
 
@@ -486,7 +490,7 @@ class Workflow(pulumi.CustomResource):
     @pulumi.getter
     def steps(self) -> pulumi.Output[Sequence['outputs.WorkflowStep']]:
         """
-        Specifies the details for the steps that are in the specified workflow. See Workflow Steps below.
+        Details for the steps that are in the specified workflow. See `steps` Block below.
         """
         return pulumi.get(self, "steps")
 
@@ -494,7 +498,7 @@ class Workflow(pulumi.CustomResource):
     @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, _builtins.str]]]:
         """
-        A map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        Map of tags to assign to the resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
@@ -502,7 +506,7 @@ class Workflow(pulumi.CustomResource):
     @pulumi.getter(name="tagsAll")
     def tags_all(self) -> pulumi.Output[Mapping[str, _builtins.str]]:
         """
-        A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 

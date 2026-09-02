@@ -24,7 +24,6 @@ class ConnectionType(str, Enum):
     CLEVER_OIDC = "CleverOIDC"
     CLOUDFLARE_SAML = "CloudflareSAML"
     CYBER_ARK_SAML = "CyberArkSAML"
-    DISCORD_OAUTH = "DiscordOAuth"
     DUO_SAML = "DuoSAML"
     ENTRA_ID_OIDC = "EntraIdOIDC"
     GENERIC_OIDC = "GenericOIDC"
@@ -87,7 +86,6 @@ ConnectionTypeLiteral: TypeAlias = Literal[
     "CleverOIDC",
     "CloudflareSAML",
     "CyberArkSAML",
-    "DiscordOAuth",
     "DuoSAML",
     "EntraIdOIDC",
     "GenericOIDC",

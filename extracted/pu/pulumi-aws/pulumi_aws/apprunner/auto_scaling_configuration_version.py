@@ -20,13 +20,14 @@ __all__ = ['AutoScalingConfigurationVersionArgs', 'AutoScalingConfigurationVersi
 class AutoScalingConfigurationVersionArgs:
     def __init__(__self__, *,
                  auto_scaling_configuration_name: pulumi.Input[_builtins.str],
-                 max_concurrency: Optional[pulumi.Input[_builtins.int]] = None,
-                 max_size: Optional[pulumi.Input[_builtins.int]] = None,
-                 min_size: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 max_concurrency: pulumi.Input[Optional[_builtins.int]] = None,
+                 max_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 min_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a AutoScalingConfigurationVersion resource.
+
         :param pulumi.Input[_builtins.str] auto_scaling_configuration_name: Name of the auto scaling configuration.
         :param pulumi.Input[_builtins.int] max_concurrency: Maximal number of concurrent requests that you want an instance to process. When the number of concurrent requests goes over this limit, App Runner scales up your service.
         :param pulumi.Input[_builtins.int] max_size: Maximal number of instances that App Runner provisions for your service.
@@ -60,86 +61,89 @@ class AutoScalingConfigurationVersionArgs:
 
     @_builtins.property
     @pulumi.getter(name="maxConcurrency")
-    def max_concurrency(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max_concurrency(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Maximal number of concurrent requests that you want an instance to process. When the number of concurrent requests goes over this limit, App Runner scales up your service.
         """
         return pulumi.get(self, "max_concurrency")
 
     @max_concurrency.setter
-    def max_concurrency(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max_concurrency(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max_concurrency", value)
 
     @_builtins.property
     @pulumi.getter(name="maxSize")
-    def max_size(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max_size(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Maximal number of instances that App Runner provisions for your service.
         """
         return pulumi.get(self, "max_size")
 
     @max_size.setter
-    def max_size(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max_size(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max_size", value)
 
     @_builtins.property
     @pulumi.getter(name="minSize")
-    def min_size(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def min_size(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Minimal number of instances that App Runner provisions for your service.
         """
         return pulumi.get(self, "min_size")
 
     @min_size.setter
-    def min_size(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def min_size(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "min_size", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _AutoScalingConfigurationVersionState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 auto_scaling_configuration_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 auto_scaling_configuration_revision: Optional[pulumi.Input[_builtins.int]] = None,
-                 has_associated_service: Optional[pulumi.Input[_builtins.bool]] = None,
-                 is_default: Optional[pulumi.Input[_builtins.bool]] = None,
-                 latest: Optional[pulumi.Input[_builtins.bool]] = None,
-                 max_concurrency: Optional[pulumi.Input[_builtins.int]] = None,
-                 max_size: Optional[pulumi.Input[_builtins.int]] = None,
-                 min_size: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 auto_scaling_configuration_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 auto_scaling_configuration_revision: pulumi.Input[Optional[_builtins.int]] = None,
+                 has_associated_service: pulumi.Input[Optional[_builtins.bool]] = None,
+                 is_default: pulumi.Input[Optional[_builtins.bool]] = None,
+                 latest: pulumi.Input[Optional[_builtins.bool]] = None,
+                 max_concurrency: pulumi.Input[Optional[_builtins.int]] = None,
+                 max_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 min_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         Input properties used for looking up and filtering AutoScalingConfigurationVersion resources.
+
         :param pulumi.Input[_builtins.str] arn: ARN of this auto scaling configuration version.
         :param pulumi.Input[_builtins.str] auto_scaling_configuration_name: Name of the auto scaling configuration.
-        :param pulumi.Input[_builtins.int] auto_scaling_configuration_revision: The revision of this auto scaling configuration.
+        :param pulumi.Input[_builtins.int] auto_scaling_configuration_revision: Revision of this auto scaling configuration.
+        :param pulumi.Input[_builtins.bool] has_associated_service: Whether there is an App Runner service associated with this auto scaling configuration.
+        :param pulumi.Input[_builtins.bool] is_default: Whether the auto scaling configuration is the default for the AWS account and Region.
         :param pulumi.Input[_builtins.bool] latest: Whether the auto scaling configuration has the highest `auto_scaling_configuration_revision` among all configurations that share the same `auto_scaling_configuration_name`.
         :param pulumi.Input[_builtins.int] max_concurrency: Maximal number of concurrent requests that you want an instance to process. When the number of concurrent requests goes over this limit, App Runner scales up your service.
         :param pulumi.Input[_builtins.int] max_size: Maximal number of instances that App Runner provisions for your service.
@@ -178,152 +182,158 @@ class _AutoScalingConfigurationVersionState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of this auto scaling configuration version.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="autoScalingConfigurationName")
-    def auto_scaling_configuration_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def auto_scaling_configuration_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the auto scaling configuration.
         """
         return pulumi.get(self, "auto_scaling_configuration_name")
 
     @auto_scaling_configuration_name.setter
-    def auto_scaling_configuration_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def auto_scaling_configuration_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "auto_scaling_configuration_name", value)
 
     @_builtins.property
     @pulumi.getter(name="autoScalingConfigurationRevision")
-    def auto_scaling_configuration_revision(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def auto_scaling_configuration_revision(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
-        The revision of this auto scaling configuration.
+        Revision of this auto scaling configuration.
         """
         return pulumi.get(self, "auto_scaling_configuration_revision")
 
     @auto_scaling_configuration_revision.setter
-    def auto_scaling_configuration_revision(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def auto_scaling_configuration_revision(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "auto_scaling_configuration_revision", value)
 
     @_builtins.property
     @pulumi.getter(name="hasAssociatedService")
-    def has_associated_service(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def has_associated_service(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        Whether there is an App Runner service associated with this auto scaling configuration.
+        """
         return pulumi.get(self, "has_associated_service")
 
     @has_associated_service.setter
-    def has_associated_service(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def has_associated_service(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "has_associated_service", value)
 
     @_builtins.property
     @pulumi.getter(name="isDefault")
-    def is_default(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def is_default(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        Whether the auto scaling configuration is the default for the AWS account and Region.
+        """
         return pulumi.get(self, "is_default")
 
     @is_default.setter
-    def is_default(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def is_default(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "is_default", value)
 
     @_builtins.property
     @pulumi.getter
-    def latest(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def latest(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Whether the auto scaling configuration has the highest `auto_scaling_configuration_revision` among all configurations that share the same `auto_scaling_configuration_name`.
         """
         return pulumi.get(self, "latest")
 
     @latest.setter
-    def latest(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def latest(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "latest", value)
 
     @_builtins.property
     @pulumi.getter(name="maxConcurrency")
-    def max_concurrency(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max_concurrency(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Maximal number of concurrent requests that you want an instance to process. When the number of concurrent requests goes over this limit, App Runner scales up your service.
         """
         return pulumi.get(self, "max_concurrency")
 
     @max_concurrency.setter
-    def max_concurrency(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max_concurrency(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max_concurrency", value)
 
     @_builtins.property
     @pulumi.getter(name="maxSize")
-    def max_size(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def max_size(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Maximal number of instances that App Runner provisions for your service.
         """
         return pulumi.get(self, "max_size")
 
     @max_size.setter
-    def max_size(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def max_size(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "max_size", value)
 
     @_builtins.property
     @pulumi.getter(name="minSize")
-    def min_size(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def min_size(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Minimal number of instances that App Runner provisions for your service.
         """
         return pulumi.get(self, "min_size")
 
     @min_size.setter
-    def min_size(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def min_size(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "min_size", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Current state of the auto scaling configuration. An INACTIVE configuration revision has been deleted and can't be used. It is permanently removed some time after deletion.
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
 
@@ -333,12 +343,12 @@ class AutoScalingConfigurationVersion(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 auto_scaling_configuration_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 max_concurrency: Optional[pulumi.Input[_builtins.int]] = None,
-                 max_size: Optional[pulumi.Input[_builtins.int]] = None,
-                 min_size: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 auto_scaling_configuration_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 max_concurrency: pulumi.Input[Optional[_builtins.int]] = None,
+                 max_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 min_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Manages an App Runner AutoScaling Configuration Version.
@@ -365,13 +375,14 @@ class AutoScalingConfigurationVersion(pulumi.CustomResource):
 
         #### Required
 
-        - `arn` (String) Amazon Resource Name (ARN) of the App Runner auto scaling configuration version.
+        - `arn` (String) ARN of the App Runner auto scaling configuration version.
 
         Using `pulumi import`, import App Runner AutoScaling Configuration Versions using the `arn`. For example:
 
         ```sh
         $ pulumi import aws:apprunner/autoScalingConfigurationVersion:AutoScalingConfigurationVersion example "arn:aws:apprunner:us-east-1:1234567890:autoscalingconfiguration/example/1/69bdfe0115224b0db49398b7beb68e0f
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -413,13 +424,14 @@ class AutoScalingConfigurationVersion(pulumi.CustomResource):
 
         #### Required
 
-        - `arn` (String) Amazon Resource Name (ARN) of the App Runner auto scaling configuration version.
+        - `arn` (String) ARN of the App Runner auto scaling configuration version.
 
         Using `pulumi import`, import App Runner AutoScaling Configuration Versions using the `arn`. For example:
 
         ```sh
         $ pulumi import aws:apprunner/autoScalingConfigurationVersion:AutoScalingConfigurationVersion example "arn:aws:apprunner:us-east-1:1234567890:autoscalingconfiguration/example/1/69bdfe0115224b0db49398b7beb68e0f
         ```
+
 
         :param str resource_name: The name of the resource.
         :param AutoScalingConfigurationVersionArgs args: The arguments to use to populate this resource's properties.
@@ -436,12 +448,12 @@ class AutoScalingConfigurationVersion(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 auto_scaling_configuration_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 max_concurrency: Optional[pulumi.Input[_builtins.int]] = None,
-                 max_size: Optional[pulumi.Input[_builtins.int]] = None,
-                 min_size: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 auto_scaling_configuration_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 max_concurrency: pulumi.Input[Optional[_builtins.int]] = None,
+                 max_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 min_size: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -476,19 +488,19 @@ class AutoScalingConfigurationVersion(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            auto_scaling_configuration_name: Optional[pulumi.Input[_builtins.str]] = None,
-            auto_scaling_configuration_revision: Optional[pulumi.Input[_builtins.int]] = None,
-            has_associated_service: Optional[pulumi.Input[_builtins.bool]] = None,
-            is_default: Optional[pulumi.Input[_builtins.bool]] = None,
-            latest: Optional[pulumi.Input[_builtins.bool]] = None,
-            max_concurrency: Optional[pulumi.Input[_builtins.int]] = None,
-            max_size: Optional[pulumi.Input[_builtins.int]] = None,
-            min_size: Optional[pulumi.Input[_builtins.int]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            status: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'AutoScalingConfigurationVersion':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            auto_scaling_configuration_name: pulumi.Input[Optional[_builtins.str]] = None,
+            auto_scaling_configuration_revision: pulumi.Input[Optional[_builtins.int]] = None,
+            has_associated_service: pulumi.Input[Optional[_builtins.bool]] = None,
+            is_default: pulumi.Input[Optional[_builtins.bool]] = None,
+            latest: pulumi.Input[Optional[_builtins.bool]] = None,
+            max_concurrency: pulumi.Input[Optional[_builtins.int]] = None,
+            max_size: pulumi.Input[Optional[_builtins.int]] = None,
+            min_size: pulumi.Input[Optional[_builtins.int]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            status: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'AutoScalingConfigurationVersion':
         """
         Get an existing AutoScalingConfigurationVersion resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -498,7 +510,9 @@ class AutoScalingConfigurationVersion(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.str] arn: ARN of this auto scaling configuration version.
         :param pulumi.Input[_builtins.str] auto_scaling_configuration_name: Name of the auto scaling configuration.
-        :param pulumi.Input[_builtins.int] auto_scaling_configuration_revision: The revision of this auto scaling configuration.
+        :param pulumi.Input[_builtins.int] auto_scaling_configuration_revision: Revision of this auto scaling configuration.
+        :param pulumi.Input[_builtins.bool] has_associated_service: Whether there is an App Runner service associated with this auto scaling configuration.
+        :param pulumi.Input[_builtins.bool] is_default: Whether the auto scaling configuration is the default for the AWS account and Region.
         :param pulumi.Input[_builtins.bool] latest: Whether the auto scaling configuration has the highest `auto_scaling_configuration_revision` among all configurations that share the same `auto_scaling_configuration_name`.
         :param pulumi.Input[_builtins.int] max_concurrency: Maximal number of concurrent requests that you want an instance to process. When the number of concurrent requests goes over this limit, App Runner scales up your service.
         :param pulumi.Input[_builtins.int] max_size: Maximal number of instances that App Runner provisions for your service.
@@ -547,18 +561,24 @@ class AutoScalingConfigurationVersion(pulumi.CustomResource):
     @pulumi.getter(name="autoScalingConfigurationRevision")
     def auto_scaling_configuration_revision(self) -> pulumi.Output[_builtins.int]:
         """
-        The revision of this auto scaling configuration.
+        Revision of this auto scaling configuration.
         """
         return pulumi.get(self, "auto_scaling_configuration_revision")
 
     @_builtins.property
     @pulumi.getter(name="hasAssociatedService")
     def has_associated_service(self) -> pulumi.Output[_builtins.bool]:
+        """
+        Whether there is an App Runner service associated with this auto scaling configuration.
+        """
         return pulumi.get(self, "has_associated_service")
 
     @_builtins.property
     @pulumi.getter(name="isDefault")
     def is_default(self) -> pulumi.Output[_builtins.bool]:
+        """
+        Whether the auto scaling configuration is the default for the AWS account and Region.
+        """
         return pulumi.get(self, "is_default")
 
     @_builtins.property

@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from cvxpy.atoms.affine.binary_operators import (matmul, multiply,
+from cvxpy.atoms.affine.add_expr import AddExpression
+from cvxpy.atoms.affine.binary_operators import (matmul, MulExpression, multiply,
                                                  vdot, scalar_product, outer,)
 from cvxpy.atoms.affine.bmat import bmat
 from cvxpy.atoms.affine.broadcast_to import broadcast_to
@@ -24,6 +25,7 @@ from cvxpy.atoms.affine.cumsum import cumsum
 from cvxpy.atoms.cumprod import cumprod
 from cvxpy.atoms.affine.diag import diag
 from cvxpy.atoms.affine.diff import diff
+from cvxpy.atoms.affine.einsum import einsum
 from cvxpy.atoms.affine.hstack import hstack
 from cvxpy.atoms.affine.imag import imag
 from cvxpy.atoms.affine.kron import kron
@@ -32,10 +34,12 @@ from cvxpy.atoms.affine.partial_transpose import partial_transpose
 from cvxpy.atoms.affine.promote import promote
 from cvxpy.atoms.affine.real import real
 from cvxpy.atoms.affine.reshape import deep_flatten, reshape
+from cvxpy.atoms.affine.squeeze import squeeze
 from cvxpy.atoms.affine.concatenate import concatenate
-from cvxpy.atoms.affine.sum import sum
-from cvxpy.atoms.affine.trace import trace
-from cvxpy.atoms.affine.transpose import transpose
+from cvxpy.atoms.affine.stack import stack
+from cvxpy.atoms.affine.sum import Sum, sum
+from cvxpy.atoms.affine.trace import trace, Trace
+from cvxpy.atoms.affine.transpose import (transpose, permute_dims, swapaxes, moveaxis)
 from cvxpy.atoms.affine.upper_tri import upper_tri, vec_to_upper_tri
 from cvxpy.atoms.affine.vec import vec
 from cvxpy.atoms.affine.vstack import vstack
@@ -62,15 +66,17 @@ from cvxpy.atoms.elementwise.maximum import maximum
 from cvxpy.atoms.elementwise.minimum import minimum
 from cvxpy.atoms.elementwise.neg import neg
 from cvxpy.atoms.elementwise.pos import pos
-from cvxpy.atoms.elementwise.power import power
+from cvxpy.atoms.elementwise.power import Power, PowerApprox, power
 from cvxpy.atoms.elementwise.rel_entr import rel_entr
 from cvxpy.atoms.elementwise.scalene import scalene
 from cvxpy.atoms.elementwise.sqrt import sqrt
 from cvxpy.atoms.elementwise.square import square
 from cvxpy.atoms.elementwise.xexp import xexp
+# NLP atoms (require nlp=True solver) are accessible via cp.nlp namespace only.
+# e.g. cp.nlp.sin, cp.nlp.cos, cp.nlp.normcdf; not at top-level cp.
 from cvxpy.atoms.eye_minus_inv import eye_minus_inv, resolvent
 from cvxpy.atoms.gen_lambda_max import gen_lambda_max
-from cvxpy.atoms.geo_mean import geo_mean
+from cvxpy.atoms.geo_mean import GeoMean, GeoMeanApprox, geo_mean
 from cvxpy.atoms.gmatmul import gmatmul
 from cvxpy.atoms.harmonic_mean import harmonic_mean
 from cvxpy.atoms.inv_prod import inv_prod
@@ -93,7 +99,7 @@ from cvxpy.atoms.norm_nuc import normNuc
 from cvxpy.atoms.one_minus_pos import diff_pos, one_minus_pos
 from cvxpy.atoms.perspective import perspective
 from cvxpy.atoms.pf_eigenvalue import pf_eigenvalue
-from cvxpy.atoms.pnorm import Pnorm, pnorm
+from cvxpy.atoms.pnorm import Pnorm, PnormApprox, pnorm
 from cvxpy.atoms.prod import Prod, prod
 from cvxpy.atoms.quad_form import QuadForm, quad_form
 from cvxpy.atoms.quad_over_lin import quad_over_lin
@@ -112,15 +118,17 @@ from cvxpy.atoms.ptp import ptp
 # TODO(akshayka): Perhaps couple this information with the atom classes
 # themselves.
 SOC_ATOMS = [
-    geo_mean,
-    pnorm,
-    Pnorm,
+    GeoMeanApprox,
+    PnormApprox,
     QuadForm,
     quad_over_lin,
-    power,
+    PowerApprox,
     huber,
     std,
 ]
+
+POWCONE_ATOMS = [Pnorm, Power]
+POWCONE_ND_ATOMS = [GeoMean]
 
 EXP_ATOMS = [
     log_sum_exp,
@@ -146,6 +154,7 @@ PSD_ATOMS = [
     sigma_max,
     tr_inv,
     quantum_rel_entr,
+    von_neumann_entr,
 ]
 
 NONPOS_ATOMS = [
@@ -153,4 +162,31 @@ NONPOS_ATOMS = [
     abs,
     huber,
     ptp
+]
+
+# DGP atoms whose Dgp2Dcp canonicalization produces ExpCone-requiring DCP atoms.
+GP_EXP_ATOMS = [
+    AddExpression,
+    exp,
+    eye_minus_inv,
+    log,
+    MulExpression,
+    norm1,
+    one_minus_pos,
+    Pnorm,
+    PnormApprox,
+    QuadForm,
+    Sum,
+    Trace,
+    xexp,
+]
+
+# DGP atoms whose Dgp2Dcp canonicalization produces NonNeg constraints.
+GP_NONPOS_ATOMS = [
+    norm_inf,
+    max,
+    min,
+    maximum,
+    minimum,
+    pf_eigenvalue,
 ]

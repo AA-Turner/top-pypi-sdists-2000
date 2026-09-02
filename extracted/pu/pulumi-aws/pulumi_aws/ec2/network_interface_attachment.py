@@ -22,10 +22,11 @@ class NetworkInterfaceAttachmentInitArgs:
                  device_index: pulumi.Input[_builtins.int],
                  instance_id: pulumi.Input[_builtins.str],
                  network_interface_id: pulumi.Input[_builtins.str],
-                 network_card_index: Optional[pulumi.Input[_builtins.int]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 network_card_index: pulumi.Input[Optional[_builtins.int]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a NetworkInterfaceAttachment resource.
+
         :param pulumi.Input[_builtins.int] device_index: Network interface index (int).
         :param pulumi.Input[_builtins.str] instance_id: Instance ID to attach.
         :param pulumi.Input[_builtins.str] network_interface_id: ENI ID to attach.
@@ -78,41 +79,42 @@ class NetworkInterfaceAttachmentInitArgs:
 
     @_builtins.property
     @pulumi.getter(name="networkCardIndex")
-    def network_card_index(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def network_card_index(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Index of the network card. Specify a value greater than 0 when using multiple network cards, which are supported by [some instance types](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html#network-cards). The default is 0.
         """
         return pulumi.get(self, "network_card_index")
 
     @network_card_index.setter
-    def network_card_index(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def network_card_index(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "network_card_index", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _NetworkInterfaceAttachmentState:
     def __init__(__self__, *,
-                 attachment_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 device_index: Optional[pulumi.Input[_builtins.int]] = None,
-                 instance_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 network_card_index: Optional[pulumi.Input[_builtins.int]] = None,
-                 network_interface_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None):
+                 attachment_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 device_index: pulumi.Input[Optional[_builtins.int]] = None,
+                 instance_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 network_card_index: pulumi.Input[Optional[_builtins.int]] = None,
+                 network_interface_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering NetworkInterfaceAttachment resources.
+
         :param pulumi.Input[_builtins.str] attachment_id: The ENI Attachment ID.
         :param pulumi.Input[_builtins.int] device_index: Network interface index (int).
         :param pulumi.Input[_builtins.str] instance_id: Instance ID to attach.
@@ -138,86 +140,86 @@ class _NetworkInterfaceAttachmentState:
 
     @_builtins.property
     @pulumi.getter(name="attachmentId")
-    def attachment_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def attachment_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ENI Attachment ID.
         """
         return pulumi.get(self, "attachment_id")
 
     @attachment_id.setter
-    def attachment_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def attachment_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "attachment_id", value)
 
     @_builtins.property
     @pulumi.getter(name="deviceIndex")
-    def device_index(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def device_index(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Network interface index (int).
         """
         return pulumi.get(self, "device_index")
 
     @device_index.setter
-    def device_index(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def device_index(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "device_index", value)
 
     @_builtins.property
     @pulumi.getter(name="instanceId")
-    def instance_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def instance_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Instance ID to attach.
         """
         return pulumi.get(self, "instance_id")
 
     @instance_id.setter
-    def instance_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def instance_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "instance_id", value)
 
     @_builtins.property
     @pulumi.getter(name="networkCardIndex")
-    def network_card_index(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def network_card_index(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Index of the network card. Specify a value greater than 0 when using multiple network cards, which are supported by [some instance types](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html#network-cards). The default is 0.
         """
         return pulumi.get(self, "network_card_index")
 
     @network_card_index.setter
-    def network_card_index(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def network_card_index(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "network_card_index", value)
 
     @_builtins.property
     @pulumi.getter(name="networkInterfaceId")
-    def network_interface_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def network_interface_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ENI ID to attach.
         """
         return pulumi.get(self, "network_interface_id")
 
     @network_interface_id.setter
-    def network_interface_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def network_interface_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "network_interface_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The status of the Network Interface Attachment.
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
 
@@ -227,11 +229,11 @@ class NetworkInterfaceAttachment(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 device_index: Optional[pulumi.Input[_builtins.int]] = None,
-                 instance_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 network_card_index: Optional[pulumi.Input[_builtins.int]] = None,
-                 network_interface_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 device_index: pulumi.Input[Optional[_builtins.int]] = None,
+                 instance_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 network_card_index: pulumi.Input[Optional[_builtins.int]] = None,
+                 network_interface_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Attach an Elastic network interface (ENI) resource with EC2 instance.
@@ -255,6 +257,7 @@ class NetworkInterfaceAttachment(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:ec2/networkInterfaceAttachment:NetworkInterfaceAttachment secondary_nic eni-attach-0a33842b4ec347c4c
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -293,6 +296,7 @@ class NetworkInterfaceAttachment(pulumi.CustomResource):
         $ pulumi import aws:ec2/networkInterfaceAttachment:NetworkInterfaceAttachment secondary_nic eni-attach-0a33842b4ec347c4c
         ```
 
+
         :param str resource_name: The name of the resource.
         :param NetworkInterfaceAttachmentInitArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -308,11 +312,11 @@ class NetworkInterfaceAttachment(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 device_index: Optional[pulumi.Input[_builtins.int]] = None,
-                 instance_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 network_card_index: Optional[pulumi.Input[_builtins.int]] = None,
-                 network_interface_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 device_index: pulumi.Input[Optional[_builtins.int]] = None,
+                 instance_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 network_card_index: pulumi.Input[Optional[_builtins.int]] = None,
+                 network_interface_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -345,13 +349,13 @@ class NetworkInterfaceAttachment(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            attachment_id: Optional[pulumi.Input[_builtins.str]] = None,
-            device_index: Optional[pulumi.Input[_builtins.int]] = None,
-            instance_id: Optional[pulumi.Input[_builtins.str]] = None,
-            network_card_index: Optional[pulumi.Input[_builtins.int]] = None,
-            network_interface_id: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            status: Optional[pulumi.Input[_builtins.str]] = None) -> 'NetworkInterfaceAttachment':
+            attachment_id: pulumi.Input[Optional[_builtins.str]] = None,
+            device_index: pulumi.Input[Optional[_builtins.int]] = None,
+            instance_id: pulumi.Input[Optional[_builtins.str]] = None,
+            network_card_index: pulumi.Input[Optional[_builtins.int]] = None,
+            network_interface_id: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            status: pulumi.Input[Optional[_builtins.str]] = None) -> 'NetworkInterfaceAttachment':
         """
         Get an existing NetworkInterfaceAttachment resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

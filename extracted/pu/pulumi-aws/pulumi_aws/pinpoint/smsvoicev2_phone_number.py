@@ -25,30 +25,38 @@ class Smsvoicev2PhoneNumberArgs:
                  message_type: pulumi.Input[_builtins.str],
                  number_capabilities: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
                  number_type: pulumi.Input[_builtins.str],
-                 deletion_protection_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 opt_out_list_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 registration_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 self_managed_opt_outs_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['Smsvoicev2PhoneNumberTimeoutsArgs']] = None,
-                 two_way_channel_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 two_way_channel_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 two_way_channel_role: Optional[pulumi.Input[_builtins.str]] = None):
+                 deletion_protection_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 force_disassociate: pulumi.Input[Optional[_builtins.bool]] = None,
+                 opt_out_list_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 registration_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 self_managed_opt_outs_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['Smsvoicev2PhoneNumberTimeoutsArgs']] = None,
+                 two_way_channel_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 two_way_channel_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 two_way_channel_role: pulumi.Input[Optional[_builtins.str]] = None,
+                 wait_for_active: pulumi.Input[Optional[_builtins.bool]] = None):
         """
         The set of arguments for constructing a Smsvoicev2PhoneNumber resource.
-        :param pulumi.Input[_builtins.str] iso_country_code: The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
-        :param pulumi.Input[_builtins.str] message_type: The type of message. Valid values are `TRANSACTIONAL` for messages that are critical or time-sensitive and `PROMOTIONAL` for messages that aren’t critical or time-sensitive.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] number_capabilities: Describes if the origination identity can be used for text messages, voice calls or both. valid values are `SMS` and `VOICE`.
-        :param pulumi.Input[_builtins.str] number_type: The type of phone number to request. Possible values are `LONG_CODE`, `TOLL_FREE`, `TEN_DLC`, or `SIMULATOR`.
-        :param pulumi.Input[_builtins.bool] deletion_protection_enabled: By default this is set to `false`. When set to true the phone number can’t be deleted.
-        :param pulumi.Input[_builtins.str] opt_out_list_name: The name of the opt-out list to associate with the phone number.
+
+        :param pulumi.Input[_builtins.str] iso_country_code: Two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
+        :param pulumi.Input[_builtins.str] message_type: Type of message. Valid values are `TRANSACTIONAL` for messages that are critical or time-sensitive and `PROMOTIONAL` for messages that aren’t critical or time-sensitive.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] number_capabilities: Whether the origination identity can be used for text messages, voice calls or both. Valid values are `SMS` and `VOICE`.
+        :param pulumi.Input[_builtins.str] number_type: Type of phone number to request. Possible values are `LONG_CODE`, `TOLL_FREE`, `TEN_DLC`, or `SIMULATOR`.
+               
+               The following arguments are optional:
+        :param pulumi.Input[_builtins.bool] deletion_protection_enabled: Whether deletion protection is enabled. When `true`, the phone number cannot be deleted.
+        :param pulumi.Input[_builtins.bool] force_disassociate: Whether to disassociate the phone number from any pool it is associated with before destroying it.
+        :param pulumi.Input[_builtins.str] opt_out_list_name: Name of the opt-out list to associate with the phone number. If omitted, AWS assigns the `Default` opt-out list.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[_builtins.str] registration_id: Use this field to attach your phone number for an external registration process.
         :param pulumi.Input[_builtins.bool] self_managed_opt_outs_enabled: When set to `false` an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, AWS End User Messaging SMS and Voice automatically replies with a customizable message and adds the end recipient to the opt-out list. When set to true you’re responsible for responding to HELP and STOP requests. You’re also responsible for tracking and honoring opt-out request.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[_builtins.str] two_way_channel_arn: Configuration for two-way SMS. Specify an ARN to receive incoming SMS messages, or `connect.[region].amazonaws.com` (with `[region]` replaced by the AWS Region of the Amazon Connect instance) to set Amazon Connect as the inbound destination.
-        :param pulumi.Input[_builtins.bool] two_way_channel_enabled: By default this is set to `false`. When set to `true` you can receive incoming text messages from your end recipients.
+        :param pulumi.Input[_builtins.bool] two_way_channel_enabled: Whether two-way messaging is enabled. When `true`, you can receive incoming text messages from your end recipients. If omitted, AWS sets this to `false`.
         :param pulumi.Input[_builtins.str] two_way_channel_role: IAM Role ARN for a service to assume, to be able to post inbound SMS messages.
+        :param pulumi.Input[_builtins.bool] wait_for_active: Whether to wait for the phone number to reach `ACTIVE` status before considering the resource created or updated. Defaults to `true`. Set to `false` for number types gated on carrier or registration approval (for example, `TEN_DLC`, `TOLL_FREE`, or any number submitted with `registration_id`), which can remain `PENDING` for days or weeks. When `false`, `pulumi up` returns once AWS accepts the phone number request; track activation with the `status` attribute.
         """
         pulumi.set(__self__, "iso_country_code", iso_country_code)
         pulumi.set(__self__, "message_type", message_type)
@@ -56,6 +64,8 @@ class Smsvoicev2PhoneNumberArgs:
         pulumi.set(__self__, "number_type", number_type)
         if deletion_protection_enabled is not None:
             pulumi.set(__self__, "deletion_protection_enabled", deletion_protection_enabled)
+        if force_disassociate is not None:
+            pulumi.set(__self__, "force_disassociate", force_disassociate)
         if opt_out_list_name is not None:
             pulumi.set(__self__, "opt_out_list_name", opt_out_list_name)
         if region is not None:
@@ -74,12 +84,14 @@ class Smsvoicev2PhoneNumberArgs:
             pulumi.set(__self__, "two_way_channel_enabled", two_way_channel_enabled)
         if two_way_channel_role is not None:
             pulumi.set(__self__, "two_way_channel_role", two_way_channel_role)
+        if wait_for_active is not None:
+            pulumi.set(__self__, "wait_for_active", wait_for_active)
 
     @_builtins.property
     @pulumi.getter(name="isoCountryCode")
     def iso_country_code(self) -> pulumi.Input[_builtins.str]:
         """
-        The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
+        Two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
         """
         return pulumi.get(self, "iso_country_code")
 
@@ -91,7 +103,7 @@ class Smsvoicev2PhoneNumberArgs:
     @pulumi.getter(name="messageType")
     def message_type(self) -> pulumi.Input[_builtins.str]:
         """
-        The type of message. Valid values are `TRANSACTIONAL` for messages that are critical or time-sensitive and `PROMOTIONAL` for messages that aren’t critical or time-sensitive.
+        Type of message. Valid values are `TRANSACTIONAL` for messages that are critical or time-sensitive and `PROMOTIONAL` for messages that aren’t critical or time-sensitive.
         """
         return pulumi.get(self, "message_type")
 
@@ -103,7 +115,7 @@ class Smsvoicev2PhoneNumberArgs:
     @pulumi.getter(name="numberCapabilities")
     def number_capabilities(self) -> pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]:
         """
-        Describes if the origination identity can be used for text messages, voice calls or both. valid values are `SMS` and `VOICE`.
+        Whether the origination identity can be used for text messages, voice calls or both. Valid values are `SMS` and `VOICE`.
         """
         return pulumi.get(self, "number_capabilities")
 
@@ -115,7 +127,9 @@ class Smsvoicev2PhoneNumberArgs:
     @pulumi.getter(name="numberType")
     def number_type(self) -> pulumi.Input[_builtins.str]:
         """
-        The type of phone number to request. Possible values are `LONG_CODE`, `TOLL_FREE`, `TEN_DLC`, or `SIMULATOR`.
+        Type of phone number to request. Possible values are `LONG_CODE`, `TOLL_FREE`, `TEN_DLC`, or `SIMULATOR`.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "number_type")
 
@@ -125,163 +139,202 @@ class Smsvoicev2PhoneNumberArgs:
 
     @_builtins.property
     @pulumi.getter(name="deletionProtectionEnabled")
-    def deletion_protection_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def deletion_protection_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        By default this is set to `false`. When set to true the phone number can’t be deleted.
+        Whether deletion protection is enabled. When `true`, the phone number cannot be deleted.
         """
         return pulumi.get(self, "deletion_protection_enabled")
 
     @deletion_protection_enabled.setter
-    def deletion_protection_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def deletion_protection_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "deletion_protection_enabled", value)
 
     @_builtins.property
-    @pulumi.getter(name="optOutListName")
-    def opt_out_list_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    @pulumi.getter(name="forceDisassociate")
+    def force_disassociate(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        The name of the opt-out list to associate with the phone number.
+        Whether to disassociate the phone number from any pool it is associated with before destroying it.
+        """
+        return pulumi.get(self, "force_disassociate")
+
+    @force_disassociate.setter
+    def force_disassociate(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "force_disassociate", value)
+
+    @_builtins.property
+    @pulumi.getter(name="optOutListName")
+    def opt_out_list_name(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Name of the opt-out list to associate with the phone number. If omitted, AWS assigns the `Default` opt-out list.
         """
         return pulumi.get(self, "opt_out_list_name")
 
     @opt_out_list_name.setter
-    def opt_out_list_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def opt_out_list_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "opt_out_list_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="registrationId")
-    def registration_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def registration_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Use this field to attach your phone number for an external registration process.
         """
         return pulumi.get(self, "registration_id")
 
     @registration_id.setter
-    def registration_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def registration_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "registration_id", value)
 
     @_builtins.property
     @pulumi.getter(name="selfManagedOptOutsEnabled")
-    def self_managed_opt_outs_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def self_managed_opt_outs_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         When set to `false` an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, AWS End User Messaging SMS and Voice automatically replies with a customizable message and adds the end recipient to the opt-out list. When set to true you’re responsible for responding to HELP and STOP requests. You’re also responsible for tracking and honoring opt-out request.
         """
         return pulumi.get(self, "self_managed_opt_outs_enabled")
 
     @self_managed_opt_outs_enabled.setter
-    def self_managed_opt_outs_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def self_managed_opt_outs_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "self_managed_opt_outs_enabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
+        """
+        Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['Smsvoicev2PhoneNumberTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['Smsvoicev2PhoneNumberTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['Smsvoicev2PhoneNumberTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['Smsvoicev2PhoneNumberTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter(name="twoWayChannelArn")
-    def two_way_channel_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def two_way_channel_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Configuration for two-way SMS. Specify an ARN to receive incoming SMS messages, or `connect.[region].amazonaws.com` (with `[region]` replaced by the AWS Region of the Amazon Connect instance) to set Amazon Connect as the inbound destination.
         """
         return pulumi.get(self, "two_way_channel_arn")
 
     @two_way_channel_arn.setter
-    def two_way_channel_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def two_way_channel_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "two_way_channel_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="twoWayChannelEnabled")
-    def two_way_channel_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def two_way_channel_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        By default this is set to `false`. When set to `true` you can receive incoming text messages from your end recipients.
+        Whether two-way messaging is enabled. When `true`, you can receive incoming text messages from your end recipients. If omitted, AWS sets this to `false`.
         """
         return pulumi.get(self, "two_way_channel_enabled")
 
     @two_way_channel_enabled.setter
-    def two_way_channel_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def two_way_channel_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "two_way_channel_enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="twoWayChannelRole")
-    def two_way_channel_role(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def two_way_channel_role(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         IAM Role ARN for a service to assume, to be able to post inbound SMS messages.
         """
         return pulumi.get(self, "two_way_channel_role")
 
     @two_way_channel_role.setter
-    def two_way_channel_role(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def two_way_channel_role(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "two_way_channel_role", value)
+
+    @_builtins.property
+    @pulumi.getter(name="waitForActive")
+    def wait_for_active(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        Whether to wait for the phone number to reach `ACTIVE` status before considering the resource created or updated. Defaults to `true`. Set to `false` for number types gated on carrier or registration approval (for example, `TEN_DLC`, `TOLL_FREE`, or any number submitted with `registration_id`), which can remain `PENDING` for days or weeks. When `false`, `pulumi up` returns once AWS accepts the phone number request; track activation with the `status` attribute.
+        """
+        return pulumi.get(self, "wait_for_active")
+
+    @wait_for_active.setter
+    def wait_for_active(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "wait_for_active", value)
 
 
 @pulumi.input_type
 class _Smsvoicev2PhoneNumberState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 deletion_protection_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 iso_country_code: Optional[pulumi.Input[_builtins.str]] = None,
-                 message_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 monthly_leasing_price: Optional[pulumi.Input[_builtins.str]] = None,
-                 number_capabilities: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 number_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 opt_out_list_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 phone_number: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 registration_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 self_managed_opt_outs_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input['Smsvoicev2PhoneNumberTimeoutsArgs']] = None,
-                 two_way_channel_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 two_way_channel_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 two_way_channel_role: Optional[pulumi.Input[_builtins.str]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 deletion_protection_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 force_disassociate: pulumi.Input[Optional[_builtins.bool]] = None,
+                 iso_country_code: pulumi.Input[Optional[_builtins.str]] = None,
+                 message_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 monthly_leasing_price: pulumi.Input[Optional[_builtins.str]] = None,
+                 number_capabilities: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 number_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 opt_out_list_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 phone_number: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 registration_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 self_managed_opt_outs_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional['Smsvoicev2PhoneNumberTimeoutsArgs']] = None,
+                 two_way_channel_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 two_way_channel_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 two_way_channel_role: pulumi.Input[Optional[_builtins.str]] = None,
+                 wait_for_active: pulumi.Input[Optional[_builtins.bool]] = None):
         """
         Input properties used for looking up and filtering Smsvoicev2PhoneNumber resources.
+
         :param pulumi.Input[_builtins.str] arn: ARN of the phone number.
-        :param pulumi.Input[_builtins.bool] deletion_protection_enabled: By default this is set to `false`. When set to true the phone number can’t be deleted.
-        :param pulumi.Input[_builtins.str] iso_country_code: The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
-        :param pulumi.Input[_builtins.str] message_type: The type of message. Valid values are `TRANSACTIONAL` for messages that are critical or time-sensitive and `PROMOTIONAL` for messages that aren’t critical or time-sensitive.
-        :param pulumi.Input[_builtins.str] monthly_leasing_price: The monthly price, in US dollars, to lease the phone number.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] number_capabilities: Describes if the origination identity can be used for text messages, voice calls or both. valid values are `SMS` and `VOICE`.
-        :param pulumi.Input[_builtins.str] number_type: The type of phone number to request. Possible values are `LONG_CODE`, `TOLL_FREE`, `TEN_DLC`, or `SIMULATOR`.
-        :param pulumi.Input[_builtins.str] opt_out_list_name: The name of the opt-out list to associate with the phone number.
-        :param pulumi.Input[_builtins.str] phone_number: The new phone number that was requested.
+        :param pulumi.Input[_builtins.bool] deletion_protection_enabled: Whether deletion protection is enabled. When `true`, the phone number cannot be deleted.
+        :param pulumi.Input[_builtins.bool] force_disassociate: Whether to disassociate the phone number from any pool it is associated with before destroying it.
+        :param pulumi.Input[_builtins.str] iso_country_code: Two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
+        :param pulumi.Input[_builtins.str] message_type: Type of message. Valid values are `TRANSACTIONAL` for messages that are critical or time-sensitive and `PROMOTIONAL` for messages that aren’t critical or time-sensitive.
+        :param pulumi.Input[_builtins.str] monthly_leasing_price: Monthly price, in US dollars, to lease the phone number.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] number_capabilities: Whether the origination identity can be used for text messages, voice calls or both. Valid values are `SMS` and `VOICE`.
+        :param pulumi.Input[_builtins.str] number_type: Type of phone number to request. Possible values are `LONG_CODE`, `TOLL_FREE`, `TEN_DLC`, or `SIMULATOR`.
+               
+               The following arguments are optional:
+        :param pulumi.Input[_builtins.str] opt_out_list_name: Name of the opt-out list to associate with the phone number. If omitted, AWS assigns the `Default` opt-out list.
+        :param pulumi.Input[_builtins.str] phone_number: New phone number that was requested.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[_builtins.str] registration_id: Use this field to attach your phone number for an external registration process.
         :param pulumi.Input[_builtins.bool] self_managed_opt_outs_enabled: When set to `false` an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, AWS End User Messaging SMS and Voice automatically replies with a customizable message and adds the end recipient to the opt-out list. When set to true you’re responsible for responding to HELP and STOP requests. You’re also responsible for tracking and honoring opt-out request.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        :param pulumi.Input[_builtins.str] status: Status of the phone number. Possible values are `PENDING`, `ACTIVE`, `ASSOCIATING`, `DISASSOCIATING`, and `DELETED`.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         :param pulumi.Input[_builtins.str] two_way_channel_arn: Configuration for two-way SMS. Specify an ARN to receive incoming SMS messages, or `connect.[region].amazonaws.com` (with `[region]` replaced by the AWS Region of the Amazon Connect instance) to set Amazon Connect as the inbound destination.
-        :param pulumi.Input[_builtins.bool] two_way_channel_enabled: By default this is set to `false`. When set to `true` you can receive incoming text messages from your end recipients.
+        :param pulumi.Input[_builtins.bool] two_way_channel_enabled: Whether two-way messaging is enabled. When `true`, you can receive incoming text messages from your end recipients. If omitted, AWS sets this to `false`.
         :param pulumi.Input[_builtins.str] two_way_channel_role: IAM Role ARN for a service to assume, to be able to post inbound SMS messages.
+        :param pulumi.Input[_builtins.bool] wait_for_active: Whether to wait for the phone number to reach `ACTIVE` status before considering the resource created or updated. Defaults to `true`. Set to `false` for number types gated on carrier or registration approval (for example, `TEN_DLC`, `TOLL_FREE`, or any number submitted with `registration_id`), which can remain `PENDING` for days or weeks. When `false`, `pulumi up` returns once AWS accepts the phone number request; track activation with the `status` attribute.
         """
         if arn is not None:
             pulumi.set(__self__, "arn", arn)
         if deletion_protection_enabled is not None:
             pulumi.set(__self__, "deletion_protection_enabled", deletion_protection_enabled)
+        if force_disassociate is not None:
+            pulumi.set(__self__, "force_disassociate", force_disassociate)
         if iso_country_code is not None:
             pulumi.set(__self__, "iso_country_code", iso_country_code)
         if message_type is not None:
@@ -302,6 +355,8 @@ class _Smsvoicev2PhoneNumberState:
             pulumi.set(__self__, "registration_id", registration_id)
         if self_managed_opt_outs_enabled is not None:
             pulumi.set(__self__, "self_managed_opt_outs_enabled", self_managed_opt_outs_enabled)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
         if tags_all is not None:
@@ -314,216 +369,259 @@ class _Smsvoicev2PhoneNumberState:
             pulumi.set(__self__, "two_way_channel_enabled", two_way_channel_enabled)
         if two_way_channel_role is not None:
             pulumi.set(__self__, "two_way_channel_role", two_way_channel_role)
+        if wait_for_active is not None:
+            pulumi.set(__self__, "wait_for_active", wait_for_active)
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the phone number.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="deletionProtectionEnabled")
-    def deletion_protection_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def deletion_protection_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        By default this is set to `false`. When set to true the phone number can’t be deleted.
+        Whether deletion protection is enabled. When `true`, the phone number cannot be deleted.
         """
         return pulumi.get(self, "deletion_protection_enabled")
 
     @deletion_protection_enabled.setter
-    def deletion_protection_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def deletion_protection_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "deletion_protection_enabled", value)
 
     @_builtins.property
-    @pulumi.getter(name="isoCountryCode")
-    def iso_country_code(self) -> Optional[pulumi.Input[_builtins.str]]:
+    @pulumi.getter(name="forceDisassociate")
+    def force_disassociate(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
+        Whether to disassociate the phone number from any pool it is associated with before destroying it.
+        """
+        return pulumi.get(self, "force_disassociate")
+
+    @force_disassociate.setter
+    def force_disassociate(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "force_disassociate", value)
+
+    @_builtins.property
+    @pulumi.getter(name="isoCountryCode")
+    def iso_country_code(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
         """
         return pulumi.get(self, "iso_country_code")
 
     @iso_country_code.setter
-    def iso_country_code(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def iso_country_code(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "iso_country_code", value)
 
     @_builtins.property
     @pulumi.getter(name="messageType")
-    def message_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def message_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The type of message. Valid values are `TRANSACTIONAL` for messages that are critical or time-sensitive and `PROMOTIONAL` for messages that aren’t critical or time-sensitive.
+        Type of message. Valid values are `TRANSACTIONAL` for messages that are critical or time-sensitive and `PROMOTIONAL` for messages that aren’t critical or time-sensitive.
         """
         return pulumi.get(self, "message_type")
 
     @message_type.setter
-    def message_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def message_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "message_type", value)
 
     @_builtins.property
     @pulumi.getter(name="monthlyLeasingPrice")
-    def monthly_leasing_price(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def monthly_leasing_price(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The monthly price, in US dollars, to lease the phone number.
+        Monthly price, in US dollars, to lease the phone number.
         """
         return pulumi.get(self, "monthly_leasing_price")
 
     @monthly_leasing_price.setter
-    def monthly_leasing_price(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def monthly_leasing_price(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "monthly_leasing_price", value)
 
     @_builtins.property
     @pulumi.getter(name="numberCapabilities")
-    def number_capabilities(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def number_capabilities(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        Describes if the origination identity can be used for text messages, voice calls or both. valid values are `SMS` and `VOICE`.
+        Whether the origination identity can be used for text messages, voice calls or both. Valid values are `SMS` and `VOICE`.
         """
         return pulumi.get(self, "number_capabilities")
 
     @number_capabilities.setter
-    def number_capabilities(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def number_capabilities(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "number_capabilities", value)
 
     @_builtins.property
     @pulumi.getter(name="numberType")
-    def number_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def number_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The type of phone number to request. Possible values are `LONG_CODE`, `TOLL_FREE`, `TEN_DLC`, or `SIMULATOR`.
+        Type of phone number to request. Possible values are `LONG_CODE`, `TOLL_FREE`, `TEN_DLC`, or `SIMULATOR`.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "number_type")
 
     @number_type.setter
-    def number_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def number_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "number_type", value)
 
     @_builtins.property
     @pulumi.getter(name="optOutListName")
-    def opt_out_list_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def opt_out_list_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The name of the opt-out list to associate with the phone number.
+        Name of the opt-out list to associate with the phone number. If omitted, AWS assigns the `Default` opt-out list.
         """
         return pulumi.get(self, "opt_out_list_name")
 
     @opt_out_list_name.setter
-    def opt_out_list_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def opt_out_list_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "opt_out_list_name", value)
 
     @_builtins.property
     @pulumi.getter(name="phoneNumber")
-    def phone_number(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def phone_number(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The new phone number that was requested.
+        New phone number that was requested.
         """
         return pulumi.get(self, "phone_number")
 
     @phone_number.setter
-    def phone_number(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def phone_number(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "phone_number", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="registrationId")
-    def registration_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def registration_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Use this field to attach your phone number for an external registration process.
         """
         return pulumi.get(self, "registration_id")
 
     @registration_id.setter
-    def registration_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def registration_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "registration_id", value)
 
     @_builtins.property
     @pulumi.getter(name="selfManagedOptOutsEnabled")
-    def self_managed_opt_outs_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def self_managed_opt_outs_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         When set to `false` an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, AWS End User Messaging SMS and Voice automatically replies with a customizable message and adds the end recipient to the opt-out list. When set to true you’re responsible for responding to HELP and STOP requests. You’re also responsible for tracking and honoring opt-out request.
         """
         return pulumi.get(self, "self_managed_opt_outs_enabled")
 
     @self_managed_opt_outs_enabled.setter
-    def self_managed_opt_outs_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def self_managed_opt_outs_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "self_managed_opt_outs_enabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
+        """
+        Status of the phone number. Possible values are `PENDING`, `ACTIVE`, `ASSOCIATING`, `DISASSOCIATING`, and `DELETED`.
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
+        pulumi.set(self, "status", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
+        """
+        Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
-        A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['Smsvoicev2PhoneNumberTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['Smsvoicev2PhoneNumberTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['Smsvoicev2PhoneNumberTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['Smsvoicev2PhoneNumberTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
     @_builtins.property
     @pulumi.getter(name="twoWayChannelArn")
-    def two_way_channel_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def two_way_channel_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Configuration for two-way SMS. Specify an ARN to receive incoming SMS messages, or `connect.[region].amazonaws.com` (with `[region]` replaced by the AWS Region of the Amazon Connect instance) to set Amazon Connect as the inbound destination.
         """
         return pulumi.get(self, "two_way_channel_arn")
 
     @two_way_channel_arn.setter
-    def two_way_channel_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def two_way_channel_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "two_way_channel_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="twoWayChannelEnabled")
-    def two_way_channel_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def two_way_channel_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        By default this is set to `false`. When set to `true` you can receive incoming text messages from your end recipients.
+        Whether two-way messaging is enabled. When `true`, you can receive incoming text messages from your end recipients. If omitted, AWS sets this to `false`.
         """
         return pulumi.get(self, "two_way_channel_enabled")
 
     @two_way_channel_enabled.setter
-    def two_way_channel_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def two_way_channel_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "two_way_channel_enabled", value)
 
     @_builtins.property
     @pulumi.getter(name="twoWayChannelRole")
-    def two_way_channel_role(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def two_way_channel_role(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         IAM Role ARN for a service to assume, to be able to post inbound SMS messages.
         """
         return pulumi.get(self, "two_way_channel_role")
 
     @two_way_channel_role.setter
-    def two_way_channel_role(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def two_way_channel_role(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "two_way_channel_role", value)
+
+    @_builtins.property
+    @pulumi.getter(name="waitForActive")
+    def wait_for_active(self) -> pulumi.Input[Optional[_builtins.bool]]:
+        """
+        Whether to wait for the phone number to reach `ACTIVE` status before considering the resource created or updated. Defaults to `true`. Set to `false` for number types gated on carrier or registration approval (for example, `TEN_DLC`, `TOLL_FREE`, or any number submitted with `registration_id`), which can remain `PENDING` for days or weeks. When `false`, `pulumi up` returns once AWS accepts the phone number request; track activation with the `status` attribute.
+        """
+        return pulumi.get(self, "wait_for_active")
+
+    @wait_for_active.setter
+    def wait_for_active(self, value: pulumi.Input[Optional[_builtins.bool]]):
+        pulumi.set(self, "wait_for_active", value)
 
 
 @pulumi.type_token("aws:pinpoint/smsvoicev2PhoneNumber:Smsvoicev2PhoneNumber")
@@ -532,20 +630,22 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 deletion_protection_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 iso_country_code: Optional[pulumi.Input[_builtins.str]] = None,
-                 message_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 number_capabilities: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 number_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 opt_out_list_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 registration_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 self_managed_opt_outs_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['Smsvoicev2PhoneNumberTimeoutsArgs', 'Smsvoicev2PhoneNumberTimeoutsArgsDict']]] = None,
-                 two_way_channel_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 two_way_channel_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 two_way_channel_role: Optional[pulumi.Input[_builtins.str]] = None,
+                 deletion_protection_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 force_disassociate: pulumi.Input[Optional[_builtins.bool]] = None,
+                 iso_country_code: pulumi.Input[Optional[_builtins.str]] = None,
+                 message_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 number_capabilities: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 number_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 opt_out_list_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 registration_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 self_managed_opt_outs_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['Smsvoicev2PhoneNumberTimeoutsArgs', 'Smsvoicev2PhoneNumberTimeoutsArgsDict']]] = None,
+                 two_way_channel_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 two_way_channel_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 two_way_channel_role: pulumi.Input[Optional[_builtins.str]] = None,
+                 wait_for_active: pulumi.Input[Optional[_builtins.bool]] = None,
                  __props__=None):
         """
         Manages an AWS End User Messaging SMS phone number.
@@ -571,20 +671,26 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
         $ pulumi import aws:pinpoint/smsvoicev2PhoneNumber:Smsvoicev2PhoneNumber example phone-abcdef0123456789abcdef0123456789
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.bool] deletion_protection_enabled: By default this is set to `false`. When set to true the phone number can’t be deleted.
-        :param pulumi.Input[_builtins.str] iso_country_code: The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
-        :param pulumi.Input[_builtins.str] message_type: The type of message. Valid values are `TRANSACTIONAL` for messages that are critical or time-sensitive and `PROMOTIONAL` for messages that aren’t critical or time-sensitive.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] number_capabilities: Describes if the origination identity can be used for text messages, voice calls or both. valid values are `SMS` and `VOICE`.
-        :param pulumi.Input[_builtins.str] number_type: The type of phone number to request. Possible values are `LONG_CODE`, `TOLL_FREE`, `TEN_DLC`, or `SIMULATOR`.
-        :param pulumi.Input[_builtins.str] opt_out_list_name: The name of the opt-out list to associate with the phone number.
+        :param pulumi.Input[_builtins.bool] deletion_protection_enabled: Whether deletion protection is enabled. When `true`, the phone number cannot be deleted.
+        :param pulumi.Input[_builtins.bool] force_disassociate: Whether to disassociate the phone number from any pool it is associated with before destroying it.
+        :param pulumi.Input[_builtins.str] iso_country_code: Two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
+        :param pulumi.Input[_builtins.str] message_type: Type of message. Valid values are `TRANSACTIONAL` for messages that are critical or time-sensitive and `PROMOTIONAL` for messages that aren’t critical or time-sensitive.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] number_capabilities: Whether the origination identity can be used for text messages, voice calls or both. Valid values are `SMS` and `VOICE`.
+        :param pulumi.Input[_builtins.str] number_type: Type of phone number to request. Possible values are `LONG_CODE`, `TOLL_FREE`, `TEN_DLC`, or `SIMULATOR`.
+               
+               The following arguments are optional:
+        :param pulumi.Input[_builtins.str] opt_out_list_name: Name of the opt-out list to associate with the phone number. If omitted, AWS assigns the `Default` opt-out list.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[_builtins.str] registration_id: Use this field to attach your phone number for an external registration process.
         :param pulumi.Input[_builtins.bool] self_managed_opt_outs_enabled: When set to `false` an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, AWS End User Messaging SMS and Voice automatically replies with a customizable message and adds the end recipient to the opt-out list. When set to true you’re responsible for responding to HELP and STOP requests. You’re also responsible for tracking and honoring opt-out request.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         :param pulumi.Input[_builtins.str] two_way_channel_arn: Configuration for two-way SMS. Specify an ARN to receive incoming SMS messages, or `connect.[region].amazonaws.com` (with `[region]` replaced by the AWS Region of the Amazon Connect instance) to set Amazon Connect as the inbound destination.
-        :param pulumi.Input[_builtins.bool] two_way_channel_enabled: By default this is set to `false`. When set to `true` you can receive incoming text messages from your end recipients.
+        :param pulumi.Input[_builtins.bool] two_way_channel_enabled: Whether two-way messaging is enabled. When `true`, you can receive incoming text messages from your end recipients. If omitted, AWS sets this to `false`.
         :param pulumi.Input[_builtins.str] two_way_channel_role: IAM Role ARN for a service to assume, to be able to post inbound SMS messages.
+        :param pulumi.Input[_builtins.bool] wait_for_active: Whether to wait for the phone number to reach `ACTIVE` status before considering the resource created or updated. Defaults to `true`. Set to `false` for number types gated on carrier or registration approval (for example, `TEN_DLC`, `TOLL_FREE`, or any number submitted with `registration_id`), which can remain `PENDING` for days or weeks. When `false`, `pulumi up` returns once AWS accepts the phone number request; track activation with the `status` attribute.
         """
         ...
     @overload
@@ -616,6 +722,7 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
         $ pulumi import aws:pinpoint/smsvoicev2PhoneNumber:Smsvoicev2PhoneNumber example phone-abcdef0123456789abcdef0123456789
         ```
 
+
         :param str resource_name: The name of the resource.
         :param Smsvoicev2PhoneNumberArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -631,20 +738,22 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 deletion_protection_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 iso_country_code: Optional[pulumi.Input[_builtins.str]] = None,
-                 message_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 number_capabilities: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 number_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 opt_out_list_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 registration_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 self_managed_opt_outs_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 timeouts: Optional[pulumi.Input[Union['Smsvoicev2PhoneNumberTimeoutsArgs', 'Smsvoicev2PhoneNumberTimeoutsArgsDict']]] = None,
-                 two_way_channel_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 two_way_channel_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 two_way_channel_role: Optional[pulumi.Input[_builtins.str]] = None,
+                 deletion_protection_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 force_disassociate: pulumi.Input[Optional[_builtins.bool]] = None,
+                 iso_country_code: pulumi.Input[Optional[_builtins.str]] = None,
+                 message_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 number_capabilities: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 number_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 opt_out_list_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 registration_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 self_managed_opt_outs_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 timeouts: pulumi.Input[Optional[Union['Smsvoicev2PhoneNumberTimeoutsArgs', 'Smsvoicev2PhoneNumberTimeoutsArgsDict']]] = None,
+                 two_way_channel_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 two_way_channel_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 two_way_channel_role: pulumi.Input[Optional[_builtins.str]] = None,
+                 wait_for_active: pulumi.Input[Optional[_builtins.bool]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -655,6 +764,7 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
             __props__ = Smsvoicev2PhoneNumberArgs.__new__(Smsvoicev2PhoneNumberArgs)
 
             __props__.__dict__["deletion_protection_enabled"] = deletion_protection_enabled
+            __props__.__dict__["force_disassociate"] = force_disassociate
             if iso_country_code is None and not opts.urn:
                 raise TypeError("Missing required property 'iso_country_code'")
             __props__.__dict__["iso_country_code"] = iso_country_code
@@ -676,9 +786,11 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
             __props__.__dict__["two_way_channel_arn"] = two_way_channel_arn
             __props__.__dict__["two_way_channel_enabled"] = two_way_channel_enabled
             __props__.__dict__["two_way_channel_role"] = two_way_channel_role
+            __props__.__dict__["wait_for_active"] = wait_for_active
             __props__.__dict__["arn"] = None
             __props__.__dict__["monthly_leasing_price"] = None
             __props__.__dict__["phone_number"] = None
+            __props__.__dict__["status"] = None
             __props__.__dict__["tags_all"] = None
         super(Smsvoicev2PhoneNumber, __self__).__init__(
             'aws:pinpoint/smsvoicev2PhoneNumber:Smsvoicev2PhoneNumber',
@@ -690,24 +802,27 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            deletion_protection_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-            iso_country_code: Optional[pulumi.Input[_builtins.str]] = None,
-            message_type: Optional[pulumi.Input[_builtins.str]] = None,
-            monthly_leasing_price: Optional[pulumi.Input[_builtins.str]] = None,
-            number_capabilities: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            number_type: Optional[pulumi.Input[_builtins.str]] = None,
-            opt_out_list_name: Optional[pulumi.Input[_builtins.str]] = None,
-            phone_number: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            registration_id: Optional[pulumi.Input[_builtins.str]] = None,
-            self_managed_opt_outs_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            timeouts: Optional[pulumi.Input[Union['Smsvoicev2PhoneNumberTimeoutsArgs', 'Smsvoicev2PhoneNumberTimeoutsArgsDict']]] = None,
-            two_way_channel_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            two_way_channel_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-            two_way_channel_role: Optional[pulumi.Input[_builtins.str]] = None) -> 'Smsvoicev2PhoneNumber':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            deletion_protection_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+            force_disassociate: pulumi.Input[Optional[_builtins.bool]] = None,
+            iso_country_code: pulumi.Input[Optional[_builtins.str]] = None,
+            message_type: pulumi.Input[Optional[_builtins.str]] = None,
+            monthly_leasing_price: pulumi.Input[Optional[_builtins.str]] = None,
+            number_capabilities: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            number_type: pulumi.Input[Optional[_builtins.str]] = None,
+            opt_out_list_name: pulumi.Input[Optional[_builtins.str]] = None,
+            phone_number: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            registration_id: pulumi.Input[Optional[_builtins.str]] = None,
+            self_managed_opt_outs_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+            status: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            timeouts: pulumi.Input[Optional[Union['Smsvoicev2PhoneNumberTimeoutsArgs', 'Smsvoicev2PhoneNumberTimeoutsArgsDict']]] = None,
+            two_way_channel_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            two_way_channel_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+            two_way_channel_role: pulumi.Input[Optional[_builtins.str]] = None,
+            wait_for_active: pulumi.Input[Optional[_builtins.bool]] = None) -> 'Smsvoicev2PhoneNumber':
         """
         Get an existing Smsvoicev2PhoneNumber resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -716,21 +831,27 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.str] arn: ARN of the phone number.
-        :param pulumi.Input[_builtins.bool] deletion_protection_enabled: By default this is set to `false`. When set to true the phone number can’t be deleted.
-        :param pulumi.Input[_builtins.str] iso_country_code: The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
-        :param pulumi.Input[_builtins.str] message_type: The type of message. Valid values are `TRANSACTIONAL` for messages that are critical or time-sensitive and `PROMOTIONAL` for messages that aren’t critical or time-sensitive.
-        :param pulumi.Input[_builtins.str] monthly_leasing_price: The monthly price, in US dollars, to lease the phone number.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] number_capabilities: Describes if the origination identity can be used for text messages, voice calls or both. valid values are `SMS` and `VOICE`.
-        :param pulumi.Input[_builtins.str] number_type: The type of phone number to request. Possible values are `LONG_CODE`, `TOLL_FREE`, `TEN_DLC`, or `SIMULATOR`.
-        :param pulumi.Input[_builtins.str] opt_out_list_name: The name of the opt-out list to associate with the phone number.
-        :param pulumi.Input[_builtins.str] phone_number: The new phone number that was requested.
+        :param pulumi.Input[_builtins.bool] deletion_protection_enabled: Whether deletion protection is enabled. When `true`, the phone number cannot be deleted.
+        :param pulumi.Input[_builtins.bool] force_disassociate: Whether to disassociate the phone number from any pool it is associated with before destroying it.
+        :param pulumi.Input[_builtins.str] iso_country_code: Two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
+        :param pulumi.Input[_builtins.str] message_type: Type of message. Valid values are `TRANSACTIONAL` for messages that are critical or time-sensitive and `PROMOTIONAL` for messages that aren’t critical or time-sensitive.
+        :param pulumi.Input[_builtins.str] monthly_leasing_price: Monthly price, in US dollars, to lease the phone number.
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] number_capabilities: Whether the origination identity can be used for text messages, voice calls or both. Valid values are `SMS` and `VOICE`.
+        :param pulumi.Input[_builtins.str] number_type: Type of phone number to request. Possible values are `LONG_CODE`, `TOLL_FREE`, `TEN_DLC`, or `SIMULATOR`.
+               
+               The following arguments are optional:
+        :param pulumi.Input[_builtins.str] opt_out_list_name: Name of the opt-out list to associate with the phone number. If omitted, AWS assigns the `Default` opt-out list.
+        :param pulumi.Input[_builtins.str] phone_number: New phone number that was requested.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[_builtins.str] registration_id: Use this field to attach your phone number for an external registration process.
         :param pulumi.Input[_builtins.bool] self_managed_opt_outs_enabled: When set to `false` an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, AWS End User Messaging SMS and Voice automatically replies with a customizable message and adds the end recipient to the opt-out list. When set to true you’re responsible for responding to HELP and STOP requests. You’re also responsible for tracking and honoring opt-out request.
-        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        :param pulumi.Input[_builtins.str] status: Status of the phone number. Possible values are `PENDING`, `ACTIVE`, `ASSOCIATING`, `DISASSOCIATING`, and `DELETED`.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         :param pulumi.Input[_builtins.str] two_way_channel_arn: Configuration for two-way SMS. Specify an ARN to receive incoming SMS messages, or `connect.[region].amazonaws.com` (with `[region]` replaced by the AWS Region of the Amazon Connect instance) to set Amazon Connect as the inbound destination.
-        :param pulumi.Input[_builtins.bool] two_way_channel_enabled: By default this is set to `false`. When set to `true` you can receive incoming text messages from your end recipients.
+        :param pulumi.Input[_builtins.bool] two_way_channel_enabled: Whether two-way messaging is enabled. When `true`, you can receive incoming text messages from your end recipients. If omitted, AWS sets this to `false`.
         :param pulumi.Input[_builtins.str] two_way_channel_role: IAM Role ARN for a service to assume, to be able to post inbound SMS messages.
+        :param pulumi.Input[_builtins.bool] wait_for_active: Whether to wait for the phone number to reach `ACTIVE` status before considering the resource created or updated. Defaults to `true`. Set to `false` for number types gated on carrier or registration approval (for example, `TEN_DLC`, `TOLL_FREE`, or any number submitted with `registration_id`), which can remain `PENDING` for days or weeks. When `false`, `pulumi up` returns once AWS accepts the phone number request; track activation with the `status` attribute.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -738,6 +859,7 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
 
         __props__.__dict__["arn"] = arn
         __props__.__dict__["deletion_protection_enabled"] = deletion_protection_enabled
+        __props__.__dict__["force_disassociate"] = force_disassociate
         __props__.__dict__["iso_country_code"] = iso_country_code
         __props__.__dict__["message_type"] = message_type
         __props__.__dict__["monthly_leasing_price"] = monthly_leasing_price
@@ -748,12 +870,14 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
         __props__.__dict__["region"] = region
         __props__.__dict__["registration_id"] = registration_id
         __props__.__dict__["self_managed_opt_outs_enabled"] = self_managed_opt_outs_enabled
+        __props__.__dict__["status"] = status
         __props__.__dict__["tags"] = tags
         __props__.__dict__["tags_all"] = tags_all
         __props__.__dict__["timeouts"] = timeouts
         __props__.__dict__["two_way_channel_arn"] = two_way_channel_arn
         __props__.__dict__["two_way_channel_enabled"] = two_way_channel_enabled
         __props__.__dict__["two_way_channel_role"] = two_way_channel_role
+        __props__.__dict__["wait_for_active"] = wait_for_active
         return Smsvoicev2PhoneNumber(resource_name, opts=opts, __props__=__props__)
 
     @_builtins.property
@@ -768,15 +892,23 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
     @pulumi.getter(name="deletionProtectionEnabled")
     def deletion_protection_enabled(self) -> pulumi.Output[_builtins.bool]:
         """
-        By default this is set to `false`. When set to true the phone number can’t be deleted.
+        Whether deletion protection is enabled. When `true`, the phone number cannot be deleted.
         """
         return pulumi.get(self, "deletion_protection_enabled")
+
+    @_builtins.property
+    @pulumi.getter(name="forceDisassociate")
+    def force_disassociate(self) -> pulumi.Output[Optional[_builtins.bool]]:
+        """
+        Whether to disassociate the phone number from any pool it is associated with before destroying it.
+        """
+        return pulumi.get(self, "force_disassociate")
 
     @_builtins.property
     @pulumi.getter(name="isoCountryCode")
     def iso_country_code(self) -> pulumi.Output[_builtins.str]:
         """
-        The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
+        Two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
         """
         return pulumi.get(self, "iso_country_code")
 
@@ -784,7 +916,7 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
     @pulumi.getter(name="messageType")
     def message_type(self) -> pulumi.Output[_builtins.str]:
         """
-        The type of message. Valid values are `TRANSACTIONAL` for messages that are critical or time-sensitive and `PROMOTIONAL` for messages that aren’t critical or time-sensitive.
+        Type of message. Valid values are `TRANSACTIONAL` for messages that are critical or time-sensitive and `PROMOTIONAL` for messages that aren’t critical or time-sensitive.
         """
         return pulumi.get(self, "message_type")
 
@@ -792,7 +924,7 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
     @pulumi.getter(name="monthlyLeasingPrice")
     def monthly_leasing_price(self) -> pulumi.Output[_builtins.str]:
         """
-        The monthly price, in US dollars, to lease the phone number.
+        Monthly price, in US dollars, to lease the phone number.
         """
         return pulumi.get(self, "monthly_leasing_price")
 
@@ -800,7 +932,7 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
     @pulumi.getter(name="numberCapabilities")
     def number_capabilities(self) -> pulumi.Output[Sequence[_builtins.str]]:
         """
-        Describes if the origination identity can be used for text messages, voice calls or both. valid values are `SMS` and `VOICE`.
+        Whether the origination identity can be used for text messages, voice calls or both. Valid values are `SMS` and `VOICE`.
         """
         return pulumi.get(self, "number_capabilities")
 
@@ -808,7 +940,9 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
     @pulumi.getter(name="numberType")
     def number_type(self) -> pulumi.Output[_builtins.str]:
         """
-        The type of phone number to request. Possible values are `LONG_CODE`, `TOLL_FREE`, `TEN_DLC`, or `SIMULATOR`.
+        Type of phone number to request. Possible values are `LONG_CODE`, `TOLL_FREE`, `TEN_DLC`, or `SIMULATOR`.
+
+        The following arguments are optional:
         """
         return pulumi.get(self, "number_type")
 
@@ -816,7 +950,7 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
     @pulumi.getter(name="optOutListName")
     def opt_out_list_name(self) -> pulumi.Output[_builtins.str]:
         """
-        The name of the opt-out list to associate with the phone number.
+        Name of the opt-out list to associate with the phone number. If omitted, AWS assigns the `Default` opt-out list.
         """
         return pulumi.get(self, "opt_out_list_name")
 
@@ -824,7 +958,7 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
     @pulumi.getter(name="phoneNumber")
     def phone_number(self) -> pulumi.Output[_builtins.str]:
         """
-        The new phone number that was requested.
+        New phone number that was requested.
         """
         return pulumi.get(self, "phone_number")
 
@@ -854,14 +988,25 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
 
     @_builtins.property
     @pulumi.getter
+    def status(self) -> pulumi.Output[_builtins.str]:
+        """
+        Status of the phone number. Possible values are `PENDING`, `ACTIVE`, `ASSOCIATING`, `DISASSOCIATING`, and `DELETED`.
+        """
+        return pulumi.get(self, "status")
+
+    @_builtins.property
+    @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, _builtins.str]]]:
+        """
+        Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+        """
         return pulumi.get(self, "tags")
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
     def tags_all(self) -> pulumi.Output[Mapping[str, _builtins.str]]:
         """
-        A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        Map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
@@ -872,7 +1017,7 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
 
     @_builtins.property
     @pulumi.getter(name="twoWayChannelArn")
-    def two_way_channel_arn(self) -> pulumi.Output[Optional[_builtins.str]]:
+    def two_way_channel_arn(self) -> pulumi.Output[_builtins.str]:
         """
         Configuration for two-way SMS. Specify an ARN to receive incoming SMS messages, or `connect.[region].amazonaws.com` (with `[region]` replaced by the AWS Region of the Amazon Connect instance) to set Amazon Connect as the inbound destination.
         """
@@ -882,15 +1027,23 @@ class Smsvoicev2PhoneNumber(pulumi.CustomResource):
     @pulumi.getter(name="twoWayChannelEnabled")
     def two_way_channel_enabled(self) -> pulumi.Output[_builtins.bool]:
         """
-        By default this is set to `false`. When set to `true` you can receive incoming text messages from your end recipients.
+        Whether two-way messaging is enabled. When `true`, you can receive incoming text messages from your end recipients. If omitted, AWS sets this to `false`.
         """
         return pulumi.get(self, "two_way_channel_enabled")
 
     @_builtins.property
     @pulumi.getter(name="twoWayChannelRole")
-    def two_way_channel_role(self) -> pulumi.Output[Optional[_builtins.str]]:
+    def two_way_channel_role(self) -> pulumi.Output[_builtins.str]:
         """
         IAM Role ARN for a service to assume, to be able to post inbound SMS messages.
         """
         return pulumi.get(self, "two_way_channel_role")
+
+    @_builtins.property
+    @pulumi.getter(name="waitForActive")
+    def wait_for_active(self) -> pulumi.Output[_builtins.bool]:
+        """
+        Whether to wait for the phone number to reach `ACTIVE` status before considering the resource created or updated. Defaults to `true`. Set to `false` for number types gated on carrier or registration approval (for example, `TEN_DLC`, `TOLL_FREE`, or any number submitted with `registration_id`), which can remain `PENDING` for days or weeks. When `false`, `pulumi up` returns once AWS accepts the phone number request; track activation with the `status` attribute.
+        """
+        return pulumi.get(self, "wait_for_active")
 

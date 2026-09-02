@@ -19,9 +19,10 @@ from cvxpy.expressions.variable import Variable
 from cvxpy.reductions.dcp2cone.canonicalizers.lambda_max_canon import (
     lambda_max_canon,
 )
+from cvxpy.utilities.solver_context import SolverInfo
 
 
-def lambda_sum_largest_canon(expr, args):
+def lambda_sum_largest_canon(expr, args, solver_context: SolverInfo | None = None):
     """
     S_k(X) denotes lambda_sum_largest(X, k)
     t >= k S_k(X - Z) + trace(Z), Z is PSD
@@ -41,7 +42,7 @@ def lambda_sum_largest_canon(expr, args):
     """
     X = expr.args[0]
     k = expr.k
-    Z = Variable((X.shape[0], X.shape[0]), PSD=True)
+    Z = Variable(X.shape, PSD=True)
     obj, constr = lambda_max_canon(expr, [X - Z])
-    obj = k*obj + trace(Z)
+    obj = k * obj + trace(Z)
     return obj, constr

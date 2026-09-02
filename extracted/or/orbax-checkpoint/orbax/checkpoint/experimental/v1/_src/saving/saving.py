@@ -36,7 +36,7 @@ Checkpointable = handler_types.Checkpointable
 
 def save(
     path: path_types.PathLike,
-    state: tree_types.PyTreeOf[tree_types.Leaf],
+    state: tree_types.PyTreeOf[tree_types.Leaf],  # pyrefly: ignore[bad-specialization]
     *,
     checkpointable_name: str = STATE_CHECKPOINTABLE_KEY,
     overwrite: bool = False,
@@ -151,7 +151,7 @@ def save_checkpointables(
 # save operation is scheduled.
 def save_async(
     path: path_types.PathLike,
-    state: tree_types.PyTreeOf[tree_types.Leaf],
+    state: tree_types.PyTreeOf[tree_types.Leaf],  # pyrefly: ignore[bad-specialization]
     *,
     checkpointable_name: str = STATE_CHECKPOINTABLE_KEY,
     overwrite: bool = False,
@@ -336,6 +336,7 @@ def get_v0_checkpointer_and_args(
       async_options=context.async_options.v0(),
       file_options=context.file_options.v0(),
       multiprocessing_options=context.multiprocessing_options.v0(),
+      atomicity_options=context.atomicity.v0(),
   )
   ckptr = async_checkpointer.AsyncCheckpointer(
       composite_checkpoint_handler.CompositeCheckpointHandler(
@@ -345,6 +346,7 @@ def get_v0_checkpointer_and_args(
       async_options=context.async_options.v0(),
       multiprocessing_options=context.multiprocessing_options.v0(),
       file_options=context.file_options.v0(),
+      atomicity_options=context.atomicity.v0(),
   )
   args = composite_checkpoint_handler.CompositeArgs(**{
       name: handler_compatibility.Args(checkpointable)

@@ -1,8 +1,8 @@
 [project]
 name = "svglib"
-version = "1.6.0"
+version = "2.2.0"
 description = "A pure-Python library for reading and converting SVG"
-readme = "README.rst"
+readme = "README.md"
 authors = [{ name = "Dinu Gherman" }]
 keywords = [
     "SVG",
@@ -27,6 +27,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Documentation",
     "Topic :: Utilities",
@@ -43,10 +44,13 @@ requires-python = ">=3.9"
 dependencies = [
     "cssselect2>=0.2.0",
     "lxml>=6.0.0",
+    "pillow>=9.0.0",
     "reportlab>=4.4.3",
-    "rlpycairo>=0.4.0",
     "tinycss2>=0.6.0",
 ]
+
+[project.optional-dependencies]
+bitmaps = ["rlpycairo>=0.4.0"]
 
 [project.urls]
 Homepage = "https://github.com/deeplook/svglib"
@@ -58,16 +62,10 @@ svg2pdf = "svglib:main"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[project.optional-dependencies]
-dev = [
-    "mypy>=1.18.1",
-    "pre-commit>=4.3.0",
-    "pytest>=8.3.5",
-    "pytest-cov>=7.0.0",
-    "pytest-runner>=6.0.1",
-    "ruff>=0.13.0",
-    "tox>=4.30.2",
-]
+[dependency-groups]
+test = ["pytest>=8.3.5", "pytest-cov>=7.0.0", "pytest-runner>=6.0.1", "tox>=4.30.2"]
+lint = ["mypy>=1.18.1", "ruff>=0.13.0"]
+dev = [{include-group = "test"}, {include-group = "lint"}, "pre-commit>=4.3.0"]
 
 [tool.ruff]
 line-length = 88
@@ -81,3 +79,24 @@ select = [
 
 [tool.ruff.format]
 quote-style = "double"
+
+[tool.mypy]
+python_version = "3.9"
+ignore_missing_imports = true
+warn_unused_ignores = true
+
+# svglib subclasses untyped 3rd-party base classes (reportlab's Path/DirectDraw,
+# cssselect2's Matcher/ElementWrapper). Their missing stubs make the bases Any,
+# which trips disallow_subclassing_any under --strict. Allow it for this module
+# only, keeping strictness on the rest of svglib's own code.
+[[tool.mypy.overrides]]
+module = "svglib.svglib"
+disallow_subclassing_any = false
+
+# Pillow ships py.typed as of 12.x, but its PixelAccess/Image stubs are loose
+# (e.g. indexing an RGB pixel is typed as a scalar float, so unpacking a 3-tuple
+# looks invalid). svglib uses Pillow at the same untyped-graphics boundary as
+# reportlab, so skip its stubs and treat it as Any for consistency.
+[[tool.mypy.overrides]]
+module = "PIL.*"
+follow_imports = "skip"

@@ -302,9 +302,7 @@ def get_snapshot(filters: Optional[Sequence[Union['GetSnapshotFilterArgs', 'GetS
     import pulumi
     import pulumi_aws as aws
 
-    ebs_volume = aws.ebs.get_snapshot(most_recent=True,
-        owners=["self"],
-        filters=[
+    ebs_volume = aws.ebs.get_snapshot(filters=[
             {
                 "name": "volume-size",
                 "values": ["40"],
@@ -313,11 +311,13 @@ def get_snapshot(filters: Optional[Sequence[Union['GetSnapshotFilterArgs', 'GetS
                 "name": "tag:Name",
                 "values": ["Example"],
             },
-        ])
+        ],
+        most_recent=True,
+        owners=["self"])
     ```
 
 
-    :param Sequence[Union['GetSnapshotFilterArgs', 'GetSnapshotFilterArgsDict']] filters: One or more name/value pairs to filter off of. There are several valid keys, for a full reference, check out [describe-snapshots in the AWS CLI reference][1].
+    :param Sequence[Union['GetSnapshotFilterArgs', 'GetSnapshotFilterArgsDict']] filters: One or more name/value pairs to filter off of. There are several valid keys, for a full reference, check out [describe-snapshots in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-snapshots.html).
     :param _builtins.bool most_recent: If more than one result is returned, use the most recent snapshot.
     :param Sequence[_builtins.str] owners: Returns the snapshots owned by the specified owner id. Multiple owners can be specified.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -359,13 +359,13 @@ def get_snapshot(filters: Optional[Sequence[Union['GetSnapshotFilterArgs', 'GetS
         tags=pulumi.get(__ret__, 'tags'),
         volume_id=pulumi.get(__ret__, 'volume_id'),
         volume_size=pulumi.get(__ret__, 'volume_size'))
-def get_snapshot_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['GetSnapshotFilterArgs', 'GetSnapshotFilterArgsDict']]]]] = None,
-                        most_recent: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                        owners: Optional[pulumi.Input[Optional[Sequence[_builtins.str]]]] = None,
-                        region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                        restorable_by_user_ids: Optional[pulumi.Input[Optional[Sequence[_builtins.str]]]] = None,
-                        snapshot_ids: Optional[pulumi.Input[Optional[Sequence[_builtins.str]]]] = None,
-                        tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_snapshot_output(filters: pulumi.Input[Optional[Optional[Sequence[Union['GetSnapshotFilterArgs', 'GetSnapshotFilterArgsDict']]]]] = None,
+                        most_recent: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                        owners: pulumi.Input[Optional[Optional[Sequence[_builtins.str]]]] = None,
+                        region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                        restorable_by_user_ids: pulumi.Input[Optional[Optional[Sequence[_builtins.str]]]] = None,
+                        snapshot_ids: pulumi.Input[Optional[Optional[Sequence[_builtins.str]]]] = None,
+                        tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                         opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetSnapshotResult]:
     """
     Use this data source to get information about an EBS Snapshot for use when provisioning EBS Volumes
@@ -376,9 +376,7 @@ def get_snapshot_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['
     import pulumi
     import pulumi_aws as aws
 
-    ebs_volume = aws.ebs.get_snapshot(most_recent=True,
-        owners=["self"],
-        filters=[
+    ebs_volume = aws.ebs.get_snapshot(filters=[
             {
                 "name": "volume-size",
                 "values": ["40"],
@@ -387,11 +385,13 @@ def get_snapshot_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['
                 "name": "tag:Name",
                 "values": ["Example"],
             },
-        ])
+        ],
+        most_recent=True,
+        owners=["self"])
     ```
 
 
-    :param Sequence[Union['GetSnapshotFilterArgs', 'GetSnapshotFilterArgsDict']] filters: One or more name/value pairs to filter off of. There are several valid keys, for a full reference, check out [describe-snapshots in the AWS CLI reference][1].
+    :param Sequence[Union['GetSnapshotFilterArgs', 'GetSnapshotFilterArgsDict']] filters: One or more name/value pairs to filter off of. There are several valid keys, for a full reference, check out [describe-snapshots in the AWS CLI reference](http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-snapshots.html).
     :param _builtins.bool most_recent: If more than one result is returned, use the most recent snapshot.
     :param Sequence[_builtins.str] owners: Returns the snapshots owned by the specified owner id. Multiple owners can be specified.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.

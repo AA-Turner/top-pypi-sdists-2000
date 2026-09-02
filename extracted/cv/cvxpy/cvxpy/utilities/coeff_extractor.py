@@ -17,7 +17,6 @@ limitations under the License.
 from __future__ import annotations
 
 import operator
-from typing import List
 
 import numpy as np
 import scipy.sparse as sp
@@ -78,18 +77,23 @@ class CoeffExtractor:
                                                  self.canon_backend)
 
     def extract_quadratic_coeffs(self, affine_expr, quad_forms):
-        """ Assumes quadratic forms all have variable arguments.
-            Affine expressions can be anything.
+        """Extract per-variable P (quadratic) and q (linear) coefficient tensors.
+
+        Expects quad-form atoms to already be replaced with placeholder
+        Variables (via ``replace_quad_forms``), making the expression affine.
+        Runs the canon backend to get a coefficient matrix (the "affine head"),
+        then combines those coefficients with each quad form's P matrix.
+
+        Four code paths handle P depending on structure: parametric (P depends
+        on Parameters), scalar (constant P, scalar output), block-structured
+        (constant P with ``block_indices``), and diagonal (constant diagonal P).
         """
         assert affine_expr.is_dpp()
-        # Here we take the problem objective, replace all the SymbolicQuadForm
-        # atoms with variables of the same dimensions.
-        # We then apply the canonInterface to reduce the "affine head"
-        # of the expression tree to a coefficient vector c and constant offset d.
-        # Because the expression is parameterized, we extend that to a matrix
-        # [c1 c2 ...]
-        # [d1 d2 ...]
-        # where ci,di are the vector and constant for the ith parameter.
+        # Run affine canonicalization on the replaced expression to obtain
+        # param_coeffs, a matrix of shape (x_length + 1, num_params + 1).
+        # Rows correspond to variable entries (dummy + true) plus a final
+        # constant-offset row.  Columns correspond to parameter slices plus
+        # a final "constant" (parameter-free) slice.
         affine_id_map, affine_offsets, x_length, affine_var_shapes = \
             InverseData.get_var_offsets(affine_expr.variables())
         op_list = [affine_expr.canonical_form[0]]
@@ -105,7 +109,7 @@ class CoeffExtractor:
         # and obtains the Pi and qi for that entry i.
         # These are then combined into matrices [P1.flatten(), P2.flatten(), ...]
         # and [q1, q2, ...]
-        constant = param_coeffs[-1, :]
+        constant = param_coeffs[[-1], :]
         # TODO keep sparse.
         c = param_coeffs[:-1, :].toarray()
         num_params = param_coeffs.shape[1]
@@ -118,33 +122,111 @@ class CoeffExtractor:
         # in param_coeffs. Later we combine all the quadratic terms
         # to form a single matrix P.
         for var in affine_expr.variables():
-            # quad_forms maps the ids of the SymbolicQuadForm atoms
-            # in the objective to (modified parent node of quad form,
-            #                      argument index of quad form,
-            #                      quad form atom)
+            # quad_forms maps fresh placeholder variable ids to
+            # (modified parent node of quad form,
+            #  argument index of quad form,
+            #  quad form atom)
             if var.id in quad_forms:
-                # This was a dummy variable
+                # This was a dummy variable (placeholder for a quad form).
+                # var_id is the fresh placeholder's ID.
+                # orig_id is the actual CVXPY variable x's ID inside
+                # quad_form(x, P).  The same orig_id may also appear in the
+                # true-variable branch below (e.g. from a linear term c @ x).
                 var_id = var.id
                 orig_id = quad_forms[var_id][2].args[0].id
                 var_offset = affine_id_map[var_id][0]
                 var_size = affine_id_map[var_id][1]
                 c_part = c[var_offset:var_offset+var_size, :]
 
-                # Convert to sparse matrix.
-                P = quad_forms[var_id][2].P
-                assert (
-                    P.value is not None
-                ), "P matrix must be instantiated before calling extract_quadratic_coeffs."
-                if sp.issparse(P) and not isinstance(P, sp.coo_matrix):
-                    P = P.value.tocoo()
-                else:
-                    P = sp.coo_matrix(P.value)
+                # Convert to sparse matrix or handle parametric P.
+                quad_form_atom = quad_forms[var_id][2]
+                P_expr = quad_form_atom.P
+
+                # Check if P depends on parameters (for DPP support).
+                # This handles bare Parameters, 2*P, P1+P2, etc.
+                P_is_parametric = len(P_expr.parameters()) > 0
+
+                if not P_is_parametric:
+                    # For constant P, use the numeric value.
+                    assert (
+                        P_expr.value is not None
+                    ), "P matrix must be instantiated before calling extract_quadratic_coeffs."
+                    P_val = P_expr.value
+                    if sp.issparse(P_val) and not isinstance(P_val, sp.coo_matrix):
+                        P = P_val.tocoo()
+                    else:
+                        P = sp.coo_matrix(P_val)
+
+                # Get block structure if available
+                block_indices = quad_form_atom.block_indices
 
                 # We multiply P by the parameter coefficients.
-                if var_size == 1:
-                    # Single quad form in the expression, i.e., we multiply
-                    # the full P matrix by the non-zero entries of c_part.
+                if P_is_parametric:
+                    # PARAMETRIC P PATH - P depends on parameters.
+                    # Since P has no numeric value, we extract P's own affine
+                    # decomposition via canonInterface and scale it by the
+                    # constant multiplier from the affine head.
+                    # Handles bare Parameter, scalar*Parameter, sums of Parameters, etc.
+                    # Each supported parametric quadratic term here produces a scalar
+                    # dummy variable (var_size == 1), including SymbolicQuadForm terms
+                    # created from scalar quad_form canonicalization.
+                    assert var_size == 1, (
+                        "DPP quad_form with parametric P requires a scalar quad_form output."
+                    )
+                    n = P_expr.shape[0]
 
+                    # c_part[0, -1] is the constant-slice (parameter-free)
+                    # coefficient from the affine head.  _check_dpp_args()
+                    # already enforces that x is parameter-free during DPP
+                    # detection, so the non-constant columns should all be
+                    # zero.  The assert below is a safety net.
+                    coef_val = c_part[0, -1]
+                    if coef_val == 0:
+                        P_tup = TensorRepresentation.empty_with_shape((n, n))
+                    else:
+                        assert not np.any(c_part[0, :-1]), (
+                            "Bug: parametric quad_form has parameter-dependent "
+                            "affine head"
+                        )
+
+                        # Extract the affine dependence of vec(P_expr) on parameters.
+                        # P_expr has no CVXPY variables, only parameters and constants.
+                        # With x_length=0, get_problem_matrix returns a matrix of shape
+                        # (n*n, num_params) encoding the affine relationship:
+                        #   vec(P_expr) = sum_p  P_coeffs[:, p] * param[p]
+                        # The vectorization order here matches param_id_map and the
+                        # canonicalization backend: column-major / Fortran order.
+                        op_list = [P_expr.canonical_form[0]]
+                        P_coeffs = canonInterface.get_problem_matrix(
+                            op_list,
+                            0,
+                            {},
+                            self.param_to_size,
+                            self.param_id_map,
+                            n * n,
+                            self.canon_backend
+                        )
+
+                        # P_coeffs is sparse, shape (n*n, num_params).
+                        # Row k corresponds to vec(P)[k] = P[k % n, k // n].
+                        P_coeffs_coo = sp.coo_matrix(P_coeffs)
+
+                        # Convert flat index k back to (row, col) in that same order.
+                        rows = P_coeffs_coo.row % n
+                        cols = P_coeffs_coo.row // n
+                        p_indices = P_coeffs_coo.col
+                        values = P_coeffs_coo.data * coef_val
+
+                        P_tup = TensorRepresentation(
+                            values,
+                            rows,
+                            cols,
+                            p_indices,
+                            (n, n)
+                        )
+                elif var_size == 1:
+                    # SCALAR PATH - Single quad form in the expression, i.e.,
+                    # we multiply the full P matrix by the non-zero entries of c_part.
                     nonzero_idxs = c_part[0] != 0
                     data = P.data[:, None] * c_part[:, nonzero_idxs]
                     param_idxs = np.arange(num_params)[nonzero_idxs]
@@ -155,13 +237,19 @@ class CoeffExtractor:
                         np.repeat(param_idxs, len(P.data)),
                         P.shape
                     )
+                elif block_indices is not None:
+                    # BLOCK-STRUCTURED PATH - Non-scalar output with block structure.
+                    # Each output element j depends on input indices block_indices[j].
+                    P_tup = self._extract_block_quad(P, c_part, block_indices, num_params)
                 else:
-                    # Multiple quad forms in the one expression, i.e., c_part
-                    # is now a matrix where each row corresponds to a different
-                    # variable.
+                    # DIAGONAL PATH - Multiple quad forms in the one expression,
+                    # i.e., c_part is now a matrix where each row corresponds to
+                    # a different variable.
                     assert (P.col == P.row).all(), \
-                        "Only diagonal P matrices are supported for multiple quad forms."
-                    
+                        "Only diagonal P matrices are supported for multiple quad forms " \
+                        "without block_indices. If you need non-diagonal structure, " \
+                        "use SymbolicQuadForm with block_indices parameter."
+
                     scaled_c_part = P @ c_part
                     paramx_idx_row, param_idx_col = np.nonzero(scaled_c_part)
                     c_vals = c_part[paramx_idx_row, param_idx_col]
@@ -173,21 +261,23 @@ class CoeffExtractor:
                         P.shape
                     )
 
-                if orig_id in coeffs:
-                    if 'P' in coeffs[orig_id]:
-                        coeffs[orig_id]['P'] =  coeffs[orig_id]['P'] + P_tup
-                    else:
-                        coeffs[orig_id]['P'] = P_tup
+                if orig_id not in coeffs:
+                    coeffs[orig_id] = {}
+                if 'P' in coeffs[orig_id]:
+                    coeffs[orig_id]['P'] = coeffs[orig_id]['P'] + P_tup
                 else:
-                    # No q for dummy variables.
-                    coeffs[orig_id] = dict()
                     coeffs[orig_id]['P'] = P_tup
-                    shape = (P.shape[0], c.shape[1])
+                # Only initialize q if not already set — a linear term (c @ x)
+                # may have already written q for this orig_id.
+                if 'q' not in coeffs[orig_id]:
+                    q_shape = (P_tup.shape[0], c.shape[1])
                     if num_params == 1:
                         # Fast path for no parameters, keep q dense.
-                        coeffs[orig_id]['q'] = np.zeros(shape)
+                        coeffs[orig_id]['q'] = np.zeros(q_shape)
                     else:
-                        coeffs[orig_id]['q'] = sp.coo_matrix(([], ([], [])), shape=shape) 
+                        coeffs[orig_id]['q'] = sp.coo_matrix(
+                            ([], ([], [])), shape=q_shape
+                        )
             else:
                 # This was a true variable, so it can only have a q term.
                 var_offset = affine_id_map[var.id][0]
@@ -198,7 +288,7 @@ class CoeffExtractor:
                         coeffs[var.id]['q'] += c[var_offset:var_offset+var_size, :]
                     else:
                         coeffs[var.id]['q'] += param_coeffs[var_offset:var_offset+var_size, :]
-                else:   
+                else:
                     coeffs[var.id] = dict()
                     # Fast path for no parameters, q is dense and so is c.
                     if num_params == 1:
@@ -207,11 +297,80 @@ class CoeffExtractor:
                         coeffs[var.id]['q'] = param_coeffs[var_offset:var_offset+var_size, :]
         return coeffs, constant
 
-    def quad_form(self, expr):
-        """Extract quadratic, linear constant parts of a quadratic objective.
+    def _extract_block_quad(
+        self,
+        P: sp.coo_matrix,
+        c_part: np.ndarray,
+        block_indices: list[np.ndarray],
+        num_params: int,
+    ) -> TensorRepresentation:
+        """Extract quadratic coefficients for block-structured quad forms.
+
+        Each output element j uses input indices from block_indices[j].
+        Supports both contiguous and non-contiguous blocks.
+
+        Args:
+            P: COO sparse matrix (N x N)
+            c_part: Coefficients (num_outputs x num_params)
+            block_indices: List of np.ndarray, each containing indices for that block
+            num_params: Number of parameter columns
+
+        Returns:
+            TensorRepresentation for the scaled P matrix
         """
-        # Insert no-op such that root is never a quadratic form, for easier
-        # processing
+        all_data = []
+        all_row = []
+        all_col = []
+        all_param = []
+
+        for j, indices in enumerate(block_indices):
+            # Filter P entries where both row and col are in this block
+            row_mask = np.isin(P.row, indices)
+            col_mask = np.isin(P.col, indices)
+            mask = row_mask & col_mask
+
+            if not mask.any():
+                continue
+
+            block_data = P.data[mask]
+            block_row = P.row[mask]
+            block_col = P.col[mask]
+
+            # Coefficient for this output element
+            coef_row = c_part[j, :]
+            nonzero_params = np.nonzero(coef_row)[0]
+
+            if len(nonzero_params) == 0:
+                continue
+
+            # Scale by each non-zero coefficient
+            for param_idx in nonzero_params:
+                scaled_data = block_data * coef_row[param_idx]
+                all_data.append(scaled_data)
+                all_row.append(block_row)  # Already global coordinates
+                all_col.append(block_col)
+                all_param.append(np.full(len(scaled_data), param_idx, dtype=int))
+
+        if not all_data:
+            return TensorRepresentation.empty_with_shape(P.shape)
+
+        return TensorRepresentation(
+            np.concatenate(all_data),
+            np.concatenate(all_row),
+            np.concatenate(all_col),
+            np.concatenate(all_param),
+            P.shape,
+        )
+
+    def quad_form(self, expr):
+        """Extract P (quadratic) and q (linear + constant) from a quadratic objective.
+
+        Inserts a NO_OP root (so ``replace_quad_forms`` has a parent to
+        replace into), swaps quad-form atoms for placeholder Variables,
+        runs ``extract_quadratic_coeffs``, restores the originals, then
+        merges per-variable P blocks into a block-diagonal matrix and
+        stacks q vectors with the constant offset.
+        """
         root = LinOp(NO_OP, expr.shape, [expr], [])
 
         # Replace quadratic forms with dummy variables.
@@ -265,11 +424,11 @@ class CoeffExtractor:
         return P, q
 
     def merge_P_list(
-            self, 
-            P_list: List[TensorRepresentation],
-            P_height: int, 
+            self,
+            P_list: list[TensorRepresentation],
+            P_height: int,
             num_params: int,
-        ) -> sp.csc_matrix:
+        ) -> sp.csc_array:
         """Conceptually we build a block diagonal matrix
            out of all the Ps, then flatten the first two dimensions.
            eg P1
@@ -281,7 +440,7 @@ class CoeffExtractor:
             P_entries: number of entries in the merged P matrix.
             P_height: number of rows in the merged P matrix.
             num_params: number of parameters in the problem.
-        
+
         Returns:
             A CSC sparse representation of the merged P matrix.
         """
@@ -296,7 +455,7 @@ class CoeffExtractor:
             P.row += offset
             P.col += offset
             P.shape = (P_height, P_height)
-    
+
             offset += m
 
         combined = TensorRepresentation.combine(P_list)
@@ -305,10 +464,10 @@ class CoeffExtractor:
 
     def merge_q_list(
         self,
-        q_list: List[sp.spmatrix | np.ndarray],
-        constant: sp.csc_matrix,
+        q_list: list[sp.spmatrix | np.ndarray],
+        constant: sp.csc_array,
         num_params: int,
-    ) -> sp.csr_matrix:
+    ) -> sp.csr_array:
         """Stack q with constant offset as last row.
 
         Args:
@@ -323,7 +482,7 @@ class CoeffExtractor:
         if num_params == 1:
             q = np.vstack(q_list)
             q = np.vstack([q, constant.toarray()])
-            return sp.csr_matrix(q)
+            return sp.csr_array(q)
         else:
             q = sp.vstack(q_list + [constant])
-            return sp.csr_matrix(q)
+            return sp.csr_array(q)

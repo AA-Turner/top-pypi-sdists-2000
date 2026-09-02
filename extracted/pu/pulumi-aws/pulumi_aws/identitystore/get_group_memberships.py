@@ -27,16 +27,13 @@ class GetGroupMembershipsResult:
     """
     A collection of values returned by getGroupMemberships.
     """
-    def __init__(__self__, group_id=None, group_memberships=None, id=None, identity_store_id=None, region=None):
+    def __init__(__self__, group_id=None, group_memberships=None, identity_store_id=None, region=None):
         if group_id and not isinstance(group_id, str):
             raise TypeError("Expected argument 'group_id' to be a str")
         pulumi.set(__self__, "group_id", group_id)
         if group_memberships and not isinstance(group_memberships, list):
             raise TypeError("Expected argument 'group_memberships' to be a list")
         pulumi.set(__self__, "group_memberships", group_memberships)
-        if id and not isinstance(id, str):
-            raise TypeError("Expected argument 'id' to be a str")
-        pulumi.set(__self__, "id", id)
         if identity_store_id and not isinstance(identity_store_id, str):
             raise TypeError("Expected argument 'identity_store_id' to be a str")
         pulumi.set(__self__, "identity_store_id", identity_store_id)
@@ -61,14 +58,6 @@ class GetGroupMembershipsResult:
         return pulumi.get(self, "group_memberships")
 
     @_builtins.property
-    @pulumi.getter
-    def id(self) -> _builtins.str:
-        """
-        The provider-assigned unique ID for this managed resource.
-        """
-        return pulumi.get(self, "id")
-
-    @_builtins.property
     @pulumi.getter(name="identityStoreId")
     def identity_store_id(self) -> _builtins.str:
         """
@@ -90,7 +79,6 @@ class AwaitableGetGroupMembershipsResult(GetGroupMembershipsResult):
         return GetGroupMembershipsResult(
             group_id=self.group_id,
             group_memberships=self.group_memberships,
-            id=self.id,
             identity_store_id=self.identity_store_id,
             region=self.region)
 
@@ -111,13 +99,13 @@ def get_group_memberships(group_id: Optional[_builtins.str] = None,
     import pulumi_aws as aws
 
     example = aws.ssoadmin.get_instances()
-    example_get_group = aws.identitystore.get_group(identity_store_id=example.identity_store_ids[0],
-        alternate_identifier={
+    example_get_group = aws.identitystore.get_group(alternate_identifier={
             "unique_attribute": {
                 "attribute_path": "DisplayName",
                 "attribute_value": "ExampleGroup",
             },
-        })
+        },
+        identity_store_id=example.identity_store_ids[0])
     example_get_group_memberships = aws.identitystore.get_group_memberships(identity_store_id=example.identity_store_ids[0],
         group_id=example_get_group.group_id)
     ```
@@ -137,12 +125,11 @@ def get_group_memberships(group_id: Optional[_builtins.str] = None,
     return AwaitableGetGroupMembershipsResult(
         group_id=pulumi.get(__ret__, 'group_id'),
         group_memberships=pulumi.get(__ret__, 'group_memberships'),
-        id=pulumi.get(__ret__, 'id'),
         identity_store_id=pulumi.get(__ret__, 'identity_store_id'),
         region=pulumi.get(__ret__, 'region'))
-def get_group_memberships_output(group_id: Optional[pulumi.Input[_builtins.str]] = None,
-                                 identity_store_id: Optional[pulumi.Input[_builtins.str]] = None,
-                                 region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_group_memberships_output(group_id: pulumi.Input[Optional[_builtins.str]] = None,
+                                 identity_store_id: pulumi.Input[Optional[_builtins.str]] = None,
+                                 region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                  opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetGroupMembershipsResult]:
     """
     Use this data source to get a list of members in an Identity Store Group.
@@ -156,13 +143,13 @@ def get_group_memberships_output(group_id: Optional[pulumi.Input[_builtins.str]]
     import pulumi_aws as aws
 
     example = aws.ssoadmin.get_instances()
-    example_get_group = aws.identitystore.get_group(identity_store_id=example.identity_store_ids[0],
-        alternate_identifier={
+    example_get_group = aws.identitystore.get_group(alternate_identifier={
             "unique_attribute": {
                 "attribute_path": "DisplayName",
                 "attribute_value": "ExampleGroup",
             },
-        })
+        },
+        identity_store_id=example.identity_store_ids[0])
     example_get_group_memberships = aws.identitystore.get_group_memberships(identity_store_id=example.identity_store_ids[0],
         group_id=example_get_group.group_id)
     ```
@@ -181,6 +168,5 @@ def get_group_memberships_output(group_id: Optional[pulumi.Input[_builtins.str]]
     return __ret__.apply(lambda __response__: GetGroupMembershipsResult(
         group_id=pulumi.get(__response__, 'group_id'),
         group_memberships=pulumi.get(__response__, 'group_memberships'),
-        id=pulumi.get(__response__, 'id'),
         identity_store_id=pulumi.get(__response__, 'identity_store_id'),
         region=pulumi.get(__response__, 'region')))

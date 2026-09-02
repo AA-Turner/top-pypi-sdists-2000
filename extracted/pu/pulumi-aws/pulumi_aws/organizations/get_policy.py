@@ -56,7 +56,7 @@ class GetPolicyResult:
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        The Amazon Resource Name of the policy.
+        ARN of the policy.
         """
         return pulumi.get(self, "arn")
 
@@ -154,7 +154,7 @@ def get_policy(policy_id: Optional[_builtins.str] = None,
         name=pulumi.get(__ret__, 'name'),
         policy_id=pulumi.get(__ret__, 'policy_id'),
         type=pulumi.get(__ret__, 'type'))
-def get_policy_output(policy_id: Optional[pulumi.Input[_builtins.str]] = None,
+def get_policy_output(policy_id: pulumi.Input[Optional[_builtins.str]] = None,
                       opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetPolicyResult]:
     """
     Data source for managing an AWS Organizations Policy.

@@ -13,13 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-from typing import Tuple
 
 import numpy as np
 import scipy.sparse as sp
 
 import cvxpy.settings as s
-from cvxpy.constraints import PSD, SOC, ExpCone, NonNeg, PowCone3D, Zero
+from cvxpy.constraints import PSD, SOC, ExpCone, NonNeg, PowCone3D, PowConeND, SvecPSD, Zero
 from cvxpy.reductions.cvx_attr2constr import convex_attributes
 from cvxpy.reductions.dcp2cone.cone_matrix_stuffing import ParamConeProg
 from cvxpy.reductions.solution import Solution, failure_solution
@@ -34,7 +33,7 @@ from cvxpy.reductions.solvers.solver import Solver
 
 class LinearOperator:
     """A wrapper for linear operators."""
-    def __init__(self, linear_op, shape: Tuple[int, ...]) -> None:
+    def __init__(self, linear_op, shape: tuple[int, ...]) -> None:
         if sp.issparse(linear_op):
             self._matmul = lambda X: linear_op @ X
         else:
@@ -58,11 +57,12 @@ class NegativeIdentityOperator(LinearOperator):
     def __call__(self, X):
         return -X
 
-def as_linear_operator(linear_op):
+def as_linear_operator(linear_op) -> LinearOperator:
     if isinstance(linear_op, LinearOperator):
         return linear_op
     elif sp.issparse(linear_op):
         return LinearOperator(linear_op, linear_op.shape)
+    raise ValueError(f"Cannot convert {type(linear_op)} to LinearOperator")
 
 
 def as_block_diag_linear_operator(matrices) -> LinearOperator:
@@ -91,7 +91,8 @@ def dims_to_solver_dict(cone_dims):
         'q': cone_dims.soc,
         'ep': cone_dims.exp,
         's': cone_dims.psd,
-        'p': cone_dims.p3d
+        'p': cone_dims.p3d,
+        'pnd': cone_dims.pnd
     }
     return cones
 
@@ -115,11 +116,6 @@ class ConicSolver(Solver):
     # Whenever a solver uses this convention, EXP_CONE_ORDER should be [0, 1, 2].
     EXP_CONE_ORDER = None
 
-    def supports_quad_obj(self) -> bool:
-        """By default does not support a quadratic objective.
-        """
-        return False
-
     def accepts(self, problem):
         return (isinstance(problem, ParamConeProg)
                 and (self.MIP_CAPABLE or not problem.is_mixed_integer())
@@ -129,7 +125,7 @@ class ConicSolver(Solver):
                         problem.constraints))
 
     @staticmethod
-    def get_spacing_matrix(shape: Tuple[int, ...], spacing, streak, num_blocks, offset):
+    def get_spacing_matrix(shape: tuple[int, ...], spacing, streak, num_blocks, offset):
         """Returns a sparse matrix that spaces out an expression.
 
         Parameters
@@ -156,14 +152,7 @@ class ConicSolver(Solver):
         row_arr = np.arange(0, num_blocks * streak_plus_spacing).reshape(
             num_blocks, streak_plus_spacing)[:, :streak].flatten() + offset
         col_arr = np.arange(num_values)
-        return sp.csc_matrix((val_arr, (row_arr, col_arr)), shape)
-
-    @staticmethod
-    def psd_format_mat(constr):
-        """Return a matrix to multiply by PSD constraint coefficients.
-        """
-        # Default is identity.
-        return sp.eye(constr.size, format='csc')
+        return sp.csc_array((val_arr, (row_arr, col_arr)), shape)
 
     @classmethod
     def format_constraints(cls, problem, exp_cone_order):
@@ -213,9 +202,11 @@ class ConicSolver(Solver):
                 #     coeffs[1][0:gap-1, :]
                 #     coeffs[0][1, :]
                 #     coeffs[1][gap-1:2*(gap-1), :]
+                # Handle scalar X (shape is empty tuple)
+                x_dim = constr.args[1].shape[0] if constr.args[1].shape else 1
                 t_spacer = ConicSolver.get_spacing_matrix(
                     shape=(total_height, constr.args[0].size),
-                    spacing=constr.args[1].shape[0],
+                    spacing=x_dim,
                     streak=1,
                     num_blocks=constr.args[0].size,
                     offset=0,
@@ -223,7 +214,7 @@ class ConicSolver(Solver):
                 X_spacer = ConicSolver.get_spacing_matrix(
                     shape=(total_height, constr.args[1].size),
                     spacing=1,
-                    streak=constr.args[1].shape[0],
+                    streak=x_dim,
                     num_blocks=constr.args[0].size,
                     offset=1,
                 )
@@ -249,8 +240,34 @@ class ConicSolver(Solver):
                     )
                     arg_mats.append(space_mat)
                 restruct_mat.append(sp.hstack(arg_mats))
+            elif type(constr) == PowConeND:
+                arg_mats = []
+                if constr.args[0].ndim == 1:
+                    m = constr.args[0].shape[0]
+                    n = 1
+                else:
+                    m, n = constr.args[0].shape
+                for j in range(n):
+                    space_mat = ConicSolver.get_spacing_matrix(
+                        shape=(total_height, m), spacing=0,
+                        streak=1, num_blocks=m, offset=(m+1)*j,
+                    )
+                    arg_mats.append(space_mat)
+
+                # Hypo columns
+                arg = constr.args[1]
+                assert arg.size == n
+                space_mat = ConicSolver.get_spacing_matrix(
+                    shape=(total_height, n), spacing=m,
+                    streak=1, num_blocks=n, offset=m,
+                )
+                arg_mats.append(space_mat)
+                restruct_mat.append(sp.hstack(arg_mats))
+
             elif type(constr) == PSD:
-                restruct_mat.append(cls.psd_format_mat(constr))
+                restruct_mat.append(IdentityOperator(constr.size))
+            elif type(constr) == SvecPSD:
+                restruct_mat.append(IdentityOperator(constr.size))
             else:
                 raise ValueError("Unsupported constraint type.")
 
@@ -277,7 +294,7 @@ class ConicSolver(Solver):
         else:
             restructured_A = problem.A
         new_param_cone_prog = ParamConeProg(
-            problem.c,
+            problem.q,
             problem.x,
             restructured_A,
             problem.variables,
@@ -289,6 +306,8 @@ class ConicSolver(Solver):
             formatted=True,
             lower_bounds=problem.lower_bounds,
             upper_bounds=problem.upper_bounds,
+            lb_tensor=problem.lb_tensor,
+            ub_tensor=problem.ub_tensor,
         )
         return new_param_cone_prog
 
@@ -298,7 +317,7 @@ class ConicSolver(Solver):
         status = solution['status']
 
         if status in s.SOLUTION_PRESENT:
-            opt_val = solution['value']
+            opt_val = solution['value'] + inverse_data[s.OFFSET]
             primal_vars = {inverse_data[self.VAR_ID]: solution['primal']}
             eq_dual = utilities.get_dual_values(
                 solution['eq_dual'],
@@ -328,6 +347,7 @@ class ConicSolver(Solver):
         # 4. psd
         # 5. exponential
         # 6. three-dimensional power cones
+        # 7. n-dimensional power cones
         if not problem.formatted:
             problem = self.format_constraints(problem, self.EXP_CONE_ORDER)
         data[s.PARAM_PROB] = problem
@@ -337,7 +357,10 @@ class ConicSolver(Solver):
         constr_map = problem.constr_map
         inv_data[self.EQ_CONSTR] = constr_map[Zero]
         inv_data[self.NEQ_CONSTR] = constr_map[NonNeg] + constr_map[SOC] + \
-            constr_map[PSD] + constr_map[ExpCone] + constr_map[PowCone3D]
+            constr_map.get(PSD, []) + constr_map.get(SvecPSD, []) + \
+            constr_map[ExpCone] + \
+            constr_map[PowCone3D] + \
+            constr_map[PowConeND]
         return problem, data, inv_data
 
     def apply(self, problem):
@@ -365,4 +388,6 @@ class ConicSolver(Solver):
         inv_data[s.OFFSET] = d
         data[s.A] = -A
         data[s.B] = b
+        data[s.LOWER_BOUNDS] = problem.lower_bounds
+        data[s.UPPER_BOUNDS] = problem.upper_bounds
         return data, inv_data

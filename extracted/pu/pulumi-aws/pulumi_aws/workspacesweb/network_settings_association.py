@@ -21,9 +21,10 @@ class NetworkSettingsAssociationArgs:
     def __init__(__self__, *,
                  network_settings_arn: pulumi.Input[_builtins.str],
                  portal_arn: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a NetworkSettingsAssociation resource.
+
         :param pulumi.Input[_builtins.str] network_settings_arn: ARN of the network settings to associate with the portal. Forces replacement if changed.
         :param pulumi.Input[_builtins.str] portal_arn: ARN of the portal to associate with the network settings. Forces replacement if changed.
                
@@ -63,25 +64,26 @@ class NetworkSettingsAssociationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _NetworkSettingsAssociationState:
     def __init__(__self__, *,
-                 network_settings_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 portal_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 network_settings_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 portal_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering NetworkSettingsAssociation resources.
+
         :param pulumi.Input[_builtins.str] network_settings_arn: ARN of the network settings to associate with the portal. Forces replacement if changed.
         :param pulumi.Input[_builtins.str] portal_arn: ARN of the portal to associate with the network settings. Forces replacement if changed.
                
@@ -97,19 +99,19 @@ class _NetworkSettingsAssociationState:
 
     @_builtins.property
     @pulumi.getter(name="networkSettingsArn")
-    def network_settings_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def network_settings_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the network settings to associate with the portal. Forces replacement if changed.
         """
         return pulumi.get(self, "network_settings_arn")
 
     @network_settings_arn.setter
-    def network_settings_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def network_settings_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "network_settings_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="portalArn")
-    def portal_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def portal_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the portal to associate with the network settings. Forces replacement if changed.
 
@@ -118,19 +120,19 @@ class _NetworkSettingsAssociationState:
         return pulumi.get(self, "portal_arn")
 
     @portal_arn.setter
-    def portal_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def portal_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "portal_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -140,9 +142,9 @@ class NetworkSettingsAssociation(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 network_settings_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 portal_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 network_settings_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 portal_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Resource for managing an AWS WorkSpaces Web Network Settings Association.
@@ -153,35 +155,36 @@ class NetworkSettingsAssociation(pulumi.CustomResource):
 
         ```python
         import pulumi
+        from typing import Any
         import pulumi_aws as aws
         import pulumi_std as std
 
-        available = aws.get_availability_zones(state="available",
-            filters=[{
+        available = aws.get_availability_zones(filters=[{
                 "name": "opt-in-status",
                 "values": ["opt-in-not-required"],
-            }])
+            }],
+            state="available")
         example = aws.ec2.Vpc("example",
             cidr_block="10.0.0.0/16",
             tags={
                 "Name": "example",
             })
-        example_subnet = []
-        for range in [{"value": i} for i in range(0, 2)]:
-            example_subnet.append(aws.ec2.Subnet(f"example-{range['value']}",
+        example_subnet: list[aws.ec2.Subnet] = []
+        for example_subnet_range in [{"value": i} for i in range(0, 2)]:
+            example_subnet.append(aws.ec2.Subnet(f"example-{example_subnet_range['value']}",
                 vpc_id=example.id,
-                cidr_block=example.cidr_block.apply(lambda cidr_block: std.cidrsubnet_output(input=cidr_block,
+                cidr_block=std.cidrsubnet_output(input=example.cidr_block,
                     newbits=8,
-                    netnum=range["value"])).apply(lambda invoke: invoke.result),
-                availability_zone=available.names[range["value"]],
+                    netnum=example_subnet_range["value"]).result,
+                availability_zone=available.names[example_subnet_range["value"]],
                 tags={
                     "Name": "example",
                 }))
-        example_security_group = []
-        for range in [{"value": i} for i in range(0, 2)]:
-            example_security_group.append(aws.ec2.SecurityGroup(f"example-{range['value']}",
+        example_security_group: list[aws.ec2.SecurityGroup] = []
+        for example_security_group_range in [{"value": i} for i in range(0, 2)]:
+            example_security_group.append(aws.ec2.SecurityGroup(f"example-{example_security_group_range['value']}",
                 vpc_id=example.id,
-                name=f"example-{range['value']}",
+                name=f"example-{example_security_group_range['value']}",
                 tags={
                     "Name": "example",
                 }))
@@ -200,6 +203,7 @@ class NetworkSettingsAssociation(pulumi.CustomResource):
             network_settings_arn=example_network_settings.network_settings_arn,
             portal_arn=example_portal.portal_arn)
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -224,35 +228,36 @@ class NetworkSettingsAssociation(pulumi.CustomResource):
 
         ```python
         import pulumi
+        from typing import Any
         import pulumi_aws as aws
         import pulumi_std as std
 
-        available = aws.get_availability_zones(state="available",
-            filters=[{
+        available = aws.get_availability_zones(filters=[{
                 "name": "opt-in-status",
                 "values": ["opt-in-not-required"],
-            }])
+            }],
+            state="available")
         example = aws.ec2.Vpc("example",
             cidr_block="10.0.0.0/16",
             tags={
                 "Name": "example",
             })
-        example_subnet = []
-        for range in [{"value": i} for i in range(0, 2)]:
-            example_subnet.append(aws.ec2.Subnet(f"example-{range['value']}",
+        example_subnet: list[aws.ec2.Subnet] = []
+        for example_subnet_range in [{"value": i} for i in range(0, 2)]:
+            example_subnet.append(aws.ec2.Subnet(f"example-{example_subnet_range['value']}",
                 vpc_id=example.id,
-                cidr_block=example.cidr_block.apply(lambda cidr_block: std.cidrsubnet_output(input=cidr_block,
+                cidr_block=std.cidrsubnet_output(input=example.cidr_block,
                     newbits=8,
-                    netnum=range["value"])).apply(lambda invoke: invoke.result),
-                availability_zone=available.names[range["value"]],
+                    netnum=example_subnet_range["value"]).result,
+                availability_zone=available.names[example_subnet_range["value"]],
                 tags={
                     "Name": "example",
                 }))
-        example_security_group = []
-        for range in [{"value": i} for i in range(0, 2)]:
-            example_security_group.append(aws.ec2.SecurityGroup(f"example-{range['value']}",
+        example_security_group: list[aws.ec2.SecurityGroup] = []
+        for example_security_group_range in [{"value": i} for i in range(0, 2)]:
+            example_security_group.append(aws.ec2.SecurityGroup(f"example-{example_security_group_range['value']}",
                 vpc_id=example.id,
-                name=f"example-{range['value']}",
+                name=f"example-{example_security_group_range['value']}",
                 tags={
                     "Name": "example",
                 }))
@@ -272,6 +277,7 @@ class NetworkSettingsAssociation(pulumi.CustomResource):
             portal_arn=example_portal.portal_arn)
         ```
 
+
         :param str resource_name: The name of the resource.
         :param NetworkSettingsAssociationArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -287,9 +293,9 @@ class NetworkSettingsAssociation(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 network_settings_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 portal_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 network_settings_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 portal_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -316,9 +322,9 @@ class NetworkSettingsAssociation(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            network_settings_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            portal_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'NetworkSettingsAssociation':
+            network_settings_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            portal_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'NetworkSettingsAssociation':
         """
         Get an existing NetworkSettingsAssociation resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

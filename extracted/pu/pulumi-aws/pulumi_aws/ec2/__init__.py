@@ -35,12 +35,14 @@ from .flow_log import *
 from .get_ami import *
 from .get_ami_ids import *
 from .get_capacity_block_offering import *
+from .get_capacity_block_reservation import *
 from .get_coip_pool import *
 from .get_coip_pools import *
 from .get_customer_gateway import *
 from .get_dedicated_host import *
 from .get_eips import *
 from .get_elastic_ip import *
+from .get_hosts import *
 from .get_instance import *
 from .get_instance_type import *
 from .get_instance_type_offering import *
@@ -77,6 +79,8 @@ from .get_route_tables import *
 from .get_security_group import *
 from .get_security_groups import *
 from .get_serial_console_access import *
+from .get_service_link_virtual_interface import *
+from .get_service_link_virtual_interfaces import *
 from .get_spot_datafeed_subscription import *
 from .get_spot_price import *
 from .get_subnet import *
@@ -105,6 +109,8 @@ from .key_pair import *
 from .launch_configuration import *
 from .launch_template import *
 from .local_gateway_route import *
+from .local_gateway_route_table import *
+from .local_gateway_route_table_virtual_interface_group_association import *
 from .local_gateway_route_table_vpc_association import *
 from .main_route_table_association import *
 from .managed_prefix_list import *
@@ -114,6 +120,7 @@ from .nat_gateway_eip_association import *
 from .network_acl import *
 from .network_acl_association import *
 from .network_acl_rule import *
+from .network_insights_access_scope import *
 from .network_insights_analysis import *
 from .network_insights_path import *
 from .network_interface import *

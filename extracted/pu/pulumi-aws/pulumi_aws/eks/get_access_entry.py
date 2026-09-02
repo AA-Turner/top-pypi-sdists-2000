@@ -68,7 +68,7 @@ class GetAccessEntryResult:
     @pulumi.getter(name="accessEntryArn")
     def access_entry_arn(self) -> _builtins.str:
         """
-        Amazon Resource Name (ARN) of the Access Entry.
+        ARN of the Access Entry.
         """
         return pulumi.get(self, "access_entry_arn")
 
@@ -121,11 +121,12 @@ class GetAccessEntryResult:
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[Mapping[str, _builtins.str]]:
+    def tags(self) -> Mapping[str, _builtins.str]:
         return pulumi.get(self, "tags")
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
+    @_utilities.deprecated("""tags_all is deprecated.""")
     def tags_all(self) -> Mapping[str, _builtins.str]:
         """
         (Optional) Key-value map of resource tags, including those inherited from the provider `default_tags` configuration block.
@@ -217,11 +218,11 @@ def get_access_entry(cluster_name: Optional[_builtins.str] = None,
         tags_all=pulumi.get(__ret__, 'tags_all'),
         type=pulumi.get(__ret__, 'type'),
         user_name=pulumi.get(__ret__, 'user_name'))
-def get_access_entry_output(cluster_name: Optional[pulumi.Input[_builtins.str]] = None,
-                            principal_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                            region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                            tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
-                            tags_all: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_access_entry_output(cluster_name: pulumi.Input[Optional[_builtins.str]] = None,
+                            principal_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                            region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                            tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
+                            tags_all: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                             opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetAccessEntryResult]:
     """
     Access Entry Configurations for an EKS Cluster.

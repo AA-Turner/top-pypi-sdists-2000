@@ -22,13 +22,14 @@ class ClusterActivityStreamArgs:
                  kms_key_id: pulumi.Input[_builtins.str],
                  mode: pulumi.Input[_builtins.str],
                  resource_arn: pulumi.Input[_builtins.str],
-                 engine_native_audit_fields_included: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 engine_native_audit_fields_included: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a ClusterActivityStream resource.
+
         :param pulumi.Input[_builtins.str] kms_key_id: The AWS KMS key identifier for encrypting messages in the database activity stream. The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the KMS key.
         :param pulumi.Input[_builtins.str] mode: Specifies the mode of the database activity stream. Database events such as a change or access generate an activity stream event. The database session can handle these events either synchronously or asynchronously. One of: `sync`, `async`.
-        :param pulumi.Input[_builtins.str] resource_arn: The Amazon Resource Name (ARN) of the DB cluster.
+        :param pulumi.Input[_builtins.str] resource_arn: ARN of the DB cluster.
         :param pulumi.Input[_builtins.bool] engine_native_audit_fields_included: Specifies whether the database activity stream includes engine-native audit fields. This option only applies to an Oracle DB instance. By default, no engine-native audit fields are included. Defaults `false`.
                
                For more detailed documentation about each argument, refer to
@@ -71,7 +72,7 @@ class ClusterActivityStreamArgs:
     @pulumi.getter(name="resourceArn")
     def resource_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the DB cluster.
+        ARN of the DB cluster.
         """
         return pulumi.get(self, "resource_arn")
 
@@ -81,7 +82,7 @@ class ClusterActivityStreamArgs:
 
     @_builtins.property
     @pulumi.getter(name="engineNativeAuditFieldsIncluded")
-    def engine_native_audit_fields_included(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def engine_native_audit_fields_included(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Specifies whether the database activity stream includes engine-native audit fields. This option only applies to an Oracle DB instance. By default, no engine-native audit fields are included. Defaults `false`.
 
@@ -91,33 +92,34 @@ class ClusterActivityStreamArgs:
         return pulumi.get(self, "engine_native_audit_fields_included")
 
     @engine_native_audit_fields_included.setter
-    def engine_native_audit_fields_included(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def engine_native_audit_fields_included(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "engine_native_audit_fields_included", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _ClusterActivityStreamState:
     def __init__(__self__, *,
-                 engine_native_audit_fields_included: Optional[pulumi.Input[_builtins.bool]] = None,
-                 kinesis_stream_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 mode: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_arn: Optional[pulumi.Input[_builtins.str]] = None):
+                 engine_native_audit_fields_included: pulumi.Input[Optional[_builtins.bool]] = None,
+                 kinesis_stream_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 mode: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_arn: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering ClusterActivityStream resources.
+
         :param pulumi.Input[_builtins.bool] engine_native_audit_fields_included: Specifies whether the database activity stream includes engine-native audit fields. This option only applies to an Oracle DB instance. By default, no engine-native audit fields are included. Defaults `false`.
                
                For more detailed documentation about each argument, refer to
@@ -126,7 +128,7 @@ class _ClusterActivityStreamState:
         :param pulumi.Input[_builtins.str] kms_key_id: The AWS KMS key identifier for encrypting messages in the database activity stream. The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the KMS key.
         :param pulumi.Input[_builtins.str] mode: Specifies the mode of the database activity stream. Database events such as a change or access generate an activity stream event. The database session can handle these events either synchronously or asynchronously. One of: `sync`, `async`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] resource_arn: The Amazon Resource Name (ARN) of the DB cluster.
+        :param pulumi.Input[_builtins.str] resource_arn: ARN of the DB cluster.
         """
         if engine_native_audit_fields_included is not None:
             pulumi.set(__self__, "engine_native_audit_fields_included", engine_native_audit_fields_included)
@@ -143,7 +145,7 @@ class _ClusterActivityStreamState:
 
     @_builtins.property
     @pulumi.getter(name="engineNativeAuditFieldsIncluded")
-    def engine_native_audit_fields_included(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def engine_native_audit_fields_included(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Specifies whether the database activity stream includes engine-native audit fields. This option only applies to an Oracle DB instance. By default, no engine-native audit fields are included. Defaults `false`.
 
@@ -153,67 +155,67 @@ class _ClusterActivityStreamState:
         return pulumi.get(self, "engine_native_audit_fields_included")
 
     @engine_native_audit_fields_included.setter
-    def engine_native_audit_fields_included(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def engine_native_audit_fields_included(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "engine_native_audit_fields_included", value)
 
     @_builtins.property
     @pulumi.getter(name="kinesisStreamName")
-    def kinesis_stream_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kinesis_stream_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the Amazon Kinesis data stream to be used for the database activity stream.
         """
         return pulumi.get(self, "kinesis_stream_name")
 
     @kinesis_stream_name.setter
-    def kinesis_stream_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kinesis_stream_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kinesis_stream_name", value)
 
     @_builtins.property
     @pulumi.getter(name="kmsKeyId")
-    def kms_key_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def kms_key_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The AWS KMS key identifier for encrypting messages in the database activity stream. The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the KMS key.
         """
         return pulumi.get(self, "kms_key_id")
 
     @kms_key_id.setter
-    def kms_key_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def kms_key_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "kms_key_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def mode(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def mode(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Specifies the mode of the database activity stream. Database events such as a change or access generate an activity stream event. The database session can handle these events either synchronously or asynchronously. One of: `sync`, `async`.
         """
         return pulumi.get(self, "mode")
 
     @mode.setter
-    def mode(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def mode(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "mode", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="resourceArn")
-    def resource_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def resource_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the DB cluster.
+        ARN of the DB cluster.
         """
         return pulumi.get(self, "resource_arn")
 
     @resource_arn.setter
-    def resource_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def resource_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "resource_arn", value)
 
 
@@ -223,18 +225,18 @@ class ClusterActivityStream(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 engine_native_audit_fields_included: Optional[pulumi.Input[_builtins.bool]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 mode: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 engine_native_audit_fields_included: pulumi.Input[Optional[_builtins.bool]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 mode: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Manages RDS Aurora Cluster Database Activity Streams.
 
         Database Activity Streams have some limits and requirements, refer to the [Monitoring Amazon Aurora using Database Activity Streams](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/DBActivityStreams.html) documentation for detailed limitations and requirements.
 
-        > **Note:** This resource always calls the RDS [`StartActivityStream`][2] API with the `ApplyImmediately` parameter set to `true`. This is because the provider needs the activity stream to be started in order for it to get the associated attributes.
+        > **Note:** This resource always calls the RDS [`StartActivityStream`](https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_StartActivityStream.html) API with the `ApplyImmediately` parameter set to `true`. This is because the provider needs the activity stream to be started in order for it to get the associated attributes.
 
         > **Note:** This resource depends on having at least one `rds.ClusterInstance` created. To avoid race conditions when all resources are being created together, add an explicit resource reference using the resource `depends_on` meta-argument.
 
@@ -279,9 +281,6 @@ class ClusterActivityStream(pulumi.CustomResource):
         $ pulumi import aws:rds/clusterActivityStream:ClusterActivityStream default arn:aws:rds:us-west-2:123456789012:cluster:aurora-cluster-demo
         ```
 
-        [1]: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/DBActivityStreams.html
-        [2]: https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_StartActivityStream.html
-        [3]: https://docs.aws.amazon.com/cli/latest/reference/rds/start-activity-stream.html
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -292,7 +291,7 @@ class ClusterActivityStream(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] kms_key_id: The AWS KMS key identifier for encrypting messages in the database activity stream. The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the KMS key.
         :param pulumi.Input[_builtins.str] mode: Specifies the mode of the database activity stream. Database events such as a change or access generate an activity stream event. The database session can handle these events either synchronously or asynchronously. One of: `sync`, `async`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] resource_arn: The Amazon Resource Name (ARN) of the DB cluster.
+        :param pulumi.Input[_builtins.str] resource_arn: ARN of the DB cluster.
         """
         ...
     @overload
@@ -305,7 +304,7 @@ class ClusterActivityStream(pulumi.CustomResource):
 
         Database Activity Streams have some limits and requirements, refer to the [Monitoring Amazon Aurora using Database Activity Streams](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/DBActivityStreams.html) documentation for detailed limitations and requirements.
 
-        > **Note:** This resource always calls the RDS [`StartActivityStream`][2] API with the `ApplyImmediately` parameter set to `true`. This is because the provider needs the activity stream to be started in order for it to get the associated attributes.
+        > **Note:** This resource always calls the RDS [`StartActivityStream`](https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_StartActivityStream.html) API with the `ApplyImmediately` parameter set to `true`. This is because the provider needs the activity stream to be started in order for it to get the associated attributes.
 
         > **Note:** This resource depends on having at least one `rds.ClusterInstance` created. To avoid race conditions when all resources are being created together, add an explicit resource reference using the resource `depends_on` meta-argument.
 
@@ -350,9 +349,6 @@ class ClusterActivityStream(pulumi.CustomResource):
         $ pulumi import aws:rds/clusterActivityStream:ClusterActivityStream default arn:aws:rds:us-west-2:123456789012:cluster:aurora-cluster-demo
         ```
 
-        [1]: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/DBActivityStreams.html
-        [2]: https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_StartActivityStream.html
-        [3]: https://docs.aws.amazon.com/cli/latest/reference/rds/start-activity-stream.html
 
         :param str resource_name: The name of the resource.
         :param ClusterActivityStreamArgs args: The arguments to use to populate this resource's properties.
@@ -369,11 +365,11 @@ class ClusterActivityStream(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 engine_native_audit_fields_included: Optional[pulumi.Input[_builtins.bool]] = None,
-                 kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 mode: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resource_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 engine_native_audit_fields_included: pulumi.Input[Optional[_builtins.bool]] = None,
+                 kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 mode: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resource_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -405,12 +401,12 @@ class ClusterActivityStream(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            engine_native_audit_fields_included: Optional[pulumi.Input[_builtins.bool]] = None,
-            kinesis_stream_name: Optional[pulumi.Input[_builtins.str]] = None,
-            kms_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-            mode: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            resource_arn: Optional[pulumi.Input[_builtins.str]] = None) -> 'ClusterActivityStream':
+            engine_native_audit_fields_included: pulumi.Input[Optional[_builtins.bool]] = None,
+            kinesis_stream_name: pulumi.Input[Optional[_builtins.str]] = None,
+            kms_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+            mode: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            resource_arn: pulumi.Input[Optional[_builtins.str]] = None) -> 'ClusterActivityStream':
         """
         Get an existing ClusterActivityStream resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -426,7 +422,7 @@ class ClusterActivityStream(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] kms_key_id: The AWS KMS key identifier for encrypting messages in the database activity stream. The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the KMS key.
         :param pulumi.Input[_builtins.str] mode: Specifies the mode of the database activity stream. Database events such as a change or access generate an activity stream event. The database session can handle these events either synchronously or asynchronously. One of: `sync`, `async`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] resource_arn: The Amazon Resource Name (ARN) of the DB cluster.
+        :param pulumi.Input[_builtins.str] resource_arn: ARN of the DB cluster.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -487,7 +483,7 @@ class ClusterActivityStream(pulumi.CustomResource):
     @pulumi.getter(name="resourceArn")
     def resource_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the DB cluster.
+        ARN of the DB cluster.
         """
         return pulumi.get(self, "resource_arn")
 

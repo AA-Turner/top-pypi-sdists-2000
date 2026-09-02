@@ -20,10 +20,11 @@ __all__ = ['ResourceShareAccepterArgs', 'ResourceShareAccepter']
 class ResourceShareAccepterArgs:
     def __init__(__self__, *,
                  share_arn: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a ResourceShareAccepter resource.
-        :param pulumi.Input[_builtins.str] share_arn: The ARN of the resource share.
+
+        :param pulumi.Input[_builtins.str] share_arn: ARN of the resource share.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         pulumi.set(__self__, "share_arn", share_arn)
@@ -34,7 +35,7 @@ class ResourceShareAccepterArgs:
     @pulumi.getter(name="shareArn")
     def share_arn(self) -> pulumi.Input[_builtins.str]:
         """
-        The ARN of the resource share.
+        ARN of the resource share.
         """
         return pulumi.get(self, "share_arn")
 
@@ -44,40 +45,41 @@ class ResourceShareAccepterArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _ResourceShareAccepterState:
     def __init__(__self__, *,
-                 invitation_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 receiver_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 resources: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 sender_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 share_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 share_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 share_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None):
+                 invitation_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 receiver_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 resources: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 sender_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 share_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 share_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 share_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering ResourceShareAccepter resources.
-        :param pulumi.Input[_builtins.str] invitation_arn: The ARN of the resource share invitation.
-        :param pulumi.Input[_builtins.str] receiver_account_id: The account ID of the receiver account which accepts the invitation.
+
+        :param pulumi.Input[_builtins.str] invitation_arn: ARN of the resource share invitation.
+        :param pulumi.Input[_builtins.str] receiver_account_id: Account ID of the receiver account which accepts the invitation.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] resources: A list of the resource ARNs shared via the resource share.
-        :param pulumi.Input[_builtins.str] sender_account_id: The account ID of the sender account which submits the invitation.
-        :param pulumi.Input[_builtins.str] share_arn: The ARN of the resource share.
-        :param pulumi.Input[_builtins.str] share_id: The ID of the resource share as displayed in the console.
-        :param pulumi.Input[_builtins.str] share_name: The name of the resource share.
-        :param pulumi.Input[_builtins.str] status: The status of the resource share (ACTIVE, PENDING, FAILED, DELETING, DELETED).
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] resources: List of the resource ARNs shared via the resource share.
+        :param pulumi.Input[_builtins.str] sender_account_id: Account ID of the sender account which submits the invitation.
+        :param pulumi.Input[_builtins.str] share_arn: ARN of the resource share.
+        :param pulumi.Input[_builtins.str] share_id: ID of the resource share as displayed in the console.
+        :param pulumi.Input[_builtins.str] share_name: Name of the resource share.
+        :param pulumi.Input[_builtins.str] status: Status of the resource share (ACTIVE, PENDING, FAILED, DELETING, DELETED).
         """
         if invitation_arn is not None:
             pulumi.set(__self__, "invitation_arn", invitation_arn)
@@ -100,110 +102,110 @@ class _ResourceShareAccepterState:
 
     @_builtins.property
     @pulumi.getter(name="invitationArn")
-    def invitation_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def invitation_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The ARN of the resource share invitation.
+        ARN of the resource share invitation.
         """
         return pulumi.get(self, "invitation_arn")
 
     @invitation_arn.setter
-    def invitation_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def invitation_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "invitation_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="receiverAccountId")
-    def receiver_account_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def receiver_account_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The account ID of the receiver account which accepts the invitation.
+        Account ID of the receiver account which accepts the invitation.
         """
         return pulumi.get(self, "receiver_account_id")
 
     @receiver_account_id.setter
-    def receiver_account_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def receiver_account_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "receiver_account_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def resources(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def resources(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        A list of the resource ARNs shared via the resource share.
+        List of the resource ARNs shared via the resource share.
         """
         return pulumi.get(self, "resources")
 
     @resources.setter
-    def resources(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def resources(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "resources", value)
 
     @_builtins.property
     @pulumi.getter(name="senderAccountId")
-    def sender_account_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def sender_account_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The account ID of the sender account which submits the invitation.
+        Account ID of the sender account which submits the invitation.
         """
         return pulumi.get(self, "sender_account_id")
 
     @sender_account_id.setter
-    def sender_account_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def sender_account_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "sender_account_id", value)
 
     @_builtins.property
     @pulumi.getter(name="shareArn")
-    def share_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def share_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The ARN of the resource share.
+        ARN of the resource share.
         """
         return pulumi.get(self, "share_arn")
 
     @share_arn.setter
-    def share_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def share_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "share_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="shareId")
-    def share_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def share_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The ID of the resource share as displayed in the console.
+        ID of the resource share as displayed in the console.
         """
         return pulumi.get(self, "share_id")
 
     @share_id.setter
-    def share_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def share_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "share_id", value)
 
     @_builtins.property
     @pulumi.getter(name="shareName")
-    def share_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def share_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The name of the resource share.
+        Name of the resource share.
         """
         return pulumi.get(self, "share_name")
 
     @share_name.setter
-    def share_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def share_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "share_name", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The status of the resource share (ACTIVE, PENDING, FAILED, DELETING, DELETED).
+        Status of the resource share (ACTIVE, PENDING, FAILED, DELETING, DELETED).
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
 
@@ -213,8 +215,8 @@ class ResourceShareAccepter(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 share_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 share_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Manage accepting a Resource Access Manager (RAM) Resource Share invitation. From a _receiver_ AWS account, accept an invitation to share resources that were shared by a _sender_ AWS account. To create a resource share in the _sender_, see the `ram.ResourceShare` resource.
@@ -250,10 +252,11 @@ class ResourceShareAccepter(pulumi.CustomResource):
         $ pulumi import aws:ram/resourceShareAccepter:ResourceShareAccepter example arn:aws:ram:us-east-1:123456789012:resource-share/c4b56393-e8d9-89d9-6dc9-883752de4767
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] share_arn: The ARN of the resource share.
+        :param pulumi.Input[_builtins.str] share_arn: ARN of the resource share.
         """
         ...
     @overload
@@ -295,6 +298,7 @@ class ResourceShareAccepter(pulumi.CustomResource):
         $ pulumi import aws:ram/resourceShareAccepter:ResourceShareAccepter example arn:aws:ram:us-east-1:123456789012:resource-share/c4b56393-e8d9-89d9-6dc9-883752de4767
         ```
 
+
         :param str resource_name: The name of the resource.
         :param ResourceShareAccepterArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -310,8 +314,8 @@ class ResourceShareAccepter(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 share_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 share_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -342,15 +346,15 @@ class ResourceShareAccepter(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            invitation_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            receiver_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            resources: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            sender_account_id: Optional[pulumi.Input[_builtins.str]] = None,
-            share_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            share_id: Optional[pulumi.Input[_builtins.str]] = None,
-            share_name: Optional[pulumi.Input[_builtins.str]] = None,
-            status: Optional[pulumi.Input[_builtins.str]] = None) -> 'ResourceShareAccepter':
+            invitation_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            receiver_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            resources: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            sender_account_id: pulumi.Input[Optional[_builtins.str]] = None,
+            share_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            share_id: pulumi.Input[Optional[_builtins.str]] = None,
+            share_name: pulumi.Input[Optional[_builtins.str]] = None,
+            status: pulumi.Input[Optional[_builtins.str]] = None) -> 'ResourceShareAccepter':
         """
         Get an existing ResourceShareAccepter resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -358,15 +362,15 @@ class ResourceShareAccepter(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] invitation_arn: The ARN of the resource share invitation.
-        :param pulumi.Input[_builtins.str] receiver_account_id: The account ID of the receiver account which accepts the invitation.
+        :param pulumi.Input[_builtins.str] invitation_arn: ARN of the resource share invitation.
+        :param pulumi.Input[_builtins.str] receiver_account_id: Account ID of the receiver account which accepts the invitation.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] resources: A list of the resource ARNs shared via the resource share.
-        :param pulumi.Input[_builtins.str] sender_account_id: The account ID of the sender account which submits the invitation.
-        :param pulumi.Input[_builtins.str] share_arn: The ARN of the resource share.
-        :param pulumi.Input[_builtins.str] share_id: The ID of the resource share as displayed in the console.
-        :param pulumi.Input[_builtins.str] share_name: The name of the resource share.
-        :param pulumi.Input[_builtins.str] status: The status of the resource share (ACTIVE, PENDING, FAILED, DELETING, DELETED).
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] resources: List of the resource ARNs shared via the resource share.
+        :param pulumi.Input[_builtins.str] sender_account_id: Account ID of the sender account which submits the invitation.
+        :param pulumi.Input[_builtins.str] share_arn: ARN of the resource share.
+        :param pulumi.Input[_builtins.str] share_id: ID of the resource share as displayed in the console.
+        :param pulumi.Input[_builtins.str] share_name: Name of the resource share.
+        :param pulumi.Input[_builtins.str] status: Status of the resource share (ACTIVE, PENDING, FAILED, DELETING, DELETED).
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -387,7 +391,7 @@ class ResourceShareAccepter(pulumi.CustomResource):
     @pulumi.getter(name="invitationArn")
     def invitation_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The ARN of the resource share invitation.
+        ARN of the resource share invitation.
         """
         return pulumi.get(self, "invitation_arn")
 
@@ -395,7 +399,7 @@ class ResourceShareAccepter(pulumi.CustomResource):
     @pulumi.getter(name="receiverAccountId")
     def receiver_account_id(self) -> pulumi.Output[_builtins.str]:
         """
-        The account ID of the receiver account which accepts the invitation.
+        Account ID of the receiver account which accepts the invitation.
         """
         return pulumi.get(self, "receiver_account_id")
 
@@ -411,7 +415,7 @@ class ResourceShareAccepter(pulumi.CustomResource):
     @pulumi.getter
     def resources(self) -> pulumi.Output[Sequence[_builtins.str]]:
         """
-        A list of the resource ARNs shared via the resource share.
+        List of the resource ARNs shared via the resource share.
         """
         return pulumi.get(self, "resources")
 
@@ -419,7 +423,7 @@ class ResourceShareAccepter(pulumi.CustomResource):
     @pulumi.getter(name="senderAccountId")
     def sender_account_id(self) -> pulumi.Output[_builtins.str]:
         """
-        The account ID of the sender account which submits the invitation.
+        Account ID of the sender account which submits the invitation.
         """
         return pulumi.get(self, "sender_account_id")
 
@@ -427,7 +431,7 @@ class ResourceShareAccepter(pulumi.CustomResource):
     @pulumi.getter(name="shareArn")
     def share_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The ARN of the resource share.
+        ARN of the resource share.
         """
         return pulumi.get(self, "share_arn")
 
@@ -435,7 +439,7 @@ class ResourceShareAccepter(pulumi.CustomResource):
     @pulumi.getter(name="shareId")
     def share_id(self) -> pulumi.Output[_builtins.str]:
         """
-        The ID of the resource share as displayed in the console.
+        ID of the resource share as displayed in the console.
         """
         return pulumi.get(self, "share_id")
 
@@ -443,7 +447,7 @@ class ResourceShareAccepter(pulumi.CustomResource):
     @pulumi.getter(name="shareName")
     def share_name(self) -> pulumi.Output[_builtins.str]:
         """
-        The name of the resource share.
+        Name of the resource share.
         """
         return pulumi.get(self, "share_name")
 
@@ -451,7 +455,7 @@ class ResourceShareAccepter(pulumi.CustomResource):
     @pulumi.getter
     def status(self) -> pulumi.Output[_builtins.str]:
         """
-        The status of the resource share (ACTIVE, PENDING, FAILED, DELETING, DELETED).
+        Status of the resource share (ACTIVE, PENDING, FAILED, DELETING, DELETED).
         """
         return pulumi.get(self, "status")
 

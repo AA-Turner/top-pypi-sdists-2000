@@ -49,9 +49,14 @@ def resolve_pathways_checkpointing_impl(
 ) -> pathways_types.CheckpointingImpl:
   """Returns the Pathways checkpointing implementation."""
   checkpointing_impl = context.pathways_options.checkpointing_impl
-  return checkpointing_impl or pathways_types.CheckpointingImpl.from_options(
+  if checkpointing_impl is not None:
+    return checkpointing_impl
+
+  return pathways_types.CheckpointingImpl.from_options(
       use_colocated_python=False,  # Not enabled unless explicitly requested.
-      use_persistence_array_handler=True,  # Only used as a fallback.
+      # Attempt to use as a fallback, otherwise fallback to no dispatcher if
+      # using proxy Pathways without persistence enabled.
+      use_persistence_array_handler=True,
   )
 
 
@@ -71,6 +76,7 @@ def get_array_handler(
       enable_replica_parallel_separate_folder=saving_options.enable_replica_parallel_separate_folder,
       enable_write_sharding_file=saving_options.enable_write_sharding_file,
       array_metadata_store=saving_options.array_metadata_store,
+      callback=context.memory_options.serialization_status_callback,
   )
   if loading_options.use_load_and_broadcast:
     load_and_broadcast_kwargs = dict(
@@ -95,7 +101,7 @@ def get_array_handler(
       return jax_array_handlers.SingleReplicaArrayHandler(
           dispatcher=None,
           **common_kwargs,
-          **load_and_broadcast_kwargs,
+          **load_and_broadcast_kwargs,  # pyrefly: ignore[bad-argument-type]
       )
     return jax_array_handlers.ArrayHandler(dispatcher=None, **common_kwargs)
 

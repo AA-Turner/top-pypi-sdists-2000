@@ -21,9 +21,10 @@ class EndpointPrivateDnsArgs:
     def __init__(__self__, *,
                  private_dns_enabled: pulumi.Input[_builtins.bool],
                  vpc_endpoint_id: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a EndpointPrivateDns resource.
+
         :param pulumi.Input[_builtins.bool] private_dns_enabled: Indicates whether a private hosted zone is associated with the VPC. Only applicable for `Interface` endpoints.
         :param pulumi.Input[_builtins.str] vpc_endpoint_id: VPC endpoint identifier.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -59,25 +60,26 @@ class EndpointPrivateDnsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _EndpointPrivateDnsState:
     def __init__(__self__, *,
-                 private_dns_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 private_dns_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering EndpointPrivateDns resources.
+
         :param pulumi.Input[_builtins.bool] private_dns_enabled: Indicates whether a private hosted zone is associated with the VPC. Only applicable for `Interface` endpoints.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[_builtins.str] vpc_endpoint_id: VPC endpoint identifier.
@@ -91,38 +93,38 @@ class _EndpointPrivateDnsState:
 
     @_builtins.property
     @pulumi.getter(name="privateDnsEnabled")
-    def private_dns_enabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def private_dns_enabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Indicates whether a private hosted zone is associated with the VPC. Only applicable for `Interface` endpoints.
         """
         return pulumi.get(self, "private_dns_enabled")
 
     @private_dns_enabled.setter
-    def private_dns_enabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def private_dns_enabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "private_dns_enabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcEndpointId")
-    def vpc_endpoint_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def vpc_endpoint_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         VPC endpoint identifier.
         """
         return pulumi.get(self, "vpc_endpoint_id")
 
     @vpc_endpoint_id.setter
-    def vpc_endpoint_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def vpc_endpoint_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "vpc_endpoint_id", value)
 
 
@@ -132,12 +134,12 @@ class EndpointPrivateDns(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 private_dns_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 private_dns_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
-        Resource for enabling private DNS on an AWS VPC (Virtual Private Cloud) Endpoint.
+        Resource for enabling private DNS on an AWS VPC Endpoint.
 
         > When using this resource, the `private_dns_enabled` argument should be omitted on the parent `ec2.VpcEndpoint` resource.
         Setting the value both places can lead to unintended behavior and persistent differences.
@@ -157,11 +159,12 @@ class EndpointPrivateDns(pulumi.CustomResource):
 
         ## Import
 
-        Using `pulumi import`, import a VPC (Virtual Private Cloud) Endpoint Private DNS using the `vpc_endpoint_id`. For example:
+        Using `pulumi import`, import a VPC Endpoint Private DNS using the `vpc_endpoint_id`. For example:
 
         ```sh
         $ pulumi import aws:vpc/endpointPrivateDns:EndpointPrivateDns example vpce-abcd-1234
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -176,7 +179,7 @@ class EndpointPrivateDns(pulumi.CustomResource):
                  args: EndpointPrivateDnsArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Resource for enabling private DNS on an AWS VPC (Virtual Private Cloud) Endpoint.
+        Resource for enabling private DNS on an AWS VPC Endpoint.
 
         > When using this resource, the `private_dns_enabled` argument should be omitted on the parent `ec2.VpcEndpoint` resource.
         Setting the value both places can lead to unintended behavior and persistent differences.
@@ -196,11 +199,12 @@ class EndpointPrivateDns(pulumi.CustomResource):
 
         ## Import
 
-        Using `pulumi import`, import a VPC (Virtual Private Cloud) Endpoint Private DNS using the `vpc_endpoint_id`. For example:
+        Using `pulumi import`, import a VPC Endpoint Private DNS using the `vpc_endpoint_id`. For example:
 
         ```sh
         $ pulumi import aws:vpc/endpointPrivateDns:EndpointPrivateDns example vpce-abcd-1234
         ```
+
 
         :param str resource_name: The name of the resource.
         :param EndpointPrivateDnsArgs args: The arguments to use to populate this resource's properties.
@@ -217,9 +221,9 @@ class EndpointPrivateDns(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 private_dns_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 private_dns_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -246,9 +250,9 @@ class EndpointPrivateDns(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            private_dns_enabled: Optional[pulumi.Input[_builtins.bool]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            vpc_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None) -> 'EndpointPrivateDns':
+            private_dns_enabled: pulumi.Input[Optional[_builtins.bool]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            vpc_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None) -> 'EndpointPrivateDns':
         """
         Get an existing EndpointPrivateDns resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

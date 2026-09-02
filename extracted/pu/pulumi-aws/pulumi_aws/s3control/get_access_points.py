@@ -27,7 +27,7 @@ class GetAccessPointsResult:
     """
     A collection of values returned by getAccessPoints.
     """
-    def __init__(__self__, access_points=None, account_id=None, bucket=None, data_source_id=None, data_source_type=None, id=None, region=None):
+    def __init__(__self__, access_points=None, account_id=None, bucket=None, data_source_id=None, data_source_type=None, region=None):
         if access_points and not isinstance(access_points, list):
             raise TypeError("Expected argument 'access_points' to be a list")
         pulumi.set(__self__, "access_points", access_points)
@@ -43,9 +43,6 @@ class GetAccessPointsResult:
         if data_source_type and not isinstance(data_source_type, str):
             raise TypeError("Expected argument 'data_source_type' to be a str")
         pulumi.set(__self__, "data_source_type", data_source_type)
-        if id and not isinstance(id, str):
-            raise TypeError("Expected argument 'id' to be a str")
-        pulumi.set(__self__, "id", id)
         if region and not isinstance(region, str):
             raise TypeError("Expected argument 'region' to be a str")
         pulumi.set(__self__, "region", region)
@@ -54,7 +51,7 @@ class GetAccessPointsResult:
     @pulumi.getter(name="accessPoints")
     def access_points(self) -> Sequence['outputs.GetAccessPointsAccessPointResult']:
         """
-        A list of access points matching the search criteria. See `access_points` below.
+        List of access points matching the search criteria. See `access_points` below.
         """
         return pulumi.get(self, "access_points")
 
@@ -89,14 +86,6 @@ class GetAccessPointsResult:
 
     @_builtins.property
     @pulumi.getter
-    def id(self) -> _builtins.str:
-        """
-        The provider-assigned unique ID for this managed resource.
-        """
-        return pulumi.get(self, "id")
-
-    @_builtins.property
-    @pulumi.getter
     def region(self) -> _builtins.str:
         return pulumi.get(self, "region")
 
@@ -112,7 +101,6 @@ class AwaitableGetAccessPointsResult(GetAccessPointsResult):
             bucket=self.bucket,
             data_source_id=self.data_source_id,
             data_source_type=self.data_source_type,
-            id=self.id,
             region=self.region)
 
 
@@ -167,13 +155,12 @@ def get_access_points(account_id: Optional[_builtins.str] = None,
         bucket=pulumi.get(__ret__, 'bucket'),
         data_source_id=pulumi.get(__ret__, 'data_source_id'),
         data_source_type=pulumi.get(__ret__, 'data_source_type'),
-        id=pulumi.get(__ret__, 'id'),
         region=pulumi.get(__ret__, 'region'))
-def get_access_points_output(account_id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                             bucket: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                             data_source_id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                             data_source_type: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                             region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_access_points_output(account_id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                             bucket: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                             data_source_id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                             data_source_type: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                             region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                              opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetAccessPointsResult]:
     """
     Provides details about an AWS S3 Control Access Points.
@@ -219,5 +206,4 @@ def get_access_points_output(account_id: Optional[pulumi.Input[Optional[_builtin
         bucket=pulumi.get(__response__, 'bucket'),
         data_source_id=pulumi.get(__response__, 'data_source_id'),
         data_source_type=pulumi.get(__response__, 'data_source_type'),
-        id=pulumi.get(__response__, 'id'),
         region=pulumi.get(__response__, 'region')))

@@ -20,13 +20,16 @@ import numpy as np
 import cvxpy.interface as intf
 import cvxpy.settings as s
 from cvxpy.reductions.solution import Solution, failure_solution
+from cvxpy.reductions.solvers import utilities
 from cvxpy.reductions.solvers.qp_solvers.qp_solver import QpSolver
+from cvxpy.utilities.citations import CITATION_DICT
 
 
 class PIQP(QpSolver):
     """QP interface for the PIQP solver"""
 
     MIP_CAPABLE = False
+    BOUNDED_VARIABLES = True
 
     # Map of PIQP status to CVXPY status.
     STATUS_MAP = {"PIQP_SOLVED": s.OPTIMAL,
@@ -38,8 +41,7 @@ class PIQP(QpSolver):
         return s.PIQP
 
     def import_solver(self) -> None:
-        import piqp
-        piqp
+        import piqp  # noqa: F401
 
     def invert(self, solution, inverse_data):
         attr = {s.SOLVE_TIME: solution.info.run_time}
@@ -55,8 +57,20 @@ class PIQP(QpSolver):
                 intf.DEFAULT_INTF.const_to_matrix(np.array(solution.x))
             }
 
-            dual_vars = {PIQP.DUAL_VAR_ID: np.concatenate(
-                (solution.y, solution.z if hasattr(solution, 'z') else solution.z_u))}
+            # Build dual vars dict keyed by constraint IDs
+            # PIQP returns solution.y (eq_duals) and solution.z or solution.z_u (ineq_duals)
+            ineq_duals = solution.z if hasattr(solution, 'z') else solution.z_u
+            eq_dual = utilities.get_dual_values(
+                solution.y,
+                utilities.extract_dual_value,
+                inverse_data[self.EQ_CONSTR])
+            ineq_dual = utilities.get_dual_values(
+                ineq_duals,
+                utilities.extract_dual_value,
+                inverse_data[self.NEQ_CONSTR])
+            dual_vars = {}
+            dual_vars.update(eq_dual)
+            dual_vars.update(ineq_dual)
             attr[s.NUM_ITERS] = solution.info.iter
             sol = Solution(status, opt_val, primal_vars, dual_vars, attr)
         else:
@@ -117,6 +131,16 @@ class PIQP(QpSolver):
                     data[s.F].data != old_data[s.F].data):
                 new_args['G'] = data[s.F] if backend == 'sparse' else data[s.F].toarray()
 
+            if not old_interface:
+                x_lb = data.get(s.LOWER_BOUNDS)
+                x_ub = data.get(s.UPPER_BOUNDS)
+                old_x_lb = old_data.get(s.LOWER_BOUNDS)
+                old_x_ub = old_data.get(s.UPPER_BOUNDS)
+                if x_lb is not None and (old_x_lb is None or any(x_lb != old_x_lb)):
+                    new_args['x_l'] = x_lb
+                if x_ub is not None and (old_x_ub is None or any(x_ub != old_x_ub)):
+                    new_args['x_u'] = x_ub
+
             if backend == 'dense' and not isinstance(solver, piqp.DenseSolver):
                 structure_changed = True
             if backend == 'sparse' and not isinstance(solver, piqp.SparseSolver):
@@ -149,10 +173,17 @@ class PIQP(QpSolver):
             b = data[s.B]
             g = data[s.G]
 
+            x_lb = data.get(s.LOWER_BOUNDS)
+            x_ub = data.get(s.UPPER_BOUNDS)
             if old_interface:
                 solver.setup(P=P, c=q, A=A, b=b, G=F, h=g)
             else:
-                solver.setup(P=P, c=q, A=A, b=b, G=F, h_u=g)
+                setup_kwargs = dict(P=P, c=q, A=A, b=b, G=F, h_u=g)
+                if x_lb is not None:
+                    setup_kwargs['x_l'] = x_lb
+                if x_ub is not None:
+                    setup_kwargs['x_u'] = x_ub
+                solver.setup(**setup_kwargs)
 
         solver.solve()
 
@@ -162,3 +193,13 @@ class PIQP(QpSolver):
             solver_cache[self.name()] = (solver, data, result)
 
         return result
+
+    def cite(self, data):
+        """Returns bibtex citation for the solver.
+
+        Parameters
+        ----------
+        data : dict
+            Data generated via an apply call.
+        """
+        return CITATION_DICT["PIQP"]

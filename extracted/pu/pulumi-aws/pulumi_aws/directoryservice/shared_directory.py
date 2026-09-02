@@ -23,11 +23,12 @@ class SharedDirectoryArgs:
     def __init__(__self__, *,
                  directory_id: pulumi.Input[_builtins.str],
                  target: pulumi.Input['SharedDirectoryTargetArgs'],
-                 method: Optional[pulumi.Input[_builtins.str]] = None,
-                 notes: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 method: pulumi.Input[Optional[_builtins.str]] = None,
+                 notes: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a SharedDirectory resource.
+
         :param pulumi.Input[_builtins.str] directory_id: Identifier of the Managed Microsoft AD directory that you want to share with other accounts.
         :param pulumi.Input['SharedDirectoryTargetArgs'] target: Identifier for the directory consumer account with whom the directory is to be shared. See below.
                
@@ -73,52 +74,53 @@ class SharedDirectoryArgs:
 
     @_builtins.property
     @pulumi.getter
-    def method(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def method(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Method used when sharing a directory. Valid values are `ORGANIZATIONS` and `HANDSHAKE`. Default is `HANDSHAKE`.
         """
         return pulumi.get(self, "method")
 
     @method.setter
-    def method(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def method(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "method", value)
 
     @_builtins.property
     @pulumi.getter
-    def notes(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def notes(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Message sent by the directory owner to the directory consumer to help the directory consumer administrator determine whether to approve or reject the share invitation.
         """
         return pulumi.get(self, "notes")
 
     @notes.setter
-    def notes(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def notes(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "notes", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _SharedDirectoryState:
     def __init__(__self__, *,
-                 directory_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 method: Optional[pulumi.Input[_builtins.str]] = None,
-                 notes: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 shared_directory_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 target: Optional[pulumi.Input['SharedDirectoryTargetArgs']] = None):
+                 directory_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 method: pulumi.Input[Optional[_builtins.str]] = None,
+                 notes: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 shared_directory_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 target: pulumi.Input[Optional['SharedDirectoryTargetArgs']] = None):
         """
         Input properties used for looking up and filtering SharedDirectory resources.
+
         :param pulumi.Input[_builtins.str] directory_id: Identifier of the Managed Microsoft AD directory that you want to share with other accounts.
         :param pulumi.Input[_builtins.str] method: Method used when sharing a directory. Valid values are `ORGANIZATIONS` and `HANDSHAKE`. Default is `HANDSHAKE`.
         :param pulumi.Input[_builtins.str] notes: Message sent by the directory owner to the directory consumer to help the directory consumer administrator determine whether to approve or reject the share invitation.
@@ -143,67 +145,67 @@ class _SharedDirectoryState:
 
     @_builtins.property
     @pulumi.getter(name="directoryId")
-    def directory_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def directory_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Identifier of the Managed Microsoft AD directory that you want to share with other accounts.
         """
         return pulumi.get(self, "directory_id")
 
     @directory_id.setter
-    def directory_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def directory_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "directory_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def method(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def method(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Method used when sharing a directory. Valid values are `ORGANIZATIONS` and `HANDSHAKE`. Default is `HANDSHAKE`.
         """
         return pulumi.get(self, "method")
 
     @method.setter
-    def method(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def method(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "method", value)
 
     @_builtins.property
     @pulumi.getter
-    def notes(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def notes(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Message sent by the directory owner to the directory consumer to help the directory consumer administrator determine whether to approve or reject the share invitation.
         """
         return pulumi.get(self, "notes")
 
     @notes.setter
-    def notes(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def notes(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "notes", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="sharedDirectoryId")
-    def shared_directory_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def shared_directory_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Identifier of the directory that is stored in the directory consumer account that corresponds to the shared directory in the owner account.
         """
         return pulumi.get(self, "shared_directory_id")
 
     @shared_directory_id.setter
-    def shared_directory_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def shared_directory_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "shared_directory_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def target(self) -> Optional[pulumi.Input['SharedDirectoryTargetArgs']]:
+    def target(self) -> pulumi.Input[Optional['SharedDirectoryTargetArgs']]:
         """
         Identifier for the directory consumer account with whom the directory is to be shared. See below.
 
@@ -212,7 +214,7 @@ class _SharedDirectoryState:
         return pulumi.get(self, "target")
 
     @target.setter
-    def target(self, value: Optional[pulumi.Input['SharedDirectoryTargetArgs']]):
+    def target(self, value: pulumi.Input[Optional['SharedDirectoryTargetArgs']]):
         pulumi.set(self, "target", value)
 
 
@@ -222,11 +224,11 @@ class SharedDirectory(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 directory_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 method: Optional[pulumi.Input[_builtins.str]] = None,
-                 notes: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 target: Optional[pulumi.Input[Union['SharedDirectoryTargetArgs', 'SharedDirectoryTargetArgsDict']]] = None,
+                 directory_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 method: pulumi.Input[Optional[_builtins.str]] = None,
+                 notes: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 target: pulumi.Input[Optional[Union['SharedDirectoryTargetArgs', 'SharedDirectoryTargetArgsDict']]] = None,
                  __props__=None):
         """
         Manages a directory in your account (directory owner) shared with another account (directory consumer).
@@ -238,20 +240,20 @@ class SharedDirectory(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.directoryservice.Directory("example",
-            name="tf-example",
-            password="SuperSecretPassw0rd",
-            type="MicrosoftAD",
-            edition="Standard",
             vpc_settings={
                 "vpc_id": example_aws_vpc["id"],
                 "subnet_ids": [__item["id"] for __item in example_aws_subnet],
-            })
+            },
+            name="tf-example",
+            password="SuperSecretPassw0rd",
+            type="MicrosoftAD",
+            edition="Standard")
         example_shared_directory = aws.directoryservice.SharedDirectory("example",
-            directory_id=example.id,
-            notes="You wanna have a catch?",
             target={
                 "id": receiver["accountId"],
-            })
+            },
+            directory_id=example.id,
+            notes="You wanna have a catch?")
         ```
 
         ## Import
@@ -261,6 +263,7 @@ class SharedDirectory(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:directoryservice/sharedDirectory:SharedDirectory example d-1234567890/d-9267633ece
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -288,20 +291,20 @@ class SharedDirectory(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.directoryservice.Directory("example",
-            name="tf-example",
-            password="SuperSecretPassw0rd",
-            type="MicrosoftAD",
-            edition="Standard",
             vpc_settings={
                 "vpc_id": example_aws_vpc["id"],
                 "subnet_ids": [__item["id"] for __item in example_aws_subnet],
-            })
+            },
+            name="tf-example",
+            password="SuperSecretPassw0rd",
+            type="MicrosoftAD",
+            edition="Standard")
         example_shared_directory = aws.directoryservice.SharedDirectory("example",
-            directory_id=example.id,
-            notes="You wanna have a catch?",
             target={
                 "id": receiver["accountId"],
-            })
+            },
+            directory_id=example.id,
+            notes="You wanna have a catch?")
         ```
 
         ## Import
@@ -311,6 +314,7 @@ class SharedDirectory(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:directoryservice/sharedDirectory:SharedDirectory example d-1234567890/d-9267633ece
         ```
+
 
         :param str resource_name: The name of the resource.
         :param SharedDirectoryArgs args: The arguments to use to populate this resource's properties.
@@ -327,11 +331,11 @@ class SharedDirectory(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 directory_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 method: Optional[pulumi.Input[_builtins.str]] = None,
-                 notes: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 target: Optional[pulumi.Input[Union['SharedDirectoryTargetArgs', 'SharedDirectoryTargetArgsDict']]] = None,
+                 directory_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 method: pulumi.Input[Optional[_builtins.str]] = None,
+                 notes: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 target: pulumi.Input[Optional[Union['SharedDirectoryTargetArgs', 'SharedDirectoryTargetArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -363,12 +367,12 @@ class SharedDirectory(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            directory_id: Optional[pulumi.Input[_builtins.str]] = None,
-            method: Optional[pulumi.Input[_builtins.str]] = None,
-            notes: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            shared_directory_id: Optional[pulumi.Input[_builtins.str]] = None,
-            target: Optional[pulumi.Input[Union['SharedDirectoryTargetArgs', 'SharedDirectoryTargetArgsDict']]] = None) -> 'SharedDirectory':
+            directory_id: pulumi.Input[Optional[_builtins.str]] = None,
+            method: pulumi.Input[Optional[_builtins.str]] = None,
+            notes: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            shared_directory_id: pulumi.Input[Optional[_builtins.str]] = None,
+            target: pulumi.Input[Optional[Union['SharedDirectoryTargetArgs', 'SharedDirectoryTargetArgsDict']]] = None) -> 'SharedDirectory':
         """
         Get an existing SharedDirectory resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

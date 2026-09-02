@@ -20,16 +20,17 @@ __all__ = ['AuthorizerArgs', 'Authorizer']
 class AuthorizerArgs:
     def __init__(__self__, *,
                  authorizer_function_arn: pulumi.Input[_builtins.str],
-                 enable_caching_for_http: Optional[pulumi.Input[_builtins.bool]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 signing_disabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 token_key_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 token_signing_public_keys: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 enable_caching_for_http: pulumi.Input[Optional[_builtins.bool]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 signing_disabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 token_key_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 token_signing_public_keys: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a Authorizer resource.
+
         :param pulumi.Input[_builtins.str] authorizer_function_arn: The ARN of the authorizer's Lambda function.
         :param pulumi.Input[_builtins.bool] enable_caching_for_http: Specifies whether the HTTP caching is enabled or not. Default: `false`.
         :param pulumi.Input[_builtins.str] name: The name of the authorizer.
@@ -72,117 +73,118 @@ class AuthorizerArgs:
 
     @_builtins.property
     @pulumi.getter(name="enableCachingForHttp")
-    def enable_caching_for_http(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enable_caching_for_http(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Specifies whether the HTTP caching is enabled or not. Default: `false`.
         """
         return pulumi.get(self, "enable_caching_for_http")
 
     @enable_caching_for_http.setter
-    def enable_caching_for_http(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enable_caching_for_http(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enable_caching_for_http", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the authorizer.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="signingDisabled")
-    def signing_disabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def signing_disabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Specifies whether AWS IoT validates the token signature in an authorization request. Default: `false`.
         """
         return pulumi.get(self, "signing_disabled")
 
     @signing_disabled.setter
-    def signing_disabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def signing_disabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "signing_disabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The status of Authorizer request at creation. Valid values: `ACTIVE`, `INACTIVE`. Default: `ACTIVE`.
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags to assign to this resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tokenKeyName")
-    def token_key_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def token_key_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the token key used to extract the token from the HTTP headers. This value is required if signing is enabled in your authorizer.
         """
         return pulumi.get(self, "token_key_name")
 
     @token_key_name.setter
-    def token_key_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def token_key_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "token_key_name", value)
 
     @_builtins.property
     @pulumi.getter(name="tokenSigningPublicKeys")
-    def token_signing_public_keys(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def token_signing_public_keys(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         The public keys used to verify the digital signature returned by your custom authentication service. This value is required if signing is enabled in your authorizer.
         """
         return pulumi.get(self, "token_signing_public_keys")
 
     @token_signing_public_keys.setter
-    def token_signing_public_keys(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def token_signing_public_keys(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "token_signing_public_keys", value)
 
 
 @pulumi.input_type
 class _AuthorizerState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 authorizer_function_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 enable_caching_for_http: Optional[pulumi.Input[_builtins.bool]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 signing_disabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 token_key_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 token_signing_public_keys: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 authorizer_function_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 enable_caching_for_http: pulumi.Input[Optional[_builtins.bool]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 signing_disabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 token_key_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 token_signing_public_keys: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         Input properties used for looking up and filtering Authorizer resources.
+
         :param pulumi.Input[_builtins.str] arn: The ARN of the authorizer.
         :param pulumi.Input[_builtins.str] authorizer_function_arn: The ARN of the authorizer's Lambda function.
         :param pulumi.Input[_builtins.bool] enable_caching_for_http: Specifies whether the HTTP caching is enabled or not. Default: `false`.
@@ -220,134 +222,134 @@ class _AuthorizerState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of the authorizer.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter(name="authorizerFunctionArn")
-    def authorizer_function_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def authorizer_function_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of the authorizer's Lambda function.
         """
         return pulumi.get(self, "authorizer_function_arn")
 
     @authorizer_function_arn.setter
-    def authorizer_function_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def authorizer_function_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "authorizer_function_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="enableCachingForHttp")
-    def enable_caching_for_http(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def enable_caching_for_http(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Specifies whether the HTTP caching is enabled or not. Default: `false`.
         """
         return pulumi.get(self, "enable_caching_for_http")
 
     @enable_caching_for_http.setter
-    def enable_caching_for_http(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def enable_caching_for_http(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "enable_caching_for_http", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the authorizer.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="signingDisabled")
-    def signing_disabled(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def signing_disabled(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         Specifies whether AWS IoT validates the token signature in an authorization request. Default: `false`.
         """
         return pulumi.get(self, "signing_disabled")
 
     @signing_disabled.setter
-    def signing_disabled(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def signing_disabled(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "signing_disabled", value)
 
     @_builtins.property
     @pulumi.getter
-    def status(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def status(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The status of Authorizer request at creation. Valid values: `ACTIVE`, `INACTIVE`. Default: `ACTIVE`.
         """
         return pulumi.get(self, "status")
 
     @status.setter
-    def status(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def status(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "status", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Map of tags to assign to this resource. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter(name="tokenKeyName")
-    def token_key_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def token_key_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the token key used to extract the token from the HTTP headers. This value is required if signing is enabled in your authorizer.
         """
         return pulumi.get(self, "token_key_name")
 
     @token_key_name.setter
-    def token_key_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def token_key_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "token_key_name", value)
 
     @_builtins.property
     @pulumi.getter(name="tokenSigningPublicKeys")
-    def token_signing_public_keys(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def token_signing_public_keys(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         The public keys used to verify the digital signature returned by your custom authentication service. This value is required if signing is enabled in your authorizer.
         """
         return pulumi.get(self, "token_signing_public_keys")
 
     @token_signing_public_keys.setter
-    def token_signing_public_keys(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def token_signing_public_keys(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "token_signing_public_keys", value)
 
 
@@ -357,15 +359,15 @@ class Authorizer(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 authorizer_function_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 enable_caching_for_http: Optional[pulumi.Input[_builtins.bool]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 signing_disabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 token_key_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 token_signing_public_keys: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 authorizer_function_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 enable_caching_for_http: pulumi.Input[Optional[_builtins.bool]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 signing_disabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 token_key_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 token_signing_public_keys: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Creates and manages an AWS IoT Authorizer.
@@ -398,6 +400,7 @@ class Authorizer(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:iot/authorizer:Authorizer example example
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -449,6 +452,7 @@ class Authorizer(pulumi.CustomResource):
         $ pulumi import aws:iot/authorizer:Authorizer example example
         ```
 
+
         :param str resource_name: The name of the resource.
         :param AuthorizerArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -464,15 +468,15 @@ class Authorizer(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 authorizer_function_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 enable_caching_for_http: Optional[pulumi.Input[_builtins.bool]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 signing_disabled: Optional[pulumi.Input[_builtins.bool]] = None,
-                 status: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 token_key_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 token_signing_public_keys: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 authorizer_function_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 enable_caching_for_http: pulumi.Input[Optional[_builtins.bool]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 signing_disabled: pulumi.Input[Optional[_builtins.bool]] = None,
+                 status: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 token_key_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 token_signing_public_keys: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -507,17 +511,17 @@ class Authorizer(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            authorizer_function_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            enable_caching_for_http: Optional[pulumi.Input[_builtins.bool]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            signing_disabled: Optional[pulumi.Input[_builtins.bool]] = None,
-            status: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            token_key_name: Optional[pulumi.Input[_builtins.str]] = None,
-            token_signing_public_keys: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'Authorizer':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            authorizer_function_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            enable_caching_for_http: pulumi.Input[Optional[_builtins.bool]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            signing_disabled: pulumi.Input[Optional[_builtins.bool]] = None,
+            status: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            token_key_name: pulumi.Input[Optional[_builtins.str]] = None,
+            token_signing_public_keys: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'Authorizer':
         """
         Get an existing Authorizer resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

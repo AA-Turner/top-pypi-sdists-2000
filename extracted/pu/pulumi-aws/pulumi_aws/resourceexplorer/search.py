@@ -128,7 +128,7 @@ def search(query_string: Optional[_builtins.str] = None,
            
            The following arguments are optional:
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param _builtins.str view_arn: Specifies the Amazon resource name (ARN) of the view to use for the query. If you don't specify a value for this parameter, then the operation automatically uses the default view for the AWS Region in which you called this operation. If the Region either doesn't have a default view or if you don't have permission to use the default view, then the operation fails with a `401 Unauthorized` exception.
+    :param _builtins.str view_arn: ARN of the view to use for the query. If you don't specify a value for this parameter, then the operation automatically uses the default view for the AWS Region in which you called this operation. If the Region either doesn't have a default view or if you don't have permission to use the default view, then the operation fails with a `401 Unauthorized` exception.
     """
     __args__ = dict()
     __args__['queryString'] = query_string
@@ -144,9 +144,9 @@ def search(query_string: Optional[_builtins.str] = None,
         resource_counts=pulumi.get(__ret__, 'resource_counts'),
         resources=pulumi.get(__ret__, 'resources'),
         view_arn=pulumi.get(__ret__, 'view_arn'))
-def search_output(query_string: Optional[pulumi.Input[_builtins.str]] = None,
-                  region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                  view_arn: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def search_output(query_string: pulumi.Input[Optional[_builtins.str]] = None,
+                  region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                  view_arn: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                   opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[SearchResult]:
     """
     Data source for managing an AWS Resource Explorer Search.
@@ -168,7 +168,7 @@ def search_output(query_string: Optional[pulumi.Input[_builtins.str]] = None,
            
            The following arguments are optional:
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-    :param _builtins.str view_arn: Specifies the Amazon resource name (ARN) of the view to use for the query. If you don't specify a value for this parameter, then the operation automatically uses the default view for the AWS Region in which you called this operation. If the Region either doesn't have a default view or if you don't have permission to use the default view, then the operation fails with a `401 Unauthorized` exception.
+    :param _builtins.str view_arn: ARN of the view to use for the query. If you don't specify a value for this parameter, then the operation automatically uses the default view for the AWS Region in which you called this operation. If the Region either doesn't have a default view or if you don't have permission to use the default view, then the operation fails with a `401 Unauthorized` exception.
     """
     __args__ = dict()
     __args__['queryString'] = query_string

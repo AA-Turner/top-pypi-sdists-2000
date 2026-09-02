@@ -54,9 +54,10 @@ class GetRegionsResult:
 
     @_builtins.property
     @pulumi.getter
+    @_utilities.deprecated("""This attribute will be removed in a future version of the provider.""")
     def id(self) -> _builtins.str:
         """
-        Identifier of the current partition (e.g., `aws` in AWS Commercial, `aws-cn` in AWS China).
+        (**Deprecated**) Identifier of the current partition (e.g., `aws` in AWS Commercial, `aws-cn` in AWS China).
         """
         return pulumi.get(self, "id")
 
@@ -114,17 +115,17 @@ def get_regions(all_regions: Optional[_builtins.bool] = None,
     import pulumi
     import pulumi_aws as aws
 
-    current = aws.get_regions(all_regions=True,
-        filters=[{
+    current = aws.get_regions(filters=[{
             "name": "opt-in-status",
             "values": ["not-opted-in"],
-        }])
+        }],
+        all_regions=True)
     ```
 
 
     :param _builtins.bool all_regions: If true the source will query all regions regardless of availability.
     :param Sequence[Union['GetRegionsFilterArgs', 'GetRegionsFilterArgsDict']] filters: Configuration block(s) to use as filters. Detailed below.
-    :param _builtins.str id: Identifier of the current partition (e.g., `aws` in AWS Commercial, `aws-cn` in AWS China).
+    :param _builtins.str id: (**Deprecated**) Identifier of the current partition (e.g., `aws` in AWS Commercial, `aws-cn` in AWS China).
     """
     __args__ = dict()
     __args__['allRegions'] = all_regions
@@ -138,9 +139,9 @@ def get_regions(all_regions: Optional[_builtins.bool] = None,
         filters=pulumi.get(__ret__, 'filters'),
         id=pulumi.get(__ret__, 'id'),
         names=pulumi.get(__ret__, 'names'))
-def get_regions_output(all_regions: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                       filters: Optional[pulumi.Input[Optional[Sequence[Union['GetRegionsFilterArgs', 'GetRegionsFilterArgsDict']]]]] = None,
-                       id: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_regions_output(all_regions: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                       filters: pulumi.Input[Optional[Optional[Sequence[Union['GetRegionsFilterArgs', 'GetRegionsFilterArgsDict']]]]] = None,
+                       id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                        opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetRegionsResult]:
     """
     Provides information about AWS Regions. Can be used to filter regions i.e., by Opt-In status or only regions enabled for current account. To get details like endpoint and description of each region the data source can be combined with the `get_region` data source.
@@ -171,17 +172,17 @@ def get_regions_output(all_regions: Optional[pulumi.Input[Optional[_builtins.boo
     import pulumi
     import pulumi_aws as aws
 
-    current = aws.get_regions(all_regions=True,
-        filters=[{
+    current = aws.get_regions(filters=[{
             "name": "opt-in-status",
             "values": ["not-opted-in"],
-        }])
+        }],
+        all_regions=True)
     ```
 
 
     :param _builtins.bool all_regions: If true the source will query all regions regardless of availability.
     :param Sequence[Union['GetRegionsFilterArgs', 'GetRegionsFilterArgsDict']] filters: Configuration block(s) to use as filters. Detailed below.
-    :param _builtins.str id: Identifier of the current partition (e.g., `aws` in AWS Commercial, `aws-cn` in AWS China).
+    :param _builtins.str id: (**Deprecated**) Identifier of the current partition (e.g., `aws` in AWS Commercial, `aws-cn` in AWS China).
     """
     __args__ = dict()
     __args__['allRegions'] = all_regions

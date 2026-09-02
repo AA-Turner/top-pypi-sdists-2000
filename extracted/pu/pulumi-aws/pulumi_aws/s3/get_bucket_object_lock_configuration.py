@@ -27,16 +27,13 @@ class GetBucketObjectLockConfigurationResult:
     """
     A collection of values returned by getBucketObjectLockConfiguration.
     """
-    def __init__(__self__, bucket=None, expected_bucket_owner=None, id=None, object_lock_enabled=None, region=None, rules=None):
+    def __init__(__self__, bucket=None, expected_bucket_owner=None, object_lock_enabled=None, region=None, rules=None):
         if bucket and not isinstance(bucket, str):
             raise TypeError("Expected argument 'bucket' to be a str")
         pulumi.set(__self__, "bucket", bucket)
         if expected_bucket_owner and not isinstance(expected_bucket_owner, str):
             raise TypeError("Expected argument 'expected_bucket_owner' to be a str")
         pulumi.set(__self__, "expected_bucket_owner", expected_bucket_owner)
-        if id and not isinstance(id, str):
-            raise TypeError("Expected argument 'id' to be a str")
-        pulumi.set(__self__, "id", id)
         if object_lock_enabled and not isinstance(object_lock_enabled, str):
             raise TypeError("Expected argument 'object_lock_enabled' to be a str")
         pulumi.set(__self__, "object_lock_enabled", object_lock_enabled)
@@ -58,18 +55,10 @@ class GetBucketObjectLockConfigurationResult:
         return pulumi.get(self, "expected_bucket_owner")
 
     @_builtins.property
-    @pulumi.getter
-    def id(self) -> _builtins.str:
-        """
-        The provider-assigned unique ID for this managed resource.
-        """
-        return pulumi.get(self, "id")
-
-    @_builtins.property
     @pulumi.getter(name="objectLockEnabled")
     def object_lock_enabled(self) -> _builtins.str:
         """
-        Indicates whether this bucket has an Object Lock configuration enabled.
+        Whether this bucket has an Object Lock configuration enabled.
         """
         return pulumi.get(self, "object_lock_enabled")
 
@@ -95,7 +84,6 @@ class AwaitableGetBucketObjectLockConfigurationResult(GetBucketObjectLockConfigu
         return GetBucketObjectLockConfigurationResult(
             bucket=self.bucket,
             expected_bucket_owner=self.expected_bucket_owner,
-            id=self.id,
             object_lock_enabled=self.object_lock_enabled,
             region=self.region,
             rules=self.rules)
@@ -136,13 +124,12 @@ def get_bucket_object_lock_configuration(bucket: Optional[_builtins.str] = None,
     return AwaitableGetBucketObjectLockConfigurationResult(
         bucket=pulumi.get(__ret__, 'bucket'),
         expected_bucket_owner=pulumi.get(__ret__, 'expected_bucket_owner'),
-        id=pulumi.get(__ret__, 'id'),
         object_lock_enabled=pulumi.get(__ret__, 'object_lock_enabled'),
         region=pulumi.get(__ret__, 'region'),
         rules=pulumi.get(__ret__, 'rules'))
-def get_bucket_object_lock_configuration_output(bucket: Optional[pulumi.Input[_builtins.str]] = None,
-                                                expected_bucket_owner: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                                region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_bucket_object_lock_configuration_output(bucket: pulumi.Input[Optional[_builtins.str]] = None,
+                                                expected_bucket_owner: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                                region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                                 opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetBucketObjectLockConfigurationResult]:
     """
     Provides details about an AWS S3 (Simple Storage) Bucket Object Lock Configuration.
@@ -174,7 +161,6 @@ def get_bucket_object_lock_configuration_output(bucket: Optional[pulumi.Input[_b
     return __ret__.apply(lambda __response__: GetBucketObjectLockConfigurationResult(
         bucket=pulumi.get(__response__, 'bucket'),
         expected_bucket_owner=pulumi.get(__response__, 'expected_bucket_owner'),
-        id=pulumi.get(__response__, 'id'),
         object_lock_enabled=pulumi.get(__response__, 'object_lock_enabled'),
         region=pulumi.get(__response__, 'region'),
         rules=pulumi.get(__response__, 'rules')))

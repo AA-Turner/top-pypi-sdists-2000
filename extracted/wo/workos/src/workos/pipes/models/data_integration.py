@@ -39,15 +39,15 @@ class DataIntegration:
     scopes: list[str] | None
     """The OAuth scopes configured for the Data Integration. `null` when the provider's configured scopes are used."""
     redirect_uri: str
-    """The OAuth redirect URI to register with the provider when configuring the custom application."""
+    """The OAuth redirect URI to register with the provider when configuring the custom application. Empty for `api_key` and `client_credentials` integrations, which run no authorization redirect."""
     auth_methods: list[DataIntegrationAuthMethods]
     """How accounts authenticate with the provider for this Data Integration."""
-    credentials: DataIntegrationCredential
-    """The credentials configured for the Data Integration."""
+    credentials: DataIntegrationCredential | None
+    """The integration-level OAuth app credentials. `null` for `api_key` and `client_credentials` integrations, which hold no integration-level credentials (secrets are installed per-tenant)."""
     installation: DataIntegrationInstallation | None
     """The tenant installation created when an API key was supplied at creation time; `null` otherwise. Not populated on list/get responses."""
     config: dict[str, str]
-    """Provider-specific config values set on the Data Integration (e.g. a Snowflake `account_identifier`), keyed by config field. Only fields the provider declares are accepted."""
+    """Provider-specific config values set on the Data Integration (e.g. a Snowflake `account`), keyed by config field. Only fields the provider declares are accepted."""
     custom_provider: DataIntegrationCustomProvider | None
     """The OAuth definition when this is a custom provider; `null` for built-in providers."""
     created_at: datetime
@@ -74,8 +74,10 @@ class DataIntegration:
                     for item in cast(list[Any], data["auth_methods"])
                 ],
                 credentials=DataIntegrationCredential.from_dict(
-                    cast(dict[str, Any], data["credentials"])
-                ),
+                    cast(dict[str, Any], _v_credentials)
+                )
+                if (_v_credentials := data["credentials"]) is not None
+                else None,
                 installation=DataIntegrationInstallation.from_dict(
                     cast(dict[str, Any], _v_installation)
                 )
@@ -116,7 +118,10 @@ class DataIntegration:
         result["auth_methods"] = [
             item.value if isinstance(item, Enum) else item for item in self.auth_methods
         ]
-        result["credentials"] = self.credentials.to_dict()
+        if self.credentials is not None:
+            result["credentials"] = self.credentials.to_dict()
+        else:
+            result["credentials"] = None
         if self.installation is not None:
             result["installation"] = self.installation.to_dict()
         else:

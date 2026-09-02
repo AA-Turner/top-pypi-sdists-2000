@@ -18,8 +18,10 @@ import builtins
 import pickle
 import sys
 import warnings
+from contextlib import redirect_stdout
 from fractions import Fraction
 from io import StringIO
+from unittest.mock import DEFAULT, call, patch
 
 import numpy
 import numpy as np
@@ -37,14 +39,16 @@ from cvxpy.error import DCPError, ParameterError, SolverError
 from cvxpy.expressions.constants import Constant, Parameter
 from cvxpy.expressions.variable import Variable
 from cvxpy.problems.problem import Problem
+from cvxpy.reductions import Dcp2Cone
+from cvxpy.reductions.solution import Solution
 from cvxpy.reductions.solvers.conic_solvers import scs_conif
 from cvxpy.reductions.solvers.conic_solvers.conic_solver import ConicSolver
 from cvxpy.reductions.solvers.defines import (
     INSTALLED_SOLVERS,
     SOLVER_MAP_CONIC,
 )
-from cvxpy.reductions.solvers.solving_chain import ECOS_DEPRECATION_MSG
 from cvxpy.tests.base_test import BaseTest
+from cvxpy.utilities.citations import CITATION_DICT
 
 
 class TestProblem(BaseTest):
@@ -90,6 +94,13 @@ class TestProblem(BaseTest):
         vars_ = p.variables()
         ref = [self.a, self.x, self.b, self.A]
         self.assertCountEqual(vars_, ref)
+
+
+    def test_variables_with_value(self):
+        Variable(name="without_bounds", value=0.0)
+        Variable(name="with_none_bounds", value=0.0, bounds=None)
+        Variable(name="with_none_none_bounds", value=0.0, bounds=[None, None])
+
 
     def test_var_dict(self) -> None:
         p = Problem(cp.Minimize(self.a), [self.a <= self.x, self.b <= self.A + 2])
@@ -390,6 +401,43 @@ class TestProblem(BaseTest):
         result = p.solve(1, method="test", b=4)
         self.assertEqual(result, (1, 4))
 
+    def test_bibtex(self) -> None:
+        """Test bibtex citations.
+        """
+
+        # Solve Disciplined Convex Program
+        p = Problem(cp.Minimize(self.a + self.x[0]),
+                    [self.a >= 2, self.x >= 2])
+        with redirect_stdout(StringIO()) as f:
+            p.solve(verbose=True, bibtex=True)
+        out = f.getvalue()
+        assert CITATION_DICT["CVXPY"] in out
+        assert CITATION_DICT["DCP"] in out
+
+        # Solve Disciplined Geometric Program
+        x = cp.Variable(pos=True)
+        y = cp.Variable(pos=True)
+        z = cp.Variable(pos=True)
+        objective_fn = x * y * z
+        constraints = [
+        4 * x * y * z + 2 * x * z <= 10, x <= 2*y, y <= 2*x, z >= 1]
+        problem = cp.Problem(cp.Maximize(objective_fn), constraints)
+        with redirect_stdout(StringIO()) as f:
+            problem.solve(verbose=True, bibtex=True, gp=True)
+        out = f.getvalue()
+        assert CITATION_DICT["CVXPY"] in out
+        assert CITATION_DICT["DGP"] in out
+
+        # Solve Disciplined Quasiconvex Program
+        x = cp.Variable()
+        expr = cp.ceil(x)
+        problem = cp.Problem(cp.Maximize(expr), [x >= 12, x <= 17])
+        with redirect_stdout(StringIO()) as f:
+            problem.solve(verbose=True, bibtex=True, qcp=True)
+        out = f.getvalue()
+        assert CITATION_DICT["CVXPY"] in out
+        assert CITATION_DICT["DQCP"] in out
+
     # def test_consistency(self):
     #     """Test that variables and constraints keep a consistent order.
     #     """
@@ -519,6 +567,87 @@ class TestProblem(BaseTest):
         p = Problem(cp.Minimize(qpwa_obj), [cp.maximum(1, 3 * self.y ** 2) <= 200])
         self.assertEqual(p.is_qp(), False)
 
+        # Test that conic constraints are correctly rejected.
+        # These would have incorrectly returned True with the old buggy is_qp().
+        t = Variable()
+        p = Problem(cp.Minimize(obj), [cp.SOC(t, self.y)])
+        self.assertEqual(p.is_qp(), False)
+
+        p = Problem(cp.Minimize(obj), [cp.constraints.ExpCone(self.y[0], self.y[1], self.y[2])])
+        self.assertEqual(p.is_qp(), False)
+
+        X = Variable((2, 2), hermitian=True)
+        p = Problem(cp.Minimize(cp.trace(X)), [cp.real(X[0, 0]) >= 1])
+        self.assertEqual(p.is_qp(), False)
+
+    # Test the is_lp method.
+    def test_is_lp(self) -> None:
+        A = numpy.random.randn(4, 3)
+        b = numpy.random.randn(4)
+        c = numpy.random.randn(3)
+        Aeq = numpy.random.randn(2, 3)
+        beq = numpy.random.randn(2)
+
+        # Simple LP: linear objective, linear constraints
+        p = Problem(cp.Minimize(c @ self.y), [A @ self.y <= b])
+        self.assertEqual(p.is_lp(), True)
+
+        p = Problem(cp.Minimize(c @ self.y), [A @ self.y <= b, Aeq @ self.y == beq])
+        self.assertEqual(p.is_lp(), True)
+
+        # Maximization LP
+        p = Problem(cp.Maximize(c @ self.y), [A @ self.y <= b])
+        self.assertEqual(p.is_lp(), True)
+
+        # QP is not LP (quadratic objective)
+        p = Problem(cp.Minimize(cp.sum_squares(self.y)), [A @ self.y <= b])
+        self.assertEqual(p.is_lp(), False)
+
+        # SOCP is not LP (SOC constraint)
+        t = Variable()
+        p = Problem(cp.Minimize(c @ self.y), [cp.SOC(t, self.y)])
+        self.assertEqual(p.is_lp(), False)
+
+        # Non-affine constraint makes it not LP
+        p = Problem(cp.Minimize(c @ self.y), [cp.sum_squares(self.y) <= 1])
+        self.assertEqual(p.is_lp(), False)
+
+        # PSD variable makes it not LP
+        X = Variable((2, 2), PSD=True)
+        p = Problem(cp.Minimize(cp.trace(X)), [X[0, 0] >= 1])
+        self.assertEqual(p.is_lp(), False)
+
+        # NSD variable makes it not LP
+        X = Variable((2, 2), NSD=True)
+        p = Problem(cp.Minimize(-cp.trace(X)), [X[0, 0] <= -1])
+        self.assertEqual(p.is_lp(), False)
+
+        # Hermitian variable makes it not LP
+        X = Variable((2, 2), hermitian=True)
+        p = Problem(cp.Minimize(cp.real(cp.trace(X))), [cp.real(X[0, 0]) >= 1])
+        self.assertEqual(p.is_lp(), False)
+
+        # ExpCone constraint makes it not LP
+        p = Problem(cp.Minimize(c @ self.y),
+                    [cp.constraints.ExpCone(self.y[0], self.y[1], self.y[2])])
+        self.assertEqual(p.is_lp(), False)
+
+        # PWL objective (abs) is still LP (linearizes)
+        p = Problem(cp.Minimize(cp.sum(cp.abs(self.y))), [A @ self.y <= b])
+        self.assertEqual(p.is_lp(), True)
+
+        # PWL objective (max) is still LP (linearizes)
+        p = Problem(cp.Minimize(cp.max(self.y)), [A @ self.y <= b])
+        self.assertEqual(p.is_lp(), True)
+
+        # PWL constraint (abs) is still LP (linearizes)
+        p = Problem(cp.Minimize(c @ self.y), [cp.abs(self.y[0]) <= 1, self.y >= -1])
+        self.assertEqual(p.is_lp(), True)
+
+        # PWL constraint (max) is still LP (linearizes)
+        p = Problem(cp.Minimize(c @ self.y), [cp.max(self.y) <= 5, self.y >= 0])
+        self.assertEqual(p.is_lp(), True)
+
     # Test problems involving variables with the same name.
     def test_variable_name_conflict(self) -> None:
         var = Variable(name='a')
@@ -573,21 +702,21 @@ class TestProblem(BaseTest):
         combo1 = prob1 + 2 * prob2
         combo1_ref = Problem(cp.Minimize(self.a + 4 * self.b),
                              [self.a >= self.b, self.a >= 1, self.b >= 2])
-        self.assertAlmostEqual(combo1.solve(solver=cp.CLARABEL), 
+        self.assertAlmostEqual(combo1.solve(solver=cp.CLARABEL),
                                combo1_ref.solve(solver=cp.CLARABEL))
 
         # division and subtraction
         combo2 = prob1 - prob3/2
         combo2_ref = Problem(cp.Minimize(self.a + pow(self.b + self.a, 2)/2),
                              [self.b >= 3, self.a >= self.b])
-        self.assertAlmostEqual(combo2.solve(solver=cp.CLARABEL), 
+        self.assertAlmostEqual(combo2.solve(solver=cp.CLARABEL),
                                combo2_ref.solve(solver=cp.CLARABEL))
 
         # multiplication with 0 (prob2's constraints should still hold)
         combo3 = prob1 + 0 * prob2 - 3 * prob3
         combo3_ref = Problem(cp.Minimize(self.a + 3 * pow(self.b + self.a, 2)),
                              [self.a >= self.b, self.a >= 1, self.b >= 3])
-        self.assertAlmostEqual(combo3.solve(solver=cp.CLARABEL), 
+        self.assertAlmostEqual(combo3.solve(solver=cp.CLARABEL),
                                combo3_ref.solve(solver=cp.CLARABEL))
 
     # Test scalar LP problems.
@@ -631,7 +760,7 @@ class TestProblem(BaseTest):
         assert numpy.isinf(p.value)
         assert p.value > 0
         assert self.a.value is None
-        assert p.constraints[0].dual_value is None
+        assert p.constraints[0].dual_value is not None
 
         if s.CVXOPT in INSTALLED_SOLVERS:
             p = Problem(cp.Minimize(-self.a), [self.a >= 2])
@@ -652,7 +781,7 @@ class TestProblem(BaseTest):
         assert numpy.isinf(p.value)
         assert p.value < 0
         assert self.a.value is None
-        assert p.constraints[0].dual_value is None
+        assert p.constraints[0].dual_value is not None
 
         p = Problem(cp.Minimize(-self.a), [self.a >= 2, self.a <= 1])
         result = p.solve(solver=s.CLARABEL)
@@ -869,7 +998,7 @@ class TestProblem(BaseTest):
 
         with self.assertRaises(Exception) as cm:
             Problem(cp.Minimize(cp.quad_form(1, self.A))).solve(solver=cp.SCS, eps=1e-6)
-        self.assertEqual(str(cm.exception), "Invalid dimensions for arguments.")
+        self.assertEqual(str(cm.exception), "Invalid dimensions for arguments to quad_form.")
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
@@ -1083,7 +1212,7 @@ class TestProblem(BaseTest):
             problem.solve(solver=cp.SCS, eps=1e-5)
         self.assertTrue("Problem does not follow DCP rules."
                         in str(cm.exception))
-        
+
         # Test parametrized vstack
         p = Parameter((2, 1), value=np.array([[3], [3]]))
         q = Parameter((2, 1), value=np.array([[-8], [-8]]))
@@ -1321,7 +1450,7 @@ class TestProblem(BaseTest):
 
         # Test with a sparse matrix.
         import scipy.sparse as sp
-        interface = intf.get_matrix_interface(sp.csc_matrix)
+        interface = intf.get_matrix_interface(sp.csc_array)
         c = interface.const_to_matrix([1, 2])
         c = cp.Constant(c)
         expr = self.x[:, None]/(1/c)
@@ -1354,7 +1483,7 @@ class TestProblem(BaseTest):
 
         # Test with a sparse matrix.
         import scipy.sparse as sp
-        interface = intf.get_matrix_interface(sp.csc_matrix)
+        interface = intf.get_matrix_interface(sp.csc_array)
         c = interface.const_to_matrix([1, 2])
         expr = cp.multiply(c, self.x[:, None])
         obj = cp.Minimize(cp.norm_inf(expr))
@@ -1387,45 +1516,70 @@ class TestProblem(BaseTest):
     def test_solver_error_raised_on_failure(self) -> None:
         """Tests that a SolverError is raised when a solver fails.
         """
-        A = numpy.random.randn(40, 40)
-        b = cp.matmul(A, numpy.random.randn(40))
-
         with self.assertRaises(SolverError):
-            Problem(cp.Minimize(
-                cp.sum_squares(cp.matmul(A, cp.Variable(40)) - b))).solve(
-                solver=s.OSQP, max_iter=1)
+            Problem(cp.Minimize(cp.quad_form(cp.Variable(1) + 1, np.array([[-1]]), True))).solve(
+                solver=s.OSQP
+            )
 
     def test_solve_solver_path(self) -> None:
         """
         Tests the solve_solver_path method under various conditions:
-        
+
         1. Verifies that a SolverError is raised when all solvers fail.
         2. Validates that a solution is returned when any of the solvers succeeds.
         3. Ensures that a ValueError is raised when the inner inputs of the solvers are invalid.
-        
+
         """
 
         A = numpy.random.randn(40, 40)
         b = cp.matmul(A, numpy.random.randn(40))
-        
-        # valid input, return solution
+
+        # If the first solver yields a non-optimal status, we should fall back to the next solver.
         solvers_with_str=[(s.OSQP, {'max_iter':1}), s.CLARABEL]
         solvers_empty_dict=[(s.OSQP, {'max_iter':1}), (s.CLARABEL, {})]
         solvers_wrong_case=[("osqp", {'max_iter':1}), "Clarabel"]
 
         for solvers in [solvers_with_str, solvers_empty_dict, solvers_wrong_case]:
-            self.assertIsNotNone(Problem(cp.Minimize(
-                cp.sum_squares(cp.matmul(A, cp.Variable(40)) - b))).solve(
-                solver_path=solvers))
+            with patch.object(Problem, "_solve", wraps=Problem._solve) as mock_solve_func:
+                problem = Problem(cp.Minimize(cp.sum_squares(cp.matmul(A, cp.Variable(40)) - b)))
+                self.assertIsNotNone(problem.solve(solver_path=solvers))
+                self.assertEqual(problem.status, s.OPTIMAL)
+
+                expected_calls = []
+                for solver_spec in solvers:
+                    if isinstance(solver_spec, str):
+                        solver = solver_spec
+                        solver_kwargs = {}
+                    elif isinstance(solver_spec, tuple):
+                        solver, solver_kwargs = solver_spec
+                    else:
+                        msg = f"Unexpected solver specification {solver_spec}."
+                        raise ValueError(msg)
+
+                    expected_calls.append(call(problem, solver=solver, **solver_kwargs))
+
+                self.assertEqual(mock_solve_func.mock_calls, expected_calls)
+
+        # If the first solver results in a SolverError, we should fall back to the next solver.
+        with patch.object(
+                Problem,
+                "_solve",
+                wraps=Problem._solve,
+                side_effect=[SolverError("Mock solver error"), DEFAULT],
+        ) as mock_solve_func:
+            problem = Problem(cp.Minimize(0), [cp.Variable(1) == 1])
+            problem.solve(solver_path=[cp.OSQP, cp.CLARABEL])
+            expected_calls = [call(problem, solver=cp.OSQP), call(problem, solver=cp.CLARABEL)]
+            self.assertEqual(mock_solve_func.mock_calls, expected_calls)
+            self.assertEqual(problem.solver_stats.solver_name, s.CLARABEL)
+            self.assertEqual(problem.status, s.OPTIMAL)
 
         # valid input, raise SolverError
         solvers = [(s.OSQP, {'max_iter':1})]
-        
         with self.assertRaises(SolverError):
-            Problem(cp.Minimize(
-                cp.sum_squares(cp.matmul(A, cp.Variable(40)) - b))).solve(
-                solver_path=solvers)
-                
+            Problem(cp.Minimize(cp.quad_form(cp.Variable(1) + 1, np.array([[-1]]), True))).solve(
+                solver_path=solvers
+            )
         # invalid input, raise ValueError
         solvers_invalid_inner_input = [{'str':{}}, 'str', [], [1], [()], [(1)], [(1,{})],
                                         [(s.OSQP,[])], [(s.OSQP,)]]
@@ -2203,24 +2357,16 @@ class TestProblem(BaseTest):
             cp.Problem(cp.Maximize(0), [c >= 0])
             assert len(w) == 0
 
-    def test_ecos_warning(self) -> None:
-        """Test that a warning is raised when ECOS
-           is called by default.
-        """
-        # Setup a QCQP.
-        x = cp.Variable()
-        prob = cp.Problem(cp.Maximize(x), [x**2 <= 1])
+    def test_canonicalization_invert_none_duals(self) -> None:
+        """Canonicalization.invert should handle None dual_vars."""
+        x = cp.Variable(2)
+        prob = cp.Problem(cp.Minimize(cp.sum(x)), [x >= 1])
+        reduction = Dcp2Cone()
+        new_prob, inv_data = reduction.apply(prob)
 
-        # Check if ECOS is the top default solver.
-        candidate_solvers = prob._find_candidate_solvers(solver=None, gp=False)
-        prob._sort_candidate_solvers(candidate_solvers)
-        if candidate_solvers['conic_solvers'][0] == cp.ECOS:
-            with warnings.catch_warnings(record=True) as w:
-                prob.solve()
-                assert isinstance(w[0].message, FutureWarning)
-                assert str(w[0].message) == ECOS_DEPRECATION_MSG
-            
-            # No warning if CLARABEL solver specified.
-            with warnings.catch_warnings(record=True) as w:
-                prob.solve(solver=cp.CLARABEL)
-                assert len(w) == 0
+        # Simulate a solver returning None dual_vars (e.g., MIP solvers).
+        pv = {vid: np.ones(2) for vid in inv_data.id_map}
+        sol = Solution("optimal", 2.0, pv, None, {})
+        result = reduction.invert(sol, inv_data)
+        assert result.dual_vars is None
+

@@ -1,16 +1,14 @@
+import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
+from typing import Any, TypeVar, Union
+from uuid import UUID
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
+from dateutil.parser import isoparse
 
 from ..models.template_build_status import TemplateBuildStatus
 from ..types import UNSET, Unset
-
-if TYPE_CHECKING:
-    from ..models.build_log_entry import BuildLogEntry
-    from ..models.build_status_reason import BuildStatusReason
-
 
 T = TypeVar("T", bound="TemplateBuild")
 
@@ -19,91 +17,106 @@ T = TypeVar("T", bound="TemplateBuild")
 class TemplateBuild:
     """
     Attributes:
-        build_id (str): Identifier of the build
-        log_entries (list['BuildLogEntry']): Build logs structured
-        logs (list[str]): Build logs
-        status (TemplateBuildStatus): Status of the template
-        template_id (str): Identifier of the template
-        reason (Union[Unset, BuildStatusReason]):
+        build_id (UUID): Identifier of the build
+        status (TemplateBuildStatus): Status of the template build
+        created_at (datetime.datetime): Time when the build was created
+        updated_at (datetime.datetime): Time when the build was last updated
+        cpu_count (int): CPU cores for the sandbox
+        memory_mb (int): Memory for the sandbox in MiB
+        finished_at (Union[Unset, datetime.datetime]): Time when the build was finished
+        disk_size_mb (Union[Unset, int]): Disk size for the sandbox in MiB
+        envd_version (Union[Unset, str]): Version of the envd running in the sandbox
     """
 
-    build_id: str
-    log_entries: list["BuildLogEntry"]
-    logs: list[str]
+    build_id: UUID
     status: TemplateBuildStatus
-    template_id: str
-    reason: Union[Unset, "BuildStatusReason"] = UNSET
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+    cpu_count: int
+    memory_mb: int
+    finished_at: Union[Unset, datetime.datetime] = UNSET
+    disk_size_mb: Union[Unset, int] = UNSET
+    envd_version: Union[Unset, str] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        build_id = self.build_id
-
-        log_entries = []
-        for log_entries_item_data in self.log_entries:
-            log_entries_item = log_entries_item_data.to_dict()
-            log_entries.append(log_entries_item)
-
-        logs = self.logs
+        build_id = str(self.build_id)
 
         status = self.status.value
 
-        template_id = self.template_id
+        created_at = self.created_at.isoformat()
 
-        reason: Union[Unset, dict[str, Any]] = UNSET
-        if not isinstance(self.reason, Unset):
-            reason = self.reason.to_dict()
+        updated_at = self.updated_at.isoformat()
+
+        cpu_count = self.cpu_count
+
+        memory_mb = self.memory_mb
+
+        finished_at: Union[Unset, str] = UNSET
+        if not isinstance(self.finished_at, Unset):
+            finished_at = self.finished_at.isoformat()
+
+        disk_size_mb = self.disk_size_mb
+
+        envd_version = self.envd_version
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "buildID": build_id,
-                "logEntries": log_entries,
-                "logs": logs,
                 "status": status,
-                "templateID": template_id,
+                "createdAt": created_at,
+                "updatedAt": updated_at,
+                "cpuCount": cpu_count,
+                "memoryMB": memory_mb,
             }
         )
-        if reason is not UNSET:
-            field_dict["reason"] = reason
+        if finished_at is not UNSET:
+            field_dict["finishedAt"] = finished_at
+        if disk_size_mb is not UNSET:
+            field_dict["diskSizeMB"] = disk_size_mb
+        if envd_version is not UNSET:
+            field_dict["envdVersion"] = envd_version
 
         return field_dict
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.build_log_entry import BuildLogEntry
-        from ..models.build_status_reason import BuildStatusReason
-
         d = dict(src_dict)
-        build_id = d.pop("buildID")
-
-        log_entries = []
-        _log_entries = d.pop("logEntries")
-        for log_entries_item_data in _log_entries:
-            log_entries_item = BuildLogEntry.from_dict(log_entries_item_data)
-
-            log_entries.append(log_entries_item)
-
-        logs = cast(list[str], d.pop("logs"))
+        build_id = UUID(d.pop("buildID"))
 
         status = TemplateBuildStatus(d.pop("status"))
 
-        template_id = d.pop("templateID")
+        created_at = isoparse(d.pop("createdAt"))
 
-        _reason = d.pop("reason", UNSET)
-        reason: Union[Unset, BuildStatusReason]
-        if isinstance(_reason, Unset):
-            reason = UNSET
+        updated_at = isoparse(d.pop("updatedAt"))
+
+        cpu_count = d.pop("cpuCount")
+
+        memory_mb = d.pop("memoryMB")
+
+        _finished_at = d.pop("finishedAt", UNSET)
+        finished_at: Union[Unset, datetime.datetime]
+        if isinstance(_finished_at, Unset):
+            finished_at = UNSET
         else:
-            reason = BuildStatusReason.from_dict(_reason)
+            finished_at = isoparse(_finished_at)
+
+        disk_size_mb = d.pop("diskSizeMB", UNSET)
+
+        envd_version = d.pop("envdVersion", UNSET)
 
         template_build = cls(
             build_id=build_id,
-            log_entries=log_entries,
-            logs=logs,
             status=status,
-            template_id=template_id,
-            reason=reason,
+            created_at=created_at,
+            updated_at=updated_at,
+            cpu_count=cpu_count,
+            memory_mb=memory_mb,
+            finished_at=finished_at,
+            disk_size_mb=disk_size_mb,
+            envd_version=envd_version,
         )
 
         template_build.additional_properties = d

@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import warnings
-from typing import Tuple
 
 import numpy as np
 import scipy.sparse as sp
-from scipy import linalg as LA
 
 from cvxpy.atoms.affine.wraps import psd_wrap
 from cvxpy.atoms.atom import Atom
+from cvxpy.expressions.constants.parameter import is_param_affine, is_param_free
 from cvxpy.expressions.expression import Expression
 from cvxpy.interface.matrix_utilities import is_sparse
-from cvxpy.utilities.linalg import sparse_cholesky
+from cvxpy.utilities import scopes
+from cvxpy.utilities.linalg import dense_ldl_decomp, sparse_cholesky
+from cvxpy.utilities.warn import warn
 
 
 class CvxPyDomainError(Exception):
@@ -34,6 +34,7 @@ class CvxPyDomainError(Exception):
 
 class QuadForm(Atom):
     _allow_complex = True
+    block_indices = None  # For compatibility with SymbolicQuadForm
 
     def __init__(self, x, P) -> None:
         """Atom representing :math:`x^T P x`."""
@@ -51,26 +52,54 @@ class QuadForm(Atom):
         super(QuadForm, self).validate_arguments()
         n = self.args[1].shape[0]
         if self.args[1].shape[1] != n or self.args[0].shape not in [(n, 1), (n,)]:
-            raise ValueError("Invalid dimensions for arguments.")
+            raise ValueError("Invalid dimensions for arguments to quad_form.")
         if not self.args[1].is_hermitian():
             raise ValueError("Quadratic form matrices must be symmetric/Hermitian.")
 
-    def sign_from_args(self) -> Tuple[bool, bool]:
+    def sign_from_args(self) -> tuple[bool, bool]:
         """Returns sign (is positive, is negative) of the expression.
         """
         return (self.is_atom_convex(), self.is_atom_concave())
 
+    def _check_dpp_args(self) -> bool:
+        """Check if args satisfy DPP requirements for quad_form.
+
+        For DPP with parametric P (in quad_form_dpp_scope):
+        - x must be param-free (avoid quadratic-in-params)
+        - P must be param-affine (DPP requirement)
+        """
+        x, P = self.args[0], self.args[1]
+        return is_param_free(x) and is_param_affine(P)
+
     def is_atom_convex(self) -> bool:
         """Is the atom convex?
+
+        In quad_form_dpp_scope (QP solver path), allows parametric P:
+        - x must be param-free (avoid quadratic-in-params)
+        - P must be param-affine (DPP requirement)
+        - P must be PSD (for convexity)
         """
         P = self.args[1]
+        if scopes.quad_form_dpp_scope_active():
+            return self._check_dpp_args() and P.is_psd()
         return P.is_constant() and P.is_psd()
 
     def is_atom_concave(self) -> bool:
         """Is the atom concave?
+
+        In quad_form_dpp_scope (QP solver path), allows parametric P:
+        - x must be param-free (avoid quadratic-in-params)
+        - P must be param-affine (DPP requirement)
+        - P must be NSD (for concavity)
         """
         P = self.args[1]
+        if scopes.quad_form_dpp_scope_active():
+            return self._check_dpp_args() and P.is_nsd()
         return P.is_constant() and P.is_nsd()
+
+    def is_atom_smooth(self) -> bool:
+        """Is the atom smooth?"""
+        return True
 
     def is_atom_log_log_convex(self) -> bool:
         """Is the atom log-log convex?
@@ -85,14 +114,23 @@ class QuadForm(Atom):
     def is_incr(self, idx) -> bool:
         """Is the composition non-decreasing in argument idx?
         """
-        return (self.args[0].is_nonneg() and self.args[1].is_nonneg()) or \
-               (self.args[0].is_nonpos() and self.args[1].is_nonneg())
+        if idx == 0:
+            # ∇_x f = 2Px: nonneg when (x≥0, P≥0) or (x≤0, P≤0)
+            return (self.args[0].is_nonneg() and self.args[1].is_nonneg()) or \
+                   (self.args[0].is_nonpos() and self.args[1].is_nonpos())
+        elif idx == 1:
+            # ∂f/∂P_{ij} = x_i x_j: nonneg when x is all nonneg or all nonpos
+            return self.args[0].is_nonneg() or self.args[0].is_nonpos()
+        return False
 
     def is_decr(self, idx) -> bool:
         """Is the composition non-increasing in argument idx?
         """
-        return (self.args[0].is_nonneg() and self.args[1].is_nonpos()) or \
-               (self.args[0].is_nonpos() and self.args[1].is_nonpos())
+        if idx == 0:
+            # ∇_x f = 2Px: nonpos when (x≥0, P≤0) or (x≤0, P≥0)
+            return (self.args[0].is_nonneg() and self.args[1].is_nonpos()) or \
+                   (self.args[0].is_nonpos() and self.args[1].is_nonneg())
+        return False
 
     def is_quadratic(self) -> bool:
         """Is the atom quadratic?
@@ -110,31 +148,52 @@ class QuadForm(Atom):
         return False
 
     def name(self) -> str:
-        return "%s(%s, %s)" % (self.__class__.__name__,
-                               self.args[0],
-                               self.args[1])
+        return f"{type(self).__name__}({self.args[0]}, {self.args[1]})"
+
+    def format_labeled(self) -> str:
+        if self._label is not None:
+            return self._label
+        return (
+            f"{type(self).__name__}({self.args[0].format_labeled()}, "
+            f"{self.args[1].format_labeled()})"
+        )
 
     def _grad(self, values):
         x = np.array(values[0])
         P = np.array(values[1])
         D = (P + np.conj(P.T)) @ x
-        return [sp.csc_matrix(D.ravel(order="F")).T]
+        return [sp.csc_array([D.ravel(order="F")]).T]
 
-    def shape_from_args(self) -> Tuple[int, ...]:
+    def shape_from_args(self) -> tuple[int, ...]:
         return tuple()
 
 
 class SymbolicQuadForm(Atom):
     """
     Symbolic form of QuadForm when quadratic matrix is not known (yet).
+
+    Parameters
+    ----------
+    x : Variable or Expression
+        The input expression.
+    P : ndarray or sparse matrix
+        The quadratic matrix.
+    expr : Expression
+        The original expression that this represents.
+    block_indices : list of np.ndarray, optional
+        For non-scalar outputs, maps each output element j to input indices.
+        block_indices[j] is an array of indices that output[j] depends on.
+        Supports both contiguous and non-contiguous blocks.
+        If None, uses existing scalar/diagonal behavior.
     """
-    def __init__(self, x, P, expr) -> None:
+    def __init__(self, x, P, expr, block_indices=None) -> None:
         self.original_expression = expr
+        self.block_indices = block_indices
         super(SymbolicQuadForm, self).__init__(x, P)
         self.P = self.args[1]
 
     def get_data(self):
-        return [self.original_expression]
+        return [self.original_expression, self.block_indices]
 
     def _grad(self, values):
         raise NotImplementedError()
@@ -151,10 +210,10 @@ class SymbolicQuadForm(Atom):
     def is_incr(self, idx) -> bool:
         return self.original_expression.is_incr(idx)
 
-    def shape_from_args(self) -> Tuple[int, ...]:
+    def shape_from_args(self) -> tuple[int, ...]:
         return self.original_expression.shape_from_args()
 
-    def sign_from_args(self) -> Tuple[bool, bool]:
+    def sign_from_args(self) -> tuple[bool, bool]:
         return self.original_expression.sign_from_args()
 
     def is_quadratic(self) -> bool:
@@ -165,17 +224,17 @@ def decomp_quad(P, cond=None, rcond=None, lower=True, check_finite: bool = True)
     """
     Compute a matrix decomposition.
 
-    Compute sgn, scale, M such that P = sgn * scale * dot(M, M.T).
-    The strategy of determination of eigenvalue negligibility follows
-    the pinvh contributions from the scikit-learn project to scipy.
+    Compute scale, M1, M2 such that P = scale * (dot(M1, M1.T) - dot(M2, M2.T)).
+    Uses LDL decomposition for dense matrices, which is faster than
+    eigendecomposition while providing the same factorization structure.
 
     Parameters
     ----------
     P : matrix or ndarray
         A real symmetric positive or negative (semi)definite input matrix
     cond, rcond : float, optional
-        Cutoff for small eigenvalues.
-        Singular values smaller than rcond * largest_eigenvalue
+        Cutoff for small pivot values.
+        Pivot values smaller than rcond * largest_pivot
         are considered negligible.
         If None or -1, suitable machine precision is used (default).
     lower : bool, optional
@@ -190,60 +249,65 @@ def decomp_quad(P, cond=None, rcond=None, lower=True, check_finite: bool = True)
     Returns
     -------
     scale : float
-        induced matrix 2-norm of P
+        largest absolute pivot value from the LDL decomposition of P
     M1, M2 : 2d ndarray
         A rectangular ndarray such that P = scale * (dot(M1, M1.T) - dot(M2, M2.T))
 
     """
     if is_sparse(P):
-        # TODO: consider using QDLDL instead, if available.
         try:
             sign, L, p = sparse_cholesky(P)
             if sign > 0:
                 return 1.0, L[p, :], np.empty((0, 0))
             else:
-                return 1.0, np.empty((0, 0)), L[:, p]
-        except (ValueError, ModuleNotFoundError):
-            P = np.array(P.todense())  # make dense (needs to happen for eigh).
-    w, V = LA.eigh(P, lower=lower, check_finite=check_finite)
+                return 1.0, np.empty((0, 0)), L[p, :]
+        except ValueError:
+            P = P.toarray()  # make dense (needs to happen for ldl).
+    diag_vals, lu = dense_ldl_decomp(P, lower=lower, check_finite=check_finite)
 
     if rcond is not None:
         cond = rcond
     if cond in (None, -1):
-        t = V.dtype.char.lower()
+        t = lu.dtype.char.lower()
         factor = {'f': 1e3, 'd': 1e6}
         cond = factor[t] * np.finfo(t).eps
 
-    scale = max(np.absolute(w))
+    scale = max(np.absolute(diag_vals))
     if scale == 0:
-        w_scaled = w
+        d_scaled = diag_vals
     else:
-        w_scaled = w / scale
-    maskp = w_scaled > cond
-    maskn = w_scaled < -cond
+        d_scaled = diag_vals / scale
+    maskp = d_scaled > cond
+    maskn = d_scaled < -cond
     # TODO: allow indefinite quad_form
     if np.any(maskp) and np.any(maskn):
-        warnings.warn("Forming a nonconvex expression quad_form(x, indefinite).")
-    M1 = V[:, maskp] * np.sqrt(w_scaled[maskp])
-    M2 = V[:, maskn] * np.sqrt(-w_scaled[maskn])
+        warn("Forming a nonconvex expression quad_form(x, indefinite).")
+    M1 = lu[:, maskp] * np.sqrt(d_scaled[maskp])
+    M2 = lu[:, maskn] * np.sqrt(-d_scaled[maskn])
     return scale, M1, M2
 
 
 def quad_form(x, P, assume_PSD: bool = False):
-    """ Alias for :math:`x^T P x`.
+    """Alias for :math:`x^T P x`.
 
     Parameters
     ----------
     x : vector argument.
     P : matrix argument.
     assume_PSD : P is assumed to be PSD without checking.
+
+    Notes
+    -----
+    When ``P`` is a ``Parameter`` declared PSD or NSD and the solver supports
+    quadratic objectives, ``quad_form(x, P)`` can participate in a DPP solve,
+    so repeated solves can reuse cached compilation data.
     """
     x, P = map(Expression.cast_to_const, (x, P))
     # Check dimensions.
     if not P.ndim == 2 or P.shape[0] != P.shape[1] or max(x.shape, (1,))[0] != P.shape[0]:
-        raise Exception("Invalid dimensions for arguments.")
+        raise Exception("Invalid dimensions for arguments to quad_form.")
     if x.is_constant():
-        return x.H @ P @ x
+        return x.T.conjugate() @ P @ x
     elif P.is_constant():
         if assume_PSD:
             P = psd_wrap(P)

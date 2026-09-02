@@ -8,9 +8,12 @@ from cvxpy.tests.base_test import BaseTest
 
 warnings.filterwarnings("ignore")
 
-SOLVE_METHODS = [s.SCS, s.ECOS]
+SOLVE_METHODS = [s.CLARABEL, s.SCS, ]
 EPS_NAME = {s.SCS: "eps",
-            s.ECOS: "abstol"}
+            s.CLARABEL: "tol_gap_abs"}
+
+MAX_ITERS_NAME = {s.SCS: "max_iters",
+            s.CLARABEL: "max_iter"}
 
 
 def perturbcheck(problem, gp: bool = False, solve_methods: list = SOLVE_METHODS,
@@ -337,6 +340,205 @@ class TestBackward(BaseTest):
         self.assertIn(0.0, A.data)
 
 
+    def test_sparse_variable_derivative(self) -> None:
+        sparsity = [(0, 1), (1, 0)]
+        x = cp.Variable((2, 2), sparsity=sparsity)
+        b = cp.Parameter(2)
+        b.value = np.array([1.0, 2.0])
+        # Constrain only the nonzero entries (x[1,0] and x[0,1]) via
+        # column sums, which picks up one nonzero per column.
+        prob = cp.Problem(cp.Minimize(cp.sum(x)), [cp.sum(x, axis=0) >= b])
+        gradcheck(prob)
+        perturbcheck(prob)
+
+    def test_batched_symmetric_backward(self) -> None:
+        """backward() and derivative() must work with batched symmetric variables.
+
+        Regression test for a crash in split_adjoint where np.diag() and .T
+        do not generalize to 3-D arrays (batched symmetric/PSD variables).
+        """
+        X = cp.Variable((2, 2, 2), symmetric=True)
+        p = cp.Parameter(nonneg=True)
+        p.value = 1.0
+
+        prob = cp.Problem(cp.Minimize(p * cp.sum(X)), [X >> np.eye(2)])
+        prob.solve(solver=cp.SCS, requires_grad=True, eps=1e-9)
+        self.assertEqual(prob.status, cp.OPTIMAL)
+
+        # backward() must not crash
+        X.gradient = np.ones((2, 2, 2))
+        prob.backward()
+        self.assertTrue(np.isfinite(p.gradient))
+
+        # derivative() must produce symmetric deltas
+        p.delta = 1e-4
+        prob.derivative()
+        self.assertEqual(X.delta.shape, (2, 2, 2))
+        np.testing.assert_allclose(
+            X.delta, np.swapaxes(X.delta, -2, -1), atol=1e-6)
+
+
+class TestBackwardComplex(BaseTest):
+    """Test backward/forward differentiation with complex parameters."""
+    def setUp(self) -> None:
+        try:
+            import diffcp
+            diffcp  # for flake8
+        except ModuleNotFoundError:
+            self.skipTest("diffcp not installed.")
+
+    def test_backward_real_and_imag(self) -> None:
+        """Backward differentiation through real and imag parts of complex parameter."""
+        p = cp.Parameter(complex=True)
+        x = cp.Variable()
+        y = cp.Variable()
+        # minimize (x - real(p))^2 + (y - imag(p))^2
+        prob = cp.Problem(
+            cp.Minimize(cp.square(x - cp.real(p)) + cp.square(y - cp.imag(p)))
+        )
+
+        p.value = np.array(3.0 + 4.0j)
+        prob.solve(requires_grad=True)
+        self.assertAlmostEqual(x.value, 3.0, places=3)
+        self.assertAlmostEqual(y.value, 4.0, places=3)
+
+        x.gradient = 1.0
+        y.gradient = 1.0
+        prob.backward()
+
+        # Gradient follows PyTorch convention: grad = d/d(real) + j*d/d(imag)
+        # dx*/d(real(p)) = 1, dy*/d(imag(p)) = 1 => p.gradient = 1 + 1j
+        self.assertAlmostEqual(np.real(p.gradient), 1.0, places=3)
+        self.assertAlmostEqual(np.imag(p.gradient), 1.0, places=3)
+
+    def test_forward_complex_delta(self) -> None:
+        """Forward differentiation with complex delta."""
+        p = cp.Parameter(complex=True)
+        x = cp.Variable()
+        y = cp.Variable()
+        prob = cp.Problem(cp.Minimize(x + y), [x >= cp.real(p), y >= cp.imag(p)])
+
+        p.value = np.array(3.0 + 4.0j)
+        prob.solve(requires_grad=True)
+        self.assertAlmostEqual(x.value, 3.0, places=3)
+        self.assertAlmostEqual(y.value, 4.0, places=3)
+
+        # Perturb both parts
+        p.delta = 2.0 + 3.0j
+        prob.derivative()
+
+        # x* = real(p), y* = imag(p)
+        self.assertAlmostEqual(x.delta, 2.0, places=3)
+        self.assertAlmostEqual(y.delta, 3.0, places=3)
+
+    def test_backward_hermitian_param(self) -> None:
+        """Backward differentiation with Hermitian parameter."""
+        n = 2
+        P = cp.Parameter((n, n), hermitian=True)
+        x = cp.Variable()
+        # Minimize x such that x*I >= P
+        prob = cp.Problem(cp.Minimize(x), [x * np.eye(n) >> P])
+
+        P_val = np.array([[1.0, 0.5j], [-0.5j, 2.0]])
+        P.value = P_val
+        prob.solve(requires_grad=True)
+        max_eig = np.max(np.linalg.eigvalsh(P_val))
+        self.assertAlmostEqual(x.value, max_eig, places=3)
+
+        x.gradient = 1.0
+        prob.backward()
+
+        # Gradient should be Hermitian
+        self.assertTrue(np.allclose(P.gradient, P.gradient.conj().T))
+
+    def test_forward_hermitian_delta(self) -> None:
+        """Forward differentiation with Hermitian parameter delta."""
+        n = 2
+        P = cp.Parameter((n, n), hermitian=True)
+        x = cp.Variable()
+        prob = cp.Problem(cp.Minimize(x), [x * np.eye(n) >> P])
+
+        P_val = np.array([[1.0, 0.5j], [-0.5j, 2.0]])
+        P.value = P_val
+        prob.solve(requires_grad=True)
+
+        # Perturb with Hermitian delta
+        P.delta = np.array([[0.1, 0.05j], [-0.05j, 0.2]])
+        prob.derivative()
+
+        # x.delta should be scalar (perturbation of max eigenvalue)
+        self.assertTrue(np.isscalar(x.delta) or x.delta.size == 1)
+
+    def test_derivative_complex_variable_imag_param(self) -> None:
+        """Forward diff: perturbing param that affects imaginary part of complex variable.
+
+        On CVXPY 1.8.1, the imaginary variable's delta was lost in
+        split_solution because only outer variable IDs were passed as active_vars.
+        """
+        a = cp.Parameter()
+        b = cp.Parameter()
+        z = cp.Variable(complex=True)
+        # z* = a + bj at optimum
+        prob = cp.Problem(
+            cp.Minimize(
+                cp.sum_squares(cp.real(z) - a) + cp.sum_squares(cp.imag(z) - b)
+            )
+        )
+        a.value = 3.0
+        b.value = 4.0
+        prob.solve(requires_grad=True, solver=cp.SCS)
+        self.assertAlmostEqual(np.real(z.value), 3.0, places=2)
+        self.assertAlmostEqual(np.imag(z.value), 4.0, places=2)
+
+        # Perturb b only: dz*/db = j, so z.delta should be 1j
+        a.delta = 0.0
+        b.delta = 1.0
+        prob.derivative()
+        self.assertAlmostEqual(np.imag(z.delta), 1.0, places=2)
+        self.assertAlmostEqual(np.real(z.delta), 0.0, places=2)
+
+    def test_derivative_complex_variable_purely_imaginary(self) -> None:
+        """Forward diff: complex variable whose solution is purely imaginary."""
+        p = cp.Parameter()
+        w = cp.Variable(complex=True)
+        # w* = pj at optimum
+        prob = cp.Problem(
+            cp.Minimize(
+                cp.sum_squares(cp.real(w)) + cp.sum_squares(cp.imag(w) - p)
+            )
+        )
+        p.value = 5.0
+        prob.solve(requires_grad=True, solver=cp.SCS)
+        self.assertAlmostEqual(np.imag(w.value), 5.0, places=2)
+
+        # dw*/dp = j, so w.delta should be 1j
+        p.delta = 1.0
+        prob.derivative()
+        self.assertAlmostEqual(np.imag(w.delta), 1.0, places=2)
+
+    def test_derivative_complex_param_complex_variable(self) -> None:
+        """Forward diff: complex param and complex variable."""
+        q = cp.Parameter(complex=True)
+        v = cp.Variable(complex=True)
+        # v* = q at optimum
+        prob = cp.Problem(
+            cp.Minimize(
+                cp.sum_squares(cp.real(v) - cp.real(q))
+                + cp.sum_squares(cp.imag(v) - cp.imag(q))
+            )
+        )
+        q.value = np.array(2.0 + 3.0j)
+        prob.solve(requires_grad=True, solver=cp.SCS)
+        self.assertAlmostEqual(np.real(v.value), 2.0, places=2)
+        self.assertAlmostEqual(np.imag(v.value), 3.0, places=2)
+
+        # v* = q, dv*/dq = 1, so v.delta = q.delta
+        q.delta = 1.0 + 0.5j
+        prob.derivative()
+        self.assertAlmostEqual(np.real(v.delta), 1.0, places=2)
+        self.assertAlmostEqual(np.imag(v.delta), 0.5, places=2)
+
+
 class TestBackwardDgp(BaseTest):
     """Test problem.backward() and problem.derivative()."""
     def setUp(self) -> None:
@@ -440,7 +642,12 @@ class TestBackwardDgp(BaseTest):
     def test_param_used_in_exponent_and_elsewhere(self) -> None:
         # construct a problem with solution
         # x^\star(\alpha) = 1 - 0.3^alpha - alpha^2, and derivative
-        # x^\star'(\alpha) = -log(0.3) * 0.2^\alpha - 2*alpha
+        # x^\star'(\alpha) = -log(0.3) * 0.3^\alpha - 2*alpha
+        #
+        # alpha appears both as a base (alpha^2 → log-transformed) and as an
+        # exponent (0.3^alpha → used directly).  On CVXPY 1.8.1, backward()
+        # returned the wrong gradient because the direct contribution was lost,
+        # and derivative() crashed with KeyError for the same reason.
         base = 0.3
         alpha = cp.Parameter(pos=True, value=0.5)
         x = cp.Variable(pos=True)
@@ -451,9 +658,11 @@ class TestBackwardDgp(BaseTest):
         alpha.delta = 1e-5
         problem.solve(solver=cp.DIFFCP, gp=True, requires_grad=True, eps=1e-5)
         self.assertAlmostEqual(x.value, 1 - base**(0.5) - 0.5**2)
+        # Check backward first — on CVXPY 1.8.1 this gave wrong gradient
         problem.backward()
-        problem.derivative()
         self.assertAlmostEqual(alpha.gradient, -np.log(base)*base**(0.5) - 2*0.5)
+        # Check derivative — on CVXPY 1.8.1 this raised KeyError
+        problem.derivative()
         self.assertAlmostEqual(x.delta, alpha.gradient*1e-5, places=3)
 
     def test_basic_gp(self) -> None:
@@ -640,3 +849,25 @@ class TestBackwardDgp(BaseTest):
                               cp.sum(w) <= kappa])
         gradcheck(problem, gp=True, solve_methods=[s.SCS], atol=1e-1)
         perturbcheck(problem, gp=True, solve_methods=[s.SCS], atol=1e-1)
+
+
+class TestDgp2DcpReduction(BaseTest):
+    """Tests for Dgp2Dcp reduction internals (no diffcp required)."""
+
+    def test_param_backward_absent_log_param(self) -> None:
+        """param_backward must pass through when log-param id is absent from dparams.
+
+        Before the fix, Dgp2Dcp.param_backward accessed dparams[new_param.id]
+        without checking for the key, raising KeyError when the log-parameter
+        was not present in dparams (e.g. during partial backward passes).
+        """
+        from cvxpy.reductions.dgp2dcp.dgp2dcp import Dgp2Dcp
+        p = cp.Parameter(pos=True, value=2.0)
+        x = cp.Variable(pos=True)
+        prob = cp.Problem(cp.Minimize(p * x), [x >= 1])
+        dgp = Dgp2Dcp()
+        dgp.apply(prob)
+        # Pass an empty dparams dict: the log-param id is absent.
+        # With the guard this returns an empty dict; without it raises KeyError.
+        result = dgp.param_backward({})
+        self.assertEqual(result, {})

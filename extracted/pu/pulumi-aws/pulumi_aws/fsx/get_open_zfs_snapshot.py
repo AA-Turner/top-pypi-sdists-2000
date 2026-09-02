@@ -67,7 +67,7 @@ class GetOpenZfsSnapshotResult:
     @pulumi.getter
     def arn(self) -> _builtins.str:
         """
-        Amazon Resource Name of the snapshot.
+        ARN of the snapshot.
         """
         return pulumi.get(self, "arn")
 
@@ -177,16 +177,15 @@ def get_open_zfs_snapshot(filters: Optional[Sequence[Union['GetOpenZfsSnapshotFi
     import pulumi
     import pulumi_aws as aws
 
-    example = aws.fsx.get_open_zfs_snapshot(most_recent=True,
-        filters=[{
+    example = aws.fsx.get_open_zfs_snapshot(filters=[{
             "name": "volume-id",
             "values": ["fsvol-073a32b6098a73feb"],
-        }])
+        }],
+        most_recent=True)
     ```
 
 
-    :param Sequence[Union['GetOpenZfsSnapshotFilterArgs', 'GetOpenZfsSnapshotFilterArgsDict']] filters: One or more name/value pairs to filter off of. The
-           supported names are file-system-id or volume-id.
+    :param Sequence[Union['GetOpenZfsSnapshotFilterArgs', 'GetOpenZfsSnapshotFilterArgsDict']] filters: Configuration block. Detailed below.
     :param _builtins.bool most_recent: If more than one result is returned, use the most recent snapshot.
     :param _builtins.str name: Name of the snapshot.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -215,12 +214,12 @@ def get_open_zfs_snapshot(filters: Optional[Sequence[Union['GetOpenZfsSnapshotFi
         snapshot_ids=pulumi.get(__ret__, 'snapshot_ids'),
         tags=pulumi.get(__ret__, 'tags'),
         volume_id=pulumi.get(__ret__, 'volume_id'))
-def get_open_zfs_snapshot_output(filters: Optional[pulumi.Input[Optional[Sequence[Union['GetOpenZfsSnapshotFilterArgs', 'GetOpenZfsSnapshotFilterArgsDict']]]]] = None,
-                                 most_recent: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                                 name: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                 region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                 snapshot_ids: Optional[pulumi.Input[Optional[Sequence[_builtins.str]]]] = None,
-                                 tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_open_zfs_snapshot_output(filters: pulumi.Input[Optional[Optional[Sequence[Union['GetOpenZfsSnapshotFilterArgs', 'GetOpenZfsSnapshotFilterArgsDict']]]]] = None,
+                                 most_recent: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                                 name: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                 region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                 snapshot_ids: pulumi.Input[Optional[Optional[Sequence[_builtins.str]]]] = None,
+                                 tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                                  opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetOpenZfsSnapshotResult]:
     """
     Use this data source to get information about an Amazon FSx for OpenZFS Snapshot for use when provisioning new Volumes.
@@ -233,16 +232,15 @@ def get_open_zfs_snapshot_output(filters: Optional[pulumi.Input[Optional[Sequenc
     import pulumi
     import pulumi_aws as aws
 
-    example = aws.fsx.get_open_zfs_snapshot(most_recent=True,
-        filters=[{
+    example = aws.fsx.get_open_zfs_snapshot(filters=[{
             "name": "volume-id",
             "values": ["fsvol-073a32b6098a73feb"],
-        }])
+        }],
+        most_recent=True)
     ```
 
 
-    :param Sequence[Union['GetOpenZfsSnapshotFilterArgs', 'GetOpenZfsSnapshotFilterArgsDict']] filters: One or more name/value pairs to filter off of. The
-           supported names are file-system-id or volume-id.
+    :param Sequence[Union['GetOpenZfsSnapshotFilterArgs', 'GetOpenZfsSnapshotFilterArgsDict']] filters: Configuration block. Detailed below.
     :param _builtins.bool most_recent: If more than one result is returned, use the most recent snapshot.
     :param _builtins.str name: Name of the snapshot.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.

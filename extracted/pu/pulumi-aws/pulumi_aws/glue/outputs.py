@@ -16,13 +16,30 @@ from .. import _utilities
 from . import outputs
 
 __all__ = [
+    'CatalogCatalogProperties',
+    'CatalogCatalogPropertiesDataLakeAccessProperties',
+    'CatalogCatalogPropertiesIcebergOptimizationProperties',
+    'CatalogCreateDatabaseDefaultPermission',
+    'CatalogCreateDatabaseDefaultPermissionPrincipal',
+    'CatalogCreateTableDefaultPermission',
+    'CatalogCreateTableDefaultPermissionPrincipal',
     'CatalogDatabaseCreateTableDefaultPermission',
     'CatalogDatabaseCreateTableDefaultPermissionPrincipal',
     'CatalogDatabaseFederatedDatabase',
     'CatalogDatabaseTargetDatabase',
+    'CatalogFederatedCatalog',
     'CatalogTableOpenTableFormatInput',
     'CatalogTableOpenTableFormatInputIcebergInput',
+    'CatalogTableOpenTableFormatInputIcebergInputIcebergTableInput',
+    'CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputPartitionSpec',
+    'CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputPartitionSpecField',
+    'CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSchema',
+    'CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSchemaField',
+    'CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSortOrder',
+    'CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSortOrderField',
     'CatalogTableOptimizerConfiguration',
+    'CatalogTableOptimizerConfigurationCompactionConfiguration',
+    'CatalogTableOptimizerConfigurationCompactionConfigurationIcebergConfiguration',
     'CatalogTableOptimizerConfigurationOrphanFileDeletionConfiguration',
     'CatalogTableOptimizerConfigurationOrphanFileDeletionConfigurationIcebergConfiguration',
     'CatalogTableOptimizerConfigurationRetentionConfiguration',
@@ -37,10 +54,20 @@ __all__ = [
     'CatalogTableStorageDescriptorSkewedInfo',
     'CatalogTableStorageDescriptorSortColumn',
     'CatalogTableTargetTable',
+    'CatalogTableViewDefinition',
+    'CatalogTableViewDefinitionRepresentation',
+    'CatalogTargetRedshiftCatalog',
+    'CatalogTimeouts',
     'ClassifierCsvClassifier',
     'ClassifierGrokClassifier',
     'ClassifierJsonClassifier',
     'ClassifierXmlClassifier',
+    'ConnectionAuthenticationConfiguration',
+    'ConnectionAuthenticationConfigurationBasicAuthenticationCredentials',
+    'ConnectionAuthenticationConfigurationOauth2Properties',
+    'ConnectionAuthenticationConfigurationOauth2PropertiesAuthorizationCodeProperties',
+    'ConnectionAuthenticationConfigurationOauth2PropertiesOauth2ClientApplication',
+    'ConnectionAuthenticationConfigurationOauth2PropertiesOauth2Credentials',
     'ConnectionPhysicalConnectionRequirements',
     'CrawlerCatalogTarget',
     'CrawlerDeltaTarget',
@@ -82,6 +109,14 @@ __all__ = [
     'TriggerPredicate',
     'TriggerPredicateCondition',
     'UserDefinedFunctionResourceUri',
+    'GetCatalogCatalogPropertyResult',
+    'GetCatalogCatalogPropertyDataLakeAccessPropertyResult',
+    'GetCatalogCatalogPropertyIcebergOptimizationPropertyResult',
+    'GetCatalogCreateDatabaseDefaultPermissionResult',
+    'GetCatalogCreateDatabaseDefaultPermissionPrincipalResult',
+    'GetCatalogCreateTableDefaultPermissionResult',
+    'GetCatalogCreateTableDefaultPermissionPrincipalResult',
+    'GetCatalogFederatedCatalogResult',
     'GetCatalogTablePartitionIndexResult',
     'GetCatalogTablePartitionKeyResult',
     'GetCatalogTableStorageDescriptorResult',
@@ -92,6 +127,13 @@ __all__ = [
     'GetCatalogTableStorageDescriptorSkewedInfoResult',
     'GetCatalogTableStorageDescriptorSortColumnResult',
     'GetCatalogTableTargetTableResult',
+    'GetCatalogTargetRedshiftCatalogResult',
+    'GetConnectionAuthenticationConfigurationResult',
+    'GetConnectionAuthenticationConfigurationBasicAuthenticationCredentialResult',
+    'GetConnectionAuthenticationConfigurationOauth2PropertyResult',
+    'GetConnectionAuthenticationConfigurationOauth2PropertyAuthorizationCodePropertyResult',
+    'GetConnectionAuthenticationConfigurationOauth2PropertyOauth2ClientApplicationResult',
+    'GetConnectionAuthenticationConfigurationOauth2PropertyOauth2CredentialResult',
     'GetConnectionPhysicalConnectionRequirementResult',
     'GetDataCatalogEncryptionSettingsDataCatalogEncryptionSettingResult',
     'GetDataCatalogEncryptionSettingsDataCatalogEncryptionSettingConnectionPasswordEncryptionResult',
@@ -100,6 +142,412 @@ __all__ = [
     'GetScriptDagNodeResult',
     'GetScriptDagNodeArgResult',
 ]
+
+@pulumi.output_type
+class CatalogCatalogProperties(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "customProperties":
+            suggest = "custom_properties"
+        elif key == "dataLakeAccessProperties":
+            suggest = "data_lake_access_properties"
+        elif key == "icebergOptimizationProperties":
+            suggest = "iceberg_optimization_properties"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogCatalogProperties. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogCatalogProperties.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogCatalogProperties.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 custom_properties: Optional[Mapping[str, _builtins.str]] = None,
+                 data_lake_access_properties: Optional['outputs.CatalogCatalogPropertiesDataLakeAccessProperties'] = None,
+                 iceberg_optimization_properties: Optional['outputs.CatalogCatalogPropertiesIcebergOptimizationProperties'] = None):
+        """
+        :param Mapping[str, _builtins.str] custom_properties: Map of custom key-value pairs for the catalog properties.
+        :param 'CatalogCatalogPropertiesDataLakeAccessPropertiesArgs' data_lake_access_properties: Configuration block for data lake access properties. See `data_lake_access_properties` below.
+        :param 'CatalogCatalogPropertiesIcebergOptimizationPropertiesArgs' iceberg_optimization_properties: Configuration block for Iceberg optimization properties. See `iceberg_optimization_properties` below.
+        """
+        if custom_properties is not None:
+            pulumi.set(__self__, "custom_properties", custom_properties)
+        if data_lake_access_properties is not None:
+            pulumi.set(__self__, "data_lake_access_properties", data_lake_access_properties)
+        if iceberg_optimization_properties is not None:
+            pulumi.set(__self__, "iceberg_optimization_properties", iceberg_optimization_properties)
+
+    @_builtins.property
+    @pulumi.getter(name="customProperties")
+    def custom_properties(self) -> Optional[Mapping[str, _builtins.str]]:
+        """
+        Map of custom key-value pairs for the catalog properties.
+        """
+        return pulumi.get(self, "custom_properties")
+
+    @_builtins.property
+    @pulumi.getter(name="dataLakeAccessProperties")
+    def data_lake_access_properties(self) -> Optional['outputs.CatalogCatalogPropertiesDataLakeAccessProperties']:
+        """
+        Configuration block for data lake access properties. See `data_lake_access_properties` below.
+        """
+        return pulumi.get(self, "data_lake_access_properties")
+
+    @_builtins.property
+    @pulumi.getter(name="icebergOptimizationProperties")
+    def iceberg_optimization_properties(self) -> Optional['outputs.CatalogCatalogPropertiesIcebergOptimizationProperties']:
+        """
+        Configuration block for Iceberg optimization properties. See `iceberg_optimization_properties` below.
+        """
+        return pulumi.get(self, "iceberg_optimization_properties")
+
+
+@pulumi.output_type
+class CatalogCatalogPropertiesDataLakeAccessProperties(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "catalogType":
+            suggest = "catalog_type"
+        elif key == "dataLakeAccess":
+            suggest = "data_lake_access"
+        elif key == "dataTransferRole":
+            suggest = "data_transfer_role"
+        elif key == "kmsKey":
+            suggest = "kms_key"
+        elif key == "managedWorkgroupName":
+            suggest = "managed_workgroup_name"
+        elif key == "managedWorkgroupStatus":
+            suggest = "managed_workgroup_status"
+        elif key == "redshiftDatabaseName":
+            suggest = "redshift_database_name"
+        elif key == "statusMessage":
+            suggest = "status_message"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogCatalogPropertiesDataLakeAccessProperties. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogCatalogPropertiesDataLakeAccessProperties.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogCatalogPropertiesDataLakeAccessProperties.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 catalog_type: Optional[_builtins.str] = None,
+                 data_lake_access: Optional[_builtins.bool] = None,
+                 data_transfer_role: Optional[_builtins.str] = None,
+                 kms_key: Optional[_builtins.str] = None,
+                 managed_workgroup_name: Optional[_builtins.str] = None,
+                 managed_workgroup_status: Optional[_builtins.str] = None,
+                 redshift_database_name: Optional[_builtins.str] = None,
+                 status_message: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str catalog_type: Type of the catalog.
+        :param _builtins.bool data_lake_access: Whether data lake access is enabled.
+        :param _builtins.str data_transfer_role: ARN of the IAM role used for data transfer.
+        :param _builtins.str kms_key: ARN of the KMS key used for encryption.
+        :param _builtins.str managed_workgroup_name: Managed workgroup name.
+        :param _builtins.str managed_workgroup_status: Managed workgroup status.
+        :param _builtins.str redshift_database_name: Redshift database name.
+        :param _builtins.str status_message: Status message.
+        """
+        if catalog_type is not None:
+            pulumi.set(__self__, "catalog_type", catalog_type)
+        if data_lake_access is not None:
+            pulumi.set(__self__, "data_lake_access", data_lake_access)
+        if data_transfer_role is not None:
+            pulumi.set(__self__, "data_transfer_role", data_transfer_role)
+        if kms_key is not None:
+            pulumi.set(__self__, "kms_key", kms_key)
+        if managed_workgroup_name is not None:
+            pulumi.set(__self__, "managed_workgroup_name", managed_workgroup_name)
+        if managed_workgroup_status is not None:
+            pulumi.set(__self__, "managed_workgroup_status", managed_workgroup_status)
+        if redshift_database_name is not None:
+            pulumi.set(__self__, "redshift_database_name", redshift_database_name)
+        if status_message is not None:
+            pulumi.set(__self__, "status_message", status_message)
+
+    @_builtins.property
+    @pulumi.getter(name="catalogType")
+    def catalog_type(self) -> Optional[_builtins.str]:
+        """
+        Type of the catalog.
+        """
+        return pulumi.get(self, "catalog_type")
+
+    @_builtins.property
+    @pulumi.getter(name="dataLakeAccess")
+    def data_lake_access(self) -> Optional[_builtins.bool]:
+        """
+        Whether data lake access is enabled.
+        """
+        return pulumi.get(self, "data_lake_access")
+
+    @_builtins.property
+    @pulumi.getter(name="dataTransferRole")
+    def data_transfer_role(self) -> Optional[_builtins.str]:
+        """
+        ARN of the IAM role used for data transfer.
+        """
+        return pulumi.get(self, "data_transfer_role")
+
+    @_builtins.property
+    @pulumi.getter(name="kmsKey")
+    def kms_key(self) -> Optional[_builtins.str]:
+        """
+        ARN of the KMS key used for encryption.
+        """
+        return pulumi.get(self, "kms_key")
+
+    @_builtins.property
+    @pulumi.getter(name="managedWorkgroupName")
+    def managed_workgroup_name(self) -> Optional[_builtins.str]:
+        """
+        Managed workgroup name.
+        """
+        return pulumi.get(self, "managed_workgroup_name")
+
+    @_builtins.property
+    @pulumi.getter(name="managedWorkgroupStatus")
+    def managed_workgroup_status(self) -> Optional[_builtins.str]:
+        """
+        Managed workgroup status.
+        """
+        return pulumi.get(self, "managed_workgroup_status")
+
+    @_builtins.property
+    @pulumi.getter(name="redshiftDatabaseName")
+    def redshift_database_name(self) -> Optional[_builtins.str]:
+        """
+        Redshift database name.
+        """
+        return pulumi.get(self, "redshift_database_name")
+
+    @_builtins.property
+    @pulumi.getter(name="statusMessage")
+    def status_message(self) -> Optional[_builtins.str]:
+        """
+        Status message.
+        """
+        return pulumi.get(self, "status_message")
+
+
+@pulumi.output_type
+class CatalogCatalogPropertiesIcebergOptimizationProperties(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "orphanFileDeletion":
+            suggest = "orphan_file_deletion"
+        elif key == "roleArn":
+            suggest = "role_arn"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogCatalogPropertiesIcebergOptimizationProperties. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogCatalogPropertiesIcebergOptimizationProperties.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogCatalogPropertiesIcebergOptimizationProperties.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 compaction: Optional[Mapping[str, _builtins.str]] = None,
+                 orphan_file_deletion: Optional[Mapping[str, _builtins.str]] = None,
+                 retention: Optional[Mapping[str, _builtins.str]] = None,
+                 role_arn: Optional[_builtins.str] = None):
+        """
+        :param Mapping[str, _builtins.str] compaction: Map of key-value pairs for compaction settings.
+        :param Mapping[str, _builtins.str] orphan_file_deletion: Map of key-value pairs for orphan file deletion settings.
+        :param Mapping[str, _builtins.str] retention: Map of key-value pairs for retention settings.
+        :param _builtins.str role_arn: ARN of the IAM role for Iceberg optimization.
+        """
+        if compaction is not None:
+            pulumi.set(__self__, "compaction", compaction)
+        if orphan_file_deletion is not None:
+            pulumi.set(__self__, "orphan_file_deletion", orphan_file_deletion)
+        if retention is not None:
+            pulumi.set(__self__, "retention", retention)
+        if role_arn is not None:
+            pulumi.set(__self__, "role_arn", role_arn)
+
+    @_builtins.property
+    @pulumi.getter
+    def compaction(self) -> Optional[Mapping[str, _builtins.str]]:
+        """
+        Map of key-value pairs for compaction settings.
+        """
+        return pulumi.get(self, "compaction")
+
+    @_builtins.property
+    @pulumi.getter(name="orphanFileDeletion")
+    def orphan_file_deletion(self) -> Optional[Mapping[str, _builtins.str]]:
+        """
+        Map of key-value pairs for orphan file deletion settings.
+        """
+        return pulumi.get(self, "orphan_file_deletion")
+
+    @_builtins.property
+    @pulumi.getter
+    def retention(self) -> Optional[Mapping[str, _builtins.str]]:
+        """
+        Map of key-value pairs for retention settings.
+        """
+        return pulumi.get(self, "retention")
+
+    @_builtins.property
+    @pulumi.getter(name="roleArn")
+    def role_arn(self) -> Optional[_builtins.str]:
+        """
+        ARN of the IAM role for Iceberg optimization.
+        """
+        return pulumi.get(self, "role_arn")
+
+
+@pulumi.output_type
+class CatalogCreateDatabaseDefaultPermission(dict):
+    def __init__(__self__, *,
+                 permissions: Optional[Sequence[_builtins.str]] = None,
+                 principal: Optional['outputs.CatalogCreateDatabaseDefaultPermissionPrincipal'] = None):
+        """
+        :param Sequence[_builtins.str] permissions: Permissions that are granted to the principal. Valid values include `ALL`, `SELECT`, `ALTER`, `DROP`, `DELETE`, `INSERT`, `CREATE_DATABASE`, `CREATE_TABLE`, `DATA_LOCATION_ACCESS`.
+        :param 'CatalogCreateDatabaseDefaultPermissionPrincipalArgs' principal: Principal who is granted permissions. See `principal` below.
+        """
+        if permissions is not None:
+            pulumi.set(__self__, "permissions", permissions)
+        if principal is not None:
+            pulumi.set(__self__, "principal", principal)
+
+    @_builtins.property
+    @pulumi.getter
+    def permissions(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Permissions that are granted to the principal. Valid values include `ALL`, `SELECT`, `ALTER`, `DROP`, `DELETE`, `INSERT`, `CREATE_DATABASE`, `CREATE_TABLE`, `DATA_LOCATION_ACCESS`.
+        """
+        return pulumi.get(self, "permissions")
+
+    @_builtins.property
+    @pulumi.getter
+    def principal(self) -> Optional['outputs.CatalogCreateDatabaseDefaultPermissionPrincipal']:
+        """
+        Principal who is granted permissions. See `principal` below.
+        """
+        return pulumi.get(self, "principal")
+
+
+@pulumi.output_type
+class CatalogCreateDatabaseDefaultPermissionPrincipal(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "dataLakePrincipalIdentifier":
+            suggest = "data_lake_principal_identifier"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogCreateDatabaseDefaultPermissionPrincipal. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogCreateDatabaseDefaultPermissionPrincipal.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogCreateDatabaseDefaultPermissionPrincipal.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 data_lake_principal_identifier: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str data_lake_principal_identifier: Identifier for the Lake Formation principal.
+        """
+        if data_lake_principal_identifier is not None:
+            pulumi.set(__self__, "data_lake_principal_identifier", data_lake_principal_identifier)
+
+    @_builtins.property
+    @pulumi.getter(name="dataLakePrincipalIdentifier")
+    def data_lake_principal_identifier(self) -> Optional[_builtins.str]:
+        """
+        Identifier for the Lake Formation principal.
+        """
+        return pulumi.get(self, "data_lake_principal_identifier")
+
+
+@pulumi.output_type
+class CatalogCreateTableDefaultPermission(dict):
+    def __init__(__self__, *,
+                 permissions: Optional[Sequence[_builtins.str]] = None,
+                 principal: Optional['outputs.CatalogCreateTableDefaultPermissionPrincipal'] = None):
+        """
+        :param Sequence[_builtins.str] permissions: Permissions that are granted to the principal. Valid values include `ALL`, `SELECT`, `ALTER`, `DROP`, `DELETE`, `INSERT`, `CREATE_DATABASE`, `CREATE_TABLE`, `DATA_LOCATION_ACCESS`.
+        :param 'CatalogCreateTableDefaultPermissionPrincipalArgs' principal: Principal who is granted permissions. See `principal` below.
+        """
+        if permissions is not None:
+            pulumi.set(__self__, "permissions", permissions)
+        if principal is not None:
+            pulumi.set(__self__, "principal", principal)
+
+    @_builtins.property
+    @pulumi.getter
+    def permissions(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        Permissions that are granted to the principal. Valid values include `ALL`, `SELECT`, `ALTER`, `DROP`, `DELETE`, `INSERT`, `CREATE_DATABASE`, `CREATE_TABLE`, `DATA_LOCATION_ACCESS`.
+        """
+        return pulumi.get(self, "permissions")
+
+    @_builtins.property
+    @pulumi.getter
+    def principal(self) -> Optional['outputs.CatalogCreateTableDefaultPermissionPrincipal']:
+        """
+        Principal who is granted permissions. See `principal` below.
+        """
+        return pulumi.get(self, "principal")
+
+
+@pulumi.output_type
+class CatalogCreateTableDefaultPermissionPrincipal(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "dataLakePrincipalIdentifier":
+            suggest = "data_lake_principal_identifier"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogCreateTableDefaultPermissionPrincipal. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogCreateTableDefaultPermissionPrincipal.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogCreateTableDefaultPermissionPrincipal.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 data_lake_principal_identifier: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str data_lake_principal_identifier: Identifier for the Lake Formation principal.
+        """
+        if data_lake_principal_identifier is not None:
+            pulumi.set(__self__, "data_lake_principal_identifier", data_lake_principal_identifier)
+
+    @_builtins.property
+    @pulumi.getter(name="dataLakePrincipalIdentifier")
+    def data_lake_principal_identifier(self) -> Optional[_builtins.str]:
+        """
+        Identifier for the Lake Formation principal.
+        """
+        return pulumi.get(self, "data_lake_principal_identifier")
+
 
 @pulumi.output_type
 class CatalogDatabaseCreateTableDefaultPermission(dict):
@@ -277,6 +725,68 @@ class CatalogDatabaseTargetDatabase(dict):
 
 
 @pulumi.output_type
+class CatalogFederatedCatalog(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "connectionName":
+            suggest = "connection_name"
+        elif key == "connectionType":
+            suggest = "connection_type"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogFederatedCatalog. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogFederatedCatalog.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogFederatedCatalog.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 connection_name: Optional[_builtins.str] = None,
+                 connection_type: Optional[_builtins.str] = None,
+                 identifier: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str connection_name: Name of the connection to the external metastore.
+        :param _builtins.str connection_type: Type of connection used to access the federated catalog.
+        :param _builtins.str identifier: Unique identifier for the federated catalog.
+        """
+        if connection_name is not None:
+            pulumi.set(__self__, "connection_name", connection_name)
+        if connection_type is not None:
+            pulumi.set(__self__, "connection_type", connection_type)
+        if identifier is not None:
+            pulumi.set(__self__, "identifier", identifier)
+
+    @_builtins.property
+    @pulumi.getter(name="connectionName")
+    def connection_name(self) -> Optional[_builtins.str]:
+        """
+        Name of the connection to the external metastore.
+        """
+        return pulumi.get(self, "connection_name")
+
+    @_builtins.property
+    @pulumi.getter(name="connectionType")
+    def connection_type(self) -> Optional[_builtins.str]:
+        """
+        Type of connection used to access the federated catalog.
+        """
+        return pulumi.get(self, "connection_type")
+
+    @_builtins.property
+    @pulumi.getter
+    def identifier(self) -> Optional[_builtins.str]:
+        """
+        Unique identifier for the federated catalog.
+        """
+        return pulumi.get(self, "identifier")
+
+
+@pulumi.output_type
 class CatalogTableOpenTableFormatInput(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -318,6 +828,8 @@ class CatalogTableOpenTableFormatInputIcebergInput(dict):
         suggest = None
         if key == "metadataOperation":
             suggest = "metadata_operation"
+        elif key == "icebergTableInput":
+            suggest = "iceberg_table_input"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in CatalogTableOpenTableFormatInputIcebergInput. Access the value via the '{suggest}' property getter instead.")
@@ -332,12 +844,16 @@ class CatalogTableOpenTableFormatInputIcebergInput(dict):
 
     def __init__(__self__, *,
                  metadata_operation: _builtins.str,
+                 iceberg_table_input: Optional['outputs.CatalogTableOpenTableFormatInputIcebergInputIcebergTableInput'] = None,
                  version: Optional[_builtins.str] = None):
         """
-        :param _builtins.str metadata_operation: A required metadata operation. Can only be set to CREATE.
-        :param _builtins.str version: The table version for the Iceberg table. Defaults to 2.
+        :param _builtins.str metadata_operation: Required metadata operation. Can only be set to CREATE.
+        :param 'CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputArgs' iceberg_table_input: Configuration parameters, including table properties and metadata specifications. See `iceberg_table_input` below.
+        :param _builtins.str version: Table version for the Iceberg table. Defaults to 2.
         """
         pulumi.set(__self__, "metadata_operation", metadata_operation)
+        if iceberg_table_input is not None:
+            pulumi.set(__self__, "iceberg_table_input", iceberg_table_input)
         if version is not None:
             pulumi.set(__self__, "version", version)
 
@@ -345,17 +861,512 @@ class CatalogTableOpenTableFormatInputIcebergInput(dict):
     @pulumi.getter(name="metadataOperation")
     def metadata_operation(self) -> _builtins.str:
         """
-        A required metadata operation. Can only be set to CREATE.
+        Required metadata operation. Can only be set to CREATE.
         """
         return pulumi.get(self, "metadata_operation")
+
+    @_builtins.property
+    @pulumi.getter(name="icebergTableInput")
+    def iceberg_table_input(self) -> Optional['outputs.CatalogTableOpenTableFormatInputIcebergInputIcebergTableInput']:
+        """
+        Configuration parameters, including table properties and metadata specifications. See `iceberg_table_input` below.
+        """
+        return pulumi.get(self, "iceberg_table_input")
 
     @_builtins.property
     @pulumi.getter
     def version(self) -> Optional[_builtins.str]:
         """
-        The table version for the Iceberg table. Defaults to 2.
+        Table version for the Iceberg table. Defaults to 2.
         """
         return pulumi.get(self, "version")
+
+
+@pulumi.output_type
+class CatalogTableOpenTableFormatInputIcebergInputIcebergTableInput(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "partitionSpec":
+            suggest = "partition_spec"
+        elif key == "sortOrder":
+            suggest = "sort_order"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogTableOpenTableFormatInputIcebergInputIcebergTableInput. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogTableOpenTableFormatInputIcebergInputIcebergTableInput.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogTableOpenTableFormatInputIcebergInputIcebergTableInput.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 location: _builtins.str,
+                 schema: 'outputs.CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSchema',
+                 partition_spec: Optional['outputs.CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputPartitionSpec'] = None,
+                 properties: Optional[Mapping[str, _builtins.str]] = None,
+                 sort_order: Optional['outputs.CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSortOrder'] = None):
+        """
+        :param _builtins.str location: S3 location where the Iceberg table data will be stored. Maximum length of 2056 characters.
+        :param 'CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSchemaArgs' schema: Schema definition that specifies the structure, field types, and metadata for the Iceberg table. See `schema` below.
+        :param 'CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputPartitionSpecArgs' partition_spec: Partitioning specification that defines how the Iceberg table data will be organized and partitioned for optimal query performance. See `partition_spec` below.
+        :param Mapping[str, _builtins.str] properties: Key-value pairs of additional table properties and configuration settings for the Iceberg table.
+        :param 'CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSortOrderArgs' sort_order: Sort order specification that defines how data should be ordered within each partition to optimize query performance. See `sort_order` below.
+        """
+        pulumi.set(__self__, "location", location)
+        pulumi.set(__self__, "schema", schema)
+        if partition_spec is not None:
+            pulumi.set(__self__, "partition_spec", partition_spec)
+        if properties is not None:
+            pulumi.set(__self__, "properties", properties)
+        if sort_order is not None:
+            pulumi.set(__self__, "sort_order", sort_order)
+
+    @_builtins.property
+    @pulumi.getter
+    def location(self) -> _builtins.str:
+        """
+        S3 location where the Iceberg table data will be stored. Maximum length of 2056 characters.
+        """
+        return pulumi.get(self, "location")
+
+    @_builtins.property
+    @pulumi.getter
+    def schema(self) -> 'outputs.CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSchema':
+        """
+        Schema definition that specifies the structure, field types, and metadata for the Iceberg table. See `schema` below.
+        """
+        return pulumi.get(self, "schema")
+
+    @_builtins.property
+    @pulumi.getter(name="partitionSpec")
+    def partition_spec(self) -> Optional['outputs.CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputPartitionSpec']:
+        """
+        Partitioning specification that defines how the Iceberg table data will be organized and partitioned for optimal query performance. See `partition_spec` below.
+        """
+        return pulumi.get(self, "partition_spec")
+
+    @_builtins.property
+    @pulumi.getter
+    def properties(self) -> Optional[Mapping[str, _builtins.str]]:
+        """
+        Key-value pairs of additional table properties and configuration settings for the Iceberg table.
+        """
+        return pulumi.get(self, "properties")
+
+    @_builtins.property
+    @pulumi.getter(name="sortOrder")
+    def sort_order(self) -> Optional['outputs.CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSortOrder']:
+        """
+        Sort order specification that defines how data should be ordered within each partition to optimize query performance. See `sort_order` below.
+        """
+        return pulumi.get(self, "sort_order")
+
+
+@pulumi.output_type
+class CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputPartitionSpec(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "specId":
+            suggest = "spec_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputPartitionSpec. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputPartitionSpec.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputPartitionSpec.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 fields: Sequence['outputs.CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputPartitionSpecField'],
+                 spec_id: Optional[_builtins.int] = None):
+        """
+        :param Sequence['CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputPartitionSpecFieldArgs'] fields: List of partition fields that define how the table data should be partitioned. See `partition_spec.fields` below.
+        :param _builtins.int spec_id: Unique identifier for this partition specification within the Iceberg table's metadata history.
+        """
+        pulumi.set(__self__, "fields", fields)
+        if spec_id is not None:
+            pulumi.set(__self__, "spec_id", spec_id)
+
+    @_builtins.property
+    @pulumi.getter
+    def fields(self) -> Sequence['outputs.CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputPartitionSpecField']:
+        """
+        List of partition fields that define how the table data should be partitioned. See `partition_spec.fields` below.
+        """
+        return pulumi.get(self, "fields")
+
+    @_builtins.property
+    @pulumi.getter(name="specId")
+    def spec_id(self) -> Optional[_builtins.int]:
+        """
+        Unique identifier for this partition specification within the Iceberg table's metadata history.
+        """
+        return pulumi.get(self, "spec_id")
+
+
+@pulumi.output_type
+class CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputPartitionSpecField(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "sourceId":
+            suggest = "source_id"
+        elif key == "fieldId":
+            suggest = "field_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputPartitionSpecField. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputPartitionSpecField.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputPartitionSpecField.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 name: _builtins.str,
+                 source_id: _builtins.int,
+                 transform: _builtins.str,
+                 field_id: Optional[_builtins.int] = None):
+        """
+        :param _builtins.str name: Name of the table. For Hive compatibility, this must be entirely lowercase.
+               
+               The following arguments are optional:
+        :param _builtins.int field_id: Unique identifier assigned to this partition field within the Iceberg table's partition specification.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "source_id", source_id)
+        pulumi.set(__self__, "transform", transform)
+        if field_id is not None:
+            pulumi.set(__self__, "field_id", field_id)
+
+    @_builtins.property
+    @pulumi.getter
+    def name(self) -> _builtins.str:
+        """
+        Name of the table. For Hive compatibility, this must be entirely lowercase.
+
+        The following arguments are optional:
+        """
+        return pulumi.get(self, "name")
+
+    @_builtins.property
+    @pulumi.getter(name="sourceId")
+    def source_id(self) -> _builtins.int:
+        return pulumi.get(self, "source_id")
+
+    @_builtins.property
+    @pulumi.getter
+    def transform(self) -> _builtins.str:
+        return pulumi.get(self, "transform")
+
+    @_builtins.property
+    @pulumi.getter(name="fieldId")
+    def field_id(self) -> Optional[_builtins.int]:
+        """
+        Unique identifier assigned to this partition field within the Iceberg table's partition specification.
+        """
+        return pulumi.get(self, "field_id")
+
+
+@pulumi.output_type
+class CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSchema(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "identifierFieldIds":
+            suggest = "identifier_field_ids"
+        elif key == "schemaId":
+            suggest = "schema_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSchema. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSchema.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSchema.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 fields: Sequence['outputs.CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSchemaField'],
+                 identifier_field_ids: Optional[Sequence[_builtins.int]] = None,
+                 schema_id: Optional[_builtins.int] = None,
+                 type: Optional[_builtins.str] = None):
+        """
+        :param Sequence['CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSchemaFieldArgs'] fields: List of field definitions that make up the table schema. See `schema.fields` below.
+        :param Sequence[_builtins.int] identifier_field_ids: List of field identifiers that uniquely identify records in the table, used for row-level operations and deduplication.
+        :param _builtins.int schema_id: Unique identifier for this schema version within the Iceberg table's schema evolution history.
+        :param _builtins.str type: Data type definition for this field as a JSON string, specifying the structure and format of the data it contains. Examples: `"long"`, `"string"`, `"timestamp"`, `"decimal(10,2)"`.
+        """
+        pulumi.set(__self__, "fields", fields)
+        if identifier_field_ids is not None:
+            pulumi.set(__self__, "identifier_field_ids", identifier_field_ids)
+        if schema_id is not None:
+            pulumi.set(__self__, "schema_id", schema_id)
+        if type is not None:
+            pulumi.set(__self__, "type", type)
+
+    @_builtins.property
+    @pulumi.getter
+    def fields(self) -> Sequence['outputs.CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSchemaField']:
+        """
+        List of field definitions that make up the table schema. See `schema.fields` below.
+        """
+        return pulumi.get(self, "fields")
+
+    @_builtins.property
+    @pulumi.getter(name="identifierFieldIds")
+    def identifier_field_ids(self) -> Optional[Sequence[_builtins.int]]:
+        """
+        List of field identifiers that uniquely identify records in the table, used for row-level operations and deduplication.
+        """
+        return pulumi.get(self, "identifier_field_ids")
+
+    @_builtins.property
+    @pulumi.getter(name="schemaId")
+    def schema_id(self) -> Optional[_builtins.int]:
+        """
+        Unique identifier for this schema version within the Iceberg table's schema evolution history.
+        """
+        return pulumi.get(self, "schema_id")
+
+    @_builtins.property
+    @pulumi.getter
+    def type(self) -> Optional[_builtins.str]:
+        """
+        Data type definition for this field as a JSON string, specifying the structure and format of the data it contains. Examples: `"long"`, `"string"`, `"timestamp"`, `"decimal(10,2)"`.
+        """
+        return pulumi.get(self, "type")
+
+
+@pulumi.output_type
+class CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSchemaField(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "initialDefault":
+            suggest = "initial_default"
+        elif key == "writeDefault":
+            suggest = "write_default"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSchemaField. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSchemaField.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSchemaField.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 id: _builtins.int,
+                 name: _builtins.str,
+                 required: _builtins.bool,
+                 type: _builtins.str,
+                 doc: Optional[_builtins.str] = None,
+                 initial_default: Optional[_builtins.str] = None,
+                 write_default: Optional[_builtins.str] = None):
+        """
+        :param _builtins.int id: Catalog ID, database name, and table name, separated by colons (`:`).
+               * `partition_index[*].index_status` - Status of the partition index.
+        :param _builtins.str name: Name of the table. For Hive compatibility, this must be entirely lowercase.
+               
+               The following arguments are optional:
+        :param _builtins.bool required: Whether this field is required (non-nullable) or optional (nullable) in the table schema.
+        :param _builtins.str doc: Documentation or description text that provides additional context about the purpose and usage of this field. Length between 0 and 255 characters.
+        :param _builtins.str initial_default: Default value as JSON used to populate the field's value for all records that were written before the field was added to the schema.
+        :param _builtins.str write_default: Default value as JSON used to populate the field's value for any records written after the field was added to the schema, if the writer does not supply the field's value.
+        """
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "required", required)
+        pulumi.set(__self__, "type", type)
+        if doc is not None:
+            pulumi.set(__self__, "doc", doc)
+        if initial_default is not None:
+            pulumi.set(__self__, "initial_default", initial_default)
+        if write_default is not None:
+            pulumi.set(__self__, "write_default", write_default)
+
+    @_builtins.property
+    @pulumi.getter
+    def id(self) -> _builtins.int:
+        """
+        Catalog ID, database name, and table name, separated by colons (`:`).
+        * `partition_index[*].index_status` - Status of the partition index.
+        """
+        return pulumi.get(self, "id")
+
+    @_builtins.property
+    @pulumi.getter
+    def name(self) -> _builtins.str:
+        """
+        Name of the table. For Hive compatibility, this must be entirely lowercase.
+
+        The following arguments are optional:
+        """
+        return pulumi.get(self, "name")
+
+    @_builtins.property
+    @pulumi.getter
+    def required(self) -> _builtins.bool:
+        """
+        Whether this field is required (non-nullable) or optional (nullable) in the table schema.
+        """
+        return pulumi.get(self, "required")
+
+    @_builtins.property
+    @pulumi.getter
+    def type(self) -> _builtins.str:
+        return pulumi.get(self, "type")
+
+    @_builtins.property
+    @pulumi.getter
+    def doc(self) -> Optional[_builtins.str]:
+        """
+        Documentation or description text that provides additional context about the purpose and usage of this field. Length between 0 and 255 characters.
+        """
+        return pulumi.get(self, "doc")
+
+    @_builtins.property
+    @pulumi.getter(name="initialDefault")
+    def initial_default(self) -> Optional[_builtins.str]:
+        """
+        Default value as JSON used to populate the field's value for all records that were written before the field was added to the schema.
+        """
+        return pulumi.get(self, "initial_default")
+
+    @_builtins.property
+    @pulumi.getter(name="writeDefault")
+    def write_default(self) -> Optional[_builtins.str]:
+        """
+        Default value as JSON used to populate the field's value for any records written after the field was added to the schema, if the writer does not supply the field's value.
+        """
+        return pulumi.get(self, "write_default")
+
+
+@pulumi.output_type
+class CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSortOrder(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "orderId":
+            suggest = "order_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSortOrder. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSortOrder.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSortOrder.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 fields: Sequence['outputs.CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSortOrderField'],
+                 order_id: _builtins.int):
+        """
+        :param Sequence['CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSortOrderFieldArgs'] fields: List of fields and their sort directions that define the ordering criteria for the Iceberg table data. See `sort_order.fields` below.
+        :param _builtins.int order_id: Unique identifier for this sort order specification within the Iceberg table's metadata.
+        """
+        pulumi.set(__self__, "fields", fields)
+        pulumi.set(__self__, "order_id", order_id)
+
+    @_builtins.property
+    @pulumi.getter
+    def fields(self) -> Sequence['outputs.CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSortOrderField']:
+        """
+        List of fields and their sort directions that define the ordering criteria for the Iceberg table data. See `sort_order.fields` below.
+        """
+        return pulumi.get(self, "fields")
+
+    @_builtins.property
+    @pulumi.getter(name="orderId")
+    def order_id(self) -> _builtins.int:
+        """
+        Unique identifier for this sort order specification within the Iceberg table's metadata.
+        """
+        return pulumi.get(self, "order_id")
+
+
+@pulumi.output_type
+class CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSortOrderField(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "nullOrder":
+            suggest = "null_order"
+        elif key == "sourceId":
+            suggest = "source_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSortOrderField. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSortOrderField.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogTableOpenTableFormatInputIcebergInputIcebergTableInputSortOrderField.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 direction: _builtins.str,
+                 null_order: _builtins.str,
+                 source_id: _builtins.int,
+                 transform: _builtins.str):
+        """
+        :param _builtins.str direction: Sort direction for this field. Valid values: `asc`, `desc`.
+        :param _builtins.str null_order: Ordering behavior for null values in this field. Valid values: `nulls-first`, `nulls-last`.
+        """
+        pulumi.set(__self__, "direction", direction)
+        pulumi.set(__self__, "null_order", null_order)
+        pulumi.set(__self__, "source_id", source_id)
+        pulumi.set(__self__, "transform", transform)
+
+    @_builtins.property
+    @pulumi.getter
+    def direction(self) -> _builtins.str:
+        """
+        Sort direction for this field. Valid values: `asc`, `desc`.
+        """
+        return pulumi.get(self, "direction")
+
+    @_builtins.property
+    @pulumi.getter(name="nullOrder")
+    def null_order(self) -> _builtins.str:
+        """
+        Ordering behavior for null values in this field. Valid values: `nulls-first`, `nulls-last`.
+        """
+        return pulumi.get(self, "null_order")
+
+    @_builtins.property
+    @pulumi.getter(name="sourceId")
+    def source_id(self) -> _builtins.int:
+        return pulumi.get(self, "source_id")
+
+    @_builtins.property
+    @pulumi.getter
+    def transform(self) -> _builtins.str:
+        return pulumi.get(self, "transform")
 
 
 @pulumi.output_type
@@ -365,6 +1376,8 @@ class CatalogTableOptimizerConfiguration(dict):
         suggest = None
         if key == "roleArn":
             suggest = "role_arn"
+        elif key == "compactionConfiguration":
+            suggest = "compaction_configuration"
         elif key == "orphanFileDeletionConfiguration":
             suggest = "orphan_file_deletion_configuration"
         elif key == "retentionConfiguration":
@@ -384,16 +1397,20 @@ class CatalogTableOptimizerConfiguration(dict):
     def __init__(__self__, *,
                  enabled: _builtins.bool,
                  role_arn: _builtins.str,
+                 compaction_configuration: Optional['outputs.CatalogTableOptimizerConfigurationCompactionConfiguration'] = None,
                  orphan_file_deletion_configuration: Optional['outputs.CatalogTableOptimizerConfigurationOrphanFileDeletionConfiguration'] = None,
                  retention_configuration: Optional['outputs.CatalogTableOptimizerConfigurationRetentionConfiguration'] = None):
         """
         :param _builtins.bool enabled: Indicates whether the table optimizer is enabled.
         :param _builtins.str role_arn: The ARN of the IAM role to use for the table optimizer.
+        :param 'CatalogTableOptimizerConfigurationCompactionConfigurationArgs' compaction_configuration: The configuration block for a compaction optimizer. See Compaction Configuration for additional details.
         :param 'CatalogTableOptimizerConfigurationOrphanFileDeletionConfigurationArgs' orphan_file_deletion_configuration: The configuration block for an orphan file deletion optimizer. See Orphan File Deletion Configuration for additional details.
         :param 'CatalogTableOptimizerConfigurationRetentionConfigurationArgs' retention_configuration: The configuration block for a snapshot retention optimizer. See Retention Configuration for additional details.
         """
         pulumi.set(__self__, "enabled", enabled)
         pulumi.set(__self__, "role_arn", role_arn)
+        if compaction_configuration is not None:
+            pulumi.set(__self__, "compaction_configuration", compaction_configuration)
         if orphan_file_deletion_configuration is not None:
             pulumi.set(__self__, "orphan_file_deletion_configuration", orphan_file_deletion_configuration)
         if retention_configuration is not None:
@@ -416,6 +1433,14 @@ class CatalogTableOptimizerConfiguration(dict):
         return pulumi.get(self, "role_arn")
 
     @_builtins.property
+    @pulumi.getter(name="compactionConfiguration")
+    def compaction_configuration(self) -> Optional['outputs.CatalogTableOptimizerConfigurationCompactionConfiguration']:
+        """
+        The configuration block for a compaction optimizer. See Compaction Configuration for additional details.
+        """
+        return pulumi.get(self, "compaction_configuration")
+
+    @_builtins.property
     @pulumi.getter(name="orphanFileDeletionConfiguration")
     def orphan_file_deletion_configuration(self) -> Optional['outputs.CatalogTableOptimizerConfigurationOrphanFileDeletionConfiguration']:
         """
@@ -430,6 +1455,104 @@ class CatalogTableOptimizerConfiguration(dict):
         The configuration block for a snapshot retention optimizer. See Retention Configuration for additional details.
         """
         return pulumi.get(self, "retention_configuration")
+
+
+@pulumi.output_type
+class CatalogTableOptimizerConfigurationCompactionConfiguration(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "icebergConfiguration":
+            suggest = "iceberg_configuration"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogTableOptimizerConfigurationCompactionConfiguration. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogTableOptimizerConfigurationCompactionConfiguration.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogTableOptimizerConfigurationCompactionConfiguration.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 iceberg_configuration: Optional['outputs.CatalogTableOptimizerConfigurationCompactionConfigurationIcebergConfiguration'] = None):
+        """
+        :param 'CatalogTableOptimizerConfigurationCompactionConfigurationIcebergConfigurationArgs' iceberg_configuration: The configuration for an Iceberg compaction optimizer.
+        """
+        if iceberg_configuration is not None:
+            pulumi.set(__self__, "iceberg_configuration", iceberg_configuration)
+
+    @_builtins.property
+    @pulumi.getter(name="icebergConfiguration")
+    def iceberg_configuration(self) -> Optional['outputs.CatalogTableOptimizerConfigurationCompactionConfigurationIcebergConfiguration']:
+        """
+        The configuration for an Iceberg compaction optimizer.
+        """
+        return pulumi.get(self, "iceberg_configuration")
+
+
+@pulumi.output_type
+class CatalogTableOptimizerConfigurationCompactionConfigurationIcebergConfiguration(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "deleteFileThreshold":
+            suggest = "delete_file_threshold"
+        elif key == "minInputFiles":
+            suggest = "min_input_files"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogTableOptimizerConfigurationCompactionConfigurationIcebergConfiguration. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogTableOptimizerConfigurationCompactionConfigurationIcebergConfiguration.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogTableOptimizerConfigurationCompactionConfigurationIcebergConfiguration.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 delete_file_threshold: Optional[_builtins.int] = None,
+                 min_input_files: Optional[_builtins.int] = None,
+                 strategy: Optional[_builtins.str] = None):
+        """
+        :param _builtins.int delete_file_threshold: The minimum number of deletes that must be present in a data file to make it eligible for compaction. Defaults to `1`.
+        :param _builtins.int min_input_files: The minimum number of data files that must be present in a partition before compaction will actually compact files. Defaults to `100`.
+        :param _builtins.str strategy: The strategy to use for compaction. Valid values are `binpack`, `sort` and `z-order` Defaults to `binpack`.
+        """
+        if delete_file_threshold is not None:
+            pulumi.set(__self__, "delete_file_threshold", delete_file_threshold)
+        if min_input_files is not None:
+            pulumi.set(__self__, "min_input_files", min_input_files)
+        if strategy is not None:
+            pulumi.set(__self__, "strategy", strategy)
+
+    @_builtins.property
+    @pulumi.getter(name="deleteFileThreshold")
+    def delete_file_threshold(self) -> Optional[_builtins.int]:
+        """
+        The minimum number of deletes that must be present in a data file to make it eligible for compaction. Defaults to `1`.
+        """
+        return pulumi.get(self, "delete_file_threshold")
+
+    @_builtins.property
+    @pulumi.getter(name="minInputFiles")
+    def min_input_files(self) -> Optional[_builtins.int]:
+        """
+        The minimum number of data files that must be present in a partition before compaction will actually compact files. Defaults to `100`.
+        """
+        return pulumi.get(self, "min_input_files")
+
+    @_builtins.property
+    @pulumi.getter
+    def strategy(self) -> Optional[_builtins.str]:
+        """
+        The strategy to use for compaction. Valid values are `binpack`, `sort` and `z-order` Defaults to `binpack`.
+        """
+        return pulumi.get(self, "strategy")
 
 
 @pulumi.output_type
@@ -1387,6 +2510,318 @@ class CatalogTableTargetTable(dict):
 
 
 @pulumi.output_type
+class CatalogTableViewDefinition(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "isProtected":
+            suggest = "is_protected"
+        elif key == "lastRefreshType":
+            suggest = "last_refresh_type"
+        elif key == "refreshSeconds":
+            suggest = "refresh_seconds"
+        elif key == "subObjectVersionIds":
+            suggest = "sub_object_version_ids"
+        elif key == "subObjects":
+            suggest = "sub_objects"
+        elif key == "viewVersionId":
+            suggest = "view_version_id"
+        elif key == "viewVersionToken":
+            suggest = "view_version_token"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogTableViewDefinition. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogTableViewDefinition.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogTableViewDefinition.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 definer: Optional[_builtins.str] = None,
+                 is_protected: Optional[_builtins.bool] = None,
+                 last_refresh_type: Optional[_builtins.str] = None,
+                 refresh_seconds: Optional[_builtins.int] = None,
+                 representations: Optional[Sequence['outputs.CatalogTableViewDefinitionRepresentation']] = None,
+                 sub_object_version_ids: Optional[Sequence[_builtins.int]] = None,
+                 sub_objects: Optional[Sequence[_builtins.str]] = None,
+                 view_version_id: Optional[_builtins.int] = None,
+                 view_version_token: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str definer: Definer of a view in SQL.
+        :param _builtins.bool is_protected: You can set this flag as true to instruct the engine not to push user-provided operations into the logical plan of the view during query planning. However, setting this flag does not guarantee that the engine will comply. Refer to the engine's documentation to understand the guarantees provided, if any.
+        :param _builtins.str last_refresh_type: Type of the materialized view's last refresh. Valid values: `Full`, `Incremental`.
+        :param _builtins.int refresh_seconds: Auto refresh interval in seconds for the materialized view.
+        :param Sequence['CatalogTableViewDefinitionRepresentationArgs'] representations: List of structures that contains the dialect of the view, and the query that defines the view. See `representations` below.
+        :param Sequence[_builtins.int] sub_object_version_ids: List of the Apache Iceberg table versions referenced by the materialized view.
+        :param Sequence[_builtins.str] sub_objects: List of base table ARNs that make up the view.
+        :param _builtins.int view_version_id: ID value that identifies this view's version. For materialized views, the version ID is the Apache Iceberg table's snapshot ID.
+        :param _builtins.str view_version_token: Version ID of the Apache Iceberg table.
+        """
+        if definer is not None:
+            pulumi.set(__self__, "definer", definer)
+        if is_protected is not None:
+            pulumi.set(__self__, "is_protected", is_protected)
+        if last_refresh_type is not None:
+            pulumi.set(__self__, "last_refresh_type", last_refresh_type)
+        if refresh_seconds is not None:
+            pulumi.set(__self__, "refresh_seconds", refresh_seconds)
+        if representations is not None:
+            pulumi.set(__self__, "representations", representations)
+        if sub_object_version_ids is not None:
+            pulumi.set(__self__, "sub_object_version_ids", sub_object_version_ids)
+        if sub_objects is not None:
+            pulumi.set(__self__, "sub_objects", sub_objects)
+        if view_version_id is not None:
+            pulumi.set(__self__, "view_version_id", view_version_id)
+        if view_version_token is not None:
+            pulumi.set(__self__, "view_version_token", view_version_token)
+
+    @_builtins.property
+    @pulumi.getter
+    def definer(self) -> Optional[_builtins.str]:
+        """
+        Definer of a view in SQL.
+        """
+        return pulumi.get(self, "definer")
+
+    @_builtins.property
+    @pulumi.getter(name="isProtected")
+    def is_protected(self) -> Optional[_builtins.bool]:
+        """
+        You can set this flag as true to instruct the engine not to push user-provided operations into the logical plan of the view during query planning. However, setting this flag does not guarantee that the engine will comply. Refer to the engine's documentation to understand the guarantees provided, if any.
+        """
+        return pulumi.get(self, "is_protected")
+
+    @_builtins.property
+    @pulumi.getter(name="lastRefreshType")
+    def last_refresh_type(self) -> Optional[_builtins.str]:
+        """
+        Type of the materialized view's last refresh. Valid values: `Full`, `Incremental`.
+        """
+        return pulumi.get(self, "last_refresh_type")
+
+    @_builtins.property
+    @pulumi.getter(name="refreshSeconds")
+    def refresh_seconds(self) -> Optional[_builtins.int]:
+        """
+        Auto refresh interval in seconds for the materialized view.
+        """
+        return pulumi.get(self, "refresh_seconds")
+
+    @_builtins.property
+    @pulumi.getter
+    def representations(self) -> Optional[Sequence['outputs.CatalogTableViewDefinitionRepresentation']]:
+        """
+        List of structures that contains the dialect of the view, and the query that defines the view. See `representations` below.
+        """
+        return pulumi.get(self, "representations")
+
+    @_builtins.property
+    @pulumi.getter(name="subObjectVersionIds")
+    def sub_object_version_ids(self) -> Optional[Sequence[_builtins.int]]:
+        """
+        List of the Apache Iceberg table versions referenced by the materialized view.
+        """
+        return pulumi.get(self, "sub_object_version_ids")
+
+    @_builtins.property
+    @pulumi.getter(name="subObjects")
+    def sub_objects(self) -> Optional[Sequence[_builtins.str]]:
+        """
+        List of base table ARNs that make up the view.
+        """
+        return pulumi.get(self, "sub_objects")
+
+    @_builtins.property
+    @pulumi.getter(name="viewVersionId")
+    def view_version_id(self) -> Optional[_builtins.int]:
+        """
+        ID value that identifies this view's version. For materialized views, the version ID is the Apache Iceberg table's snapshot ID.
+        """
+        return pulumi.get(self, "view_version_id")
+
+    @_builtins.property
+    @pulumi.getter(name="viewVersionToken")
+    def view_version_token(self) -> Optional[_builtins.str]:
+        """
+        Version ID of the Apache Iceberg table.
+        """
+        return pulumi.get(self, "view_version_token")
+
+
+@pulumi.output_type
+class CatalogTableViewDefinitionRepresentation(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "dialectVersion":
+            suggest = "dialect_version"
+        elif key == "validationConnection":
+            suggest = "validation_connection"
+        elif key == "viewExpandedText":
+            suggest = "view_expanded_text"
+        elif key == "viewOriginalText":
+            suggest = "view_original_text"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogTableViewDefinitionRepresentation. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogTableViewDefinitionRepresentation.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogTableViewDefinitionRepresentation.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 dialect: Optional[_builtins.str] = None,
+                 dialect_version: Optional[_builtins.str] = None,
+                 validation_connection: Optional[_builtins.str] = None,
+                 view_expanded_text: Optional[_builtins.str] = None,
+                 view_original_text: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str dialect: Parameter that specifies the engine type of a specific representation. Valid values are `REDSHIFT`, `ATHENA`, and `SPARK`.
+        :param _builtins.str dialect_version: Parameter that specifies the version of the engine of a specific representation.
+        :param _builtins.str validation_connection: Name of the connection to be used to validate the specific representation of the view.
+        :param _builtins.str view_expanded_text: String that represents the SQL query that describes the view with expanded resource ARNs.
+        :param _builtins.str view_original_text: String that represents the original SQL query that describes the view.
+        """
+        if dialect is not None:
+            pulumi.set(__self__, "dialect", dialect)
+        if dialect_version is not None:
+            pulumi.set(__self__, "dialect_version", dialect_version)
+        if validation_connection is not None:
+            pulumi.set(__self__, "validation_connection", validation_connection)
+        if view_expanded_text is not None:
+            pulumi.set(__self__, "view_expanded_text", view_expanded_text)
+        if view_original_text is not None:
+            pulumi.set(__self__, "view_original_text", view_original_text)
+
+    @_builtins.property
+    @pulumi.getter
+    def dialect(self) -> Optional[_builtins.str]:
+        """
+        Parameter that specifies the engine type of a specific representation. Valid values are `REDSHIFT`, `ATHENA`, and `SPARK`.
+        """
+        return pulumi.get(self, "dialect")
+
+    @_builtins.property
+    @pulumi.getter(name="dialectVersion")
+    def dialect_version(self) -> Optional[_builtins.str]:
+        """
+        Parameter that specifies the version of the engine of a specific representation.
+        """
+        return pulumi.get(self, "dialect_version")
+
+    @_builtins.property
+    @pulumi.getter(name="validationConnection")
+    def validation_connection(self) -> Optional[_builtins.str]:
+        """
+        Name of the connection to be used to validate the specific representation of the view.
+        """
+        return pulumi.get(self, "validation_connection")
+
+    @_builtins.property
+    @pulumi.getter(name="viewExpandedText")
+    def view_expanded_text(self) -> Optional[_builtins.str]:
+        """
+        String that represents the SQL query that describes the view with expanded resource ARNs.
+        """
+        return pulumi.get(self, "view_expanded_text")
+
+    @_builtins.property
+    @pulumi.getter(name="viewOriginalText")
+    def view_original_text(self) -> Optional[_builtins.str]:
+        """
+        String that represents the original SQL query that describes the view.
+        """
+        return pulumi.get(self, "view_original_text")
+
+
+@pulumi.output_type
+class CatalogTargetRedshiftCatalog(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "catalogArn":
+            suggest = "catalog_arn"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CatalogTargetRedshiftCatalog. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CatalogTargetRedshiftCatalog.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CatalogTargetRedshiftCatalog.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 catalog_arn: _builtins.str):
+        """
+        :param _builtins.str catalog_arn: ARN of the target Redshift catalog.
+        """
+        pulumi.set(__self__, "catalog_arn", catalog_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="catalogArn")
+    def catalog_arn(self) -> _builtins.str:
+        """
+        ARN of the target Redshift catalog.
+        """
+        return pulumi.get(self, "catalog_arn")
+
+
+@pulumi.output_type
+class CatalogTimeouts(dict):
+    def __init__(__self__, *,
+                 create: Optional[_builtins.str] = None,
+                 delete: Optional[_builtins.str] = None,
+                 update: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str create: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        :param _builtins.str delete: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        :param _builtins.str update: A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        if create is not None:
+            pulumi.set(__self__, "create", create)
+        if delete is not None:
+            pulumi.set(__self__, "delete", delete)
+        if update is not None:
+            pulumi.set(__self__, "update", update)
+
+    @_builtins.property
+    @pulumi.getter
+    def create(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "create")
+
+    @_builtins.property
+    @pulumi.getter
+    def delete(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+        """
+        return pulumi.get(self, "delete")
+
+    @_builtins.property
+    @pulumi.getter
+    def update(self) -> Optional[_builtins.str]:
+        """
+        A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+        """
+        return pulumi.get(self, "update")
+
+
+@pulumi.output_type
 class ClassifierCsvClassifier(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -1670,6 +3105,422 @@ class ClassifierXmlClassifier(dict):
 
 
 @pulumi.output_type
+class ConnectionAuthenticationConfiguration(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "authenticationType":
+            suggest = "authentication_type"
+        elif key == "basicAuthenticationCredentials":
+            suggest = "basic_authentication_credentials"
+        elif key == "customAuthenticationCredentials":
+            suggest = "custom_authentication_credentials"
+        elif key == "kmsKeyArn":
+            suggest = "kms_key_arn"
+        elif key == "oauth2Properties":
+            suggest = "oauth2_properties"
+        elif key == "secretArn":
+            suggest = "secret_arn"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ConnectionAuthenticationConfiguration. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ConnectionAuthenticationConfiguration.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ConnectionAuthenticationConfiguration.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 authentication_type: _builtins.str,
+                 basic_authentication_credentials: Optional['outputs.ConnectionAuthenticationConfigurationBasicAuthenticationCredentials'] = None,
+                 custom_authentication_credentials: Optional[Mapping[str, _builtins.str]] = None,
+                 kms_key_arn: Optional[_builtins.str] = None,
+                 oauth2_properties: Optional['outputs.ConnectionAuthenticationConfigurationOauth2Properties'] = None,
+                 secret_arn: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str authentication_type: Type of authentication. Valid values: `BASIC`, `CUSTOM`, `IAM`, `OAUTH2`.
+        :param 'ConnectionAuthenticationConfigurationBasicAuthenticationCredentialsArgs' basic_authentication_credentials: Basic authentication credentials. See `basic_authentication_credentials` below.
+        :param Mapping[str, _builtins.str] custom_authentication_credentials: Map of custom authentication credentials.
+        :param _builtins.str kms_key_arn: ARN of the KMS key used for encryption.
+        :param 'ConnectionAuthenticationConfigurationOauth2PropertiesArgs' oauth2_properties: OAuth2 properties. See `oauth2_properties` below.
+        :param _builtins.str secret_arn: ARN of the Secrets Manager secret containing credentials.
+        """
+        pulumi.set(__self__, "authentication_type", authentication_type)
+        if basic_authentication_credentials is not None:
+            pulumi.set(__self__, "basic_authentication_credentials", basic_authentication_credentials)
+        if custom_authentication_credentials is not None:
+            pulumi.set(__self__, "custom_authentication_credentials", custom_authentication_credentials)
+        if kms_key_arn is not None:
+            pulumi.set(__self__, "kms_key_arn", kms_key_arn)
+        if oauth2_properties is not None:
+            pulumi.set(__self__, "oauth2_properties", oauth2_properties)
+        if secret_arn is not None:
+            pulumi.set(__self__, "secret_arn", secret_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="authenticationType")
+    def authentication_type(self) -> _builtins.str:
+        """
+        Type of authentication. Valid values: `BASIC`, `CUSTOM`, `IAM`, `OAUTH2`.
+        """
+        return pulumi.get(self, "authentication_type")
+
+    @_builtins.property
+    @pulumi.getter(name="basicAuthenticationCredentials")
+    def basic_authentication_credentials(self) -> Optional['outputs.ConnectionAuthenticationConfigurationBasicAuthenticationCredentials']:
+        """
+        Basic authentication credentials. See `basic_authentication_credentials` below.
+        """
+        return pulumi.get(self, "basic_authentication_credentials")
+
+    @_builtins.property
+    @pulumi.getter(name="customAuthenticationCredentials")
+    def custom_authentication_credentials(self) -> Optional[Mapping[str, _builtins.str]]:
+        """
+        Map of custom authentication credentials.
+        """
+        return pulumi.get(self, "custom_authentication_credentials")
+
+    @_builtins.property
+    @pulumi.getter(name="kmsKeyArn")
+    def kms_key_arn(self) -> Optional[_builtins.str]:
+        """
+        ARN of the KMS key used for encryption.
+        """
+        return pulumi.get(self, "kms_key_arn")
+
+    @_builtins.property
+    @pulumi.getter(name="oauth2Properties")
+    def oauth2_properties(self) -> Optional['outputs.ConnectionAuthenticationConfigurationOauth2Properties']:
+        """
+        OAuth2 properties. See `oauth2_properties` below.
+        """
+        return pulumi.get(self, "oauth2_properties")
+
+    @_builtins.property
+    @pulumi.getter(name="secretArn")
+    def secret_arn(self) -> Optional[_builtins.str]:
+        """
+        ARN of the Secrets Manager secret containing credentials.
+        """
+        return pulumi.get(self, "secret_arn")
+
+
+@pulumi.output_type
+class ConnectionAuthenticationConfigurationBasicAuthenticationCredentials(dict):
+    def __init__(__self__, *,
+                 password: _builtins.str,
+                 username: _builtins.str):
+        """
+        :param _builtins.str password: Password for authentication.
+        :param _builtins.str username: Username for authentication.
+        """
+        pulumi.set(__self__, "password", password)
+        pulumi.set(__self__, "username", username)
+
+    @_builtins.property
+    @pulumi.getter
+    def password(self) -> _builtins.str:
+        """
+        Password for authentication.
+        """
+        return pulumi.get(self, "password")
+
+    @_builtins.property
+    @pulumi.getter
+    def username(self) -> _builtins.str:
+        """
+        Username for authentication.
+        """
+        return pulumi.get(self, "username")
+
+
+@pulumi.output_type
+class ConnectionAuthenticationConfigurationOauth2Properties(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "authorizationCodeProperties":
+            suggest = "authorization_code_properties"
+        elif key == "oauth2ClientApplication":
+            suggest = "oauth2_client_application"
+        elif key == "oauth2Credentials":
+            suggest = "oauth2_credentials"
+        elif key == "oauth2GrantType":
+            suggest = "oauth2_grant_type"
+        elif key == "tokenUrl":
+            suggest = "token_url"
+        elif key == "tokenUrlParametersMap":
+            suggest = "token_url_parameters_map"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ConnectionAuthenticationConfigurationOauth2Properties. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ConnectionAuthenticationConfigurationOauth2Properties.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ConnectionAuthenticationConfigurationOauth2Properties.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 authorization_code_properties: Optional['outputs.ConnectionAuthenticationConfigurationOauth2PropertiesAuthorizationCodeProperties'] = None,
+                 oauth2_client_application: Optional['outputs.ConnectionAuthenticationConfigurationOauth2PropertiesOauth2ClientApplication'] = None,
+                 oauth2_credentials: Optional['outputs.ConnectionAuthenticationConfigurationOauth2PropertiesOauth2Credentials'] = None,
+                 oauth2_grant_type: Optional[_builtins.str] = None,
+                 token_url: Optional[_builtins.str] = None,
+                 token_url_parameters_map: Optional[Mapping[str, _builtins.str]] = None):
+        """
+        :param 'ConnectionAuthenticationConfigurationOauth2PropertiesAuthorizationCodePropertiesArgs' authorization_code_properties: Authorization code properties. See `authorization_code_properties` below.
+        :param 'ConnectionAuthenticationConfigurationOauth2PropertiesOauth2ClientApplicationArgs' oauth2_client_application: OAuth2 client application details. See `oauth2_client_application` below.
+        :param 'ConnectionAuthenticationConfigurationOauth2PropertiesOauth2CredentialsArgs' oauth2_credentials: OAuth2 credentials. See `oauth2_credentials` below.
+        :param _builtins.str oauth2_grant_type: OAuth2 grant type. Valid values: `AUTHORIZATION_CODE`, `CLIENT_CREDENTIALS`, `JWT_BEARER`.
+        :param _builtins.str token_url: Token URL for OAuth2 authentication.
+        :param Mapping[str, _builtins.str] token_url_parameters_map: Map of additional parameters for the token URL.
+        """
+        if authorization_code_properties is not None:
+            pulumi.set(__self__, "authorization_code_properties", authorization_code_properties)
+        if oauth2_client_application is not None:
+            pulumi.set(__self__, "oauth2_client_application", oauth2_client_application)
+        if oauth2_credentials is not None:
+            pulumi.set(__self__, "oauth2_credentials", oauth2_credentials)
+        if oauth2_grant_type is not None:
+            pulumi.set(__self__, "oauth2_grant_type", oauth2_grant_type)
+        if token_url is not None:
+            pulumi.set(__self__, "token_url", token_url)
+        if token_url_parameters_map is not None:
+            pulumi.set(__self__, "token_url_parameters_map", token_url_parameters_map)
+
+    @_builtins.property
+    @pulumi.getter(name="authorizationCodeProperties")
+    def authorization_code_properties(self) -> Optional['outputs.ConnectionAuthenticationConfigurationOauth2PropertiesAuthorizationCodeProperties']:
+        """
+        Authorization code properties. See `authorization_code_properties` below.
+        """
+        return pulumi.get(self, "authorization_code_properties")
+
+    @_builtins.property
+    @pulumi.getter(name="oauth2ClientApplication")
+    def oauth2_client_application(self) -> Optional['outputs.ConnectionAuthenticationConfigurationOauth2PropertiesOauth2ClientApplication']:
+        """
+        OAuth2 client application details. See `oauth2_client_application` below.
+        """
+        return pulumi.get(self, "oauth2_client_application")
+
+    @_builtins.property
+    @pulumi.getter(name="oauth2Credentials")
+    def oauth2_credentials(self) -> Optional['outputs.ConnectionAuthenticationConfigurationOauth2PropertiesOauth2Credentials']:
+        """
+        OAuth2 credentials. See `oauth2_credentials` below.
+        """
+        return pulumi.get(self, "oauth2_credentials")
+
+    @_builtins.property
+    @pulumi.getter(name="oauth2GrantType")
+    def oauth2_grant_type(self) -> Optional[_builtins.str]:
+        """
+        OAuth2 grant type. Valid values: `AUTHORIZATION_CODE`, `CLIENT_CREDENTIALS`, `JWT_BEARER`.
+        """
+        return pulumi.get(self, "oauth2_grant_type")
+
+    @_builtins.property
+    @pulumi.getter(name="tokenUrl")
+    def token_url(self) -> Optional[_builtins.str]:
+        """
+        Token URL for OAuth2 authentication.
+        """
+        return pulumi.get(self, "token_url")
+
+    @_builtins.property
+    @pulumi.getter(name="tokenUrlParametersMap")
+    def token_url_parameters_map(self) -> Optional[Mapping[str, _builtins.str]]:
+        """
+        Map of additional parameters for the token URL.
+        """
+        return pulumi.get(self, "token_url_parameters_map")
+
+
+@pulumi.output_type
+class ConnectionAuthenticationConfigurationOauth2PropertiesAuthorizationCodeProperties(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "authorizationCode":
+            suggest = "authorization_code"
+        elif key == "redirectUri":
+            suggest = "redirect_uri"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ConnectionAuthenticationConfigurationOauth2PropertiesAuthorizationCodeProperties. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ConnectionAuthenticationConfigurationOauth2PropertiesAuthorizationCodeProperties.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ConnectionAuthenticationConfigurationOauth2PropertiesAuthorizationCodeProperties.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 authorization_code: _builtins.str,
+                 redirect_uri: _builtins.str):
+        """
+        :param _builtins.str authorization_code: Authorization code.
+        :param _builtins.str redirect_uri: Redirect URI for OAuth2 flow.
+        """
+        pulumi.set(__self__, "authorization_code", authorization_code)
+        pulumi.set(__self__, "redirect_uri", redirect_uri)
+
+    @_builtins.property
+    @pulumi.getter(name="authorizationCode")
+    def authorization_code(self) -> _builtins.str:
+        """
+        Authorization code.
+        """
+        return pulumi.get(self, "authorization_code")
+
+    @_builtins.property
+    @pulumi.getter(name="redirectUri")
+    def redirect_uri(self) -> _builtins.str:
+        """
+        Redirect URI for OAuth2 flow.
+        """
+        return pulumi.get(self, "redirect_uri")
+
+
+@pulumi.output_type
+class ConnectionAuthenticationConfigurationOauth2PropertiesOauth2ClientApplication(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "awsManagedClientApplicationReference":
+            suggest = "aws_managed_client_application_reference"
+        elif key == "userManagedClientApplicationClientId":
+            suggest = "user_managed_client_application_client_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ConnectionAuthenticationConfigurationOauth2PropertiesOauth2ClientApplication. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ConnectionAuthenticationConfigurationOauth2PropertiesOauth2ClientApplication.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ConnectionAuthenticationConfigurationOauth2PropertiesOauth2ClientApplication.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 aws_managed_client_application_reference: Optional[_builtins.str] = None,
+                 user_managed_client_application_client_id: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str aws_managed_client_application_reference: Reference to an AWS-managed client application.
+        :param _builtins.str user_managed_client_application_client_id: Client ID for a user-managed client application.
+        """
+        if aws_managed_client_application_reference is not None:
+            pulumi.set(__self__, "aws_managed_client_application_reference", aws_managed_client_application_reference)
+        if user_managed_client_application_client_id is not None:
+            pulumi.set(__self__, "user_managed_client_application_client_id", user_managed_client_application_client_id)
+
+    @_builtins.property
+    @pulumi.getter(name="awsManagedClientApplicationReference")
+    def aws_managed_client_application_reference(self) -> Optional[_builtins.str]:
+        """
+        Reference to an AWS-managed client application.
+        """
+        return pulumi.get(self, "aws_managed_client_application_reference")
+
+    @_builtins.property
+    @pulumi.getter(name="userManagedClientApplicationClientId")
+    def user_managed_client_application_client_id(self) -> Optional[_builtins.str]:
+        """
+        Client ID for a user-managed client application.
+        """
+        return pulumi.get(self, "user_managed_client_application_client_id")
+
+
+@pulumi.output_type
+class ConnectionAuthenticationConfigurationOauth2PropertiesOauth2Credentials(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "accessToken":
+            suggest = "access_token"
+        elif key == "jwtToken":
+            suggest = "jwt_token"
+        elif key == "refreshToken":
+            suggest = "refresh_token"
+        elif key == "userManagedClientApplicationClientSecret":
+            suggest = "user_managed_client_application_client_secret"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ConnectionAuthenticationConfigurationOauth2PropertiesOauth2Credentials. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ConnectionAuthenticationConfigurationOauth2PropertiesOauth2Credentials.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ConnectionAuthenticationConfigurationOauth2PropertiesOauth2Credentials.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 access_token: Optional[_builtins.str] = None,
+                 jwt_token: Optional[_builtins.str] = None,
+                 refresh_token: Optional[_builtins.str] = None,
+                 user_managed_client_application_client_secret: Optional[_builtins.str] = None):
+        """
+        :param _builtins.str access_token: OAuth2 access token.
+        :param _builtins.str jwt_token: JWT token.
+        :param _builtins.str refresh_token: OAuth2 refresh token.
+        :param _builtins.str user_managed_client_application_client_secret: Client secret for user-managed client application.
+        """
+        if access_token is not None:
+            pulumi.set(__self__, "access_token", access_token)
+        if jwt_token is not None:
+            pulumi.set(__self__, "jwt_token", jwt_token)
+        if refresh_token is not None:
+            pulumi.set(__self__, "refresh_token", refresh_token)
+        if user_managed_client_application_client_secret is not None:
+            pulumi.set(__self__, "user_managed_client_application_client_secret", user_managed_client_application_client_secret)
+
+    @_builtins.property
+    @pulumi.getter(name="accessToken")
+    def access_token(self) -> Optional[_builtins.str]:
+        """
+        OAuth2 access token.
+        """
+        return pulumi.get(self, "access_token")
+
+    @_builtins.property
+    @pulumi.getter(name="jwtToken")
+    def jwt_token(self) -> Optional[_builtins.str]:
+        """
+        JWT token.
+        """
+        return pulumi.get(self, "jwt_token")
+
+    @_builtins.property
+    @pulumi.getter(name="refreshToken")
+    def refresh_token(self) -> Optional[_builtins.str]:
+        """
+        OAuth2 refresh token.
+        """
+        return pulumi.get(self, "refresh_token")
+
+    @_builtins.property
+    @pulumi.getter(name="userManagedClientApplicationClientSecret")
+    def user_managed_client_application_client_secret(self) -> Optional[_builtins.str]:
+        """
+        Client secret for user-managed client application.
+        """
+        return pulumi.get(self, "user_managed_client_application_client_secret")
+
+
+@pulumi.output_type
 class ConnectionPhysicalConnectionRequirements(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -1697,9 +3548,9 @@ class ConnectionPhysicalConnectionRequirements(dict):
                  security_group_id_lists: Optional[Sequence[_builtins.str]] = None,
                  subnet_id: Optional[_builtins.str] = None):
         """
-        :param _builtins.str availability_zone: The availability zone of the connection. This field is redundant and implied by `subnet_id`, but is currently an api requirement.
-        :param Sequence[_builtins.str] security_group_id_lists: The security group ID list used by the connection.
-        :param _builtins.str subnet_id: The subnet ID used by the connection.
+        :param _builtins.str availability_zone: Availability zone of the connection. This field is redundant and implied by `subnet_id`, but is currently an API requirement.
+        :param Sequence[_builtins.str] security_group_id_lists: Security group ID list used by the connection.
+        :param _builtins.str subnet_id: Subnet ID used by the connection.
         """
         if availability_zone is not None:
             pulumi.set(__self__, "availability_zone", availability_zone)
@@ -1712,7 +3563,7 @@ class ConnectionPhysicalConnectionRequirements(dict):
     @pulumi.getter(name="availabilityZone")
     def availability_zone(self) -> Optional[_builtins.str]:
         """
-        The availability zone of the connection. This field is redundant and implied by `subnet_id`, but is currently an api requirement.
+        Availability zone of the connection. This field is redundant and implied by `subnet_id`, but is currently an API requirement.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -1720,7 +3571,7 @@ class ConnectionPhysicalConnectionRequirements(dict):
     @pulumi.getter(name="securityGroupIdLists")
     def security_group_id_lists(self) -> Optional[Sequence[_builtins.str]]:
         """
-        The security group ID list used by the connection.
+        Security group ID list used by the connection.
         """
         return pulumi.get(self, "security_group_id_lists")
 
@@ -1728,7 +3579,7 @@ class ConnectionPhysicalConnectionRequirements(dict):
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> Optional[_builtins.str]:
         """
-        The subnet ID used by the connection.
+        Subnet ID used by the connection.
         """
         return pulumi.get(self, "subnet_id")
 
@@ -3746,7 +5597,7 @@ class SecurityConfigurationEncryptionConfiguration(dict):
                  job_bookmarks_encryption: 'outputs.SecurityConfigurationEncryptionConfigurationJobBookmarksEncryption',
                  s3_encryption: 'outputs.SecurityConfigurationEncryptionConfigurationS3Encryption'):
         """
-        :param 'SecurityConfigurationEncryptionConfigurationS3EncryptionArgs' s3_encryption: A `s3_encryption ` block as described below, which contains encryption configuration for S3 data.
+        :param 'SecurityConfigurationEncryptionConfigurationS3EncryptionArgs' s3_encryption: A ` s3_encryption  ` block as described below, which contains encryption configuration for S3 data.
         """
         pulumi.set(__self__, "cloudwatch_encryption", cloudwatch_encryption)
         pulumi.set(__self__, "job_bookmarks_encryption", job_bookmarks_encryption)
@@ -3766,7 +5617,7 @@ class SecurityConfigurationEncryptionConfiguration(dict):
     @pulumi.getter(name="s3Encryption")
     def s3_encryption(self) -> 'outputs.SecurityConfigurationEncryptionConfigurationS3Encryption':
         """
-        A `s3_encryption ` block as described below, which contains encryption configuration for S3 data.
+        A ` s3_encryption  ` block as described below, which contains encryption configuration for S3 data.
         """
         return pulumi.get(self, "s3_encryption")
 
@@ -3797,7 +5648,7 @@ class SecurityConfigurationEncryptionConfigurationCloudwatchEncryption(dict):
                  kms_key_arn: Optional[_builtins.str] = None):
         """
         :param _builtins.str cloudwatch_encryption_mode: Encryption mode to use for CloudWatch data. Valid values: `DISABLED`, `SSE-KMS`. Default value: `DISABLED`.
-        :param _builtins.str kms_key_arn: Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.
+        :param _builtins.str kms_key_arn: ARN of the KMS key to be used to encrypt the data.
         """
         if cloudwatch_encryption_mode is not None:
             pulumi.set(__self__, "cloudwatch_encryption_mode", cloudwatch_encryption_mode)
@@ -3816,7 +5667,7 @@ class SecurityConfigurationEncryptionConfigurationCloudwatchEncryption(dict):
     @pulumi.getter(name="kmsKeyArn")
     def kms_key_arn(self) -> Optional[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.
+        ARN of the KMS key to be used to encrypt the data.
         """
         return pulumi.get(self, "kms_key_arn")
 
@@ -3847,7 +5698,7 @@ class SecurityConfigurationEncryptionConfigurationJobBookmarksEncryption(dict):
                  kms_key_arn: Optional[_builtins.str] = None):
         """
         :param _builtins.str job_bookmarks_encryption_mode: Encryption mode to use for job bookmarks data. Valid values: `CSE-KMS`, `DISABLED`. Default value: `DISABLED`.
-        :param _builtins.str kms_key_arn: Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.
+        :param _builtins.str kms_key_arn: ARN of the KMS key to be used to encrypt the data.
         """
         if job_bookmarks_encryption_mode is not None:
             pulumi.set(__self__, "job_bookmarks_encryption_mode", job_bookmarks_encryption_mode)
@@ -3866,7 +5717,7 @@ class SecurityConfigurationEncryptionConfigurationJobBookmarksEncryption(dict):
     @pulumi.getter(name="kmsKeyArn")
     def kms_key_arn(self) -> Optional[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.
+        ARN of the KMS key to be used to encrypt the data.
         """
         return pulumi.get(self, "kms_key_arn")
 
@@ -3896,7 +5747,7 @@ class SecurityConfigurationEncryptionConfigurationS3Encryption(dict):
                  kms_key_arn: Optional[_builtins.str] = None,
                  s3_encryption_mode: Optional[_builtins.str] = None):
         """
-        :param _builtins.str kms_key_arn: Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.
+        :param _builtins.str kms_key_arn: ARN of the KMS key to be used to encrypt the data.
         :param _builtins.str s3_encryption_mode: Encryption mode to use for S3 data. Valid values: `DISABLED`, `SSE-KMS`, `SSE-S3`. Default value: `DISABLED`.
         """
         if kms_key_arn is not None:
@@ -3908,7 +5759,7 @@ class SecurityConfigurationEncryptionConfigurationS3Encryption(dict):
     @pulumi.getter(name="kmsKeyArn")
     def kms_key_arn(self) -> Optional[_builtins.str]:
         """
-        Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.
+        ARN of the KMS key to be used to encrypt the data.
         """
         return pulumi.get(self, "kms_key_arn")
 
@@ -4272,6 +6123,308 @@ class UserDefinedFunctionResourceUri(dict):
         The URI for accessing the resource.
         """
         return pulumi.get(self, "uri")
+
+
+@pulumi.output_type
+class GetCatalogCatalogPropertyResult(dict):
+    def __init__(__self__, *,
+                 custom_properties: Mapping[str, _builtins.str],
+                 data_lake_access_properties: Sequence['outputs.GetCatalogCatalogPropertyDataLakeAccessPropertyResult'],
+                 iceberg_optimization_properties: Sequence['outputs.GetCatalogCatalogPropertyIcebergOptimizationPropertyResult']):
+        """
+        :param Mapping[str, _builtins.str] custom_properties: Map of custom key-value pairs for the catalog properties.
+        :param Sequence['GetCatalogCatalogPropertyDataLakeAccessPropertyArgs'] data_lake_access_properties: Data lake access properties. See `data_lake_access_properties` below.
+        :param Sequence['GetCatalogCatalogPropertyIcebergOptimizationPropertyArgs'] iceberg_optimization_properties: Iceberg optimization properties. See `iceberg_optimization_properties` below.
+        """
+        pulumi.set(__self__, "custom_properties", custom_properties)
+        pulumi.set(__self__, "data_lake_access_properties", data_lake_access_properties)
+        pulumi.set(__self__, "iceberg_optimization_properties", iceberg_optimization_properties)
+
+    @_builtins.property
+    @pulumi.getter(name="customProperties")
+    def custom_properties(self) -> Mapping[str, _builtins.str]:
+        """
+        Map of custom key-value pairs for the catalog properties.
+        """
+        return pulumi.get(self, "custom_properties")
+
+    @_builtins.property
+    @pulumi.getter(name="dataLakeAccessProperties")
+    def data_lake_access_properties(self) -> Sequence['outputs.GetCatalogCatalogPropertyDataLakeAccessPropertyResult']:
+        """
+        Data lake access properties. See `data_lake_access_properties` below.
+        """
+        return pulumi.get(self, "data_lake_access_properties")
+
+    @_builtins.property
+    @pulumi.getter(name="icebergOptimizationProperties")
+    def iceberg_optimization_properties(self) -> Sequence['outputs.GetCatalogCatalogPropertyIcebergOptimizationPropertyResult']:
+        """
+        Iceberg optimization properties. See `iceberg_optimization_properties` below.
+        """
+        return pulumi.get(self, "iceberg_optimization_properties")
+
+
+@pulumi.output_type
+class GetCatalogCatalogPropertyDataLakeAccessPropertyResult(dict):
+    def __init__(__self__, *,
+                 catalog_type: _builtins.str,
+                 data_lake_access: _builtins.bool,
+                 data_transfer_role: _builtins.str,
+                 kms_key: _builtins.str,
+                 managed_workgroup_name: _builtins.str,
+                 managed_workgroup_status: _builtins.str,
+                 redshift_database_name: _builtins.str,
+                 status_message: _builtins.str):
+        """
+        :param _builtins.str catalog_type: Type of the catalog.
+        :param _builtins.bool data_lake_access: Whether data lake access is enabled.
+        :param _builtins.str data_transfer_role: ARN of the IAM role used for data transfer.
+        :param _builtins.str kms_key: ARN of the KMS key used for encryption.
+        :param _builtins.str managed_workgroup_name: Managed workgroup name.
+        :param _builtins.str managed_workgroup_status: Managed workgroup status.
+        :param _builtins.str redshift_database_name: Redshift database name.
+        :param _builtins.str status_message: Status message.
+        """
+        pulumi.set(__self__, "catalog_type", catalog_type)
+        pulumi.set(__self__, "data_lake_access", data_lake_access)
+        pulumi.set(__self__, "data_transfer_role", data_transfer_role)
+        pulumi.set(__self__, "kms_key", kms_key)
+        pulumi.set(__self__, "managed_workgroup_name", managed_workgroup_name)
+        pulumi.set(__self__, "managed_workgroup_status", managed_workgroup_status)
+        pulumi.set(__self__, "redshift_database_name", redshift_database_name)
+        pulumi.set(__self__, "status_message", status_message)
+
+    @_builtins.property
+    @pulumi.getter(name="catalogType")
+    def catalog_type(self) -> _builtins.str:
+        """
+        Type of the catalog.
+        """
+        return pulumi.get(self, "catalog_type")
+
+    @_builtins.property
+    @pulumi.getter(name="dataLakeAccess")
+    def data_lake_access(self) -> _builtins.bool:
+        """
+        Whether data lake access is enabled.
+        """
+        return pulumi.get(self, "data_lake_access")
+
+    @_builtins.property
+    @pulumi.getter(name="dataTransferRole")
+    def data_transfer_role(self) -> _builtins.str:
+        """
+        ARN of the IAM role used for data transfer.
+        """
+        return pulumi.get(self, "data_transfer_role")
+
+    @_builtins.property
+    @pulumi.getter(name="kmsKey")
+    def kms_key(self) -> _builtins.str:
+        """
+        ARN of the KMS key used for encryption.
+        """
+        return pulumi.get(self, "kms_key")
+
+    @_builtins.property
+    @pulumi.getter(name="managedWorkgroupName")
+    def managed_workgroup_name(self) -> _builtins.str:
+        """
+        Managed workgroup name.
+        """
+        return pulumi.get(self, "managed_workgroup_name")
+
+    @_builtins.property
+    @pulumi.getter(name="managedWorkgroupStatus")
+    def managed_workgroup_status(self) -> _builtins.str:
+        """
+        Managed workgroup status.
+        """
+        return pulumi.get(self, "managed_workgroup_status")
+
+    @_builtins.property
+    @pulumi.getter(name="redshiftDatabaseName")
+    def redshift_database_name(self) -> _builtins.str:
+        """
+        Redshift database name.
+        """
+        return pulumi.get(self, "redshift_database_name")
+
+    @_builtins.property
+    @pulumi.getter(name="statusMessage")
+    def status_message(self) -> _builtins.str:
+        """
+        Status message.
+        """
+        return pulumi.get(self, "status_message")
+
+
+@pulumi.output_type
+class GetCatalogCatalogPropertyIcebergOptimizationPropertyResult(dict):
+    def __init__(__self__, *,
+                 compaction: Mapping[str, _builtins.str],
+                 orphan_file_deletion: Mapping[str, _builtins.str],
+                 retention: Mapping[str, _builtins.str],
+                 role_arn: _builtins.str):
+        pulumi.set(__self__, "compaction", compaction)
+        pulumi.set(__self__, "orphan_file_deletion", orphan_file_deletion)
+        pulumi.set(__self__, "retention", retention)
+        pulumi.set(__self__, "role_arn", role_arn)
+
+    @_builtins.property
+    @pulumi.getter
+    def compaction(self) -> Mapping[str, _builtins.str]:
+        return pulumi.get(self, "compaction")
+
+    @_builtins.property
+    @pulumi.getter(name="orphanFileDeletion")
+    def orphan_file_deletion(self) -> Mapping[str, _builtins.str]:
+        return pulumi.get(self, "orphan_file_deletion")
+
+    @_builtins.property
+    @pulumi.getter
+    def retention(self) -> Mapping[str, _builtins.str]:
+        return pulumi.get(self, "retention")
+
+    @_builtins.property
+    @pulumi.getter(name="roleArn")
+    def role_arn(self) -> _builtins.str:
+        return pulumi.get(self, "role_arn")
+
+
+@pulumi.output_type
+class GetCatalogCreateDatabaseDefaultPermissionResult(dict):
+    def __init__(__self__, *,
+                 permissions: Sequence[_builtins.str],
+                 principals: Sequence['outputs.GetCatalogCreateDatabaseDefaultPermissionPrincipalResult']):
+        """
+        :param Sequence[_builtins.str] permissions: Permissions that are granted to the principal.
+        :param Sequence['GetCatalogCreateDatabaseDefaultPermissionPrincipalArgs'] principals: Principal who is granted permissions. See `principal` below.
+        """
+        pulumi.set(__self__, "permissions", permissions)
+        pulumi.set(__self__, "principals", principals)
+
+    @_builtins.property
+    @pulumi.getter
+    def permissions(self) -> Sequence[_builtins.str]:
+        """
+        Permissions that are granted to the principal.
+        """
+        return pulumi.get(self, "permissions")
+
+    @_builtins.property
+    @pulumi.getter
+    def principals(self) -> Sequence['outputs.GetCatalogCreateDatabaseDefaultPermissionPrincipalResult']:
+        """
+        Principal who is granted permissions. See `principal` below.
+        """
+        return pulumi.get(self, "principals")
+
+
+@pulumi.output_type
+class GetCatalogCreateDatabaseDefaultPermissionPrincipalResult(dict):
+    def __init__(__self__, *,
+                 data_lake_principal_identifier: _builtins.str):
+        """
+        :param _builtins.str data_lake_principal_identifier: Identifier for the Lake Formation principal.
+        """
+        pulumi.set(__self__, "data_lake_principal_identifier", data_lake_principal_identifier)
+
+    @_builtins.property
+    @pulumi.getter(name="dataLakePrincipalIdentifier")
+    def data_lake_principal_identifier(self) -> _builtins.str:
+        """
+        Identifier for the Lake Formation principal.
+        """
+        return pulumi.get(self, "data_lake_principal_identifier")
+
+
+@pulumi.output_type
+class GetCatalogCreateTableDefaultPermissionResult(dict):
+    def __init__(__self__, *,
+                 permissions: Sequence[_builtins.str],
+                 principals: Sequence['outputs.GetCatalogCreateTableDefaultPermissionPrincipalResult']):
+        """
+        :param Sequence[_builtins.str] permissions: Permissions that are granted to the principal.
+        :param Sequence['GetCatalogCreateTableDefaultPermissionPrincipalArgs'] principals: Principal who is granted permissions. See `principal` below.
+        """
+        pulumi.set(__self__, "permissions", permissions)
+        pulumi.set(__self__, "principals", principals)
+
+    @_builtins.property
+    @pulumi.getter
+    def permissions(self) -> Sequence[_builtins.str]:
+        """
+        Permissions that are granted to the principal.
+        """
+        return pulumi.get(self, "permissions")
+
+    @_builtins.property
+    @pulumi.getter
+    def principals(self) -> Sequence['outputs.GetCatalogCreateTableDefaultPermissionPrincipalResult']:
+        """
+        Principal who is granted permissions. See `principal` below.
+        """
+        return pulumi.get(self, "principals")
+
+
+@pulumi.output_type
+class GetCatalogCreateTableDefaultPermissionPrincipalResult(dict):
+    def __init__(__self__, *,
+                 data_lake_principal_identifier: _builtins.str):
+        """
+        :param _builtins.str data_lake_principal_identifier: Identifier for the Lake Formation principal.
+        """
+        pulumi.set(__self__, "data_lake_principal_identifier", data_lake_principal_identifier)
+
+    @_builtins.property
+    @pulumi.getter(name="dataLakePrincipalIdentifier")
+    def data_lake_principal_identifier(self) -> _builtins.str:
+        """
+        Identifier for the Lake Formation principal.
+        """
+        return pulumi.get(self, "data_lake_principal_identifier")
+
+
+@pulumi.output_type
+class GetCatalogFederatedCatalogResult(dict):
+    def __init__(__self__, *,
+                 connection_name: _builtins.str,
+                 connection_type: _builtins.str,
+                 identifier: _builtins.str):
+        """
+        :param _builtins.str connection_name: Name of the connection to the external metastore.
+        :param _builtins.str connection_type: Type of connection used to access the federated catalog.
+        :param _builtins.str identifier: Unique identifier for the federated catalog.
+        """
+        pulumi.set(__self__, "connection_name", connection_name)
+        pulumi.set(__self__, "connection_type", connection_type)
+        pulumi.set(__self__, "identifier", identifier)
+
+    @_builtins.property
+    @pulumi.getter(name="connectionName")
+    def connection_name(self) -> _builtins.str:
+        """
+        Name of the connection to the external metastore.
+        """
+        return pulumi.get(self, "connection_name")
+
+    @_builtins.property
+    @pulumi.getter(name="connectionType")
+    def connection_type(self) -> _builtins.str:
+        """
+        Type of connection used to access the federated catalog.
+        """
+        return pulumi.get(self, "connection_type")
+
+    @_builtins.property
+    @pulumi.getter
+    def identifier(self) -> _builtins.str:
+        """
+        Unique identifier for the federated catalog.
+        """
+        return pulumi.get(self, "identifier")
 
 
 @pulumi.output_type
@@ -4814,11 +6967,318 @@ class GetCatalogTableTargetTableResult(dict):
 
 
 @pulumi.output_type
+class GetCatalogTargetRedshiftCatalogResult(dict):
+    def __init__(__self__, *,
+                 catalog_arn: _builtins.str):
+        """
+        :param _builtins.str catalog_arn: ARN of the target Redshift catalog.
+        """
+        pulumi.set(__self__, "catalog_arn", catalog_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="catalogArn")
+    def catalog_arn(self) -> _builtins.str:
+        """
+        ARN of the target Redshift catalog.
+        """
+        return pulumi.get(self, "catalog_arn")
+
+
+@pulumi.output_type
+class GetConnectionAuthenticationConfigurationResult(dict):
+    def __init__(__self__, *,
+                 authentication_type: _builtins.str,
+                 basic_authentication_credentials: Sequence['outputs.GetConnectionAuthenticationConfigurationBasicAuthenticationCredentialResult'],
+                 custom_authentication_credentials: Mapping[str, _builtins.str],
+                 kms_key_arn: _builtins.str,
+                 oauth2_properties: Sequence['outputs.GetConnectionAuthenticationConfigurationOauth2PropertyResult'],
+                 secret_arn: _builtins.str):
+        """
+        :param _builtins.str authentication_type: Type of authentication used for the connection.
+        :param Sequence['GetConnectionAuthenticationConfigurationBasicAuthenticationCredentialArgs'] basic_authentication_credentials: Basic authentication credentials. See `basic_authentication_credentials` Block for details.
+        :param Mapping[str, _builtins.str] custom_authentication_credentials: Map of credentials used when the authentication type is custom authentication.
+        :param _builtins.str kms_key_arn: ARN of the KMS key used to encrypt the connection.
+        :param Sequence['GetConnectionAuthenticationConfigurationOauth2PropertyArgs'] oauth2_properties: OAuth2 properties. See `oauth2_properties` Block for details.
+        :param _builtins.str secret_arn: ARN of the secret used for authentication.
+        """
+        pulumi.set(__self__, "authentication_type", authentication_type)
+        pulumi.set(__self__, "basic_authentication_credentials", basic_authentication_credentials)
+        pulumi.set(__self__, "custom_authentication_credentials", custom_authentication_credentials)
+        pulumi.set(__self__, "kms_key_arn", kms_key_arn)
+        pulumi.set(__self__, "oauth2_properties", oauth2_properties)
+        pulumi.set(__self__, "secret_arn", secret_arn)
+
+    @_builtins.property
+    @pulumi.getter(name="authenticationType")
+    def authentication_type(self) -> _builtins.str:
+        """
+        Type of authentication used for the connection.
+        """
+        return pulumi.get(self, "authentication_type")
+
+    @_builtins.property
+    @pulumi.getter(name="basicAuthenticationCredentials")
+    def basic_authentication_credentials(self) -> Sequence['outputs.GetConnectionAuthenticationConfigurationBasicAuthenticationCredentialResult']:
+        """
+        Basic authentication credentials. See `basic_authentication_credentials` Block for details.
+        """
+        return pulumi.get(self, "basic_authentication_credentials")
+
+    @_builtins.property
+    @pulumi.getter(name="customAuthenticationCredentials")
+    def custom_authentication_credentials(self) -> Mapping[str, _builtins.str]:
+        """
+        Map of credentials used when the authentication type is custom authentication.
+        """
+        return pulumi.get(self, "custom_authentication_credentials")
+
+    @_builtins.property
+    @pulumi.getter(name="kmsKeyArn")
+    def kms_key_arn(self) -> _builtins.str:
+        """
+        ARN of the KMS key used to encrypt the connection.
+        """
+        return pulumi.get(self, "kms_key_arn")
+
+    @_builtins.property
+    @pulumi.getter(name="oauth2Properties")
+    def oauth2_properties(self) -> Sequence['outputs.GetConnectionAuthenticationConfigurationOauth2PropertyResult']:
+        """
+        OAuth2 properties. See `oauth2_properties` Block for details.
+        """
+        return pulumi.get(self, "oauth2_properties")
+
+    @_builtins.property
+    @pulumi.getter(name="secretArn")
+    def secret_arn(self) -> _builtins.str:
+        """
+        ARN of the secret used for authentication.
+        """
+        return pulumi.get(self, "secret_arn")
+
+
+@pulumi.output_type
+class GetConnectionAuthenticationConfigurationBasicAuthenticationCredentialResult(dict):
+    def __init__(__self__, *,
+                 password: _builtins.str,
+                 username: _builtins.str):
+        """
+        :param _builtins.str password: Password used for basic authentication.
+        :param _builtins.str username: Username used for basic authentication.
+        """
+        pulumi.set(__self__, "password", password)
+        pulumi.set(__self__, "username", username)
+
+    @_builtins.property
+    @pulumi.getter
+    def password(self) -> _builtins.str:
+        """
+        Password used for basic authentication.
+        """
+        return pulumi.get(self, "password")
+
+    @_builtins.property
+    @pulumi.getter
+    def username(self) -> _builtins.str:
+        """
+        Username used for basic authentication.
+        """
+        return pulumi.get(self, "username")
+
+
+@pulumi.output_type
+class GetConnectionAuthenticationConfigurationOauth2PropertyResult(dict):
+    def __init__(__self__, *,
+                 authorization_code_properties: Sequence['outputs.GetConnectionAuthenticationConfigurationOauth2PropertyAuthorizationCodePropertyResult'],
+                 oauth2_client_applications: Sequence['outputs.GetConnectionAuthenticationConfigurationOauth2PropertyOauth2ClientApplicationResult'],
+                 oauth2_credentials: Sequence['outputs.GetConnectionAuthenticationConfigurationOauth2PropertyOauth2CredentialResult'],
+                 oauth2_grant_type: _builtins.str,
+                 token_url: _builtins.str,
+                 token_url_parameters_map: Mapping[str, _builtins.str]):
+        """
+        :param Sequence['GetConnectionAuthenticationConfigurationOauth2PropertyAuthorizationCodePropertyArgs'] authorization_code_properties: Authorization code properties. See `authorization_code_properties` Block for details.
+        :param Sequence['GetConnectionAuthenticationConfigurationOauth2PropertyOauth2ClientApplicationArgs'] oauth2_client_applications: OAuth2 client application. See `oauth2_client_application` Block for details.
+        :param Sequence['GetConnectionAuthenticationConfigurationOauth2PropertyOauth2CredentialArgs'] oauth2_credentials: OAuth2 credentials. See `oauth2_credentials` Block for details.
+        :param _builtins.str oauth2_grant_type: OAuth2 grant type.
+        :param _builtins.str token_url: URL of the provider's authentication server used to exchange an authorization code for an access token.
+        :param Mapping[str, _builtins.str] token_url_parameters_map: Map of parameters to add to the token request.
+        """
+        pulumi.set(__self__, "authorization_code_properties", authorization_code_properties)
+        pulumi.set(__self__, "oauth2_client_applications", oauth2_client_applications)
+        pulumi.set(__self__, "oauth2_credentials", oauth2_credentials)
+        pulumi.set(__self__, "oauth2_grant_type", oauth2_grant_type)
+        pulumi.set(__self__, "token_url", token_url)
+        pulumi.set(__self__, "token_url_parameters_map", token_url_parameters_map)
+
+    @_builtins.property
+    @pulumi.getter(name="authorizationCodeProperties")
+    def authorization_code_properties(self) -> Sequence['outputs.GetConnectionAuthenticationConfigurationOauth2PropertyAuthorizationCodePropertyResult']:
+        """
+        Authorization code properties. See `authorization_code_properties` Block for details.
+        """
+        return pulumi.get(self, "authorization_code_properties")
+
+    @_builtins.property
+    @pulumi.getter(name="oauth2ClientApplications")
+    def oauth2_client_applications(self) -> Sequence['outputs.GetConnectionAuthenticationConfigurationOauth2PropertyOauth2ClientApplicationResult']:
+        """
+        OAuth2 client application. See `oauth2_client_application` Block for details.
+        """
+        return pulumi.get(self, "oauth2_client_applications")
+
+    @_builtins.property
+    @pulumi.getter(name="oauth2Credentials")
+    def oauth2_credentials(self) -> Sequence['outputs.GetConnectionAuthenticationConfigurationOauth2PropertyOauth2CredentialResult']:
+        """
+        OAuth2 credentials. See `oauth2_credentials` Block for details.
+        """
+        return pulumi.get(self, "oauth2_credentials")
+
+    @_builtins.property
+    @pulumi.getter(name="oauth2GrantType")
+    def oauth2_grant_type(self) -> _builtins.str:
+        """
+        OAuth2 grant type.
+        """
+        return pulumi.get(self, "oauth2_grant_type")
+
+    @_builtins.property
+    @pulumi.getter(name="tokenUrl")
+    def token_url(self) -> _builtins.str:
+        """
+        URL of the provider's authentication server used to exchange an authorization code for an access token.
+        """
+        return pulumi.get(self, "token_url")
+
+    @_builtins.property
+    @pulumi.getter(name="tokenUrlParametersMap")
+    def token_url_parameters_map(self) -> Mapping[str, _builtins.str]:
+        """
+        Map of parameters to add to the token request.
+        """
+        return pulumi.get(self, "token_url_parameters_map")
+
+
+@pulumi.output_type
+class GetConnectionAuthenticationConfigurationOauth2PropertyAuthorizationCodePropertyResult(dict):
+    def __init__(__self__, *,
+                 authorization_code: _builtins.str,
+                 redirect_uri: _builtins.str):
+        """
+        :param _builtins.str authorization_code: Authorization code used to obtain an access token.
+        :param _builtins.str redirect_uri: Redirect URI used in the authorization code request.
+        """
+        pulumi.set(__self__, "authorization_code", authorization_code)
+        pulumi.set(__self__, "redirect_uri", redirect_uri)
+
+    @_builtins.property
+    @pulumi.getter(name="authorizationCode")
+    def authorization_code(self) -> _builtins.str:
+        """
+        Authorization code used to obtain an access token.
+        """
+        return pulumi.get(self, "authorization_code")
+
+    @_builtins.property
+    @pulumi.getter(name="redirectUri")
+    def redirect_uri(self) -> _builtins.str:
+        """
+        Redirect URI used in the authorization code request.
+        """
+        return pulumi.get(self, "redirect_uri")
+
+
+@pulumi.output_type
+class GetConnectionAuthenticationConfigurationOauth2PropertyOauth2ClientApplicationResult(dict):
+    def __init__(__self__, *,
+                 aws_managed_client_application_reference: _builtins.str,
+                 user_managed_client_application_client_id: _builtins.str):
+        """
+        :param _builtins.str aws_managed_client_application_reference: Reference to the AWS managed client application.
+        :param _builtins.str user_managed_client_application_client_id: Client ID of the user-managed client application.
+        """
+        pulumi.set(__self__, "aws_managed_client_application_reference", aws_managed_client_application_reference)
+        pulumi.set(__self__, "user_managed_client_application_client_id", user_managed_client_application_client_id)
+
+    @_builtins.property
+    @pulumi.getter(name="awsManagedClientApplicationReference")
+    def aws_managed_client_application_reference(self) -> _builtins.str:
+        """
+        Reference to the AWS managed client application.
+        """
+        return pulumi.get(self, "aws_managed_client_application_reference")
+
+    @_builtins.property
+    @pulumi.getter(name="userManagedClientApplicationClientId")
+    def user_managed_client_application_client_id(self) -> _builtins.str:
+        """
+        Client ID of the user-managed client application.
+        """
+        return pulumi.get(self, "user_managed_client_application_client_id")
+
+
+@pulumi.output_type
+class GetConnectionAuthenticationConfigurationOauth2PropertyOauth2CredentialResult(dict):
+    def __init__(__self__, *,
+                 access_token: _builtins.str,
+                 jwt_token: _builtins.str,
+                 refresh_token: _builtins.str,
+                 user_managed_client_application_client_secret: _builtins.str):
+        """
+        :param _builtins.str access_token: Access token used for OAuth2 authentication.
+        :param _builtins.str jwt_token: JWT token used for OAuth2 authentication.
+        :param _builtins.str refresh_token: Refresh token used for OAuth2 authentication.
+        :param _builtins.str user_managed_client_application_client_secret: Client secret of the user-managed client application.
+        """
+        pulumi.set(__self__, "access_token", access_token)
+        pulumi.set(__self__, "jwt_token", jwt_token)
+        pulumi.set(__self__, "refresh_token", refresh_token)
+        pulumi.set(__self__, "user_managed_client_application_client_secret", user_managed_client_application_client_secret)
+
+    @_builtins.property
+    @pulumi.getter(name="accessToken")
+    def access_token(self) -> _builtins.str:
+        """
+        Access token used for OAuth2 authentication.
+        """
+        return pulumi.get(self, "access_token")
+
+    @_builtins.property
+    @pulumi.getter(name="jwtToken")
+    def jwt_token(self) -> _builtins.str:
+        """
+        JWT token used for OAuth2 authentication.
+        """
+        return pulumi.get(self, "jwt_token")
+
+    @_builtins.property
+    @pulumi.getter(name="refreshToken")
+    def refresh_token(self) -> _builtins.str:
+        """
+        Refresh token used for OAuth2 authentication.
+        """
+        return pulumi.get(self, "refresh_token")
+
+    @_builtins.property
+    @pulumi.getter(name="userManagedClientApplicationClientSecret")
+    def user_managed_client_application_client_secret(self) -> _builtins.str:
+        """
+        Client secret of the user-managed client application.
+        """
+        return pulumi.get(self, "user_managed_client_application_client_secret")
+
+
+@pulumi.output_type
 class GetConnectionPhysicalConnectionRequirementResult(dict):
     def __init__(__self__, *,
                  availability_zone: _builtins.str,
                  security_group_id_lists: Sequence[_builtins.str],
                  subnet_id: _builtins.str):
+        """
+        :param _builtins.str availability_zone: Availability Zone used by the connection.
+        :param Sequence[_builtins.str] security_group_id_lists: List of security group IDs used by the connection.
+        :param _builtins.str subnet_id: Subnet ID used by the connection.
+        """
         pulumi.set(__self__, "availability_zone", availability_zone)
         pulumi.set(__self__, "security_group_id_lists", security_group_id_lists)
         pulumi.set(__self__, "subnet_id", subnet_id)
@@ -4826,16 +7286,25 @@ class GetConnectionPhysicalConnectionRequirementResult(dict):
     @_builtins.property
     @pulumi.getter(name="availabilityZone")
     def availability_zone(self) -> _builtins.str:
+        """
+        Availability Zone used by the connection.
+        """
         return pulumi.get(self, "availability_zone")
 
     @_builtins.property
     @pulumi.getter(name="securityGroupIdLists")
     def security_group_id_lists(self) -> Sequence[_builtins.str]:
+        """
+        List of security group IDs used by the connection.
+        """
         return pulumi.get(self, "security_group_id_lists")
 
     @_builtins.property
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> _builtins.str:
+        """
+        Subnet ID used by the connection.
+        """
         return pulumi.get(self, "subnet_id")
 
 

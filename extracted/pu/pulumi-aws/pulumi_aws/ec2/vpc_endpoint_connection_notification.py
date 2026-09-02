@@ -21,11 +21,12 @@ class VpcEndpointConnectionNotificationArgs:
     def __init__(__self__, *,
                  connection_events: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
                  connection_notification_arn: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_service_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_service_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a VpcEndpointConnectionNotification resource.
+
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] connection_events: One or more endpoint [events](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVpcEndpointConnectionNotification.html#API_CreateVpcEndpointConnectionNotification_RequestParameters) for which to receive notifications.
                
                > **NOTE:** One of `vpc_endpoint_service_id` or `vpc_endpoint_id` must be specified.
@@ -71,53 +72,54 @@ class VpcEndpointConnectionNotificationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcEndpointId")
-    def vpc_endpoint_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def vpc_endpoint_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the VPC Endpoint to receive notifications for.
         """
         return pulumi.get(self, "vpc_endpoint_id")
 
     @vpc_endpoint_id.setter
-    def vpc_endpoint_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def vpc_endpoint_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "vpc_endpoint_id", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcEndpointServiceId")
-    def vpc_endpoint_service_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def vpc_endpoint_service_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the VPC Endpoint Service to receive notifications for.
         """
         return pulumi.get(self, "vpc_endpoint_service_id")
 
     @vpc_endpoint_service_id.setter
-    def vpc_endpoint_service_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def vpc_endpoint_service_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "vpc_endpoint_service_id", value)
 
 
 @pulumi.input_type
 class _VpcEndpointConnectionNotificationState:
     def __init__(__self__, *,
-                 connection_events: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 connection_notification_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 notification_type: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 state: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_service_id: Optional[pulumi.Input[_builtins.str]] = None):
+                 connection_events: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 connection_notification_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 notification_type: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 state: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_service_id: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering VpcEndpointConnectionNotification resources.
+
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] connection_events: One or more endpoint [events](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVpcEndpointConnectionNotification.html#API_CreateVpcEndpointConnectionNotification_RequestParameters) for which to receive notifications.
                
                > **NOTE:** One of `vpc_endpoint_service_id` or `vpc_endpoint_id` must be specified.
@@ -145,7 +147,7 @@ class _VpcEndpointConnectionNotificationState:
 
     @_builtins.property
     @pulumi.getter(name="connectionEvents")
-    def connection_events(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]:
+    def connection_events(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
         One or more endpoint [events](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVpcEndpointConnectionNotification.html#API_CreateVpcEndpointConnectionNotification_RequestParameters) for which to receive notifications.
 
@@ -154,79 +156,79 @@ class _VpcEndpointConnectionNotificationState:
         return pulumi.get(self, "connection_events")
 
     @connection_events.setter
-    def connection_events(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]]):
+    def connection_events(self, value: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "connection_events", value)
 
     @_builtins.property
     @pulumi.getter(name="connectionNotificationArn")
-    def connection_notification_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def connection_notification_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of the SNS topic for the notifications.
         """
         return pulumi.get(self, "connection_notification_arn")
 
     @connection_notification_arn.setter
-    def connection_notification_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def connection_notification_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "connection_notification_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="notificationType")
-    def notification_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def notification_type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The type of notification.
         """
         return pulumi.get(self, "notification_type")
 
     @notification_type.setter
-    def notification_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def notification_type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "notification_type", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def state(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def state(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The state of the notification.
         """
         return pulumi.get(self, "state")
 
     @state.setter
-    def state(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def state(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "state", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcEndpointId")
-    def vpc_endpoint_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def vpc_endpoint_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the VPC Endpoint to receive notifications for.
         """
         return pulumi.get(self, "vpc_endpoint_id")
 
     @vpc_endpoint_id.setter
-    def vpc_endpoint_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def vpc_endpoint_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "vpc_endpoint_id", value)
 
     @_builtins.property
     @pulumi.getter(name="vpcEndpointServiceId")
-    def vpc_endpoint_service_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def vpc_endpoint_service_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the VPC Endpoint Service to receive notifications for.
         """
         return pulumi.get(self, "vpc_endpoint_service_id")
 
     @vpc_endpoint_service_id.setter
-    def vpc_endpoint_service_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def vpc_endpoint_service_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "vpc_endpoint_service_id", value)
 
 
@@ -236,11 +238,11 @@ class VpcEndpointConnectionNotification(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 connection_events: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 connection_notification_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_service_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 connection_events: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 connection_notification_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_service_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides a VPC Endpoint connection notification resource.
@@ -253,11 +255,11 @@ class VpcEndpointConnectionNotification(pulumi.CustomResource):
         import pulumi_aws as aws
 
         topic = aws.iam.get_policy_document(statements=[{
-            "effect": "Allow",
             "principals": [{
                 "type": "Service",
                 "identifiers": ["vpce.amazonaws.com"],
             }],
+            "effect": "Allow",
             "actions": ["SNS:Publish"],
             "resources": ["arn:aws:sns:*:*:vpce-notification-topic"],
         }])
@@ -283,6 +285,7 @@ class VpcEndpointConnectionNotification(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:ec2/vpcEndpointConnectionNotification:VpcEndpointConnectionNotification foo vpce-nfn-09e6ed3b4efba2263
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -311,11 +314,11 @@ class VpcEndpointConnectionNotification(pulumi.CustomResource):
         import pulumi_aws as aws
 
         topic = aws.iam.get_policy_document(statements=[{
-            "effect": "Allow",
             "principals": [{
                 "type": "Service",
                 "identifiers": ["vpce.amazonaws.com"],
             }],
+            "effect": "Allow",
             "actions": ["SNS:Publish"],
             "resources": ["arn:aws:sns:*:*:vpce-notification-topic"],
         }])
@@ -342,6 +345,7 @@ class VpcEndpointConnectionNotification(pulumi.CustomResource):
         $ pulumi import aws:ec2/vpcEndpointConnectionNotification:VpcEndpointConnectionNotification foo vpce-nfn-09e6ed3b4efba2263
         ```
 
+
         :param str resource_name: The name of the resource.
         :param VpcEndpointConnectionNotificationArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -357,11 +361,11 @@ class VpcEndpointConnectionNotification(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 connection_events: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-                 connection_notification_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 vpc_endpoint_service_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 connection_events: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+                 connection_notification_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 vpc_endpoint_service_id: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -392,13 +396,13 @@ class VpcEndpointConnectionNotification(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            connection_events: Optional[pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]] = None,
-            connection_notification_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            notification_type: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            state: Optional[pulumi.Input[_builtins.str]] = None,
-            vpc_endpoint_id: Optional[pulumi.Input[_builtins.str]] = None,
-            vpc_endpoint_service_id: Optional[pulumi.Input[_builtins.str]] = None) -> 'VpcEndpointConnectionNotification':
+            connection_events: pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]] = None,
+            connection_notification_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            notification_type: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            state: pulumi.Input[Optional[_builtins.str]] = None,
+            vpc_endpoint_id: pulumi.Input[Optional[_builtins.str]] = None,
+            vpc_endpoint_service_id: pulumi.Input[Optional[_builtins.str]] = None) -> 'VpcEndpointConnectionNotification':
         """
         Get an existing VpcEndpointConnectionNotification resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

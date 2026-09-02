@@ -45,7 +45,7 @@ class TestExpressionMethods(BaseTest):
 
         # Takes no arguments and only complex input is interesting
         for method in [
-            'conj', 
+            'conj',
         ]:
             fn = getattr(cp, method)
             method_fn = getattr(complex_X, method)
@@ -55,8 +55,8 @@ class TestExpressionMethods(BaseTest):
 
         # Takes no arguments
         for method in [
-            'conj', 
-            'trace', 
+            'conj',
+            'trace',
             'cumsum',
             'max',
             'min',
@@ -77,7 +77,7 @@ class TestExpressionMethods(BaseTest):
 
         # Takes axis arguments
         for method in [
-            'cumsum', 
+            'cumsum',
         ]:
             for axis in [None, 0, 1]:
                 fn = getattr(cp, method)(X, axis)
@@ -88,12 +88,12 @@ class TestExpressionMethods(BaseTest):
 
         # Takes axis, keepdims arguments
         for method in [
-            'max', 
-            'mean', 
-            'min', 
-            'prod', 
-            'ptp', 
-            'sum', 
+            'max',
+            'mean',
+            'min',
+            'prod',
+            'ptp',
+            'sum',
 
         ]:
             for axis in [None, 0, 1]:
@@ -106,7 +106,7 @@ class TestExpressionMethods(BaseTest):
 
         # Takes axis, keepdims, ddof arguments
         for method in [
-            'std', 
+            'std',
         ]:
             for axis in [None, 0, 1]:
                 for keepdims in [True, False]:
@@ -119,7 +119,7 @@ class TestExpressionMethods(BaseTest):
 
         # Takes ddof arguments
         for method in [
-            'var', 
+            'var',
         ]:
             for ddof in [0, 1, 2]:
                 fn = getattr(cp, method)(X, ddof=ddof)
@@ -303,16 +303,15 @@ class TestExpressionMethods(BaseTest):
         self.assertEqual(Variable((2, 3)).sum(axis=1).shape, (2,))
 
         # Invalid axis.
-        with self.assertRaises(Exception) as cm:
+        with self.assertRaises(ValueError):
             cp.sum(self.x, axis=4)
-        self.assertEqual(str(cm.exception),
-                        "axis 4 is out of bounds for array of dimension 1")
 
-        A = sp.eye(3)
+        A = sp.eye_array(3)
         self.assertEqual(Constant(A).sum().value, 3)
 
-        A = sp.eye(3)
+        A = sp.eye_array(3)
         self.assertItemsAlmostEqual(Constant(A).sum(axis=0).value, [1, 1, 1])
+
     def test_trace(self) -> None:
         """Test the trace atom.
         """
@@ -324,7 +323,7 @@ class TestExpressionMethods(BaseTest):
         with self.assertRaises(Exception) as cm:
             self.C.trace()
         self.assertEqual(str(cm.exception),
-                         "Argument to trace must be a square matrix.")
+                         "Argument to trace must have ndim >= 2 with equal last two dimensions.")
 
     def test_trace_sign_psd(self) -> None:
         """Test sign of trace for psd/nsd inputs.
@@ -337,7 +336,7 @@ class TestExpressionMethods(BaseTest):
 
         assert psd_trace.is_nonneg()
         assert nsd_trace.is_nonpos()
-    
+
     def test_ptp(self) -> None:
         """Test the ptp atom.
         """

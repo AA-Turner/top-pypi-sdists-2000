@@ -144,6 +144,9 @@ class GetGroupResult:
     @_builtins.property
     @pulumi.getter(name="defaultCooldown")
     def default_cooldown(self) -> _builtins.int:
+        """
+        Amount of time, in seconds, after a scaling activity completes before another scaling activity can start.
+        """
         return pulumi.get(self, "default_cooldown")
 
     @_builtins.property
@@ -158,7 +161,7 @@ class GetGroupResult:
     @pulumi.getter(name="desiredCapacityType")
     def desired_capacity_type(self) -> _builtins.str:
         """
-        The unit of measurement for the value returned for `desired_capacity`.
+        Unit of measurement for the value returned for `desired_capacity`.
         """
         return pulumi.get(self, "desired_capacity_type")
 
@@ -174,7 +177,7 @@ class GetGroupResult:
     @pulumi.getter(name="healthCheckGracePeriod")
     def health_check_grace_period(self) -> _builtins.int:
         """
-        The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checking the health status of an EC2 instance that has come into service.
+        Amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checking the health status of an EC2 instance that has come into service.
         """
         return pulumi.get(self, "health_check_grace_period")
 
@@ -206,7 +209,7 @@ class GetGroupResult:
     @pulumi.getter(name="launchConfiguration")
     def launch_configuration(self) -> _builtins.str:
         """
-        The name of the associated launch configuration.
+        Name of the associated launch configuration.
         """
         return pulumi.get(self, "launch_configuration")
 
@@ -269,13 +272,16 @@ class GetGroupResult:
     @_builtins.property
     @pulumi.getter(name="newInstancesProtectedFromScaleIn")
     def new_instances_protected_from_scale_in(self) -> _builtins.bool:
+        """
+        Whether newly launched instances are protected from termination by Amazon EC2 Auto Scaling when scaling in.
+        """
         return pulumi.get(self, "new_instances_protected_from_scale_in")
 
     @_builtins.property
     @pulumi.getter(name="placementGroup")
     def placement_group(self) -> _builtins.str:
         """
-        Name of the placement group into which to launch your instances, if any. For more information, see Placement Groups (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html) in the Amazon Elastic Compute Cloud User Guide.
+        Name of the placement group into which to launch your instances, if any. For more information, see Placement Groups (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html) in the EC2 User Guide.
         """
         return pulumi.get(self, "placement_group")
 
@@ -336,7 +342,7 @@ class GetGroupResult:
     @pulumi.getter(name="terminationPolicies")
     def termination_policies(self) -> Sequence[_builtins.str]:
         """
-        The termination policies for the group.
+        Termination policies for the group.
         """
         return pulumi.get(self, "termination_policies")
 
@@ -471,8 +477,8 @@ def get_group(name: Optional[_builtins.str] = None,
         vpc_zone_identifier=pulumi.get(__ret__, 'vpc_zone_identifier'),
         warm_pool_size=pulumi.get(__ret__, 'warm_pool_size'),
         warm_pools=pulumi.get(__ret__, 'warm_pools'))
-def get_group_output(name: Optional[pulumi.Input[_builtins.str]] = None,
-                     region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_group_output(name: pulumi.Input[Optional[_builtins.str]] = None,
+                     region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                      opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetGroupResult]:
     """
     Use this data source to get information on an existing autoscaling group.

@@ -41,6 +41,7 @@ __all__ = [
     'TableServerSideEncryption',
     'TableTtl',
     'TableWarmThroughput',
+    'GetBackupsBackupSummaryResult',
     'GetTableAttributeResult',
     'GetTableGlobalSecondaryIndexResult',
     'GetTableGlobalSecondaryIndexKeySchemaResult',
@@ -761,8 +762,8 @@ class TableGlobalSecondaryIndexWarmThroughput(dict):
                  read_units_per_second: Optional[_builtins.int] = None,
                  write_units_per_second: Optional[_builtins.int] = None):
         """
-        :param _builtins.int read_units_per_second: Number of read operations a table or index can instantaneously support. For the base table, decreasing this value will force a new resource. For a global secondary index, this value can be increased or decreased without recreation. Minimum value of `12000` (default).
-        :param _builtins.int write_units_per_second: Number of write operations a table or index can instantaneously support. For the base table, decreasing this value will force a new resource. For a global secondary index, this value can be increased or decreased without recreation. Minimum value of `4000` (default).
+        :param _builtins.int read_units_per_second: Number of read operations a table or index can instantaneously support. For the base table, this value cannot be decreased. For a global secondary index, this value can be increased or decreased. Minimum value of `12000` (default).
+        :param _builtins.int write_units_per_second: Number of write operations a table or index can instantaneously support. For the base table, this value cannot be decreased. For a global secondary index, this value can be increased or decreased. Minimum value of `4000` (default).
         """
         if read_units_per_second is not None:
             pulumi.set(__self__, "read_units_per_second", read_units_per_second)
@@ -773,7 +774,7 @@ class TableGlobalSecondaryIndexWarmThroughput(dict):
     @pulumi.getter(name="readUnitsPerSecond")
     def read_units_per_second(self) -> Optional[_builtins.int]:
         """
-        Number of read operations a table or index can instantaneously support. For the base table, decreasing this value will force a new resource. For a global secondary index, this value can be increased or decreased without recreation. Minimum value of `12000` (default).
+        Number of read operations a table or index can instantaneously support. For the base table, this value cannot be decreased. For a global secondary index, this value can be increased or decreased. Minimum value of `12000` (default).
         """
         return pulumi.get(self, "read_units_per_second")
 
@@ -781,7 +782,7 @@ class TableGlobalSecondaryIndexWarmThroughput(dict):
     @pulumi.getter(name="writeUnitsPerSecond")
     def write_units_per_second(self) -> Optional[_builtins.int]:
         """
-        Number of write operations a table or index can instantaneously support. For the base table, decreasing this value will force a new resource. For a global secondary index, this value can be increased or decreased without recreation. Minimum value of `4000` (default).
+        Number of write operations a table or index can instantaneously support. For the base table, this value cannot be decreased. For a global secondary index, this value can be increased or decreased. Minimum value of `4000` (default).
         """
         return pulumi.get(self, "write_units_per_second")
 
@@ -1252,6 +1253,9 @@ class TableReplica(dict):
         """
         :param _builtins.str region_name: Region name of the replica.
         :param _builtins.str arn: ARN of the table
+               * `replica.*.arn` - ARN of the replica
+               * `replica.*.stream_arn` - ARN of the replica Table Stream. Only available when `stream_enabled = true`.
+               * `replica.*.stream_label` - Timestamp, in ISO 8601 format, for the replica stream. Note that this timestamp is not a unique identifier for the stream on its own. However, the combination of AWS customer ID, table name and this field is guaranteed to be unique. It can be used for creating CloudWatch Alarms. Only available when `stream_enabled = true`.
         :param _builtins.str consistency_mode: Whether this global table will be using `STRONG` consistency mode or `EVENTUAL` consistency mode. Default value is `EVENTUAL`.
         :param _builtins.bool deletion_protection_enabled: Whether deletion protection is enabled (true) or disabled (false) on the replica. Default is `false`.
         :param _builtins.str kms_key_arn: ARN of the CMK that should be used for the AWS KMS encryption.
@@ -1299,6 +1303,9 @@ class TableReplica(dict):
     def arn(self) -> Optional[_builtins.str]:
         """
         ARN of the table
+        * `replica.*.arn` - ARN of the replica
+        * `replica.*.stream_arn` - ARN of the replica Table Stream. Only available when `stream_enabled = true`.
+        * `replica.*.stream_label` - Timestamp, in ISO 8601 format, for the replica stream. Note that this timestamp is not a unique identifier for the stream on its own. However, the combination of AWS customer ID, table name and this field is guaranteed to be unique. It can be used for creating CloudWatch Alarms. Only available when `stream_enabled = true`.
         """
         return pulumi.get(self, "arn")
 
@@ -1491,8 +1498,8 @@ class TableWarmThroughput(dict):
                  read_units_per_second: Optional[_builtins.int] = None,
                  write_units_per_second: Optional[_builtins.int] = None):
         """
-        :param _builtins.int read_units_per_second: Number of read operations a table or index can instantaneously support. For the base table, decreasing this value will force a new resource. For a global secondary index, this value can be increased or decreased without recreation. Minimum value of `12000` (default).
-        :param _builtins.int write_units_per_second: Number of write operations a table or index can instantaneously support. For the base table, decreasing this value will force a new resource. For a global secondary index, this value can be increased or decreased without recreation. Minimum value of `4000` (default).
+        :param _builtins.int read_units_per_second: Number of read operations a table or index can instantaneously support. For the base table, this value cannot be decreased. For a global secondary index, this value can be increased or decreased. Minimum value of `12000` (default).
+        :param _builtins.int write_units_per_second: Number of write operations a table or index can instantaneously support. For the base table, this value cannot be decreased. For a global secondary index, this value can be increased or decreased. Minimum value of `4000` (default).
         """
         if read_units_per_second is not None:
             pulumi.set(__self__, "read_units_per_second", read_units_per_second)
@@ -1503,7 +1510,7 @@ class TableWarmThroughput(dict):
     @pulumi.getter(name="readUnitsPerSecond")
     def read_units_per_second(self) -> Optional[_builtins.int]:
         """
-        Number of read operations a table or index can instantaneously support. For the base table, decreasing this value will force a new resource. For a global secondary index, this value can be increased or decreased without recreation. Minimum value of `12000` (default).
+        Number of read operations a table or index can instantaneously support. For the base table, this value cannot be decreased. For a global secondary index, this value can be increased or decreased. Minimum value of `12000` (default).
         """
         return pulumi.get(self, "read_units_per_second")
 
@@ -1511,9 +1518,126 @@ class TableWarmThroughput(dict):
     @pulumi.getter(name="writeUnitsPerSecond")
     def write_units_per_second(self) -> Optional[_builtins.int]:
         """
-        Number of write operations a table or index can instantaneously support. For the base table, decreasing this value will force a new resource. For a global secondary index, this value can be increased or decreased without recreation. Minimum value of `4000` (default).
+        Number of write operations a table or index can instantaneously support. For the base table, this value cannot be decreased. For a global secondary index, this value can be increased or decreased. Minimum value of `4000` (default).
         """
         return pulumi.get(self, "write_units_per_second")
+
+
+@pulumi.output_type
+class GetBackupsBackupSummaryResult(dict):
+    def __init__(__self__, *,
+                 backup_arn: _builtins.str,
+                 backup_creation_date_time: _builtins.str,
+                 backup_expiry_date_time: _builtins.str,
+                 backup_name: _builtins.str,
+                 backup_size_bytes: _builtins.int,
+                 backup_status: _builtins.str,
+                 backup_type: _builtins.str,
+                 table_arn: _builtins.str,
+                 table_id: _builtins.str,
+                 table_name: _builtins.str):
+        """
+        :param _builtins.str backup_arn: ARN of the backup.
+        :param _builtins.str backup_creation_date_time: Time at which the backup was created.
+        :param _builtins.str backup_expiry_date_time: Time at which the automatic on-demand backup created by DynamoDB will expire.
+        :param _builtins.str backup_name: Name of the specified backup.
+        :param _builtins.int backup_size_bytes: Size of the backup in bytes.
+        :param _builtins.str backup_status: Backup can be in one of the following states: `CREATING`, `DELETED`, `AVAILABLE`.
+        :param _builtins.str backup_type: Backup type. Valid values: `USER`, `SYSTEM`, `AWS_BACKUP`, `ALL`.
+        :param _builtins.str table_arn: ARN associated with the table.
+        :param _builtins.str table_id: Unique identifier for the table.
+        :param _builtins.str table_name: Name of the table to list backups for.
+        """
+        pulumi.set(__self__, "backup_arn", backup_arn)
+        pulumi.set(__self__, "backup_creation_date_time", backup_creation_date_time)
+        pulumi.set(__self__, "backup_expiry_date_time", backup_expiry_date_time)
+        pulumi.set(__self__, "backup_name", backup_name)
+        pulumi.set(__self__, "backup_size_bytes", backup_size_bytes)
+        pulumi.set(__self__, "backup_status", backup_status)
+        pulumi.set(__self__, "backup_type", backup_type)
+        pulumi.set(__self__, "table_arn", table_arn)
+        pulumi.set(__self__, "table_id", table_id)
+        pulumi.set(__self__, "table_name", table_name)
+
+    @_builtins.property
+    @pulumi.getter(name="backupArn")
+    def backup_arn(self) -> _builtins.str:
+        """
+        ARN of the backup.
+        """
+        return pulumi.get(self, "backup_arn")
+
+    @_builtins.property
+    @pulumi.getter(name="backupCreationDateTime")
+    def backup_creation_date_time(self) -> _builtins.str:
+        """
+        Time at which the backup was created.
+        """
+        return pulumi.get(self, "backup_creation_date_time")
+
+    @_builtins.property
+    @pulumi.getter(name="backupExpiryDateTime")
+    def backup_expiry_date_time(self) -> _builtins.str:
+        """
+        Time at which the automatic on-demand backup created by DynamoDB will expire.
+        """
+        return pulumi.get(self, "backup_expiry_date_time")
+
+    @_builtins.property
+    @pulumi.getter(name="backupName")
+    def backup_name(self) -> _builtins.str:
+        """
+        Name of the specified backup.
+        """
+        return pulumi.get(self, "backup_name")
+
+    @_builtins.property
+    @pulumi.getter(name="backupSizeBytes")
+    def backup_size_bytes(self) -> _builtins.int:
+        """
+        Size of the backup in bytes.
+        """
+        return pulumi.get(self, "backup_size_bytes")
+
+    @_builtins.property
+    @pulumi.getter(name="backupStatus")
+    def backup_status(self) -> _builtins.str:
+        """
+        Backup can be in one of the following states: `CREATING`, `DELETED`, `AVAILABLE`.
+        """
+        return pulumi.get(self, "backup_status")
+
+    @_builtins.property
+    @pulumi.getter(name="backupType")
+    def backup_type(self) -> _builtins.str:
+        """
+        Backup type. Valid values: `USER`, `SYSTEM`, `AWS_BACKUP`, `ALL`.
+        """
+        return pulumi.get(self, "backup_type")
+
+    @_builtins.property
+    @pulumi.getter(name="tableArn")
+    def table_arn(self) -> _builtins.str:
+        """
+        ARN associated with the table.
+        """
+        return pulumi.get(self, "table_arn")
+
+    @_builtins.property
+    @pulumi.getter(name="tableId")
+    def table_id(self) -> _builtins.str:
+        """
+        Unique identifier for the table.
+        """
+        return pulumi.get(self, "table_id")
+
+    @_builtins.property
+    @pulumi.getter(name="tableName")
+    def table_name(self) -> _builtins.str:
+        """
+        Name of the table to list backups for.
+        """
+        return pulumi.get(self, "table_name")
 
 
 @pulumi.output_type

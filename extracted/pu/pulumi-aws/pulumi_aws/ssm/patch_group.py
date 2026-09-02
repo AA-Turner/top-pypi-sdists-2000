@@ -21,9 +21,10 @@ class PatchGroupArgs:
     def __init__(__self__, *,
                  baseline_id: pulumi.Input[_builtins.str],
                  patch_group: pulumi.Input[_builtins.str],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a PatchGroup resource.
+
         :param pulumi.Input[_builtins.str] baseline_id: The ID of the patch baseline to register the patch group with.
         :param pulumi.Input[_builtins.str] patch_group: The name of the patch group that should be registered with the patch baseline.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -59,25 +60,26 @@ class PatchGroupArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _PatchGroupState:
     def __init__(__self__, *,
-                 baseline_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 patch_group: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 baseline_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 patch_group: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering PatchGroup resources.
+
         :param pulumi.Input[_builtins.str] baseline_id: The ID of the patch baseline to register the patch group with.
         :param pulumi.Input[_builtins.str] patch_group: The name of the patch group that should be registered with the patch baseline.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
@@ -91,38 +93,38 @@ class _PatchGroupState:
 
     @_builtins.property
     @pulumi.getter(name="baselineId")
-    def baseline_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def baseline_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the patch baseline to register the patch group with.
         """
         return pulumi.get(self, "baseline_id")
 
     @baseline_id.setter
-    def baseline_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def baseline_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "baseline_id", value)
 
     @_builtins.property
     @pulumi.getter(name="patchGroup")
-    def patch_group(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def patch_group(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the patch group that should be registered with the patch baseline.
         """
         return pulumi.get(self, "patch_group")
 
     @patch_group.setter
-    def patch_group(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def patch_group(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "patch_group", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -132,9 +134,9 @@ class PatchGroup(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 baseline_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 patch_group: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 baseline_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 patch_group: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides an SSM Patch Group resource
@@ -145,13 +147,34 @@ class PatchGroup(pulumi.CustomResource):
         import pulumi
         import pulumi_aws as aws
 
-        production = aws.ssm.PatchBaseline("production",
+        example = aws.ssm.PatchBaseline("example",
             name="patch-baseline",
             approved_patches=["KB123456"])
-        patchgroup = aws.ssm.PatchGroup("patchgroup",
-            baseline_id=production.id,
+        example_patch_group = aws.ssm.PatchGroup("example",
+            baseline_id=example.id,
             patch_group="patch-group-name")
         ```
+
+        ## Import
+
+        ### Identity Schema
+
+        #### Required
+
+        * `baseline_id` (String) The ID of the patch baseline.
+        * `patch_group` (String) The name of the patch group.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
+        Using `pulumi import`, import an SSM Patch Group using the `patch_group` and `baseline_id` separated by a comma (`,`). For example:
+
+        ```sh
+        $ pulumi import aws:ssm/patchGroup:PatchGroup example patch-group-name,pb-1234567890abcdef0
+        ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -174,13 +197,34 @@ class PatchGroup(pulumi.CustomResource):
         import pulumi
         import pulumi_aws as aws
 
-        production = aws.ssm.PatchBaseline("production",
+        example = aws.ssm.PatchBaseline("example",
             name="patch-baseline",
             approved_patches=["KB123456"])
-        patchgroup = aws.ssm.PatchGroup("patchgroup",
-            baseline_id=production.id,
+        example_patch_group = aws.ssm.PatchGroup("example",
+            baseline_id=example.id,
             patch_group="patch-group-name")
         ```
+
+        ## Import
+
+        ### Identity Schema
+
+        #### Required
+
+        * `baseline_id` (String) The ID of the patch baseline.
+        * `patch_group` (String) The name of the patch group.
+
+        #### Optional
+
+        * `account_id` (String) AWS Account where this resource is managed.
+        * `region` (String) Region where this resource is managed.
+
+        Using `pulumi import`, import an SSM Patch Group using the `patch_group` and `baseline_id` separated by a comma (`,`). For example:
+
+        ```sh
+        $ pulumi import aws:ssm/patchGroup:PatchGroup example patch-group-name,pb-1234567890abcdef0
+        ```
+
 
         :param str resource_name: The name of the resource.
         :param PatchGroupArgs args: The arguments to use to populate this resource's properties.
@@ -197,9 +241,9 @@ class PatchGroup(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 baseline_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 patch_group: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 baseline_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 patch_group: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -226,9 +270,9 @@ class PatchGroup(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            baseline_id: Optional[pulumi.Input[_builtins.str]] = None,
-            patch_group: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'PatchGroup':
+            baseline_id: pulumi.Input[Optional[_builtins.str]] = None,
+            patch_group: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'PatchGroup':
         """
         Get an existing PatchGroup resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

@@ -14,6 +14,8 @@
 
 """AsyncCheckpointer."""
 
+import asyncio
+import concurrent.futures
 import datetime
 import sys
 import threading
@@ -37,8 +39,6 @@ from orbax.checkpoint._src.multihost import multihost
 from orbax.checkpoint._src.path import async_path
 from orbax.checkpoint._src.path import atomicity
 from orbax.checkpoint._src.path import atomicity_types
-
-
 
 BarrierSyncFn = multihost.BarrierSyncFn
 _DIRECTORY_CREATION_SIGNALS = [
@@ -104,6 +104,10 @@ def _background_wait_for_commit_futures(
       '/jax/checkpoint/write/async/commit_duration_sec',
       commit_duration_secs,
   )
+  jax.monitoring.record_event_duration_secs(
+      '/jax/orbax/write/async/tensorstore_duration_secs',
+      commit_duration_secs,
+  )
 
   if process_count > 1:
     # All processes will wait at the barrier. When all processes are at the
@@ -118,7 +122,7 @@ def _background_wait_for_commit_futures(
               prefix=barrier_sync_key_prefix,
               suffix=f'{directory.name}',
           ),
-          int(time_remaining_secs * 1000),
+          int(time_remaining_secs * 1000),  # pyrefly: ignore[unsupported-operation]
       )
     except jax.errors.JaxRuntimeError as e:
       if sys.version_info >= (3, 11):
@@ -142,7 +146,7 @@ def _background_wait_for_commit_futures(
               prefix=barrier_sync_key_prefix,
               suffix=f'{directory.name}',
           ),
-          int(time_remaining_secs * 1000),
+          int(time_remaining_secs * 1000),  # pyrefly: ignore[unsupported-operation]
       )
     except jax.errors.JaxRuntimeError as e:
       if sys.version_info >= (3, 11):
@@ -203,7 +207,9 @@ class _AsyncManager:
     self._barrier_sync_key_prefix = barrier_sync_key_prefix
 
     self._thread = None
+    self._commit_futures = None
     self._exception = None
+    self._cancel_requested = False
 
     self._sync_fn: Callable[[str, int], None] = (
         lambda key, timeout_ms: barrier_sync_fn(key=key, timeout_ms=timeout_ms)
@@ -230,19 +236,29 @@ class _AsyncManager:
           directory,
           commit_futures,
           on_commit_callback,
-          barrier_sync_key_prefix=self._barrier_sync_key_prefix,
+          barrier_sync_key_prefix=self._barrier_sync_key_prefix,  # pyrefly: ignore[bad-argument-type]
           sync_fn=self._sync_fn,
           timeout_secs=self._timeout_secs,
           primary_host=self._primary_host,
       )
-    except Exception as e:  # pylint: disable=broad-exception-caught
-      msg = (
-          f'[process={multihost.process_index()}] Failed to run'
-          f' {len(commit_futures)} Handler Commit operations or the Commit'
-          f' callback in background save thread, directory: {directory}'
-      )
-      logging.error(msg, exc_info=True)
-      self._exception = e
+    except BaseException as e:  # pylint: disable=broad-exception-caught
+
+      if isinstance(
+          e, (concurrent.futures.CancelledError, asyncio.CancelledError)
+      ) or getattr(self, '_cancel_requested', False):
+        logging.info(
+            '[process=%s] Background save thread was cancelled cleanly.',
+            multihost.process_index(),
+        )
+        return
+      else:
+        msg = (
+            f'[process={multihost.process_index()}] Failed to run'
+            f' {len(commit_futures)} Handler Commit operations or the Commit'
+            f' callback in background save thread, directory: {directory}'
+        )
+        logging.error(msg, exc_info=True)
+        self._exception = e
 
   def start_async_commit(
       self,
@@ -251,6 +267,8 @@ class _AsyncManager:
       on_commit_callback: Callable[[], None],
   ):
     """Completes checkpoint save in a background thread."""
+    self._cancel_requested = False
+    self._commit_futures = commit_futures
     self._thread = threading.Thread(
         name='async_save',
         target=self._thread_func,
@@ -265,6 +283,11 @@ class _AsyncManager:
   def check_for_errors(self):
     """Surfaces any errors from the background commit operations."""
     if self._exception is not None:
+      if self._cancel_requested:
+        logging.info('Ignoring background error due to cancellation request.')
+        self._exception = None
+        self._cancel_requested = False
+        return
       # Clears self._exception so it is only raised once.
       exception = self._exception
       self._exception = None
@@ -303,6 +326,31 @@ class _AsyncManager:
           background_thread_name,
       )
 
+  def cancel(self):
+    """Cancels any ongoing background save operations by detaching the process and canceling futures."""
+    logging.info(
+        '[process=%s] _AsyncManager.cancel() called.',
+        multihost.process_index(),
+    )
+    if self._thread is not None:
+      logging.info(
+          '[process=%s] Cancelling background save thread and detaching it.',
+          multihost.process_index(),
+      )
+      self._cancel_requested = True
+      if self._commit_futures:
+        for f in self._commit_futures:
+          try:
+            logging.info(
+                '[process=%s] Calling cancel() on future %s',
+                multihost.process_index(),
+                getattr(f, 'name', str(f)),
+            )
+            f.cancel()
+          except Exception as e:  # pylint: disable=broad-exception-caught
+            logging.warning('Error while cancelling future: %s', e)
+      self._commit_futures = None
+
 
 class AsyncCheckpointer(checkpointer.Checkpointer):
   """An asynchronous implementation of Checkpointer.
@@ -329,6 +377,7 @@ class AsyncCheckpointer(checkpointer.Checkpointer):
       async_options: options_lib.AsyncOptions = options_lib.AsyncOptions(),
       multiprocessing_options: options_lib.MultiprocessingOptions = options_lib.MultiprocessingOptions(),
       file_options: options_lib.FileOptions = options_lib.FileOptions(),
+      atomicity_options: Optional[options_lib.AtomicityOptions] = None,
       checkpoint_metadata_store: Optional[checkpoint.MetadataStore] = None,
       temporary_path_class: Optional[
           Type[atomicity_types.TemporaryPath]
@@ -342,7 +391,7 @@ class AsyncCheckpointer(checkpointer.Checkpointer):
           multihost.process_index(),
           type(handler),
       )
-      handler = checkpointer.get_legacy_handler_wrapper(handler)
+      handler = checkpointer.get_legacy_handler_wrapper(handler)  # pyrefly: ignore[bad-assignment]
       assert isinstance(
           handler, async_checkpoint_handler.AsyncCheckpointHandler
       )
@@ -360,6 +409,7 @@ class AsyncCheckpointer(checkpointer.Checkpointer):
     )
     self._barrier_sync_key_prefix = barrier_sync_key_prefix
     self._file_options = file_options
+    self._atomicity_options = atomicity_options
     self._metadata_store = (
         checkpoint_metadata_store
         or checkpoint.metadata_store(enable_write=True)
@@ -394,6 +444,7 @@ class AsyncCheckpointer(checkpointer.Checkpointer):
     )
 
     def _callback() -> None:
+      finalize_start_time = time.time()
       if utils.is_primary_host(self._primary_host):
         # Update StepMetadata after the handler save is complete.
         # (blocking write)
@@ -432,11 +483,15 @@ class AsyncCheckpointer(checkpointer.Checkpointer):
           tmpdir,
           checkpoint_start_time,
       )
+      jax.monitoring.record_event_duration_secs(
+          '/jax/orbax/write/async/finalize_duration_secs',
+          time.time() - finalize_start_time,
+      )
       operation_recorder = event_tracking.OperationRecorder(
           tmpdir.get_final(),
           operation_type=event_tracking.OperationType.SAVE,
           async_origin=True,
-          primary_host=self._primary_host,
+          primary_host=self._primary_host,  # pyrefly: ignore[bad-argument-type]
       )
       operation_recorder.record_completion(time.time() - checkpoint_start_time)
       # Clean up all awaitable signals for the current operation id as they are
@@ -493,7 +548,7 @@ class AsyncCheckpointer(checkpointer.Checkpointer):
     else:
       path = tmpdir.get()
     commit_ops.extend(
-        await self._handler.async_save(path, args=ckpt_args) or []
+        await self._handler.async_save(path, args=ckpt_args) or []  # pyrefly: ignore[bad-argument-type]
     )
     commit_ops, _ = jax.tree.flatten(commit_ops)
     commit_ops = [op for op in commit_ops if op is not None]
@@ -546,7 +601,7 @@ class AsyncCheckpointer(checkpointer.Checkpointer):
         directory,
         operation_type=event_tracking.OperationType.SAVE,
         async_origin=True,
-        primary_host=self._primary_host,
+        primary_host=self._primary_host,  # pyrefly: ignore[bad-argument-type]
     )
     operation_recorder.record_start(start_time=checkpoint_start_time)
     tmpdir = self.get_temporary_path(directory)
@@ -588,6 +643,17 @@ class AsyncCheckpointer(checkpointer.Checkpointer):
     """Waits for any outstanding operations to finish."""
     self._async_manager.wait_until_finished()
     self._metadata_store.wait_until_finished()
+
+  # TODO(nikhilbansall): add telemetry that allows tracking the time between
+  # cancel initiated and cancel actually completed.
+  def cancel(self):
+    """Cancels any ongoing background save operations safely."""
+    logging.info(
+        '[process=%s] V0 AsyncCheckpointer.cancel() delegating to'
+        ' _AsyncManager.cancel()',
+        jax.process_index(),
+    )
+    self._async_manager.cancel()
 
   def close(self):
     """Waits to finish any outstanding operations before closing."""

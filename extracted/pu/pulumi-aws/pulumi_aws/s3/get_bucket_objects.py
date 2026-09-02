@@ -175,7 +175,7 @@ def get_bucket_objects(bucket: Optional[_builtins.str] = None,
     The objects data source returns keys (i.e., file names) and other metadata about objects in an S3 bucket.
 
 
-    :param _builtins.str bucket: Lists object keys in this S3 bucket. Alternatively, an [S3 access point](https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html) ARN can be specified
+    :param _builtins.str bucket: Lists object keys in this S3 bucket. Alternatively, an [S3 access point](https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html) ARN can be specified. Use the `s3_get_objects` data source instead.
     :param _builtins.str delimiter: Character used to group keys (Default: none)
     :param _builtins.str encoding_type: Encodes keys using this method (Default: none; besides none, only "url" can be used)
     :param _builtins.bool fetch_owner: Boolean specifying whether to populate the owner list (Default: false)
@@ -209,14 +209,14 @@ def get_bucket_objects(bucket: Optional[_builtins.str] = None,
         prefix=pulumi.get(__ret__, 'prefix'),
         region=pulumi.get(__ret__, 'region'),
         start_after=pulumi.get(__ret__, 'start_after'))
-def get_bucket_objects_output(bucket: Optional[pulumi.Input[_builtins.str]] = None,
-                              delimiter: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              encoding_type: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              fetch_owner: Optional[pulumi.Input[Optional[_builtins.bool]]] = None,
-                              max_keys: Optional[pulumi.Input[Optional[_builtins.int]]] = None,
-                              prefix: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                              start_after: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_bucket_objects_output(bucket: pulumi.Input[Optional[_builtins.str]] = None,
+                              delimiter: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              encoding_type: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              fetch_owner: pulumi.Input[Optional[Optional[_builtins.bool]]] = None,
+                              max_keys: pulumi.Input[Optional[Optional[_builtins.int]]] = None,
+                              prefix: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                              start_after: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                               opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetBucketObjectsResult]:
     """
     > **NOTE:** The `s3_get_bucket_objects` data source is DEPRECATED and will be removed in a future version! Use `s3_get_objects` instead, where new features and fixes will be added.
@@ -226,7 +226,7 @@ def get_bucket_objects_output(bucket: Optional[pulumi.Input[_builtins.str]] = No
     The objects data source returns keys (i.e., file names) and other metadata about objects in an S3 bucket.
 
 
-    :param _builtins.str bucket: Lists object keys in this S3 bucket. Alternatively, an [S3 access point](https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html) ARN can be specified
+    :param _builtins.str bucket: Lists object keys in this S3 bucket. Alternatively, an [S3 access point](https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html) ARN can be specified. Use the `s3_get_objects` data source instead.
     :param _builtins.str delimiter: Character used to group keys (Default: none)
     :param _builtins.str encoding_type: Encodes keys using this method (Default: none; besides none, only "url" can be used)
     :param _builtins.bool fetch_owner: Boolean specifying whether to populate the owner list (Default: false)

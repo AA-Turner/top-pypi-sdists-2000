@@ -65,7 +65,7 @@ class GetContactsRotationResult:
     @pulumi.getter(name="contactIds")
     def contact_ids(self) -> Sequence[_builtins.str]:
         """
-        The Amazon Resource Names (ARNs) of the contacts to add to the rotation. The order in which you list the contacts is their shift order in the rotation schedule.
+        ARNs of the contacts to add to the rotation. The order in which you list the contacts is their shift order in the rotation schedule.
         """
         return pulumi.get(self, "contact_ids")
 
@@ -155,7 +155,7 @@ def get_contacts_rotation(arn: Optional[_builtins.str] = None,
     ```
 
 
-    :param _builtins.str arn: The Amazon Resource Name (ARN) of the rotation.
+    :param _builtins.str arn: ARN of the rotation.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     """
     __args__ = dict()
@@ -174,8 +174,8 @@ def get_contacts_rotation(arn: Optional[_builtins.str] = None,
         start_time=pulumi.get(__ret__, 'start_time'),
         tags=pulumi.get(__ret__, 'tags'),
         time_zone_id=pulumi.get(__ret__, 'time_zone_id'))
-def get_contacts_rotation_output(arn: Optional[pulumi.Input[_builtins.str]] = None,
-                                 region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_contacts_rotation_output(arn: pulumi.Input[Optional[_builtins.str]] = None,
+                                 region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                  opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetContactsRotationResult]:
     """
     Provides a Terraform data source for managing a Contacts Rotation in AWS Systems Manager Incident Manager
@@ -192,7 +192,7 @@ def get_contacts_rotation_output(arn: Optional[pulumi.Input[_builtins.str]] = No
     ```
 
 
-    :param _builtins.str arn: The Amazon Resource Name (ARN) of the rotation.
+    :param _builtins.str arn: ARN of the rotation.
     :param _builtins.str region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
     """
     __args__ = dict()

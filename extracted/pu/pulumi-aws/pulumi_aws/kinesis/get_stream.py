@@ -27,7 +27,7 @@ class GetStreamResult:
     """
     A collection of values returned by getStream.
     """
-    def __init__(__self__, arn=None, closed_shards=None, creation_timestamp=None, encryption_type=None, id=None, kms_key_id=None, max_record_size_in_kib=None, name=None, open_shards=None, region=None, retention_period=None, shard_level_metrics=None, status=None, stream_mode_details=None, tags=None):
+    def __init__(__self__, arn=None, closed_shards=None, creation_timestamp=None, encryption_type=None, id=None, kms_key_id=None, max_record_size_in_kib=None, name=None, open_shards=None, region=None, retention_period=None, shard_level_metrics=None, status=None, stream_mode_details=None, tags=None, warm_throughputs=None):
         if arn and not isinstance(arn, str):
             raise TypeError("Expected argument 'arn' to be a str")
         pulumi.set(__self__, "arn", arn)
@@ -73,6 +73,9 @@ class GetStreamResult:
         if tags and not isinstance(tags, dict):
             raise TypeError("Expected argument 'tags' to be a dict")
         pulumi.set(__self__, "tags", tags)
+        if warm_throughputs and not isinstance(warm_throughputs, list):
+            raise TypeError("Expected argument 'warm_throughputs' to be a list")
+        pulumi.set(__self__, "warm_throughputs", warm_throughputs)
 
     @_builtins.property
     @pulumi.getter
@@ -118,7 +121,7 @@ class GetStreamResult:
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> _builtins.str:
         """
-        GUID for the customer-managed AWS KMS key to use for encryption.
+        The identifier for the customer-managed KMS key to use for encryption. This can be a Key ID (UUID), a Key ARN, an Alias Name (prefixed with `alias/`), or an Alias ARN.
         """
         return pulumi.get(self, "kms_key_id")
 
@@ -191,6 +194,14 @@ class GetStreamResult:
         """
         return pulumi.get(self, "tags")
 
+    @_builtins.property
+    @pulumi.getter(name="warmThroughputs")
+    def warm_throughputs(self) -> Sequence['outputs.GetStreamWarmThroughputResult']:
+        """
+        Warm throughput in MB/s for the stream. Detailed below.
+        """
+        return pulumi.get(self, "warm_throughputs")
+
 
 class AwaitableGetStreamResult(GetStreamResult):
     # pylint: disable=using-constant-test
@@ -212,7 +223,8 @@ class AwaitableGetStreamResult(GetStreamResult):
             shard_level_metrics=self.shard_level_metrics,
             status=self.status,
             stream_mode_details=self.stream_mode_details,
-            tags=self.tags)
+            tags=self.tags,
+            warm_throughputs=self.warm_throughputs)
 
 
 def get_stream(name: Optional[_builtins.str] = None,
@@ -261,10 +273,11 @@ def get_stream(name: Optional[_builtins.str] = None,
         shard_level_metrics=pulumi.get(__ret__, 'shard_level_metrics'),
         status=pulumi.get(__ret__, 'status'),
         stream_mode_details=pulumi.get(__ret__, 'stream_mode_details'),
-        tags=pulumi.get(__ret__, 'tags'))
-def get_stream_output(name: Optional[pulumi.Input[_builtins.str]] = None,
-                      region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                      tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+        tags=pulumi.get(__ret__, 'tags'),
+        warm_throughputs=pulumi.get(__ret__, 'warm_throughputs'))
+def get_stream_output(name: pulumi.Input[Optional[_builtins.str]] = None,
+                      region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                      tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                       opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetStreamResult]:
     """
     Use this data source to get information about a Kinesis Stream for use in other
@@ -307,4 +320,5 @@ def get_stream_output(name: Optional[pulumi.Input[_builtins.str]] = None,
         shard_level_metrics=pulumi.get(__response__, 'shard_level_metrics'),
         status=pulumi.get(__response__, 'status'),
         stream_mode_details=pulumi.get(__response__, 'stream_mode_details'),
-        tags=pulumi.get(__response__, 'tags')))
+        tags=pulumi.get(__response__, 'tags'),
+        warm_throughputs=pulumi.get(__response__, 'warm_throughputs')))

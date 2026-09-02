@@ -27,7 +27,7 @@ class GetManagedRuleGroupResult:
     """
     A collection of values returned by getManagedRuleGroup.
     """
-    def __init__(__self__, available_labels=None, capacity=None, consumed_labels=None, id=None, label_namespace=None, name=None, region=None, rules=None, scope=None, sns_topic_arn=None, vendor_name=None, version_name=None):
+    def __init__(__self__, available_labels=None, capacity=None, consumed_labels=None, label_namespace=None, name=None, region=None, rules=None, scope=None, sns_topic_arn=None, vendor_name=None, version_name=None):
         if available_labels and not isinstance(available_labels, list):
             raise TypeError("Expected argument 'available_labels' to be a list")
         pulumi.set(__self__, "available_labels", available_labels)
@@ -37,9 +37,6 @@ class GetManagedRuleGroupResult:
         if consumed_labels and not isinstance(consumed_labels, list):
             raise TypeError("Expected argument 'consumed_labels' to be a list")
         pulumi.set(__self__, "consumed_labels", consumed_labels)
-        if id and not isinstance(id, str):
-            raise TypeError("Expected argument 'id' to be a str")
-        pulumi.set(__self__, "id", id)
         if label_namespace and not isinstance(label_namespace, str):
             raise TypeError("Expected argument 'label_namespace' to be a str")
         pulumi.set(__self__, "label_namespace", label_namespace)
@@ -90,14 +87,6 @@ class GetManagedRuleGroupResult:
         return pulumi.get(self, "consumed_labels")
 
     @_builtins.property
-    @pulumi.getter
-    def id(self) -> _builtins.str:
-        """
-        The provider-assigned unique ID for this managed resource.
-        """
-        return pulumi.get(self, "id")
-
-    @_builtins.property
     @pulumi.getter(name="labelNamespace")
     def label_namespace(self) -> _builtins.str:
         """
@@ -109,7 +98,7 @@ class GetManagedRuleGroupResult:
     @pulumi.getter
     def name(self) -> _builtins.str:
         """
-        Name of the rule.
+        Name of the header.
         """
         return pulumi.get(self, "name")
 
@@ -122,7 +111,7 @@ class GetManagedRuleGroupResult:
     @pulumi.getter
     def rules(self) -> Sequence['outputs.GetManagedRuleGroupRuleResult']:
         """
-        High-level information about the rules. See Rules below for details.
+        High-level information about the rules. See `rules` Block below for details.
         """
         return pulumi.get(self, "rules")
 
@@ -159,7 +148,6 @@ class AwaitableGetManagedRuleGroupResult(GetManagedRuleGroupResult):
             available_labels=self.available_labels,
             capacity=self.capacity,
             consumed_labels=self.consumed_labels,
-            id=self.id,
             label_namespace=self.label_namespace,
             name=self.name,
             region=self.region,
@@ -210,7 +198,6 @@ def get_managed_rule_group(name: Optional[_builtins.str] = None,
         available_labels=pulumi.get(__ret__, 'available_labels'),
         capacity=pulumi.get(__ret__, 'capacity'),
         consumed_labels=pulumi.get(__ret__, 'consumed_labels'),
-        id=pulumi.get(__ret__, 'id'),
         label_namespace=pulumi.get(__ret__, 'label_namespace'),
         name=pulumi.get(__ret__, 'name'),
         region=pulumi.get(__ret__, 'region'),
@@ -219,11 +206,11 @@ def get_managed_rule_group(name: Optional[_builtins.str] = None,
         sns_topic_arn=pulumi.get(__ret__, 'sns_topic_arn'),
         vendor_name=pulumi.get(__ret__, 'vendor_name'),
         version_name=pulumi.get(__ret__, 'version_name'))
-def get_managed_rule_group_output(name: Optional[pulumi.Input[_builtins.str]] = None,
-                                  region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                                  scope: Optional[pulumi.Input[_builtins.str]] = None,
-                                  vendor_name: Optional[pulumi.Input[_builtins.str]] = None,
-                                  version_name: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
+def get_managed_rule_group_output(name: pulumi.Input[Optional[_builtins.str]] = None,
+                                  region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                                  scope: pulumi.Input[Optional[_builtins.str]] = None,
+                                  vendor_name: pulumi.Input[Optional[_builtins.str]] = None,
+                                  version_name: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                                   opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetManagedRuleGroupResult]:
     """
     High-level information for a managed rule group.
@@ -258,7 +245,6 @@ def get_managed_rule_group_output(name: Optional[pulumi.Input[_builtins.str]] = 
         available_labels=pulumi.get(__response__, 'available_labels'),
         capacity=pulumi.get(__response__, 'capacity'),
         consumed_labels=pulumi.get(__response__, 'consumed_labels'),
-        id=pulumi.get(__response__, 'id'),
         label_namespace=pulumi.get(__response__, 'label_namespace'),
         name=pulumi.get(__response__, 'name'),
         region=pulumi.get(__response__, 'region'),

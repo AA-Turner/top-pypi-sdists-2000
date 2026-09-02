@@ -20,17 +20,18 @@ __all__ = ['MacsecKeyAssociationArgs', 'MacsecKeyAssociation']
 class MacsecKeyAssociationArgs:
     def __init__(__self__, *,
                  connection_id: pulumi.Input[_builtins.str],
-                 cak: Optional[pulumi.Input[_builtins.str]] = None,
-                 ckn: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 secret_arn: Optional[pulumi.Input[_builtins.str]] = None):
+                 cak: pulumi.Input[Optional[_builtins.str]] = None,
+                 ckn: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 secret_arn: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a MacsecKeyAssociation resource.
+
         :param pulumi.Input[_builtins.str] connection_id: The ID of the dedicated Direct Connect connection. The connection must be a dedicated connection in the `AVAILABLE` state.
         :param pulumi.Input[_builtins.str] cak: The MAC Security (MACsec) CAK to associate with the dedicated connection. The valid values are 64 hexadecimal characters (0-9, A-E). Required if using `ckn`.
         :param pulumi.Input[_builtins.str] ckn: The MAC Security (MACsec) CKN to associate with the dedicated connection. The valid values are 64 hexadecimal characters (0-9, A-E). Required if using `cak`.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] secret_arn: The Amazon Resource Name (ARN) of the MAC Security (MACsec) secret key to associate with the dedicated connection.
+        :param pulumi.Input[_builtins.str] secret_arn: ARN of the MAC Security (MACsec) secret key to associate with the dedicated connection.
                
                > **Note:** `ckn` and `cak` are mutually exclusive with `secret_arn` - these arguments cannot be used together. If you use `ckn` and `cak`, you should not use `secret_arn`. If you use the `secret_arn` argument to reference an existing MAC Security (MACSec) secret key, you should not use `ckn` or `cak`.
         """
@@ -58,72 +59,73 @@ class MacsecKeyAssociationArgs:
 
     @_builtins.property
     @pulumi.getter
-    def cak(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def cak(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The MAC Security (MACsec) CAK to associate with the dedicated connection. The valid values are 64 hexadecimal characters (0-9, A-E). Required if using `ckn`.
         """
         return pulumi.get(self, "cak")
 
     @cak.setter
-    def cak(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def cak(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "cak", value)
 
     @_builtins.property
     @pulumi.getter
-    def ckn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def ckn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The MAC Security (MACsec) CKN to associate with the dedicated connection. The valid values are 64 hexadecimal characters (0-9, A-E). Required if using `cak`.
         """
         return pulumi.get(self, "ckn")
 
     @ckn.setter
-    def ckn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def ckn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "ckn", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="secretArn")
-    def secret_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def secret_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the MAC Security (MACsec) secret key to associate with the dedicated connection.
+        ARN of the MAC Security (MACsec) secret key to associate with the dedicated connection.
 
         > **Note:** `ckn` and `cak` are mutually exclusive with `secret_arn` - these arguments cannot be used together. If you use `ckn` and `cak`, you should not use `secret_arn`. If you use the `secret_arn` argument to reference an existing MAC Security (MACSec) secret key, you should not use `ckn` or `cak`.
         """
         return pulumi.get(self, "secret_arn")
 
     @secret_arn.setter
-    def secret_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def secret_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "secret_arn", value)
 
 
 @pulumi.input_type
 class _MacsecKeyAssociationState:
     def __init__(__self__, *,
-                 cak: Optional[pulumi.Input[_builtins.str]] = None,
-                 ckn: Optional[pulumi.Input[_builtins.str]] = None,
-                 connection_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 secret_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 start_on: Optional[pulumi.Input[_builtins.str]] = None,
-                 state: Optional[pulumi.Input[_builtins.str]] = None):
+                 cak: pulumi.Input[Optional[_builtins.str]] = None,
+                 ckn: pulumi.Input[Optional[_builtins.str]] = None,
+                 connection_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 secret_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 start_on: pulumi.Input[Optional[_builtins.str]] = None,
+                 state: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering MacsecKeyAssociation resources.
+
         :param pulumi.Input[_builtins.str] cak: The MAC Security (MACsec) CAK to associate with the dedicated connection. The valid values are 64 hexadecimal characters (0-9, A-E). Required if using `ckn`.
         :param pulumi.Input[_builtins.str] ckn: The MAC Security (MACsec) CKN to associate with the dedicated connection. The valid values are 64 hexadecimal characters (0-9, A-E). Required if using `cak`.
         :param pulumi.Input[_builtins.str] connection_id: The ID of the dedicated Direct Connect connection. The connection must be a dedicated connection in the `AVAILABLE` state.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] secret_arn: The Amazon Resource Name (ARN) of the MAC Security (MACsec) secret key to associate with the dedicated connection.
+        :param pulumi.Input[_builtins.str] secret_arn: ARN of the MAC Security (MACsec) secret key to associate with the dedicated connection.
                
                > **Note:** `ckn` and `cak` are mutually exclusive with `secret_arn` - these arguments cannot be used together. If you use `ckn` and `cak`, you should not use `secret_arn`. If you use the `secret_arn` argument to reference an existing MAC Security (MACSec) secret key, you should not use `ckn` or `cak`.
         :param pulumi.Input[_builtins.str] start_on: The date in UTC format that the MAC Security (MACsec) secret key takes effect.
@@ -146,88 +148,88 @@ class _MacsecKeyAssociationState:
 
     @_builtins.property
     @pulumi.getter
-    def cak(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def cak(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The MAC Security (MACsec) CAK to associate with the dedicated connection. The valid values are 64 hexadecimal characters (0-9, A-E). Required if using `ckn`.
         """
         return pulumi.get(self, "cak")
 
     @cak.setter
-    def cak(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def cak(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "cak", value)
 
     @_builtins.property
     @pulumi.getter
-    def ckn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def ckn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The MAC Security (MACsec) CKN to associate with the dedicated connection. The valid values are 64 hexadecimal characters (0-9, A-E). Required if using `cak`.
         """
         return pulumi.get(self, "ckn")
 
     @ckn.setter
-    def ckn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def ckn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "ckn", value)
 
     @_builtins.property
     @pulumi.getter(name="connectionId")
-    def connection_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def connection_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ID of the dedicated Direct Connect connection. The connection must be a dedicated connection in the `AVAILABLE` state.
         """
         return pulumi.get(self, "connection_id")
 
     @connection_id.setter
-    def connection_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def connection_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "connection_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter(name="secretArn")
-    def secret_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def secret_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the MAC Security (MACsec) secret key to associate with the dedicated connection.
+        ARN of the MAC Security (MACsec) secret key to associate with the dedicated connection.
 
         > **Note:** `ckn` and `cak` are mutually exclusive with `secret_arn` - these arguments cannot be used together. If you use `ckn` and `cak`, you should not use `secret_arn`. If you use the `secret_arn` argument to reference an existing MAC Security (MACSec) secret key, you should not use `ckn` or `cak`.
         """
         return pulumi.get(self, "secret_arn")
 
     @secret_arn.setter
-    def secret_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def secret_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "secret_arn", value)
 
     @_builtins.property
     @pulumi.getter(name="startOn")
-    def start_on(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def start_on(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The date in UTC format that the MAC Security (MACsec) secret key takes effect.
         """
         return pulumi.get(self, "start_on")
 
     @start_on.setter
-    def start_on(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def start_on(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "start_on", value)
 
     @_builtins.property
     @pulumi.getter
-    def state(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def state(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The state of the MAC Security (MACsec) secret key. The possible values are: associating, associated, disassociating, disassociated. See [MacSecKey](https://docs.aws.amazon.com/directconnect/latest/APIReference/API_MacSecKey.html#DX-Type-MacSecKey-state) for descriptions of each state.
         """
         return pulumi.get(self, "state")
 
     @state.setter
-    def state(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def state(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "state", value)
 
 
@@ -237,11 +239,11 @@ class MacsecKeyAssociation(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 cak: Optional[pulumi.Input[_builtins.str]] = None,
-                 ckn: Optional[pulumi.Input[_builtins.str]] = None,
-                 connection_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 secret_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 cak: pulumi.Input[Optional[_builtins.str]] = None,
+                 ckn: pulumi.Input[Optional[_builtins.str]] = None,
+                 connection_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 secret_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides a MAC Security (MACSec) secret key resource for use with Direct Connect. See [MACsec prerequisites](https://docs.aws.amazon.com/directconnect/latest/UserGuide/direct-connect-mac-sec-getting-started.html#mac-sec-prerequisites) for information about MAC Security (MACsec) prerequisites.
@@ -279,13 +281,14 @@ class MacsecKeyAssociation(pulumi.CustomResource):
             secret_arn=example_get_secret.arn)
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.str] cak: The MAC Security (MACsec) CAK to associate with the dedicated connection. The valid values are 64 hexadecimal characters (0-9, A-E). Required if using `ckn`.
         :param pulumi.Input[_builtins.str] ckn: The MAC Security (MACsec) CKN to associate with the dedicated connection. The valid values are 64 hexadecimal characters (0-9, A-E). Required if using `cak`.
         :param pulumi.Input[_builtins.str] connection_id: The ID of the dedicated Direct Connect connection. The connection must be a dedicated connection in the `AVAILABLE` state.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] secret_arn: The Amazon Resource Name (ARN) of the MAC Security (MACsec) secret key to associate with the dedicated connection.
+        :param pulumi.Input[_builtins.str] secret_arn: ARN of the MAC Security (MACsec) secret key to associate with the dedicated connection.
                
                > **Note:** `ckn` and `cak` are mutually exclusive with `secret_arn` - these arguments cannot be used together. If you use `ckn` and `cak`, you should not use `secret_arn`. If you use the `secret_arn` argument to reference an existing MAC Security (MACSec) secret key, you should not use `ckn` or `cak`.
         """
@@ -331,6 +334,7 @@ class MacsecKeyAssociation(pulumi.CustomResource):
             secret_arn=example_get_secret.arn)
         ```
 
+
         :param str resource_name: The name of the resource.
         :param MacsecKeyAssociationArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -346,11 +350,11 @@ class MacsecKeyAssociation(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 cak: Optional[pulumi.Input[_builtins.str]] = None,
-                 ckn: Optional[pulumi.Input[_builtins.str]] = None,
-                 connection_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 secret_arn: Optional[pulumi.Input[_builtins.str]] = None,
+                 cak: pulumi.Input[Optional[_builtins.str]] = None,
+                 ckn: pulumi.Input[Optional[_builtins.str]] = None,
+                 connection_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 secret_arn: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -379,13 +383,13 @@ class MacsecKeyAssociation(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            cak: Optional[pulumi.Input[_builtins.str]] = None,
-            ckn: Optional[pulumi.Input[_builtins.str]] = None,
-            connection_id: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            secret_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            start_on: Optional[pulumi.Input[_builtins.str]] = None,
-            state: Optional[pulumi.Input[_builtins.str]] = None) -> 'MacsecKeyAssociation':
+            cak: pulumi.Input[Optional[_builtins.str]] = None,
+            ckn: pulumi.Input[Optional[_builtins.str]] = None,
+            connection_id: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            secret_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            start_on: pulumi.Input[Optional[_builtins.str]] = None,
+            state: pulumi.Input[Optional[_builtins.str]] = None) -> 'MacsecKeyAssociation':
         """
         Get an existing MacsecKeyAssociation resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -397,7 +401,7 @@ class MacsecKeyAssociation(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] ckn: The MAC Security (MACsec) CKN to associate with the dedicated connection. The valid values are 64 hexadecimal characters (0-9, A-E). Required if using `cak`.
         :param pulumi.Input[_builtins.str] connection_id: The ID of the dedicated Direct Connect connection. The connection must be a dedicated connection in the `AVAILABLE` state.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-        :param pulumi.Input[_builtins.str] secret_arn: The Amazon Resource Name (ARN) of the MAC Security (MACsec) secret key to associate with the dedicated connection.
+        :param pulumi.Input[_builtins.str] secret_arn: ARN of the MAC Security (MACsec) secret key to associate with the dedicated connection.
                
                > **Note:** `ckn` and `cak` are mutually exclusive with `secret_arn` - these arguments cannot be used together. If you use `ckn` and `cak`, you should not use `secret_arn`. If you use the `secret_arn` argument to reference an existing MAC Security (MACSec) secret key, you should not use `ckn` or `cak`.
         :param pulumi.Input[_builtins.str] start_on: The date in UTC format that the MAC Security (MACsec) secret key takes effect.
@@ -452,7 +456,7 @@ class MacsecKeyAssociation(pulumi.CustomResource):
     @pulumi.getter(name="secretArn")
     def secret_arn(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the MAC Security (MACsec) secret key to associate with the dedicated connection.
+        ARN of the MAC Security (MACsec) secret key to associate with the dedicated connection.
 
         > **Note:** `ckn` and `cak` are mutually exclusive with `secret_arn` - these arguments cannot be used together. If you use `ckn` and `cak`, you should not use `secret_arn`. If you use the `secret_arn` argument to reference an existing MAC Security (MACSec) secret key, you should not use `ckn` or `cak`.
         """

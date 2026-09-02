@@ -23,10 +23,11 @@ class PlanArgs:
     def __init__(__self__, *,
                  contact_id: pulumi.Input[_builtins.str],
                  stages: pulumi.Input[Sequence[pulumi.Input['PlanStageArgs']]],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a Plan resource.
-        :param pulumi.Input[_builtins.str] contact_id: The Amazon Resource Name (ARN) of the contact or escalation plan.
+
+        :param pulumi.Input[_builtins.str] contact_id: The ARN of the contact or escalation plan.
         :param pulumi.Input[Sequence[pulumi.Input['PlanStageArgs']]] stages: One or more configuration blocks for specifying a list of stages that the escalation plan or engagement plan uses to engage contacts and contact methods. See Stage below for more details.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
@@ -39,7 +40,7 @@ class PlanArgs:
     @pulumi.getter(name="contactId")
     def contact_id(self) -> pulumi.Input[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the contact or escalation plan.
+        The ARN of the contact or escalation plan.
         """
         return pulumi.get(self, "contact_id")
 
@@ -61,26 +62,27 @@ class PlanArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _PlanState:
     def __init__(__self__, *,
-                 contact_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 stages: Optional[pulumi.Input[Sequence[pulumi.Input['PlanStageArgs']]]] = None):
+                 contact_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 stages: pulumi.Input[Optional[Sequence[pulumi.Input['PlanStageArgs']]]] = None):
         """
         Input properties used for looking up and filtering Plan resources.
-        :param pulumi.Input[_builtins.str] contact_id: The Amazon Resource Name (ARN) of the contact or escalation plan.
+
+        :param pulumi.Input[_builtins.str] contact_id: The ARN of the contact or escalation plan.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Sequence[pulumi.Input['PlanStageArgs']]] stages: One or more configuration blocks for specifying a list of stages that the escalation plan or engagement plan uses to engage contacts and contact methods. See Stage below for more details.
         """
@@ -93,38 +95,38 @@ class _PlanState:
 
     @_builtins.property
     @pulumi.getter(name="contactId")
-    def contact_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def contact_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
-        The Amazon Resource Name (ARN) of the contact or escalation plan.
+        The ARN of the contact or escalation plan.
         """
         return pulumi.get(self, "contact_id")
 
     @contact_id.setter
-    def contact_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def contact_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "contact_id", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def stages(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PlanStageArgs']]]]:
+    def stages(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['PlanStageArgs']]]]:
         """
         One or more configuration blocks for specifying a list of stages that the escalation plan or engagement plan uses to engage contacts and contact methods. See Stage below for more details.
         """
         return pulumi.get(self, "stages")
 
     @stages.setter
-    def stages(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PlanStageArgs']]]]):
+    def stages(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['PlanStageArgs']]]]):
         pulumi.set(self, "stages", value)
 
 
@@ -134,9 +136,9 @@ class Plan(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 contact_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 stages: Optional[pulumi.Input[Sequence[pulumi.Input[Union['PlanStageArgs', 'PlanStageArgsDict']]]]] = None,
+                 contact_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 stages: pulumi.Input[Optional[Sequence[pulumi.Input[Union['PlanStageArgs', 'PlanStageArgsDict']]]]] = None,
                  __props__=None):
         """
         Resource for managing an AWS SSM Contact Plan.
@@ -150,10 +152,10 @@ class Plan(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.ssmcontacts.Plan("example",
-            contact_id="arn:aws:ssm-contacts:us-west-2:123456789012:contact/contactalias",
             stages=[{
                 "duration_in_minutes": 1,
-            }])
+            }],
+            contact_id="arn:aws:ssm-contacts:us-west-2:123456789012:contact/contactalias")
         ```
 
         ### Usage with SSM Contact
@@ -166,10 +168,10 @@ class Plan(pulumi.CustomResource):
             alias="alias",
             type="PERSONAL")
         plan = aws.ssmcontacts.Plan("plan",
-            contact_id=contact.arn,
             stages=[{
                 "duration_in_minutes": 1,
-            }])
+            }],
+            contact_id=contact.arn)
         ```
 
         ### Usage With All Fields
@@ -188,9 +190,7 @@ class Plan(pulumi.CustomResource):
             alias="alias",
             type="PERSONAL")
         test = aws.ssmcontacts.Plan("test",
-            contact_id=escalation_plan.arn,
             stages=[{
-                "duration_in_minutes": 0,
                 "targets": [
                     {
                         "contact_target_info": {
@@ -211,7 +211,9 @@ class Plan(pulumi.CustomResource):
                         },
                     },
                 ],
-            }])
+                "duration_in_minutes": 0,
+            }],
+            contact_id=escalation_plan.arn)
         ```
 
         ## Import
@@ -222,9 +224,10 @@ class Plan(pulumi.CustomResource):
         $ pulumi import aws:ssmcontacts/plan:Plan example {ARNValue}
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] contact_id: The Amazon Resource Name (ARN) of the contact or escalation plan.
+        :param pulumi.Input[_builtins.str] contact_id: The ARN of the contact or escalation plan.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Sequence[pulumi.Input[Union['PlanStageArgs', 'PlanStageArgsDict']]]] stages: One or more configuration blocks for specifying a list of stages that the escalation plan or engagement plan uses to engage contacts and contact methods. See Stage below for more details.
         """
@@ -246,10 +249,10 @@ class Plan(pulumi.CustomResource):
         import pulumi_aws as aws
 
         example = aws.ssmcontacts.Plan("example",
-            contact_id="arn:aws:ssm-contacts:us-west-2:123456789012:contact/contactalias",
             stages=[{
                 "duration_in_minutes": 1,
-            }])
+            }],
+            contact_id="arn:aws:ssm-contacts:us-west-2:123456789012:contact/contactalias")
         ```
 
         ### Usage with SSM Contact
@@ -262,10 +265,10 @@ class Plan(pulumi.CustomResource):
             alias="alias",
             type="PERSONAL")
         plan = aws.ssmcontacts.Plan("plan",
-            contact_id=contact.arn,
             stages=[{
                 "duration_in_minutes": 1,
-            }])
+            }],
+            contact_id=contact.arn)
         ```
 
         ### Usage With All Fields
@@ -284,9 +287,7 @@ class Plan(pulumi.CustomResource):
             alias="alias",
             type="PERSONAL")
         test = aws.ssmcontacts.Plan("test",
-            contact_id=escalation_plan.arn,
             stages=[{
-                "duration_in_minutes": 0,
                 "targets": [
                     {
                         "contact_target_info": {
@@ -307,7 +308,9 @@ class Plan(pulumi.CustomResource):
                         },
                     },
                 ],
-            }])
+                "duration_in_minutes": 0,
+            }],
+            contact_id=escalation_plan.arn)
         ```
 
         ## Import
@@ -317,6 +320,7 @@ class Plan(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:ssmcontacts/plan:Plan example {ARNValue}
         ```
+
 
         :param str resource_name: The name of the resource.
         :param PlanArgs args: The arguments to use to populate this resource's properties.
@@ -333,9 +337,9 @@ class Plan(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 contact_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 stages: Optional[pulumi.Input[Sequence[pulumi.Input[Union['PlanStageArgs', 'PlanStageArgsDict']]]]] = None,
+                 contact_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 stages: pulumi.Input[Optional[Sequence[pulumi.Input[Union['PlanStageArgs', 'PlanStageArgsDict']]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -362,9 +366,9 @@ class Plan(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            contact_id: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            stages: Optional[pulumi.Input[Sequence[pulumi.Input[Union['PlanStageArgs', 'PlanStageArgsDict']]]]] = None) -> 'Plan':
+            contact_id: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            stages: pulumi.Input[Optional[Sequence[pulumi.Input[Union['PlanStageArgs', 'PlanStageArgsDict']]]]] = None) -> 'Plan':
         """
         Get an existing Plan resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -372,7 +376,7 @@ class Plan(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[_builtins.str] contact_id: The Amazon Resource Name (ARN) of the contact or escalation plan.
+        :param pulumi.Input[_builtins.str] contact_id: The ARN of the contact or escalation plan.
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         :param pulumi.Input[Sequence[pulumi.Input[Union['PlanStageArgs', 'PlanStageArgsDict']]]] stages: One or more configuration blocks for specifying a list of stages that the escalation plan or engagement plan uses to engage contacts and contact methods. See Stage below for more details.
         """
@@ -389,7 +393,7 @@ class Plan(pulumi.CustomResource):
     @pulumi.getter(name="contactId")
     def contact_id(self) -> pulumi.Output[_builtins.str]:
         """
-        The Amazon Resource Name (ARN) of the contact or escalation plan.
+        The ARN of the contact or escalation plan.
         """
         return pulumi.get(self, "contact_id")
 

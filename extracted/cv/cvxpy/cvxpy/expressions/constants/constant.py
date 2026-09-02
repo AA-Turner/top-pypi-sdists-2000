@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import warnings
-from typing import List, Optional, Tuple
 
 import numpy as np
 import scipy.sparse as sp
@@ -26,6 +24,7 @@ import cvxpy.settings as s
 import cvxpy.utilities.linalg as eig_util
 from cvxpy.expressions.leaf import Leaf
 from cvxpy.utilities import performance_utils as perf
+from cvxpy.utilities.warn import warn
 
 NESTED_LIST_WARNING = "Initializing a Constant with a nested list is " \
                       "undefined behavior. Consider using a numpy array instead."
@@ -41,7 +40,10 @@ class Constant(Leaf):
     then ``x + c`` creates an expression by casting ``c`` to a Constant.
     """
 
-    def __init__(self, value, name: Optional[str] = None) -> None:
+    def __init__(self, value, name: str | None = None) -> None:
+        # Record whether the original value was boolean-typed before
+        # const_to_matrix converts it to float64.
+        self._boolean: bool = self._detect_boolean(value)
         # Keep sparse matrices sparse.
         if intf.is_sparse(value):
             self._value = intf.DEFAULT_SPARSE_INTF.const_to_matrix(
@@ -49,21 +51,35 @@ class Constant(Leaf):
             self._sparse = True
         else:
             if isinstance(value, list) and any(isinstance(i, list) for i in value):
-                warnings.warn(NESTED_LIST_WARNING)
+                warn(NESTED_LIST_WARNING)
 
             self._value = intf.DEFAULT_INTF.const_to_matrix(value)
             self._sparse = False
-        self._imag: Optional[bool] = None
-        self._nonneg: Optional[bool] = None
-        self._nonpos: Optional[bool] = None
-        self._symm: Optional[bool] = None
-        self._herm: Optional[bool] = None
-        self._psd_test: Optional[bool] = None
-        self._nsd_test: Optional[bool] = None
+        self._imag: bool | None = None
+        self._nonneg: bool | None = None
+        self._nonpos: bool | None = None
+        self._symm: bool | None = None
+        self._herm: bool | None = None
+        self._psd_test: bool | None = None
+        self._nsd_test: bool | None = None
         self._cached_is_pos = None
         self._skew_symm = None
         self._name = name
         super(Constant, self).__init__(intf.shape(self.value))
+
+    @staticmethod
+    def _detect_boolean(value) -> bool:
+        """Check if the original value has boolean dtype."""
+        if isinstance(value, (bool, np.bool_)):
+            return True
+        if hasattr(value, 'dtype') and value.dtype == np.bool_:
+            return True
+        return False
+
+    @property
+    def is_boolean_valued(self) -> bool:
+        """Whether this constant was constructed from a boolean-typed value."""
+        return self._boolean
 
     def name(self) -> str:
         """
@@ -79,7 +95,7 @@ class Constant(Leaf):
         else:
             return self._name
 
-    def constants(self) -> List["Constant"]:
+    def constants(self) -> list["Constant"]:
         """Returns self as a constant.
         """
         return [self]
@@ -117,7 +133,7 @@ class Constant(Leaf):
         return {}
 
     @property
-    def shape(self) -> Tuple[int, ...]:
+    def shape(self) -> tuple[int, ...]:
         """Returns the (row, col) dimensions of the expression.
         """
         return self._shape
@@ -260,3 +276,17 @@ class Constant(Leaf):
             self._nsd_test = eig_util.is_psd_within_tol(-self.value, s.EIGVAL_TOL)
 
         return self._nsd_test
+
+    def get_bounds(self) -> tuple[np.ndarray, np.ndarray]:
+        """Return bounds for this constant.
+
+        For constants, the bounds are exactly (value, value).
+        Sparse matrices are returned as-is to avoid memory blowup.
+
+        Returns
+        -------
+        tuple of np.ndarray or sparse matrix
+            (lower_bound, upper_bound) equal to the constant's value.
+        """
+        val = self._value
+        return (val.copy(), val.copy())

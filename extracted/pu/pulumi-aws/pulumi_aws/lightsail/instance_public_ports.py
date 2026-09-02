@@ -23,9 +23,10 @@ class InstancePublicPortsArgs:
     def __init__(__self__, *,
                  instance_name: pulumi.Input[_builtins.str],
                  port_infos: pulumi.Input[Sequence[pulumi.Input['InstancePublicPortsPortInfoArgs']]],
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         The set of arguments for constructing a InstancePublicPorts resource.
+
         :param pulumi.Input[_builtins.str] instance_name: Name of the instance for which to open ports.
         :param pulumi.Input[Sequence[pulumi.Input['InstancePublicPortsPortInfoArgs']]] port_infos: Descriptor of the ports to open for the specified instance. AWS closes all currently open ports that are not included in this argument. See `port_info` Block for details.
                
@@ -65,25 +66,26 @@ class InstancePublicPortsArgs:
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
 @pulumi.input_type
 class _InstancePublicPortsState:
     def __init__(__self__, *,
-                 instance_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 port_infos: Optional[pulumi.Input[Sequence[pulumi.Input['InstancePublicPortsPortInfoArgs']]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 instance_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 port_infos: pulumi.Input[Optional[Sequence[pulumi.Input['InstancePublicPortsPortInfoArgs']]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering InstancePublicPorts resources.
+
         :param pulumi.Input[_builtins.str] instance_name: Name of the instance for which to open ports.
         :param pulumi.Input[Sequence[pulumi.Input['InstancePublicPortsPortInfoArgs']]] port_infos: Descriptor of the ports to open for the specified instance. AWS closes all currently open ports that are not included in this argument. See `port_info` Block for details.
                
@@ -99,19 +101,19 @@ class _InstancePublicPortsState:
 
     @_builtins.property
     @pulumi.getter(name="instanceName")
-    def instance_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def instance_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the instance for which to open ports.
         """
         return pulumi.get(self, "instance_name")
 
     @instance_name.setter
-    def instance_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def instance_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "instance_name", value)
 
     @_builtins.property
     @pulumi.getter(name="portInfos")
-    def port_infos(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstancePublicPortsPortInfoArgs']]]]:
+    def port_infos(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['InstancePublicPortsPortInfoArgs']]]]:
         """
         Descriptor of the ports to open for the specified instance. AWS closes all currently open ports that are not included in this argument. See `port_info` Block for details.
 
@@ -120,19 +122,19 @@ class _InstancePublicPortsState:
         return pulumi.get(self, "port_infos")
 
     @port_infos.setter
-    def port_infos(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['InstancePublicPortsPortInfoArgs']]]]):
+    def port_infos(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['InstancePublicPortsPortInfoArgs']]]]):
         pulumi.set(self, "port_infos", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
 
@@ -142,9 +144,9 @@ class InstancePublicPorts(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 instance_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 port_infos: Optional[pulumi.Input[Sequence[pulumi.Input[Union['InstancePublicPortsPortInfoArgs', 'InstancePublicPortsPortInfoArgsDict']]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 instance_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 port_infos: pulumi.Input[Optional[Sequence[pulumi.Input[Union['InstancePublicPortsPortInfoArgs', 'InstancePublicPortsPortInfoArgsDict']]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Manages public ports for a Lightsail instance. Use this resource to open ports for a specific Amazon Lightsail instance and specify the IP addresses allowed to connect to the instance through the ports and the protocol.
@@ -159,18 +161,17 @@ class InstancePublicPorts(pulumi.CustomResource):
         import pulumi
         import pulumi_aws as aws
 
-        available = aws.get_availability_zones(state="available",
-            filters=[{
+        available = aws.get_availability_zones(filters=[{
                 "name": "opt-in-status",
                 "values": ["opt-in-not-required"],
-            }])
+            }],
+            state="available")
         example = aws.lightsail.Instance("example",
             name="example-instance",
             availability_zone=available.names[0],
             blueprint_id="amazon_linux_2",
             bundle_id="nano_3_0")
         example_instance_public_ports = aws.lightsail.InstancePublicPorts("example",
-            instance_name=example.name,
             port_infos=[
                 {
                     "protocol": "tcp",
@@ -183,8 +184,10 @@ class InstancePublicPorts(pulumi.CustomResource):
                     "to_port": 443,
                     "cidrs": ["192.168.1.0/24"],
                 },
-            ])
+            ],
+            instance_name=example.name)
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -213,18 +216,17 @@ class InstancePublicPorts(pulumi.CustomResource):
         import pulumi
         import pulumi_aws as aws
 
-        available = aws.get_availability_zones(state="available",
-            filters=[{
+        available = aws.get_availability_zones(filters=[{
                 "name": "opt-in-status",
                 "values": ["opt-in-not-required"],
-            }])
+            }],
+            state="available")
         example = aws.lightsail.Instance("example",
             name="example-instance",
             availability_zone=available.names[0],
             blueprint_id="amazon_linux_2",
             bundle_id="nano_3_0")
         example_instance_public_ports = aws.lightsail.InstancePublicPorts("example",
-            instance_name=example.name,
             port_infos=[
                 {
                     "protocol": "tcp",
@@ -237,8 +239,10 @@ class InstancePublicPorts(pulumi.CustomResource):
                     "to_port": 443,
                     "cidrs": ["192.168.1.0/24"],
                 },
-            ])
+            ],
+            instance_name=example.name)
         ```
+
 
         :param str resource_name: The name of the resource.
         :param InstancePublicPortsArgs args: The arguments to use to populate this resource's properties.
@@ -255,9 +259,9 @@ class InstancePublicPorts(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 instance_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 port_infos: Optional[pulumi.Input[Sequence[pulumi.Input[Union['InstancePublicPortsPortInfoArgs', 'InstancePublicPortsPortInfoArgsDict']]]]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 instance_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 port_infos: pulumi.Input[Optional[Sequence[pulumi.Input[Union['InstancePublicPortsPortInfoArgs', 'InstancePublicPortsPortInfoArgsDict']]]]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -284,9 +288,9 @@ class InstancePublicPorts(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            instance_name: Optional[pulumi.Input[_builtins.str]] = None,
-            port_infos: Optional[pulumi.Input[Sequence[pulumi.Input[Union['InstancePublicPortsPortInfoArgs', 'InstancePublicPortsPortInfoArgsDict']]]]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'InstancePublicPorts':
+            instance_name: pulumi.Input[Optional[_builtins.str]] = None,
+            port_infos: pulumi.Input[Optional[Sequence[pulumi.Input[Union['InstancePublicPortsPortInfoArgs', 'InstancePublicPortsPortInfoArgsDict']]]]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None) -> 'InstancePublicPorts':
         """
         Get an existing InstancePublicPorts resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

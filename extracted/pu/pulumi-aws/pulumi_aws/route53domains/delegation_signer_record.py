@@ -22,10 +22,11 @@ __all__ = ['DelegationSignerRecordArgs', 'DelegationSignerRecord']
 class DelegationSignerRecordArgs:
     def __init__(__self__, *,
                  domain_name: pulumi.Input[_builtins.str],
-                 signing_attributes: Optional[pulumi.Input['DelegationSignerRecordSigningAttributesArgs']] = None,
-                 timeouts: Optional[pulumi.Input['DelegationSignerRecordTimeoutsArgs']] = None):
+                 signing_attributes: pulumi.Input[Optional['DelegationSignerRecordSigningAttributesArgs']] = None,
+                 timeouts: pulumi.Input[Optional['DelegationSignerRecordTimeoutsArgs']] = None):
         """
         The set of arguments for constructing a DelegationSignerRecord resource.
+
         :param pulumi.Input[_builtins.str] domain_name: The name of the domain that will have its parent DNS zone updated with the Delegation Signer record.
         :param pulumi.Input['DelegationSignerRecordSigningAttributesArgs'] signing_attributes: The information about a key, including the algorithm, public key-value, and flags.
         """
@@ -49,35 +50,36 @@ class DelegationSignerRecordArgs:
 
     @_builtins.property
     @pulumi.getter(name="signingAttributes")
-    def signing_attributes(self) -> Optional[pulumi.Input['DelegationSignerRecordSigningAttributesArgs']]:
+    def signing_attributes(self) -> pulumi.Input[Optional['DelegationSignerRecordSigningAttributesArgs']]:
         """
         The information about a key, including the algorithm, public key-value, and flags.
         """
         return pulumi.get(self, "signing_attributes")
 
     @signing_attributes.setter
-    def signing_attributes(self, value: Optional[pulumi.Input['DelegationSignerRecordSigningAttributesArgs']]):
+    def signing_attributes(self, value: pulumi.Input[Optional['DelegationSignerRecordSigningAttributesArgs']]):
         pulumi.set(self, "signing_attributes", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['DelegationSignerRecordTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['DelegationSignerRecordTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['DelegationSignerRecordTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['DelegationSignerRecordTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
 @pulumi.input_type
 class _DelegationSignerRecordState:
     def __init__(__self__, *,
-                 dnssec_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-                 domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 signing_attributes: Optional[pulumi.Input['DelegationSignerRecordSigningAttributesArgs']] = None,
-                 timeouts: Optional[pulumi.Input['DelegationSignerRecordTimeoutsArgs']] = None):
+                 dnssec_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+                 domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 signing_attributes: pulumi.Input[Optional['DelegationSignerRecordSigningAttributesArgs']] = None,
+                 timeouts: pulumi.Input[Optional['DelegationSignerRecordTimeoutsArgs']] = None):
         """
         Input properties used for looking up and filtering DelegationSignerRecord resources.
+
         :param pulumi.Input[_builtins.str] dnssec_key_id: An ID assigned to the created DS record.
         :param pulumi.Input[_builtins.str] domain_name: The name of the domain that will have its parent DNS zone updated with the Delegation Signer record.
         :param pulumi.Input['DelegationSignerRecordSigningAttributesArgs'] signing_attributes: The information about a key, including the algorithm, public key-value, and flags.
@@ -93,47 +95,47 @@ class _DelegationSignerRecordState:
 
     @_builtins.property
     @pulumi.getter(name="dnssecKeyId")
-    def dnssec_key_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def dnssec_key_id(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         An ID assigned to the created DS record.
         """
         return pulumi.get(self, "dnssec_key_id")
 
     @dnssec_key_id.setter
-    def dnssec_key_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def dnssec_key_id(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "dnssec_key_id", value)
 
     @_builtins.property
     @pulumi.getter(name="domainName")
-    def domain_name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def domain_name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of the domain that will have its parent DNS zone updated with the Delegation Signer record.
         """
         return pulumi.get(self, "domain_name")
 
     @domain_name.setter
-    def domain_name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def domain_name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "domain_name", value)
 
     @_builtins.property
     @pulumi.getter(name="signingAttributes")
-    def signing_attributes(self) -> Optional[pulumi.Input['DelegationSignerRecordSigningAttributesArgs']]:
+    def signing_attributes(self) -> pulumi.Input[Optional['DelegationSignerRecordSigningAttributesArgs']]:
         """
         The information about a key, including the algorithm, public key-value, and flags.
         """
         return pulumi.get(self, "signing_attributes")
 
     @signing_attributes.setter
-    def signing_attributes(self, value: Optional[pulumi.Input['DelegationSignerRecordSigningAttributesArgs']]):
+    def signing_attributes(self, value: pulumi.Input[Optional['DelegationSignerRecordSigningAttributesArgs']]):
         pulumi.set(self, "signing_attributes", value)
 
     @_builtins.property
     @pulumi.getter
-    def timeouts(self) -> Optional[pulumi.Input['DelegationSignerRecordTimeoutsArgs']]:
+    def timeouts(self) -> pulumi.Input[Optional['DelegationSignerRecordTimeoutsArgs']]:
         return pulumi.get(self, "timeouts")
 
     @timeouts.setter
-    def timeouts(self, value: Optional[pulumi.Input['DelegationSignerRecordTimeoutsArgs']]):
+    def timeouts(self, value: pulumi.Input[Optional['DelegationSignerRecordTimeoutsArgs']]):
         pulumi.set(self, "timeouts", value)
 
 
@@ -143,9 +145,9 @@ class DelegationSignerRecord(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 signing_attributes: Optional[pulumi.Input[Union['DelegationSignerRecordSigningAttributesArgs', 'DelegationSignerRecordSigningAttributesArgsDict']]] = None,
-                 timeouts: Optional[pulumi.Input[Union['DelegationSignerRecordTimeoutsArgs', 'DelegationSignerRecordTimeoutsArgsDict']]] = None,
+                 domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 signing_attributes: pulumi.Input[Optional[Union['DelegationSignerRecordSigningAttributesArgs', 'DelegationSignerRecordSigningAttributesArgsDict']]] = None,
+                 timeouts: pulumi.Input[Optional[Union['DelegationSignerRecordTimeoutsArgs', 'DelegationSignerRecordTimeoutsArgsDict']]] = None,
                  __props__=None):
         """
         Provides a resource to manage a [delegation signer record](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-dnssec-enable-signing.html#dns-configuring-dnssec-enable-signing-step-1) in the parent DNS zone for domains registered with Route53.
@@ -221,12 +223,12 @@ class DelegationSignerRecord(pulumi.CustomResource):
         example_hosted_zone_dns_sec = aws.route53.HostedZoneDnsSec("example", hosted_zone_id=example_key_signing_key.hosted_zone_id,
         opts = pulumi.ResourceOptions(depends_on=[example_key_signing_key]))
         example_delegation_signer_record = aws.route53domains.DelegationSignerRecord("example",
-            domain_name="example.com",
             signing_attributes={
                 "algorithm": example_key_signing_key.signing_algorithm_type,
                 "flags": example_key_signing_key.flag,
                 "public_key": example_key_signing_key.public_key,
-            })
+            },
+            domain_name="example.com")
         ```
 
         ## Import
@@ -236,6 +238,7 @@ class DelegationSignerRecord(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:route53domains/delegationSignerRecord:DelegationSignerRecord example example.com,40DE3534F5324DBDAC598ACEDB5B1E26A5368732D9C791D1347E4FBDDF6FC343
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -322,12 +325,12 @@ class DelegationSignerRecord(pulumi.CustomResource):
         example_hosted_zone_dns_sec = aws.route53.HostedZoneDnsSec("example", hosted_zone_id=example_key_signing_key.hosted_zone_id,
         opts = pulumi.ResourceOptions(depends_on=[example_key_signing_key]))
         example_delegation_signer_record = aws.route53domains.DelegationSignerRecord("example",
-            domain_name="example.com",
             signing_attributes={
                 "algorithm": example_key_signing_key.signing_algorithm_type,
                 "flags": example_key_signing_key.flag,
                 "public_key": example_key_signing_key.public_key,
-            })
+            },
+            domain_name="example.com")
         ```
 
         ## Import
@@ -337,6 +340,7 @@ class DelegationSignerRecord(pulumi.CustomResource):
         ```sh
         $ pulumi import aws:route53domains/delegationSignerRecord:DelegationSignerRecord example example.com,40DE3534F5324DBDAC598ACEDB5B1E26A5368732D9C791D1347E4FBDDF6FC343
         ```
+
 
         :param str resource_name: The name of the resource.
         :param DelegationSignerRecordArgs args: The arguments to use to populate this resource's properties.
@@ -353,9 +357,9 @@ class DelegationSignerRecord(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-                 signing_attributes: Optional[pulumi.Input[Union['DelegationSignerRecordSigningAttributesArgs', 'DelegationSignerRecordSigningAttributesArgsDict']]] = None,
-                 timeouts: Optional[pulumi.Input[Union['DelegationSignerRecordTimeoutsArgs', 'DelegationSignerRecordTimeoutsArgsDict']]] = None,
+                 domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+                 signing_attributes: pulumi.Input[Optional[Union['DelegationSignerRecordSigningAttributesArgs', 'DelegationSignerRecordSigningAttributesArgsDict']]] = None,
+                 timeouts: pulumi.Input[Optional[Union['DelegationSignerRecordTimeoutsArgs', 'DelegationSignerRecordTimeoutsArgsDict']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -381,10 +385,10 @@ class DelegationSignerRecord(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            dnssec_key_id: Optional[pulumi.Input[_builtins.str]] = None,
-            domain_name: Optional[pulumi.Input[_builtins.str]] = None,
-            signing_attributes: Optional[pulumi.Input[Union['DelegationSignerRecordSigningAttributesArgs', 'DelegationSignerRecordSigningAttributesArgsDict']]] = None,
-            timeouts: Optional[pulumi.Input[Union['DelegationSignerRecordTimeoutsArgs', 'DelegationSignerRecordTimeoutsArgsDict']]] = None) -> 'DelegationSignerRecord':
+            dnssec_key_id: pulumi.Input[Optional[_builtins.str]] = None,
+            domain_name: pulumi.Input[Optional[_builtins.str]] = None,
+            signing_attributes: pulumi.Input[Optional[Union['DelegationSignerRecordSigningAttributesArgs', 'DelegationSignerRecordSigningAttributesArgsDict']]] = None,
+            timeouts: pulumi.Input[Optional[Union['DelegationSignerRecordTimeoutsArgs', 'DelegationSignerRecordTimeoutsArgsDict']]] = None) -> 'DelegationSignerRecord':
         """
         Get an existing DelegationSignerRecord resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

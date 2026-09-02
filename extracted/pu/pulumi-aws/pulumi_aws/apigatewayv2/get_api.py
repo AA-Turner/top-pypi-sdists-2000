@@ -94,8 +94,7 @@ class GetApiResult:
     @pulumi.getter(name="apiKeySelectionExpression")
     def api_key_selection_expression(self) -> _builtins.str:
         """
-        An [API key selection expression](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions).
-        Applicable for WebSocket APIs.
+        [API key selection expression](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions). Applicable for WebSocket APIs.
         """
         return pulumi.get(self, "api_key_selection_expression")
 
@@ -111,8 +110,7 @@ class GetApiResult:
     @pulumi.getter(name="corsConfigurations")
     def cors_configurations(self) -> Sequence['outputs.GetApiCorsConfigurationResult']:
         """
-        Cross-origin resource sharing (CORS) [configuration](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-cors.html).
-        Applicable for HTTP APIs.
+        Cross-origin resource sharing (CORS) [configuration](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-cors.html). Applicable for HTTP APIs. See below.
         """
         return pulumi.get(self, "cors_configurations")
 
@@ -136,9 +134,7 @@ class GetApiResult:
     @pulumi.getter(name="executionArn")
     def execution_arn(self) -> _builtins.str:
         """
-        ARN prefix to be used in an `lambda.Permission`'s `source_arn` attribute
-        or in an `iam.Policy` to authorize access to the [`@connections` API](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html).
-        See the [Amazon API Gateway Developer Guide](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-control-access-iam.html) for details.
+        ARN prefix to be used in an `lambda.Permission`'s `source_arn` attribute or in an `iam.Policy` to authorize access to the [`@connections` API](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html). See the [Amazon API Gateway Developer Guide](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-control-access-iam.html) for details.
         """
         return pulumi.get(self, "execution_arn")
 
@@ -153,6 +149,9 @@ class GetApiResult:
     @_builtins.property
     @pulumi.getter(name="ipAddressType")
     def ip_address_type(self) -> _builtins.str:
+        """
+        IP address types that can invoke an API.
+        """
         return pulumi.get(self, "ip_address_type")
 
     @_builtins.property
@@ -180,7 +179,7 @@ class GetApiResult:
     @pulumi.getter(name="routeSelectionExpression")
     def route_selection_expression(self) -> _builtins.str:
         """
-        The [route selection expression](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-route-selection-expressions) for the API.
+        [Route selection expression](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-route-selection-expressions) for the API.
         """
         return pulumi.get(self, "route_selection_expression")
 
@@ -270,9 +269,9 @@ def get_api(api_id: Optional[_builtins.str] = None,
         route_selection_expression=pulumi.get(__ret__, 'route_selection_expression'),
         tags=pulumi.get(__ret__, 'tags'),
         version=pulumi.get(__ret__, 'version'))
-def get_api_output(api_id: Optional[pulumi.Input[_builtins.str]] = None,
-                   region: Optional[pulumi.Input[Optional[_builtins.str]]] = None,
-                   tags: Optional[pulumi.Input[Optional[Mapping[str, _builtins.str]]]] = None,
+def get_api_output(api_id: pulumi.Input[Optional[_builtins.str]] = None,
+                   region: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                   tags: pulumi.Input[Optional[Optional[Mapping[str, _builtins.str]]]] = None,
                    opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetApiResult]:
     """
     Provides details about a specific Amazon API Gateway Version 2 API.

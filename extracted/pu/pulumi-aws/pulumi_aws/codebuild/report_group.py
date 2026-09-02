@@ -23,12 +23,13 @@ class ReportGroupArgs:
     def __init__(__self__, *,
                  export_config: pulumi.Input['ReportGroupExportConfigArgs'],
                  type: pulumi.Input[_builtins.str],
-                 delete_reports: Optional[pulumi.Input[_builtins.bool]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
+                 delete_reports: pulumi.Input[Optional[_builtins.bool]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a ReportGroup resource.
+
         :param pulumi.Input['ReportGroupExportConfigArgs'] export_config: Information about the destination where the raw data of this Report Group is exported. see Export Config documented below.
         :param pulumi.Input[_builtins.str] type: The type of the Report Group. Valid value are `TEST` and `CODE_COVERAGE`.
         :param pulumi.Input[_builtins.bool] delete_reports: If `true`, deletes any reports that belong to a report group before deleting the report group. If `false`, you must delete any reports in the report group before deleting it. Default value is `false`.
@@ -73,67 +74,68 @@ class ReportGroupArgs:
 
     @_builtins.property
     @pulumi.getter(name="deleteReports")
-    def delete_reports(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def delete_reports(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         If `true`, deletes any reports that belong to a report group before deleting the report group. If `false`, you must delete any reports in the report group before deleting it. Default value is `false`.
         """
         return pulumi.get(self, "delete_reports")
 
     @delete_reports.setter
-    def delete_reports(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def delete_reports(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "delete_reports", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of a Report Group.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value mapping of resource tags. .If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _ReportGroupState:
     def __init__(__self__, *,
-                 arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 created: Optional[pulumi.Input[_builtins.str]] = None,
-                 delete_reports: Optional[pulumi.Input[_builtins.bool]] = None,
-                 export_config: Optional[pulumi.Input['ReportGroupExportConfigArgs']] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None):
+                 arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 created: pulumi.Input[Optional[_builtins.str]] = None,
+                 delete_reports: pulumi.Input[Optional[_builtins.bool]] = None,
+                 export_config: pulumi.Input[Optional['ReportGroupExportConfigArgs']] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None):
         """
         Input properties used for looking up and filtering ReportGroup resources.
+
         :param pulumi.Input[_builtins.str] arn: The ARN of Report Group.
         :param pulumi.Input[_builtins.str] created: The date and time this Report Group was created.
         :param pulumi.Input[_builtins.bool] delete_reports: If `true`, deletes any reports that belong to a report group before deleting the report group. If `false`, you must delete any reports in the report group before deleting it. Default value is `false`.
@@ -165,110 +167,110 @@ class _ReportGroupState:
 
     @_builtins.property
     @pulumi.getter
-    def arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The ARN of Report Group.
         """
         return pulumi.get(self, "arn")
 
     @arn.setter
-    def arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def created(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def created(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The date and time this Report Group was created.
         """
         return pulumi.get(self, "created")
 
     @created.setter
-    def created(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def created(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "created", value)
 
     @_builtins.property
     @pulumi.getter(name="deleteReports")
-    def delete_reports(self) -> Optional[pulumi.Input[_builtins.bool]]:
+    def delete_reports(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
         If `true`, deletes any reports that belong to a report group before deleting the report group. If `false`, you must delete any reports in the report group before deleting it. Default value is `false`.
         """
         return pulumi.get(self, "delete_reports")
 
     @delete_reports.setter
-    def delete_reports(self, value: Optional[pulumi.Input[_builtins.bool]]):
+    def delete_reports(self, value: pulumi.Input[Optional[_builtins.bool]]):
         pulumi.set(self, "delete_reports", value)
 
     @_builtins.property
     @pulumi.getter(name="exportConfig")
-    def export_config(self) -> Optional[pulumi.Input['ReportGroupExportConfigArgs']]:
+    def export_config(self) -> pulumi.Input[Optional['ReportGroupExportConfigArgs']]:
         """
         Information about the destination where the raw data of this Report Group is exported. see Export Config documented below.
         """
         return pulumi.get(self, "export_config")
 
     @export_config.setter
-    def export_config(self, value: Optional[pulumi.Input['ReportGroupExportConfigArgs']]):
+    def export_config(self, value: pulumi.Input[Optional['ReportGroupExportConfigArgs']]):
         pulumi.set(self, "export_config", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The name of a Report Group.
         """
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
 
     @_builtins.property
     @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         Key-value mapping of resource tags. .If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags", value)
 
     @_builtins.property
     @pulumi.getter(name="tagsAll")
-    def tags_all(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]:
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
         """
         A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         return pulumi.get(self, "tags_all")
 
     @tags_all.setter
-    def tags_all(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "tags_all", value)
 
     @_builtins.property
     @pulumi.getter
-    def type(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def type(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         The type of the Report Group. Valid value are `TEST` and `CODE_COVERAGE`.
         """
         return pulumi.get(self, "type")
 
     @type.setter
-    def type(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def type(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "type", value)
 
 
@@ -278,12 +280,12 @@ class ReportGroup(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 delete_reports: Optional[pulumi.Input[_builtins.bool]] = None,
-                 export_config: Optional[pulumi.Input[Union['ReportGroupExportConfigArgs', 'ReportGroupExportConfigArgsDict']]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None,
+                 delete_reports: pulumi.Input[Optional[_builtins.bool]] = None,
+                 export_config: pulumi.Input[Optional[Union['ReportGroupExportConfigArgs', 'ReportGroupExportConfigArgsDict']]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         """
         Provides a CodeBuild Report Groups Resource.
@@ -296,12 +298,12 @@ class ReportGroup(pulumi.CustomResource):
 
         current = aws.get_caller_identity()
         example = aws.iam.get_policy_document(statements=[{
-            "sid": "Enable IAM User Permissions",
-            "effect": "Allow",
             "principals": [{
                 "type": "AWS",
                 "identifiers": [f"arn:aws:iam::{current.account_id}:root"],
             }],
+            "sid": "Enable IAM User Permissions",
+            "effect": "Allow",
             "actions": ["kms:*"],
             "resources": ["*"],
         }])
@@ -311,10 +313,7 @@ class ReportGroup(pulumi.CustomResource):
             policy=example.json)
         example_bucket = aws.s3.Bucket("example", bucket="my-test")
         example_report_group = aws.codebuild.ReportGroup("example",
-            name="my test report group",
-            type="TEST",
             export_config={
-                "type": "S3",
                 "s3_destination": {
                     "bucket": example_bucket.id,
                     "encryption_disabled": False,
@@ -322,7 +321,10 @@ class ReportGroup(pulumi.CustomResource):
                     "packaging": "NONE",
                     "path": "/some",
                 },
-            })
+                "type": "S3",
+            },
+            name="my test report group",
+            type="TEST")
         ```
 
         ## Import
@@ -331,13 +333,14 @@ class ReportGroup(pulumi.CustomResource):
 
         #### Required
 
-        - `arn` (String) Amazon Resource Name (ARN) of the CodeBuild report group.
+        - `arn` (String) ARN of the CodeBuild report group.
 
         Using `pulumi import`, import CodeBuild Report Group using the CodeBuild Report Group arn. For example:
 
         ```sh
         $ pulumi import aws:codebuild/reportGroup:ReportGroup example arn:aws:codebuild:us-west-2:123456789:report-group/report-group-name
         ```
+
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -365,12 +368,12 @@ class ReportGroup(pulumi.CustomResource):
 
         current = aws.get_caller_identity()
         example = aws.iam.get_policy_document(statements=[{
-            "sid": "Enable IAM User Permissions",
-            "effect": "Allow",
             "principals": [{
                 "type": "AWS",
                 "identifiers": [f"arn:aws:iam::{current.account_id}:root"],
             }],
+            "sid": "Enable IAM User Permissions",
+            "effect": "Allow",
             "actions": ["kms:*"],
             "resources": ["*"],
         }])
@@ -380,10 +383,7 @@ class ReportGroup(pulumi.CustomResource):
             policy=example.json)
         example_bucket = aws.s3.Bucket("example", bucket="my-test")
         example_report_group = aws.codebuild.ReportGroup("example",
-            name="my test report group",
-            type="TEST",
             export_config={
-                "type": "S3",
                 "s3_destination": {
                     "bucket": example_bucket.id,
                     "encryption_disabled": False,
@@ -391,7 +391,10 @@ class ReportGroup(pulumi.CustomResource):
                     "packaging": "NONE",
                     "path": "/some",
                 },
-            })
+                "type": "S3",
+            },
+            name="my test report group",
+            type="TEST")
         ```
 
         ## Import
@@ -400,13 +403,14 @@ class ReportGroup(pulumi.CustomResource):
 
         #### Required
 
-        - `arn` (String) Amazon Resource Name (ARN) of the CodeBuild report group.
+        - `arn` (String) ARN of the CodeBuild report group.
 
         Using `pulumi import`, import CodeBuild Report Group using the CodeBuild Report Group arn. For example:
 
         ```sh
         $ pulumi import aws:codebuild/reportGroup:ReportGroup example arn:aws:codebuild:us-west-2:123456789:report-group/report-group-name
         ```
+
 
         :param str resource_name: The name of the resource.
         :param ReportGroupArgs args: The arguments to use to populate this resource's properties.
@@ -423,12 +427,12 @@ class ReportGroup(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 delete_reports: Optional[pulumi.Input[_builtins.bool]] = None,
-                 export_config: Optional[pulumi.Input[Union['ReportGroupExportConfigArgs', 'ReportGroupExportConfigArgsDict']]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-                 type: Optional[pulumi.Input[_builtins.str]] = None,
+                 delete_reports: pulumi.Input[Optional[_builtins.bool]] = None,
+                 export_config: pulumi.Input[Optional[Union['ReportGroupExportConfigArgs', 'ReportGroupExportConfigArgsDict']]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 type: pulumi.Input[Optional[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -461,15 +465,15 @@ class ReportGroup(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            arn: Optional[pulumi.Input[_builtins.str]] = None,
-            created: Optional[pulumi.Input[_builtins.str]] = None,
-            delete_reports: Optional[pulumi.Input[_builtins.bool]] = None,
-            export_config: Optional[pulumi.Input[Union['ReportGroupExportConfigArgs', 'ReportGroupExportConfigArgsDict']]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            tags_all: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
-            type: Optional[pulumi.Input[_builtins.str]] = None) -> 'ReportGroup':
+            arn: pulumi.Input[Optional[_builtins.str]] = None,
+            created: pulumi.Input[Optional[_builtins.str]] = None,
+            delete_reports: pulumi.Input[Optional[_builtins.bool]] = None,
+            export_config: pulumi.Input[Optional[Union['ReportGroupExportConfigArgs', 'ReportGroupExportConfigArgsDict']]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            type: pulumi.Input[Optional[_builtins.str]] = None) -> 'ReportGroup':
         """
         Get an existing ReportGroup resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.

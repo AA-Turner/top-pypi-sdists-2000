@@ -21,13 +21,15 @@ __all__ = ['AgentcoreApiKeyCredentialProviderArgs', 'AgentcoreApiKeyCredentialPr
 @pulumi.input_type
 class AgentcoreApiKeyCredentialProviderArgs:
     def __init__(__self__, *,
-                 api_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 api_key_wo: Optional[pulumi.Input[_builtins.str]] = None,
-                 api_key_wo_version: Optional[pulumi.Input[_builtins.int]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 api_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 api_key_wo: pulumi.Input[Optional[_builtins.str]] = None,
+                 api_key_wo_version: pulumi.Input[Optional[_builtins.int]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         The set of arguments for constructing a AgentcoreApiKeyCredentialProvider resource.
+
         :param pulumi.Input[_builtins.str] api_key: API key value. Cannot be used with `api_key_wo`. This value will be visible in pulumi preview outputs and logs.
                
                **Write-Only API Key (choose one approach):**
@@ -38,6 +40,7 @@ class AgentcoreApiKeyCredentialProviderArgs:
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
                
                **Standard API Key (choose one approach):**
         """
@@ -51,10 +54,12 @@ class AgentcoreApiKeyCredentialProviderArgs:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
 
     @_builtins.property
     @pulumi.getter(name="apiKey")
-    def api_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def api_key(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         API key value. Cannot be used with `api_key_wo`. This value will be visible in pulumi preview outputs and logs.
 
@@ -63,12 +68,12 @@ class AgentcoreApiKeyCredentialProviderArgs:
         return pulumi.get(self, "api_key")
 
     @api_key.setter
-    def api_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def api_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "api_key", value)
 
     @_builtins.property
     @pulumi.getter(name="apiKeyWo")
-    def api_key_wo(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def api_key_wo(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         **NOTE:** This field is write-only and its value will not be updated in state as part of read operations.
         Write-only API key value. Cannot be used with `api_key`. Must be used together with `api_key_wo_version`.
@@ -76,24 +81,24 @@ class AgentcoreApiKeyCredentialProviderArgs:
         return pulumi.get(self, "api_key_wo")
 
     @api_key_wo.setter
-    def api_key_wo(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def api_key_wo(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "api_key_wo", value)
 
     @_builtins.property
     @pulumi.getter(name="apiKeyWoVersion")
-    def api_key_wo_version(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def api_key_wo_version(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Used together with `api_key_wo` to trigger an update. Increment this value when an update to `api_key_wo` is required.
         """
         return pulumi.get(self, "api_key_wo_version")
 
     @api_key_wo_version.setter
-    def api_key_wo_version(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def api_key_wo_version(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "api_key_wo_version", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the API Key credential provider. Forces replacement when changed.
 
@@ -102,36 +107,51 @@ class AgentcoreApiKeyCredentialProviderArgs:
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-
-        **Standard API Key (choose one approach):**
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
+        """
+        Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+
+        **Standard API Key (choose one approach):**
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
 class _AgentcoreApiKeyCredentialProviderState:
     def __init__(__self__, *,
-                 api_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 api_key_secret_arns: Optional[pulumi.Input[Sequence[pulumi.Input['AgentcoreApiKeyCredentialProviderApiKeySecretArnArgs']]]] = None,
-                 api_key_wo: Optional[pulumi.Input[_builtins.str]] = None,
-                 api_key_wo_version: Optional[pulumi.Input[_builtins.int]] = None,
-                 credential_provider_arn: Optional[pulumi.Input[_builtins.str]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None):
+                 api_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 api_key_secret_arns: pulumi.Input[Optional[Sequence[pulumi.Input['AgentcoreApiKeyCredentialProviderApiKeySecretArnArgs']]]] = None,
+                 api_key_wo: pulumi.Input[Optional[_builtins.str]] = None,
+                 api_key_wo_version: pulumi.Input[Optional[_builtins.int]] = None,
+                 credential_provider_arn: pulumi.Input[Optional[_builtins.str]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None):
         """
         Input properties used for looking up and filtering AgentcoreApiKeyCredentialProvider resources.
+
         :param pulumi.Input[_builtins.str] api_key: API key value. Cannot be used with `api_key_wo`. This value will be visible in pulumi preview outputs and logs.
                
                **Write-Only API Key (choose one approach):**
@@ -144,8 +164,10 @@ class _AgentcoreApiKeyCredentialProviderState:
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
                
                **Standard API Key (choose one approach):**
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         if api_key is not None:
             pulumi.set(__self__, "api_key", api_key)
@@ -161,10 +183,14 @@ class _AgentcoreApiKeyCredentialProviderState:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
+        if tags_all is not None:
+            pulumi.set(__self__, "tags_all", tags_all)
 
     @_builtins.property
     @pulumi.getter(name="apiKey")
-    def api_key(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def api_key(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         API key value. Cannot be used with `api_key_wo`. This value will be visible in pulumi preview outputs and logs.
 
@@ -173,24 +199,24 @@ class _AgentcoreApiKeyCredentialProviderState:
         return pulumi.get(self, "api_key")
 
     @api_key.setter
-    def api_key(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def api_key(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "api_key", value)
 
     @_builtins.property
     @pulumi.getter(name="apiKeySecretArns")
-    def api_key_secret_arns(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['AgentcoreApiKeyCredentialProviderApiKeySecretArnArgs']]]]:
+    def api_key_secret_arns(self) -> pulumi.Input[Optional[Sequence[pulumi.Input['AgentcoreApiKeyCredentialProviderApiKeySecretArnArgs']]]]:
         """
         ARN of the AWS Secrets Manager secret containing the API key.
         """
         return pulumi.get(self, "api_key_secret_arns")
 
     @api_key_secret_arns.setter
-    def api_key_secret_arns(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['AgentcoreApiKeyCredentialProviderApiKeySecretArnArgs']]]]):
+    def api_key_secret_arns(self, value: pulumi.Input[Optional[Sequence[pulumi.Input['AgentcoreApiKeyCredentialProviderApiKeySecretArnArgs']]]]):
         pulumi.set(self, "api_key_secret_arns", value)
 
     @_builtins.property
     @pulumi.getter(name="apiKeyWo")
-    def api_key_wo(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def api_key_wo(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         **NOTE:** This field is write-only and its value will not be updated in state as part of read operations.
         Write-only API key value. Cannot be used with `api_key`. Must be used together with `api_key_wo_version`.
@@ -198,36 +224,36 @@ class _AgentcoreApiKeyCredentialProviderState:
         return pulumi.get(self, "api_key_wo")
 
     @api_key_wo.setter
-    def api_key_wo(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def api_key_wo(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "api_key_wo", value)
 
     @_builtins.property
     @pulumi.getter(name="apiKeyWoVersion")
-    def api_key_wo_version(self) -> Optional[pulumi.Input[_builtins.int]]:
+    def api_key_wo_version(self) -> pulumi.Input[Optional[_builtins.int]]:
         """
         Used together with `api_key_wo` to trigger an update. Increment this value when an update to `api_key_wo` is required.
         """
         return pulumi.get(self, "api_key_wo_version")
 
     @api_key_wo_version.setter
-    def api_key_wo_version(self, value: Optional[pulumi.Input[_builtins.int]]):
+    def api_key_wo_version(self, value: pulumi.Input[Optional[_builtins.int]]):
         pulumi.set(self, "api_key_wo_version", value)
 
     @_builtins.property
     @pulumi.getter(name="credentialProviderArn")
-    def credential_provider_arn(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def credential_provider_arn(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         ARN of the API Key credential provider.
         """
         return pulumi.get(self, "credential_provider_arn")
 
     @credential_provider_arn.setter
-    def credential_provider_arn(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def credential_provider_arn(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "credential_provider_arn", value)
 
     @_builtins.property
     @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def name(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Name of the API Key credential provider. Forces replacement when changed.
 
@@ -236,22 +262,46 @@ class _AgentcoreApiKeyCredentialProviderState:
         return pulumi.get(self, "name")
 
     @name.setter
-    def name(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def name(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "name", value)
 
     @_builtins.property
     @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[_builtins.str]]:
+    def region(self) -> pulumi.Input[Optional[_builtins.str]]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
-
-        **Standard API Key (choose one approach):**
         """
         return pulumi.get(self, "region")
 
     @region.setter
-    def region(self, value: Optional[pulumi.Input[_builtins.str]]):
+    def region(self, value: pulumi.Input[Optional[_builtins.str]]):
         pulumi.set(self, "region", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def tags(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
+        """
+        Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+
+        **Standard API Key (choose one approach):**
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "tags", value)
+
+    @_builtins.property
+    @pulumi.getter(name="tagsAll")
+    def tags_all(self) -> pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]:
+        """
+        A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        """
+        return pulumi.get(self, "tags_all")
+
+    @tags_all.setter
+    def tags_all(self, value: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]]):
+        pulumi.set(self, "tags_all", value)
 
 
 @pulumi.type_token("aws:bedrock/agentcoreApiKeyCredentialProvider:AgentcoreApiKeyCredentialProvider")
@@ -260,11 +310,12 @@ class AgentcoreApiKeyCredentialProvider(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 api_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 api_key_wo: Optional[pulumi.Input[_builtins.str]] = None,
-                 api_key_wo_version: Optional[pulumi.Input[_builtins.int]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 api_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 api_key_wo: pulumi.Input[Optional[_builtins.str]] = None,
+                 api_key_wo_version: pulumi.Input[Optional[_builtins.int]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         """
         Manages an AWS Bedrock AgentCore API Key Credential Provider. API Key credential providers enable secure authentication with external services that use API key-based authentication for agent runtimes.
@@ -304,6 +355,7 @@ class AgentcoreApiKeyCredentialProvider(pulumi.CustomResource):
         $ pulumi import aws:bedrock/agentcoreApiKeyCredentialProvider:AgentcoreApiKeyCredentialProvider example example-api-key-provider
         ```
 
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[_builtins.str] api_key: API key value. Cannot be used with `api_key_wo`. This value will be visible in pulumi preview outputs and logs.
@@ -316,6 +368,7 @@ class AgentcoreApiKeyCredentialProvider(pulumi.CustomResource):
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
                
                **Standard API Key (choose one approach):**
         """
@@ -363,6 +416,7 @@ class AgentcoreApiKeyCredentialProvider(pulumi.CustomResource):
         $ pulumi import aws:bedrock/agentcoreApiKeyCredentialProvider:AgentcoreApiKeyCredentialProvider example example-api-key-provider
         ```
 
+
         :param str resource_name: The name of the resource.
         :param AgentcoreApiKeyCredentialProviderArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -378,11 +432,12 @@ class AgentcoreApiKeyCredentialProvider(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 api_key: Optional[pulumi.Input[_builtins.str]] = None,
-                 api_key_wo: Optional[pulumi.Input[_builtins.str]] = None,
-                 api_key_wo_version: Optional[pulumi.Input[_builtins.int]] = None,
-                 name: Optional[pulumi.Input[_builtins.str]] = None,
-                 region: Optional[pulumi.Input[_builtins.str]] = None,
+                 api_key: pulumi.Input[Optional[_builtins.str]] = None,
+                 api_key_wo: pulumi.Input[Optional[_builtins.str]] = None,
+                 api_key_wo_version: pulumi.Input[Optional[_builtins.int]] = None,
+                 name: pulumi.Input[Optional[_builtins.str]] = None,
+                 region: pulumi.Input[Optional[_builtins.str]] = None,
+                 tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -397,8 +452,10 @@ class AgentcoreApiKeyCredentialProvider(pulumi.CustomResource):
             __props__.__dict__["api_key_wo_version"] = api_key_wo_version
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
+            __props__.__dict__["tags"] = tags
             __props__.__dict__["api_key_secret_arns"] = None
             __props__.__dict__["credential_provider_arn"] = None
+            __props__.__dict__["tags_all"] = None
         secret_opts = pulumi.ResourceOptions(additional_secret_outputs=["apiKey", "apiKeyWo"])
         opts = pulumi.ResourceOptions.merge(opts, secret_opts)
         super(AgentcoreApiKeyCredentialProvider, __self__).__init__(
@@ -411,13 +468,15 @@ class AgentcoreApiKeyCredentialProvider(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            api_key: Optional[pulumi.Input[_builtins.str]] = None,
-            api_key_secret_arns: Optional[pulumi.Input[Sequence[pulumi.Input[Union['AgentcoreApiKeyCredentialProviderApiKeySecretArnArgs', 'AgentcoreApiKeyCredentialProviderApiKeySecretArnArgsDict']]]]] = None,
-            api_key_wo: Optional[pulumi.Input[_builtins.str]] = None,
-            api_key_wo_version: Optional[pulumi.Input[_builtins.int]] = None,
-            credential_provider_arn: Optional[pulumi.Input[_builtins.str]] = None,
-            name: Optional[pulumi.Input[_builtins.str]] = None,
-            region: Optional[pulumi.Input[_builtins.str]] = None) -> 'AgentcoreApiKeyCredentialProvider':
+            api_key: pulumi.Input[Optional[_builtins.str]] = None,
+            api_key_secret_arns: pulumi.Input[Optional[Sequence[pulumi.Input[Union['AgentcoreApiKeyCredentialProviderApiKeySecretArnArgs', 'AgentcoreApiKeyCredentialProviderApiKeySecretArnArgsDict']]]]] = None,
+            api_key_wo: pulumi.Input[Optional[_builtins.str]] = None,
+            api_key_wo_version: pulumi.Input[Optional[_builtins.int]] = None,
+            credential_provider_arn: pulumi.Input[Optional[_builtins.str]] = None,
+            name: pulumi.Input[Optional[_builtins.str]] = None,
+            region: pulumi.Input[Optional[_builtins.str]] = None,
+            tags: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+            tags_all: pulumi.Input[Optional[Mapping[str, pulumi.Input[_builtins.str]]]] = None) -> 'AgentcoreApiKeyCredentialProvider':
         """
         Get an existing AgentcoreApiKeyCredentialProvider resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -437,8 +496,10 @@ class AgentcoreApiKeyCredentialProvider(pulumi.CustomResource):
                
                The following arguments are optional:
         :param pulumi.Input[_builtins.str] region: Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags: Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
                
                **Standard API Key (choose one approach):**
+        :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] tags_all: A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -451,6 +512,8 @@ class AgentcoreApiKeyCredentialProvider(pulumi.CustomResource):
         __props__.__dict__["credential_provider_arn"] = credential_provider_arn
         __props__.__dict__["name"] = name
         __props__.__dict__["region"] = region
+        __props__.__dict__["tags"] = tags
+        __props__.__dict__["tags_all"] = tags_all
         return AgentcoreApiKeyCredentialProvider(resource_name, opts=opts, __props__=__props__)
 
     @_builtins.property
@@ -511,8 +574,24 @@ class AgentcoreApiKeyCredentialProvider(pulumi.CustomResource):
     def region(self) -> pulumi.Output[_builtins.str]:
         """
         Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the provider configuration.
+        """
+        return pulumi.get(self, "region")
+
+    @_builtins.property
+    @pulumi.getter
+    def tags(self) -> pulumi.Output[Optional[Mapping[str, _builtins.str]]]:
+        """
+        Key-value map of resource tags. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
 
         **Standard API Key (choose one approach):**
         """
-        return pulumi.get(self, "region")
+        return pulumi.get(self, "tags")
+
+    @_builtins.property
+    @pulumi.getter(name="tagsAll")
+    def tags_all(self) -> pulumi.Output[Mapping[str, _builtins.str]]:
+        """
+        A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+        """
+        return pulumi.get(self, "tags_all")
 
