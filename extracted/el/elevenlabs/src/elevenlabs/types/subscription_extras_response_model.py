@@ -25,6 +25,21 @@ class SubscriptionExtrasResponseModel(UncheckedBaseModel):
     The Music concurrency of the user on enterprise plan.
     """
 
+    music_finetunes_total_limit: typing.Optional[int] = pydantic.Field(default=None)
+    """
+    Custom total finetunes limit for the user.
+    """
+
+    music_finetunes_monthly_limit: typing.Optional[int] = pydantic.Field(default=None)
+    """
+    Custom monthly finetunes limit for the user.
+    """
+
+    music_finetunes_concurrency_limit: typing.Optional[int] = pydantic.Field(default=None)
+    """
+    Custom finetunes concurrency limit for the user.
+    """
+
     convai_chars_per_minute: typing.Optional[int] = pydantic.Field(default=None)
     """
     The Convai characters per minute of the user. This field is deprecated and will always return None.

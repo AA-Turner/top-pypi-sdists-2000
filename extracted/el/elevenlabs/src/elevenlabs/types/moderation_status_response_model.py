@@ -40,6 +40,11 @@ class ModerationStatusResponseModel(UncheckedBaseModel):
     Whether the user's enterprise background moderation is enabled.
     """
 
+    is_ivc_captcha_required: bool = pydantic.Field()
+    """
+    Whether captcha is required when creating IVCs.
+    """
+
     safety_status: typing.Optional[ModerationStatusResponseModelSafetyStatus] = pydantic.Field(default=None)
     """
     The safety status of the user.

@@ -23,6 +23,11 @@ class SubscriptionUsageResponseModel(UncheckedBaseModel):
     The manually gifted credits quota.
     """
 
+    payg_credits_quota: typing.Optional[int] = pydantic.Field(default=None)
+    """
+    The payg credits quota.
+    """
+
     rollover_credits_used: int = pydantic.Field()
     """
     The rollover credits used.
@@ -36,6 +41,11 @@ class SubscriptionUsageResponseModel(UncheckedBaseModel):
     manually_gifted_credits_used: int = pydantic.Field()
     """
     The manually gifted credits used.
+    """
+
+    payg_credits_used: typing.Optional[int] = pydantic.Field(default=None)
+    """
+    The payg credits used.
     """
 
     paid_usage_based_credits_used: int = pydantic.Field()
