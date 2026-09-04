@@ -35,6 +35,7 @@ struct IntegerSpec {
   std::optional<int64_t> maximum;
   std::optional<int64_t> exclusive_minimum;
   std::optional<int64_t> exclusive_maximum;
+  std::optional<int64_t> multiple_of;
 
   std::string ToString() const;
 };
@@ -132,6 +133,12 @@ struct AnyOfSpec {
   std::string ToString() const;
 };
 
+struct OneOfSpec {
+  std::vector<SchemaSpecPtr> options;
+
+  std::string ToString() const;
+};
+
 struct AllOfSpec {
   std::vector<SchemaSpecPtr> schemas;
 
@@ -159,6 +166,7 @@ using SchemaSpecVariant = std::variant<
     EnumSpec,
     RefSpec,
     AnyOfSpec,
+    OneOfSpec,
     AllOfSpec,
     TypeArraySpec>;
 
@@ -189,6 +197,13 @@ enum class JSONFormat : int {
   kDeepSeekXML = 3,
   kGlmXML = 4,
 };
+
+/*!
+ * \brief Convert a format name to JSONFormat.
+ * \param format One of "json", "qwen_xml", "minimax_xml", "deepseek_xml", "glm_xml".
+ * \return The corresponding JSONFormat, or std::nullopt if the name is not recognized.
+ */
+std::optional<JSONFormat> JSONFormatFromString(const std::string& format);
 
 /*!
  * \brief Manage the rule generation cache. Wraps key-value cache for schema deduplication.
@@ -292,6 +307,7 @@ class JSONSchemaConverter {
   virtual std::string GenerateEnum(const EnumSpec& spec, const std::string& rule_name);
   virtual std::string GenerateRef(const RefSpec& spec, const std::string& rule_name);
   virtual std::string GenerateAnyOf(const AnyOfSpec& spec, const std::string& rule_name);
+  virtual std::string GenerateOneOf(const OneOfSpec& spec, const std::string& rule_name);
   virtual std::string GenerateAllOf(const AllOfSpec& spec, const std::string& rule_name);
   virtual std::string GenerateTypeArray(const TypeArraySpec& spec, const std::string& rule_name);
 
@@ -439,6 +455,7 @@ class JSONSchemaConverter {
 
   // Helper for integer/number range regex generation
   static std::string GenerateRangeRegex(std::optional<int64_t> start, std::optional<int64_t> end);
+  std::string GenerateIntegerMultipleOfDFA(int64_t multiple_of, const std::string& rule_name);
   static std::string GenerateFloatRangeRegex(
       std::optional<double> start,
       std::optional<double> end,
@@ -552,38 +569,6 @@ std::string GenerateFloatRangeRegex(
     bool exclusive_start = false,
     bool exclusive_end = false
 );
-
-/*!
- * \brief Convert a function call to a Grammar.
- * \param schema The schema of the parameters of the function call.
- * \return The ebnf-grammar to match the requirements of the schema, and
- * in Qwen xml style.
- */
-std::string QwenXMLToolCallingToEBNF(const std::string& schema, bool any_order = false);
-
-/*!
- * \brief Convert a function call to a Grammar.
- * \param schema The schema of the parameters of the function call.
- * \return The ebnf-grammar to match the requirements of the schema, and
- * in MiniMax xml style.
- */
-std::string MiniMaxXMLToolCallingToEBNF(const std::string& schema, bool any_order = false);
-
-/*!
- * \brief Convert a function call to a Grammar.
- * \param schema The schema of the parameters of the function call.
- * \return The ebnf-grammar to match the requirements of the schema, and
- * in DeepSeek xml style.
- */
-std::string DeepSeekXMLToolCallingToEBNF(const std::string& schema, bool any_order = false);
-
-/*!
- * \brief Convert a function call to a Grammar.
- * \param schema The schema of the parameters of the function call.
- * \return The ebnf-grammar to match the requirements of the schema, and
- * in GLM xml style (<arg_key>key</arg_key><arg_value>value</arg_value>).
- */
-std::string GlmXMLToolCallingToEBNF(const std::string& schema, bool any_order = false);
 
 }  // namespace xgrammar
 

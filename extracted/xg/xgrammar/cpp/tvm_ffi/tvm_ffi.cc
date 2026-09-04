@@ -383,6 +383,42 @@ TVM_FFI_STATIC_INIT_BLOCK() {
           }
       )
       .def_static(
+          "from_lark",
+          [](ffi::String lark_string,
+             ffi::AnyView tokenizer_info_view,
+             ffi::AnyView named_grammar_names_view,
+             ffi::AnyView named_grammar_values_view) {
+            XGRAMMAR_FFI_TRY_BEGIN();
+            std::optional<TokenizerInfo> tokenizer_info = std::nullopt;
+            if (tokenizer_info_view != nullptr) {
+              tokenizer_info =
+                  tokenizer_info_view.cast<ffi::ObjectRef>().as<TokenizerInfoObj>()->value;
+            }
+            auto named_grammar_names = named_grammar_names_view.cast<ffi::Array<ffi::Any>>();
+            auto named_grammar_values = named_grammar_values_view.cast<ffi::Array<ffi::Any>>();
+            if (named_grammar_names.size() != named_grammar_values.size()) {
+              throw XGrammarError("Named grammar names and values must have the same length");
+            }
+            std::vector<NamedGrammar> named_grammars;
+            named_grammars.reserve(static_cast<size_t>(named_grammar_names.size()));
+            for (int64_t i = 0; i < static_cast<int64_t>(named_grammar_names.size()); ++i) {
+              std::string name = named_grammar_names[i].cast<ffi::String>();
+              ffi::AnyView value = named_grammar_values[i];
+              if (const auto* grammar_obj = value.as<GrammarObj>()) {
+                named_grammars.push_back({std::move(name), grammar_obj->value});
+              } else if (value.as<ffi::String>()) {
+                named_grammars.push_back({std::move(name), std::string(value.cast<ffi::String>())});
+              } else {
+                throw XGrammarError("Named grammar values must be Grammar or Lark strings");
+              }
+            }
+            return ffi::ObjectRef(ffi::make_object<GrammarObj>(
+                Grammar::FromLark(lark_string, tokenizer_info, named_grammars)
+            ));
+            XGRAMMAR_FFI_TRY_END();
+          }
+      )
+      .def_static(
           "from_structural_tag",
           [](ffi::String structural_tag_json) {
             XGRAMMAR_FFI_TRY_BEGIN();
@@ -713,7 +749,12 @@ TVM_FFI_STATIC_INIT_BLOCK() {
              ffi::AnyView separators,
              bool strict_mode,
              ffi::AnyView max_whitespace_cnt,
+             ffi::String json_format,
              bool any_order) {
+            auto format = JSONFormatFromString(json_format);
+            if (!format.has_value()) {
+              TVM_FFI_THROW(RuntimeError) << "Invalid json_format: " << std::string(json_format);
+            }
             return ffi::String(JSONSchemaToEBNF(
                 schema,
                 any_whitespace,
@@ -721,7 +762,7 @@ TVM_FFI_STATIC_INIT_BLOCK() {
                 OptionalSeparatorsFromView(separators),
                 strict_mode,
                 OptionalIntFromView(max_whitespace_cnt),
-                JSONFormat::kJSON,
+                *format,
                 any_order
             ));
           }
@@ -814,30 +855,6 @@ TVM_FFI_STATIC_INIT_BLOCK() {
                 std::remove(regex_string.begin(), regex_string.end(), '\0'), regex_string.end()
             );
             return ffi::String(regex_string);
-          }
-      )
-      .def(
-          "xgrammar.tvm_ffi_binding.testing._qwen_xml_tool_calling_to_ebnf",
-          [](ffi::String schema, bool any_order) {
-            return ffi::String(QwenXMLToolCallingToEBNF(schema, any_order));
-          }
-      )
-      .def(
-          "xgrammar.tvm_ffi_binding.testing._minimax_xml_tool_calling_to_ebnf",
-          [](ffi::String schema, bool any_order) {
-            return ffi::String(MiniMaxXMLToolCallingToEBNF(schema, any_order));
-          }
-      )
-      .def(
-          "xgrammar.tvm_ffi_binding.testing._deepseek_xml_tool_calling_to_ebnf",
-          [](ffi::String schema, bool any_order) {
-            return ffi::String(DeepSeekXMLToolCallingToEBNF(schema, any_order));
-          }
-      )
-      .def(
-          "xgrammar.tvm_ffi_binding.testing._glm_xml_tool_calling_to_ebnf",
-          [](ffi::String schema, bool any_order) {
-            return ffi::String(GlmXMLToolCallingToEBNF(schema, any_order));
           }
       )
       .def(

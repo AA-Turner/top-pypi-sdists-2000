@@ -4,11 +4,9 @@ import pytest
 
 from xgrammar import Grammar
 from xgrammar.testing import (
-    _deepseek_xml_tool_calling_to_ebnf,
-    _glm_xml_tool_calling_to_ebnf,
+    _get_matcher_from_grammar,
     _is_grammar_accept_string,
-    _minimax_xml_tool_calling_to_ebnf,
-    _qwen_xml_tool_calling_to_ebnf,
+    _json_schema_to_ebnf,
 )
 
 
@@ -23,25 +21,25 @@ def check_grammar_with_instance(grammar: Grammar, instance: str, accepted: bool)
 
 
 def _check_qwen_grammar(schema: dict, expected_grammar: str, instance: str, accepted: bool):
-    ebnf_grammar = _qwen_xml_tool_calling_to_ebnf(schema)
+    ebnf_grammar = _json_schema_to_ebnf(schema, json_format="qwen_xml")
     check_grammar_with_expected_grammar(ebnf_grammar, expected_grammar)
     check_grammar_with_instance(ebnf_grammar, instance, accepted)
 
 
 def _check_minimax_grammar(schema: dict, expected_grammar: str, instance: str, accepted: bool):
-    ebnf_grammar = _minimax_xml_tool_calling_to_ebnf(schema)
+    ebnf_grammar = _json_schema_to_ebnf(schema, json_format="minimax_xml")
     check_grammar_with_expected_grammar(ebnf_grammar, expected_grammar)
     check_grammar_with_instance(ebnf_grammar, instance, accepted)
 
 
 def _check_deepseek_grammar(schema: dict, expected_grammar: str, instance: str, accepted: bool):
-    ebnf_grammar = _deepseek_xml_tool_calling_to_ebnf(schema)
+    ebnf_grammar = _json_schema_to_ebnf(schema, json_format="deepseek_xml")
     check_grammar_with_expected_grammar(ebnf_grammar, expected_grammar)
     check_grammar_with_instance(ebnf_grammar, instance, accepted)
 
 
 def _check_glm_grammar(schema: dict, instance: str, accepted: bool):
-    ebnf_grammar = _glm_xml_tool_calling_to_ebnf(schema)
+    ebnf_grammar = _json_schema_to_ebnf(schema, json_format="glm_xml")
     check_grammar_with_instance(ebnf_grammar, instance, accepted)
 
 
@@ -77,7 +75,7 @@ xml_object ::= ( [ \n\t]* "<parameter=" xml_variable_name ">" [ \n\t]* xml_any [
 xml_variable_name ::= [a-zA-Z_][a-zA-Z0-9_]*
 root_prop_1 ::= ("0" | "-"? [1-9] [0-9]*)
 root_part_0 ::= [ \n\t]* "<parameter=age>" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" ""
-root ::=  [ \n\t]* (("<parameter=name>" [ \n\t]* xml_string [ \n\t]* "</parameter>" root_part_0)) [ \n\t]*
+root ::=  [ \n\t]* (("<parameter=name>" xml_string "</parameter>" root_part_0)) [ \n\t]*
 """
 
     schema = {
@@ -122,7 +120,7 @@ root_prop_1 ::= ("0" | "-"? [1-9] [0-9]*)
 root_addl ::= xml_string | basic_array | basic_object
 root_part_1 ::= ([ \n\t]* "<parameter=" xml_variable_name ">" [ \n\t]* root_addl [ \n\t]* "</parameter>")*
 root_part_0 ::= [ \n\t]* "<parameter=age>" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" root_part_1
-root ::=  [ \n\t]* (("<parameter=name>" [ \n\t]* xml_string [ \n\t]* "</parameter>" root_part_0)) [ \n\t]*
+root ::=  [ \n\t]* (("<parameter=name>" xml_string "</parameter>" root_part_0)) [ \n\t]*
 """
     schema = {
         "type": "object",
@@ -164,7 +162,7 @@ root_prop_1 ::= ("0" | "-"? [1-9] [0-9]*)
 root_addl ::= xml_string | basic_array | basic_object
 root_part_1 ::= ([ \n\t]* "<parameter=" xml_variable_name ">" [ \n\t]* root_addl [ \n\t]* "</parameter>")*
 root_part_0 ::= root_part_1 | [ \n\t]* "<parameter=age>" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" root_part_1
-root ::= ( [ \n\t]* (("<parameter=name>" [ \n\t]* xml_string [ \n\t]* "</parameter>" root_part_0) | ("<parameter=age>" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" root_part_1) | "<parameter=" xml_variable_name ">" [ \n\t]* root_addl [ \n\t]* "</parameter>" root_part_1) [ \n\t]*) | [ \n\t]*
+root ::= ( [ \n\t]* (("<parameter=name>" xml_string "</parameter>" root_part_0) | ("<parameter=age>" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" root_part_1) | "<parameter=" xml_variable_name ">" [ \n\t]* root_addl [ \n\t]* "</parameter>" root_part_1) [ \n\t]*) | [ \n\t]*
 """
 
     schema = {
@@ -210,7 +208,7 @@ root_prop_1 ::= ("0" | "-"? [1-9] [0-9]*)
 root_addl ::= xml_string | basic_array | basic_object
 root_part_1 ::= ([ \n\t]* "<parameter=" xml_variable_name ">" [ \n\t]* root_addl [ \n\t]* "</parameter>")*
 root_part_0 ::= root_part_1 | [ \n\t]* "<parameter=age>" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" root_part_1
-root ::=  [ \n\t]* (("<parameter=name>" [ \n\t]* xml_string [ \n\t]* "</parameter>" root_part_0)) [ \n\t]*
+root ::=  [ \n\t]* (("<parameter=name>" xml_string "</parameter>" root_part_0)) [ \n\t]*
 """
 
     schema = {
@@ -309,7 +307,7 @@ root_part_2_3 ::= ""
 root_part_1_1 ::= root_part_2_1 | [ \n\t]* "<parameter=ID>" [ \n\t]* root_prop_2 [ \n\t]* "</parameter>" root_part_2_2
 root_part_1_2 ::= root_part_2_2 | [ \n\t]* "<parameter=ID>" [ \n\t]* root_prop_2 [ \n\t]* "</parameter>" root_part_2_3
 root_part_0_1 ::= root_part_1_1 | [ \n\t]* "<parameter=age>" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" root_part_1_2
-root ::=  [ \n\t]* (("<parameter=name>" [ \n\t]* xml_string [ \n\t]* "</parameter>" root_part_0_1) | ("<parameter=age>" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" root_part_1_1) | ("<parameter=ID>" [ \n\t]* root_prop_2 [ \n\t]* "</parameter>" root_part_2_1)) [ \n\t]*
+root ::=  [ \n\t]* (("<parameter=name>" xml_string "</parameter>" root_part_0_1) | ("<parameter=age>" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" root_part_1_1) | ("<parameter=ID>" [ \n\t]* root_prop_2 [ \n\t]* "</parameter>" root_part_2_1)) [ \n\t]*
 """
     schema = {
         "type": "object",
@@ -438,7 +436,7 @@ root ::=  [ \n\t]* (("<parameter=array>" [ \n\t]* root_prop_0 [ \n\t]* "</parame
     _check_qwen_grammar(schema, expected_grammar, input_str, accepted)
 
 
-# ---------- MiniMax XML tool calling (_minimax_xml_tool_calling_to_ebnf) ----------
+# ---------- MiniMax XML tool calling (json_format="minimax_xml") ----------
 # Format: <parameter name="key">value</parameter> (not <parameter=key>)
 
 
@@ -474,7 +472,7 @@ xml_object ::= ( [ \n\t]* "<parameter name=\"" xml_variable_name "\">" [ \n\t]* 
 xml_variable_name ::= [a-zA-Z_][a-zA-Z0-9_]*
 root_prop_1 ::= ("0" | "-"? [1-9] [0-9]*)
 root_part_0 ::= [ \n\t]* "<parameter name=\"age\">" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" ""
-root ::=  [ \n\t]* (("<parameter name=\"name\">" [ \n\t]* xml_string [ \n\t]* "</parameter>" root_part_0)) [ \n\t]*
+root ::=  [ \n\t]* (("<parameter name=\"name\">" xml_string "</parameter>" root_part_0)) [ \n\t]*
 """
 
     schema = {
@@ -519,7 +517,7 @@ root_prop_1 ::= ("0" | "-"? [1-9] [0-9]*)
 root_addl ::= xml_string | basic_array | basic_object
 root_part_1 ::= ([ \n\t]* "<parameter name=\"" xml_variable_name "\">" [ \n\t]* root_addl [ \n\t]* "</parameter>")*
 root_part_0 ::= [ \n\t]* "<parameter name=\"age\">" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" root_part_1
-root ::=  [ \n\t]* (("<parameter name=\"name\">" [ \n\t]* xml_string [ \n\t]* "</parameter>" root_part_0)) [ \n\t]*
+root ::=  [ \n\t]* (("<parameter name=\"name\">" xml_string "</parameter>" root_part_0)) [ \n\t]*
 """
     schema = {
         "type": "object",
@@ -561,7 +559,7 @@ root_prop_1 ::= ("0" | "-"? [1-9] [0-9]*)
 root_addl ::= xml_string | basic_array | basic_object
 root_part_1 ::= ([ \n\t]* "<parameter name=\"" xml_variable_name "\">" [ \n\t]* root_addl [ \n\t]* "</parameter>")*
 root_part_0 ::= root_part_1 | [ \n\t]* "<parameter name=\"age\">" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" root_part_1
-root ::= ( [ \n\t]* (("<parameter name=\"name\">" [ \n\t]* xml_string [ \n\t]* "</parameter>" root_part_0) | ("<parameter name=\"age\">" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" root_part_1) | "<parameter name=\"" xml_variable_name "\">" [ \n\t]* root_addl [ \n\t]* "</parameter>" root_part_1) [ \n\t]*) | [ \n\t]*
+root ::= ( [ \n\t]* (("<parameter name=\"name\">" xml_string "</parameter>" root_part_0) | ("<parameter name=\"age\">" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" root_part_1) | "<parameter name=\"" xml_variable_name "\">" [ \n\t]* root_addl [ \n\t]* "</parameter>" root_part_1) [ \n\t]*) | [ \n\t]*
 """
     schema = {
         "type": "object",
@@ -609,7 +607,7 @@ root_prop_1 ::= ("0" | "-"? [1-9] [0-9]*)
 root_addl ::= xml_string | basic_array | basic_object
 root_part_1 ::= ([ \n\t]* "<parameter name=\"" xml_variable_name "\">" [ \n\t]* root_addl [ \n\t]* "</parameter>")*
 root_part_0 ::= root_part_1 | [ \n\t]* "<parameter name=\"age\">" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" root_part_1
-root ::=  [ \n\t]* (("<parameter name=\"name\">" [ \n\t]* xml_string [ \n\t]* "</parameter>" root_part_0)) [ \n\t]*
+root ::=  [ \n\t]* (("<parameter name=\"name\">" xml_string "</parameter>" root_part_0)) [ \n\t]*
 """
     schema = {
         "type": "object",
@@ -724,7 +722,7 @@ root_part_2_3 ::= ""
 root_part_1_1 ::= root_part_2_1 | [ \n\t]* "<parameter name=\"ID\">" [ \n\t]* root_prop_2 [ \n\t]* "</parameter>" root_part_2_2
 root_part_1_2 ::= root_part_2_2 | [ \n\t]* "<parameter name=\"ID\">" [ \n\t]* root_prop_2 [ \n\t]* "</parameter>" root_part_2_3
 root_part_0_1 ::= root_part_1_1 | [ \n\t]* "<parameter name=\"age\">" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" root_part_1_2
-root ::=  [ \n\t]* (("<parameter name=\"name\">" [ \n\t]* xml_string [ \n\t]* "</parameter>" root_part_0_1) | ("<parameter name=\"age\">" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" root_part_1_1) | ("<parameter name=\"ID\">" [ \n\t]* root_prop_2 [ \n\t]* "</parameter>" root_part_2_1)) [ \n\t]*
+root ::=  [ \n\t]* (("<parameter name=\"name\">" xml_string "</parameter>" root_part_0_1) | ("<parameter name=\"age\">" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" root_part_1_1) | ("<parameter name=\"ID\">" [ \n\t]* root_prop_2 [ \n\t]* "</parameter>" root_part_2_1)) [ \n\t]*
 """
     schema = {
         "type": "object",
@@ -856,7 +854,7 @@ xml_object ::= ( [ \n\t]* "<parameter name=\"" xml_variable_name "\">" [ \n\t]* 
 xml_variable_name ::= [a-zA-Z_][a-zA-Z0-9_]*
 root_prop_1 ::= ("0" | "-"? [1-9] [0-9]*)
 root_part_0 ::= [ \n\t]* "<parameter name=\"age\">" [ \n\t]* root_prop_1 [ \n\t]* "</parameter>" ""
-root ::=  [ \n\t]* (("<parameter name=\"name\">" [ \n\t]* xml_string [ \n\t]* "</parameter>" root_part_0)) [ \n\t]*
+root ::=  [ \n\t]* (("<parameter name=\"name\">" xml_string "</parameter>" root_part_0)) [ \n\t]*
 """
     schema = {
         "type": "object",
@@ -866,7 +864,7 @@ root ::=  [ \n\t]* (("<parameter name=\"name\">" [ \n\t]* xml_string [ \n\t]* "<
     _check_minimax_grammar(schema, expected_grammar, input_str, accepted)
 
 
-# ---------- DeepSeek XML tool calling (_deepseek_xml_tool_calling_to_ebnf) ----------
+# ---------- DeepSeek XML tool calling (json_format="deepseek_xml") ----------
 # Format: <｜DSML｜parameter name="$PARAMETER_NAME" string="true|false">$PARAMETER_VALUE</｜DSML｜parameter>
 
 
@@ -925,7 +923,7 @@ xml_object ::= ( [ \n\t]* "<｜DSML｜parameter name=\"" xml_variable_name "\" s
 xml_variable_name ::= [a-zA-Z_][a-zA-Z0-9_]*
 root_prop_1 ::= ("0" | "-"? [1-9] [0-9]*)
 root_part_0 ::= [ \n\t]* "<｜DSML｜parameter name=\"age\" string=\"" ("true" | "false") "\">" [ \n\t]* root_prop_1 [ \n\t]* "</｜DSML｜parameter>" ""
-root ::=  [ \n\t]* (("<｜DSML｜parameter name=\"name\" string=\"" ("true" | "false") "\">" [ \n\t]* xml_string [ \n\t]* "</｜DSML｜parameter>" root_part_0)) [ \n\t]*
+root ::=  [ \n\t]* (("<｜DSML｜parameter name=\"name\" string=\"" ("true" | "false") "\">" xml_string "</｜DSML｜parameter>" root_part_0)) [ \n\t]*
 """
     schema = {
         "type": "object",
@@ -1015,7 +1013,7 @@ root_prop_1 ::= ("0" | "-"? [1-9] [0-9]*)
 root_addl ::= xml_string | basic_array | basic_object
 root_part_1 ::= ([ \n\t]* "<｜DSML｜parameter name=\"" xml_variable_name "\" string=\"" ("true" | "false") "\">" [ \n\t]* root_addl [ \n\t]* "</｜DSML｜parameter>")*
 root_part_0 ::= [ \n\t]* "<｜DSML｜parameter name=\"age\" string=\"" ("true" | "false") "\">" [ \n\t]* root_prop_1 [ \n\t]* "</｜DSML｜parameter>" root_part_1
-root ::=  [ \n\t]* (("<｜DSML｜parameter name=\"name\" string=\"" ("true" | "false") "\">" [ \n\t]* xml_string [ \n\t]* "</｜DSML｜parameter>" root_part_0)) [ \n\t]*
+root ::=  [ \n\t]* (("<｜DSML｜parameter name=\"name\" string=\"" ("true" | "false") "\">" xml_string "</｜DSML｜parameter>" root_part_0)) [ \n\t]*
 """
     schema = {
         "type": "object",
@@ -1063,7 +1061,7 @@ root_prop_1 ::= ("0" | "-"? [1-9] [0-9]*)
 root_addl ::= xml_string | basic_array | basic_object
 root_part_1 ::= ([ \n\t]* "<｜DSML｜parameter name=\"" xml_variable_name "\" string=\"" ("true" | "false") "\">" [ \n\t]* root_addl [ \n\t]* "</｜DSML｜parameter>")*
 root_part_0 ::= root_part_1 | [ \n\t]* "<｜DSML｜parameter name=\"age\" string=\"" ("true" | "false") "\">" [ \n\t]* root_prop_1 [ \n\t]* "</｜DSML｜parameter>" root_part_1
-root ::= ( [ \n\t]* (("<｜DSML｜parameter name=\"name\" string=\"" ("true" | "false") "\">" [ \n\t]* xml_string [ \n\t]* "</｜DSML｜parameter>" root_part_0) | ("<｜DSML｜parameter name=\"age\" string=\"" ("true" | "false") "\">" [ \n\t]* root_prop_1 [ \n\t]* "</｜DSML｜parameter>" root_part_1) | "<｜DSML｜parameter name=\"" xml_variable_name "\" string=\"" ("true" | "false") "\">" [ \n\t]* root_addl [ \n\t]* "</｜DSML｜parameter>" root_part_1) [ \n\t]*) | [ \n\t]*
+root ::= ( [ \n\t]* (("<｜DSML｜parameter name=\"name\" string=\"" ("true" | "false") "\">" xml_string "</｜DSML｜parameter>" root_part_0) | ("<｜DSML｜parameter name=\"age\" string=\"" ("true" | "false") "\">" [ \n\t]* root_prop_1 [ \n\t]* "</｜DSML｜parameter>" root_part_1) | "<｜DSML｜parameter name=\"" xml_variable_name "\" string=\"" ("true" | "false") "\">" [ \n\t]* root_addl [ \n\t]* "</｜DSML｜parameter>" root_part_1) [ \n\t]*) | [ \n\t]*
 """
     schema = {
         "type": "object",
@@ -1114,7 +1112,7 @@ root_prop_1 ::= ("0" | "-"? [1-9] [0-9]*)
 root_addl ::= xml_string | basic_array | basic_object
 root_part_1 ::= ([ \n\t]* "<｜DSML｜parameter name=\"" xml_variable_name "\" string=\"" ("true" | "false") "\">" [ \n\t]* root_addl [ \n\t]* "</｜DSML｜parameter>")*
 root_part_0 ::= root_part_1 | [ \n\t]* "<｜DSML｜parameter name=\"age\" string=\"" ("true" | "false") "\">" [ \n\t]* root_prop_1 [ \n\t]* "</｜DSML｜parameter>" root_part_1
-root ::=  [ \n\t]* (("<｜DSML｜parameter name=\"name\" string=\"" ("true" | "false") "\">" [ \n\t]* xml_string [ \n\t]* "</｜DSML｜parameter>" root_part_0)) [ \n\t]*
+root ::=  [ \n\t]* (("<｜DSML｜parameter name=\"name\" string=\"" ("true" | "false") "\">" xml_string "</｜DSML｜parameter>" root_part_0)) [ \n\t]*
 """
     schema = {
         "type": "object",
@@ -1246,7 +1244,7 @@ root_part_2_3 ::= ""
 root_part_1_1 ::= root_part_2_1 | [ \n\t]* "<｜DSML｜parameter name=\"ID\" string=\"" ("true" | "false") "\">" [ \n\t]* root_prop_2 [ \n\t]* "</｜DSML｜parameter>" root_part_2_2
 root_part_1_2 ::= root_part_2_2 | [ \n\t]* "<｜DSML｜parameter name=\"ID\" string=\"" ("true" | "false") "\">" [ \n\t]* root_prop_2 [ \n\t]* "</｜DSML｜parameter>" root_part_2_3
 root_part_0_1 ::= root_part_1_1 | [ \n\t]* "<｜DSML｜parameter name=\"age\" string=\"" ("true" | "false") "\">" [ \n\t]* root_prop_1 [ \n\t]* "</｜DSML｜parameter>" root_part_1_2
-root ::=  [ \n\t]* (("<｜DSML｜parameter name=\"name\" string=\"" ("true" | "false") "\">" [ \n\t]* xml_string [ \n\t]* "</｜DSML｜parameter>" root_part_0_1) | ("<｜DSML｜parameter name=\"age\" string=\"" ("true" | "false") "\">" [ \n\t]* root_prop_1 [ \n\t]* "</｜DSML｜parameter>" root_part_1_1) | ("<｜DSML｜parameter name=\"ID\" string=\"" ("true" | "false") "\">" [ \n\t]* root_prop_2 [ \n\t]* "</｜DSML｜parameter>" root_part_2_1)) [ \n\t]*
+root ::=  [ \n\t]* (("<｜DSML｜parameter name=\"name\" string=\"" ("true" | "false") "\">" xml_string "</｜DSML｜parameter>" root_part_0_1) | ("<｜DSML｜parameter name=\"age\" string=\"" ("true" | "false") "\">" [ \n\t]* root_prop_1 [ \n\t]* "</｜DSML｜parameter>" root_part_1_1) | ("<｜DSML｜parameter name=\"ID\" string=\"" ("true" | "false") "\">" [ \n\t]* root_prop_2 [ \n\t]* "</｜DSML｜parameter>" root_part_2_1)) [ \n\t]*
 """
     schema = {
         "type": "object",
@@ -1297,7 +1295,7 @@ xml_object ::= ( [ \n\t]* "<｜DSML｜parameter name=\"" xml_variable_name "\" s
 xml_variable_name ::= [a-zA-Z_][a-zA-Z0-9_]*
 root_prop_1 ::= ("0" | "-"? [1-9] [0-9]*)
 root_part_0 ::= [ \n\t]* "<｜DSML｜parameter name=\"age\" string=\"" ("true" | "false") "\">" [ \n\t]* root_prop_1 [ \n\t]* "</｜DSML｜parameter>" ""
-root ::=  [ \n\t]* (("<｜DSML｜parameter name=\"name\" string=\"" ("true" | "false") "\">" [ \n\t]* xml_string [ \n\t]* "</｜DSML｜parameter>" root_part_0)) [ \n\t]*
+root ::=  [ \n\t]* (("<｜DSML｜parameter name=\"name\" string=\"" ("true" | "false") "\">" xml_string "</｜DSML｜parameter>" root_part_0)) [ \n\t]*
 """
     schema = {
         "type": "object",
@@ -1307,7 +1305,7 @@ root ::=  [ \n\t]* (("<｜DSML｜parameter name=\"name\" string=\"" ("true" | "f
     _check_deepseek_grammar(schema, expected_grammar, input_str, accepted)
 
 
-# ---------- GLM XML tool calling (_glm_xml_tool_calling_to_ebnf) ----------
+# ---------- GLM XML tool calling (json_format="glm_xml") ----------
 # Format: <arg_key>$PARAMETER_NAME</arg_key><arg_value>$PARAMETER_VALUE</arg_value>
 
 
@@ -1336,7 +1334,7 @@ def test_glm_reject_wrong_parameter_format(input_str: str, accepted: bool):
         "properties": {"name": {"type": "string"}, "age": {"type": "integer"}},
         "required": ["name", "age"],
     }
-    ebnf_grammar = _glm_xml_tool_calling_to_ebnf(schema)
+    ebnf_grammar = _json_schema_to_ebnf(schema, json_format="glm_xml")
     grammar_str = str(ebnf_grammar)
     assert "<arg_key>" in grammar_str
     assert "<arg_value>" in grammar_str
@@ -1344,9 +1342,29 @@ def test_glm_reject_wrong_parameter_format(input_str: str, accepted: bool):
     _check_glm_grammar(schema, input_str, accepted)
 
 
+def test_glm_unconstrained_string_whitespace_has_bounded_parser_states():
+    schema = {
+        "type": "object",
+        "properties": {"value": {"type": "string"}},
+        "required": ["value"],
+        "additionalProperties": False,
+    }
+    grammar = _json_schema_to_ebnf(schema, json_format="glm_xml")
+    matcher = _get_matcher_from_grammar(grammar)
+
+    assert matcher.accept_string("<arg_key>value</arg_key><arg_value>")
+    states_before = matcher._debug_print_internal_state().count("ParserState(")
+    assert matcher.accept_string(" " * 1024)
+    states_after = matcher._debug_print_internal_state().count("ParserState(")
+
+    assert states_after <= states_before + 1
+    assert matcher.accept_string("</arg_value>")
+    assert matcher.is_terminated()
+
+
 def test_nested_true_schema():
     schema = {"type": "object", "properties": {"name": True}, "required": ["name"]}
-    ebnf_grammar = _qwen_xml_tool_calling_to_ebnf(schema)
+    ebnf_grammar = _json_schema_to_ebnf(schema, json_format="qwen_xml")
     assert _is_grammar_accept_string(ebnf_grammar, "<parameter=name>\nvalue\n</parameter>")
     assert _is_grammar_accept_string(ebnf_grammar, "<parameter=name>\n[1, 2, 3]\n</parameter>")
     assert _is_grammar_accept_string(
@@ -1357,7 +1375,7 @@ def test_nested_true_schema():
 
 def test_true_schema():
     schema = "true"
-    ebnf_grammar = _qwen_xml_tool_calling_to_ebnf(schema)
+    ebnf_grammar = _json_schema_to_ebnf(schema, json_format="qwen_xml")
     assert _is_grammar_accept_string(ebnf_grammar, "<parameter=name>\nvalue\n</parameter>")
     assert _is_grammar_accept_string(ebnf_grammar, "<parameter=abc>\n[1, 2, 3]\n</parameter>")
     assert _is_grammar_accept_string(
