@@ -100,8 +100,16 @@ populate_all()
     assert not hasattr(module, '__all__')
 
 
-# This can't pass because sys.abiflags is a string, for which inspect.getmodule() returns None.
-@pytest.mark.xfail
+# This doesn't pass with the current provenance check.  populate_all() decides whether a name was
+# imported by asking inspect.getmodule() where its value came from, and sys.abiflags is a string, so
+# the answer is None and the name is kept.  A string carries no provenance of its own, but that
+# doesn't make the case unfixable: the value could be matched by identity against the attributes of
+# the modules in sys.modules, or the calling module's own `from X import Y` statements could be read
+# out of its AST.  Both are heuristics with their own false positives, so neither has been adopted.
+#
+# The marker is strict so that this starts failing, rather than quietly passing, if populate_all()
+# ever learns to catch this case and the marker needs removing.
+@pytest.mark.xfail(strict=True)
 def test_populate_all_gets_fooled(example):
     example("""\
 from public import populate_all

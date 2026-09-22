@@ -43,6 +43,44 @@ intersphinx_mapping = {
 autodoc_typehints = 'both'
 copybutton_exclude = '.linenos, .gp, .go'
 
+
+# Furo builds its sidebar with titles_only=True, so the sidebar lists only the page titles and never
+# the sections inside them.  The theme offers no setting for this, and the :maxdepth: in a toctree
+# has no effect on it either, so the navigation tree is rebuilt here with the sections included.
+#
+# The rebuilt tree is handed to furo's own get_navigation_tree(), because that is what adds the
+# checkboxes and labels behind the theme's collapsing sidebar.  Calling Sphinx's toctree() from an
+# overridden sidebar/navigation.html template would skip that step and give a tree that can't be
+# expanded or collapsed.
+#
+# get_navigation_tree() is not part of furo's documented interface, so this is worth re-checking when
+# furo is upgraded.  If it ever goes away the sidebar quietly reverts to the theme's own version.
+SIDEBAR_MAXDEPTH = 3
+
+
+def _expand_sidebar(app, pagename, templatename, context, doctree):
+    toctree = context.get('toctree')
+    if toctree is None:
+        return
+    try:
+        from furo import get_navigation_tree
+    except ImportError:
+        return
+    context['furo_navigation_tree'] = get_navigation_tree(
+        toctree(
+            collapse=False,
+            titles_only=False,
+            maxdepth=SIDEBAR_MAXDEPTH,
+            includehidden=True,
+        )
+    )
+
+
+def setup(app):
+    # The priority must be higher than the default, so that this runs after furo has put its own
+    # navigation tree into the context and can replace it.
+    app.connect('html-page-context', _expand_sidebar, priority=900)
+
 # Add any paths that contain templates here, relative to this directory.
 # templates_path = ['_templates']
 
@@ -102,6 +140,24 @@ pygments_style = 'sphinx'
 
 # A list of ignored prefixes for module index sorting.
 # modindex_common_prefix = []
+
+
+# -- Options for the linkcheck builder -----------------------------------------
+
+# GitHub renders issue comments on the client, so a comment anchor is never present in the HTML that
+# linkcheck fetches.  The pages themselves are fine, so only the anchor check is skipped here.
+linkcheck_anchors_ignore_for_url = [
+    r'https://github\.com/.*',
+]
+
+# These two redirect on purpose and the URLs we publish are the right ones to publish.  The clone URL
+# has to keep its .git suffix to be usable with git, even though a browser gets sent to the project
+# page, and the bare Read the Docs URL is version agnostic, so it sends readers to whichever version
+# is current rather than pinning the docs to today's.
+linkcheck_allowed_redirects = {
+    r'https://gitlab\.com/flufl/public\.git': r'https://gitlab\.com/flufl/public',
+    r'https://public\.readthedocs\.io': r'https://public\.readthedocs\.io/en/stable/',
+}
 
 
 # -- Options for HTML output ---------------------------------------------------

@@ -1,13 +1,13 @@
 # example.py
 from public import populate_all
 
-def foo():
+def tune():
     pass
 
-class Foo:
+class Bass:
     pass
 
-fooint: int = 7
-_foobool: bool = False
+tempo: int = 120
+_muted: bool = False
 
 populate_all()
