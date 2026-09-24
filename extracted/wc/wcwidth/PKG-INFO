@@ -1,19 +1,17 @@
-Metadata-Version: 2.5
+Metadata-Version: 2.4
 Name: wcwidth
-Version: 0.8.4
+Version: 0.9.1
 Summary: Measures the displayed width of unicode strings in a terminal
-Project-URL: Homepage, https://github.com/jquast/wcwidth
 Author-email: Jeff Quast <contact@jeffquast.com>
-License-Expression: MIT
-License-File: LICENSE
+Project-URL: Homepage, https://github.com/jquast/wcwidth
 Keywords: cjk,combining,console,eastasian,emoji,emulator,terminal,unicode,wcswidth,wcwidth,xterm
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
 Classifier: Natural Language :: English
 Classifier: Operating System :: POSIX
 Classifier: Programming Language :: Python :: 3 :: Only
-Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
@@ -26,8 +24,10 @@ Classifier: Topic :: Software Development :: Libraries
 Classifier: Topic :: Software Development :: Localization
 Classifier: Topic :: Terminals
 Classifier: Typing :: Typed
-Requires-Python: >=3.8
+Requires-Python: >=3.9
 Description-Content-Type: text/x-rst
+License-File: LICENSE
+Dynamic: license-file
 
 |pypi_downloads| |codecov| |license|
 
@@ -35,9 +35,8 @@ Description-Content-Type: text/x-rst
 Introduction
 ============
 
-This Python library is mainly for CLI/TUI programs that carefully produce output for Terminals.
-
-See page libwcwidth_ about the portable C11 library.
+This Python and C11 library is mainly for CLI/TUI programs that carefully produce output for
+Terminals.  This page is about the Python library, see libwcwidth_ for the portable C11 library.
 
 Installation
 ------------
@@ -61,9 +60,9 @@ Some examples of **incorrect results**:
     >>> 'コンニチハ'.rjust(11, 'X')
     'XXXXXXコンニチハ'
 
-    >>> # result consumes 5 total cells, 6 expected,
-    >>> 'café'.center(6, 'X')
-    'caféX'
+    >>> # combining acute accent: result consumes 5 total cells, 6 expected,
+    >>> 'cafe\u0301'.center(6, 'X')
+    'caféX'
 
 Solution
 --------
