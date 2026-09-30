@@ -1,12 +1,43 @@
 from __future__ import annotations
 
 import shutil
+import subprocess
 import sys
 from argparse import Namespace
+from typing import TYPE_CHECKING
 
 import pytest
 
 from virtualenv.activation import PowerShellActivator
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+
+@pytest.mark.skipif(shutil.which("pwsh") is None, reason="requires PowerShell Core")
+@pytest.mark.parametrize(
+    "delimiter",
+    [
+        pytest.param(chr(0x27), id="apostrophe"),
+        pytest.param(chr(0x2018), id="left-single"),
+        pytest.param(chr(0x2019), id="right-single"),
+        pytest.param(chr(0x201A), id="low-9"),
+        pytest.param(chr(0x201B), id="high-reversed-9"),
+    ],
+)
+def test_powershell_quote_neutralizes_single_quote_delimiters(tmp_path: Path, delimiter: str) -> None:
+    marker = tmp_path / "PWNED"
+    payload = f"x{delimiter}+$(New-Item -ItemType File -Path '{marker}')+{delimiter}y"
+    literal = PowerShellActivator.quote(payload)
+    result = subprocess.run(
+        ["pwsh", "-NoProfile", "-NonInteractive", "-Command", f"Write-Output {literal}"],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+
+    assert (marker.exists(), result.stdout.strip()) == (False, payload), result.stderr
 
 
 def test_powershell_pydoc_call_operator(tmp_path) -> None:
@@ -115,8 +146,9 @@ def test_powershell(activation_tester_class, activation_tester, monkeypatch) -> 
         def invoke_script(self):
             return [self.cmd, "-File"]
 
-        def print_os_env_var(self, var) -> str:
-            return f'if ($env:{var} -eq $null) {{ "None" }} else {{ $env:{var} }}'
+        def print_state(self, names: tuple[str, ...]) -> str:
+            lookups = (f'if ($env:{var} -eq $null) {{ "None" }} else {{ $env:{var} }}' for var in names)
+            return "; ".join([self.print_python_exe(), *lookups])
 
         def print_prompt(self) -> str:
             return "prompt"

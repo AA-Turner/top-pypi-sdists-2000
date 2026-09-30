@@ -11,6 +11,8 @@ import platformdirs
 from platformdirs.macos import MacOS
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from pytest_mock import MockerFixture
 
 _MEDIA_DIRS: Final = [
@@ -548,7 +550,7 @@ def test_macos_site_runtime_path(home: str) -> None:
 
 @pytest.mark.usefixtures("_clear_xdg_env", "_builtin_py_prefix")
 def test_macos_ensure_exists_preexisting_dir(mocker: MockerFixture, tmp_path: Path) -> None:
-    mocker.patch("platformdirs.macos.os.path.expanduser", lambda p: str(tmp_path / p.lstrip("~/")))
+    mocker.patch("platformdirs._xdg.os.path.expanduser", lambda p: str(tmp_path / p.lstrip("~/")))
     dirs = MacOS(appname="foo", ensure_exists=True)
     first = dirs.user_data_dir
     assert Path(first).exists()
@@ -562,6 +564,12 @@ def test_macos_iter_runtime_dirs_no_duplicate(home: str) -> None:
     # site_runtime_dir is defined as user_runtime_dir.
     expected = os.path.join(f"{home}/Library/Caches/TemporaryItems", "foo")  # ruff:ignore[os-path-join]
     assert list(MacOS(appname="foo").iter_runtime_dirs()) == [expected]
+
+
+@pytest.mark.usefixtures("_clear_xdg_env", "_unknown_home")
+def test_without_home_macos_runtime_dir_raises() -> None:
+    with pytest.raises(RuntimeError, match=r"^could not determine the home directory for '~/Library/Caches/"):
+        _ = MacOS(appname="app").user_runtime_dir
 
 
 @pytest.mark.usefixtures("_clear_xdg_env")
@@ -642,3 +650,13 @@ def test_non_homebrew_opt_python_uses_system_site_dirs(
 ) -> None:
     mocker.patch("sys.base_prefix", base_prefix)
     assert getattr(MacOS(multipath=True), prop) == expected
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="Windows ignores POSIX mode bits")
+@pytest.mark.usefixtures("_clear_xdg_env", "_umask")
+def test_macos_user_log_dir_creates_missing_components_private(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, modes: Callable[[Path], dict[str, int]]
+) -> None:
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _ = MacOS(appname="app", ensure_exists=True).user_log_dir
+    assert modes(tmp_path) == {"Library": 0o700, "Library/Logs": 0o700, "Library/Logs/app": 0o700}

@@ -83,7 +83,7 @@ struct ScopedExclusions {
 impl Excludes {
     /// Record which settings are consulted while resolving runtime dependencies.
     #[must_use]
-    pub fn with_recorder(mut self, recorder: Option<ResolutionRecorder>) -> Self {
+    pub(crate) fn with_recorder(mut self, recorder: Option<ResolutionRecorder>) -> Self {
         self.recorder = recorder;
         self
     }
@@ -115,8 +115,34 @@ impl Excludes {
         excludes
     }
 
+    /// Return sorted declarations, combining duplicate exclusions within each package scope.
+    ///
+    /// Retain empty version-specific scopes: they shadow exclusions from a versionless scope.
+    pub(crate) fn into_entries(self) -> Vec<ExcludeDependency> {
+        let mut entries = self
+            .global
+            .into_iter()
+            .map(ExcludeDependency::Dependency)
+            .collect::<Vec<_>>();
+        for (name, packages) in self.scoped {
+            for package in packages {
+                let mut dependencies = package.excludes.into_iter().collect::<Vec<_>>();
+                dependencies.sort();
+                entries.push(ExcludeDependency::Package(PackageExclusion {
+                    package: PackageExclusionTarget {
+                        name: name.clone(),
+                        version: package.version,
+                    },
+                    dependencies: dependencies.into_boxed_slice(),
+                }));
+            }
+        }
+        entries.sort();
+        entries
+    }
+
     /// Check if a package is excluded.
-    pub fn contains(&self, name: &PackageName) -> bool {
+    pub(crate) fn contains(&self, name: &PackageName) -> bool {
         if let Some(recorder) = &self.recorder {
             recorder.exclusion(name);
         }
@@ -124,12 +150,12 @@ impl Excludes {
     }
 
     /// Return whether any exclusions are scoped to the given package.
-    pub fn has_scoped_package(&self, package: &PackageName) -> bool {
+    pub(crate) fn has_scoped_package(&self, package: &PackageName) -> bool {
         self.scoped.contains_key(package)
     }
 
     /// Check if a dependency is excluded from a specific package version.
-    pub fn contains_for(
+    pub(crate) fn contains_for(
         &self,
         package: &PackageName,
         version: &Version,
@@ -142,7 +168,7 @@ impl Excludes {
     ///
     /// A versionless scope remains eligible if any exact-version exclusion allows the dependency
     /// at a version where the override is not shadowed by an exact override scope.
-    pub fn contains_for_scope(
+    pub(crate) fn contains_for_scope(
         &self,
         overrides: &Overrides,
         package: &PackageName,
@@ -175,7 +201,7 @@ impl Excludes {
     }
 
     /// Check if a dependency is excluded with optional package-version context.
-    pub fn contains_for_package(
+    pub(crate) fn contains_for_package(
         &self,
         package: Option<(&PackageName, &Version)>,
         dependency: &PackageName,

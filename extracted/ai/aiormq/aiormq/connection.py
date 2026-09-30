@@ -1,24 +1,26 @@
 import asyncio
+import inspect
 import logging
 import platform
 import ssl
 import sys
 from abc import abstractmethod, ABC
 from base64 import b64decode
-from collections.abc import AsyncIterable
+from collections.abc import (
+    AsyncIterable, Coroutine, Generator, Mapping,
+)
 from contextlib import suppress
+from importlib.metadata import version
 from io import BytesIO
 from types import MappingProxyType, TracebackType
-from typing import (
-    Any, Awaitable, Callable, Dict, Mapping, Optional, Tuple, Type, Union,
-)
+from typing import Any
 
 import pamqp.frame
 from pamqp import commands as spec
 from pamqp.base import Frame
 from pamqp.common import FieldTable
 from pamqp.constants import REPLY_SUCCESS
-from pamqp.exceptions import AMQPFrameError, AMQPInternalError, AMQPSyntaxError
+from pamqp.exceptions import PAMQPException
 from pamqp.frame import FrameTypes
 from pamqp.header import ProtocolHeader
 from pamqp.heartbeat import Heartbeat
@@ -36,18 +38,13 @@ from .exceptions import (
     ConnectionClosed, ConnectionCommandInvalid, ConnectionFrameError,
     ConnectionInternalError, ConnectionNotAllowed, ConnectionNotImplemented,
     ConnectionResourceError, ConnectionSyntaxError, ConnectionUnexpectedFrame,
-    IncompatibleProtocolError, ProbableAuthenticationError,
+    IncompatibleProtocolError, InvalidFrameError, ProbableAuthenticationError,
+    ProtocolSyntaxError,
 )
 from .tools import Countdown, censor_url
 
 
-# noinspection PyUnresolvedReferences
-try:
-    from importlib.metadata import Distribution
-    __version__ = Distribution.from_name("aiormq").version
-except ImportError:
-    import pkg_resources
-    __version__ = pkg_resources.get_distribution("aiormq").version
+__version__ = version("aiormq")
 
 
 log = logging.getLogger(__name__)
@@ -68,9 +65,9 @@ PLATFORM = "{} {} ({} build {})".format(
 )
 
 
-TimeType = Union[float, int]
-TimeoutType = Optional[TimeType]
-ReceivedFrame = Tuple[int, int, FrameTypes]
+TimeType = float | int
+TimeoutType = TimeType | None
+ReceivedFrame = tuple[int, int, FrameTypes]
 
 
 EXCEPTION_MAPPING = MappingProxyType({
@@ -145,7 +142,7 @@ def parse_heartbeat(v: str) -> int:
     return result if 0 <= result < 65535 else 0
 
 
-def parse_connection_name(connection_name: Optional[str]) -> Dict[str, str]:
+def parse_connection_name(connection_name: str | None) -> dict[str, str]:
     if not connection_name or not isinstance(connection_name, str):
         return {}
     return dict(connection_name=connection_name)
@@ -182,7 +179,7 @@ class FrameReceiver(AsyncIterable):
 
                     if fp.getvalue() == b"\0x00":
                         fp.write(await self.reader.read())
-                        raise AMQPFrameError(fp.getvalue())
+                        raise InvalidFrameError(fp.getvalue())
 
                     if self.reader is None:
                         raise AMQPConnectionError()
@@ -190,7 +187,9 @@ class FrameReceiver(AsyncIterable):
                     fp.write(await self.reader.readexactly(6))
 
                     if not self.started and fp.getvalue().startswith(b"AMQP"):
-                        raise AMQPSyntaxError
+                        raise ProtocolSyntaxError(
+                            "Unexpected AMQP protocol header",
+                        )
                     else:
                         self.started = True
 
@@ -198,7 +197,7 @@ class FrameReceiver(AsyncIterable):
                         fp.getvalue(),
                     )
                     if frame_length is None:
-                        raise AMQPInternalError("No frame length", None)
+                        raise InvalidFrameError("No frame length")
 
                     fp.write(await self.reader.readexactly(frame_length + 1))
                 except asyncio.IncompleteReadError as e:
@@ -224,7 +223,10 @@ class FrameReceiver(AsyncIterable):
                         f"Server communication error: {e!r}",
                     ) from e
 
-            return pamqp.frame.unmarshal(fp.getvalue())
+            try:
+                return pamqp.frame.unmarshal(fp.getvalue())
+            except PAMQPException as e:
+                raise InvalidFrameError(str(e)) from e
 
     async def __anext__(self) -> ReceivedFrame:
         return await self.get_frame()
@@ -257,7 +259,7 @@ class SSLContextProvider:
     def __init__(
         self,
         *,
-        ssl_context: Optional[ssl.SSLContext],
+        ssl_context: ssl.SSLContext | None,
         ssl_certs: SSLCerts,
         loop: asyncio.AbstractEventLoop,
     ) -> None:
@@ -309,7 +311,7 @@ class TransportFactory(ABC):
             self,
             url: URL,
             **kwargs: Any
-    ) -> Tuple[asyncio.StreamReader, asyncio.StreamWriter]:
+    ) -> tuple[asyncio.StreamReader, asyncio.StreamWriter]:
         """Create a transport connection to the AMQP server."""
         pass
 
@@ -319,7 +321,7 @@ class TCPTransportFactory(TransportFactory):
             self,
             url: URL,
             **kwargs: Any
-    ) -> Tuple[asyncio.StreamReader, asyncio.StreamWriter]:
+    ) -> tuple[asyncio.StreamReader, asyncio.StreamWriter]:
         # unexpected for asyncio.open_connection ignoring it
         _ = kwargs.pop("ssl_context_provider", None)
         try:
@@ -335,7 +337,7 @@ class TLSTransportFactory(TransportFactory):
             self,
             url: URL,
             **kwargs: Any
-    ) -> Tuple[asyncio.StreamReader, asyncio.StreamWriter]:
+    ) -> tuple[asyncio.StreamReader, asyncio.StreamWriter]:
         ssl_context_provider = kwargs.pop("ssl_context_provider")
         ssl = await ssl_context_provider.get_context()
 
@@ -363,23 +365,26 @@ class Connection(Base, AbstractConnection):
     write_queue: asyncio.Queue
     server_properties: ArgumentsType
     connection_tune: spec.Connection.Tune
-    channels: Dict[int, Optional[AbstractChannel]]
+    channels: dict[int, AbstractChannel | None]
 
     @staticmethod
-    def _parse_ca_data(data: Optional[str]) -> Optional[bytes]:
+    def _parse_ca_data(data: str | None) -> bytes | None:
         return b64decode(data) if data else None
 
     def __init__(
         self,
         url: URLorStr,
         *,
-        loop: Optional[asyncio.AbstractEventLoop] = None,
-        context: Optional[ssl.SSLContext] = None,
-        transport_factory: Optional[TransportFactory] = None,
+        loop: asyncio.AbstractEventLoop | None = None,
+        context: ssl.SSLContext | None = None,
+        transport_factory: TransportFactory | None = None,
+        client_properties: FieldTable | None = None,
         **create_connection_kwargs: Any,
     ):
 
         super().__init__(loop=loop or asyncio.get_event_loop(), parent=None)
+
+        self.__client_properties: FieldTable = client_properties or {}
 
         self.url = URL(url)
         if self.url.is_absolute() and not self.url.port:
@@ -429,7 +434,7 @@ class Connection(Base, AbstractConnection):
         self.__close_class_id: int = 0
         self.__close_method_id: int = 0
         self.__update_secret_lock: asyncio.Lock = asyncio.Lock()
-        self.__update_secret_future: Optional[asyncio.Future] = None
+        self.__update_secret_future: asyncio.Future | None = None
         self.__connection_unblocked: asyncio.Event = asyncio.Event()
         self.__heartbeat_grace_timeout = (
             (self.heartbeat_timeout + 1) * self.HEARTBEAT_GRACE_MULTIPLIER
@@ -469,7 +474,7 @@ class Connection(Base, AbstractConnection):
     def __str__(self) -> str:
         return str(censor_url(self.url))
 
-    def _client_properties(self, **kwargs: Any) -> Dict[str, Any]:
+    def _client_properties(self, **kwargs: Any) -> dict[str, Any]:
         properties = {
             "platform": PLATFORM,
             "version": __version__,
@@ -508,7 +513,7 @@ class Connection(Base, AbstractConnection):
         request: Frame, writer: asyncio.StreamWriter,
         frame_receiver: FrameReceiver,
         wait_response: bool = True,
-    ) -> Optional[FrameTypes]:
+    ) -> FrameTypes | None:
 
         writer.write(pamqp.frame.marshal(request, 0))
         await writer.drain()
@@ -519,8 +524,8 @@ class Connection(Base, AbstractConnection):
         _, _, frame = await frame_receiver.get_frame()
 
         if request.synchronous and frame.name not in request.valid_responses:
-            raise AMQPInternalError(
-                "one of {!r}".format(request.valid_responses), frame,
+            raise InvalidFrameError(
+                f"Expected one of {request.valid_responses!r}, got {frame!r}",
             )
         elif isinstance(frame, spec.Connection.Close):
             if frame.reply_code == 403:
@@ -530,7 +535,7 @@ class Connection(Base, AbstractConnection):
 
     @task
     async def connect(
-        self, client_properties: Optional[FieldTable] = None,
+        self, client_properties: FieldTable | None = None,
     ) -> bool:
         if self.is_opened:
             raise RuntimeError("Connection already opened")
@@ -551,28 +556,35 @@ class Connection(Base, AbstractConnection):
             raise e
 
         frame_receiver = FrameReceiver(reader)
-        frame: Optional[FrameTypes]
+        frame: FrameTypes | None
 
+        # Every failure after the transport exists must close the writer,
+        # the protocol header exchange included.
         try:
             protocol_header = ProtocolHeader()
             writer.write(protocol_header.marshal())
 
-            _, _, frame = await frame_receiver.get_frame()
-        except EOFError as e:
-            raise IncompatibleProtocolError(*e.args) from e
+            try:
+                _, _, frame = await frame_receiver.get_frame()
+            except EOFError as e:
+                raise IncompatibleProtocolError(*e.args) from e
 
-        if not isinstance(frame, spec.Connection.Start):
-            raise AMQPInternalError("Connection.StartOk", frame)
+            if not isinstance(frame, spec.Connection.Start):
+                raise InvalidFrameError(
+                    f"Expected Connection.Start, got {frame!r}",
+                )
 
-        credentials = self._credentials_class(frame)
+            credentials = self._credentials_class(frame)
 
-        server_properties: ArgumentsType = frame.server_properties
+            server_properties: ArgumentsType = frame.server_properties
 
-        try:
+            if client_properties is None:
+                client_properties = self.__client_properties
+
             frame = await self._rpc(
                 spec.Connection.StartOk(
                     client_properties=self._client_properties(
-                        **(client_properties or {}),
+                        **client_properties,
                     ),
                     mechanism=credentials.name,
                     response=credentials.value(self).marshal(),
@@ -582,7 +594,9 @@ class Connection(Base, AbstractConnection):
             )
 
             if not isinstance(frame, spec.Connection.Tune):
-                raise AMQPInternalError("Connection.Tune", frame)
+                raise InvalidFrameError(
+                    f"Expected Connection.Tune, got {frame!r}",
+                )
 
             connection_tune: spec.Connection.Tune = frame
             connection_tune.heartbeat = self.heartbeat_timeout
@@ -605,7 +619,9 @@ class Connection(Base, AbstractConnection):
             )
 
             if not isinstance(frame, spec.Connection.OpenOk):
-                raise AMQPInternalError("Connection.OpenOk", frame)
+                raise InvalidFrameError(
+                    f"Expected Connection.OpenOk, got {frame!r}",
+                )
         except BaseException as e:
             await self.__close_writer(writer)
             await self.close(e)
@@ -626,14 +642,22 @@ class Connection(Base, AbstractConnection):
         log.debug("Reader exited for %r", self)
 
         if not task.cancelled() and task.exception() is not None:
-            log.debug("Cancelling cause reader exited abnormally")
+            # Show the cause. A debug record without the traceback hides
+            # a malformed frame from the broker.
+            log.warning(
+                "Cancelling cause reader exited abnormally",
+                exc_info=task.exception(),
+            )
             self.set_close_reason(
                 reply_code=500, reply_text="reader unexpected closed",
             )
 
         async def close_writer_task() -> None:
             if not self._writer_task.done():
-                self._writer_task.cancel()
+                # A second cancellation would interrupt wait_closed(),
+                # leaving the TLS transport open during shutdown.
+                if not self._writer_task.cancelling():
+                    self._writer_task.cancel()
                 await asyncio.gather(self._writer_task, return_exceptions=True)
             try:
                 exc = task.exception()
@@ -650,7 +674,7 @@ class Connection(Base, AbstractConnection):
         return
 
     async def __handle_close(self, frame: spec.Connection.Close) -> None:
-        log.exception(
+        log.error(
             "Unexpected connection close from remote \"%s\", "
             "Connection.Close(reply_code=%r, reply_text=%r)",
             self, frame.reply_code, frame.reply_text,
@@ -710,19 +734,6 @@ class Connection(Base, AbstractConnection):
         if self.heartbeat_timeout > 0:
             self.create_task(self.__heartbeat())
 
-        channel_frame_handlers: Mapping[Any, Callable[[Any], Awaitable[None]]]
-        channel_frame_handlers = {
-            spec.Connection.CloseOk: self.__handle_close_ok,
-            spec.Connection.Close: self.__handle_close,
-            Heartbeat: self.__handle_heartbeat,
-            spec.Channel.CloseOk: self.__handle_channel_close_ok,
-            spec.Connection.UpdateSecretOk: (
-                self.__handle_channel_update_secret_ok
-            ),
-            spec.Connection.Blocked: self.__handle_connection_blocked,
-            spec.Connection.Unblocked: self.__handle_connection_unblocked,
-        }
-
         try:
             async for weight, channel, frame in frame_receiver:
                 self.__last_frame_time = self.loop.time()
@@ -733,16 +744,26 @@ class Connection(Base, AbstractConnection):
                 )
 
                 if channel == 0:
-                    handler = channel_frame_handlers.get(type(frame))
-
-                    if handler is None:
-                        log.error("Unexpected frame %r", frame)
-                        continue
-
-                    await handler(frame)
+                    match frame:
+                        case spec.Connection.CloseOk():
+                            await self.__handle_close_ok(frame)
+                        case spec.Connection.Close():
+                            await self.__handle_close(frame)
+                        case Heartbeat():
+                            await self.__handle_heartbeat(frame)
+                        case spec.Channel.CloseOk():
+                            await self.__handle_channel_close_ok(frame)
+                        case spec.Connection.UpdateSecretOk():
+                            await self.__handle_channel_update_secret_ok(frame)
+                        case spec.Connection.Blocked():
+                            await self.__handle_connection_blocked(frame)
+                        case spec.Connection.Unblocked():
+                            await self.__handle_connection_unblocked(frame)
+                        case _:
+                            log.error("Unexpected frame %r", frame)
                     continue
 
-                ch: Optional[AbstractChannel] = self.channels.get(channel)
+                ch: AbstractChannel | None = self.channels.get(channel)
                 if ch is None:
                     log.error(
                         "Got frame for closed channel %d: %r", channel, frame,
@@ -750,7 +771,9 @@ class Connection(Base, AbstractConnection):
                     continue
 
                 if isinstance(frame, CHANNEL_CLOSE_RESPONSES):
-                    self.channels[channel] = None
+                    # The broker confirmed the close. The number is free
+                    # even when the channel object is already closed.
+                    self.channels.pop(channel, None)
 
                 await ch.frames.put((weight, frame))
         except asyncio.CancelledError:
@@ -773,7 +796,7 @@ class Connection(Base, AbstractConnection):
             frames=[Heartbeat()], channel_number=0,
         )
 
-        while not self.closing.done():
+        while not self._closing.done():
             if self.is_connection_was_stuck:
                 self._reader_task.cancel()
                 return
@@ -794,7 +817,7 @@ class Connection(Base, AbstractConnection):
 
         try:
             frame_iterator = FrameGenerator(self.write_queue)
-            self.closing.add_done_callback(
+            self._closing.add_done_callback(
                 lambda _: frame_iterator.close_event.set(),
             )
 
@@ -838,6 +861,8 @@ class Connection(Base, AbstractConnection):
 
             raise
         finally:
+            if not writer.is_closing():
+                await self.__close_writer(writer)
             log.debug("Writer exited for %r", self)
 
     if sys.version_info < (3, 7):
@@ -850,7 +875,11 @@ class Connection(Base, AbstractConnection):
             with suppress(OSError, RuntimeError):
                 if writer.can_write_eof():
                     writer.write_eof()
-                writer.close()
+            writer.close()
+            if self.is_connection_was_stuck:
+                # The peer cannot complete the TLS shutdown handshake.
+                writer.transport.abort()
+            with suppress(OSError, RuntimeError):
                 await writer.wait_closed()
 
     @staticmethod
@@ -868,23 +897,26 @@ class Connection(Base, AbstractConnection):
 
     async def _on_close(
         self,
-        ex: Optional[ExceptionType] = ConnectionClosed(0, "normal closed"),
+        exc: ExceptionType | None = ConnectionClosed(0, "normal closed"),
     ) -> None:
-        log.debug("Closing connection %r cause: %r", self, ex)
+        log.debug("Closing connection %r cause: %r", self, exc)
         if not self._reader_task.done():
             self._reader_task.cancel()
-        if not self._writer_task.done():
+        if (
+            not self._writer_task.done() and
+            not self._writer_task.cancelling()
+        ):
             self._writer_task.cancel()
 
         await asyncio.gather(
             self._reader_task, self._writer_task, return_exceptions=True,
         )
-        if self.closing.done():
+        if self._closing.done():
             return
-        if ex is None:
-            self.closing.set_result(None)
+        if exc is None:
+            self._closing.set_result(None)
         else:
-            self.closing.set_exception(ex)
+            self._closing.set_exception(exc)
 
     @property
     def server_capabilities(self) -> ArgumentsType:
@@ -903,7 +935,7 @@ class Connection(Base, AbstractConnection):
         return bool(self.server_capabilities.get("exchange_exchange_bindings"))
 
     @property
-    def publisher_confirms(self) -> Optional[bool]:
+    def publisher_confirms(self) -> bool | None:
         publisher_confirms = self.server_capabilities.get("publisher_confirms")
         if publisher_confirms is None:
             return None
@@ -911,7 +943,7 @@ class Connection(Base, AbstractConnection):
 
     async def channel(
         self,
-        channel_number: Optional[int] = None,
+        channel_number: int | None = None,
         publisher_confirms: bool = True,
         frame_buffer_size: int = FRAME_BUFFER_SIZE,
         timeout: TimeoutType = None,
@@ -957,11 +989,9 @@ class Connection(Base, AbstractConnection):
 
         self.channels[channel_number] = channel
 
-        try:
-            await channel.open(timeout=timeout)
-        except Exception:
-            self.channels[channel_number] = None
-            raise
+        # On failure the channel removes itself from self.channels when
+        # its reader task exits. This covers cancellation too.
+        await channel.open(timeout=timeout)
 
         return channel
 
@@ -996,20 +1026,90 @@ class Connection(Base, AbstractConnection):
             await self.connect()
         return self
 
+
     async def __aexit__(
         self,
-        exc_type: Optional[Type[BaseException]],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[TracebackType],
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
     ) -> None:
         await self.close(exc_val)
 
 
-async def connect(
-    url: URLorStr, *args: Any, client_properties: Optional[FieldTable] = None,
-    **kwargs: Any,
-) -> AbstractConnection:
-    connection = Connection(url, *args, **kwargs)
+class ConnectionContext(Coroutine[Any, Any, Connection]):
+    """Result of aiormq.connect().
 
-    await connection.connect(client_properties or {})
-    return connection
+    `async with aiormq.connect(url) as connection:` opens the connection
+    and closes it on exit. `await aiormq.connect(url)` opens it and
+    returns it, as before aiormq 7.1. The object follows the coroutine
+    protocol, so asyncio.create_task(), asyncio.run() and similar callers
+    accept it like the coroutine that connect() returned before.
+    """
+
+    __slots__ = ("_args", "_kwargs", "_connection", "_coro")
+
+    def __init__(self, *args: Any, **kwargs: Any):
+        self._args = args
+        self._kwargs = kwargs
+        self._connection: Connection | None = None
+        self._coro: Coroutine[Any, Any, Connection] | None = None
+
+    @property
+    def connection(self) -> Connection:
+        # The Connection is built on first use. Its constructor needs an
+        # event loop, and asyncio.run(aiormq.connect(url)) has none yet
+        # when connect() is called.
+        if self._connection is None:
+            self._connection = Connection(*self._args, **self._kwargs)
+        return self._connection
+
+    async def __aenter__(self) -> Connection:
+        await self.connection.__aenter__()
+        return self.connection
+
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
+        await self.connection.__aexit__(exc_type, exc_val, exc_tb)
+
+    async def __connect(self) -> Connection:
+        await self.connection.connect()
+        return self.connection
+
+    def __coroutine(self) -> Coroutine[Any, Any, Connection]:
+        if self._coro is None:
+            self._coro = self.__connect()
+        return self._coro
+
+    def __await__(self) -> Generator[Any, None, Connection]:
+        return self.__coroutine().__await__()
+
+    def send(self, value: Any) -> Any:
+        return self.__coroutine().send(value)
+
+    def throw(self, *args: Any) -> Any:
+        return self.__coroutine().throw(*args)
+
+    def close(self) -> None:
+        if self._coro is not None:
+            self._coro.close()
+
+
+def connect(
+    url: URLorStr, *args: Any, client_properties: FieldTable | None = None,
+    **kwargs: Any,
+) -> ConnectionContext:
+    """Prepare a connection. See ConnectionContext for the ways to open it."""
+    return ConnectionContext(
+        url, *args, client_properties=client_properties, **kwargs,
+    )
+
+
+# connect() was a coroutine function before aiormq 7.1. Keep
+# inspect.iscoroutinefunction() and asyncio.iscoroutinefunction() true.
+if hasattr(inspect, "markcoroutinefunction"):    # Python 3.12+
+    connect = inspect.markcoroutinefunction(connect)
+connect._is_coroutine = asyncio.coroutines._is_coroutine  # ty: ignore[unresolved-attribute]  # noqa: E501

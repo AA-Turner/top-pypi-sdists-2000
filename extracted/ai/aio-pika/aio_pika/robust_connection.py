@@ -1,6 +1,6 @@
 import asyncio
 from ssl import SSLContext
-from typing import Any, Optional, Tuple, Type, TypeVar, Union, overload
+from typing import Any, Optional, Tuple, Type, TypeVar, overload
 from weakref import WeakSet
 
 import aiormq.abc
@@ -16,16 +16,11 @@ from .abc import (
     TimeoutType,
 )
 from .connection import Connection, make_url
-from .exceptions import CONNECTION_EXCEPTIONS
+from .exceptions import CONNECTION_EXCEPTIONS, ChannelNotFoundEntity
 from .log import get_logger
 from .robust_channel import RobustChannel
 from .tools import CallbackCollection
 
-
-RobustConnectionType = TypeVar(
-    "RobustConnectionType",
-    bound=AbstractRobustConnection,
-)
 
 log = get_logger(__name__)
 
@@ -51,7 +46,7 @@ class RobustConnection(Connection, AbstractRobustConnection):
     def __init__(
         self,
         url: URL,
-        loop: Optional[asyncio.AbstractEventLoop] = None,
+        loop: asyncio.AbstractEventLoop | None = None,
         **kwargs: Any,
     ):
         super().__init__(url=url, loop=loop, **kwargs)
@@ -112,22 +107,28 @@ class RobustConnection(Connection, AbstractRobustConnection):
             raise RuntimeError("No active transport for connection %r", self)
 
         try:
-            # Make a copy of the channels to iterate on, to guard from
-            # concurrent updates to the set.
-            for channel in tuple(self.__channels):
-                try:
-                    await channel.restore()
-                except Exception as exc:
-                    log.error(
-                        "Failed to reopen channel due to %s: %s",
-                        type(exc).__name__,
-                        exc,
-                    )
-                    log.debug(
-                        "Full traceback for failure to reopen channel",
-                        exc_info=True,
-                    )
-                    raise
+            # A queue may depend on an exchange declared on another channel.
+            # Retry missing entities after other channels have been restored;
+            # WeakSet iteration order must not prevent their declaration.
+            pending = tuple(self.__channels)
+            while pending:
+                failed = []
+                errors = []
+                for channel in pending:
+                    try:
+                        await channel.restore()
+                    except ChannelNotFoundEntity as exc:
+                        failed.append(channel)
+                        errors.append(exc)
+                        log.debug(
+                            "Deferring channel with a missing entity",
+                            exc_info=True,
+                        )
+                if len(failed) == len(pending):
+                    # No progress: leave permanent failures to the connection
+                    # retry loop, which applies the configured backoff.
+                    raise errors[0]
+                pending = tuple(failed)
         except Exception as e:
             await self.close_callbacks(e)
             await asyncio.gather(
@@ -263,45 +264,53 @@ class RobustConnection(Connection, AbstractRobustConnection):
         return await super().close(exc)
 
 
-@overload
-async def connect_robust(
-    url: Union[str, URL, None] = None,
-    *,
-    host: str = "localhost",
-    port: int = 5672,
-    login: str = "guest",
-    password: str = "guest",
-    virtualhost: str = "/",
-    ssl: bool = False,
-    loop: Optional[asyncio.AbstractEventLoop] = None,
-    ssl_options: Optional[SSLOptions] = None,
-    ssl_context: Optional[SSLContext] = None,
-    timeout: TimeoutType = None,
-    client_properties: Optional[FieldTable] = None,
-) -> RobustConnection: ...
+RobustConnectionType = TypeVar(
+    "RobustConnectionType",
+    bound=AbstractRobustConnection,
+)
 
 
 @overload
 async def connect_robust(
-    url: Union[str, URL, None] = None,
+    url: str | URL | None = ...,
     *,
-    host: str = "localhost",
-    port: int = 5672,
-    login: str = "guest",
-    password: str = "guest",
-    virtualhost: str = "/",
-    ssl: bool = False,
-    loop: Optional[asyncio.AbstractEventLoop] = None,
-    ssl_options: Optional[SSLOptions] = None,
-    ssl_context: Optional[SSLContext] = None,
-    timeout: TimeoutType = None,
-    client_properties: Optional[FieldTable] = None,
-    connection_class: Type[RobustConnectionType] = ...,
+    host: str = ...,
+    port: int = ...,
+    login: str = ...,
+    password: str = ...,
+    virtualhost: str = ...,
+    ssl: bool = ...,
+    loop: asyncio.AbstractEventLoop | None = ...,
+    ssl_options: SSLOptions | None = ...,
+    ssl_context: SSLContext | None = ...,
+    timeout: TimeoutType = ...,
+    client_properties: FieldTable | None = ...,
+    connection_class: type[RobustConnectionType],
+    **kwargs: Any,
 ) -> RobustConnectionType: ...
 
 
+@overload
 async def connect_robust(
-    url: Union[str, URL, None] = None,
+    url: str | URL | None = ...,
+    *,
+    host: str = ...,
+    port: int = ...,
+    login: str = ...,
+    password: str = ...,
+    virtualhost: str = ...,
+    ssl: bool = ...,
+    loop: asyncio.AbstractEventLoop | None = ...,
+    ssl_options: SSLOptions | None = ...,
+    ssl_context: SSLContext | None = ...,
+    timeout: TimeoutType = ...,
+    client_properties: FieldTable | None = ...,
+    **kwargs: Any,
+) -> RobustConnection: ...
+
+
+async def connect_robust(
+    url: str | URL | None = None,
     *,
     host: str = "localhost",
     port: int = 5672,
@@ -309,11 +318,11 @@ async def connect_robust(
     password: str = "guest",
     virtualhost: str = "/",
     ssl: bool = False,
-    loop: Optional[asyncio.AbstractEventLoop] = None,
-    ssl_options: Optional[SSLOptions] = None,
-    ssl_context: Optional[SSLContext] = None,
+    loop: asyncio.AbstractEventLoop | None = None,
+    ssl_options: SSLOptions | None = None,
+    ssl_context: SSLContext | None = None,
     timeout: TimeoutType = None,
-    client_properties: Optional[FieldTable] = None,
+    client_properties: FieldTable | None = None,
     connection_class: Type[AbstractRobustConnection] = RobustConnection,
     **kwargs: Any,
 ) -> AbstractRobustConnection:
@@ -398,7 +407,7 @@ async def connect_robust(
 
     """
 
-    connection: AbstractRobustConnection = connection_class(
+    connection = connection_class(
         make_url(
             url,
             host=host,
@@ -408,11 +417,15 @@ async def connect_robust(
             virtualhost=virtualhost,
             ssl=ssl,
             ssl_options=ssl_options,
-            client_properties=client_properties,
             **kwargs,
         ),
         loop=loop,
         ssl_context=ssl_context,
+        **(
+            {"client_properties": client_properties}
+            if client_properties is not None
+            else {}
+        ),
         **kwargs,
     )
 

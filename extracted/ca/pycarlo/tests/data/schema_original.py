@@ -6533,6 +6533,8 @@ class Permission(sgqlc.types.Enum):
     * `SettingsIntegrationsAccess`None
     * `SettingsIntegrationsEdit`None
     * `SettingsListIamResources`None
+    * `SettingsMcpServersAccess`None
+    * `SettingsMcpServersEdit`None
     * `SettingsNetworkAccess`None
     * `SettingsNetworkEdit`None
     * `SettingsNotificationsAccess`None
@@ -6662,6 +6664,8 @@ class Permission(sgqlc.types.Enum):
         "SettingsIntegrationsAccess",
         "SettingsIntegrationsEdit",
         "SettingsListIamResources",
+        "SettingsMcpServersAccess",
+        "SettingsMcpServersEdit",
         "SettingsNetworkAccess",
         "SettingsNetworkEdit",
         "SettingsNotificationsAccess",
@@ -7370,7 +7374,7 @@ class RcaStatus(sgqlc.types.Enum):
 
 
 class ReinforcementLoopClusterKind(sgqlc.types.Enum):
-    """BUILT_IN: default cluster with fixed criteria. EVAL_DERIVED: one
+    """BUILT_IN: a default cluster the catalog seeds. EVAL_DERIVED: one
     eval monitor's low-scoring conversations (see evalScoreThreshold).
 
     Enumeration Choices:
@@ -7816,6 +7820,10 @@ class ResourcePolicyPath(sgqlc.types.Enum):
     * `SettingsIntegrationsPropose`None
     * `SettingsIntegrationsRead`None
     * `SettingsIntegrationsWrite`None
+    * `SettingsMcpServersAll`None
+    * `SettingsMcpServersPropose`None
+    * `SettingsMcpServersRead`None
+    * `SettingsMcpServersWrite`None
     * `SettingsNetworkAll`None
     * `SettingsNetworkPropose`None
     * `SettingsNetworkRead`None
@@ -8038,6 +8046,10 @@ class ResourcePolicyPath(sgqlc.types.Enum):
         "SettingsIntegrationsPropose",
         "SettingsIntegrationsRead",
         "SettingsIntegrationsWrite",
+        "SettingsMcpServersAll",
+        "SettingsMcpServersPropose",
+        "SettingsMcpServersRead",
+        "SettingsMcpServersWrite",
         "SettingsNetworkAll",
         "SettingsNetworkPropose",
         "SettingsNetworkRead",
@@ -8965,6 +8977,7 @@ class TagAssignmentObjectType(sgqlc.types.Enum):
 
     * `BULK_MONITOR`None
     * `CUSTOM_RULE_MONITOR`None
+    * `JOB_MONITOR`None
     * `METRIC_MONITOR`None
     * `MONITOR_EXCEPTION`None
     * `TABLE_MONITOR`None
@@ -8974,6 +8987,7 @@ class TagAssignmentObjectType(sgqlc.types.Enum):
     __choices__ = (
         "BULK_MONITOR",
         "CUSTOM_RULE_MONITOR",
+        "JOB_MONITOR",
         "METRIC_MONITOR",
         "MONITOR_EXCEPTION",
         "TABLE_MONITOR",
@@ -9748,6 +9762,7 @@ class UserDefinedMonitorModelMonitorType(sgqlc.types.Enum):
     * `FIELD_QUALITY`: Metric - legacy
     * `FRESHNESS`: Freshness
     * `HOURLY_STATS`: Statistical metrics over an hour interval
+    * `JOB`: Job
     * `JSON_SCHEMA`: JSON schema
     * `METRIC_COMPARISON`: Comparison
     * `QUERY_PERF`: Query performance
@@ -9770,6 +9785,7 @@ class UserDefinedMonitorModelMonitorType(sgqlc.types.Enum):
         "FIELD_QUALITY",
         "FRESHNESS",
         "HOURLY_STATS",
+        "JOB",
         "JSON_SCHEMA",
         "METRIC_COMPARISON",
         "QUERY_PERF",
@@ -9808,13 +9824,14 @@ class UserDefinedMonitorModelUdmType(sgqlc.types.Enum):
     """Enumeration Choices:
 
     * `BULK_MONITOR`: BULK_MONITOR
+    * `JOB_MONITOR`: JOB_MONITOR
     * `MONITOR`: MONITOR
     * `RULE`: RULE
     * `TABLE_MONITOR`: TABLE_MONITOR
     """
 
     __schema__ = schema
-    __choices__ = ("BULK_MONITOR", "MONITOR", "RULE", "TABLE_MONITOR")
+    __choices__ = ("BULK_MONITOR", "JOB_MONITOR", "MONITOR", "RULE", "TABLE_MONITOR")
 
 
 class UserDefinedMonitorSearchFields(sgqlc.types.Enum):
@@ -9848,13 +9865,14 @@ class UserDefinedMonitorType(sgqlc.types.Enum):
     """Enumeration Choices:
 
     * `BULK_MONITOR`None
+    * `JOB_MONITOR`None
     * `MONITOR`None
     * `RULE`None
     * `TABLE_MONITOR`None
     """
 
     __schema__ = schema
-    __choices__ = ("BULK_MONITOR", "MONITOR", "RULE", "TABLE_MONITOR")
+    __choices__ = ("BULK_MONITOR", "JOB_MONITOR", "MONITOR", "RULE", "TABLE_MONITOR")
 
 
 class UserDefinedMonitors(sgqlc.types.Enum):
@@ -9873,6 +9891,7 @@ class UserDefinedMonitors(sgqlc.types.Enum):
     * `CUSTOM_SQL`: Custom SQL
     * `FIELD_QUALITY`: Metric - legacy
     * `FRESHNESS`: Freshness
+    * `JOB`: Job
     * `JSON_SCHEMA`: JSON schema
     * `METRIC_COMPARISON`: Comparison
     * `QUERY_PERF`: Query performance
@@ -9899,6 +9918,7 @@ class UserDefinedMonitors(sgqlc.types.Enum):
         "CUSTOM_SQL",
         "FIELD_QUALITY",
         "FRESHNESS",
+        "JOB",
         "JSON_SCHEMA",
         "METRIC_COMPARISON",
         "QUERY_PERF",
@@ -17468,6 +17488,21 @@ class ReportArgumentsUnionInput(sgqlc.types.Input):
     type = sgqlc.types.Field(sgqlc.types.non_null(ReportTypeEnum), graphql_name="type")
 
 
+class RequiredTagInput(sgqlc.types.Input):
+    __schema__ = schema
+    __field_names__ = ("key", "allowed_values")
+    key = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name="key")
+    """The tag key, matched case-sensitively."""
+
+    allowed_values = sgqlc.types.Field(
+        sgqlc.types.list_of(sgqlc.types.non_null(String)), graphql_name="allowedValues"
+    )
+    """Values the key may take, matched case-sensitively. Every value of
+    the key on a monitor must be in this list. Omit to allow any
+    value, including none.
+    """
+
+
 class RetrieveTableDataRequestInput(sgqlc.types.Input):
     __schema__ = schema
     __field_names__ = ("dataset", "order_by", "limit")
@@ -21349,9 +21384,10 @@ class IMonitor(sgqlc.types.Interface):
         sgqlc.types.list_of(sgqlc.types.non_null(RequiredMonitorField)),
         graphql_name="missingRequiredFields",
     )
-    """Fields this account requires that the monitor leaves empty. Empty
-    when the monitor conforms, and always empty when the account
-    requires no fields.
+    """Fields this account requires that the monitor leaves empty. TAGS
+    means the monitor breaks a required tag rule. Empty when the
+    monitor conforms, and always empty when the account requires no
+    fields and no tags.
     """
 
 
@@ -34522,6 +34558,28 @@ class CustomUserEdge(sgqlc.types.Type):
     """A cursor for use in pagination"""
 
 
+class CustomerMcpServerAuthorizationOutput(sgqlc.types.Type):
+    """A user's OAuth authorization on a customer MCP server"""
+
+    __schema__ = schema
+    __field_names__ = ("uuid", "user", "status", "authorized_at", "expires_at")
+    uuid = sgqlc.types.Field(sgqlc.types.non_null(UUID), graphql_name="uuid")
+    """Authorization identifier, used to revoke it"""
+
+    user = sgqlc.types.Field(sgqlc.types.non_null("User"), graphql_name="user")
+    """Who authorized"""
+
+    status = sgqlc.types.Field(
+        sgqlc.types.non_null(CustomerMcpAuthorizationStatus), graphql_name="status"
+    )
+
+    authorized_at = sgqlc.types.Field(DateTime, graphql_name="authorizedAt")
+    """When the user authorized"""
+
+    expires_at = sgqlc.types.Field(DateTime, graphql_name="expiresAt")
+    """When the authorization expires, if known"""
+
+
 class CustomerMcpServerOutput(sgqlc.types.Type):
     """A customer MCP server integration"""
 
@@ -34548,6 +34606,7 @@ class CustomerMcpServerOutput(sgqlc.types.Type):
         "oauth_resource",
         "oauth_audience",
         "oauth_client_secret_configured",
+        "pkce_client_secret_required",
         "oauth_config_revision",
         "connection_status",
         "connection_last_checked_at",
@@ -34642,6 +34701,14 @@ class CustomerMcpServerOutput(sgqlc.types.Type):
     )
     """Whether a client secret is stored (the secret itself is never
     exposed)
+    """
+
+    pkce_client_secret_required = sgqlc.types.Field(
+        sgqlc.types.non_null(Boolean), graphql_name="pkceClientSecretRequired"
+    )
+    """Whether an OAuth client ID for authorization code + PKCE must be
+    supplied with its client secret. Without one, a public client is
+    used and a secret is rejected.
     """
 
     oauth_config_revision = sgqlc.types.Field(
@@ -45850,6 +45917,7 @@ class McpServerAuthDiscovery(sgqlc.types.Type):
         "dcr_supported",
         "pkce_supported",
         "client_credentials_supported",
+        "pkce_client_secret_required",
         "code_challenge_methods",
         "scopes",
         "discovery_url",
@@ -45877,6 +45945,14 @@ class McpServerAuthDiscovery(sgqlc.types.Type):
     )
     """Client Credentials flow supported (server-to-server, no user
     interaction)
+    """
+
+    pkce_client_secret_required = sgqlc.types.Field(
+        sgqlc.types.non_null(Boolean), graphql_name="pkceClientSecretRequired"
+    )
+    """Whether a new server's OAuth client ID for authorization code +
+    PKCE must be supplied with its client secret. Without one, a
+    public client is used and a secret is rejected.
     """
 
     code_challenge_methods = sgqlc.types.Field(
@@ -47149,7 +47225,7 @@ class MonitorLabelObject(sgqlc.types.Type):
       true, returns only monitors missing at least one required field;
       when false, only monitors that have all of them; when null, no
       filtering. Returns nothing when true and the account requires no
-      fields, since no monitor can be missing one.
+      fields and no tags.
     * `created_by_agent` (`Boolean`): Filter monitors by whether their
       creator is an agent user. When true, returns only monitors
       created by an agent user. When false, returns only monitors
@@ -49457,10 +49533,15 @@ class Mutation(sgqlc.types.Type):
     * `name` (`String!`): Display name for the server
     * `oauth_audience` (`String`): Provider-specific audience for the
       token request
-    * `oauth_client_id` (`String`): OAuth2 client ID (required for
-      CLIENT_CREDENTIALS; optional for PKCE)
-    * `oauth_client_secret` (`String`): OAuth2 client secret
-      (CLIENT_CREDENTIALS only; stored in Vault, never exposed)
+    * `oauth_client_id` (`String`): OAuth2 client ID. Required for
+      CLIENT_CREDENTIALS. Optional for AUTHORIZATION_CODE_PKCE, where
+      it is supplied together with oauth_client_secret; omit both to
+      register a client dynamically.
+    * `oauth_client_secret` (`String`): OAuth2 client secret. Required
+      for CLIENT_CREDENTIALS, where it is stored in Vault. Accepted
+      for AUTHORIZATION_CODE_PKCE on servers whose backend registers a
+      confidential client, where it is held by that backend. Never
+      exposed.
     * `oauth_grant_type` (`CustomerMcpOAuthGrantType`): OAuth2 grant
       type (required if auth_type=OAUTH2)
     * `oauth_resource` (`String`): OAuth2 resource indicator for the
@@ -49590,9 +49671,12 @@ class Mutation(sgqlc.types.Type):
     * `name` (`String`): New display name
     * `oauth_audience` (`String`): New provider-specific audience; an
       empty string clears it
-    * `oauth_client_id` (`String`): New OAuth2 client ID
-    * `oauth_client_secret` (`String`): New OAuth2 client secret
-      (CLIENT_CREDENTIALS only; stored in Vault, never exposed)
+    * `oauth_client_id` (`String`): New OAuth2 client ID. Supply
+      oauth_client_secret with it; changing the id alone is rejected.
+    * `oauth_client_secret` (`String`): New OAuth2 client secret.
+      Stored in Vault for CLIENT_CREDENTIALS, held by the credential
+      backend for AUTHORIZATION_CODE_PKCE. Omit to keep the stored
+      one. Never exposed.
     * `oauth_grant_type` (`CustomerMcpOAuthGrantType`): New OAuth2
       grant type
     * `oauth_resource` (`String`): New OAuth2 resource indicator; an
@@ -49786,6 +49870,10 @@ class Mutation(sgqlc.types.Type):
         args=sgqlc.types.ArgDict(
             (
                 (
+                    "authorization_uuid",
+                    sgqlc.types.Arg(UUID, graphql_name="authorizationUuid", default=None),
+                ),
+                (
                     "mcp_server_uuid",
                     sgqlc.types.Arg(
                         sgqlc.types.non_null(UUID), graphql_name="mcpServerUuid", default=None
@@ -49798,6 +49886,8 @@ class Mutation(sgqlc.types.Type):
 
     Arguments:
 
+    * `authorization_uuid` (`UUID`): Revoke this authorization instead
+      of the caller's own. Requires permission to edit MCP servers.
     * `mcp_server_uuid` (`UUID!`): UUID of the MCP server
     """
 
@@ -61122,11 +61212,20 @@ class Mutation(sgqlc.types.Type):
                         default=None,
                     ),
                 ),
+                (
+                    "required_tags",
+                    sgqlc.types.Arg(
+                        sgqlc.types.list_of(sgqlc.types.non_null(RequiredTagInput)),
+                        graphql_name="requiredTags",
+                        default=None,
+                    ),
+                ),
             )
         ),
     )
-    """(experimental) Set the monitor fields that are required when
-    creating or editing a monitor in the calling user's account.
+    """(experimental) Set the monitor fields and required tags that are
+    required when creating or editing a monitor in the calling user's
+    account.
 
     Arguments:
 
@@ -61134,6 +61233,9 @@ class Mutation(sgqlc.types.Type):
       fields to require, replacing any previous set. Pass an empty
       list to stop requiring any field. Requires permission to change
       account settings, granted to account owners by default.
+    * `required_tags` (`[RequiredTagInput!]`): The complete set of
+      required tags, replacing any previous set. Omit to keep the
+      current set. Pass an empty list to stop requiring specific tags.
     """
 
     create_monitor_tuning_run = sgqlc.types.Field(
@@ -78509,6 +78611,7 @@ class Query(sgqlc.types.Type):
         "get_scheduled_report",
         "get_my_dashboard_schedules",
         "get_customer_mcp_servers",
+        "get_customer_mcp_server_authorizations",
         "discover_customer_mcp_server_auth",
         "get_federation_sources",
         "get_federation_references",
@@ -79325,6 +79428,30 @@ class Query(sgqlc.types.Type):
 
     * `uuid` (`UUID`): Filter by specific server UUID
     * `status` (`CustomerMcpServerStatus`): Filter by status
+    """
+
+    get_customer_mcp_server_authorizations = sgqlc.types.Field(
+        sgqlc.types.non_null(
+            sgqlc.types.list_of(sgqlc.types.non_null(CustomerMcpServerAuthorizationOutput))
+        ),
+        graphql_name="getCustomerMcpServerAuthorizations",
+        args=sgqlc.types.ArgDict(
+            (
+                (
+                    "mcp_server_uuid",
+                    sgqlc.types.Arg(
+                        sgqlc.types.non_null(UUID), graphql_name="mcpServerUuid", default=None
+                    ),
+                ),
+            )
+        ),
+    )
+    """(experimental) Users currently authorized on a customer MCP
+    server. Requires permission to edit MCP servers.
+
+    Arguments:
+
+    * `mcp_server_uuid` (`UUID!`): UUID of the MCP server
     """
 
     discover_customer_mcp_server_auth = sgqlc.types.Field(
@@ -90298,7 +90425,7 @@ class Query(sgqlc.types.Type):
       true, returns only monitors missing at least one required field;
       when false, only monitors that have all of them; when null, no
       filtering. Returns nothing when true and the account requires no
-      fields, since no monitor can be missing one.
+      fields and no tags.
     * `created_by_agent` (`Boolean`): Filter monitors by whether their
       creator is an agent user. When true, returns only monitors
       created by an agent user. When false, returns only monitors
@@ -90618,7 +90745,7 @@ class Query(sgqlc.types.Type):
       true, returns only monitors missing at least one required field;
       when false, only monitors that have all of them; when null, no
       filtering. Returns nothing when true and the account requires no
-      fields, since no monitor can be missing one.
+      fields and no tags.
     * `created_by_agent` (`Boolean`): Filter monitors by whether their
       creator is an agent user. When true, returns only monitors
       created by an agent user. When false, returns only monitors
@@ -90938,7 +91065,7 @@ class Query(sgqlc.types.Type):
       true, returns only monitors missing at least one required field;
       when false, only monitors that have all of them; when null, no
       filtering. Returns nothing when true and the account requires no
-      fields, since no monitor can be missing one.
+      fields and no tags.
     * `created_by_agent` (`Boolean`): Filter monitors by whether their
       creator is an agent user. When true, returns only monitors
       created by an agent user. When false, returns only monitors
@@ -91258,7 +91385,7 @@ class Query(sgqlc.types.Type):
       true, returns only monitors missing at least one required field;
       when false, only monitors that have all of them; when null, no
       filtering. Returns nothing when true and the account requires no
-      fields, since no monitor can be missing one.
+      fields and no tags.
     * `created_by_agent` (`Boolean`): Filter monitors by whether their
       creator is an agent user. When true, returns only monitors
       created by an agent user. When false, returns only monitors
@@ -91578,7 +91705,7 @@ class Query(sgqlc.types.Type):
       true, returns only monitors missing at least one required field;
       when false, only monitors that have all of them; when null, no
       filtering. Returns nothing when true and the account requires no
-      fields, since no monitor can be missing one.
+      fields and no tags.
     * `created_by_agent` (`Boolean`): Filter monitors by whether their
       creator is an agent user. When true, returns only monitors
       created by an agent user. When false, returns only monitors
@@ -91898,7 +92025,7 @@ class Query(sgqlc.types.Type):
       true, returns only monitors missing at least one required field;
       when false, only monitors that have all of them; when null, no
       filtering. Returns nothing when true and the account requires no
-      fields, since no monitor can be missing one.
+      fields and no tags.
     * `created_by_agent` (`Boolean`): Filter monitors by whether their
       creator is an agent user. When true, returns only monitors
       created by an agent user. When false, returns only monitors
@@ -92218,7 +92345,7 @@ class Query(sgqlc.types.Type):
       true, returns only monitors missing at least one required field;
       when false, only monitors that have all of them; when null, no
       filtering. Returns nothing when true and the account requires no
-      fields, since no monitor can be missing one.
+      fields and no tags.
     * `created_by_agent` (`Boolean`): Filter monitors by whether their
       creator is an agent user. When true, returns only monitors
       created by an agent user. When false, returns only monitors
@@ -92538,7 +92665,7 @@ class Query(sgqlc.types.Type):
       true, returns only monitors missing at least one required field;
       when false, only monitors that have all of them; when null, no
       filtering. Returns nothing when true and the account requires no
-      fields, since no monitor can be missing one.
+      fields and no tags.
     * `created_by_agent` (`Boolean`): Filter monitors by whether their
       creator is an agent user. When true, returns only monitors
       created by an agent user. When false, returns only monitors
@@ -92858,7 +92985,7 @@ class Query(sgqlc.types.Type):
       true, returns only monitors missing at least one required field;
       when false, only monitors that have all of them; when null, no
       filtering. Returns nothing when true and the account requires no
-      fields, since no monitor can be missing one.
+      fields and no tags.
     * `created_by_agent` (`Boolean`): Filter monitors by whether their
       creator is an agent user. When true, returns only monitors
       created by an agent user. When false, returns only monitors
@@ -94917,8 +95044,9 @@ class Query(sgqlc.types.Type):
     get_required_monitor_fields = sgqlc.types.Field(
         "RequiredMonitorFields", graphql_name="getRequiredMonitorFields"
     )
-    """(experimental) Get the monitor fields that are required when
-    creating or editing a monitor in the calling user's account.
+    """(experimental) Get the monitor fields and required tags that are
+    required when creating or editing a monitor in the calling user's
+    account.
     """
 
     get_monitor_tuning_runs = sgqlc.types.Field(
@@ -104834,8 +104962,10 @@ class ReinforcementLoopAvailableCluster(sgqlc.types.Type):
         "name",
         "description",
         "kind",
+        "derivation",
         "source_monitor_uuid",
         "criteria",
+        "classification_criteria",
     )
     cluster_key = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name="clusterKey")
     """Stable key; the value to put in selectedClusterKeys."""
@@ -104850,11 +104980,27 @@ class ReinforcementLoopAvailableCluster(sgqlc.types.Type):
         sgqlc.types.non_null(ReinforcementLoopClusterKind), graphql_name="kind"
     )
 
+    derivation = sgqlc.types.Field(
+        sgqlc.types.non_null(ClusteringDerivation), graphql_name="derivation"
+    )
+    """How membership is computed: RULE evaluates `criteria` as SQL; LLM
+    classifies each conversation against `classificationCriteria`.
+    """
+
     source_monitor_uuid = sgqlc.types.Field(UUID, graphql_name="sourceMonitorUuid")
     """For an EVAL_DERIVED cluster, the eval monitor it tracks."""
 
     criteria = sgqlc.types.Field(sgqlc.types.non_null("FilterGroup"), graphql_name="criteria")
-    """Membership criteria as a filter tree."""
+    """Membership criteria as a filter tree. Empty on an LLM cluster,
+    whose definition is classificationCriteria.
+    """
+
+    classification_criteria = sgqlc.types.Field(
+        sgqlc.types.non_null(String), graphql_name="classificationCriteria"
+    )
+    """What belongs in the cluster, as the classifier reads it; empty on
+    a RULE cluster.
+    """
 
 
 class ReinforcementLoopDraftPrRef(sgqlc.types.Type):
@@ -105225,6 +105371,34 @@ class ReinforcementLoopTraceRef(sgqlc.types.Type):
     """
 
 
+class ReinforcementLoopV2DiagnosisCluster(sgqlc.types.Type):
+    """An Issue cluster as the diagnosis run recorded it when the trigger
+    fired.  A snapshot from the run's manifest. Name and description
+    are the cluster's at diagnosis time and survive a later rename or
+    deletion. Not subject to content redaction.
+    """
+
+    __schema__ = schema
+    __field_names__ = ("cluster_uuid", "cluster_key", "name", "description", "conversation_count")
+    cluster_uuid = sgqlc.types.Field(sgqlc.types.non_null(UUID), graphql_name="clusterUuid")
+    """The cluster's id at diagnosis time."""
+
+    cluster_key = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name="clusterKey")
+    """The cluster's key within its Issue space."""
+
+    name = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name="name")
+    """The cluster's name at diagnosis time."""
+
+    description = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name="description")
+    """The cluster's description at diagnosis time."""
+
+    conversation_count = sgqlc.types.Field(Int, graphql_name="conversationCount")
+    """Distinct conversations of the issue that matched this cluster.
+    Counted within the same workflow filter as the issue's
+    conversationCount. Null on a conversation's diagnosisClusters.
+    """
+
+
 class ReinforcementLoopV2Issue(sgqlc.types.Type):
     """One RL V2 issue: cross-conversation identity plus its
     conversations.
@@ -105245,6 +105419,7 @@ class ReinforcementLoopV2Issue(sgqlc.types.Type):
         "last_seen_at",
         "conversation_count",
         "conversations",
+        "diagnosis_clusters",
         "linear_ticket",
         "jira_ticket",
         "service_now_ticket",
@@ -105315,6 +105490,18 @@ class ReinforcementLoopV2Issue(sgqlc.types.Type):
     newest report first.
     """
 
+    diagnosis_clusters = sgqlc.types.Field(
+        sgqlc.types.non_null(
+            sgqlc.types.list_of(sgqlc.types.non_null(ReinforcementLoopV2DiagnosisCluster))
+        ),
+        graphql_name="diagnosisClusters",
+    )
+    """The Issue clusters the issue's conversations matched. Aggregated
+    over all conversations, not only the served slice. Sorted by
+    conversationCount descending, then name, then clusterKey. Name and
+    description come from the newest run that matched the cluster.
+    """
+
     linear_ticket = sgqlc.types.Field(AgentHealthIssueLinearTicket, graphql_name="linearTicket")
     """Linear ticket linked to this issue (at most one); null when none."""
 
@@ -105370,6 +105557,7 @@ class ReinforcementLoopV2IssueConversation(sgqlc.types.Type):
         "trace_refs",
         "reported_at",
         "run_uuid",
+        "diagnosis_clusters",
     )
     report_uuid = sgqlc.types.Field(sgqlc.types.non_null(UUID), graphql_name="reportUuid")
     """The report record this row is."""
@@ -105399,6 +105587,16 @@ class ReinforcementLoopV2IssueConversation(sgqlc.types.Type):
 
     run_uuid = sgqlc.types.Field(sgqlc.types.non_null(UUID), graphql_name="runUuid")
     """The diagnosis run that reported this conversation."""
+
+    diagnosis_clusters = sgqlc.types.Field(
+        sgqlc.types.non_null(
+            sgqlc.types.list_of(sgqlc.types.non_null(ReinforcementLoopV2DiagnosisCluster))
+        ),
+        graphql_name="diagnosisClusters",
+    )
+    """The Issue clusters that qualified this conversation for diagnosis,
+    as the run recorded them, in manifest order.
+    """
 
 
 class ReinforcementLoopV2IssuePageInfo(sgqlc.types.Type):
@@ -105750,7 +105948,7 @@ class RequiredMonitorFields(sgqlc.types.Type):
     """Account-level configuration of which monitor fields are mandatory."""
 
     __schema__ = schema
-    __field_names__ = ("fields", "updated_time", "updated_by")
+    __field_names__ = ("fields", "required_tags", "updated_time", "updated_by")
     fields = sgqlc.types.Field(
         sgqlc.types.non_null(sgqlc.types.list_of(sgqlc.types.non_null(RequiredMonitorField))),
         graphql_name="fields",
@@ -105758,6 +105956,16 @@ class RequiredMonitorFields(sgqlc.types.Type):
     """Monitor fields that must be non-empty when a monitor is created or
     edited in this account. An empty list means no fields are
     required.
+    """
+
+    required_tags = sgqlc.types.Field(
+        sgqlc.types.non_null(sgqlc.types.list_of(sgqlc.types.non_null("RequiredTag"))),
+        graphql_name="requiredTags",
+    )
+    """Tag keys every monitor in this account must carry when it is
+    created or edited. They apply whether or not `fields` includes
+    TAGS, and replace the generic TAGS check when non-empty. An empty
+    list means no specific tags are required.
     """
 
     updated_time = sgqlc.types.Field(DateTime, graphql_name="updatedTime")
@@ -105770,6 +105978,25 @@ class RequiredMonitorFields(sgqlc.types.Type):
     list. Returns the user's email for human users; for agent users,
     returns a derived display label (e.g. ``Agent on <domain>``) —
     never the agent's internal address.
+    """
+
+
+class RequiredTag(sgqlc.types.Type):
+    """A tag key every monitor must carry, optionally limited to a set of
+    values.
+    """
+
+    __schema__ = schema
+    __field_names__ = ("key", "allowed_values")
+    key = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name="key")
+    """The tag key, matched case-sensitively."""
+
+    allowed_values = sgqlc.types.Field(
+        sgqlc.types.list_of(sgqlc.types.non_null(String)), graphql_name="allowedValues"
+    )
+    """Values the key may take, matched case-sensitively. Every value of
+    the key on a monitor must be in this list. Null means any value,
+    including none.
     """
 
 
@@ -106790,15 +107017,19 @@ class ScheduledReportType(sgqlc.types.Type):
     """Audience (monitor label) UUIDs the report is delivered to."""
 
     enabled = sgqlc.types.Field(sgqlc.types.non_null(Boolean), graphql_name="enabled")
-    """Whether the report is actively scheduled. False when the account
-    no longer has access to this kind of report or when a user
-    explicitly disables it.
+    """Whether the report is actively scheduled. False when a user turned
+    the report off, or when the account cannot run this kind of
+    report: no entitlement, or the report falls outside the owning
+    agent's configured scope.
     """
 
     disabled_reason = sgqlc.types.Field(String, graphql_name="disabledReason")
     """Why the report is not actively scheduled, or null when it is. Set
     whenever 'enabled' is false: either a user turned the report off,
-    or the account no longer has access to this kind of report.
+    or the account cannot run this kind of report (no entitlement, or
+    the report falls outside the owning agent's configured scope). An
+    account-level reason wins over the user-off reason when both
+    apply.
     """
 
     created_by = sgqlc.types.Field("UserInfoOutput", graphql_name="createdBy")
@@ -114919,8 +115150,8 @@ class UpdateReinforcementLoopSelector(sgqlc.types.Type):
 
 
 class UpdateRequiredMonitorFields(sgqlc.types.Type):
-    """Replace the monitor fields this account requires on monitor create
-    and edit.
+    """Replace the monitor fields and required tags this account requires
+    on monitor saves.
     """
 
     __schema__ = schema
@@ -125106,6 +125337,7 @@ class SlackMessageDetails(sgqlc.types.Type, Node):
         "permalink",
         "msg_ts",
         "slack_app_type",
+        "tsa_analysis_posted_thread_id",
         "engagements",
     )
     incident = sgqlc.types.Field(sgqlc.types.non_null(Incident), graphql_name="incident")
@@ -125129,6 +125361,13 @@ class SlackMessageDetails(sgqlc.types.Type, Node):
 
     slack_app_type = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name="slackAppType")
     """SlackAppType of the app that posted this message"""
+
+    tsa_analysis_posted_thread_id = sgqlc.types.Field(
+        String, graphql_name="tsaAnalysisPostedThreadId"
+    )
+    """TSA thread whose analysis has been posted as a reply to this
+    message
+    """
 
     engagements = sgqlc.types.Field(
         sgqlc.types.non_null(SlackEngagementConnection),
@@ -127389,6 +127628,9 @@ class UserDefinedMonitorV2(sgqlc.types.Type, Node):
     )
 
     resource_id = sgqlc.types.Field(sgqlc.types.non_null(UUID), graphql_name="resourceId")
+    """Warehouse uuid, except for JOB_MONITOR rows, where it is the
+    integration uuid: an EtlContainerModel or a dbt ConnectionModel
+    """
 
     updater_id = sgqlc.types.Field(String, graphql_name="updaterId")
     """The email of the user that last updated the monitor"""

@@ -2,7 +2,7 @@
 """
 A test harness for gnupg.py.
 
-Copyright (C) 2008-2025 Vinay Sajip. All rights reserved.
+Copyright (C) 2008-2026 Vinay Sajip. All rights reserved.
 """
 import argparse
 import io
@@ -36,7 +36,7 @@ except ImportError:  # pragma: no cover
 import gnupg
 
 __author__ = 'Vinay Sajip'
-__date__ = '$04-Aug-2025 19:50:21$'
+__date__ = '$30-Sep-2026 17:36:41$'
 
 ALL_TESTS = True
 
@@ -178,6 +178,34 @@ T+z7ykRxRjpMv6MfhWVcw5B0s7lPedLhcx657HfY49t36/CIZ9/zMKsduX7cTOAh
 tO8f06R3yfjxLRD8y89frVP3+tGMvt2yGOd5TT0zht5yYcG6QkiHlfdgXqeE8nsU
 2392Xn/RETq6xCj3kG6K3wbWqh0=
 =2A5s
+-----END PGP PRIVATE KEY BLOCK-----
+"""
+
+CERTIFYING_KEY = """
+-----BEGIN PGP PRIVATE KEY BLOCK-----
+
+lHcEaeE/WBMIKoZIzj0DAQcCAwQJX+QJbszp7FFHIaGY1ZOwLJCTnwjzy1Z5vnKw
+1AZ9UnIRO+TMPEEUizEc4FO1nQBUgCS2nOccwXpnZtavc8d5AAD/TitHUDwl1CbF
+f2FGF4alBhMBuWohWcAUNOopbKgaNO4MubQfQ2VydGlmaWVyIFRlc3QgPGNlcnRp
+ZmllckB0ZXN0PoiQBBMTCAA4FiEEl+gdlmY3v7p/43AlhW+ORWgM16QFAmnhP1gC
+GwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQhW+ORWgM16RwdQEA9CTM/Zz+
+rWNl3ToKdsPKS7s3KaPfvGPKNIqVwUJzhT8BAN58ziizYcb85HREsFHtYOJs0Uti
+7GYLD4MPZxhIz5sr
+=he2w
+-----END PGP PRIVATE KEY BLOCK-----
+"""
+
+RECIPIENT_KEY = """
+-----BEGIN PGP PRIVATE KEY BLOCK-----
+
+lHcEaeE//hMIKoZIzj0DAQcCAwRraYDaESix05+l8b69fKzIvYmIoXbaOVPoCnjA
+Qe6hYEKQrO7p5zOUp6lLXhnZ6JWD6B7RcoGSHpAHQMWzpzkWAAEA92FWKM7TZolx
+Wpvuj+6lLf6wrg/gOVofvjKDoj9IbfARALQfUmVjaXBpZW50IFRlc3QgPFJlY2lw
+aWVudEB0ZXN0PoiQBBMTCAA4FiEEqHrbKqME4ufCGsGh2ILlpHJXa3EFAmnhP/4C
+GwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQ2ILlpHJXa3E2NAEAlbZ+sUpL
+j88bPK7sBA0pgiAItWYclDgZXAmqBCXz9ggBAM4khSii4pshJh0XavURaYnoC2SU
+qlWoXWGVJkVDlHla
+=1zeo
 -----END PGP PRIVATE KEY BLOCK-----
 """
 
@@ -431,6 +459,16 @@ class GPGTestCase(unittest.TestCase):
                                      usage='sign',
                                      expire=0)
         self.assertEqual(0, result.returncode, 'Non-zero return code')
+        pubkeys = self.gpg.list_keys()
+        for key in pubkeys:
+            sklist = key['subkeys']
+            skmap = key['subkey_info']
+            self.assertEqual(len(sklist), 1)
+            self.assertTrue(len(skmap), 1)
+            for sk in sklist:
+                skid, capability, fp, grp = sk
+                self.assertEqual(skmap[skid]['fingerprint'], fp)
+                self.assertEqual(skmap[skid]['keygrip'], grp)
 
     def test_add_subkey_with_invalid_key_type(self):
         "Test that subkey generation handles invalid key type"
@@ -761,6 +799,29 @@ class GPGTestCase(unittest.TestCase):
                 uids.add(d['uids'][0])
             self.assertEqual(uids, expected)
 
+    def test_quick_sign_key(self):
+        "Test the quick-sign-key functionality"
+        if self.gpg.version < (2, 0):  # pragma: no cover
+            raise unittest.SkipTest('No support for feature in gpg 1.x')
+        # GPG requires real random when signing keys
+        self.gpg.options.remove('--debug-quick-random')
+
+        recipient_key = self.gpg.import_keys(RECIPIENT_KEY)
+        certifying_key = self.gpg.import_keys(CERTIFYING_KEY)
+        self.assertEqual(len(set(recipient_key.fingerprints)), 1)
+        self.assertEqual(len(set(certifying_key.fingerprints)), 1)
+        certifying_fingerprint = certifying_key.fingerprints[0]
+        recipient_fingerprint = recipient_key.fingerprints[0]
+
+        sign_result = self.gpg.quick_sign_key(certifying_fingerprint, recipient_fingerprint)
+        self.assertEqual(sign_result.returncode, 0)
+        sigs = self.gpg.list_keys(keys=recipient_fingerprint, sigs=True)[0]['sigs']
+        key_id = sigs[1][0]
+        self.assertIn(key_id, certifying_key.fingerprints[0])
+
+        # Revert our test environment changes
+        self.gpg.options.append('--debug-quick-random')
+
     def test_encryption_and_decryption(self):
         "Test that encryption and decryption works"
         key = self.generate_key('Andrew', 'Able', 'alpha.com', passphrase='andy')
@@ -797,6 +858,30 @@ class GPGTestCase(unittest.TestCase):
         self.assertEqual(data, ddata.data, 'Round-trip must work')
         ddata = gpg.decrypt(edata, passphrase='bbrown')
         self.assertEqual(data, ddata.data, 'Round-trip must work')
+        # Test with hidden recipients
+        result = gpg.encrypt(data, andrew, hidden_recipients=barbara)
+        self.assertEqual(0, result.returncode, 'Non-zero return code')
+        edata = str(result)
+        self.assertNotEqual(data, edata, 'Data must have changed')
+        ddata = gpg.decrypt(edata, passphrase='andy')
+        self.assertEqual(0, ddata.returncode, 'Non-zero return code')
+        self.assertEqual(data, ddata.data, 'Round-trip must work')
+        ddata = gpg.decrypt(edata, passphrase='bbrown')
+        self.assertEqual(data, ddata.data, 'Round-trip must work')
+        # Test only hidden recipients
+        result = gpg.encrypt(data, None, hidden_recipients=[andrew, barbara])
+        self.assertEqual(0, result.returncode, 'Non-zero return code')
+        edata = str(result)
+        self.assertNotEqual(data, edata, 'Data must have changed')
+        ddata = gpg.decrypt(edata, passphrase='andy')
+        self.assertEqual(0, ddata.returncode, 'Non-zero return code')
+        self.assertEqual(data, ddata.data, 'Round-trip must work')
+        ddata = gpg.decrypt(edata, passphrase='bbrown')
+        self.assertEqual(data, ddata.data, 'Round-trip must work')
+        # Test with no recipients
+        self.assertRaises(ValueError, gpg.encrypt, data, None)
+        self.assertRaises(ValueError, gpg.encrypt, data, None, hidden_recipients=None)
+        self.assertRaises(ValueError, gpg.encrypt, data, None, hidden_recipients=None, symmetric=False)
         # Test symmetric encryption
         data = 'chippy was here'
         self.assertRaises(ValueError, gpg.encrypt, data, None, passphrase='bbr\x00own', symmetric=True)
@@ -1043,10 +1128,23 @@ class GPGTestCase(unittest.TestCase):
         data_file.close()
         try:
             verified = self.gpg.verify_data(sig_file, data)
-            self.assertTrue(verified.username.startswith('Andrew Able'))
-            self.assertTrue(key.fingerprint.endswith(verified.key_id))
+        except Exception as e:
+            os.remove(sig_file)
+            self.fail(e)
+        self.assertTrue(verified.username.startswith('Andrew Able'))
+        self.assertTrue(key.fingerprint.endswith(verified.key_id))
+        self.assertEqual(0, verified.returncode, 'Non-zero return code')
+        if key.fingerprint != verified.fingerprint:  # pragma: no cover
+            logger.debug('key: %r', key.fingerprint)
+            logger.debug('ver: %r', verified.fingerprint)
+        self.assertEqual(key.fingerprint, verified.fingerprint, 'Fingerprints must match')
+        # Test file path verification
+        try:
+            verified = self.gpg.verify_file(sig_file, self.test_fn)
         finally:
             os.remove(sig_file)
+        self.assertTrue(verified.username.startswith('Andrew Able'))
+        self.assertTrue(key.fingerprint.endswith(verified.key_id))
         self.assertEqual(0, verified.returncode, 'Non-zero return code')
         if key.fingerprint != verified.fingerprint:  # pragma: no cover
             logger.debug('key: %r', key.fingerprint)
@@ -1133,6 +1231,7 @@ class GPGTestCase(unittest.TestCase):
             # pick a mode that won't be already in effect via umask
             if os.path.exists(encfname) and os.path.exists(decfname):
                 mode = os.stat(encfname).st_mode | stat.S_IXUSR
+                logger.debug('Setting mode to %s', oct(mode))
                 os.chmod(encfname, mode)
                 # assume same for decfname
                 os.chmod(decfname, mode)
@@ -1170,20 +1269,28 @@ class GPGTestCase(unittest.TestCase):
             if gnupg._py3k:
                 logger.debug('about to pass text stream to decrypt_file')
                 with open(encfname, 'r') as efile:
-                    self.assertRaises(UnicodeDecodeError, self.gpg.decrypt_file, efile, passphrase='bbrown', output=decfname)
+                    self.assertRaises(UnicodeDecodeError,
+                                      self.gpg.decrypt_file,
+                                      efile,
+                                      passphrase='bbrown',
+                                      output=decfname)
         finally:
             for fn in (encfname, decfname):
-                if os.name == 'posix' and mode is not None:
+                if os.name == 'posix' and mode is not None and self.gpg.version < (2, 5, 21):
                     # Check that the file wasn't deleted, and that the
                     # mode bits we set are still in effect
-                    self.assertEqual(os.stat(fn).st_mode, mode)
+                    # gpg 2.5.21 introduced a change whereby the mode does change
+                    msg = 'Mode changed for %s: %s vs. %s' % (fn, oct(os.stat(fn).st_mode), oct(mode))
+                    if os.stat(fn).st_mode != mode:
+                        logger.error('Mode changed for %s: %s vs. %s', fn, oct(os.stat(fn).st_mode), oct(mode))
+                    self.assertEqual(os.stat(fn).st_mode, mode, msg)
                 if os.path.exists(fn):
                     os.remove(fn)
 
     def test_file_encryption_and_decryption(self):
         "Test that encryption/decryption to/from file works"
-        encfno, encfname = tempfile.mkstemp(prefix='pygpg-test-')
-        decfno, decfname = tempfile.mkstemp(prefix='pygpg-test-')
+        encfno, encfname = tempfile.mkstemp(prefix='pygpg-test-', suffix='.enc')
+        decfno, decfname = tempfile.mkstemp(prefix='pygpg-test-', suffix='.dec')
         # On Windows, if the handles aren't closed, the files can't be deleted
         os.close(encfno)
         os.close(decfno)
@@ -1618,16 +1725,16 @@ TEST_GROUPS = {
     set([
         'test_deletion', 'test_import_and_export', 'test_list_keys_after_generation', 'test_list_signatures',
         'test_key_generation_with_invalid_key_type', 'test_key_generation_with_escapes', 'test_key_generation_input',
-        'test_key_generation_with_colons', 'test_search_keys', 'test_scan_keys', 'test_scan_keys_mem',
-        'test_key_trust', 'test_add_subkey', 'test_add_subkey_with_invalid_key_type', 'test_deletion_subkey',
-        'test_list_subkey_after_generation'
+        'test_key_generation_with_colons', 'test_search_keys', 'test_scan_keys', 'test_scan_keys_mem', 'test_key_trust',
+        'test_add_subkey', 'test_add_subkey_with_invalid_key_type', 'test_deletion_subkey',
+        'test_list_subkey_after_generation', 'test_quick_sign_key'
     ]),
     'import':
     set(['test_import_only', 'test_doctest_import_keys']),
     'basic':
     set(['test_environment', 'test_list_keys_initial', 'test_nogpg', 'test_make_args', 'test_quote_with_shell']),
     'test':
-    set(['test_filenames_with_spaces']),
+    set(['test_file_encryption_and_decryption']),
 }
 
 
@@ -1648,7 +1755,9 @@ def suite(args=None):
 
 
 def init_logging():
+
     class PrimegenFilter(logging.Filter):
+
         def filter(self, record):
             arg = record.args
             if isinstance(arg, (list, tuple)) and len(arg) > 0:

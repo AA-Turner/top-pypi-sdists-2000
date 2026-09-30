@@ -91,6 +91,7 @@ __all__ = (
     "CapacityReservationDeliveryPreferenceType",
     "CapacityReservationFleetStateType",
     "CapacityReservationInstancePlatformType",
+    "CapacityReservationLaunchStatusType",
     "CapacityReservationModificationQuoteStateType",
     "CapacityReservationPreferenceType",
     "CapacityReservationStateType",
@@ -101,8 +102,11 @@ __all__ = (
     "ChronologicalOrderType",
     "ClientCertificateRevocationListStatusCodeType",
     "ClientVpnAuthenticationTypeType",
+    "ClientVpnAuthorizationPolicyShadowModeType",
+    "ClientVpnAuthorizationPolicyStatusType",
     "ClientVpnAuthorizationRuleStatusCodeType",
     "ClientVpnConnectionStatusCodeType",
+    "ClientVpnDeviceTrustProviderTypeType",
     "ClientVpnEndpointAttributeStatusCodeType",
     "ClientVpnEndpointStatusCodeType",
     "ClientVpnRouteStatusCodeType",
@@ -926,6 +930,7 @@ CapacityReservationInstancePlatformType = Literal[
     "Windows with SQL Server Standard",
     "Windows with SQL Server Web",
 ]
+CapacityReservationLaunchStatusType = Literal["launchable", "unlaunchable"]
 CapacityReservationModificationQuoteStateType = Literal["active", "expired"]
 CapacityReservationPreferenceType = Literal["capacity-reservations-only", "none", "open"]
 CapacityReservationStateType = Literal[
@@ -952,10 +957,15 @@ ClientCertificateRevocationListStatusCodeType = Literal["active", "pending"]
 ClientVpnAuthenticationTypeType = Literal[
     "certificate-authentication", "directory-service-authentication", "federated-authentication"
 ]
+ClientVpnAuthorizationPolicyShadowModeType = Literal["disabled", "enabled"]
+ClientVpnAuthorizationPolicyStatusType = Literal[
+    "active", "creating", "deleting", "failed", "updating"
+]
 ClientVpnAuthorizationRuleStatusCodeType = Literal["active", "authorizing", "failed", "revoking"]
 ClientVpnConnectionStatusCodeType = Literal[
     "active", "failed-to-terminate", "terminated", "terminating"
 ]
+ClientVpnDeviceTrustProviderTypeType = Literal["crowdstrike", "jamf", "jumpcloud"]
 ClientVpnEndpointAttributeStatusCodeType = Literal["applied", "applying"]
 ClientVpnEndpointStatusCodeType = Literal[
     "available", "deleted", "deleting", "pending", "pending-associate"
@@ -2936,6 +2946,9 @@ IpamInternetRegistryAssociationStateType = Literal[
     "delete-complete",
     "delete-failed",
     "delete-in-progress",
+    "disable-complete",
+    "disable-failed",
+    "disable-in-progress",
     "enable-complete",
     "enable-failed",
     "enable-in-progress",
@@ -3476,7 +3489,7 @@ ResourceTypeType = Literal[
     "vpn-connection-device-type",
     "vpn-gateway",
 ]
-RirType = Literal["apnic", "arin", "lacnic", "ripe"]
+RirType = Literal["apnic", "arin", "lacnic", "nicbr", "ripe"]
 RootDeviceTypeType = Literal["ebs", "instance-store"]
 RouteOriginType = Literal[
     "Advertisement", "CreateRoute", "CreateRouteTable", "EnableVgwRoutePropagation"
@@ -3974,6 +3987,7 @@ ServiceName = Literal[
     "emr-serverless",
     "entityresolution",
     "es",
+    "eventbridgev2",
     "events",
     "evs",
     "finspace",
@@ -4097,6 +4111,7 @@ ServiceName = Literal[
     "neptune-graph",
     "neptunedata",
     "network-firewall",
+    "network-security-manager",
     "networkflowmonitor",
     "networkmanager",
     "networkmonitor",

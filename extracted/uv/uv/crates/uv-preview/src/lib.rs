@@ -325,6 +325,8 @@ pub enum PreviewFeature {
     IndexHashAlgorithm,
     /// Rejects non-canonical lockfile formatting when using `--locked` or `--check`.
     LockfileFormatCheck,
+    /// Combines equivalent dependency declarations when writing lockfiles.
+    LockfileNormalization,
     /// Omit `package.metadata` from `uv.lock`, except for remote URL dependencies.
     LockWithoutMetadata,
     /// Uses the new `tar-codec` encoding/decoding backend, instead of `astral-tokio-tar`.
@@ -338,7 +340,7 @@ pub enum PreviewFeature {
     /// Exclude `exclude-newer-package` entries from the lockfile when not included in the
     /// project's resolved dependencies.
     MissingExcludeNewerPackageLock,
-    /// Records runtime configuration consultations and omits unused constraints, overrides, exclusions,
+    /// Omits redundant runtime constraints and records consultations to omit unused overrides, exclusions,
     /// dependency metadata, and package-specific upload cutoffs from the lockfile.
     ResolutionInputs,
     /// Allows using `uv export --batch`.

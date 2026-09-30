@@ -1,10 +1,9 @@
 [project]
 name = "aiormq"
-version = "7.0.0"
+version = "7.2.1"
 description = "Pure python AMQP asynchronous client library"
-authors = [{ name = "Dmitry Orlov", email = "me@mosquito.su" }]
 requires-python = ">=3.11,<4"
-readme = "README.rst"
+readme = "README.md"
 license = "Apache-2.0"
 license-files = ["COPYING"]
 keywords = [
@@ -42,11 +41,15 @@ dependencies = [
     "yarl",
 ]
 
+[[project.authors]]
+name = "Dmitry Orlov"
+email = "me@mosquito.su"
+
 [project.urls]
 Homepage = "https://github.com/mosquito/aiormq"
 Source = "https://github.com/mosquito/aiormq"
 Tracker = "https://github.com/mosquito/aiormq/issues"
-Documentation = "https://github.com/mosquito/aiormq/blob/master/README.rst"
+Documentation = "https://github.com/mosquito/aiormq/blob/master/README.md"
 
 [dependency-groups]
 dev = [
@@ -55,12 +58,9 @@ dev = [
     "coveralls>=3.3.1,<5",
     "ruff",
     "pytest-cov>=4,<8",
-    "collective-checkdocs>=0.2,<0.3",
-    "mypy>=1.18,<2",
-    "pytest-rst>=0.1,<0.3",
-    "types-setuptools>=80.9,<82",
+    "markdown-pytest>=0.6.6,<0.7",
     "aiomisc-pytest>=2,<3",
-    "setuptools>=80.9,<82",
+    "ty>=0.0.84",
 ]
 uvloop = ["uvloop>=0.22,<0.23"]
 
@@ -72,31 +72,16 @@ module-name = ["aiormq"]
 module-root = ""
 source-include = ["tests/**"]
 
-[build-system]
-requires = ["uv_build>=0.10.4,<0.12"]
-build-backend = "uv_build"
+[tool.ty.src]
+include = ["aiormq"]
 
-[tool.mypy]
-check_untyped_defs = true
-disallow_any_generics = false
-disallow_incomplete_defs = true
-disallow_subclassing_any = true
-disallow_untyped_calls = true
-disallow_untyped_decorators = true
-disallow_untyped_defs = true
-follow_imports = "silent"
-no_implicit_reexport = true
-strict_optional = true
-warn_redundant_casts = true
-warn_unused_configs = true
-warn_unused_ignores = false
-files = "aiormq"
+[tool.ty.environment]
+python-version = "3.11"
 
 [tool.pytest.ini_options]
 addopts = "-p no:asyncio"
-markers = [
-    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-]
+markers = ["""slow: marks tests as slow (deselect with '-m "not slow"')"""]
+filterwarnings = ["ignore:'asyncio.iscoroutinefunction' is deprecated:DeprecationWarning"]
 
 [tool.coverage.run]
 branch = true
@@ -119,5 +104,14 @@ exclude = [
 ]
 
 [tool.ruff.lint]
-select = ["E", "W", "F", "C90"]
+select = [
+    "E",
+    "W",
+    "F",
+    "C90",
+]
 ignore = ["C901"]
+
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13"]
+build-backend = "uv_build"

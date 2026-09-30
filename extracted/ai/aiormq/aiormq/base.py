@@ -1,8 +1,9 @@
 import abc
 import asyncio
+from collections.abc import Callable, Coroutine
 from contextlib import suppress
 from functools import wraps
-from typing import Any, Callable, Coroutine, Optional, Set, TypeVar, Union
+from typing import Any, Literal, TypeVar
 from weakref import WeakSet
 
 from .abc import (
@@ -15,20 +16,28 @@ from .tools import Countdown, shield
 T = TypeVar("T")
 
 
+def _retrieve_exception(future: asyncio.Future) -> None:
+    if not future.cancelled():
+        future.exception()
+
+
 class FutureStore(AbstractFutureStore):
     __slots__ = "futures", "loop", "parent"
 
-    futures: Set[Union[asyncio.Future, TaskType]]
+    futures: set[asyncio.Future | TaskType]
     weak_futures: WeakSet
     loop: asyncio.AbstractEventLoop
 
     def __init__(self, loop: asyncio.AbstractEventLoop):
         self.futures = set()
         self.loop = loop
-        self.parent: Optional[FutureStore] = None
+        # False until reject_all() ran. After that every added future is
+        # rejected at once with this reason, so no caller waits forever.
+        self.reject_reason: ExceptionType | Literal[False] | None = False
+        self.parent: FutureStore | None = None
 
     def __on_task_done(
-        self, future: Union[asyncio.Future, TaskWrapper],
+        self, future: asyncio.Future | TaskWrapper,
     ) -> Callable[..., Any]:
         def remover(*_: Any) -> None:
             nonlocal future     # noqa
@@ -37,7 +46,13 @@ class FutureStore(AbstractFutureStore):
 
         return remover
 
-    def add(self, future: Union[asyncio.Future, TaskWrapper]) -> None:
+    def add(self, future: asyncio.Future | TaskWrapper) -> None:
+        if self.reject_reason is not False:
+            if isinstance(future, TaskWrapper):
+                future.throw(self.reject_reason or Exception)
+            elif isinstance(future, asyncio.Future):
+                future.set_exception(self.reject_reason or Exception)
+
         self.futures.add(future)
         future.add_done_callback(self.__on_task_done(future))
 
@@ -45,11 +60,12 @@ class FutureStore(AbstractFutureStore):
             self.parent.add(future)
 
     @shield
-    async def reject_all(self, exception: Optional[ExceptionType]) -> None:
+    async def reject_all(self, exception: ExceptionType | None) -> None:
+        self.reject_reason = exception
         tasks = []
 
         while self.futures:
-            future: Union[TaskType, asyncio.Future] = self.futures.pop()
+            future: TaskType | asyncio.Future = self.futures.pop()
 
             if future.done():
                 continue
@@ -70,6 +86,12 @@ class FutureStore(AbstractFutureStore):
 
     def create_future(self, weak: bool = False) -> asyncio.Future:
         future = self.loop.create_future()
+        # A caller can stop waiting for the future before reject_all()
+        # sets its exception, for example a publish that failed on the
+        # drain future while its confirmation was still pending. Read the
+        # exception once, so asyncio does not log "Future exception was
+        # never retrieved" when the future is collected.
+        future.add_done_callback(_retrieve_exception)
         self.add(future)
         return future
 
@@ -80,11 +102,11 @@ class FutureStore(AbstractFutureStore):
 
 
 class Base(AbstractBase):
-    __slots__ = "loop", "__future_store", "closing"
+    __slots__ = "loop", "__future_store", "_closing"
 
     def __init__(
         self, *, loop: asyncio.AbstractEventLoop,
-        parent: Optional[AbstractBase] = None,
+        parent: AbstractBase | None = None,
     ):
         self.loop: asyncio.AbstractEventLoop = loop
 
@@ -93,15 +115,44 @@ class Base(AbstractBase):
         else:
             self.__future_store = FutureStore(loop=self.loop)
 
-        self.closing = self._create_closing_future()
+        self._closing = self._create_closing_future()
 
     def _create_closing_future(self) -> asyncio.Future:
-        future = self.__future_store.create_future()
-        future.add_done_callback(lambda x: x.exception())
+        return self.__future_store.create_future()
+
+    @property
+    def closing(self) -> asyncio.Future:
+        """Return an independent observer of closure while the resource is open.
+
+        Cancelling this future only stops that observer. Use close() to
+        shut down the resource.
+        """
+        if self._closing.done():
+            return self._closing
+
+        future = self.loop.create_future()
+
+        def on_close(source: asyncio.Future) -> None:
+            if future.done():
+                return
+            if source.cancelled():
+                future.cancel()
+            elif (exc := source.exception()) is not None:
+                future.set_exception(exc)
+            else:
+                future.set_result(source.result())
+
+        def on_done(observer: asyncio.Future) -> None:
+            self._closing.remove_done_callback(on_close)
+            if not observer.cancelled():
+                observer.exception()
+
+        self._closing.add_done_callback(on_close)
+        future.add_done_callback(on_done)
         return future
 
     def _cancel_tasks(
-        self, exc: Optional[ExceptionType] = None,
+        self, exc: ExceptionType | None = None,
     ) -> Coroutine[Any, Any, None]:
         return self.__future_store.reject_all(exc)
 
@@ -116,11 +167,11 @@ class Base(AbstractBase):
 
     @abc.abstractmethod
     async def _on_close(
-        self, exc: Optional[ExceptionType] = None,
+        self, exc: ExceptionType | None = None,
     ) -> None:  # pragma: no cover
         return
 
-    async def __closer(self, exc: Optional[ExceptionType]) -> None:
+    async def __closer(self, exc: ExceptionType | None) -> None:
         if self.is_closed:  # pragma: no cover
             return
 
@@ -131,7 +182,7 @@ class Base(AbstractBase):
             await self._cancel_tasks(exc)
 
     async def close(
-        self, exc: Optional[ExceptionType] = asyncio.CancelledError,
+        self, exc: ExceptionType | None = asyncio.CancelledError,
         timeout: TimeoutType = None,
     ) -> None:
         if self.is_closed:
@@ -152,7 +203,7 @@ class Base(AbstractBase):
 
     @property
     def is_closed(self) -> bool:
-        return self.closing.done()
+        return self._closing.done()
 
 
 TaskFunctionType = Callable[..., T]

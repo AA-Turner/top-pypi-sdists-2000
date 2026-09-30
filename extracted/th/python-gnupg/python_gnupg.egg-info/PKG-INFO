@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: python-gnupg
-Version: 0.5.5
+Version: 0.5.7
 Summary: A wrapper for the Gnu Privacy Guard (GPG or GnuPG)
 Home-page: https://github.com/vsajip/python-gnupg
 Author: Vinay Sajip
@@ -28,13 +28,14 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Operating System :: OS Independent
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 License-File: LICENSE.txt
 
 
 This module allows easy access to GnuPG's key management, encryption and signature
-functionality from Python programs. It is intended for use with Python 2.4 or
+functionality from Python programs. It is intended for use with Python 2.7 or
 greater.
 
 Releases are normally signed using a GnuPG key with the user id
@@ -48,4 +49,3 @@ and signatures from
 https://github.com/vsajip/python-gnupg/releases/
 
 The archives should be the same as those uploaded to PyPI.
-

@@ -28,6 +28,20 @@ size_t list_range_check(QPDFObjectHandle h, int index);
 bool object_has_key(QPDFObjectHandle h, std::string const &key);
 bool array_has_item(QPDFObjectHandle haystack, QPDFObjectHandle needle);
 QPDFObjectHandle object_get_key(QPDFObjectHandle h, std::string const &key);
+QPDF *live_owner(QPDFObjectHandle &h);
+QPDFObjectHandle adopt_into(QPDF *owner, QPDFObjectHandle value);
+void adopt_children_into(QPDF *owner, QPDFObjectHandle container);
+QPDFObjectHandle adopt_key_on_read(QPDFObjectHandle holder,
+    QPDFObjectHandle dict,
+    std::string const &key,
+    QPDFObjectHandle value);
+QPDFObjectHandle adopt_item_on_read(
+    QPDFObjectHandle array, int index, QPDFObjectHandle value);
+void adopt_children_on_read(QPDFObjectHandle holder, QPDFObjectHandle container);
+QPDFObjectHandle make_direct_indirect(QPDF *owner, QPDFObjectHandle direct);
+void refuse_to_steal(QPDFObjectHandle &h, QPDF *target);
+void disconnect_from_owner(QPDF *owner, QPDFObjectHandle old);
+void disconnect_detached(QPDFObjectHandle &container, QPDFObjectHandle old);
 void object_set_key(
     QPDFObjectHandle h, std::string const &key, QPDFObjectHandle &value);
 void object_del_key(QPDFObjectHandle h, std::string const &key);
@@ -40,3 +54,5 @@ std::shared_ptr<Buffer> get_stream_data(
 
 // Second half of the Object binding, defined in object_methods.cpp.
 void init_object_methods(py::class_<QPDFObjectHandle> &object);
+// Module-level pikepdf.as_int() and friends, defined in object_methods.cpp.
+void init_typed_conversions(py::module_ &m);

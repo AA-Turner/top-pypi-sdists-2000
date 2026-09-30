@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 
 from pamqp.base import Frame
 from pamqp.commands import Basic
@@ -185,13 +185,40 @@ class DeliveryError(AMQPError):
     reason = "Error when delivery message %r, frame %r"
 
     def __init__(
-        self, message: Optional[DeliveredMessage],
+        self, message: DeliveredMessage | None,
         frame: Frame, *args: Any,
     ):
         self.message = message
         self.frame = frame
 
         super().__init__(self.message, self.frame)
+
+    def __str__(self) -> str:
+        frame = self.frame
+        match frame:
+            case Basic.Nack():
+                details = (
+                    f"delivery_tag={frame.delivery_tag!r}, "
+                    f"multiple={frame.multiple!r}"
+                )
+            case Basic.Reject():
+                details = (
+                    f"delivery_tag={frame.delivery_tag!r}, "
+                    f"requeue={frame.requeue!r}"
+                )
+            case Basic.Return():
+                details = (
+                    f"reply_code={frame.reply_code!r}, "
+                    f"reply_text={frame.reply_text!r}, "
+                    f"exchange={frame.exchange!r}, "
+                    f"routing_key={frame.routing_key!r}"
+                )
+            case _:
+                details = ""
+        return f"Message delivery failed: {frame.name}({details})"
+
+    def __repr__(self) -> str:
+        return f"<{type(self).__name__}: {self}>"
 
 
 class PublishError(DeliveryError):
