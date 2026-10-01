@@ -6082,15 +6082,17 @@ class MonitoringPlanOutcomeStatus(pycarlo.lib.types.Enum):
 
 
 class MonitoringPlanRecordingState(pycarlo.lib.types.Enum):
-    """Whether a run's outcome recording is complete, and whether to keep
-    polling.  Derived at read time from the run's execution state,
-    delivery accounting and persisted evidence — not a stored status.
-    - `pending`: recording may still be in flight; keep polling. -
-    `complete`: the run finished normally and its full recorded set
-    has landed. - `incomplete`: recording is over with known or
-    unknown gaps; `reasons`   explains. Late batches can still add
-    rows but will not improve this. - `not_recorded`: the run was
-    dispatched without outcome capture.
+    """Whether the run's outcome producer finished sending, and whether
+    to keep polling.  Derived at read time from the producer's seal
+    and the run's execution state — not a stored status. It describes
+    the recording, not the monitoring work: a run that errored can
+    still have recorded completely, and its execution status says how
+    the run itself went.  - `pending`: the producer has not sealed
+    yet; keep polling. - `complete`: the producer sealed. It does not
+    promise every record was   valid, delivered or persisted — read
+    `recordingDiagnostics` for that. - `incomplete`: no seal arrived
+    and none is expected; `reasons` explains. - `not_recorded`: the
+    run was dispatched without outcome capture.
 
     Enumeration Choices:
 
@@ -6486,6 +6488,9 @@ class Permission(pycarlo.lib.types.Enum):
     * `MonitorsManagementCustomSqlAccess`None
     * `MonitorsManagementCustomSqlDraft`None
     * `MonitorsManagementCustomSqlEdit`None
+    * `MonitorsManagementJobAccess`None
+    * `MonitorsManagementJobDraft`None
+    * `MonitorsManagementJobEdit`None
     * `MonitorsManagementJsonSchemaAccess`None
     * `MonitorsManagementJsonSchemaDraft`None
     * `MonitorsManagementJsonSchemaEdit`None
@@ -6617,6 +6622,9 @@ class Permission(pycarlo.lib.types.Enum):
         "MonitorsManagementCustomSqlAccess",
         "MonitorsManagementCustomSqlDraft",
         "MonitorsManagementCustomSqlEdit",
+        "MonitorsManagementJobAccess",
+        "MonitorsManagementJobDraft",
+        "MonitorsManagementJobEdit",
         "MonitorsManagementJsonSchemaAccess",
         "MonitorsManagementJsonSchemaDraft",
         "MonitorsManagementJsonSchemaEdit",
@@ -7740,6 +7748,10 @@ class ResourcePolicyPath(pycarlo.lib.types.Enum):
     * `MonitorsManagementCustomSqlPropose`None
     * `MonitorsManagementCustomSqlRead`None
     * `MonitorsManagementCustomSqlWrite`None
+    * `MonitorsManagementJobAll`None
+    * `MonitorsManagementJobPropose`None
+    * `MonitorsManagementJobRead`None
+    * `MonitorsManagementJobWrite`None
     * `MonitorsManagementJsonSchemaAll`None
     * `MonitorsManagementJsonSchemaPropose`None
     * `MonitorsManagementJsonSchemaRead`None
@@ -7966,6 +7978,10 @@ class ResourcePolicyPath(pycarlo.lib.types.Enum):
         "MonitorsManagementCustomSqlPropose",
         "MonitorsManagementCustomSqlRead",
         "MonitorsManagementCustomSqlWrite",
+        "MonitorsManagementJobAll",
+        "MonitorsManagementJobPropose",
+        "MonitorsManagementJobRead",
+        "MonitorsManagementJobWrite",
         "MonitorsManagementJsonSchemaAll",
         "MonitorsManagementJsonSchemaPropose",
         "MonitorsManagementJsonSchemaRead",
@@ -48286,6 +48302,7 @@ class MonitoringPlanOutcomes(sgqlc.types.Type):
         "materialization_status",
         "recording_state",
         "recording_reasons",
+        "recording_diagnostics",
         "snapshot_revision",
         "provisional",
         "filtered_total",
@@ -48315,19 +48332,31 @@ class MonitoringPlanOutcomes(sgqlc.types.Type):
     recording_state = sgqlc.types.Field(
         sgqlc.types.non_null(MonitoringPlanRecordingState), graphql_name="recordingState"
     )
-    """Whether the run's outcome recording is complete and whether to
-    keep polling. Derived at read time; unlike status, it exists for
-    every collection. Stopping at a non-pending state does not promise
-    an immutable snapshot: late batches can still add rows.
+    """Whether the run's outcome producer finished sending, and whether
+    to keep polling. Derived at read time; unlike status, it exists
+    for every collection. Stopping at a non-pending state does not
+    promise an immutable snapshot: late batches can still add rows.
     """
 
     recording_reasons = sgqlc.types.Field(
         sgqlc.types.non_null(sgqlc.types.list_of(sgqlc.types.non_null(String))),
         graphql_name="recordingReasons",
     )
-    """Why an incomplete recording is incomplete (producer loss,
-    recording uncertainty, missing run metadata, delivery short of the
-    reported count). Empty unless recordingState is incomplete.
+    """Why the recording is not complete: no seal arrived before the
+    ingestion grace elapsed, the run has no terminal time to bound the
+    wait, or capture is disabled. Empty unless recordingState is
+    incomplete or not_recorded.
+    """
+
+    recording_diagnostics = sgqlc.types.Field(
+        sgqlc.types.non_null(sgqlc.types.list_of(sgqlc.types.non_null(String))),
+        graphql_name="recordingDiagnostics",
+    )
+    """Recording quality, independent of recordingState: `producer_loss`
+    for records the producer explicitly dropped,
+    `recording_uncertainty` for protocol errors. A complete recording
+    can carry these — the seal means the producer finished, not that
+    everything landed.
     """
 
     snapshot_revision = sgqlc.types.Field(
@@ -64786,6 +64815,14 @@ class Mutation(sgqlc.types.Type):
         args=sgqlc.types.ArgDict(
             (
                 (
+                    "audience_conditions",
+                    sgqlc.types.Arg(
+                        sgqlc.types.list_of(sgqlc.types.non_null(AudienceConditionInput)),
+                        graphql_name="audienceConditions",
+                        default=None,
+                    ),
+                ),
+                (
                     "labels",
                     sgqlc.types.Arg(
                         sgqlc.types.non_null(sgqlc.types.list_of(String)),
@@ -64806,6 +64843,18 @@ class Mutation(sgqlc.types.Type):
     )
     """Arguments:
 
+    * `audience_conditions` (`[AudienceConditionInput!]`): Restricts
+      audiences in `labels` to alerts at the given triage priorities:
+      the priority the triage agent assigns to an alert, or
+      NOT_TRIAGED when no priority arrives. For example, `[{audience:
+      "oncall", triagePriority: [HIGH, MEDIUM]}]` notifies oncall only
+      for High and Medium alerts on these monitors. Audiences in
+      `labels` without an entry are notified of every alert, so `[]`
+      clears their restrictions. Omit the argument to leave existing
+      restrictions unchanged. Audiences outside `labels` are never
+      changed. Rejected if a monitor would end up with every audience
+      restricted and none including NOT_TRIAGED, since its untriaged
+      alerts would notify nobody.
     * `labels` (`[String]!`): Labels to add on the monitors
     * `monitor_uuids` (`[UUID]!`): UUID of the monitors to update
     """
@@ -78641,6 +78690,7 @@ class Query(sgqlc.types.Type):
         "get_reinforcement_loop_issues",
         "get_reinforcement_loop_reports",
         "get_reinforcement_loop_selectors",
+        "get_reinforcement_loop_diagnosis_triggers",
         "get_reinforcement_loop_v2_issues",
         "get_linear_teams",
         "get_linear_integration",
@@ -80247,6 +80297,67 @@ class Query(sgqlc.types.Type):
     * `trace_table_mcon` (`String!`): MCON of the agent's trace table
       — same value passed as `traceTableMcon` on getAgentGraph.
       Disambiguates agents with identical names across trace tables.
+    """
+
+    get_reinforcement_loop_diagnosis_triggers = sgqlc.types.Field(
+        sgqlc.types.non_null(
+            sgqlc.types.list_of(sgqlc.types.non_null("ReinforcementLoopDiagnosisTrigger"))
+        ),
+        graphql_name="getReinforcementLoopDiagnosisTriggers",
+        args=sgqlc.types.ArgDict(
+            (
+                (
+                    "agent_name",
+                    sgqlc.types.Arg(
+                        sgqlc.types.non_null(String), graphql_name="agentName", default=None
+                    ),
+                ),
+                (
+                    "trace_table_mcon",
+                    sgqlc.types.Arg(
+                        sgqlc.types.non_null(String), graphql_name="traceTableMcon", default=None
+                    ),
+                ),
+                (
+                    "start_time",
+                    sgqlc.types.Arg(
+                        sgqlc.types.non_null(DateTime), graphql_name="startTime", default=None
+                    ),
+                ),
+                (
+                    "end_time",
+                    sgqlc.types.Arg(
+                        sgqlc.types.non_null(DateTime), graphql_name="endTime", default=None
+                    ),
+                ),
+                (
+                    "limit",
+                    sgqlc.types.Arg(sgqlc.types.non_null(Int), graphql_name="limit", default=100),
+                ),
+            )
+        ),
+    )
+    """(experimental) Monte Carlo users only. The reinforcement loop's
+    diagnosis input for an agent's conversations labeled in a window,
+    one payload per Issue space, the agent-wide one first. Every
+    current Issue cluster counts, whatever the selector chose. A
+    conversation appears once, with every cluster it matched. For
+    Snowflake Cortex and Databricks Genie agents, a conversation's
+    workflow is its space's scope workflow, null on the agent-wide
+    space. Read-only: the payload's run uuid names no run.
+
+    Arguments:
+
+    * `agent_name` (`String!`): Observability agent name.
+    * `trace_table_mcon` (`String!`): MCON of the agent's trace table
+      — same value passed as `traceTableMcon` on getAgentGraph.
+      Disambiguates agents with identical names across trace tables.
+    * `start_time` (`DateTime!`): Include conversations labeled at or
+      after this instant.
+    * `end_time` (`DateTime!`): Include conversations labeled at or
+      before this instant.
+    * `limit` (`Int!`): Most distinct conversations across all Issue
+      spaces, oldest label first. At most 200. (default: `100`)
     """
 
     get_reinforcement_loop_v2_issues = sgqlc.types.Field(
@@ -105001,6 +105112,49 @@ class ReinforcementLoopAvailableCluster(sgqlc.types.Type):
     )
     """What belongs in the cluster, as the classifier reads it; empty on
     a RULE cluster.
+    """
+
+
+class ReinforcementLoopDiagnosisTrigger(sgqlc.types.Type):
+    """The payload the reinforcement loop would send its diagnosis agent
+    for one Issue space's labeled conversations. Nothing is recorded,
+    so the run uuid names no run.
+    """
+
+    __schema__ = schema
+    __field_names__ = (
+        "issue_space_uuid",
+        "scope_workflow",
+        "conversation_count",
+        "truncated",
+        "skipped_count",
+        "payload",
+    )
+    issue_space_uuid = sgqlc.types.Field(sgqlc.types.non_null(UUID), graphql_name="issueSpaceUuid")
+
+    scope_workflow = sgqlc.types.Field(String, graphql_name="scopeWorkflow")
+    """The Issue space's workflow; null for the agent-wide space."""
+
+    conversation_count = sgqlc.types.Field(
+        sgqlc.types.non_null(Int), graphql_name="conversationCount"
+    )
+    """Conversations in the payload."""
+
+    truncated = sgqlc.types.Field(sgqlc.types.non_null(Boolean), graphql_name="truncated")
+    """The limit or the page cap ran out before this space was read to
+    the end of the window.
+    """
+
+    skipped_count = sgqlc.types.Field(sgqlc.types.non_null(Int), graphql_name="skippedCount")
+    """Labeled conversations left out: no recent turns, a label without
+    run provenance, a workflow outside the space, conflicting labels
+    or a manifest the contract refuses.
+    """
+
+    payload = sgqlc.types.Field(GenericScalar, graphql_name="payload")
+    """The dispatch input, one entry in `conversations` per conversation
+    with every cluster it matched. Null when no conversation
+    qualified.
     """
 
 

@@ -78,6 +78,750 @@ else:
     _constructs_77d1e7e8 = _LazyImport("constructs")
 
 
+@jsii.implements(_aws_cdk_0cae9daa.IInspectable, _aws_sagemaker_2f7a2e3e.IAIWorkloadConfigRef, _aws_cdk_0cae9daa.ITaggableV2)
+class CfnAIWorkloadConfig(
+    _aws_cdk_0cae9daa.CfnResource,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_sagemaker.CfnAIWorkloadConfig",
+):
+    '''Resource Type definition for AWS::SageMaker::AIWorkloadConfig.
+
+    A reusable AI workload configuration that defines datasets, data sources and benchmark tool settings for consistent performance testing of generative AI inference deployments on Amazon SageMaker AI.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-aiworkloadconfig.html
+    :cloudformationResource: AWS::SageMaker::AIWorkloadConfig
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        from aws_cdk import CfnTag
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_sagemaker as sagemaker
+        
+        cfn_ai_workload_config = sagemaker.CfnAIWorkloadConfig(self, "MyCfnAIWorkloadConfig",
+            ai_workload_config_name="aiWorkloadConfigName",
+        
+            # the properties below are optional
+            ai_workload_configs=sagemaker.CfnAIWorkloadConfig.AIWorkloadConfigsProperty(
+                workload_spec=sagemaker.CfnAIWorkloadConfig.WorkloadSpecProperty(
+                    inline="inline"
+                )
+            ),
+            dataset_config=sagemaker.CfnAIWorkloadConfig.AIDatasetConfigProperty(
+                input_data_config=[sagemaker.CfnAIWorkloadConfig.AIWorkloadInputDataConfigProperty(
+                    channel_name="channelName",
+                    data_source=sagemaker.CfnAIWorkloadConfig.AIWorkloadDataSourceProperty(
+                        s3_data_source=sagemaker.CfnAIWorkloadConfig.AIWorkloadS3DataSourceProperty(
+                            s3_uri="s3Uri"
+                        )
+                    )
+                )]
+            ),
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        *,
+        ai_workload_config_name: builtins.str,
+        ai_workload_configs: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnAIWorkloadConfig.AIWorkloadConfigsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dataset_config: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnAIWorkloadConfig.AIDatasetConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_aws_cdk_0cae9daa.CfnTag", typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::SageMaker::AIWorkloadConfig``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param ai_workload_config_name: The name of the AI workload configuration. The name must be unique within your AWS account in the current AWS Region. Only lowercase letters and digits are accepted: DeleteAIWorkloadConfig lowercases the name before looking it up, so a name containing an uppercase letter produces a configuration that can be created and read but never deleted.
+        :param ai_workload_configs: The benchmark tool configuration for an AI workload.
+        :param dataset_config: The dataset configuration for an AI workload.
+        :param tags: The metadata that you apply to the AI workload configuration to help you categorize and organize it.
+        '''
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__20f635cf48841c34b073bba1432128ccaef46412b2ad638eddddb3f2c48e4163)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnAIWorkloadConfigProps(
+            ai_workload_config_name=ai_workload_config_name,
+            ai_workload_configs=ai_workload_configs,
+            dataset_config=dataset_config,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAIWorkloadConfig")
+    @builtins.classmethod
+    def arn_for_ai_workload_config(
+        cls,
+        resource: "_aws_sagemaker_2f7a2e3e.IAIWorkloadConfigRef",
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__0b26e09857fd6f35dfc4c1ee7b256f1e0ef04aea6ca6e5e1c3f8b66a24f290ae)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAIWorkloadConfig", [resource]))
+
+    @jsii.member(jsii_name="isCfnAIWorkloadConfig")
+    @builtins.classmethod
+    def is_cfn_ai_workload_config(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAIWorkloadConfig.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__6f100d1f6352e80f8bf3e92127990e4c627de7b13c2991bbc81d5c4be8c72dea)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAIWorkloadConfig", [x]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: "_aws_cdk_0cae9daa.TreeInspector") -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__c47734492e8781c9979b3bf00668349067603745ae53157f7e446d0e3f62a177)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__728a78ad0915bc9d7e57619eca3218e0833190ef7307407a7d4b2d3e63e80e7d)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="aiWorkloadConfigRef")
+    def ai_workload_config_ref(
+        self,
+    ) -> "_aws_sagemaker_2f7a2e3e.AIWorkloadConfigReference":
+        '''A reference to a AIWorkloadConfig resource.'''
+        return typing.cast("_aws_sagemaker_2f7a2e3e.AIWorkloadConfigReference", jsii.get(self, "aiWorkloadConfigRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrAiWorkloadConfigArn")
+    def attr_ai_workload_config_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the AI workload configuration.
+
+        The name segment is restricted to lowercase for the same reason as AIWorkloadConfigName: the engine derives that property from this ARN, so a permissive ARN would yield a derived name the schema itself rejects.
+
+        :cloudformationAttribute: AIWorkloadConfigArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrAiWorkloadConfigArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreationTime")
+    def attr_creation_time(self) -> builtins.str:
+        '''A timestamp that indicates when the AI workload configuration was created.
+
+        :cloudformationAttribute: CreationTime
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreationTime"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> "_aws_cdk_0cae9daa.TagManager":
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast("_aws_cdk_0cae9daa.TagManager", jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnPropertyNames")
+    def _cfn_property_names(self) -> typing.Mapping[builtins.str, builtins.str]:
+        return typing.cast(typing.Mapping[builtins.str, builtins.str], jsii.get(self, "cfnPropertyNames"))
+
+    @builtins.property
+    @jsii.member(jsii_name="aiWorkloadConfigName")
+    def ai_workload_config_name(self) -> builtins.str:
+        '''The name of the AI workload configuration.'''
+        return typing.cast(builtins.str, jsii.get(self, "aiWorkloadConfigName"))
+
+    @ai_workload_config_name.setter
+    def ai_workload_config_name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__fa5b0159cd5ea05c77acf6b7064c9e8765ec53960a561f67c261dc405e596288)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "aiWorkloadConfigName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="aiWorkloadConfigs")
+    def ai_workload_configs(
+        self,
+    ) -> typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.AIWorkloadConfigsProperty"]]:
+        '''The benchmark tool configuration for an AI workload.'''
+        return typing.cast(typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.AIWorkloadConfigsProperty"]], jsii.get(self, "aiWorkloadConfigs"))
+
+    @ai_workload_configs.setter
+    def ai_workload_configs(
+        self,
+        value: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.AIWorkloadConfigsProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__c48148fd798add16b001e48b756d7a862dd23cc1be15b06a4129032752d16d4c)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "aiWorkloadConfigs", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="datasetConfig")
+    def dataset_config(
+        self,
+    ) -> typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.AIDatasetConfigProperty"]]:
+        '''The dataset configuration for an AI workload.'''
+        return typing.cast(typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.AIDatasetConfigProperty"]], jsii.get(self, "datasetConfig"))
+
+    @dataset_config.setter
+    def dataset_config(
+        self,
+        value: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.AIDatasetConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__e0e3b65a5c6d3d8ec840f7ef31dea796967f90db54486fc43b3a8f8624daff6b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "datasetConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List["_aws_cdk_0cae9daa.CfnTag"]]:
+        '''The metadata that you apply to the AI workload configuration to help you categorize and organize it.'''
+        return typing.cast(typing.Optional[typing.List["_aws_cdk_0cae9daa.CfnTag"]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(
+        self,
+        value: typing.Optional[typing.List["_aws_cdk_0cae9daa.CfnTag"]],
+    ) -> None:
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__4ab9263c0f1637a5475bf02da96a594a18cd63d8e3aa2386b5124faa8603ec33)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_sagemaker.CfnAIWorkloadConfig.AIDatasetConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"input_data_config": "inputDataConfig"},
+    )
+    class AIDatasetConfigProperty:
+        def __init__(
+            self,
+            *,
+            input_data_config: typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Sequence[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnAIWorkloadConfig.AIWorkloadInputDataConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        ) -> None:
+            '''The dataset configuration for an AI workload.
+
+            :param input_data_config: An array of input data channel configurations for the workload.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-aiworkloadconfig-aidatasetconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_sagemaker as sagemaker
+                
+                a_i_dataset_config_property = sagemaker.CfnAIWorkloadConfig.AIDatasetConfigProperty(
+                    input_data_config=[sagemaker.CfnAIWorkloadConfig.AIWorkloadInputDataConfigProperty(
+                        channel_name="channelName",
+                        data_source=sagemaker.CfnAIWorkloadConfig.AIWorkloadDataSourceProperty(
+                            s3_data_source=sagemaker.CfnAIWorkloadConfig.AIWorkloadS3DataSourceProperty(
+                                s3_uri="s3Uri"
+                            )
+                        )
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = cached_type_hints(_typecheckingstub__db7115409dd65b840e4f437f78ef854e197ef4403dc6f9f290e117f9cca82efb)
+                check_type(argname="argument input_data_config", value=input_data_config, expected_type=type_hints["input_data_config"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "input_data_config": input_data_config,
+            }
+
+        @builtins.property
+        def input_data_config(
+            self,
+        ) -> typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.List[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.AIWorkloadInputDataConfigProperty"]]]:
+            '''An array of input data channel configurations for the workload.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-aiworkloadconfig-aidatasetconfig.html#cfn-sagemaker-aiworkloadconfig-aidatasetconfig-inputdataconfig
+            '''
+            result = self._values.get("input_data_config")
+            assert result is not None, "Required property 'input_data_config' is missing"
+            return typing.cast(typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.List[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.AIWorkloadInputDataConfigProperty"]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AIDatasetConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_sagemaker.CfnAIWorkloadConfig.AIWorkloadConfigsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"workload_spec": "workloadSpec"},
+    )
+    class AIWorkloadConfigsProperty:
+        def __init__(
+            self,
+            *,
+            workload_spec: typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnAIWorkloadConfig.WorkloadSpecProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''The benchmark tool configuration for an AI workload.
+
+            :param workload_spec: The workload specification for benchmark tool configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-aiworkloadconfig-aiworkloadconfigs.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_sagemaker as sagemaker
+                
+                a_i_workload_configs_property = sagemaker.CfnAIWorkloadConfig.AIWorkloadConfigsProperty(
+                    workload_spec=sagemaker.CfnAIWorkloadConfig.WorkloadSpecProperty(
+                        inline="inline"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = cached_type_hints(_typecheckingstub__4f9b81f5ed2e2360b7b0c88c81cccc00ebe68a1848d8a8b63e70cdc4d696a5d4)
+                check_type(argname="argument workload_spec", value=workload_spec, expected_type=type_hints["workload_spec"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "workload_spec": workload_spec,
+            }
+
+        @builtins.property
+        def workload_spec(
+            self,
+        ) -> typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.WorkloadSpecProperty"]:
+            '''The workload specification for benchmark tool configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-aiworkloadconfig-aiworkloadconfigs.html#cfn-sagemaker-aiworkloadconfig-aiworkloadconfigs-workloadspec
+            '''
+            result = self._values.get("workload_spec")
+            assert result is not None, "Required property 'workload_spec' is missing"
+            return typing.cast(typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.WorkloadSpecProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AIWorkloadConfigsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_sagemaker.CfnAIWorkloadConfig.AIWorkloadDataSourceProperty",
+        jsii_struct_bases=[],
+        name_mapping={"s3_data_source": "s3DataSource"},
+    )
+    class AIWorkloadDataSourceProperty:
+        def __init__(
+            self,
+            *,
+            s3_data_source: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnAIWorkloadConfig.AIWorkloadS3DataSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''The data source for an AI workload input data channel.
+
+            :param s3_data_source: The Amazon S3 data source for an AI workload.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-aiworkloadconfig-aiworkloaddatasource.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_sagemaker as sagemaker
+                
+                a_i_workload_data_source_property = sagemaker.CfnAIWorkloadConfig.AIWorkloadDataSourceProperty(
+                    s3_data_source=sagemaker.CfnAIWorkloadConfig.AIWorkloadS3DataSourceProperty(
+                        s3_uri="s3Uri"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = cached_type_hints(_typecheckingstub__a4bfae899178e6e1e49b0220473ea1ff9873d1960b8a0d96551bfe27d625c244)
+                check_type(argname="argument s3_data_source", value=s3_data_source, expected_type=type_hints["s3_data_source"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if s3_data_source is not None:
+                self._values["s3_data_source"] = s3_data_source
+
+        @builtins.property
+        def s3_data_source(
+            self,
+        ) -> typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.AIWorkloadS3DataSourceProperty"]]:
+            '''The Amazon S3 data source for an AI workload.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-aiworkloadconfig-aiworkloaddatasource.html#cfn-sagemaker-aiworkloadconfig-aiworkloaddatasource-s3datasource
+            '''
+            result = self._values.get("s3_data_source")
+            return typing.cast(typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.AIWorkloadS3DataSourceProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AIWorkloadDataSourceProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_sagemaker.CfnAIWorkloadConfig.AIWorkloadInputDataConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"channel_name": "channelName", "data_source": "dataSource"},
+    )
+    class AIWorkloadInputDataConfigProperty:
+        def __init__(
+            self,
+            *,
+            channel_name: builtins.str,
+            data_source: typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnAIWorkloadConfig.AIWorkloadDataSourceProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''A channel of input data for an AI workload configuration.
+
+            :param channel_name: The logical name for the data channel.
+            :param data_source: The data source for an AI workload input data channel.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-aiworkloadconfig-aiworkloadinputdataconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_sagemaker as sagemaker
+                
+                a_i_workload_input_data_config_property = sagemaker.CfnAIWorkloadConfig.AIWorkloadInputDataConfigProperty(
+                    channel_name="channelName",
+                    data_source=sagemaker.CfnAIWorkloadConfig.AIWorkloadDataSourceProperty(
+                        s3_data_source=sagemaker.CfnAIWorkloadConfig.AIWorkloadS3DataSourceProperty(
+                            s3_uri="s3Uri"
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = cached_type_hints(_typecheckingstub__7cbac76d235380a689bb212b4a19c3ada5bc8996520bda09464d2287cd4a1014)
+                check_type(argname="argument channel_name", value=channel_name, expected_type=type_hints["channel_name"])
+                check_type(argname="argument data_source", value=data_source, expected_type=type_hints["data_source"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "channel_name": channel_name,
+                "data_source": data_source,
+            }
+
+        @builtins.property
+        def channel_name(self) -> builtins.str:
+            '''The logical name for the data channel.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-aiworkloadconfig-aiworkloadinputdataconfig.html#cfn-sagemaker-aiworkloadconfig-aiworkloadinputdataconfig-channelname
+            '''
+            result = self._values.get("channel_name")
+            assert result is not None, "Required property 'channel_name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def data_source(
+            self,
+        ) -> typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.AIWorkloadDataSourceProperty"]:
+            '''The data source for an AI workload input data channel.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-aiworkloadconfig-aiworkloadinputdataconfig.html#cfn-sagemaker-aiworkloadconfig-aiworkloadinputdataconfig-datasource
+            '''
+            result = self._values.get("data_source")
+            assert result is not None, "Required property 'data_source' is missing"
+            return typing.cast(typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.AIWorkloadDataSourceProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AIWorkloadInputDataConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_sagemaker.CfnAIWorkloadConfig.AIWorkloadS3DataSourceProperty",
+        jsii_struct_bases=[],
+        name_mapping={"s3_uri": "s3Uri"},
+    )
+    class AIWorkloadS3DataSourceProperty:
+        def __init__(self, *, s3_uri: builtins.str) -> None:
+            '''The Amazon S3 data source for an AI workload.
+
+            :param s3_uri: The Amazon S3 URI of the data.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-aiworkloadconfig-aiworkloads3datasource.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_sagemaker as sagemaker
+                
+                a_i_workload_s3_data_source_property = sagemaker.CfnAIWorkloadConfig.AIWorkloadS3DataSourceProperty(
+                    s3_uri="s3Uri"
+                )
+            '''
+            if __debug__:
+                type_hints = cached_type_hints(_typecheckingstub__93bad8b0eb473057b3bea8ef82641d81c6bbd14a5b73410283488bc087d3ad2b)
+                check_type(argname="argument s3_uri", value=s3_uri, expected_type=type_hints["s3_uri"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "s3_uri": s3_uri,
+            }
+
+        @builtins.property
+        def s3_uri(self) -> builtins.str:
+            '''The Amazon S3 URI of the data.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-aiworkloadconfig-aiworkloads3datasource.html#cfn-sagemaker-aiworkloadconfig-aiworkloads3datasource-s3uri
+            '''
+            result = self._values.get("s3_uri")
+            assert result is not None, "Required property 's3_uri' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AIWorkloadS3DataSourceProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_sagemaker.CfnAIWorkloadConfig.WorkloadSpecProperty",
+        jsii_struct_bases=[],
+        name_mapping={"inline": "inline"},
+    )
+    class WorkloadSpecProperty:
+        def __init__(self, *, inline: builtins.str) -> None:
+            '''The workload specification for benchmark tool configuration.
+
+            :param inline: An inline YAML or JSON string that defines benchmark parameters. The service validates the document against its own benchmark schema: it must declare a benchmark object whose type member matches the pattern ^(aiperf)$.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-aiworkloadconfig-workloadspec.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_sagemaker as sagemaker
+                
+                workload_spec_property = sagemaker.CfnAIWorkloadConfig.WorkloadSpecProperty(
+                    inline="inline"
+                )
+            '''
+            if __debug__:
+                type_hints = cached_type_hints(_typecheckingstub__c6f67b440708b02579f33f6dc67cc019bba17568f1a7381947f66d1a6d21c8a5)
+                check_type(argname="argument inline", value=inline, expected_type=type_hints["inline"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "inline": inline,
+            }
+
+        @builtins.property
+        def inline(self) -> builtins.str:
+            '''An inline YAML or JSON string that defines benchmark parameters.
+
+            The service validates the document against its own benchmark schema: it must declare a benchmark object whose type member matches the pattern ^(aiperf)$.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-aiworkloadconfig-workloadspec.html#cfn-sagemaker-aiworkloadconfig-workloadspec-inline
+            '''
+            result = self._values.get("inline")
+            assert result is not None, "Required property 'inline' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "WorkloadSpecProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_sagemaker.CfnAIWorkloadConfigProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "ai_workload_config_name": "aiWorkloadConfigName",
+        "ai_workload_configs": "aiWorkloadConfigs",
+        "dataset_config": "datasetConfig",
+        "tags": "tags",
+    },
+)
+class CfnAIWorkloadConfigProps:
+    def __init__(
+        self,
+        *,
+        ai_workload_config_name: builtins.str,
+        ai_workload_configs: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnAIWorkloadConfig.AIWorkloadConfigsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dataset_config: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnAIWorkloadConfig.AIDatasetConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_aws_cdk_0cae9daa.CfnTag", typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnAIWorkloadConfig``.
+
+        :param ai_workload_config_name: The name of the AI workload configuration. The name must be unique within your AWS account in the current AWS Region. Only lowercase letters and digits are accepted: DeleteAIWorkloadConfig lowercases the name before looking it up, so a name containing an uppercase letter produces a configuration that can be created and read but never deleted.
+        :param ai_workload_configs: The benchmark tool configuration for an AI workload.
+        :param dataset_config: The dataset configuration for an AI workload.
+        :param tags: The metadata that you apply to the AI workload configuration to help you categorize and organize it.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-aiworkloadconfig.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            from aws_cdk import CfnTag
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_sagemaker as sagemaker
+            
+            cfn_ai_workload_config_props = sagemaker.CfnAIWorkloadConfigProps(
+                ai_workload_config_name="aiWorkloadConfigName",
+            
+                # the properties below are optional
+                ai_workload_configs=sagemaker.CfnAIWorkloadConfig.AIWorkloadConfigsProperty(
+                    workload_spec=sagemaker.CfnAIWorkloadConfig.WorkloadSpecProperty(
+                        inline="inline"
+                    )
+                ),
+                dataset_config=sagemaker.CfnAIWorkloadConfig.AIDatasetConfigProperty(
+                    input_data_config=[sagemaker.CfnAIWorkloadConfig.AIWorkloadInputDataConfigProperty(
+                        channel_name="channelName",
+                        data_source=sagemaker.CfnAIWorkloadConfig.AIWorkloadDataSourceProperty(
+                            s3_data_source=sagemaker.CfnAIWorkloadConfig.AIWorkloadS3DataSourceProperty(
+                                s3_uri="s3Uri"
+                            )
+                        )
+                    )]
+                ),
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__325f04cbeef0a7f10aee7685c605fdf7798c2eef99c9dc1bd8e013e1e62c8795)
+            check_type(argname="argument ai_workload_config_name", value=ai_workload_config_name, expected_type=type_hints["ai_workload_config_name"])
+            check_type(argname="argument ai_workload_configs", value=ai_workload_configs, expected_type=type_hints["ai_workload_configs"])
+            check_type(argname="argument dataset_config", value=dataset_config, expected_type=type_hints["dataset_config"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "ai_workload_config_name": ai_workload_config_name,
+        }
+        if ai_workload_configs is not None:
+            self._values["ai_workload_configs"] = ai_workload_configs
+        if dataset_config is not None:
+            self._values["dataset_config"] = dataset_config
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def ai_workload_config_name(self) -> builtins.str:
+        '''The name of the AI workload configuration.
+
+        The name must be unique within your AWS account in the current AWS Region. Only lowercase letters and digits are accepted: DeleteAIWorkloadConfig lowercases the name before looking it up, so a name containing an uppercase letter produces a configuration that can be created and read but never deleted.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-aiworkloadconfig.html#cfn-sagemaker-aiworkloadconfig-aiworkloadconfigname
+        '''
+        result = self._values.get("ai_workload_config_name")
+        assert result is not None, "Required property 'ai_workload_config_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def ai_workload_configs(
+        self,
+    ) -> typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.AIWorkloadConfigsProperty"]]:
+        '''The benchmark tool configuration for an AI workload.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-aiworkloadconfig.html#cfn-sagemaker-aiworkloadconfig-aiworkloadconfigs
+        '''
+        result = self._values.get("ai_workload_configs")
+        return typing.cast(typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.AIWorkloadConfigsProperty"]], result)
+
+    @builtins.property
+    def dataset_config(
+        self,
+    ) -> typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.AIDatasetConfigProperty"]]:
+        '''The dataset configuration for an AI workload.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-aiworkloadconfig.html#cfn-sagemaker-aiworkloadconfig-datasetconfig
+        '''
+        result = self._values.get("dataset_config")
+        return typing.cast(typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnAIWorkloadConfig.AIDatasetConfigProperty"]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List["_aws_cdk_0cae9daa.CfnTag"]]:
+        '''The metadata that you apply to the AI workload configuration to help you categorize and organize it.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-aiworkloadconfig.html#cfn-sagemaker-aiworkloadconfig-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List["_aws_cdk_0cae9daa.CfnTag"]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnAIWorkloadConfigProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.implements(_aws_cdk_0cae9daa.IInspectable, _aws_sagemaker_2f7a2e3e.IActionRef, _aws_cdk_0cae9daa.ITaggableV2)
 class CfnAction(
     _aws_cdk_0cae9daa.CfnResource,
@@ -9135,6 +9879,582 @@ class CfnClusterProps:
         )
 
 
+@jsii.implements(_aws_cdk_0cae9daa.IInspectable, _aws_sagemaker_2f7a2e3e.IClusterSchedulerConfigRef, _aws_cdk_0cae9daa.ITaggableV2)
+class CfnClusterSchedulerConfig(
+    _aws_cdk_0cae9daa.CfnResource,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_sagemaker.CfnClusterSchedulerConfig",
+):
+    '''Resource Type definition for AWS::SageMaker::ClusterSchedulerConfig.
+
+    Cluster policy configuration used for task prioritization and fair-share allocation of idle compute.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-clusterschedulerconfig.html
+    :cloudformationResource: AWS::SageMaker::ClusterSchedulerConfig
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        from aws_cdk import CfnTag
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_sagemaker as sagemaker
+        
+        cfn_cluster_scheduler_config = sagemaker.CfnClusterSchedulerConfig(self, "MyCfnClusterSchedulerConfig",
+            cluster_arn="clusterArn",
+            name="name",
+            scheduler_config=sagemaker.CfnClusterSchedulerConfig.SchedulerConfigProperty(
+                fair_share="fairShare",
+                idle_resource_sharing="idleResourceSharing",
+                priority_classes=[sagemaker.CfnClusterSchedulerConfig.PriorityClassProperty(
+                    name="name",
+                    weight=123
+                )]
+            ),
+        
+            # the properties below are optional
+            description="description",
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        *,
+        cluster_arn: builtins.str,
+        name: builtins.str,
+        scheduler_config: typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnClusterSchedulerConfig.SchedulerConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        description: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_aws_cdk_0cae9daa.CfnTag", typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::SageMaker::ClusterSchedulerConfig``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param cluster_arn: ARN of the cluster.
+        :param name: Name for the cluster policy.
+        :param scheduler_config: Cluster policy configuration.
+        :param description: Description of the cluster policy.
+        :param tags: Tags of the cluster policy.
+        '''
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__07103939e44198ead01dbc429cd557a2bb4e9f5b442276af74809d2330ea841d)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnClusterSchedulerConfigProps(
+            cluster_arn=cluster_arn,
+            name=name,
+            scheduler_config=scheduler_config,
+            description=description,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForClusterSchedulerConfig")
+    @builtins.classmethod
+    def arn_for_cluster_scheduler_config(
+        cls,
+        resource: "_aws_sagemaker_2f7a2e3e.IClusterSchedulerConfigRef",
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__41846122b3da27d6b04724306ad3483bc711092317ce1ea5feecce629208939b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForClusterSchedulerConfig", [resource]))
+
+    @jsii.member(jsii_name="isCfnClusterSchedulerConfig")
+    @builtins.classmethod
+    def is_cfn_cluster_scheduler_config(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnClusterSchedulerConfig.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__f8193645b73ccd4fe5e2aa70bff276cb737d9a17260457b85fa43016a395b582)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnClusterSchedulerConfig", [x]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: "_aws_cdk_0cae9daa.TreeInspector") -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__0d524d643c7bd16392b85f7dac9d8de9632a67432ba79601b8f83e52b655048e)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__1b5bf1027ed6aada56a1b7413a562800f882060bcc923bfce5d570cd1f719c8d)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrClusterSchedulerConfigArn")
+    def attr_cluster_scheduler_config_arn(self) -> builtins.str:
+        '''ARN of the cluster policy.
+
+        :cloudformationAttribute: ClusterSchedulerConfigArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrClusterSchedulerConfigArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrClusterSchedulerConfigId")
+    def attr_cluster_scheduler_config_id(self) -> builtins.str:
+        '''ID of the cluster policy.
+
+        :cloudformationAttribute: ClusterSchedulerConfigId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrClusterSchedulerConfigId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrClusterSchedulerConfigVersion")
+    def attr_cluster_scheduler_config_version(self) -> jsii.Number:
+        '''Version of the cluster policy.
+
+        :cloudformationAttribute: ClusterSchedulerConfigVersion
+        '''
+        return typing.cast(jsii.Number, jsii.get(self, "attrClusterSchedulerConfigVersion"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreationTime")
+    def attr_creation_time(self) -> builtins.str:
+        '''Creation time of the cluster policy.
+
+        :cloudformationAttribute: CreationTime
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreationTime"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrStatus")
+    def attr_status(self) -> builtins.str:
+        '''Status of the cluster policy.
+
+        :cloudformationAttribute: Status
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> "_aws_cdk_0cae9daa.TagManager":
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast("_aws_cdk_0cae9daa.TagManager", jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnPropertyNames")
+    def _cfn_property_names(self) -> typing.Mapping[builtins.str, builtins.str]:
+        return typing.cast(typing.Mapping[builtins.str, builtins.str], jsii.get(self, "cfnPropertyNames"))
+
+    @builtins.property
+    @jsii.member(jsii_name="clusterSchedulerConfigRef")
+    def cluster_scheduler_config_ref(
+        self,
+    ) -> "_aws_sagemaker_2f7a2e3e.ClusterSchedulerConfigReference":
+        '''A reference to a ClusterSchedulerConfig resource.'''
+        return typing.cast("_aws_sagemaker_2f7a2e3e.ClusterSchedulerConfigReference", jsii.get(self, "clusterSchedulerConfigRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="clusterArn")
+    def cluster_arn(self) -> builtins.str:
+        '''ARN of the cluster.'''
+        return typing.cast(builtins.str, jsii.get(self, "clusterArn"))
+
+    @cluster_arn.setter
+    def cluster_arn(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__a40508206f2b16c2f665924bfb2e07dd456e25e242b3060bddf23673bc84f7dd)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "clusterArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> builtins.str:
+        '''Name for the cluster policy.'''
+        return typing.cast(builtins.str, jsii.get(self, "name"))
+
+    @name.setter
+    def name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__1ddffe18a932cb91a460a21e99160d53f801dd64e3b89bae20f758e4e2c1e844)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="schedulerConfig")
+    def scheduler_config(
+        self,
+    ) -> typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnClusterSchedulerConfig.SchedulerConfigProperty"]:
+        '''Cluster policy configuration.'''
+        return typing.cast(typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnClusterSchedulerConfig.SchedulerConfigProperty"], jsii.get(self, "schedulerConfig"))
+
+    @scheduler_config.setter
+    def scheduler_config(
+        self,
+        value: typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnClusterSchedulerConfig.SchedulerConfigProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__8341504e1f5c879af9f59439db094b4c30a1aa079dbbbde99185981e8c79c742)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "schedulerConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="description")
+    def description(self) -> typing.Optional[builtins.str]:
+        '''Description of the cluster policy.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
+
+    @description.setter
+    def description(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__e6f7817f2ce9fa0d831d48636067eed994e3d124d66182e1c3c4e1a2c9d187a3)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List["_aws_cdk_0cae9daa.CfnTag"]]:
+        '''Tags of the cluster policy.'''
+        return typing.cast(typing.Optional[typing.List["_aws_cdk_0cae9daa.CfnTag"]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(
+        self,
+        value: typing.Optional[typing.List["_aws_cdk_0cae9daa.CfnTag"]],
+    ) -> None:
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__1887249cfcb685372db3f19f706de201a2b37cab8120584f5c6cc8fe4aa91766)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_sagemaker.CfnClusterSchedulerConfig.PriorityClassProperty",
+        jsii_struct_bases=[],
+        name_mapping={"name": "name", "weight": "weight"},
+    )
+    class PriorityClassProperty:
+        def __init__(self, *, name: builtins.str, weight: jsii.Number) -> None:
+            '''Priority class configuration.
+
+            :param name: Name of the priority class.
+            :param weight: Weight of the priority class. Range 0-100, default 0.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-clusterschedulerconfig-priorityclass.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_sagemaker as sagemaker
+                
+                priority_class_property = sagemaker.CfnClusterSchedulerConfig.PriorityClassProperty(
+                    name="name",
+                    weight=123
+                )
+            '''
+            if __debug__:
+                type_hints = cached_type_hints(_typecheckingstub__273b4fdf062e6568eba8a14b062d32c6b1e6f6ec2f5b671948f707eb8e5c8dd8)
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument weight", value=weight, expected_type=type_hints["weight"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "name": name,
+                "weight": weight,
+            }
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''Name of the priority class.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-clusterschedulerconfig-priorityclass.html#cfn-sagemaker-clusterschedulerconfig-priorityclass-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def weight(self) -> jsii.Number:
+            '''Weight of the priority class.
+
+            Range 0-100, default 0.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-clusterschedulerconfig-priorityclass.html#cfn-sagemaker-clusterschedulerconfig-priorityclass-weight
+            '''
+            result = self._values.get("weight")
+            assert result is not None, "Required property 'weight' is missing"
+            return typing.cast(jsii.Number, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "PriorityClassProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_sagemaker.CfnClusterSchedulerConfig.SchedulerConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "fair_share": "fairShare",
+            "idle_resource_sharing": "idleResourceSharing",
+            "priority_classes": "priorityClasses",
+        },
+    )
+    class SchedulerConfigProperty:
+        def __init__(
+            self,
+            *,
+            fair_share: typing.Optional[builtins.str] = None,
+            idle_resource_sharing: typing.Optional[builtins.str] = None,
+            priority_classes: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Sequence[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnClusterSchedulerConfig.PriorityClassProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''Cluster policy configuration.
+
+            :param fair_share: When enabled, entities borrow idle compute based on assigned FairShareWeight.
+            :param idle_resource_sharing: Configuration for sharing idle compute resources across entities.
+            :param priority_classes: List of priority class configurations.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-clusterschedulerconfig-schedulerconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_sagemaker as sagemaker
+                
+                scheduler_config_property = sagemaker.CfnClusterSchedulerConfig.SchedulerConfigProperty(
+                    fair_share="fairShare",
+                    idle_resource_sharing="idleResourceSharing",
+                    priority_classes=[sagemaker.CfnClusterSchedulerConfig.PriorityClassProperty(
+                        name="name",
+                        weight=123
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = cached_type_hints(_typecheckingstub__f4228b8e433cfd39e6612ae172e5b9f6fed26e9d5ae9f4ed351f6f0be006a8c0)
+                check_type(argname="argument fair_share", value=fair_share, expected_type=type_hints["fair_share"])
+                check_type(argname="argument idle_resource_sharing", value=idle_resource_sharing, expected_type=type_hints["idle_resource_sharing"])
+                check_type(argname="argument priority_classes", value=priority_classes, expected_type=type_hints["priority_classes"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if fair_share is not None:
+                self._values["fair_share"] = fair_share
+            if idle_resource_sharing is not None:
+                self._values["idle_resource_sharing"] = idle_resource_sharing
+            if priority_classes is not None:
+                self._values["priority_classes"] = priority_classes
+
+        @builtins.property
+        def fair_share(self) -> typing.Optional[builtins.str]:
+            '''When enabled, entities borrow idle compute based on assigned FairShareWeight.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-clusterschedulerconfig-schedulerconfig.html#cfn-sagemaker-clusterschedulerconfig-schedulerconfig-fairshare
+            '''
+            result = self._values.get("fair_share")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def idle_resource_sharing(self) -> typing.Optional[builtins.str]:
+            '''Configuration for sharing idle compute resources across entities.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-clusterschedulerconfig-schedulerconfig.html#cfn-sagemaker-clusterschedulerconfig-schedulerconfig-idleresourcesharing
+            '''
+            result = self._values.get("idle_resource_sharing")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def priority_classes(
+            self,
+        ) -> typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.List[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnClusterSchedulerConfig.PriorityClassProperty"]]]]:
+            '''List of priority class configurations.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-clusterschedulerconfig-schedulerconfig.html#cfn-sagemaker-clusterschedulerconfig-schedulerconfig-priorityclasses
+            '''
+            result = self._values.get("priority_classes")
+            return typing.cast(typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.List[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnClusterSchedulerConfig.PriorityClassProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SchedulerConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_sagemaker.CfnClusterSchedulerConfigProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "cluster_arn": "clusterArn",
+        "name": "name",
+        "scheduler_config": "schedulerConfig",
+        "description": "description",
+        "tags": "tags",
+    },
+)
+class CfnClusterSchedulerConfigProps:
+    def __init__(
+        self,
+        *,
+        cluster_arn: builtins.str,
+        name: builtins.str,
+        scheduler_config: typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnClusterSchedulerConfig.SchedulerConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        description: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_aws_cdk_0cae9daa.CfnTag", typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnClusterSchedulerConfig``.
+
+        :param cluster_arn: ARN of the cluster.
+        :param name: Name for the cluster policy.
+        :param scheduler_config: Cluster policy configuration.
+        :param description: Description of the cluster policy.
+        :param tags: Tags of the cluster policy.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-clusterschedulerconfig.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            from aws_cdk import CfnTag
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_sagemaker as sagemaker
+            
+            cfn_cluster_scheduler_config_props = sagemaker.CfnClusterSchedulerConfigProps(
+                cluster_arn="clusterArn",
+                name="name",
+                scheduler_config=sagemaker.CfnClusterSchedulerConfig.SchedulerConfigProperty(
+                    fair_share="fairShare",
+                    idle_resource_sharing="idleResourceSharing",
+                    priority_classes=[sagemaker.CfnClusterSchedulerConfig.PriorityClassProperty(
+                        name="name",
+                        weight=123
+                    )]
+                ),
+            
+                # the properties below are optional
+                description="description",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__add90296b89326947dc6df028d5d7850c8db2eb2d97f38d0119833292f2219af)
+            check_type(argname="argument cluster_arn", value=cluster_arn, expected_type=type_hints["cluster_arn"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument scheduler_config", value=scheduler_config, expected_type=type_hints["scheduler_config"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "cluster_arn": cluster_arn,
+            "name": name,
+            "scheduler_config": scheduler_config,
+        }
+        if description is not None:
+            self._values["description"] = description
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def cluster_arn(self) -> builtins.str:
+        '''ARN of the cluster.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-clusterschedulerconfig.html#cfn-sagemaker-clusterschedulerconfig-clusterarn
+        '''
+        result = self._values.get("cluster_arn")
+        assert result is not None, "Required property 'cluster_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''Name for the cluster policy.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-clusterschedulerconfig.html#cfn-sagemaker-clusterschedulerconfig-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def scheduler_config(
+        self,
+    ) -> typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnClusterSchedulerConfig.SchedulerConfigProperty"]:
+        '''Cluster policy configuration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-clusterschedulerconfig.html#cfn-sagemaker-clusterschedulerconfig-schedulerconfig
+        '''
+        result = self._values.get("scheduler_config")
+        assert result is not None, "Required property 'scheduler_config' is missing"
+        return typing.cast(typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnClusterSchedulerConfig.SchedulerConfigProperty"], result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''Description of the cluster policy.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-clusterschedulerconfig.html#cfn-sagemaker-clusterschedulerconfig-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List["_aws_cdk_0cae9daa.CfnTag"]]:
+        '''Tags of the cluster policy.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-clusterschedulerconfig.html#cfn-sagemaker-clusterschedulerconfig-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List["_aws_cdk_0cae9daa.CfnTag"]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnClusterSchedulerConfigProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.implements(_aws_cdk_0cae9daa.IInspectable, _aws_sagemaker_2f7a2e3e.ICodeRepositoryRef, _aws_cdk_0cae9daa.ITaggable)
 class CfnCodeRepository(
     _aws_cdk_0cae9daa.CfnResource,
@@ -9260,6 +10580,15 @@ class CfnCodeRepository(
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrCodeRepositoryArn")
+    def attr_code_repository_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the code repository.
+
+        :cloudformationAttribute: CodeRepositoryArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCodeRepositoryArn"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrCodeRepositoryName")
     def attr_code_repository_name(self) -> builtins.str:
         '''The name of the code repository, such as ``myCodeRepo`` .
@@ -9267,14 +10596,6 @@ class CfnCodeRepository(
         :cloudformationAttribute: CodeRepositoryName
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrCodeRepositoryName"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrId")
-    def attr_id(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: Id
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrId"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -54183,14 +55504,6 @@ class CfnNotebookInstance(
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
 
     @builtins.property
-    @jsii.member(jsii_name="attrId")
-    def attr_id(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: Id
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrId"))
-
-    @builtins.property
     @jsii.member(jsii_name="attrNotebookInstanceArn")
     def attr_notebook_instance_arn(self) -> builtins.str:
         '''The Amazon Resource Name (ARN) of the notebook instance.
@@ -54528,7 +55841,7 @@ class CfnNotebookInstance(
             )
 
 
-@jsii.implements(_aws_cdk_0cae9daa.IInspectable, _aws_sagemaker_2f7a2e3e.INotebookInstanceLifecycleConfigRef)
+@jsii.implements(_aws_cdk_0cae9daa.IInspectable, _aws_sagemaker_2f7a2e3e.INotebookInstanceLifecycleConfigRef, _aws_cdk_0cae9daa.ITaggableV2)
 class CfnNotebookInstanceLifecycleConfig(
     _aws_cdk_0cae9daa.CfnResource,
     metaclass=jsii.JSIIMeta,
@@ -54544,6 +55857,7 @@ class CfnNotebookInstanceLifecycleConfig(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_sagemaker as sagemaker
@@ -54555,6 +55869,10 @@ class CfnNotebookInstanceLifecycleConfig(
             )],
             on_start=[sagemaker.CfnNotebookInstanceLifecycleConfig.NotebookInstanceLifecycleHookProperty(
                 content="content"
+            )],
+            tags=[CfnTag(
+                key="key",
+                value="value"
             )]
         )
     '''
@@ -54567,6 +55885,7 @@ class CfnNotebookInstanceLifecycleConfig(
         notebook_instance_lifecycle_config_name: typing.Optional[builtins.str] = None,
         on_create: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Sequence[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnNotebookInstanceLifecycleConfig.NotebookInstanceLifecycleHookProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         on_start: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Sequence[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnNotebookInstanceLifecycleConfig.NotebookInstanceLifecycleHookProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_aws_cdk_0cae9daa.CfnTag", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SageMaker::NotebookInstanceLifecycleConfig``.
 
@@ -54575,6 +55894,7 @@ class CfnNotebookInstanceLifecycleConfig(
         :param notebook_instance_lifecycle_config_name: The name of the lifecycle configuration.
         :param on_create: A shell script that runs only once, when you create a notebook instance. The shell script must be a base64-encoded string.
         :param on_start: A shell script that runs every time you start a notebook instance, including when you create the notebook instance. The shell script must be a base64-encoded string.
+        :param tags: An array of key-value pairs to apply to this resource.
         '''
         if __debug__:
             type_hints = cached_type_hints(_typecheckingstub__518043e7ff4ea7436d95b52252fafb48d756a1ef9372e9e1109fbba43ece3446)
@@ -54584,6 +55904,7 @@ class CfnNotebookInstanceLifecycleConfig(
             notebook_instance_lifecycle_config_name=notebook_instance_lifecycle_config_name,
             on_create=on_create,
             on_start=on_start,
+            tags=tags,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -54645,12 +55966,13 @@ class CfnNotebookInstanceLifecycleConfig(
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
 
     @builtins.property
-    @jsii.member(jsii_name="attrId")
-    def attr_id(self) -> builtins.str:
+    @jsii.member(jsii_name="attrNotebookInstanceLifecycleConfigArn")
+    def attr_notebook_instance_lifecycle_config_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the lifecycle configuration.
+
+        :cloudformationAttribute: NotebookInstanceLifecycleConfigArn
         '''
-        :cloudformationAttribute: Id
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrId"))
+        return typing.cast(builtins.str, jsii.get(self, "attrNotebookInstanceLifecycleConfigArn"))
 
     @builtins.property
     @jsii.member(jsii_name="attrNotebookInstanceLifecycleConfigName")
@@ -54660,6 +55982,12 @@ class CfnNotebookInstanceLifecycleConfig(
         :cloudformationAttribute: NotebookInstanceLifecycleConfigName
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrNotebookInstanceLifecycleConfigName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> "_aws_cdk_0cae9daa.TagManager":
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast("_aws_cdk_0cae9daa.TagManager", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -54731,6 +56059,22 @@ class CfnNotebookInstanceLifecycleConfig(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "onStart", value) # pyright: ignore[reportArgumentType]
 
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List["_aws_cdk_0cae9daa.CfnTag"]]:
+        '''An array of key-value pairs to apply to this resource.'''
+        return typing.cast(typing.Optional[typing.List["_aws_cdk_0cae9daa.CfnTag"]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(
+        self,
+        value: typing.Optional[typing.List["_aws_cdk_0cae9daa.CfnTag"]],
+    ) -> None:
+        if __debug__:
+            type_hints = cached_type_hints(_typecheckingstub__1c49cd0e01db988cfdf8354ea37a34bd35a6bb004bcbcc36df6a80da8d5cf9fe)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_sagemaker.CfnNotebookInstanceLifecycleConfig.NotebookInstanceLifecycleHookProperty",
         jsii_struct_bases=[],
@@ -54792,6 +56136,7 @@ class CfnNotebookInstanceLifecycleConfig(
         "notebook_instance_lifecycle_config_name": "notebookInstanceLifecycleConfigName",
         "on_create": "onCreate",
         "on_start": "onStart",
+        "tags": "tags",
     },
 )
 class CfnNotebookInstanceLifecycleConfigProps:
@@ -54801,18 +56146,21 @@ class CfnNotebookInstanceLifecycleConfigProps:
         notebook_instance_lifecycle_config_name: typing.Optional[builtins.str] = None,
         on_create: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Sequence[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnNotebookInstanceLifecycleConfig.NotebookInstanceLifecycleHookProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         on_start: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Sequence[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnNotebookInstanceLifecycleConfig.NotebookInstanceLifecycleHookProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_aws_cdk_0cae9daa.CfnTag", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnNotebookInstanceLifecycleConfig``.
 
         :param notebook_instance_lifecycle_config_name: The name of the lifecycle configuration.
         :param on_create: A shell script that runs only once, when you create a notebook instance. The shell script must be a base64-encoded string.
         :param on_start: A shell script that runs every time you start a notebook instance, including when you create the notebook instance. The shell script must be a base64-encoded string.
+        :param tags: An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-notebookinstancelifecycleconfig.html
         :exampleMetadata: fixture=_generated
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_sagemaker as sagemaker
@@ -54824,6 +56172,10 @@ class CfnNotebookInstanceLifecycleConfigProps:
                 )],
                 on_start=[sagemaker.CfnNotebookInstanceLifecycleConfig.NotebookInstanceLifecycleHookProperty(
                     content="content"
+                )],
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
                 )]
             )
         '''
@@ -54832,6 +56184,7 @@ class CfnNotebookInstanceLifecycleConfigProps:
             check_type(argname="argument notebook_instance_lifecycle_config_name", value=notebook_instance_lifecycle_config_name, expected_type=type_hints["notebook_instance_lifecycle_config_name"])
             check_type(argname="argument on_create", value=on_create, expected_type=type_hints["on_create"])
             check_type(argname="argument on_start", value=on_start, expected_type=type_hints["on_start"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if notebook_instance_lifecycle_config_name is not None:
             self._values["notebook_instance_lifecycle_config_name"] = notebook_instance_lifecycle_config_name
@@ -54839,6 +56192,8 @@ class CfnNotebookInstanceLifecycleConfigProps:
             self._values["on_create"] = on_create
         if on_start is not None:
             self._values["on_start"] = on_start
+        if tags is not None:
+            self._values["tags"] = tags
 
     @builtins.property
     def notebook_instance_lifecycle_config_name(self) -> typing.Optional[builtins.str]:
@@ -54874,6 +56229,15 @@ class CfnNotebookInstanceLifecycleConfigProps:
         '''
         result = self._values.get("on_start")
         return typing.cast(typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.List[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnNotebookInstanceLifecycleConfig.NotebookInstanceLifecycleHookProperty"]]]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List["_aws_cdk_0cae9daa.CfnTag"]]:
+        '''An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-notebookinstancelifecycleconfig.html#cfn-sagemaker-notebookinstancelifecycleconfig-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List["_aws_cdk_0cae9daa.CfnTag"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -68033,6 +69397,8 @@ class CfnWorkteam(
                     oidc_groups=["oidcGroups"]
                 )
             )],
+        
+            # the properties below are optional
             notification_configuration=sagemaker.CfnWorkteam.NotificationConfigurationProperty(
                 notification_topic_arn="notificationTopicArn"
             ),
@@ -68050,8 +69416,8 @@ class CfnWorkteam(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        description: typing.Optional[builtins.str] = None,
-        member_definitions: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Sequence[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnWorkteam.MemberDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        description: builtins.str,
+        member_definitions: typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Sequence[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnWorkteam.MemberDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]],
         notification_configuration: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnWorkteam.NotificationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["_aws_cdk_0cae9daa.CfnTag", typing.Dict[builtins.str, typing.Any]]]] = None,
         workforce_name: typing.Optional[builtins.str] = None,
@@ -68140,12 +69506,13 @@ class CfnWorkteam(
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
 
     @builtins.property
-    @jsii.member(jsii_name="attrId")
-    def attr_id(self) -> builtins.str:
+    @jsii.member(jsii_name="attrWorkteamArn")
+    def attr_workteam_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) that identifies the work team.
+
+        :cloudformationAttribute: WorkteamArn
         '''
-        :cloudformationAttribute: Id
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrId"))
+        return typing.cast(builtins.str, jsii.get(self, "attrWorkteamArn"))
 
     @builtins.property
     @jsii.member(jsii_name="attrWorkteamName")
@@ -68180,12 +69547,12 @@ class CfnWorkteam(
 
     @builtins.property
     @jsii.member(jsii_name="description")
-    def description(self) -> typing.Optional[builtins.str]:
+    def description(self) -> builtins.str:
         '''A description of the work team.'''
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
+        return typing.cast(builtins.str, jsii.get(self, "description"))
 
     @description.setter
-    def description(self, value: typing.Optional[builtins.str]) -> None:
+    def description(self, value: builtins.str) -> None:
         if __debug__:
             type_hints = cached_type_hints(_typecheckingstub__3e51dbce26db436df412eb92734802d8f2f60a15c55f5bc26f1c0f647a4b427f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -68195,14 +69562,14 @@ class CfnWorkteam(
     @jsii.member(jsii_name="memberDefinitions")
     def member_definitions(
         self,
-    ) -> typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.List[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnWorkteam.MemberDefinitionProperty"]]]]:
+    ) -> typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.List[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnWorkteam.MemberDefinitionProperty"]]]:
         '''A list of ``MemberDefinition`` objects that contains objects that identify the workers that make up the work team.'''
-        return typing.cast(typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.List[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnWorkteam.MemberDefinitionProperty"]]]], jsii.get(self, "memberDefinitions"))
+        return typing.cast(typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.List[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnWorkteam.MemberDefinitionProperty"]]], jsii.get(self, "memberDefinitions"))
 
     @member_definitions.setter
     def member_definitions(
         self,
-        value: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.List[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnWorkteam.MemberDefinitionProperty"]]]],
+        value: typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.List[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnWorkteam.MemberDefinitionProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = cached_type_hints(_typecheckingstub__fdde5f079b81bfe00bc13e6bfa94c26420f9144669b455ef4c46b615c569713e)
@@ -68513,7 +69880,7 @@ class CfnWorkteam(
 
             One to ten groups can be used to create a single private work team. When you add a user group to the list of ``Groups`` , you can add that user group to one or more private work teams. If you add a user group to a private work team, all workers in that user group are added to the work team.
 
-            :param oidc_groups: 
+            :param oidc_groups: A list of OIDC group names whose members will be part of this workteam.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-workteam-oidcmemberdefinition.html
             :exampleMetadata: fixture=_generated
@@ -68537,7 +69904,8 @@ class CfnWorkteam(
 
         @builtins.property
         def oidc_groups(self) -> typing.List[builtins.str]:
-            '''
+            '''A list of OIDC group names whose members will be part of this workteam.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-workteam-oidcmemberdefinition.html#cfn-sagemaker-workteam-oidcmemberdefinition-oidcgroups
             '''
             result = self._values.get("oidc_groups")
@@ -68572,8 +69940,8 @@ class CfnWorkteamProps:
     def __init__(
         self,
         *,
-        description: typing.Optional[builtins.str] = None,
-        member_definitions: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Sequence[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnWorkteam.MemberDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        description: builtins.str,
+        member_definitions: typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Sequence[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnWorkteam.MemberDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]],
         notification_configuration: typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.Union["CfnWorkteam.NotificationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["_aws_cdk_0cae9daa.CfnTag", typing.Dict[builtins.str, typing.Any]]]] = None,
         workforce_name: typing.Optional[builtins.str] = None,
@@ -68610,6 +69978,8 @@ class CfnWorkteamProps:
                         oidc_groups=["oidcGroups"]
                     )
                 )],
+            
+                # the properties below are optional
                 notification_configuration=sagemaker.CfnWorkteam.NotificationConfigurationProperty(
                     notification_topic_arn="notificationTopicArn"
                 ),
@@ -68629,11 +69999,10 @@ class CfnWorkteamProps:
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument workforce_name", value=workforce_name, expected_type=type_hints["workforce_name"])
             check_type(argname="argument workteam_name", value=workteam_name, expected_type=type_hints["workteam_name"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {}
-        if description is not None:
-            self._values["description"] = description
-        if member_definitions is not None:
-            self._values["member_definitions"] = member_definitions
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "description": description,
+            "member_definitions": member_definitions,
+        }
         if notification_configuration is not None:
             self._values["notification_configuration"] = notification_configuration
         if tags is not None:
@@ -68644,18 +70013,19 @@ class CfnWorkteamProps:
             self._values["workteam_name"] = workteam_name
 
     @builtins.property
-    def description(self) -> typing.Optional[builtins.str]:
+    def description(self) -> builtins.str:
         '''A description of the work team.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-workteam.html#cfn-sagemaker-workteam-description
         '''
         result = self._values.get("description")
-        return typing.cast(typing.Optional[builtins.str], result)
+        assert result is not None, "Required property 'description' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def member_definitions(
         self,
-    ) -> typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.List[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnWorkteam.MemberDefinitionProperty"]]]]:
+    ) -> typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.List[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnWorkteam.MemberDefinitionProperty"]]]:
         '''A list of ``MemberDefinition`` objects that contains objects that identify the workers that make up the work team.
 
         Workforces can be created using Amazon Cognito or your own OIDC Identity Provider (IdP). For private workforces created using Amazon Cognito use ``CognitoMemberDefinition`` . For workforces created using your own OIDC identity provider (IdP) use ``OidcMemberDefinition`` .
@@ -68663,7 +70033,8 @@ class CfnWorkteamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-workteam.html#cfn-sagemaker-workteam-memberdefinitions
         '''
         result = self._values.get("member_definitions")
-        return typing.cast(typing.Optional[typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.List[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnWorkteam.MemberDefinitionProperty"]]]], result)
+        assert result is not None, "Required property 'member_definitions' is missing"
+        return typing.cast(typing.Union["_aws_cdk_0cae9daa.IResolvable", typing.List[typing.Union["_aws_cdk_0cae9daa.IResolvable", "CfnWorkteam.MemberDefinitionProperty"]]], result)
 
     @builtins.property
     def notification_configuration(
@@ -68880,6 +70251,8 @@ typing.cast(typing.Any, IPipeline).__jsii_proxy_class__ = lambda : _IPipelinePro
 
 
 __all__ = [
+    "CfnAIWorkloadConfig",
+    "CfnAIWorkloadConfigProps",
     "CfnAction",
     "CfnActionProps",
     "CfnAlgorithm",
@@ -68892,6 +70265,8 @@ __all__ = [
     "CfnArtifactProps",
     "CfnCluster",
     "CfnClusterProps",
+    "CfnClusterSchedulerConfig",
+    "CfnClusterSchedulerConfigProps",
     "CfnCodeRepository",
     "CfnCodeRepositoryProps",
     "CfnContext",
@@ -68975,6 +70350,119 @@ __all__ = [
 ]
 
 publication.publish()
+
+def _typecheckingstub__20f635cf48841c34b073bba1432128ccaef46412b2ad638eddddb3f2c48e4163(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    ai_workload_config_name: builtins.str,
+    ai_workload_configs: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnAIWorkloadConfig.AIWorkloadConfigsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    dataset_config: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnAIWorkloadConfig.AIDatasetConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_aws_cdk_0cae9daa.CfnTag, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0b26e09857fd6f35dfc4c1ee7b256f1e0ef04aea6ca6e5e1c3f8b66a24f290ae(
+    resource: _aws_sagemaker_2f7a2e3e.IAIWorkloadConfigRef,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6f100d1f6352e80f8bf3e92127990e4c627de7b13c2991bbc81d5c4be8c72dea(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c47734492e8781c9979b3bf00668349067603745ae53157f7e446d0e3f62a177(
+    inspector: _aws_cdk_0cae9daa.TreeInspector,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__728a78ad0915bc9d7e57619eca3218e0833190ef7307407a7d4b2d3e63e80e7d(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fa5b0159cd5ea05c77acf6b7064c9e8765ec53960a561f67c261dc405e596288(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c48148fd798add16b001e48b756d7a862dd23cc1be15b06a4129032752d16d4c(
+    value: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, CfnAIWorkloadConfig.AIWorkloadConfigsProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e0e3b65a5c6d3d8ec840f7ef31dea796967f90db54486fc43b3a8f8624daff6b(
+    value: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, CfnAIWorkloadConfig.AIDatasetConfigProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4ab9263c0f1637a5475bf02da96a594a18cd63d8e3aa2386b5124faa8603ec33(
+    value: typing.Optional[typing.List[_aws_cdk_0cae9daa.CfnTag]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__db7115409dd65b840e4f437f78ef854e197ef4403dc6f9f290e117f9cca82efb(
+    *,
+    input_data_config: typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Sequence[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnAIWorkloadConfig.AIWorkloadInputDataConfigProperty, typing.Dict[builtins.str, typing.Any]]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4f9b81f5ed2e2360b7b0c88c81cccc00ebe68a1848d8a8b63e70cdc4d696a5d4(
+    *,
+    workload_spec: typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnAIWorkloadConfig.WorkloadSpecProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a4bfae899178e6e1e49b0220473ea1ff9873d1960b8a0d96551bfe27d625c244(
+    *,
+    s3_data_source: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnAIWorkloadConfig.AIWorkloadS3DataSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7cbac76d235380a689bb212b4a19c3ada5bc8996520bda09464d2287cd4a1014(
+    *,
+    channel_name: builtins.str,
+    data_source: typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnAIWorkloadConfig.AIWorkloadDataSourceProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__93bad8b0eb473057b3bea8ef82641d81c6bbd14a5b73410283488bc087d3ad2b(
+    *,
+    s3_uri: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c6f67b440708b02579f33f6dc67cc019bba17568f1a7381947f66d1a6d21c8a5(
+    *,
+    inline: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__325f04cbeef0a7f10aee7685c605fdf7798c2eef99c9dc1bd8e013e1e62c8795(
+    *,
+    ai_workload_config_name: builtins.str,
+    ai_workload_configs: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnAIWorkloadConfig.AIWorkloadConfigsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    dataset_config: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnAIWorkloadConfig.AIDatasetConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_aws_cdk_0cae9daa.CfnTag, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
 
 def _typecheckingstub__4df85d3bf8185e7c93d6c240e2eb963fb8160a0d6a0b142d2540eee9a18719eb(
     scope: _constructs_77d1e7e8.Construct,
@@ -70076,6 +71564,101 @@ def _typecheckingstub__c8126a53dc1741a2edde75d8d4eca79c53a2294746ea237dfba0097a7
     tags: typing.Optional[typing.Sequence[typing.Union[_aws_cdk_0cae9daa.CfnTag, typing.Dict[builtins.str, typing.Any]]]] = None,
     tiered_storage_config: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnCluster.TieredStorageConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_config: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnCluster.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__07103939e44198ead01dbc429cd557a2bb4e9f5b442276af74809d2330ea841d(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    cluster_arn: builtins.str,
+    name: builtins.str,
+    scheduler_config: typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnClusterSchedulerConfig.SchedulerConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+    description: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_aws_cdk_0cae9daa.CfnTag, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__41846122b3da27d6b04724306ad3483bc711092317ce1ea5feecce629208939b(
+    resource: _aws_sagemaker_2f7a2e3e.IClusterSchedulerConfigRef,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f8193645b73ccd4fe5e2aa70bff276cb737d9a17260457b85fa43016a395b582(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0d524d643c7bd16392b85f7dac9d8de9632a67432ba79601b8f83e52b655048e(
+    inspector: _aws_cdk_0cae9daa.TreeInspector,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1b5bf1027ed6aada56a1b7413a562800f882060bcc923bfce5d570cd1f719c8d(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a40508206f2b16c2f665924bfb2e07dd456e25e242b3060bddf23673bc84f7dd(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1ddffe18a932cb91a460a21e99160d53f801dd64e3b89bae20f758e4e2c1e844(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8341504e1f5c879af9f59439db094b4c30a1aa079dbbbde99185981e8c79c742(
+    value: typing.Union[_aws_cdk_0cae9daa.IResolvable, CfnClusterSchedulerConfig.SchedulerConfigProperty],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e6f7817f2ce9fa0d831d48636067eed994e3d124d66182e1c3c4e1a2c9d187a3(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1887249cfcb685372db3f19f706de201a2b37cab8120584f5c6cc8fe4aa91766(
+    value: typing.Optional[typing.List[_aws_cdk_0cae9daa.CfnTag]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__273b4fdf062e6568eba8a14b062d32c6b1e6f6ec2f5b671948f707eb8e5c8dd8(
+    *,
+    name: builtins.str,
+    weight: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f4228b8e433cfd39e6612ae172e5b9f6fed26e9d5ae9f4ed351f6f0be006a8c0(
+    *,
+    fair_share: typing.Optional[builtins.str] = None,
+    idle_resource_sharing: typing.Optional[builtins.str] = None,
+    priority_classes: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Sequence[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnClusterSchedulerConfig.PriorityClassProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__add90296b89326947dc6df028d5d7850c8db2eb2d97f38d0119833292f2219af(
+    *,
+    cluster_arn: builtins.str,
+    name: builtins.str,
+    scheduler_config: typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnClusterSchedulerConfig.SchedulerConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+    description: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_aws_cdk_0cae9daa.CfnTag, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -75523,6 +77106,7 @@ def _typecheckingstub__518043e7ff4ea7436d95b52252fafb48d756a1ef9372e9e1109fbba43
     notebook_instance_lifecycle_config_name: typing.Optional[builtins.str] = None,
     on_create: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Sequence[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnNotebookInstanceLifecycleConfig.NotebookInstanceLifecycleHookProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     on_start: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Sequence[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnNotebookInstanceLifecycleConfig.NotebookInstanceLifecycleHookProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_aws_cdk_0cae9daa.CfnTag, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -75569,6 +77153,12 @@ def _typecheckingstub__b5b4ce7c5cf92409ac58f3fedeef60cad5fa7a2d8c43865b05accd56e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1c49cd0e01db988cfdf8354ea37a34bd35a6bb004bcbcc36df6a80da8d5cf9fe(
+    value: typing.Optional[typing.List[_aws_cdk_0cae9daa.CfnTag]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3d974a645e6211d4f3c43552b14b1faa8fd797600d1731ea384d007af9996c7a(
     *,
     content: typing.Optional[builtins.str] = None,
@@ -75581,6 +77171,7 @@ def _typecheckingstub__39107b19e23bf4f67fa7869a85622b221e9d7f93297b32d555adbc59a
     notebook_instance_lifecycle_config_name: typing.Optional[builtins.str] = None,
     on_create: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Sequence[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnNotebookInstanceLifecycleConfig.NotebookInstanceLifecycleHookProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     on_start: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Sequence[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnNotebookInstanceLifecycleConfig.NotebookInstanceLifecycleHookProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_aws_cdk_0cae9daa.CfnTag, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -77211,8 +78802,8 @@ def _typecheckingstub__db9eb282091c745abfbd70a294ab8c168a305af7f2b4e80c34f292cc2
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    description: typing.Optional[builtins.str] = None,
-    member_definitions: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Sequence[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnWorkteam.MemberDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    description: builtins.str,
+    member_definitions: typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Sequence[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnWorkteam.MemberDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]],
     notification_configuration: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnWorkteam.NotificationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_aws_cdk_0cae9daa.CfnTag, typing.Dict[builtins.str, typing.Any]]]] = None,
     workforce_name: typing.Optional[builtins.str] = None,
@@ -77246,13 +78837,13 @@ def _typecheckingstub__d08e1e1dec47e610599cd87e4e531705da6fe7e63bfea4097a53c4a1e
     pass
 
 def _typecheckingstub__3e51dbce26db436df412eb92734802d8f2f60a15c55f5bc26f1c0f647a4b427f(
-    value: typing.Optional[builtins.str],
+    value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__fdde5f079b81bfe00bc13e6bfa94c26420f9144669b455ef4c46b615c569713e(
-    value: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.List[typing.Union[_aws_cdk_0cae9daa.IResolvable, CfnWorkteam.MemberDefinitionProperty]]]],
+    value: typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.List[typing.Union[_aws_cdk_0cae9daa.IResolvable, CfnWorkteam.MemberDefinitionProperty]]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -77314,8 +78905,8 @@ def _typecheckingstub__74f817ac3b5bece92b045cdf0b84972864f8be367364ba082cd53e173
 
 def _typecheckingstub__6ed0fa104d17e6f2523c2e22c3478df23a7c14bf46bbb1dc39031a5c0d6d362e(
     *,
-    description: typing.Optional[builtins.str] = None,
-    member_definitions: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Sequence[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnWorkteam.MemberDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    description: builtins.str,
+    member_definitions: typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Sequence[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnWorkteam.MemberDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]],
     notification_configuration: typing.Optional[typing.Union[_aws_cdk_0cae9daa.IResolvable, typing.Union[CfnWorkteam.NotificationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_aws_cdk_0cae9daa.CfnTag, typing.Dict[builtins.str, typing.Any]]]] = None,
     workforce_name: typing.Optional[builtins.str] = None,
