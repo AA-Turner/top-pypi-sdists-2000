@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-
 from io import BytesIO
+from pathlib import Path
 
 import pytest
 
@@ -9,6 +8,9 @@ from thriftpy2 import load
 from thriftpy2.protocol import binary as proto
 from thriftpy2.thrift import TPayload, TType
 from thriftpy2.utils import hexlify, serialize
+from thriftpy2.transport.memory import TMemoryBuffer
+
+TEST_DIR = Path(__file__).parent
 
 
 class TItem(TPayload):
@@ -173,6 +175,56 @@ def test_write_huge_struct():
     proto.TBinaryProtocol(b).write_struct(item)
 
 
+@pytest.fixture
+def buffer_supports_non_contiguous():
+    """Pypy 3.9 and 3.10 feature BytesIO supporting non-contiguous input data."""
+    b = BytesIO()
+    try:
+        b.write(memoryview(b"abcd")[::-1])
+    except BufferError:
+        return False
+    return True
+
+
+def test_write_memoryview(buffer_supports_non_contiguous):
+    # contiguous 8-bit items
+    b = TMemoryBuffer()
+    data = memoryview(b"hello world!\x01")
+    proto.write_val(b, TType.BINARY, data)
+    b.flush()
+    assert "00 00 00 0d 68 65 6c 6c 6f 20 77 6f 72 6c 64 21 01" == \
+        hexlify(b.getvalue())
+
+    # not 8-bit items
+    b = TMemoryBuffer()
+    data = memoryview(b"0000111122223333").cast("h")
+    proto.write_val(b, TType.BINARY, data)
+    b.flush()
+    assert "00 00 00 10 30 30 30 30 31 31 31 31 32 32 32 32 33 33 33 33" == \
+        hexlify(b.getvalue())
+
+    # not contiguous
+    b = TMemoryBuffer()
+    data = memoryview(b"0123")[::-1]
+    if not buffer_supports_non_contiguous:
+        with pytest.raises(BufferError, match="contiguous"):
+            proto.write_val(b, TType.BINARY, data)
+    else:
+        proto.write_val(b, TType.BINARY, data)
+        b.flush()
+        assert "00 00 00 04 33 32 31 30" == \
+            hexlify(b.getvalue())
+
+
+def test_write_bytearray():
+    b = TMemoryBuffer()
+    proto.write_val(b, TType.BINARY, bytearray("hello world!", "utf-8"))
+    b.flush()
+    assert "00 00 00 0c 68 65 6c 6c 6f 20 77 6f 72 6c 64 21" == \
+        hexlify(b.getvalue())
+
+
+
 @pytest.mark.skipif(not _compat.CYTHON, reason="cybin required")
 def test_string_binary_equivalency():
     from thriftpy2.protocol.binary import TBinaryProtocolFactory
@@ -182,7 +234,7 @@ def test_string_binary_equivalency():
 
 
 def string_binary_equivalency(proto_factory):
-    container = load("./container.thrift")
+    container = load(TEST_DIR / "container.thrift")
     l_item = container.ListItem()
     l_item.list_string = ['foo', 'bar']
     l_item.list_list_string = [['foo', 'bar']]
@@ -232,3 +284,121 @@ def string_binary_equivalency(proto_factory):
 
     assert serialize(l_struct, proto_factory=proto_factory()) == serialize(
         bl_struct, proto_factory=proto_factory())
+
+
+class TTree(TPayload):
+    thrift_spec = {
+        1: (TType.I32, "v", False),
+        2: (TType.STRUCT, "child", None, False),
+        3: (TType.LIST, "children", None, False),
+    }
+    default_spec = [("v", None), ("child", None), ("children", None)]
+
+
+TTree.thrift_spec[2] = (TType.STRUCT, "child", TTree, False)
+TTree.thrift_spec[3] = (TType.LIST, "children", (TType.STRUCT, TTree), False)
+
+
+def make_tree(depth, in_list=False):
+    root = TTree(v=0)
+    node = root
+    for i in range(1, depth + 1):
+        child = TTree(v=i)
+        if in_list:
+            node.children = [child]
+        else:
+            node.child = child
+        node = child
+    return root
+
+
+def tree_depth(obj):
+    depth = 0
+    while obj.child is not None or obj.children:
+        obj = obj.child if obj.child is not None else obj.children[0]
+        depth += 1
+    return depth
+
+
+def encode(obj, **kwargs):
+    b = BytesIO()
+    proto.TBinaryProtocol(b, **kwargs).write_struct(obj)
+    return b.getvalue()
+
+
+def decode(blob, cls=TTree, **kwargs):
+    obj = cls()
+    proto.TBinaryProtocol(BytesIO(blob), **kwargs).read_struct(obj)
+    return obj
+
+
+# The root struct counts as a level too, and the extra struct above the list
+# chain makes it overflow on a list instead of a struct.
+LIMIT = proto.DEFAULT_MAX_DEPTH
+DEEPEST = make_tree(LIMIT - 1)
+DEEPEST_LIST = make_tree((LIMIT - 2) // 2, in_list=True)
+TOO_DEEP = make_tree(LIMIT)
+TOO_DEEP_LIST = TTree(v=0, child=make_tree(LIMIT // 2, in_list=True))
+
+
+def test_nested_struct_within_limit():
+    assert tree_depth(decode(encode(DEEPEST))) == LIMIT - 1
+    assert tree_depth(decode(encode(DEEPEST_LIST))) == (LIMIT - 2) // 2
+
+
+def test_deeply_nested_write_raises_recursion_error():
+    with pytest.raises(RecursionError, match="while writing a Thrift struct"):
+        encode(TOO_DEEP)
+    with pytest.raises(RecursionError,
+                       match="while writing a Thrift container"):
+        encode(TOO_DEEP_LIST)
+
+
+def test_deeply_nested_read_raises_recursion_error():
+    blob = encode(TOO_DEEP, max_depth=LIMIT + 8)
+    with pytest.raises(RecursionError, match="while reading a Thrift struct"):
+        decode(blob)
+    blob = encode(TOO_DEEP_LIST, max_depth=LIMIT + 8)
+    with pytest.raises(RecursionError,
+                       match="while reading a Thrift container"):
+        decode(blob)
+
+
+def test_deeply_nested_skip_raises_recursion_error():
+    # TItem has a list where TTree has its child struct, so the subtree is
+    # skipped rather than read.
+    blob = encode(TOO_DEEP, max_depth=LIMIT + 8)
+    with pytest.raises(RecursionError, match="while skipping a Thrift struct"):
+        decode(blob, TItem)
+    with pytest.raises(RecursionError):
+        proto.skip(BytesIO(blob), TType.STRUCT)
+    with pytest.raises(RecursionError):
+        proto.TBinaryProtocol(BytesIO(blob)).skip(TType.STRUCT)
+
+    blob = encode(TOO_DEEP_LIST, max_depth=LIMIT + 8)
+    with pytest.raises(RecursionError,
+                       match="while skipping a Thrift container"):
+        decode(blob, TItem)
+
+
+def test_max_depth_is_configurable():
+    depth = LIMIT * 4
+    obj = make_tree(depth)
+    blob = encode(obj, max_depth=depth + 1)
+    assert tree_depth(decode(blob, max_depth=depth + 1)) == depth
+    decode(blob, TItem, max_depth=depth + 1)
+    proto.TBinaryProtocol(BytesIO(blob), max_depth=depth + 1).skip(TType.STRUCT)
+
+    with pytest.raises(RecursionError):
+        encode(obj, max_depth=depth)
+    with pytest.raises(RecursionError):
+        decode(blob, max_depth=depth)
+    with pytest.raises(RecursionError):
+        decode(blob, TItem, max_depth=depth)
+
+    factory = proto.TBinaryProtocolFactory(max_depth=depth + 1)
+    p = factory.get_protocol(BytesIO(blob))
+    assert p.max_depth == depth + 1
+    obj = TTree()
+    p.read_struct(obj)
+    assert tree_depth(obj) == depth

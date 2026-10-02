@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import json
 import logging
 import sys
 import time
@@ -21,7 +22,7 @@ import uuid
 from newrelic.api.function_trace import FunctionTrace
 from newrelic.api.time_trace import current_trace, get_trace_linking_metadata
 from newrelic.api.transaction import current_transaction
-from newrelic.common.llm_utils import AsyncGeneratorProxy, GeneratorProxy, _get_llm_metadata
+from newrelic.common.llm_utils import AsyncLLMStreamProxy, LLMStreamProxy, _get_llm_metadata
 from newrelic.common.object_wrapper import ObjectProxy, wrap_function_wrapper
 from newrelic.common.package_version_utils import get_package_version
 from newrelic.common.signature import bind_args
@@ -161,9 +162,11 @@ class AgentObjectProxy(ObjectProxy):
         agent_id = str(uuid.uuid4())
         agent_event_dict = _construct_base_agent_event_dict(agent_name, agent_id, transaction)
         function_trace_name = f"invoke/{agent_name}"
+        agentic_subcomponent_data = {"type": "APM-AI_AGENT", "name": agent_name}
 
         ft = FunctionTrace(name=function_trace_name, group="Llm/agent/LangChain")
         ft.__enter__()
+        ft._add_agent_attribute("subcomponent", json.dumps(agentic_subcomponent_data))
         try:
             return_val = self.__wrapped__.invoke(*args, **kwargs)
         except Exception:
@@ -189,9 +192,11 @@ class AgentObjectProxy(ObjectProxy):
         agent_id = str(uuid.uuid4())
         agent_event_dict = _construct_base_agent_event_dict(agent_name, agent_id, transaction)
         function_trace_name = f"ainvoke/{agent_name}"
+        agentic_subcomponent_data = {"type": "APM-AI_AGENT", "name": agent_name}
 
         ft = FunctionTrace(name=function_trace_name, group="Llm/agent/LangChain")
         ft.__enter__()
+        ft._add_agent_attribute("subcomponent", json.dumps(agentic_subcomponent_data))
         try:
             return_val = await self.__wrapped__.ainvoke(*args, **kwargs)
         except Exception:
@@ -217,12 +222,14 @@ class AgentObjectProxy(ObjectProxy):
         agent_id = str(uuid.uuid4())
         agent_event_dict = _construct_base_agent_event_dict(agent_name, agent_id, transaction)
         function_trace_name = f"stream/{agent_name}"
+        agentic_subcomponent_data = {"type": "APM-AI_AGENT", "name": agent_name}
 
         ft = FunctionTrace(name=function_trace_name, group="Llm/agent/LangChain")
         ft.__enter__()
+        ft._add_agent_attribute("subcomponent", json.dumps(agentic_subcomponent_data))
         try:
             return_val = self.__wrapped__.stream(*args, **kwargs)
-            return_val = GeneratorProxy(
+            return_val = LLMStreamProxy(
                 return_val,
                 on_stop_iteration=self._nr_on_stop_iteration(ft, agent_event_dict),
                 on_error=self._nr_on_error(ft, agent_event_dict, agent_id),
@@ -242,12 +249,14 @@ class AgentObjectProxy(ObjectProxy):
         agent_id = str(uuid.uuid4())
         agent_event_dict = _construct_base_agent_event_dict(agent_name, agent_id, transaction)
         function_trace_name = f"astream/{agent_name}"
+        agentic_subcomponent_data = {"type": "APM-AI_AGENT", "name": agent_name}
 
         ft = FunctionTrace(name=function_trace_name, group="Llm/agent/LangChain")
         ft.__enter__()
+        ft._add_agent_attribute("subcomponent", json.dumps(agentic_subcomponent_data))
         try:
             return_val = self.__wrapped__.astream(*args, **kwargs)
-            return_val = AsyncGeneratorProxy(
+            return_val = AsyncLLMStreamProxy(
                 return_val,
                 on_stop_iteration=self._nr_on_stop_iteration(ft, agent_event_dict),
                 on_error=self._nr_on_error(ft, agent_event_dict, agent_id),
@@ -258,6 +267,118 @@ class AgentObjectProxy(ObjectProxy):
 
         return return_val
 
+    def stream_events(self, *args, **kwargs):
+        try:
+            bound_args = bind_args(self.__wrapped__.stream_events, args, kwargs)
+            api_version = bound_args.get("version")
+        except Exception:
+            # If we can't determine which version of the API this is,
+            # exit early to avoid breaking the API.
+            return self.__wrapped__.stream_events(*args, **kwargs)
+
+        if api_version == "v3":
+            return self._nr_stream_events_v3(*args, **kwargs)
+        else:
+            # Unsupported/unknown version, return without disrupting the API's return value.
+            return self.__wrapped__.stream_events(*args, **kwargs)
+
+    def _nr_stream_events_v3(self, *args, **kwargs):
+        transaction = current_transaction()
+        if not transaction:
+            return self.__wrapped__.stream_events(*args, **kwargs)
+
+        agent_name = getattr(self.__wrapped__, "name", "agent")
+        agent_id = str(uuid.uuid4())
+        agent_event_dict = _construct_base_agent_event_dict(agent_name, agent_id, transaction)
+        function_trace_name = f"stream_events/{agent_name}"
+        agentic_subcomponent_data = {"type": "APM-AI_AGENT", "name": agent_name}
+
+        ft = FunctionTrace(name=function_trace_name, group="Llm/agent/LangChain")
+        ft.__enter__()
+        ft._add_agent_attribute("subcomponent", json.dumps(agentic_subcomponent_data))
+        try:
+            # Returns a GraphRunStream object which we instrument, but requires the
+            # context from this agent invocation to be attached so we can send events
+            # on completion.
+            stream = self.__wrapped__.stream_events(*args, **kwargs)
+        except Exception:
+            self._nr_on_error(ft, agent_event_dict, agent_id)(transaction)
+            raise
+
+        self._nr_attach_graph_run_stream_context(stream, ft, agent_event_dict, agent_id)
+        return stream
+
+    def astream_events(self, *args, **kwargs):
+        # v3 Support
+        try:
+            bound_args = bind_args(self.__wrapped__.astream_events, args, kwargs)
+            api_version = bound_args.get("version")
+        except Exception:
+            # If we can't determine which version of the API this is,
+            # exit early to avoid breaking the API.
+            return self.__wrapped__.astream_events(*args, **kwargs)
+
+        if api_version in {"v1", "v2"}:
+            return self._nr_astream_events_v1_v2(*args, **kwargs)
+        elif api_version == "v3":
+            return self._nr_astream_events_v3(*args, **kwargs)
+        else:
+            # Unknown API version, return without disrupting the API's return value
+            return self.__wrapped__.astream_events(*args, **kwargs)
+
+    def _nr_astream_events_v1_v2(self, *args, **kwargs):
+        transaction = current_transaction()
+        if not transaction:
+            return self.__wrapped__.astream_events(*args, **kwargs)
+
+        agent_name = getattr(self.__wrapped__, "name", "agent")
+        agent_id = str(uuid.uuid4())
+        agent_event_dict = _construct_base_agent_event_dict(agent_name, agent_id, transaction)
+        function_trace_name = f"astream_events/{agent_name}"
+        agentic_subcomponent_data = {"type": "APM-AI_AGENT", "name": agent_name}
+
+        ft = FunctionTrace(name=function_trace_name, group="Llm/agent/LangChain")
+        ft.__enter__()
+        ft._add_agent_attribute("subcomponent", json.dumps(agentic_subcomponent_data))
+        try:
+            return_val = self.__wrapped__.astream_events(*args, **kwargs)
+            return_val = AsyncLLMStreamProxy(
+                return_val,
+                on_stop_iteration=self._nr_on_stop_iteration(ft, agent_event_dict),
+                on_error=self._nr_on_error(ft, agent_event_dict, agent_id),
+            )
+        except Exception:
+            self._nr_on_error(ft, agent_event_dict, agent_id)(transaction)
+            raise
+
+        return return_val
+
+    async def _nr_astream_events_v3(self, *args, **kwargs):
+        transaction = current_transaction()
+        if not transaction:
+            return await self.__wrapped__.astream_events(*args, **kwargs)
+
+        agent_name = getattr(self.__wrapped__, "name", "agent")
+        agent_id = str(uuid.uuid4())
+        agent_event_dict = _construct_base_agent_event_dict(agent_name, agent_id, transaction)
+        function_trace_name = f"astream_events/{agent_name}"
+        agentic_subcomponent_data = {"type": "APM-AI_AGENT", "name": agent_name}
+
+        ft = FunctionTrace(name=function_trace_name, group="Llm/agent/LangChain")
+        ft.__enter__()
+        ft._add_agent_attribute("subcomponent", json.dumps(agentic_subcomponent_data))
+        try:
+            # Returns a AsyncGraphRunStream object which we instrument, but requires the
+            # context from this agent invocation to be attached so we can send events
+            # on completion.
+            run = await self.__wrapped__.astream_events(*args, **kwargs)
+        except Exception:
+            self._nr_on_error(ft, agent_event_dict, agent_id)(transaction)
+            raise
+
+        self._nr_attach_graph_run_stream_context(run, ft, agent_event_dict, agent_id)
+        return run
+
     def transform(self, *args, **kwargs):
         transaction = current_transaction()
         if not transaction:
@@ -267,12 +388,14 @@ class AgentObjectProxy(ObjectProxy):
         agent_id = str(uuid.uuid4())
         agent_event_dict = _construct_base_agent_event_dict(agent_name, agent_id, transaction)
         function_trace_name = f"stream/{agent_name}"
+        agentic_subcomponent_data = {"type": "APM-AI_AGENT", "name": agent_name}
 
         ft = FunctionTrace(name=function_trace_name, group="Llm/agent/LangChain")
         ft.__enter__()
+        ft._add_agent_attribute("subcomponent", json.dumps(agentic_subcomponent_data))
         try:
             return_val = self.__wrapped__.transform(*args, **kwargs)
-            return_val = GeneratorProxy(
+            return_val = LLMStreamProxy(
                 return_val,
                 on_stop_iteration=self._nr_on_stop_iteration(ft, agent_event_dict),
                 on_error=self._nr_on_error(ft, agent_event_dict, agent_id),
@@ -292,12 +415,14 @@ class AgentObjectProxy(ObjectProxy):
         agent_id = str(uuid.uuid4())
         agent_event_dict = _construct_base_agent_event_dict(agent_name, agent_id, transaction)
         function_trace_name = f"astream/{agent_name}"
+        agentic_subcomponent_data = {"type": "APM-AI_AGENT", "name": agent_name}
 
         ft = FunctionTrace(name=function_trace_name, group="Llm/agent/LangChain")
         ft.__enter__()
+        ft._add_agent_attribute("subcomponent", json.dumps(agentic_subcomponent_data))
         try:
             return_val = self.__wrapped__.atransform(*args, **kwargs)
-            return_val = AsyncGeneratorProxy(
+            return_val = AsyncLLMStreamProxy(
                 return_val,
                 on_stop_iteration=self._nr_on_stop_iteration(ft, agent_event_dict),
                 on_error=self._nr_on_error(ft, agent_event_dict, agent_id),
@@ -319,8 +444,9 @@ class AgentObjectProxy(ObjectProxy):
         return _on_stop_iteration
 
     def _nr_on_error(self, ft, agent_event_dict, agent_id):
-        def _on_error(proxy, transaction):
-            ft.notice_error(attributes={"agent_id": agent_id})
+        def _on_error(proxy, transaction, error=None):
+            # Uses active exception if error=None
+            ft.notice_error(error=error, attributes={"agent_id": agent_id})
             ft.__exit__(*sys.exc_info())
             if agent_event_dict:
                 # If we hit an exception, append the error attribute and duration from the exited function trace
@@ -329,6 +455,22 @@ class AgentObjectProxy(ObjectProxy):
                 agent_event_dict.clear()
 
         return _on_error
+
+    def _nr_attach_graph_run_stream_context(self, graph_run_stream, ft, agent_event_dict, agent_id):
+        on_stop_iteration = self._nr_on_stop_iteration(ft, agent_event_dict)
+        on_error = self._nr_on_error(ft, agent_event_dict, agent_id)
+
+        try:
+            graph_run_stream._nr_on_stop_iteration = on_stop_iteration
+            graph_run_stream._nr_on_error = on_error
+            graph_run_stream._nr_closed = False
+        except Exception:
+            # If we cannot attach context to an unexpected stream type, close the trace so it does
+            # not leak. The agent event will not be recorded in this case.
+            ft.__exit__(None, None, None)
+            _logger.debug("Unable to attach New Relic context to LangChain v3 stream.", exc_info=True)
+
+        return graph_run_stream
 
 
 def bind_submit(func, *args, **kwargs):
@@ -346,7 +488,25 @@ def wrap_ContextThreadPoolExecutor_submit(wrapped, instance, args, kwargs):
     return wrapped(bound_args["func"], *bound_args["args"], **bound_args["kwargs"])
 
 
-def _create_error_vectorstore_events(transaction, search_id, args, kwargs, linking_metadata, wrapped):
+def bind_run_in_executor(executor_or_config, func, *args, **kwargs):
+    return executor_or_config, func, args, kwargs
+
+
+async def wrap_run_in_executor(wrapped, instance, args, kwargs):
+    trace = current_trace()
+    if not trace:
+        return await wrapped(*args, **kwargs)
+
+    try:
+        executor_or_config, func, args, kwargs = bind_run_in_executor(*args, **kwargs)
+    except Exception:
+        return await wrapped(*args, **kwargs)
+
+    func = context_wrapper(func, trace=trace, strict=True)
+    return await wrapped(executor_or_config, func, *args, **kwargs)
+
+
+def _create_error_vectorstore_events(*, transaction, search_id, args, kwargs, linking_metadata, wrapped):
     settings = transaction.settings if transaction.settings is not None else global_settings()
     span_id = linking_metadata.get("span.id")
     trace_id = linking_metadata.get("trace.id")
@@ -393,14 +553,30 @@ async def wrap_asimilarity_search(wrapped, instance, args, kwargs):
     except Exception:
         ft.notice_error(attributes={"vector_store_id": search_id})
         ft.__exit__(*sys.exc_info())
-        _create_error_vectorstore_events(transaction, search_id, args, kwargs, linking_metadata, wrapped)
+        _create_error_vectorstore_events(
+            transaction=transaction,
+            search_id=search_id,
+            args=args,
+            kwargs=kwargs,
+            linking_metadata=linking_metadata,
+            wrapped=wrapped,
+        )
         raise
     ft.__exit__(None, None, None)
 
     if not response:
         return response
 
-    _record_vector_search_success(transaction, linking_metadata, ft, search_id, args, kwargs, response, wrapped)
+    _record_vector_search_success(
+        transaction=transaction,
+        linking_metadata=linking_metadata,
+        ft=ft,
+        search_id=search_id,
+        args=args,
+        kwargs=kwargs,
+        response=response,
+        wrapped=wrapped,
+    )
     return response
 
 
@@ -426,18 +602,34 @@ def wrap_similarity_search(wrapped, instance, args, kwargs):
     except Exception:
         ft.notice_error(attributes={"vector_store_id": search_id})
         ft.__exit__(*sys.exc_info())
-        _create_error_vectorstore_events(transaction, search_id, args, kwargs, linking_metadata, wrapped)
+        _create_error_vectorstore_events(
+            transaction=transaction,
+            search_id=search_id,
+            args=args,
+            kwargs=kwargs,
+            linking_metadata=linking_metadata,
+            wrapped=wrapped,
+        )
         raise
     ft.__exit__(None, None, None)
 
     if not response:
         return response
 
-    _record_vector_search_success(transaction, linking_metadata, ft, search_id, args, kwargs, response, wrapped)
+    _record_vector_search_success(
+        transaction=transaction,
+        linking_metadata=linking_metadata,
+        ft=ft,
+        search_id=search_id,
+        args=args,
+        kwargs=kwargs,
+        response=response,
+        wrapped=wrapped,
+    )
     return response
 
 
-def _record_vector_search_success(transaction, linking_metadata, ft, search_id, args, kwargs, response, wrapped):
+def _record_vector_search_success(*, transaction, linking_metadata, ft, search_id, args, kwargs, response, wrapped):
     settings = transaction.settings if transaction.settings is not None else global_settings()
     bound_args = bind_args(wrapped, args, kwargs)
     request_query = bound_args["query"]
@@ -514,6 +706,10 @@ def wrap_tool_sync_run(wrapped, instance, args, kwargs):
 
     ft = FunctionTrace(name=f"{wrapped.__name__}/{tool_name}", group="Llm/tool/LangChain")
     ft.__enter__()
+    # Subcomponent attribute is only added when the tool executes locally
+    if _is_local_tool(instance):
+        agentic_subcomponent_data = {"type": "APM-AI_TOOL", "name": tool_name}
+        ft._add_agent_attribute("subcomponent", json.dumps(agentic_subcomponent_data))
     linking_metadata = get_trace_linking_metadata()
     try:
         return_val = wrapped(**run_args)
@@ -575,6 +771,10 @@ async def wrap_tool_async_run(wrapped, instance, args, kwargs):
 
     ft = FunctionTrace(name=f"{wrapped.__name__}/{tool_name}", group="Llm/tool/LangChain")
     ft.__enter__()
+    # Subcomponent attribute is only added when the tool executes locally
+    if _is_local_tool(instance):
+        agentic_subcomponent_data = {"type": "APM-AI_TOOL", "name": tool_name}
+        ft._add_agent_attribute("subcomponent", json.dumps(agentic_subcomponent_data))
     linking_metadata = get_trace_linking_metadata()
     try:
         return_val = await wrapped(**run_args)
@@ -611,6 +811,31 @@ async def wrap_tool_async_run(wrapped, instance, args, kwargs):
     return return_val
 
 
+# Known modules whose tools execute remotely.
+_REMOTE_TOOL_MODULE_PREFIXES = ("langchain_mcp_adapters", "langgraph.pregel.remote")
+
+
+def _is_local_tool(instance):
+    """
+    Best effort check that a LangChain tool executes locally.
+
+    Returns False only for known remote tools.
+    """
+    try:
+        # StructuredTool holds the underlying callable in the func or coroutine attributes.
+        # Custom BaseTool subclasses hold their logic on the class itself.
+        candidates = (getattr(instance, "func", None), getattr(instance, "coroutine", None), type(instance))
+        for candidate in candidates:
+            module = getattr(candidate, "__module__", "") or ""
+            if module.startswith(_REMOTE_TOOL_MODULE_PREFIXES):
+                return False
+    except Exception:
+        pass
+
+    # If we can't prove it was a remote tool, assume it was local.
+    return True
+
+
 def _capture_tool_info(instance, wrapped, args, kwargs):
     run_args = bind_args(wrapped, args, kwargs)
 
@@ -627,7 +852,7 @@ def _capture_tool_info(instance, wrapped, args, kwargs):
 
 
 def _record_tool_success(
-    instance, transaction, linking_metadata, agent_name, tool_id, tool_input, tool_name, tool_run_id, ft, response
+    *, instance, transaction, linking_metadata, agent_name, tool_id, tool_input, tool_name, tool_run_id, ft, response
 ):
     settings = transaction.settings if transaction.settings is not None else global_settings()
 
@@ -655,7 +880,7 @@ def _record_tool_success(
 
 
 def _record_tool_error(
-    instance, transaction, linking_metadata, agent_name, tool_id, tool_input, tool_name, tool_run_id, ft
+    *, instance, transaction, linking_metadata, agent_name, tool_id, tool_input, tool_name, tool_run_id, ft
 ):
     settings = transaction.settings if transaction.settings is not None else global_settings()
     ft.notice_error(attributes={"tool_id": tool_id})
@@ -699,6 +924,7 @@ async def wrap_chain_async_run(wrapped, instance, args, kwargs):
     run_args["timestamp"] = int(1000.0 * time.time())
     completion_id = str(uuid.uuid4())
     add_nr_completion_id(run_args, completion_id)
+    nr_callback_handler = _attach_nr_callback_handler(run_args)
     # Check to see if launched from agent or directly from chain.
     # The trace group will reflect from where it has started.
     # The AgentExecutor class has an attribute "agent" that does
@@ -719,6 +945,7 @@ async def wrap_chain_async_run(wrapped, instance, args, kwargs):
             completion_id=completion_id,
             linking_metadata=linking_metadata,
             duration=ft.duration * 1000,
+            callback_handler=nr_callback_handler,
         )
         raise
     ft.__exit__(None, None, None)
@@ -734,6 +961,7 @@ async def wrap_chain_async_run(wrapped, instance, args, kwargs):
         response=response,
         linking_metadata=linking_metadata,
         duration=ft.duration * 1000,
+        callback_handler=nr_callback_handler,
     )
     return response
 
@@ -755,6 +983,7 @@ def wrap_chain_sync_run(wrapped, instance, args, kwargs):
     run_args["timestamp"] = int(1000.0 * time.time())
     completion_id = str(uuid.uuid4())
     add_nr_completion_id(run_args, completion_id)
+    nr_callback_handler = _attach_nr_callback_handler(run_args)
     # Check to see if launched from agent or directly from chain.
     # The trace group will reflect from where it has started.
     # The AgentExecutor class has an attribute "agent" that does
@@ -775,6 +1004,7 @@ def wrap_chain_sync_run(wrapped, instance, args, kwargs):
             completion_id=completion_id,
             linking_metadata=linking_metadata,
             duration=ft.duration * 1000,
+            callback_handler=nr_callback_handler,
         )
         raise
     ft.__exit__(None, None, None)
@@ -790,6 +1020,7 @@ def wrap_chain_sync_run(wrapped, instance, args, kwargs):
         response=response,
         linking_metadata=linking_metadata,
         duration=ft.duration * 1000,
+        callback_handler=nr_callback_handler,
     )
     return response
 
@@ -811,6 +1042,7 @@ def wrap_RunnableSequence_stream(wrapped, instance, args, kwargs):
     run_args["timestamp"] = int(1000.0 * time.time())
     completion_id = str(uuid.uuid4())
     add_nr_completion_id(run_args, completion_id)
+    nr_callback_handler = _attach_nr_callback_handler(run_args)
     # Check to see if launched from agent or directly from chain.
     # The trace group will reflect from where it has started.
     # The AgentExecutor class has an attribute "agent" that does
@@ -821,7 +1053,7 @@ def wrap_RunnableSequence_stream(wrapped, instance, args, kwargs):
     linking_metadata = get_trace_linking_metadata()
     try:
         return_val = wrapped(input=run_args["input"], config=run_args["config"], **run_args.get("kwargs", {}))
-        return_val = GeneratorProxy(
+        return_val = LLMStreamProxy(
             return_val,
             on_stop_iteration=_on_chain_stop_iteration(
                 ft=ft,
@@ -830,6 +1062,7 @@ def wrap_RunnableSequence_stream(wrapped, instance, args, kwargs):
                 completion_id=completion_id,
                 response=[],
                 linking_metadata=linking_metadata,
+                callback_handler=nr_callback_handler,
             ),
             on_error=_on_chain_error(
                 ft=ft,
@@ -837,11 +1070,17 @@ def wrap_RunnableSequence_stream(wrapped, instance, args, kwargs):
                 run_args=run_args,
                 completion_id=completion_id,
                 linking_metadata=linking_metadata,
+                callback_handler=nr_callback_handler,
             ),
         )
     except Exception:
         _on_chain_error(
-            ft=ft, instance=instance, run_args=run_args, completion_id=completion_id, linking_metadata=linking_metadata
+            ft=ft,
+            instance=instance,
+            run_args=run_args,
+            completion_id=completion_id,
+            linking_metadata=linking_metadata,
+            callback_handler=nr_callback_handler,
         )(transaction)
         raise
 
@@ -865,6 +1104,7 @@ def wrap_RunnableSequence_astream(wrapped, instance, args, kwargs):
     run_args["timestamp"] = int(1000.0 * time.time())
     completion_id = str(uuid.uuid4())
     add_nr_completion_id(run_args, completion_id)
+    nr_callback_handler = _attach_nr_callback_handler(run_args)
     # Check to see if launched from agent or directly from chain.
     # The trace group will reflect from where it has started.
     # The AgentExecutor class has an attribute "agent" that does
@@ -875,7 +1115,7 @@ def wrap_RunnableSequence_astream(wrapped, instance, args, kwargs):
     linking_metadata = get_trace_linking_metadata()
     try:
         return_val = wrapped(input=run_args["input"], config=run_args["config"], **run_args.get("kwargs", {}))
-        return_val = AsyncGeneratorProxy(
+        return_val = AsyncLLMStreamProxy(
             return_val,
             on_stop_iteration=_on_chain_stop_iteration(
                 ft=ft,
@@ -884,6 +1124,7 @@ def wrap_RunnableSequence_astream(wrapped, instance, args, kwargs):
                 completion_id=completion_id,
                 response=[],
                 linking_metadata=linking_metadata,
+                callback_handler=nr_callback_handler,
             ),
             on_error=_on_chain_error(
                 ft=ft,
@@ -891,18 +1132,26 @@ def wrap_RunnableSequence_astream(wrapped, instance, args, kwargs):
                 run_args=run_args,
                 completion_id=completion_id,
                 linking_metadata=linking_metadata,
+                callback_handler=nr_callback_handler,
             ),
         )
     except Exception:
         _on_chain_error(
-            ft=ft, instance=instance, run_args=run_args, completion_id=completion_id, linking_metadata=linking_metadata
+            ft=ft,
+            instance=instance,
+            run_args=run_args,
+            completion_id=completion_id,
+            linking_metadata=linking_metadata,
+            callback_handler=nr_callback_handler,
         )(transaction)
         raise
 
     return return_val
 
 
-def _on_chain_stop_iteration(ft, instance, run_args, completion_id, response, linking_metadata):
+def _on_chain_stop_iteration(
+    *, ft, instance, run_args, completion_id, response, linking_metadata, callback_handler=None
+):
     def _on_stop_iteration(proxy, transaction):
         ft.__exit__(None, None, None)
         _create_successful_chain_run_events(
@@ -913,12 +1162,13 @@ def _on_chain_stop_iteration(ft, instance, run_args, completion_id, response, li
             response=response,
             linking_metadata=linking_metadata,
             duration=ft.duration * 1000,
+            callback_handler=callback_handler,
         )
 
     return _on_stop_iteration
 
 
-def _on_chain_error(ft, instance, run_args, completion_id, linking_metadata):
+def _on_chain_error(*, ft, instance, run_args, completion_id, linking_metadata, callback_handler=None):
     def _on_error(proxy, transaction):
         ft.notice_error(attributes={"completion_id": completion_id})
         ft.__exit__(*sys.exc_info())
@@ -929,6 +1179,7 @@ def _on_chain_error(ft, instance, run_args, completion_id, linking_metadata):
             completion_id=completion_id,
             linking_metadata=linking_metadata,
             duration=ft.duration * 1000,
+            callback_handler=callback_handler,
         )
 
     return _on_error
@@ -946,13 +1197,109 @@ def add_nr_completion_id(run_args, completion_id):
         run_args["config"]["metadata"] = metadata
 
 
-def _create_error_chain_run_events(transaction, instance, run_args, completion_id, linking_metadata, duration):
+_NR_CALLBACK_HANDLER_CLS = None
+
+
+def _get_nr_callback_handler_cls():
+    global _NR_CALLBACK_HANDLER_CLS
+    if _NR_CALLBACK_HANDLER_CLS is not None:
+        return _NR_CALLBACK_HANDLER_CLS
+    try:
+        from langchain_core.callbacks import BaseCallbackHandler
+    except ImportError:
+        _NR_CALLBACK_HANDLER_CLS = False
+        return False
+
+    class NewRelicCallbackHandler(BaseCallbackHandler):
+        raise_error = False
+
+        def __init__(self):
+            super().__init__()
+            self.response_model = None
+
+        def on_llm_end(self, response, **_kwargs):
+            if self.response_model is not None:
+                return
+            try:
+                self.response_model = _extract_chain_response_model(response)
+            except Exception:
+                pass
+
+    _NR_CALLBACK_HANDLER_CLS = NewRelicCallbackHandler
+    return NewRelicCallbackHandler
+
+
+def _attach_nr_callback_handler(run_args):
+    cls = _get_nr_callback_handler_cls()
+    if not cls:
+        return None
+    handler = cls()
+    cfg = dict(run_args.get("config") or {})
+    callbacks = cfg.get("callbacks")
+    if callbacks is None:
+        cfg["callbacks"] = [handler]
+    elif isinstance(callbacks, list):
+        cfg["callbacks"] = [*callbacks, handler]
+    else:
+        try:
+            callbacks.add_handler(handler, inherit=True)
+        except Exception:
+            return None
+    run_args["config"] = cfg
+    return handler
+
+
+def _extract_chain_response_model(response):
+    llm_output = getattr(response, "llm_output", None) or {}
+    for key in ("model_name", "model", "model_id"):
+        val = llm_output.get(key)
+        if isinstance(val, str) and val:
+            return val
+    generations = getattr(response, "generations", None) or []
+    for gen_list in generations:
+        for gen in gen_list or []:
+            info = getattr(gen, "generation_info", None) or {}
+            for key in ("model_name", "model", "model_id"):
+                val = info.get(key)
+                if isinstance(val, str) and val:
+                    return val
+    return None
+
+
+def _get_chain_request_model(instance):
+    # A best effort attempt to pull the request model from the chain or any of
+    # its steps for better observability. This is not guaranteed to work in all
+    # cases as it depends on how the chain and steps are implemented, and it can
+    # only pull the first model it finds. The request model is not a guaranteed
+    # attribute on chains or steps, but some implementations may have it.
+    try:
+        llm = getattr(instance, "llm", None)
+        if llm is not None:
+            name = getattr(llm, "model_name", None) or getattr(llm, "model", None)
+            if isinstance(name, str) and name:
+                return name
+        steps = getattr(instance, "steps", None)
+        if steps:
+            for step in steps:
+                name = getattr(step, "model_name", None) or getattr(step, "model", None)
+                if isinstance(name, str) and name:
+                    return name
+    except Exception:
+        pass
+    return None
+
+
+def _create_error_chain_run_events(
+    *, transaction, instance, run_args, completion_id, linking_metadata, duration, callback_handler=None
+):
     _input = run_args.get("input")
     llm_metadata_dict = _get_llm_metadata(transaction)
     run_id, metadata, tags = _get_run_manager_info(transaction, run_args, instance, completion_id)
     span_id = linking_metadata.get("span.id")
     trace_id = linking_metadata.get("trace.id")
     input_message_list = [_input]
+    request_model = _get_chain_request_model(instance)
+    response_model = getattr(callback_handler, "response_model", None) if callback_handler else None
 
     # Make sure the builtin attributes take precedence over metadata attributes.
     full_chat_completion_summary_dict = {f"metadata.{key}": value for key, value in metadata.items()}
@@ -966,6 +1313,8 @@ def _create_error_chain_run_events(transaction, instance, run_args, completion_i
             "virtual_llm": True,
             "request_id": run_id,
             "duration": duration,
+            "request.model": request_model,
+            "response.model": response_model,
             "response.number_of_messages": len(input_message_list),
             "tags": tags,
             "error": True,
@@ -975,15 +1324,16 @@ def _create_error_chain_run_events(transaction, instance, run_args, completion_i
     full_chat_completion_summary_dict.update(llm_metadata_dict)
     transaction.record_custom_event("LlmChatCompletionSummary", full_chat_completion_summary_dict)
     create_chat_completion_message_event(
-        transaction,
-        input_message_list,
-        completion_id,
-        span_id,
-        trace_id,
-        run_id,
-        llm_metadata_dict,
-        [],
-        run_args["timestamp"] or None,
+        transaction=transaction,
+        input_message_list=input_message_list,
+        chat_completion_id=completion_id,
+        span_id=span_id,
+        trace_id=trace_id,
+        run_id=run_id,
+        llm_metadata_dict=llm_metadata_dict,
+        output_message_list=[],
+        request_timestamp=run_args["timestamp"] or None,
+        response_model=response_model,
     )
 
 
@@ -1000,7 +1350,7 @@ def _get_run_manager_info(transaction, run_args, instance, completion_id):
 
 
 def _create_successful_chain_run_events(
-    transaction, instance, run_args, completion_id, response, linking_metadata, duration
+    *, transaction, instance, run_args, completion_id, response, linking_metadata, duration, callback_handler=None
 ):
     _input = run_args.get("input")
     llm_metadata_dict = _get_llm_metadata(transaction)
@@ -1009,8 +1359,14 @@ def _create_successful_chain_run_events(
     trace_id = linking_metadata.get("trace.id")
     input_message_list = [_input]
     output_message_list = []
+    request_model = _get_chain_request_model(instance)
+    response_model = getattr(callback_handler, "response_model", None) if callback_handler else None
     if isinstance(response, str):
         output_message_list = [response]
+    elif hasattr(response, "value") and hasattr(response, "interrupts"):
+        # LangGraph V1.1+ returns a GraphOutput. Read .value to avoid the
+        # deprecated item access path (response[key]) that emits a warning.
+        output_message_list = [response.value]
     else:
         try:
             output_message_list = [response[0]] if response else []
@@ -1035,6 +1391,8 @@ def _create_successful_chain_run_events(
             "virtual_llm": True,
             "request_id": run_id,
             "duration": duration,
+            "request.model": request_model,
+            "response.model": response_model,
             "response.number_of_messages": len(input_message_list) + len(output_message_list),
             "tags": tags,
             "timestamp": run_args.get("timestamp") or None,
@@ -1047,19 +1405,21 @@ def _create_successful_chain_run_events(
     full_chat_completion_summary_dict.update(llm_metadata_dict)
     transaction.record_custom_event("LlmChatCompletionSummary", full_chat_completion_summary_dict)
     create_chat_completion_message_event(
-        transaction,
-        input_message_list,
-        completion_id,
-        span_id,
-        trace_id,
-        run_id,
-        llm_metadata_dict,
-        output_message_list,
-        run_args["timestamp"] or None,
+        transaction=transaction,
+        input_message_list=input_message_list,
+        chat_completion_id=completion_id,
+        span_id=span_id,
+        trace_id=trace_id,
+        run_id=run_id,
+        llm_metadata_dict=llm_metadata_dict,
+        output_message_list=output_message_list,
+        request_timestamp=run_args["timestamp"] or None,
+        response_model=response_model,
     )
 
 
 def create_chat_completion_message_event(
+    *,
     transaction,
     input_message_list,
     chat_completion_id,
@@ -1069,6 +1429,7 @@ def create_chat_completion_message_event(
     llm_metadata_dict,
     output_message_list,
     request_timestamp=None,
+    response_model=None,
 ):
     settings = transaction.settings if transaction.settings is not None else global_settings()
 
@@ -1081,6 +1442,7 @@ def create_chat_completion_message_event(
             "trace_id": trace_id,
             "completion_id": chat_completion_id,
             "sequence": index,
+            "response.model": response_model,
             "vendor": "langchain",
             "ingest_source": "Python",
             "virtual_llm": True,
@@ -1106,6 +1468,7 @@ def create_chat_completion_message_event(
                 "trace_id": trace_id,
                 "completion_id": chat_completion_id,
                 "sequence": index,
+                "response.model": response_model,
                 "vendor": "langchain",
                 "ingest_source": "Python",
                 "is_response": True,
@@ -1145,11 +1508,11 @@ def wrap_StructuredTool_invoke(wrapped, instance, args, kwargs):
 
     metadata = bind_args(wrapped, args, kwargs).get("config", {}).get("metadata", {})
     # Delete the reference after grabbing it to avoid it ending up in LangChain attributes
-    trace = metadata.pop("_nr_trace", None)
-    if not trace:
+    trace_cache_id = metadata.pop("_nr_trace_id", None)
+    if not trace_cache_id:
         return wrapped(*args, **kwargs)
 
-    with ContextOf(trace=trace):
+    with ContextOf(trace_cache_id=trace_cache_id):
         return wrapped(*args, **kwargs)
 
 
@@ -1161,12 +1524,12 @@ async def wrap_StructuredTool_ainvoke(wrapped, instance, args, kwargs):
         return await wrapped(*args, **kwargs)
 
     metadata = bind_args(wrapped, args, kwargs).get("config", {}).get("metadata", {})
-    metadata["_nr_trace"] = trace
+    metadata["_nr_trace_id"] = trace.thread_id
 
     try:
         return await wrapped(*args, **kwargs)
     finally:
-        metadata.pop("_nr_trace", None)
+        metadata.pop("_nr_trace_id", None)
 
 
 def instrument_langchain_runnables_chains_base(module):
@@ -1214,6 +1577,8 @@ def instrument_langchain_core_tools(module):
 def instrument_langchain_core_runnables_config(module):
     if hasattr(module, "ContextThreadPoolExecutor"):
         wrap_function_wrapper(module, "ContextThreadPoolExecutor.submit", wrap_ContextThreadPoolExecutor_submit)
+    if hasattr(module, "run_in_executor"):
+        wrap_function_wrapper(module, "run_in_executor", wrap_run_in_executor)
 
 
 def instrument_langchain_core_tools_structured(module):

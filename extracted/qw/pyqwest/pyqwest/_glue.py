@@ -5,24 +5,36 @@ import inspect
 import types
 from typing import TYPE_CHECKING, Protocol, TypeVar
 
+from ._multipart import (
+    encode_multipart,
+    encode_multipart_sync,
+    multipart_boundary,
+    multipart_content_type,
+)
 from ._pyqwest import FullResponse, Headers, Request, Transport
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator, Awaitable, Callable, Iterator
+
+    from ._multipart import Multipart, SyncMultipart
 
 T_contra = TypeVar("T_contra", contravariant=True)
 U = TypeVar("U")
 
 
 async def wrap_body_gen(
-    gen: AsyncIterator[T_contra], wrap_fn: Callable[[T_contra], U]
+    gen: AsyncIterator[T_contra],
+    wrap_fn: Callable[[T_contra], U],
+    start: Awaitable[bool],
 ) -> AsyncIterator[U]:
     try:
+        if not await start:
+            return
         async for item in gen:
             yield wrap_fn(item)
     finally:
         try:
-            aclose = gen.aclose  # type: ignore[attr-defined]
+            aclose = gen.aclose  # ty: ignore[unresolved-attribute]
         except AttributeError:
             pass
         else:
@@ -41,7 +53,7 @@ async def new_full_response(
             buf.extend(chunk)
     finally:
         try:
-            aclose = content.aclose  # type: ignore[attr-defined]
+            aclose = content.aclose  # ty: ignore[unresolved-attribute]
         except AttributeError:
             pass
         else:
@@ -63,12 +75,22 @@ def read_content_sync(content: Iterator[bytes | memoryview]) -> bytes:
             buf.extend(chunk)
     finally:
         try:
-            close = content.close  # type: ignore[attr-defined]
+            close = content.close  # ty: ignore[unresolved-attribute]
         except AttributeError:
             pass
         else:
             close()
     return bytes(buf)
+
+
+def multipart_content(multipart: Multipart) -> tuple[str, AsyncIterator[bytes]]:
+    boundary = multipart_boundary()
+    return multipart_content_type(boundary), encode_multipart(multipart, boundary)
+
+
+def multipart_content_sync(multipart: SyncMultipart) -> tuple[str, Iterator[bytes]]:
+    boundary = multipart_boundary()
+    return multipart_content_type(boundary), encode_multipart_sync(multipart, boundary)
 
 
 def close_request_iterator(itr: Iterator[bytes]) -> None:
@@ -81,7 +103,7 @@ def close_request_iterator(itr: Iterator[bytes]) -> None:
         return
 
     try:
-        close = itr.close  # pyright: ignore[reportAttributeAccessIssue]
+        close = itr.close  # ty: ignore[unresolved-attribute]
     except AttributeError:
         pass
     else:
@@ -94,6 +116,9 @@ def close_request_iterator(itr: Iterator[bytes]) -> None:
 
 class Sender(Protocol[T_contra]):
     def send(self, item: T_contra | BaseException) -> bool | Awaitable[bool]: ...
+
+    # Ends the body as complete. Closing without it fails the body.
+    def finish(self) -> None: ...
 
     def close(self) -> None: ...
 
@@ -113,5 +138,11 @@ async def forward(gen: AsyncIterator[T_contra], sender: Sender[T_contra]) -> Non
         res = sender.send(e)
         if inspect.isawaitable(res):
             await res
+    else:
+        # Also reached after the break, when the receiver is already gone.
+        sender.finish()
     finally:
         sender.close()
+        aclose = getattr(gen, "aclose", None)
+        if aclose is not None:
+            await aclose()

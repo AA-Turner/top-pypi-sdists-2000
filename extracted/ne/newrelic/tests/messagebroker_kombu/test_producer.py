@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import json
+
 import pytest
 from conftest import cache_kombu_producer_headers
 from kombu.exceptions import EncodeError
@@ -55,7 +57,8 @@ def test_distributed_tracing_headers(exchange, send_producer_message):
         "test_producer:test_distributed_tracing_headers.<locals>.test",
         rollup_metrics=[
             ("Supportability/TraceContext/Create/Success", 1),
-            ("Supportability/DistributedTrace/CreatePayload/Success", 1),
+            # Only generated when the newrelic header is emitted (exclude_newrelic_header=False).
+            ("Supportability/DistributedTrace/CreatePayload/Success", None),
         ],
         background_task=True,
     )
@@ -68,12 +71,38 @@ def test_distributed_tracing_headers(exchange, send_producer_message):
     test()
 
 
+def test_distributed_tracing_headers_are_json_serializable(exchange, send_producer_message):
+    # Regression test for dropping DT header byte encoding
+    # (done to support kombu's sqlalchemy transport, which serializes the
+    # message envelope with the stdlib json module and can't encode bytes).
+
+    captured_headers = {}
+
+    @transient_function_wrapper("kombu.messaging", "Producer.publish.__wrapped__")
+    def capture_headers_before_publish(wrapped, instance, args, kwargs):
+        captured_headers.update(kwargs.get("headers") or {})
+        return wrapped(*args, **kwargs)
+
+    @background_task()
+    @capture_headers_before_publish
+    @cache_kombu_producer_headers
+    def test():
+        send_producer_message()
+
+    test()
+
+    assert all(isinstance(v, str) for v in captured_headers.values()), captured_headers
+    # Shouldn't raise an exception when converting the headers to JSON
+    json.dumps(captured_headers)
+
+
 def test_distributed_tracing_headers_under_terminal(exchange, send_producer_message):
     @validate_transaction_metrics(
         "test_distributed_tracing_headers_under_terminal",
         rollup_metrics=[
             ("Supportability/TraceContext/Create/Success", 1),
-            ("Supportability/DistributedTrace/CreatePayload/Success", 1),
+            # Only generated when the newrelic header is emitted (exclude_newrelic_header=False).
+            ("Supportability/DistributedTrace/CreatePayload/Success", None),
         ],
         background_task=True,
     )

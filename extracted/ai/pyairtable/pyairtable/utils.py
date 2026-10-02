@@ -3,26 +3,13 @@ import re
 import textwrap
 import urllib.parse
 import warnings
+from collections.abc import Callable, Iterable, Iterator, Sequence
 from datetime import date, datetime
 from functools import partial, wraps
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    Dict,
-    Generic,
-    Iterable,
-    Iterator,
-    List,
-    Optional,
-    Sequence,
-    TypeVar,
-    Union,
-    cast,
-)
+from typing import TYPE_CHECKING, Any, Generic, ParamSpec, TypeVar, cast
 
 import requests
-from typing_extensions import ParamSpec, Protocol, Self
+from typing_extensions import Protocol, Self
 
 from pyairtable.api.types import AnyRecordDict, CreateAttachmentByUrl, FieldValue
 
@@ -60,7 +47,7 @@ def datetime_from_iso_str(value: str) -> datetime:
     return datetime.fromisoformat(value)
 
 
-def date_to_iso_str(value: Union[date, datetime]) -> str:
+def date_to_iso_str(value: date | datetime) -> str:
     """
     Convert a ``date`` or ``datetime`` into an Airtable-compatible ISO 8601 string
 
@@ -197,13 +184,18 @@ def _prepend_docstring_text(obj: Any, text: str, *, skip_empty: bool = True) -> 
     obj.__doc__ = f"{text}\n\n{doc}"
 
 
-def _append_docstring_text(obj: Any, text: str, *, skip_empty: bool = True) -> None:
+def _append_docstring_text(
+    obj: Any, text: str, *, skip_empty: bool = True, before_re: str = ""
+) -> None:
     doc = obj.__doc__ or ""
     if skip_empty and not doc:
         return
     doc = doc.rstrip("\n")
     if has_leading_spaces := re.match(r"^\s+", doc):
         text = textwrap.indent(text, has_leading_spaces[0])
+    if before_re and (match := re.search(before_re, doc, re.MULTILINE)):
+        text = text + "\n\n" + doc[match.start() :]
+        doc = doc[: match.start()].rstrip()
     obj.__doc__ = f"{doc}\n\n{text}"
 
 
@@ -246,7 +238,7 @@ def cache_unless_forced(func: Callable[[C], R]) -> _FetchMethod[C, R]:
     return cast(_FetchMethod[C, R], _inner)
 
 
-def coerce_iso_str(value: Any) -> Optional[str]:
+def coerce_iso_str(value: Any) -> str | None:
     """
     Given an input that might be a date or datetime, or an ISO 8601 formatted str,
     convert the value into an ISO 8601 formatted str.
@@ -261,7 +253,7 @@ def coerce_iso_str(value: Any) -> Optional[str]:
     raise TypeError(f"cannot coerce {type(value)} into ISO 8601 str")
 
 
-def coerce_list_str(value: Optional[Union[str, Iterable[str]]]) -> List[str]:
+def coerce_list_str(value: str | Iterable[str] | None) -> list[str]:
     """
     Given an input that is either a str or an iterable of str, return a list.
     """
@@ -274,7 +266,7 @@ def coerce_list_str(value: Optional[Union[str, Iterable[str]]]) -> List[str]:
 
 def fieldgetter(
     *fields: str,
-    required: Union[bool, Iterable[str]] = False,
+    required: bool | Iterable[str] = False,
 ) -> Callable[[AnyRecordDict], Any]:
     """
     Create a function that extracts ID, created time, or field values from a record.
@@ -351,10 +343,10 @@ class Url(str):
     def __floordiv__(self, others: Iterable[Any]) -> Self:
         return self.add_path(*others)
 
-    def __and__(self, params: Dict[str, Any]) -> Self:
+    def __and__(self, params: dict[str, Any]) -> Self:
         return self.add_qs(params)
 
-    def add_path(self, *others: Iterable[Any]) -> Self:
+    def add_path(self, *others: Any) -> Self:
         """
         Build a copy of this URL with additional path segments.
 
@@ -382,7 +374,7 @@ class Url(str):
 
     def add_qs(
         self,
-        params: Optional[Dict[str, Any]] = None,
+        params: dict[str, Any] | None = None,
         **other_params: Any,
     ) -> Self:
         """

@@ -61,6 +61,7 @@ def test_opensocket_callback_keyboard_interrupt(callback_curl):
         called["called"] = True
         raise KeyboardInterrupt()
 
+    callback_curl.setopt(pycurl.IPRESOLVE, pycurl.IPRESOLVE_V4)
     callback_curl.setopt(pycurl.OPENSOCKETFUNCTION, opensocket_function)
 
     with pytest.raises(KeyboardInterrupt):
@@ -125,6 +126,31 @@ def test_xferinfo_callback_keyboard_interrupt(curl, app):
         curl.perform()
 
     assert called["called"]
+
+
+def test_debug_callback_keyboard_interrupt(callback_curl):
+    # DEBUGFUNCTION reports success, so the transfer outlives the interrupt.
+    calls = {"debug": 0, "write": 0}
+
+    def debug_function(_typ, _data):
+        calls["debug"] += 1
+        if calls["debug"] == 1:
+            raise KeyboardInterrupt()
+
+    def write_function(chunk):
+        calls["write"] += 1
+        return len(chunk)
+
+    callback_curl.setopt(pycurl.VERBOSE, 1)
+    callback_curl.setopt(pycurl.DEBUGFUNCTION, debug_function)
+    callback_curl.setopt(pycurl.WRITEFUNCTION, write_function)
+
+    with pytest.raises(KeyboardInterrupt):
+        callback_curl.perform()
+
+    # later callbacks are skipped rather than invoked with the interrupt pending
+    assert calls["debug"] == 1
+    assert calls["write"] == 0
 
 
 def test_header_callback_non_interrupt_exception(callback_curl):

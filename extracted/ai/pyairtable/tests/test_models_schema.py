@@ -1,5 +1,4 @@
 from operator import attrgetter
-from typing import List, Optional
 
 import mock
 import pytest
@@ -63,10 +62,15 @@ def test_find_in_collection(clsname, method, id_or_name, sample_json):
     {
         "BaseCollaborators.individual_collaborators.via_base[0].permission_level": "create",
         "BaseCollaborators.individual_collaborators.via_base[0].user_id": "usrsOEchC9xuwRgKk",
+        "BaseCollaborators.package_installations[0].package_id": "pkgLkNDICXNqxSDhG",
+        "BaseCollaborators.package_installations[0].installation_type": "application",
+        "BaseCollaborators.package_installations[1].package_release_id": None,
         "BaseSchema.tables[0].fields[1].type": "multipleAttachments",
         "BaseSchema.tables[0].fields[2].options.inverse_link_field_id": "fldWnCJlo2z6ttT8Y",
         "BaseSchema.tables[0].name": "Apartments",
         "BaseSchema.tables[0].views[0].type": "grid",
+        "TableSchema.date_dependency.is_forward_only": True,
+        "TableSchema.date_dependency.holidays": ["2026-01-01"],
         "BaseShares.shares[0].effective_email_domain_allow_list": ["foobar.com"],
         "BaseShares.shares[2].state": "disabled",
         "EnterpriseInfo.email_domains[0].email_domain": "foobar.com",
@@ -90,12 +94,12 @@ def test_deserialized_values(obj_path, expected_value, schema_obj):
 
 
 class Outer(AirtableModel):
-    inners: List["Outer.Inner"]
+    inners: list["Outer.Inner"]
 
     class Inner(AirtableModel):
         id: str
         name: str
-        deleted: Optional[bool] = None
+        deleted: bool | None = None
 
     def find(self, id_or_name):
         return schema._find(self.inners, id_or_name)
@@ -445,3 +449,150 @@ def test_workspace_restrictions(workspace, mock_workspace_metadata, requests_moc
         "inviteCreationRestriction": "unrestricted",
         "shareCreationRestriction": "onlyOwners",
     }
+
+
+def test_save_date_dependency_settings(api, base, requests_mock):
+    table_id = fake_id("tbl")
+
+    from pyairtable import orm
+
+    class TaskModel(orm.Model):
+        # Used to test that add_date_dependency accepts an ORM field.
+        class Meta:
+            api_key = api.api_key
+            base_id = base.id
+            table_name = "Tasks"
+
+        duration = orm.fields.IntegerField("Duration")
+
+    obj = {
+        "id": table_id,
+        "name": "Tasks",
+        "description": "",
+        "primaryFieldId": "fldName",
+        "views": [],
+        "fields": [
+            {
+                "id": "fldName",
+                "name": "Name",
+                "type": "singleLineText",
+                "options": {},
+            },
+            {
+                "id": "fldDepends",
+                "name": "Depends",
+                "type": "multipleRecordLinks",
+                "options": {
+                    "isReversed": False,
+                    "linkedTableId": table_id,
+                    "prefersSingleRecordLink": False,
+                    "inverseLinkFieldId": None,
+                    "viewIdForRecordSelection": None,
+                },
+            },
+            {
+                "id": "fldStartDate",
+                "name": "Start Date",
+                "type": "date",
+                "options": {},
+            },
+            {
+                "id": "fldEndDate",
+                "name": "End Date",
+                "type": "date",
+                "options": {},
+            },
+            {
+                "id": "fldDuration",
+                "name": "Duration",
+                "type": "number",
+                "options": {},
+            },
+        ],
+    }
+    table_schema = schema.TableSchema.from_api(obj, api, context={"base": base})
+    m = requests_mock.patch(table_schema._url, json=obj)
+    table_schema.set_date_dependency(
+        start_date_field="fldStartDate",
+        end_date_field="End Date",
+        duration_field=TaskModel.duration,
+        rescheduling_mode="none",
+    )
+    assert m.call_count == 0
+
+    table_schema.save()
+    assert m.call_count == 1
+    assert m.last_request.json() == {
+        "name": "Tasks",
+        "description": "",
+        "dateDependencySettings": {
+            "startDateFieldId": "fldStartDate",
+            "endDateFieldId": "fldEndDate",
+            "durationFieldId": "fldDuration",
+            "reschedulingMode": "none",
+            "isEnabled": True,
+            "shouldSkipWeekendsAndHolidays": False,
+            "holidays": [],
+        },
+    }
+
+
+def test_save_date_dependency_settings__invalid_field(table_schema):
+    with pytest.raises(KeyError, match=r"^'invalid_field'$"):
+        table_schema.set_date_dependency(
+            start_date_field="Name",
+            end_date_field="Name",
+            duration_field="Name",
+            predecessor_field="invalid_field",
+            rescheduling_mode="none",
+        )
+
+
+def test_field_type_enum():
+    """
+    Test that FieldType enum contains all expected field types.
+    """
+    # Test that enum inherits from str
+    assert isinstance(schema.FieldType.SINGLE_LINE_TEXT, str)
+
+    # Test that enum can be used in string comparisons
+    assert schema.FieldType.SINGLE_LINE_TEXT == "singleLineText"
+
+    # Test that all field config types have corresponding enum values
+    expected_types = {
+        "aiText",
+        "autoNumber",
+        "barcode",
+        "button",
+        "checkbox",
+        "count",
+        "createdBy",
+        "createdTime",
+        "currency",
+        "date",
+        "dateTime",
+        "duration",
+        "email",
+        "externalSyncSource",
+        "formula",
+        "lastModifiedBy",
+        "lastModifiedTime",
+        "manualSort",
+        "multilineText",
+        "multipleAttachments",
+        "multipleCollaborators",
+        "multipleLookupValues",
+        "multipleRecordLinks",
+        "multipleSelects",
+        "number",
+        "percent",
+        "phoneNumber",
+        "rating",
+        "richText",
+        "rollup",
+        "singleCollaborator",
+        "singleLineText",
+        "singleSelect",
+        "url",
+    }
+    assert expected_types == {member.value for member in schema.FieldType}

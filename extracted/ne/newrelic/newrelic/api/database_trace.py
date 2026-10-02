@@ -191,9 +191,7 @@ class DatabaseTrace(TimeTrace):
                         execute_params = self.execute_params
                         transaction._explain_plan_count += 1
 
-        self.sql_format = (
-            tt.record_sql if tt.record_sql else "off"
-        )  # If tt.record_sql is None, then default to sql being off
+        self.sql_format = tt.record_sql or "off"  # If tt.record_sql is None, then default to sql being off
         self.connect_params = connect_params
         self.cursor_params = cursor_params
         self.sql_parameters = sql_parameters
@@ -226,6 +224,8 @@ class DatabaseTrace(TimeTrace):
             guid=self.guid,
             agent_attributes=self.agent_attributes,
             user_attributes=self.user_attributes,
+            span_link_events=self.span_link_events,
+            span_event_events=self.span_event_events,
         )
 
 

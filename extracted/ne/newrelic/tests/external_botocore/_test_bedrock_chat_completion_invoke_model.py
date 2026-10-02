@@ -101,6 +101,9 @@ chat_completion_expected_events = {
                 "duration": None,  # Response time varies each test run
                 "request.model": "amazon.titan-text-express-v1",
                 "response.model": "amazon.titan-text-express-v1",
+                "response.usage.completion_tokens": 32,
+                "response.usage.total_tokens": 44,
+                "response.usage.prompt_tokens": 12,
                 "request.temperature": 0.7,
                 "request.max_tokens": 100,
                 "response.choices.finish_reason": "FINISH",
@@ -123,6 +126,7 @@ chat_completion_expected_events = {
                 "role": "user",
                 "completion_id": None,
                 "sequence": 0,
+                "token_count": 0,
                 "response.model": "amazon.titan-text-express-v1",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
@@ -141,6 +145,7 @@ chat_completion_expected_events = {
                 "role": "assistant",
                 "completion_id": None,
                 "sequence": 1,
+                "token_count": 0,
                 "response.model": "amazon.titan-text-express-v1",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
@@ -282,9 +287,13 @@ chat_completion_expected_events = {
                 "span_id": None,
                 "trace_id": "trace-id",
                 "request_id": "ab38295d-df9c-4141-8173-38221651bf46",
+                "response_id": None,  # UUID that varies with each run
                 "duration": None,  # Response time varies each test run
                 "request.model": "anthropic.claude-3-sonnet-20240229-v1:0",
                 "response.model": "anthropic.claude-3-sonnet-20240229-v1:0",
+                "response.usage.completion_tokens": 31,
+                "response.usage.prompt_tokens": 21,
+                "response.usage.total_tokens": 52,
                 "request.temperature": 0.7,
                 "request.max_tokens": 100,
                 "response.choices.finish_reason": "end_turn",
@@ -307,6 +316,7 @@ chat_completion_expected_events = {
                 "role": "user",
                 "completion_id": None,
                 "sequence": 0,
+                "token_count": 0,
                 "response.model": "anthropic.claude-3-sonnet-20240229-v1:0",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
@@ -325,6 +335,7 @@ chat_completion_expected_events = {
                 "role": "assistant",
                 "completion_id": None,
                 "sequence": 1,
+                "token_count": 0,
                 "response.model": "anthropic.claude-3-sonnet-20240229-v1:0",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
@@ -408,6 +419,9 @@ chat_completion_expected_events = {
                 "duration": None,  # Response time varies each test run
                 "request.model": "meta.llama2-13b-chat-v1",
                 "response.model": "meta.llama2-13b-chat-v1",
+                "response.usage.prompt_tokens": 17,
+                "response.usage.completion_tokens": 69,
+                "response.usage.total_tokens": 86,
                 "request.temperature": 0.7,
                 "request.max_tokens": 100,
                 "response.choices.finish_reason": "stop",
@@ -430,6 +444,7 @@ chat_completion_expected_events = {
                 "role": "user",
                 "completion_id": None,
                 "sequence": 0,
+                "token_count": 0,
                 "response.model": "meta.llama2-13b-chat-v1",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
@@ -448,6 +463,7 @@ chat_completion_expected_events = {
                 "role": "assistant",
                 "completion_id": None,
                 "sequence": 1,
+                "token_count": 0,
                 "response.model": "meta.llama2-13b-chat-v1",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
@@ -646,6 +662,7 @@ chat_completion_langchain_expected_streaming_events = {
                 "span_id": None,
                 "trace_id": "trace-id",
                 "request_id": "e8fc1dd7-3d1e-42c6-9c58-535cae563bff",
+                "response_id": None,  # UUID that varies with each run
                 "duration": None,  # Response time varies each test run
                 "request.model": "anthropic.claude-3-sonnet-20240229-v1:0",
                 "response.model": "anthropic.claude-3-sonnet-20240229-v1:0",
@@ -943,6 +960,7 @@ chat_completion_langchain_expected_events = {
                 "span_id": None,
                 "trace_id": "trace-id",
                 "request_id": "96c7306d-2d60-4629-83e9-dbd6befb0e4e",
+                "response_id": None,  # UUID that varies with each run
                 "duration": None,  # Response time varies each test run
                 "request.model": "anthropic.claude-3-sonnet-20240229-v1:0",
                 "response.model": "anthropic.claude-3-sonnet-20240229-v1:0",
@@ -1073,6 +1091,7 @@ chat_completion_streaming_expected_events = {
                 "vendor": "bedrock",
                 "ingest_source": "Python",
                 "response.number_of_messages": 2,
+                "time_to_first_token": None,  # Varies each test run
             },
         ),
         (
@@ -1128,12 +1147,16 @@ chat_completion_streaming_expected_events = {
                 "duration": None,  # Response time varies each test run
                 "request.model": "amazon.titan-text-express-v1",
                 "response.model": "amazon.titan-text-express-v1",
+                "response.usage.completion_tokens": 35,
+                "response.usage.total_tokens": 47,
+                "response.usage.prompt_tokens": 12,
                 "request.temperature": 0.7,
                 "request.max_tokens": 100,
                 "response.choices.finish_reason": "FINISH",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
                 "response.number_of_messages": 2,
+                "time_to_first_token": None,  # Varies each test run
             },
         ),
         (
@@ -1150,6 +1173,7 @@ chat_completion_streaming_expected_events = {
                 "role": "user",
                 "completion_id": None,
                 "sequence": 0,
+                "token_count": 0,
                 "response.model": "amazon.titan-text-express-v1",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
@@ -1168,6 +1192,7 @@ chat_completion_streaming_expected_events = {
                 "role": "assistant",
                 "completion_id": None,
                 "sequence": 1,
+                "token_count": 0,
                 "response.model": "amazon.titan-text-express-v1",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
@@ -1189,12 +1214,16 @@ chat_completion_streaming_expected_events = {
                 "duration": None,  # Response time varies each test run
                 "request.model": "anthropic.claude-instant-v1",
                 "response.model": "anthropic.claude-instant-v1",
+                "response.usage.completion_tokens": 99,
+                "response.usage.prompt_tokens": 19,
+                "response.usage.total_tokens": 118,
                 "request.temperature": 0.7,
                 "request.max_tokens": 100,
                 "response.choices.finish_reason": "stop_sequence",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
                 "response.number_of_messages": 2,
+                "time_to_first_token": None,  # Varies each test run
             },
         ),
         (
@@ -1211,6 +1240,7 @@ chat_completion_streaming_expected_events = {
                 "role": "user",
                 "completion_id": None,
                 "sequence": 0,
+                "token_count": 0,
                 "response.model": "anthropic.claude-instant-v1",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
@@ -1229,6 +1259,7 @@ chat_completion_streaming_expected_events = {
                 "role": "assistant",
                 "completion_id": None,
                 "sequence": 1,
+                "token_count": 0,
                 "response.model": "anthropic.claude-instant-v1",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
@@ -1255,6 +1286,7 @@ chat_completion_streaming_expected_events = {
                 "vendor": "bedrock",
                 "ingest_source": "Python",
                 "response.number_of_messages": 2,
+                "time_to_first_token": None,  # Varies each test run
             },
         ),
         (
@@ -1311,12 +1343,16 @@ chat_completion_streaming_expected_events = {
                 "duration": None,  # Response time varies each test run
                 "request.model": "cohere.command-text-v14",
                 "response.model": "cohere.command-text-v14",
+                "response.usage.completion_tokens": 91,
+                "response.usage.total_tokens": 100,
+                "response.usage.prompt_tokens": 9,
                 "request.temperature": 0.7,
                 "request.max_tokens": 100,
                 "response.choices.finish_reason": "COMPLETE",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
                 "response.number_of_messages": 2,
+                "time_to_first_token": None,  # Varies each test run
             },
         ),
         (
@@ -1333,6 +1369,7 @@ chat_completion_streaming_expected_events = {
                 "role": "user",
                 "completion_id": None,
                 "sequence": 0,
+                "token_count": 0,
                 "response.model": "cohere.command-text-v14",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
@@ -1351,6 +1388,7 @@ chat_completion_streaming_expected_events = {
                 "role": "assistant",
                 "completion_id": None,
                 "sequence": 1,
+                "token_count": 0,
                 "response.model": "cohere.command-text-v14",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
@@ -1372,12 +1410,16 @@ chat_completion_streaming_expected_events = {
                 "duration": None,  # Response time varies each test run
                 "request.model": "meta.llama2-13b-chat-v1",
                 "response.model": "meta.llama2-13b-chat-v1",
+                "response.usage.prompt_tokens": 17,
+                "response.usage.completion_tokens": 100,
+                "response.usage.total_tokens": 117,
                 "request.temperature": 0.7,
                 "request.max_tokens": 100,
                 "response.choices.finish_reason": "length",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
                 "response.number_of_messages": 2,
+                "time_to_first_token": None,  # Varies each test run
             },
         ),
         (
@@ -1394,6 +1436,7 @@ chat_completion_streaming_expected_events = {
                 "role": "user",
                 "completion_id": None,
                 "sequence": 0,
+                "token_count": 0,
                 "response.model": "meta.llama2-13b-chat-v1",
                 "vendor": "bedrock",
                 "ingest_source": "Python",
@@ -1412,6 +1455,7 @@ chat_completion_streaming_expected_events = {
                 "role": "assistant",
                 "completion_id": None,
                 "sequence": 1,
+                "token_count": 0,
                 "response.model": "meta.llama2-13b-chat-v1",
                 "vendor": "bedrock",
                 "ingest_source": "Python",

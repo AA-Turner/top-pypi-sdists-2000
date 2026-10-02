@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate
 from django.utils.cache import patch_vary_headers
 
 from oauth2_provider.models import get_access_token_model
+from oauth2_provider.utils import parse_bearer_token
 
 
 log = logging.getLogger(__name__)
@@ -35,7 +36,7 @@ class OAuth2TokenMiddleware:
 
     def __call__(self, request):
         # do something only if request contains a Bearer token
-        if request.META.get("HTTP_AUTHORIZATION", "").startswith("Bearer"):
+        if parse_bearer_token(request.META.get("HTTP_AUTHORIZATION", "")):
             if not hasattr(request, "user") or request.user.is_anonymous:
                 user = authenticate(request=request)
                 if user:
@@ -51,9 +52,8 @@ class OAuth2ExtraTokenMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        authheader = request.META.get("HTTP_AUTHORIZATION", "")
-        if authheader.startswith("Bearer"):
-            tokenstring = authheader.split()[1]
+        tokenstring = parse_bearer_token(request.META.get("HTTP_AUTHORIZATION", ""))
+        if tokenstring:
             AccessToken = get_access_token_model()
             try:
                 token_checksum = hashlib.sha256(tokenstring.encode("utf-8")).hexdigest()

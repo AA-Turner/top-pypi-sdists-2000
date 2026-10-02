@@ -15,7 +15,7 @@
 import pytest
 from langchain.messages import HumanMessage
 from langchain.tools import tool
-from testing_support.fixtures import reset_core_stats_engine, validate_attributes
+from testing_support.fixtures import dt_enabled, reset_core_stats_engine, validate_attributes
 from testing_support.ml_testing_utils import (
     disabled_ai_monitoring_record_content_settings,
     disabled_ai_monitoring_settings,
@@ -24,6 +24,7 @@ from testing_support.ml_testing_utils import (
 from testing_support.validators.validate_custom_event import validate_custom_event_count
 from testing_support.validators.validate_custom_events import validate_custom_events
 from testing_support.validators.validate_error_trace_attributes import validate_error_trace_attributes
+from testing_support.validators.validate_span_events import validate_span_events
 from testing_support.validators.validate_transaction_error_event_count import validate_transaction_error_event_count
 from testing_support.validators.validate_transaction_metrics import validate_transaction_metrics
 
@@ -32,7 +33,27 @@ from newrelic.api.llm_custom_attributes import WithLlmCustomAttributes
 from newrelic.common.object_names import callable_name
 from newrelic.common.object_wrapper import transient_function_wrapper
 
-PROMPT = {"messages": [HumanMessage('Use a tool to add an exclamation to the word "Hello"')]}
+from ._test_agents import (
+    agent_method_metric,
+    agent_runnable_type,
+    create_agent_runnable,
+    exercise_agent,
+    exercise_astream_events,
+    exercise_iteration_method,
+    exercise_method,
+    exercise_method_params,
+    exercise_method_version,
+    exercise_stream_events,
+    validate_agent_output,
+)
+
+PROMPT = {
+    "messages": [
+        HumanMessage(
+            'Call the add_exclamation tool with message="Hello". Reply with only the tool output, no other text.'
+        )
+    ]
+}
 ERROR_PROMPT = {"messages": [HumanMessage('Use a tool to add an exclamation to the word "exc"')]}
 SYNC_METHODS = {"invoke", "stream"}
 
@@ -76,17 +97,17 @@ def add_exclamation(message: str) -> str:
     return f"{message}!"
 
 
+@dt_enabled
 @reset_core_stats_engine()
-def test_agent(exercise_agent, create_agent_runnable, set_trace_info, method_name):
+def test_agent(exercise_agent, create_agent_runnable, set_trace_info, agent_method_metric):
     @validate_custom_events(events_with_context_attrs(agent_recorded_event))
     @validate_custom_event_count(count=exercise_agent._expected_event_count)
     @validate_transaction_metrics(
-        "test_agent",
-        scoped_metrics=[(f"Llm/agent/LangChain/{method_name}/my_agent", 1)],
-        rollup_metrics=[(f"Llm/agent/LangChain/{method_name}/my_agent", 1)],
-        background_task=True,
+        "test_agent", scoped_metrics=[agent_method_metric], rollup_metrics=[agent_method_metric], background_task=True
     )
     @validate_attributes("agent", ["llm"])
+    @validate_span_events(count=1, exact_agents={"subcomponent": '{"type": "APM-AI_AGENT", "name": "my_agent"}'})
+    @validate_span_events(count=1, exact_agents={"subcomponent": '{"type": "APM-AI_TOOL", "name": "add_exclamation"}'})
     @background_task(name="test_agent")
     def _test():
         set_trace_info()
@@ -100,18 +121,21 @@ def test_agent(exercise_agent, create_agent_runnable, set_trace_info, method_nam
     _test()
 
 
+@dt_enabled
 @reset_core_stats_engine()
 @disabled_ai_monitoring_record_content_settings
-def test_agent_no_content(exercise_agent, create_agent_runnable, set_trace_info, method_name):
+def test_agent_no_content(exercise_agent, create_agent_runnable, set_trace_info, agent_method_metric):
     @validate_custom_events(agent_recorded_event)
     @validate_custom_event_count(count=exercise_agent._expected_event_count)
     @validate_transaction_metrics(
         "test_agent_no_content",
-        scoped_metrics=[(f"Llm/agent/LangChain/{method_name}/my_agent", 1)],
-        rollup_metrics=[(f"Llm/agent/LangChain/{method_name}/my_agent", 1)],
+        scoped_metrics=[agent_method_metric],
+        rollup_metrics=[agent_method_metric],
         background_task=True,
     )
     @validate_attributes("agent", ["llm"])
+    @validate_span_events(count=1, exact_agents={"subcomponent": '{"type": "APM-AI_AGENT", "name": "my_agent"}'})
+    @validate_span_events(count=1, exact_agents={"subcomponent": '{"type": "APM-AI_TOOL", "name": "add_exclamation"}'})
     @background_task(name="test_agent_no_content")
     def _test():
         set_trace_info()
@@ -123,6 +147,7 @@ def test_agent_no_content(exercise_agent, create_agent_runnable, set_trace_info,
     _test()
 
 
+@dt_enabled
 @reset_core_stats_engine()
 @validate_custom_event_count(count=0)
 def test_agent_outside_txn(exercise_agent, create_agent_runnable):
@@ -130,6 +155,7 @@ def test_agent_outside_txn(exercise_agent, create_agent_runnable):
     exercise_agent(my_agent, PROMPT)
 
 
+@dt_enabled
 @disabled_ai_monitoring_settings
 @reset_core_stats_engine()
 @validate_custom_event_count(count=0)
@@ -140,8 +166,11 @@ def test_agent_disabled_ai_monitoring_events(exercise_agent, create_agent_runnab
     exercise_agent(my_agent, PROMPT)
 
 
+@dt_enabled
 @reset_core_stats_engine()
-def test_agent_execution_error(exercise_agent, create_agent_runnable, set_trace_info, method_name, agent_runnable_type):
+def test_agent_execution_error(
+    exercise_agent, create_agent_runnable, set_trace_info, agent_method_metric, agent_runnable_type
+):
     # Add a wrapper to intentionally force an error in the Agent code
     @transient_function_wrapper("langchain_openai.chat_models.base", "ChatOpenAI._get_request_payload")
     def inject_exception(wrapped, instance, args, kwargs):
@@ -154,11 +183,13 @@ def test_agent_execution_error(exercise_agent, create_agent_runnable, set_trace_
     @validate_custom_event_count(count=1 if agent_runnable_type != "RunnableSequence" else 3)
     @validate_transaction_metrics(
         "test_agent_execution_error",
-        scoped_metrics=[(f"Llm/agent/LangChain/{method_name}/my_agent", 1)],
-        rollup_metrics=[(f"Llm/agent/LangChain/{method_name}/my_agent", 1)],
+        scoped_metrics=[agent_method_metric],
+        rollup_metrics=[agent_method_metric],
         background_task=True,
     )
     @validate_attributes("agent", ["llm"])
+    # Only an agent span is expected here and not a tool because the error is injected before the tool is called
+    @validate_span_events(count=1, exact_agents={"subcomponent": '{"type": "APM-AI_AGENT", "name": "my_agent"}'})
     @background_task(name="test_agent_execution_error")
     def _test():
         set_trace_info()

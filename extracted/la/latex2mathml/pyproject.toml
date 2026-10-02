@@ -1,0 +1,81 @@
+[project]
+name = "latex2mathml"
+version = "3.81.1"
+description = "Pure Python library for LaTeX to MathML conversion"
+readme = "README.md"
+keywords = [
+    "latex",
+    "mathml",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: Markup :: HTML",
+    "Topic :: Text Processing :: Markup :: LaTeX",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+requires-python = ">=3.10"
+dependencies = []
+
+[[project.authors]]
+name = "Ronie Martinez"
+email = "ronmarti18@gmail.com"
+
+[project.license]
+text = "MIT"
+
+[project.urls]
+repository = "https://github.com/roniemartinez/latex2mathml"
+Donate = "https://www.buymeacoffee.com/roniemartinez"
+
+[project.scripts]
+latex2mathml = "latex2mathml.converter:main"
+l2m = "latex2mathml.converter:main"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.19.1",
+    "pre-commit>=4.5.1",
+    "pytest>=9.0.2",
+    "pytest-clarity>=1.0.1",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.15.6",
+    "syrupy>=5.1.0",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "I",
+    "W",
+]
+ignore = ["E203"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["latex2mathml"]
+
+[tool.mypy]
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+addopts = "--cov=latex2mathml --cov-report=term-missing --cov-report=xml --cov-report=html -vv -x "
+
+[tool.uv.build-backend]
+module-root = ""
+
+[build-system]
+requires = ["uv_build>=0.10.11,<0.13.0"]
+build-backend = "uv_build"

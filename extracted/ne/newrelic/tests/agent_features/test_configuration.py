@@ -32,9 +32,9 @@ from newrelic.config import (
     delete_setting,
     initialize,
     translate_deprecated_settings,
-    translate_event_harvest_config_settings,
 )
 from newrelic.core.config import (
+    ML_EVENT_RESERVOIR_SIZE,
     Settings,
     _map_aws_account_id,
     apply_config_setting,
@@ -396,117 +396,24 @@ def test_delete_setting_parent():
     assert "transaction_tracer" not in settings
 
 
-# Build a series of tests for `translate_deprecated_setting`.
-#
-# Each test will consist of an old setting and new setting.
-# For each setting, there are 2 variations:
-#
-#       'value' == 'default'
-#       'value' != 'default'
-TSetting = collections.namedtuple("TSetting", ["name", "value", "default"])
+def test_browser_monitoring_version_without_loader_warns(caplog):
+    caplog.set_level(logging.WARNING, logger="newrelic.core.config")
 
-translate_event_harvest_settings_tests = [
-    (
-        TSetting("transaction_events.max_samples_stored", 1200, 1200),
-        TSetting("event_harvest_config.harvest_limits.analytic_event_data", 9999, 1200),
-    ),
-    (
-        TSetting("transaction_events.max_samples_stored", 9999, 1200),
-        TSetting("event_harvest_config.harvest_limits.analytic_event_data", 1200, 1200),
-    ),
-    (
-        TSetting("span_events.max_samples_stored", 1000, 2000),
-        TSetting("event_harvest_config.harvest_limits.span_event_data", 9999, 2000),
-    ),
-    (
-        TSetting("span_events.max_samples_stored", 9999, 2000),
-        TSetting("event_harvest_config.harvest_limits.span_event_data", 1000, 2000),
-    ),
-    (
-        TSetting("error_collector.max_event_samples_stored", 100, 100),
-        TSetting("event_harvest_config.harvest_limits.error_event_data", 9999, 100),
-    ),
-    (
-        TSetting("error_collector.max_event_samples_stored", 9999, 100),
-        TSetting("event_harvest_config.harvest_limits.error_event_data", 100, 100),
-    ),
-    (
-        TSetting("custom_insights_events.max_samples_stored", 3600, 3600),
-        TSetting("event_harvest_config.harvest_limits.custom_event_data", 9999, 3600),
-    ),
-    (
-        TSetting("custom_insights_events.max_samples_stored", 9999, 3600),
-        TSetting("event_harvest_config.harvest_limits.custom_event_data", 3600, 3600),
-    ),
-    (
-        TSetting("application_logging.forwarding.max_samples_stored", 10000, 10000),
-        TSetting("event_harvest_config.harvest_limits.log_event_data", 99999, 10000),
-    ),
-    (
-        TSetting("application_logging.forwarding.max_samples_stored", 99999, 10000),
-        TSetting("event_harvest_config.harvest_limits.log_event_data", 10000, 10000),
-    ),
-]
+    settings = global_settings()
+    apply_config_setting(settings, "browser_monitoring.version", "1.317.0")
 
+    app_settings = apply_server_side_settings(settings=settings)
 
-@pytest.mark.parametrize("external,internal", translate_event_harvest_settings_tests)
-def test_translate_event_harvest_setting_without_new_setting(external, internal):
-    # From the user's end, the *.max_samples_stored naming convention
-    # is the desired setting name, but since the collector still uses the
-    # event_harvest_config.harvest_limits.* naming convention, those will be
-    # what is actually stored in the settings object.
-    #
-    # Before: max_samples_stored setting will be in settings object.
-    #         event_harvest_config.harvest_limits.* settings will
-    #         *NOT* be in settings object.
-    #
-    # After:  max_samples_stored setting will *NOT* be in settings object.
-    #         event_harvest_config.harvest_limits.* settings will be in
-    #         settings object with value given by max_samples_stored
+    assert app_settings.browser_monitoring.version == "1.317.0"
+    assert not app_settings.js_agent_loader
 
-    settings = apply_server_side_settings()
-    apply_config_setting(settings, external.name, external.value)
+    message = (
+        "Requested browser_monitoring.version '1.317.0' did not return a browser agent loader; "
+        "please ensure it is available and supported. No browser monitoring will be injected."
+    )
+    assert message in caplog.text
 
-    assert fetch_config_setting(settings, external.name) == external.value
-    assert fetch_config_setting(settings, internal.name) == internal.default
-
-    cached = [(external.name, external.value)]
-    result = translate_event_harvest_config_settings(settings, cached)
-
-    assert result is settings
-    assert external.name not in flatten_settings(result)
-    assert fetch_config_setting(result, internal.name) == external.value
-
-
-@pytest.mark.parametrize("external,internal", translate_event_harvest_settings_tests)
-def test_translate_event_harvest_setting_with_new_setting(external, internal):
-    # NOTE: This is the same behavior for whether the old setting is present or not
-    # From the user's end, the *.max_samples_stored naming convention
-    # is the desired setting name, but since the collector still uses the
-    # event_harvest_config.harvest_limits.* naming convention, those will be
-    # what is actually stored in the settings object.
-    #
-    # Before: max_samples_stored setting will be in settings object.
-    #         event_harvest_config.harvest_limits.* settings will
-    #         also be in settings object.
-    #
-    # After:  max_samples_stored setting will *NOT* be in settings object.
-    #         event_harvest_config.harvest_limits.* settings will be in
-    #         settings object with value given by max_samples_stored
-
-    settings = apply_server_side_settings()
-    apply_config_setting(settings, external.name, external.value)
-    apply_config_setting(settings, internal.name, internal.value)
-
-    assert fetch_config_setting(settings, external.name) == external.value
-    assert fetch_config_setting(settings, internal.name) == internal.value
-
-    cached = [(external.name, external.value), (internal.name, internal.value)]
-    result = translate_event_harvest_config_settings(settings, cached)
-
-    assert result is settings
-    assert external.name not in flatten_settings(result)
-    assert fetch_config_setting(result, internal.name) == external.value
+    apply_config_setting(settings, "browser_monitoring.version", None)
 
 
 translate_deprecated_settings_tests = [
@@ -589,7 +496,7 @@ def test_translate_deprecated_setting_without_old_setting(old, new):
     (
         ("agent_run_id", None),
         ("entity_guid", None),
-        ("distributed_tracing.exclude_newrelic_header", False),
+        ("distributed_tracing.exclude_newrelic_header", True),
         ("otlp_host", "otlp.nr-data.net"),
         ("otlp_port", 0),
     ),

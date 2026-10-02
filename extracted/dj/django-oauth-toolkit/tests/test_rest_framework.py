@@ -16,6 +16,7 @@ from rest_framework.views import APIView
 from oauth2_provider.contrib.rest_framework import (
     IsAuthenticatedOrTokenHasScope,
     OAuth2Authentication,
+    OAuth2ProtectedResourceAuthentication,
     TokenHasReadWriteScope,
     TokenHasResourceScope,
     TokenHasScope,
@@ -111,9 +112,23 @@ class AuthenticationNoneOAuth2View(MockView):
     authentication_classes = [AuthenticationNone]
 
 
+class OAuth2ProtectedResourceView(MockView):
+    authentication_classes = [OAuth2ProtectedResourceAuthentication]
+
+
+class OAuth2ProtectedResourceCustomUrlAuthentication(OAuth2ProtectedResourceAuthentication):
+    resource_metadata_url = "https://api.example.com/.well-known/oauth-protected-resource/tenant1"
+
+
+class OAuth2ProtectedResourceCustomUrlView(MockView):
+    authentication_classes = [OAuth2ProtectedResourceCustomUrlAuthentication]
+
+
 urlpatterns = [
     path("oauth2/", include("oauth2_provider.urls")),
     path("oauth2-test/", OAuth2View.as_view()),
+    path("oauth2-protected-resource-test/", OAuth2ProtectedResourceView.as_view()),
+    path("oauth2-protected-resource-custom-url/", OAuth2ProtectedResourceCustomUrlView.as_view()),
     path("oauth2-scoped-test/", ScopedView.as_view()),
     path("oauth2-scoped-missing-auth/", TokenHasScopeViewWrongAuth.as_view()),
     path("oauth2-read-write-test/", ReadWriteScopedView.as_view()),
@@ -177,6 +192,44 @@ class TestOAuth2Authentication(TestCase):
             'Bearer realm="api",error="invalid_token",error_description="The access token is invalid."',
         )
 
+    def test_protected_resource_authentication_advertises_metadata(self):
+        """RFC 9728: the metadata authenticator adds resource_metadata to the challenge."""
+        metadata_url = "http://testserver/oauth2/.well-known/oauth-protected-resource"
+        response = self.client.get("/oauth2-protected-resource-test/")
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(
+            response["WWW-Authenticate"],
+            'Bearer realm="api",resource_metadata="{}"'.format(metadata_url),
+        )
+
+    def test_protected_resource_authentication_metadata_with_invalid_token(self):
+        metadata_url = "http://testserver/oauth2/.well-known/oauth-protected-resource"
+        auth = self._create_authorization_header("fake-token")
+        response = self.client.get("/oauth2-protected-resource-test/", HTTP_AUTHORIZATION=auth)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(
+            response["WWW-Authenticate"],
+            'Bearer realm="api",error="invalid_token",'
+            'error_description="The access token is invalid.",'
+            'resource_metadata="{}"'.format(metadata_url),
+        )
+
+    def test_base_authentication_challenge_unchanged(self):
+        """The base OAuth2Authentication challenge must not gain resource_metadata."""
+        response = self.client.get("/oauth2-test/")
+        self.assertEqual(response.status_code, 401)
+        assert "resource_metadata" not in response["WWW-Authenticate"]
+
+    def test_protected_resource_authentication_custom_metadata_url(self):
+        """A subclass can advertise a path-component / multi-tenant metadata URL."""
+        response = self.client.get("/oauth2-protected-resource-custom-url/")
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(
+            response["WWW-Authenticate"],
+            'Bearer realm="api",'
+            'resource_metadata="https://api.example.com/.well-known/oauth-protected-resource/tenant1"',
+        )
+
     def test_authentication_or_scope_denied(self):
         # user is not authenticated
         # not a correct token
@@ -203,10 +256,16 @@ class TestOAuth2Authentication(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_scope_missing_scope_attr(self):
+        # A token without a `scope` attribute (wrong authentication class) must deny
+        # the request rather than raise an AssertionError, so TokenHasScope can be
+        # composed with other permissions. Regression test for #1169.
         auth = self._create_authorization_header("fake-token")
-        with self.assertRaises(AssertionError) as e:
-            self.client.get("/oauth2-scoped-missing-auth/", HTTP_AUTHORIZATION=auth)
-        self.assertTrue("`oauth2_provider.rest_framework.OAuth2Authentication`" in str(e.exception))
+        with self.assertLogs("oauth2_provider", level="WARNING") as logs:
+            response = self.client.get("/oauth2-scoped-missing-auth/", HTTP_AUTHORIZATION=auth)
+        self.assertEqual(response.status_code, 403)
+        self.assertTrue(
+            any("`oauth2_provider.contrib.rest_framework.OAuth2Authentication`" in msg for msg in logs.output)
+        )
 
     def test_authenticated_or_scoped_permission_allow(self):
         self.access_token.scope = "scope1"
@@ -407,10 +466,15 @@ class TestOAuth2Authentication(TestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_method_scope_alt_missing_scope_attr(self):
+        # As with TokenHasScope, a token lacking a `scope` attribute must deny
+        # rather than raise, so TokenMatchesOASRequirements composes. See #1169.
         auth = self._create_authorization_header("fake-token")
-        with self.assertRaises(AssertionError) as e:
-            self.client.get("/oauth2-method-scope-missing-auth/", HTTP_AUTHORIZATION=auth)
-        self.assertTrue("`oauth2_provider.rest_framework.OAuth2Authentication`" in str(e.exception))
+        with self.assertLogs("oauth2_provider", level="WARNING") as logs:
+            response = self.client.get("/oauth2-method-scope-missing-auth/", HTTP_AUTHORIZATION=auth)
+        self.assertEqual(response.status_code, 403)
+        self.assertTrue(
+            any("`oauth2_provider.contrib.rest_framework.OAuth2Authentication`" in msg for msg in logs.output)
+        )
 
     def test_authentication_none(self):
         auth = self._create_authorization_header(self.access_token.token)

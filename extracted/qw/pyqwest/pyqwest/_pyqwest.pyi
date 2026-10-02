@@ -12,21 +12,36 @@ from collections.abc import (
 )
 from contextlib import AbstractContextManager
 from types import TracebackType
-from typing import Protocol, TypeAlias, TypeVar, overload, runtime_checkable
+from typing import (
+    Literal,
+    Protocol,
+    TypeAlias,
+    TypeVar,
+    final,
+    overload,
+    runtime_checkable,
+)
 
 from opentelemetry.metrics import MeterProvider
 from opentelemetry.trace import TracerProvider
+
+from ._multipart import Multipart, SyncMultipart
 
 _T = TypeVar("_T")
 _JSON: TypeAlias = (
     Mapping[str, _JSON] | Sequence[_JSON] | str | int | float | bool | None
 )
-_RequestContent: TypeAlias = bytes | AsyncIterator[bytes] | Mapping[str, _JSON]
-_SyncRequestContent: TypeAlias = bytes | Iterable[bytes] | Mapping[str, _JSON]
+_RequestContent: TypeAlias = (
+    bytes | AsyncIterator[bytes] | Mapping[str, _JSON] | Multipart
+)
+_SyncRequestContent: TypeAlias = (
+    bytes | Iterable[bytes] | Mapping[str, _JSON] | SyncMultipart
+)
 
 _Buffer: TypeAlias = bytes | memoryview | bytearray
 _QueryParams: TypeAlias = dict[str, str | None] | Iterable[tuple[str, str | None]]
 
+@final
 class Headers:
     """Container of HTTP headers.
 
@@ -93,7 +108,7 @@ class Headers:
             other: The object to compare against.
         """
 
-    def get(self, key: str | HTTPHeaderName, default: _T = None) -> str | _T:
+    def get(self, key: str | HTTPHeaderName, default: _T | None = None) -> str | _T:
         """Returns the header value for the key, or default if not present.
 
         Args:
@@ -194,6 +209,7 @@ class Headers:
             key: The header name.
         """
 
+@final
 class HTTPVersion:
     """An enumeration of HTTP versions."""
 
@@ -213,6 +229,7 @@ class HTTPVersion:
     def __gt__(self, other: object) -> bool: ...
     def __ge__(self, other: object) -> bool: ...
 
+@final
 class Client:
     def __init__(self, transport: Transport | None = None) -> None:
         """Creates a new asynchronous HTTP client.
@@ -242,6 +259,7 @@ class Client:
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -259,12 +277,14 @@ class Client:
         Args:
             url: The unencoded request URL.
             headers: The request headers.
-            content: The request content. A Python dictionary will be converted to JSON.
+            content: The request content. A Python dictionary will be converted
+                     to JSON and a Multipart will be sent as a multipart form.
             params: Query parameters to append to the URL. None values will be treated as key-only.
 
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -285,6 +305,7 @@ class Client:
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -306,6 +327,7 @@ class Client:
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -327,6 +349,7 @@ class Client:
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -344,12 +367,14 @@ class Client:
         Args:
             url: The unencoded request URL.
             headers: The request headers.
-            content: The request content. A Python dictionary will be converted to JSON.
+            content: The request content. A Python dictionary will be converted
+                     to JSON and a Multipart will be sent as a multipart form.
             params: Query parameters to append to the URL. None values will be treated as key-only.
 
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -367,12 +392,14 @@ class Client:
         Args:
             url: The unencoded request URL.
             headers: The request headers.
-            content: The request content. A Python dictionary will be converted to JSON.
+            content: The request content. A Python dictionary will be converted
+                     to JSON and a Multipart will be sent as a multipart form.
             params: Query parameters to append to the URL. None values will be treated as key-only.
 
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -392,12 +419,14 @@ class Client:
             method: The HTTP method.
             url: The unencoded request URL.
             headers: The request headers.
-            content: The request content. A Python dictionary will be converted to JSON.
+            content: The request content. A Python dictionary will be converted
+                     to JSON and a Multipart will be sent as a multipart form.
             params: Query parameters to append to the URL. None values will be treated as key-only.
 
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -417,14 +446,52 @@ class Client:
             method: The HTTP method.
             url: The unencoded request URL.
             headers: The request headers.
-            content: The request content. A Python dictionary will be converted to JSON.
+            content: The request content. A Python dictionary will be converted
+                     to JSON and a Multipart will be sent as a multipart form.
             params: Query parameters to append to the URL. None values will be treated as key-only.
 
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
+        """
+
+class Proxy:
+    """A proxy for transports to route requests through.
+
+    In addition to authentication and extra headers to send to the proxy,
+    it allows restricting the requests routed through the proxy by URL
+    scheme or exclusion list.
+    """
+
+    def __init__(
+        self,
+        url: str,
+        *,
+        auth: tuple[str, str] | None = None,
+        headers: Headers | Mapping[str, str] | Iterable[tuple[str, str]] | None = None,
+        no_proxy: str | None = None,
+        scheme: Literal["http", "https"] | None = None,
+    ) -> None:
+        """Creates a new Proxy object.
+
+        Args:
+            url: The URL of the proxy, for example "http://localhost:8030".
+                 The URL scheme may be http, https, socks5, or socks5h.
+                 Credentials in the URL, for example
+                 "http://user:pass@localhost:8030", will be used for proxy
+                 authentication.
+            auth: A (username, password) tuple to use for basic proxy
+                  authentication, as an alternative to credentials in the URL.
+            headers: Extra headers to send to the proxy.
+            no_proxy: A comma-separated list of hosts that should not be proxied.
+                      Entries may be IP addresses, optionally with a subnet mask
+                      such as "192.168.1.0/24", or domain names which also match
+                      all subdomains. The entry "*" matches all hosts.
+            scheme: Which request URL scheme to route through the proxy. By default,
+                    both http and https requests are proxied.
         """
 
 @runtime_checkable
@@ -441,6 +508,7 @@ class Transport(Protocol):
     def execute(self, request: Request) -> Awaitable[Response]:
         """Executes a request."""
 
+@final
 class HTTPTransport:
     """An HTTP transport implementation using reqwest."""
 
@@ -448,9 +516,11 @@ class HTTPTransport:
         self,
         *,
         tls_ca_cert: bytes | None = None,
+        tls_include_system_certs: bool = False,
         tls_key: bytes | None = None,
         tls_cert: bytes | None = None,
         http_version: HTTPVersion | None = None,
+        proxy: str | Proxy | Sequence[str | Proxy] | None = None,
         timeout: float | None = None,
         connect_timeout: float | None = 30.0,
         read_timeout: float | None = None,
@@ -462,17 +532,21 @@ class HTTPTransport:
         enable_zstd: bool = True,
         use_system_dns: bool = False,
         enable_cookie_store: bool = False,
+        follow_redirects: bool = True,
+        max_redirects: int = 10,
         enable_otel: bool = True,
         meter_provider: MeterProvider | None = None,
         tracer_provider: TracerProvider | None = None,
     ) -> None:
         """Creates a new HTTPTransport object.
 
-        Without any arguments, the transport behaves like the default transport. When creating
-        a transport, take care to set options to meet your needs.
+        Without any arguments, the transport behaves like the default transport without trusted TLS certificates.
+        When creating a transport, take care to set options to meet your needs.
 
         Args:
-            tls_ca_cert: The CA certificate to use to verify the server for TLS connections.
+            tls_ca_cert: The PEM-encoded CA certificate(s) to use to verify the server for TLS connections.
+            tls_include_system_certs: Whether to include the system CA certificates to verify TLS connections.
+                                      If this is unset and tls_ca_cert is not provided, TLS will not function.
             tls_key: The client private key to identify the client for mTLS connections.
                      tls_cert must also be set.
             tls_cert: The client certificate to identify the client for mTLS connections.
@@ -480,6 +554,14 @@ class HTTPTransport:
             http_version: The HTTP version to use for requests. If unset, HTTP/1 is used for
                           plaintext and ALPN negotiates the version for TLS connections
                           which typically means HTTP/2 if the server supports it.
+            proxy: A proxy to send requests through. A URL string such as
+                   "http://localhost:8030" proxies all requests, equivalent to
+                   Proxy(url). Pass a Proxy object to configure authentication,
+                   extra headers, or routing rules, or a sequence of them to
+                   apply multiple proxy rules, where the first matching proxy
+                   is used for each request. An empty sequence, like None,
+                   configures no explicit proxy, in which case proxy
+                   environment variables such as HTTP_PROXY still apply.
             timeout: Default timeout for requests in seconds. This is the timeout from
                      the start of the request to the end of the response.
             connect_timeout: Timeout for connection establishment in seconds.
@@ -498,6 +580,13 @@ class HTTPTransport:
             enable_cookie_store: Whether to enable automatic cookie storage and sending. When enabled,
                           the transport will automatically store cookies from responses and send
                           them with subsequent requests.
+            follow_redirects: Whether to automatically follow redirect responses. When disabled,
+                              which is the default, redirect responses are returned as-is.
+                              Leave this disabled when the transport is used through
+                              pyqwest.httpx, because httpx clients apply their own
+                              follow_redirects setting and track redirects in response.history.
+            max_redirects: Maximum number of redirects to follow when follow_redirects is enabled.
+                           A request exceeding it fails with TooManyRedirects.
         """
 
     def __aenter__(self) -> Awaitable[HTTPTransport]:
@@ -522,6 +611,7 @@ class HTTPTransport:
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -546,6 +636,7 @@ def get_default_transport() -> HTTPTransport:
     ```
     """
 
+@final
 class Request:
     """An HTTP request."""
 
@@ -564,7 +655,8 @@ class Request:
             method: The HTTP method.
             url: The unencoded request URL.
             headers: The request headers.
-            content: The request content. A Python dictionary will be converted to JSON.
+            content: The request content. A Python dictionary will be converted
+                     to JSON and a Multipart will be sent as a multipart form.
             params: Query parameters to append to the URL. None values will be treated as key-only.
         """
 
@@ -587,6 +679,7 @@ class Request:
     @property
     def _json(self) -> bool: ...
 
+@final
 class Response:
     """An HTTP response."""
 
@@ -613,6 +706,9 @@ class Response:
             headers: The response headers.
             content: The response content.
             trailers: The response trailers.
+
+        Raises:
+            RemoteProtocolError: If the status is not a valid HTTP status code.
         """
 
     def __aenter__(self) -> Awaitable[Response]:
@@ -662,6 +758,7 @@ class Response:
         it is not necessary to explicitly close the response.
         """
 
+@final
 class SyncClient:
     """A synchronous HTTP client.
 
@@ -696,6 +793,7 @@ class SyncClient:
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -714,13 +812,15 @@ class SyncClient:
         Args:
             url: The unencoded request URL.
             headers: The request headers.
-            content: The request content. A Python dictionary will be converted to JSON.
+            content: The request content. A Python dictionary will be converted
+                     to JSON and a SyncMultipart will be sent as a multipart form.
             timeout: The timeout for the request in seconds.
             params: Query parameters to append to the URL. None values will be treated as key-only.
 
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -744,6 +844,7 @@ class SyncClient:
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -767,6 +868,7 @@ class SyncClient:
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -790,6 +892,7 @@ class SyncClient:
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -808,13 +911,15 @@ class SyncClient:
         Args:
             url: The unencoded request URL.
             headers: The request headers.
-            content: The request content. A Python dictionary will be converted to JSON.
+            content: The request content. A Python dictionary will be converted
+                     to JSON and a SyncMultipart will be sent as a multipart form.
             timeout: The timeout for the request in seconds.
             params: Query parameters to append to the URL. None values will be treated as key-only.
 
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -833,13 +938,15 @@ class SyncClient:
         Args:
             url: The unencoded request URL.
             headers: The request headers.
-            content: The request content. A Python dictionary will be converted to JSON.
+            content: The request content. A Python dictionary will be converted
+                     to JSON and a SyncMultipart will be sent as a multipart form.
             timeout: The timeout for the request in seconds.
             params: Query parameters to append to the URL. None values will be treated as key-only.
 
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -860,13 +967,15 @@ class SyncClient:
             method: The HTTP method.
             url: The unencoded request URL.
             headers: The request headers.
-            content: The request content. A Python dictionary will be converted to JSON.
+            content: The request content. A Python dictionary will be converted
+                     to JSON and a SyncMultipart will be sent as a multipart form.
             timeout: The timeout for the request in seconds.
             params: Query parameters to append to the URL. None values will be treated as key-only.
 
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -887,13 +996,15 @@ class SyncClient:
             method: The HTTP method.
             url: The unencoded request URL.
             headers: The request headers.
-            content: The request content. A Python dictionary will be converted to JSON.
+            content: The request content. A Python dictionary will be converted
+                     to JSON and a SyncMultipart will be sent as a multipart form.
             timeout: The timeout for the request in seconds.
             params: Query parameters to append to the URL. None values will be treated as key-only.
 
         Raises:
             ConnectionError: If the connection fails.
             TimeoutError: If the request times out.
+            RemoteProtocolError: If the peer violates the HTTP protocol.
             ReadError: If an error occurs reading the response.
             WriteError: If an error occurs writing the request.
         """
@@ -912,6 +1023,7 @@ class SyncTransport(Protocol):
     def execute_sync(self, request: SyncRequest) -> SyncResponse:
         """Executes a request."""
 
+@final
 class SyncHTTPTransport:
     """An HTTP transport implementation using reqwest."""
 
@@ -919,9 +1031,11 @@ class SyncHTTPTransport:
         self,
         *,
         tls_ca_cert: bytes | None = None,
+        tls_include_system_certs: bool = False,
         tls_key: bytes | None = None,
         tls_cert: bytes | None = None,
         http_version: HTTPVersion | None = None,
+        proxy: str | Proxy | Sequence[str | Proxy] | None = None,
         timeout: float | None = None,
         connect_timeout: float | None = 30.0,
         read_timeout: float | None = None,
@@ -933,17 +1047,21 @@ class SyncHTTPTransport:
         enable_zstd: bool = True,
         use_system_dns: bool = False,
         enable_cookie_store: bool = False,
+        follow_redirects: bool = True,
+        max_redirects: int = 10,
         enable_otel: bool = True,
         meter_provider: MeterProvider | None = None,
         tracer_provider: TracerProvider | None = None,
     ) -> None:
         """Creates a new SyncHTTPTransport object.
 
-        Without any arguments, the transport behaves like the default transport. When creating
-        a transport, take care to set options to meet your needs.
+        Without any arguments, the transport behaves like the default transport without trusted TLS certificates.
+        When creating a transport, take care to set options to meet your needs.
 
         Args:
-            tls_ca_cert: The CA certificate to use to verify the server for TLS connections.
+            tls_ca_cert: The PEM-encoded CA certificate(s) to use to verify the server for TLS connections.
+            tls_include_system_certs: Whether to include the system CA certificates to verify TLS connections.
+                                      If this is unset and tls_ca_cert is not provided, TLS will not function.
             tls_key: The client private key to identify the client for mTLS connections.
                      tls_cert must also be set.
             tls_cert: The client certificate to identify the client for mTLS connections.
@@ -951,6 +1069,14 @@ class SyncHTTPTransport:
             http_version: The HTTP version to use for requests. If unset, HTTP/1 is used for
                           plaintext and ALPN negotiates the version for TLS connections
                           which typically means HTTP/2 if the server supports it.
+            proxy: A proxy to send requests through. A URL string such as
+                   "http://localhost:8030" proxies all requests, equivalent to
+                   Proxy(url). Pass a Proxy object to configure authentication,
+                   extra headers, or routing rules, or a sequence of them to
+                   apply multiple proxy rules, where the first matching proxy
+                   is used for each request. An empty sequence, like None,
+                   configures no explicit proxy, in which case proxy
+                   environment variables such as HTTP_PROXY still apply.
             timeout: Default timeout for requests in seconds. This is the timeout from
                      the start of the request to the end of the response.
             connect_timeout: Timeout for connection establishment in seconds.
@@ -969,6 +1095,13 @@ class SyncHTTPTransport:
             enable_cookie_store: Whether to enable automatic cookie storage and sending. When enabled,
                           the transport will automatically store cookies from responses and send
                           them with subsequent requests.
+            follow_redirects: Whether to automatically follow redirect responses. When disabled,
+                              which is the default, redirect responses are returned as-is.
+                              Leave this disabled when the transport is used through
+                              pyqwest.httpx, because httpx clients apply their own
+                              follow_redirects setting and track redirects in response.history.
+            max_redirects: Maximum number of redirects to follow when follow_redirects is enabled.
+                           A request exceeding it fails with TooManyRedirects.
         """
 
     def __enter__(self) -> SyncHTTPTransport:
@@ -1012,6 +1145,7 @@ def get_default_sync_transport() -> SyncHTTPTransport:
     ```
     """
 
+@final
 class SyncRequest:
     """An HTTP request."""
 
@@ -1030,7 +1164,8 @@ class SyncRequest:
             method: The HTTP method.
             url: The unencoded request URL.
             headers: The request headers.
-            content: The request content. A Python dictionary will be converted to JSON.
+            content: The request content. A Python dictionary will be converted
+                     to JSON and a SyncMultipart will be sent as a multipart form.
             params: Query parameters to append to the URL. None values will be treated as key-only.
         """
 
@@ -1053,6 +1188,7 @@ class SyncRequest:
     @property
     def _json(self) -> bool: ...
 
+@final
 class SyncResponse:
     """An HTTP response."""
 
@@ -1079,6 +1215,9 @@ class SyncResponse:
             headers: The response headers.
             content: The response content.
             trailers: The response trailers.
+
+        Raises:
+            RemoteProtocolError: If the status is not a valid HTTP status code.
         """
 
     def __enter__(self) -> SyncResponse:
@@ -1128,6 +1267,7 @@ class SyncResponse:
         it is not necessary to explicitly close the response.
         """
 
+@final
 class FullResponse:
     """A fully buffered HTTP response."""
 
@@ -1172,12 +1312,19 @@ class FullResponse:
         The content-type header is not checked when using this method.
         """
 
+@final
 class ReadError(Exception):
     """An error representing a read error during response reading."""
 
+@final
 class WriteError(Exception):
     """An error representing a write error during request sending."""
 
+@final
+class TooManyRedirects(Exception):
+    """An error raised when a request exceeded the transport's max_redirects."""
+
+@final
 class HTTPHeaderName:
     """An enum type corresponding to HTTP header names."""
 

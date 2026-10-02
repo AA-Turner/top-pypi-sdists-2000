@@ -46,6 +46,7 @@ struct mjtDisableBit {
     std::make_pair("mjDSBL_AUTORESET", ::mjtDisableBit::mjDSBL_AUTORESET),
     std::make_pair("mjDSBL_NATIVECCD", ::mjtDisableBit::mjDSBL_NATIVECCD),
     std::make_pair("mjDSBL_ISLAND", ::mjtDisableBit::mjDSBL_ISLAND),
+    std::make_pair("mjDSBL_MULTICCD", ::mjtDisableBit::mjDSBL_MULTICCD),
     std::make_pair("mjNDISABLE", ::mjtDisableBit::mjNDISABLE)};
 };
 
@@ -57,8 +58,9 @@ struct mjtEnableBit {
     std::make_pair("mjENBL_ENERGY", ::mjtEnableBit::mjENBL_ENERGY),
     std::make_pair("mjENBL_FWDINV", ::mjtEnableBit::mjENBL_FWDINV),
     std::make_pair("mjENBL_INVDISCRETE", ::mjtEnableBit::mjENBL_INVDISCRETE),
-    std::make_pair("mjENBL_MULTICCD", ::mjtEnableBit::mjENBL_MULTICCD),
     std::make_pair("mjENBL_SLEEP", ::mjtEnableBit::mjENBL_SLEEP),
+    std::make_pair("mjENBL_DIAGEXACT", ::mjtEnableBit::mjENBL_DIAGEXACT),
+    std::make_pair("mjENBL_IPC", ::mjtEnableBit::mjENBL_IPC),
     std::make_pair("mjNENABLE", ::mjtEnableBit::mjNENABLE)};
 };
 
@@ -169,7 +171,8 @@ struct mjtIntegrator {
     std::make_pair("mjINT_EULER", ::mjtIntegrator::mjINT_EULER),
     std::make_pair("mjINT_RK4", ::mjtIntegrator::mjINT_RK4),
     std::make_pair("mjINT_IMPLICIT", ::mjtIntegrator::mjINT_IMPLICIT),
-    std::make_pair("mjINT_IMPLICITFAST", ::mjtIntegrator::mjINT_IMPLICITFAST)};
+    std::make_pair("mjINT_IMPLICITFAST", ::mjtIntegrator::mjINT_IMPLICITFAST),
+    std::make_pair("mjINT_DISCRETE", ::mjtIntegrator::mjINT_DISCRETE)};
 };
 
 struct mjtCone {
@@ -208,6 +211,7 @@ struct mjtEq {
     std::make_pair("mjEQ_TENDON", ::mjtEq::mjEQ_TENDON),
     std::make_pair("mjEQ_FLEX", ::mjtEq::mjEQ_FLEX),
     std::make_pair("mjEQ_FLEXVERT", ::mjtEq::mjEQ_FLEXVERT),
+    std::make_pair("mjEQ_FLEXSTRAIN", ::mjtEq::mjEQ_FLEXSTRAIN),
     std::make_pair("mjEQ_DISTANCE", ::mjtEq::mjEQ_DISTANCE)};
 };
 
@@ -233,6 +237,7 @@ struct mjtTrn {
     std::make_pair("mjTRN_TENDON", ::mjtTrn::mjTRN_TENDON),
     std::make_pair("mjTRN_SITE", ::mjtTrn::mjTRN_SITE),
     std::make_pair("mjTRN_BODY", ::mjtTrn::mjTRN_BODY),
+    std::make_pair("mjTRN_SO3", ::mjtTrn::mjTRN_SO3),
     std::make_pair("mjTRN_UNDEFINED", ::mjtTrn::mjTRN_UNDEFINED)};
 };
 
@@ -245,6 +250,8 @@ struct mjtDyn {
     std::make_pair("mjDYN_FILTER", ::mjtDyn::mjDYN_FILTER),
     std::make_pair("mjDYN_FILTEREXACT", ::mjtDyn::mjDYN_FILTEREXACT),
     std::make_pair("mjDYN_MUSCLE", ::mjtDyn::mjDYN_MUSCLE),
+    std::make_pair("mjDYN_DCMOTOR", ::mjtDyn::mjDYN_DCMOTOR),
+    std::make_pair("mjDYN_PID", ::mjtDyn::mjDYN_PID),
     std::make_pair("mjDYN_USER", ::mjtDyn::mjDYN_USER)};
 };
 
@@ -255,6 +262,9 @@ struct mjtGain {
     std::make_pair("mjGAIN_FIXED", ::mjtGain::mjGAIN_FIXED),
     std::make_pair("mjGAIN_AFFINE", ::mjtGain::mjGAIN_AFFINE),
     std::make_pair("mjGAIN_MUSCLE", ::mjtGain::mjGAIN_MUSCLE),
+    std::make_pair("mjGAIN_DCMOTOR", ::mjtGain::mjGAIN_DCMOTOR),
+    std::make_pair("mjGAIN_SO3", ::mjtGain::mjGAIN_SO3),
+    std::make_pair("mjGAIN_PID", ::mjtGain::mjGAIN_PID),
     std::make_pair("mjGAIN_USER", ::mjtGain::mjGAIN_USER)};
 };
 
@@ -265,7 +275,28 @@ struct mjtBias {
     std::make_pair("mjBIAS_NONE", ::mjtBias::mjBIAS_NONE),
     std::make_pair("mjBIAS_AFFINE", ::mjtBias::mjBIAS_AFFINE),
     std::make_pair("mjBIAS_MUSCLE", ::mjtBias::mjBIAS_MUSCLE),
+    std::make_pair("mjBIAS_DCMOTOR", ::mjtBias::mjBIAS_DCMOTOR),
+    std::make_pair("mjBIAS_SO3", ::mjtBias::mjBIAS_SO3),
     std::make_pair("mjBIAS_USER", ::mjtBias::mjBIAS_USER)};
+};
+
+struct mjtCtrlChart {
+  static constexpr char name[] = "mjtCtrlChart";
+  using type = ::mjtCtrlChart;
+  static constexpr auto values = std::array{
+    std::make_pair("mjCHART_EXPMAP", ::mjtCtrlChart::mjCHART_EXPMAP),
+    std::make_pair("mjCHART_QUAT", ::mjtCtrlChart::mjCHART_QUAT)};
+};
+
+struct mjtCtrlInput {
+  static constexpr char name[] = "mjtCtrlInput";
+  using type = ::mjtCtrlInput;
+  static constexpr auto values = std::array{
+    std::make_pair("mjINPUT_POS", ::mjtCtrlInput::mjINPUT_POS),
+    std::make_pair("mjINPUT_VEL", ::mjtCtrlInput::mjINPUT_VEL),
+    std::make_pair("mjINPUT_FF", ::mjtCtrlInput::mjINPUT_FF),
+    std::make_pair("mjINPUT_VOLTAGE", ::mjtCtrlInput::mjINPUT_VOLTAGE),
+    std::make_pair("mjINPUT_NONE", ::mjtCtrlInput::mjINPUT_NONE)};
 };
 
 struct mjtObj {
@@ -472,15 +503,6 @@ struct mjtSDFType {
     std::make_pair("mjSDFTYPE_COLLISION", ::mjtSDFType::mjSDFTYPE_COLLISION)};
 };
 
-struct mjtTaskStatus {
-  static constexpr char name[] = "mjtTaskStatus";
-  using type = ::mjtTaskStatus;
-  static constexpr auto values = std::array{
-    std::make_pair("mjTASK_NEW", ::mjtTaskStatus::mjTASK_NEW),
-    std::make_pair("mjTASK_QUEUED", ::mjtTaskStatus::mjTASK_QUEUED),
-    std::make_pair("mjTASK_COMPLETED", ::mjtTaskStatus::mjTASK_COMPLETED)};
-};
-
 struct mjtState {
   static constexpr char name[] = "mjtState";
   using type = ::mjtState;
@@ -538,7 +560,6 @@ struct mjtWarning {
     std::make_pair("mjWARN_INERTIA", ::mjtWarning::mjWARN_INERTIA),
     std::make_pair("mjWARN_CONTACTFULL", ::mjtWarning::mjWARN_CONTACTFULL),
     std::make_pair("mjWARN_CNSTRFULL", ::mjtWarning::mjWARN_CNSTRFULL),
-    std::make_pair("mjWARN_VGEOMFULL", ::mjtWarning::mjWARN_VGEOMFULL),
     std::make_pair("mjWARN_BADQPOS", ::mjtWarning::mjWARN_BADQPOS),
     std::make_pair("mjWARN_BADQVEL", ::mjtWarning::mjWARN_BADQVEL),
     std::make_pair("mjWARN_BADQACC", ::mjtWarning::mjWARN_BADQACC),
@@ -575,6 +596,27 @@ struct mjtSleepState {
     std::make_pair("mjS_STATIC", ::mjtSleepState::mjS_STATIC),
     std::make_pair("mjS_ASLEEP", ::mjtSleepState::mjS_ASLEEP),
     std::make_pair("mjS_AWAKE", ::mjtSleepState::mjS_AWAKE)};
+};
+
+struct mjtLogLevel {
+  static constexpr char name[] = "mjtLogLevel";
+  using type = ::mjtLogLevel;
+  static constexpr auto values = std::array{
+    std::make_pair("mjLOG_DEBUG", ::mjtLogLevel::mjLOG_DEBUG),
+    std::make_pair("mjLOG_INFO", ::mjtLogLevel::mjLOG_INFO),
+    std::make_pair("mjLOG_WARNING", ::mjtLogLevel::mjLOG_WARNING),
+    std::make_pair("mjLOG_ERROR", ::mjtLogLevel::mjLOG_ERROR)};
+};
+
+struct mjtLogTopic {
+  static constexpr char name[] = "mjtLogTopic";
+  using type = ::mjtLogTopic;
+  static constexpr auto values = std::array{
+    std::make_pair("mjTOPIC_NONE", ::mjtLogTopic::mjTOPIC_NONE),
+    std::make_pair("mjTOPIC_TIME_STP", ::mjtLogTopic::mjTOPIC_TIME_STP),
+    std::make_pair("mjTOPIC_TIME_CMP", ::mjtLogTopic::mjTOPIC_TIME_CMP),
+    std::make_pair("mjTOPIC_SLEEP", ::mjtLogTopic::mjTOPIC_SLEEP),
+    std::make_pair("mjNTOPIC", ::mjtLogTopic::mjNTOPIC)};
 };
 
 struct mjtGeomInertia {
@@ -667,6 +709,31 @@ struct mjtOrientation {
     std::make_pair("mjORIENTATION_EULER", ::mjtOrientation::mjORIENTATION_EULER)};
 };
 
+struct mjtConflict {
+  static constexpr char name[] = "mjtConflict";
+  using type = ::mjtConflict;
+  static constexpr auto values = std::array{
+    std::make_pair("mjCONFLICT_WARNING", ::mjtConflict::mjCONFLICT_WARNING),
+    std::make_pair("mjCONFLICT_MERGE", ::mjtConflict::mjCONFLICT_MERGE),
+    std::make_pair("mjCONFLICT_ERROR", ::mjtConflict::mjCONFLICT_ERROR)};
+};
+
+struct mjtCTimer {
+  static constexpr char name[] = "mjtCTimer";
+  using type = ::mjtCTimer;
+  static constexpr auto values = std::array{
+    std::make_pair("mjCTIMER_TOTAL", ::mjtCTimer::mjCTIMER_TOTAL),
+    std::make_pair("mjCTIMER_ASSETS", ::mjtCTimer::mjCTIMER_ASSETS),
+    std::make_pair("mjCTIMER_TEXTURE", ::mjtCTimer::mjCTIMER_TEXTURE),
+    std::make_pair("mjCTIMER_MESH_LOAD", ::mjtCTimer::mjCTIMER_MESH_LOAD),
+    std::make_pair("mjCTIMER_MESH_HULL", ::mjtCTimer::mjCTIMER_MESH_HULL),
+    std::make_pair("mjCTIMER_MESH_POLYGON", ::mjtCTimer::mjCTIMER_MESH_POLYGON),
+    std::make_pair("mjCTIMER_MESH_INERTIA", ::mjtCTimer::mjCTIMER_MESH_INERTIA),
+    std::make_pair("mjCTIMER_MESH_BVH", ::mjtCTimer::mjCTIMER_MESH_BVH),
+    std::make_pair("mjCTIMER_MESH_OCTREE", ::mjtCTimer::mjCTIMER_MESH_OCTREE),
+    std::make_pair("mjNCTIMER", ::mjtCTimer::mjNCTIMER)};
+};
+
 struct mjtCatBit {
   static constexpr char name[] = "mjtCatBit";
   using type = ::mjtCatBit;
@@ -688,7 +755,9 @@ struct mjtMouse {
     std::make_pair("mjMOUSE_MOVE_H", ::mjtMouse::mjMOUSE_MOVE_H),
     std::make_pair("mjMOUSE_ZOOM", ::mjtMouse::mjMOUSE_ZOOM),
     std::make_pair("mjMOUSE_MOVE_V_REL", ::mjtMouse::mjMOUSE_MOVE_V_REL),
-    std::make_pair("mjMOUSE_MOVE_H_REL", ::mjtMouse::mjMOUSE_MOVE_H_REL)};
+    std::make_pair("mjMOUSE_MOVE_H_REL", ::mjtMouse::mjMOUSE_MOVE_H_REL),
+    std::make_pair("mjMOUSE_TURN_V", ::mjtMouse::mjMOUSE_TURN_V),
+    std::make_pair("mjMOUSE_TURN_H", ::mjtMouse::mjMOUSE_TURN_H)};
 };
 
 struct mjtPertBit {
@@ -874,6 +943,56 @@ struct mjtFont {
     std::make_pair("mjFONT_BIG", ::mjtFont::mjFONT_BIG)};
 };
 
+struct mjrPixelFormat {
+  static constexpr char name[] = "mjrPixelFormat";
+  using type = ::mjrPixelFormat;
+  static constexpr auto values = std::array{
+    std::make_pair("mjPIXEL_FORMAT_UNKNOWN", ::mjrPixelFormat::mjPIXEL_FORMAT_UNKNOWN),
+    std::make_pair("mjPIXEL_FORMAT_R8", ::mjrPixelFormat::mjPIXEL_FORMAT_R8),
+    std::make_pair("mjPIXEL_FORMAT_RGB8", ::mjrPixelFormat::mjPIXEL_FORMAT_RGB8),
+    std::make_pair("mjPIXEL_FORMAT_RGBA8", ::mjrPixelFormat::mjPIXEL_FORMAT_RGBA8),
+    std::make_pair("mjPIXEL_FORMAT_R32F", ::mjrPixelFormat::mjPIXEL_FORMAT_R32F),
+    std::make_pair("mjPIXEL_FORMAT_DEPTH32F", ::mjrPixelFormat::mjPIXEL_FORMAT_DEPTH32F),
+    std::make_pair("mjPIXEL_FORMAT_KTX", ::mjrPixelFormat::mjPIXEL_FORMAT_KTX)};
+};
+
+struct mjrVertexAttributeUsage {
+  static constexpr char name[] = "mjrVertexAttributeUsage";
+  using type = ::mjrVertexAttributeUsage;
+  static constexpr auto values = std::array{
+    std::make_pair("mjVERTEX_ATTRIBUTE_USAGE_POSITION", ::mjrVertexAttributeUsage::mjVERTEX_ATTRIBUTE_USAGE_POSITION),
+    std::make_pair("mjVERTEX_ATTRIBUTE_USAGE_NORMAL", ::mjrVertexAttributeUsage::mjVERTEX_ATTRIBUTE_USAGE_NORMAL),
+    std::make_pair("mjVERTEX_ATTRIBUTE_USAGE_TANGENTS", ::mjrVertexAttributeUsage::mjVERTEX_ATTRIBUTE_USAGE_TANGENTS),
+    std::make_pair("mjVERTEX_ATTRIBUTE_USAGE_UV", ::mjrVertexAttributeUsage::mjVERTEX_ATTRIBUTE_USAGE_UV),
+    std::make_pair("mjVERTEX_ATTRIBUTE_USAGE_COLOR", ::mjrVertexAttributeUsage::mjVERTEX_ATTRIBUTE_USAGE_COLOR)};
+};
+
+struct mjrVertexAttributeType {
+  static constexpr char name[] = "mjrVertexAttributeType";
+  using type = ::mjrVertexAttributeType;
+  static constexpr auto values = std::array{
+    std::make_pair("mjVERTEX_ATTRIBUTE_TYPE_FLOAT2", ::mjrVertexAttributeType::mjVERTEX_ATTRIBUTE_TYPE_FLOAT2),
+    std::make_pair("mjVERTEX_ATTRIBUTE_TYPE_FLOAT3", ::mjrVertexAttributeType::mjVERTEX_ATTRIBUTE_TYPE_FLOAT3),
+    std::make_pair("mjVERTEX_ATTRIBUTE_TYPE_FLOAT4", ::mjrVertexAttributeType::mjVERTEX_ATTRIBUTE_TYPE_FLOAT4),
+    std::make_pair("mjVERTEX_ATTRIBUTE_TYPE_UBYTE4", ::mjrVertexAttributeType::mjVERTEX_ATTRIBUTE_TYPE_UBYTE4)};
+};
+
+struct mjrIndexType {
+  static constexpr char name[] = "mjrIndexType";
+  using type = ::mjrIndexType;
+  static constexpr auto values = std::array{
+    std::make_pair("mjINDEX_TYPE_U16", ::mjrIndexType::mjINDEX_TYPE_U16),
+    std::make_pair("mjINDEX_TYPE_U32", ::mjrIndexType::mjINDEX_TYPE_U32)};
+};
+
+struct mjrMeshPrimitiveType {
+  static constexpr char name[] = "mjrMeshPrimitiveType";
+  using type = ::mjrMeshPrimitiveType;
+  static constexpr auto values = std::array{
+    std::make_pair("mjMESH_PRIMITIVE_TYPE_TRIANGLES", ::mjrMeshPrimitiveType::mjMESH_PRIMITIVE_TYPE_TRIANGLES),
+    std::make_pair("mjMESH_PRIMITIVE_TYPE_LINES", ::mjrMeshPrimitiveType::mjMESH_PRIMITIVE_TYPE_LINES)};
+};
+
 struct mjtButton {
   static constexpr char name[] = "mjtButton";
   using type = ::mjtButton;
@@ -952,6 +1071,8 @@ static constexpr auto kAllEnums = std::make_tuple(
     mjtDyn{},
     mjtGain{},
     mjtBias{},
+    mjtCtrlChart{},
+    mjtCtrlInput{},
     mjtObj{},
     mjtSensor{},
     mjtStage{},
@@ -964,13 +1085,14 @@ static constexpr auto kAllEnums = std::make_tuple(
     mjtLRMode{},
     mjtFlexSelf{},
     mjtSDFType{},
-    mjtTaskStatus{},
     mjtState{},
     mjtConstraint{},
     mjtConstraintState{},
     mjtWarning{},
     mjtTimer{},
     mjtSleepState{},
+    mjtLogLevel{},
+    mjtLogTopic{},
     mjtGeomInertia{},
     mjtMeshInertia{},
     mjtMeshBuiltin{},
@@ -980,6 +1102,8 @@ static constexpr auto kAllEnums = std::make_tuple(
     mjtAlignFree{},
     mjtInertiaFromGeom{},
     mjtOrientation{},
+    mjtConflict{},
+    mjtCTimer{},
     mjtCatBit{},
     mjtMouse{},
     mjtPertBit{},
@@ -995,6 +1119,11 @@ static constexpr auto kAllEnums = std::make_tuple(
     mjtDepthMap{},
     mjtFontScale{},
     mjtFont{},
+    mjrPixelFormat{},
+    mjrVertexAttributeUsage{},
+    mjrVertexAttributeType{},
+    mjrIndexType{},
+    mjrMeshPrimitiveType{},
     mjtButton{},
     mjtEvent{},
     mjtItem{},

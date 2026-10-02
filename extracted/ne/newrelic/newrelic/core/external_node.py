@@ -35,14 +35,13 @@ _ExternalNode = namedtuple(
         "guid",
         "agent_attributes",
         "user_attributes",
+        "span_link_events",
+        "span_event_events",
     ],
 )
 
 
 class ExternalNode(_ExternalNode, GenericNodeMixin):
-    cross_process_id = None
-    external_txn_name = None
-
     @property
     def details(self):
         if hasattr(self, "_details"):
@@ -107,49 +106,24 @@ class ExternalNode(_ExternalNode, GenericNodeMixin):
 
         netloc = self.netloc
 
-        try:
-            # Remove cross_process_id from the params dict otherwise it shows
-            # up in the UI.
-
-            self.cross_process_id = self.params.pop("cross_process_id")
-            self.external_txn_name = self.params.pop("external_txn_name")
-        except KeyError:
-            self.cross_process_id = None
-            self.external_txn_name = None
-
         name = f"External/{netloc}/all"
 
         yield TimeMetric(name=name, scope="", duration=self.duration, exclusive=self.exclusive)
 
-        if self.cross_process_id is None:
-            method = self.method or ""
+        method = self.method or ""
 
-            name = f"External/{netloc}/{self.library}/{method}"
+        name = f"External/{netloc}/{self.library}/{method}"
 
-            yield TimeMetric(name=name, scope="", duration=self.duration, exclusive=self.exclusive)
+        yield TimeMetric(name=name, scope="", duration=self.duration, exclusive=self.exclusive)
 
-            yield TimeMetric(name=name, scope=root.path, duration=self.duration, exclusive=self.exclusive)
-
-        else:
-            name = f"ExternalTransaction/{netloc}/{self.cross_process_id}/{self.external_txn_name}"
-
-            yield TimeMetric(name=name, scope="", duration=self.duration, exclusive=self.exclusive)
-
-            yield TimeMetric(name=name, scope=root.path, duration=self.duration, exclusive=self.exclusive)
-
-            name = f"ExternalApp/{netloc}/{self.cross_process_id}/all"
-
-            yield TimeMetric(name=name, scope="", duration=self.duration, exclusive=self.exclusive)
+        yield TimeMetric(name=name, scope=root.path, duration=self.duration, exclusive=self.exclusive)
 
     def trace_node(self, stats, root, connections):
         netloc = self.netloc
 
         method = self.method or ""
 
-        if self.cross_process_id is None:
-            name = f"External/{netloc}/{self.library}/{method}"
-        else:
-            name = f"ExternalTransaction/{netloc}/{self.cross_process_id}/{self.external_txn_name}"
+        name = f"External/{netloc}/{self.library}/{method}"
 
         name = root.string_table.cache(name)
 
@@ -169,11 +143,10 @@ class ExternalNode(_ExternalNode, GenericNodeMixin):
             start_time=start_time, end_time=end_time, name=name, params=params, children=children, label=None
         )
 
-    def span_event(self, *args, **kwargs):
+    def span_event(self, settings, base_attrs=None, parent_guid=None, attr_class=dict):
         self.agent_attributes["http.url"] = self.http_url
-        attrs = super().span_event(*args, **kwargs)
-        i_attrs = attrs[0]
 
+        i_attrs = (base_attrs and base_attrs.copy()) or attr_class()
         i_attrs["category"] = "http"
         i_attrs["span.kind"] = "client"
         _, i_attrs["component"] = attribute.process_user_attribute("component", self.library)
@@ -181,4 +154,4 @@ class ExternalNode(_ExternalNode, GenericNodeMixin):
         if self.method:
             _, i_attrs["http.method"] = attribute.process_user_attribute("http.method", self.method)
 
-        return attrs
+        return i_attrs, attr_class, self.span_link_events, self.span_event_events

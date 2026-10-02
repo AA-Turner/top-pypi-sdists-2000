@@ -172,3 +172,77 @@ def test_generating_iss_endpoint_type_error(oauth2_settings):
 def test_pkce_required_is_default():
     settings = OAuth2ProviderSettings()
     assert settings.PKCE_REQUIRED is True
+
+
+def test_authentication_server_exp_time_zone_warns_when_configured():
+    with pytest.warns(DeprecationWarning, match="AUTHENTICATION_SERVER_EXP_TIME_ZONE"):
+        OAuth2ProviderSettings({"AUTHENTICATION_SERVER_EXP_TIME_ZONE": "Europe/Berlin"})
+
+
+def test_authentication_server_exp_time_zone_no_warning_when_not_configured(recwarn):
+    OAuth2ProviderSettings({})
+    assert not [w for w in recwarn.list if issubclass(w.category, DeprecationWarning)]
+
+
+def test_oidc_server_class_user_override_used_when_oidc_enabled():
+    """
+    When OIDC is enabled and OAUTH2_SERVER_CLASS is not user overridden,
+    the user-overridden OIDC_SERVER_CLASS must be returned (not the default).
+    """
+    custom = "tests.admin.CustomApplicationAdmin"  # any importable class works for the test
+    settings = OAuth2ProviderSettings(
+        user_settings={
+            "OIDC_ENABLED": True,
+            "OIDC_SERVER_CLASS": custom,
+        }
+    )
+    assert settings.OAUTH2_SERVER_CLASS is CustomApplicationAdmin
+
+
+def test_oidc_server_class_default_used_when_neither_overridden():
+    """When OIDC is enabled and neither *_SERVER_CLASS is overridden, fall back to OIDC default."""
+    from oauthlib.openid import Server as OIDCServer
+
+    settings = OAuth2ProviderSettings(user_settings={"OIDC_ENABLED": True})
+    assert settings.OAUTH2_SERVER_CLASS is OIDCServer
+
+
+class TestRefreshTokenAdminSelectRelated(TestCase):
+    def test_changelist_queryset_select_related_is_bounded(self):
+        """
+        RefreshTokenAdmin changelist must not use unbounded select_related.
+
+        The default (list_select_related = False) causes Django to call qs.select_related()
+        with no arguments when list_display contains FK fields, recursively following every
+        FK in the model graph. On MySQL, this can produce a query with so many columns that
+        it exceeds the server's column limit and raises an error.
+
+        list_select_related = ("application", "user") makes Django call
+        qs.select_related("application", "user") instead, bounding the JOIN.
+        """
+        from django.contrib.admin.sites import AdminSite
+        from django.contrib.auth import get_user_model
+        from django.test import RequestFactory
+
+        from oauth2_provider.admin import RefreshTokenAdmin
+        from oauth2_provider.models import get_refresh_token_model
+
+        UserModel = get_user_model()
+        RefreshToken = get_refresh_token_model()
+
+        admin_user = UserModel.objects.create_superuser("admin", "admin@example.com", "password")
+        request = RequestFactory().get("/")
+        request.user = admin_user
+        ma = RefreshTokenAdmin(RefreshToken, AdminSite())
+        qs = ma.get_queryset(request)
+
+        # Replicate what ChangeList.apply_select_related does with list_select_related.
+        if ma.list_select_related is True:
+            qs = qs.select_related()
+        elif ma.list_select_related:
+            qs = qs.select_related(*ma.list_select_related)
+
+        # qs.query.select_related is True when called with no arguments (unbounded).
+        # It must be a dict so the JOIN is scoped to only the declared fields.
+        self.assertIsInstance(qs.query.select_related, dict)
+        self.assertEqual(set(qs.query.select_related.keys()), {"application", "user"})

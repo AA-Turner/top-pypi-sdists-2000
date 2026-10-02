@@ -66,10 +66,10 @@ class TestFormulaMaterializer:
 
         with pytest.raises(
             FormulaMaterializerNotFoundError,
-            match=re.escape(
-                "No materializer is available for input type 'pandas.core.frame.DataFrame' "
-                "that also supports output type 'invalid_output'. Available output types "
-                "for 'pandas.core.frame.DataFrame' are: "
+            match=(
+                r"No materializer is available for input type 'pandas\.[a-z\.]*DataFrame' "
+                r"that also supports output type 'invalid_output'\. Available output types "
+                r"for 'pandas\.[a-z\.]*DataFrame' are: "
             ),
         ):
             FormulaMaterializer.for_data(pandas.DataFrame(), output="invalid_output")
@@ -112,8 +112,8 @@ class TestFormulaMaterializer:
         ) == sorted(["A-:b", "b"])
 
     def test__simplify_scoped_terms(self, evaled_factors):
-        A, B, C = [ScopedFactor(l, reduced=False) for l in "ABC"]
-        A_, B_, C_ = [ScopedFactor(l, reduced=True) for l in "ABC"]
+        A, B, C = (ScopedFactor(l, reduced=False) for l in "ABC")
+        A_, B_, C_ = (ScopedFactor(l, reduced=True) for l in "ABC")
         assert list(
             FormulaMaterializer._simplify_scoped_terms(
                 [

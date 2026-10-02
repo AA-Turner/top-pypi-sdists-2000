@@ -1,5 +1,4 @@
 from datetime import datetime, timezone
-from typing import List
 
 import pytest
 
@@ -126,7 +125,7 @@ def test_save__nested_reload(requests_mock, api):
     class Parent(CanUpdateModel, url="foo/{self.id}"):
         id: int
         name: str
-        children: List["Parent.Child"]  # noqa
+        children: list["Parent.Child"]  # noqa
 
         class Child(CanUpdateModel, url="foo/{parent.id}/child/{child.id}"):
             id: int
@@ -233,9 +232,9 @@ def test_writable_and_readonly(create_instance):
         create_instance(writable=["foo"], readonly=["bar"])
 
 
-def test_update_forward_refs():
+def test_rebuild_models():
     """
-    Test that update_forward_refs does not get caught in an infinite loop.
+    Test that rebuild_models does not get caught in an infinite loop.
     """
 
     class Outer(AirtableModel):

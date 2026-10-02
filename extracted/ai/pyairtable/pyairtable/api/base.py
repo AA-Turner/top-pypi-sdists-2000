@@ -1,8 +1,10 @@
 import warnings
+from collections.abc import Sequence
 from functools import cached_property
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Sequence, Union
+from typing import TYPE_CHECKING, Any
 
 import pyairtable.api.table
+from pyairtable.exceptions import MissingRecordError
 from pyairtable.models.schema import BaseCollaborators, BaseSchema, BaseShares
 from pyairtable.models.webhook import (
     CreateWebhook,
@@ -33,12 +35,12 @@ class Base:
     id: str
 
     #: The permission level the current user has on the base
-    permission_level: Optional[str]
+    permission_level: str | None
 
     # Cached metadata to reduce API calls
-    _collaborators: Optional[BaseCollaborators] = None
-    _schema: Optional[BaseSchema] = None
-    _shares: Optional[List[BaseShares.Info]] = None
+    _collaborators: BaseCollaborators | None = None
+    _schema: BaseSchema | None = None
+    _shares: list[BaseShares.Info] | None = None
 
     class _urls(UrlBuilder):
         #: URL for retrieving the base's metadata and collaborators.
@@ -69,11 +71,11 @@ class Base:
 
     def __init__(
         self,
-        api: Union["Api", str],
+        api: "Api | str",
         base_id: str,
         *,
-        name: Optional[str] = None,
-        permission_level: Optional[str] = None,
+        name: str | None = None,
+        permission_level: str | None = None,
     ):
         """
         Old style constructor takes ``str`` arguments, and will create its own
@@ -112,7 +114,7 @@ class Base:
         self._name = name
 
     @property
-    def name(self) -> Optional[str]:
+    def name(self) -> str | None:
         """
         The name of the base, if provided to the constructor
         or available in cached base information.
@@ -153,7 +155,7 @@ class Base:
             return pyairtable.api.table.Table(None, self, schema)
         return pyairtable.api.table.Table(None, self, id_or_name)
 
-    def tables(self, *, force: bool = False) -> List["pyairtable.api.table.Table"]:
+    def tables(self, *, force: bool = False) -> list["pyairtable.api.table.Table"]:
         """
         Retrieve the base's schema and returns a list of :class:`Table` instances.
 
@@ -175,8 +177,8 @@ class Base:
     def create_table(
         self,
         name: str,
-        fields: Sequence[Dict[str, Any]],
-        description: Optional[str] = None,
+        fields: Sequence[dict[str, Any]],
+        description: str | None = None,
     ) -> "pyairtable.api.table.Table":
         """
         Create a table in the given base.
@@ -212,7 +214,7 @@ class Base:
         data = self.api.get(url, params=params)
         return BaseSchema.from_api(data, self.api, context=self)
 
-    def webhooks(self) -> List[Webhook]:
+    def webhooks(self) -> list[Webhook]:
         """
         Retrieve all the base's webhooks
         (see: `List webhooks <https://airtable.com/developers/web/api/list-webhooks>`_).
@@ -241,7 +243,7 @@ class Base:
 
     def webhook(self, webhook_id: str) -> Webhook:
         """
-        Build a single webhook or raises ``KeyError`` if the given ID is invalid.
+        Build a single webhook or raises ``MissingRecordError`` if the given ID is invalid.
 
         Airtable's API does not permit retrieving a single webhook, so this function
         will call :meth:`~webhooks` and simply return one item from the list.
@@ -249,12 +251,12 @@ class Base:
         for webhook in self.webhooks():
             if webhook.id == webhook_id:
                 return webhook
-        raise KeyError(f"webhook not found: {webhook_id!r}")
+        raise MissingRecordError(webhook_id)
 
     def add_webhook(
         self,
         notify_url: str,
-        spec: Union[WebhookSpecification, Dict[Any, Any]],
+        spec: WebhookSpecification | dict[Any, Any],
     ) -> CreateWebhookResponse:
         """
         Create a webhook on the base with the given
@@ -302,7 +304,6 @@ class Base:
         response = self.api.post(self.urls.webhooks, json=request)
         return CreateWebhookResponse.from_api(response, self.api)
 
-    @enterprise_only
     @cache_unless_forced
     def collaborators(self) -> "BaseCollaborators":
         """
@@ -314,7 +315,7 @@ class Base:
 
     @enterprise_only
     @cache_unless_forced
-    def shares(self) -> List[BaseShares.Info]:
+    def shares(self) -> list[BaseShares.Info]:
         """
         Retrieve `base shares <https://airtable.com/developers/web/api/list-shares>`__.
         """

@@ -41,6 +41,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/pytypes.h>
 #include <pybind11/stl.h>
+#include "vfs.h"
 
 namespace mujoco::python::_impl {
 
@@ -77,7 +78,18 @@ py::tuple RecompileSpec(raw::MjSpec* spec, const MjModelWrapper& old_m,
   raw::MjModel* m = static_cast<raw::MjModel*>(mju_malloc(sizeof(mjModel)));
   m->buffer = nullptr;
   raw::MjData* d = mj_copyData(nullptr, old_m.get(), old_d.get());
-  if (mj_recompile(spec, nullptr, m, d)) {
+
+  bool compile_failed = false;
+
+  {
+    // Release GIL before calling mj_recompile which may spawn threads
+    py::gil_scoped_release no_gil;
+    if (mj_recompile(spec, nullptr, m, d)) {
+      compile_failed = true;
+    }
+  }
+
+  if (compile_failed) {
     throw py::value_error(mjs_getError(spec));
   }
 
@@ -89,8 +101,15 @@ py::tuple RecompileSpec(raw::MjSpec* spec, const MjModelWrapper& old_m,
 
 }  // namespace
 
-PYBIND11_MODULE(_structs, m) {
+PYBIND11_MODULE(_structs, m, pybind11::mod_gil_not_used()) {
   py::module_::import("mujoco._enums");
+
+  // We import _callbacks so that a default timer is installed.
+  try {
+    py::module_::import("mujoco._callbacks");
+  } catch (py::error_already_set&) {
+    // In stubgen or isolated extension loading, _callbacks may not be present.
+  }
 
   // ==================== MJOPTION =============================================
   py::class_<MjOptionWrapper> mjOption(m, "MjOption");
@@ -103,50 +122,53 @@ PYBIND11_MODULE(_structs, m) {
   });
   mjOption.def_property_readonly_static("_all_fields", [](py::object) {
     std::vector<std::string> fields;
-#define X(dtype, name) fields.push_back(#name);
-    MJOPTION_FLOATS
-#undef X
-#define X(name, dim0) fields.push_back(#name);
-    MJOPTION_VECTORS
-#undef X
-#define X(dtype, name) fields.push_back(#name);
-    MJOPTION_INTS
+#define X(type, var, dim) fields.push_back(#var);
+#define XVEC X
+    MJOPTION_FIELDS
+#undef XVEC
 #undef X
     return py::tuple(py::cast(fields));
   });
   DefineStructFunctions(mjOption);
 
-#define X(type, var)                                               \
+#define X(type, var, dim)                                          \
   mjOption.def_property(                                           \
       #var, [](const MjOptionWrapper& c) { return c.get()->var; }, \
       [](MjOptionWrapper& c, type rhs) { c.get()->var = rhs; });
-  MJOPTION_SCALARS
-#undef X
-
-#define X(var, dim) DefinePyArray(mjOption, #var, &MjOptionWrapper::var);
-  MJOPTION_VECTORS
+#define XVEC(type, var, dim) \
+  DefinePyArray(mjOption, #var, &MjOptionWrapper::var);
+  MJOPTION_FIELDS
+#undef XVEC
 #undef X
 
   mjOption.def_property_readonly_static("_float_fields", [](py::object) {
     std::vector<std::string> field_names;
-#define X(type, var) field_names.push_back(#var);
-    MJOPTION_FLOATS
+#define X(type, var, dim) \
+  if constexpr (std::is_floating_point_v<type>) field_names.push_back(#var);
+#define XVEC(type, var, dim)
+    MJOPTION_FIELDS
+#undef XVEC
 #undef X
     return py::tuple(py::cast(field_names));
   });
 
   mjOption.def_property_readonly_static("_int_fields", [](py::object) {
     std::vector<std::string> field_names;
-#define X(type, var) field_names.push_back(#var);
-    MJOPTION_INTS
+#define X(type, var, dim) \
+  if constexpr (std::is_integral_v<type>) field_names.push_back(#var);
+#define XVEC(type, var, dim)
+    MJOPTION_FIELDS
+#undef XVEC
 #undef X
     return py::tuple(py::cast(field_names));
   });
 
   mjOption.def_property_readonly_static("_floatarray_fields", [](py::object) {
     std::vector<std::string> field_names;
-#define X(var, sz) field_names.push_back(#var);
-    MJOPTION_VECTORS
+#define X(type, var, dim)
+#define XVEC(type, var, dim) field_names.push_back(#var);
+    MJOPTION_FIELDS
+#undef XVEC
 #undef X
     return py::tuple(py::cast(field_names));
   });
@@ -192,20 +214,9 @@ PYBIND11_MODULE(_structs, m) {
                        return raw::MjVisualGlobal(other);
                      });
   DefineStructFunctions(mjVisualGlobal);
-#define X(var) mjVisualGlobal.def_readwrite(#var, &raw::MjVisualGlobal::var)
-  X(cameraid);
-  X(orthographic);
-  X(fovy);
-  X(ipd);
-  X(azimuth);
-  X(elevation);
-  X(linewidth);
-  X(glow);
-  X(realtime);
-  X(offwidth);
-  X(offheight);
-  X(ellipsoidinertia);
-  X(bvactive);
+#define X(type, var, dim) \
+  mjVisualGlobal.def_readwrite(#var, &raw::MjVisualGlobal::var);
+  MJVISUAL_GLOBAL_FIELDS
 #undef X
 
   py::class_<raw::MjVisualQuality> mjVisualQuality(mjVisual, "Quality");
@@ -217,12 +228,9 @@ PYBIND11_MODULE(_structs, m) {
                         return raw::MjVisualQuality(other);
                       });
   DefineStructFunctions(mjVisualQuality);
-#define X(var) mjVisualQuality.def_readwrite(#var, &raw::MjVisualQuality::var)
-  X(shadowsize);
-  X(offsamples);
-  X(numslices);
-  X(numstacks);
-  X(numquads);
+#define X(type, var, dim) \
+  mjVisualQuality.def_readwrite(#var, &raw::MjVisualQuality::var);
+  MJVISUAL_QUALITY_FIELDS
 #undef X
 
   py::class_<MjVisualHeadlightWrapper> mjVisualHeadlight(mjVisual, "Headlight");
@@ -234,18 +242,17 @@ PYBIND11_MODULE(_structs, m) {
                           return MjVisualHeadlightWrapper(other);
                         });
   DefineStructFunctions(mjVisualHeadlight);
-#define X(var) \
-  DefinePyArray(mjVisualHeadlight, #var, &MjVisualHeadlightWrapper::var)
-  X(ambient);
-  X(diffuse);
-  X(specular);
-#undef X
-  mjVisualHeadlight.def_property(
-      "active",
-      [](const MjVisualHeadlightWrapper& c) { return c.get()->active; },
-      [](MjVisualHeadlightWrapper& c, int rhs) {
-        return c.get()->active = rhs;
+#define X(type, var, dim)                                                   \
+  mjVisualHeadlight.def_property(                                           \
+      #var, [](const MjVisualHeadlightWrapper& c) { return c.get()->var; }, \
+      [](MjVisualHeadlightWrapper& c, type rhs) {                           \
+        return c.get()->var = rhs;                                          \
       });
+#define XVEC(type, var, dim) \
+  DefinePyArray(mjVisualHeadlight, #var, &MjVisualHeadlightWrapper::var);
+  MJVISUAL_HEADLIGHT_FIELDS
+#undef XVEC
+#undef X
 
   py::class_<raw::MjVisualMap> mjVisualMap(mjVisual, "Map");
   mjVisualMap.def("__copy__", [](const raw::MjVisualMap& other) {
@@ -255,20 +262,9 @@ PYBIND11_MODULE(_structs, m) {
     return raw::MjVisualMap(other);
   });
   DefineStructFunctions(mjVisualMap);
-#define X(var) mjVisualMap.def_readwrite(#var, &raw::MjVisualMap::var)
-  X(stiffness);
-  X(stiffnessrot);
-  X(force);
-  X(torque);
-  X(alpha);
-  X(fogstart);
-  X(fogend);
-  X(znear);
-  X(zfar);
-  X(haze);
-  X(shadowclip);
-  X(shadowscale);
-  X(actuatortendon);
+#define X(type, var, dim) \
+  mjVisualMap.def_readwrite(#var, &raw::MjVisualMap::var);
+  MJVISUAL_MAP_FIELDS
 #undef X
 
   py::class_<raw::MjVisualScale> mjVisualScale(mjVisual, "Scale");
@@ -280,24 +276,9 @@ PYBIND11_MODULE(_structs, m) {
                       return raw::MjVisualScale(other);
                     });
   DefineStructFunctions(mjVisualScale);
-#define X(var) mjVisualScale.def_readwrite(#var, &raw::MjVisualScale::var)
-  X(forcewidth);
-  X(contactwidth);
-  X(contactheight);
-  X(connect);
-  X(com);
-  X(camera);
-  X(light);
-  X(selectpoint);
-  X(jointlength);
-  X(jointwidth);
-  X(actuatorlength);
-  X(actuatorwidth);
-  X(framelength);
-  X(framewidth);
-  X(constraint);
-  X(slidercrank);
-  X(frustum);
+#define X(type, var, dim) \
+  mjVisualScale.def_readwrite(#var, &raw::MjVisualScale::var);
+  MJVISUAL_SCALE_FIELDS
 #undef X
 
   py::class_<MjVisualRgbaWrapper> mjVisualRgba(mjVisual, "Rgba");
@@ -309,33 +290,10 @@ PYBIND11_MODULE(_structs, m) {
                      return MjVisualRgbaWrapper(other);
                    });
   DefineStructFunctions(mjVisualRgba);
-#define X(var) DefinePyArray(mjVisualRgba, #var, &MjVisualRgbaWrapper::var)
-  X(fog);
-  X(haze);
-  X(force);
-  X(inertia);
-  X(joint);
-  X(actuator);
-  X(actuatornegative);
-  X(actuatorpositive);
-  X(com);
-  X(camera);
-  X(light);
-  X(selectpoint);
-  X(connect);
-  X(contactpoint);
-  X(contactforce);
-  X(contactfriction);
-  X(contacttorque);
-  X(contactgap);
-  X(rangefinder);
-  X(constraint);
-  X(slidercrank);
-  X(crankbroken);
-  X(frustum);
-  X(bv);
-  X(bvactive);
-#undef X
+#define XVEC(type, var, dim) \
+  DefinePyArray(mjVisualRgba, #var, &MjVisualRgbaWrapper::var);
+  MJVISUAL_RGBA_FIELDS
+#undef XVEC
 
 #define X(var)                    \
   mjVisual.def_property_readonly( \
@@ -355,24 +313,21 @@ PYBIND11_MODULE(_structs, m) {
   // ==================== MJMODEL ==============================================
   py::class_<MjModelWrapper> mjModel(m, "MjModel");
   mjModel.def_static(
-      "from_xml_string", &MjModelWrapper::LoadXML, py::arg("xml"),
-      py::arg_v("assets", py::none()),
+      "from_xml_string", MjModelWrapper::LoadXML, py::arg("xml"),
+      py::arg_v("assets", py::none()), py::arg("vfs") = py::none(),
       py::doc(
-          R"(Loads an MjModel from an XML string and an optional assets dictionary.)"));
+          R"(Loads an MjModel from an XML string and optional assets dict or VFS.)"));
   mjModel.def_static("_from_model_ptr", [](uintptr_t addr) {
     return MjModelWrapper::WrapRawModel(reinterpret_cast<raw::MjModel*>(addr));
   });
   mjModel.def_static(
-      "from_xml_path", &MjModelWrapper::LoadXMLFile, py::arg("filename"),
-      py::arg_v("assets", py::none()),
+      "from_xml_path", MjModelWrapper::LoadXMLFile, py::arg("filename"),
+      py::arg_v("assets", py::none()), py::arg("vfs") = py::none(),
       py::doc(
-          R"(Loads an MjModel from an XML file and an optional assets dictionary.
-
-The filename for the XML can also refer to a key in the assets dictionary.
-This is useful for example when the XML is not available as a file on disk.)"));
+          R"(Loads an MjModel from an XML file and optional assets dict or VFS.)"));
   mjModel.def_static(
       "from_binary_path", &MjModelWrapper::LoadBinaryFile, py::arg("filename"),
-      py::arg_v("assets", py::none()),
+      py::arg_v("assets", py::none()), py::arg("vfs") = py::none(),
       py::doc(
           R"(Loads an MjModel from an MJB file and an optional assets dictionary.
 
@@ -401,6 +356,28 @@ This is useful for example when the MJB is not available as a file on disk.)"));
   mjModel.def_readonly("opt", &MjModelWrapper::opt);
   mjModel.def_readonly("vis", &MjModelWrapper::vis);
   mjModel.def_readonly("stat", &MjModelWrapper::stat);
+
+  mjModel.def_property(
+      "flg_gravcomp",
+      [](const MjModelWrapper& m) { return m.get()->flg_gravcomp; },
+      [](MjModelWrapper& m, bool val) {
+        m.get()->flg_gravcomp = val;
+        m.get()->ngravcomp = val ? 1 : 0;
+      });
+
+  mjModel.def_property(
+      "flg_surfacevel",
+      [](const MjModelWrapper& m) { return m.get()->flg_surfacevel; },
+      [](MjModelWrapper& m, bool val) {
+        m.get()->flg_surfacevel = val;
+      });
+
+  mjModel.def_property(
+      "flg_adhesion",
+      [](const MjModelWrapper& m) { return m.get()->flg_adhesion; },
+      [](MjModelWrapper& m, bool val) {
+        m.get()->flg_adhesion = val;
+      });
 
 #define X(var)                   \
   mjModel.def_property_readonly( \
@@ -591,6 +568,96 @@ This is useful for example when the MJB is not available as a file on disk.)"));
   X(int, number);
 #undef X
 
+  // ==================== MJLOGCONFIG ==========================================
+  py::class_<MjLogConfigWrapper> mjLogConfig(m, "MjLogConfig");
+  mjLogConfig.def(py::init<>());
+  mjLogConfig.def("__copy__", [](const MjLogConfigWrapper& other) {
+    return MjLogConfigWrapper(other);
+  });
+  mjLogConfig.def("__deepcopy__",
+                  [](const MjLogConfigWrapper& other, py::dict) {
+                    return MjLogConfigWrapper(other);
+                  });
+  DefineStructFunctions(mjLogConfig);
+  mjLogConfig.def_property(
+      "logto_console",
+      [](const MjLogConfigWrapper& d) { return d.get()->logto_console; },
+      [](MjLogConfigWrapper& d, bool rhs) { d.get()->logto_console = rhs; });
+  mjLogConfig.def_property(
+      "logto_file",
+      [](const MjLogConfigWrapper& d) { return d.get()->logto_file; },
+      [](MjLogConfigWrapper& d, bool rhs) { d.get()->logto_file = rhs; });
+  mjLogConfig.def_property(
+      "logfile",
+      [](const MjLogConfigWrapper& d) { return std::string(d.get()->logfile); },
+      [](MjLogConfigWrapper& d, const std::string& rhs) {
+        std::strncpy(d.get()->logfile, rhs.c_str(), 1023);
+        d.get()->logfile[1023] = '\0';
+      });
+  mjLogConfig.def_property(
+      "topics", [](const MjLogConfigWrapper& d) { return d.get()->topics; },
+      [](MjLogConfigWrapper& d, int rhs) { d.get()->topics = rhs; });
+  mjLogConfig.def_static("get", []() {
+    MjLogConfigWrapper wrapper;
+    *wrapper.get() = mju_getLogConfig();
+    return wrapper;
+  });
+  mjLogConfig.def("set", [](const MjLogConfigWrapper& self) {
+    mju_setLogConfig(*self.get());
+  });
+
+  // ==================== MJLOGMESSAGE =========================================
+  py::class_<MjLogMessageWrapper> mjLogMessage(m, "MjLogMessage");
+  mjLogMessage.def(py::init<>());
+  mjLogMessage.def("__copy__", [](const MjLogMessageWrapper& other) {
+    return MjLogMessageWrapper(other);
+  });
+  mjLogMessage.def("__deepcopy__",
+                   [](const MjLogMessageWrapper& other, py::dict) {
+                     return MjLogMessageWrapper(other);
+                   });
+  DefineStructFunctions(mjLogMessage);
+  mjLogMessage.def_property(
+      "level", [](const MjLogMessageWrapper& d) { return d.get()->level; },
+      [](MjLogMessageWrapper& d, int rhs) { d.get()->level = rhs; });
+  mjLogMessage.def_property(
+      "topic", [](const MjLogMessageWrapper& d) { return d.get()->topic; },
+      [](MjLogMessageWrapper& d, int rhs) { d.get()->topic = rhs; });
+  mjLogMessage.def_property(
+      "subject",
+      [](const MjLogMessageWrapper& d) {
+        return std::string(d.get()->subject);
+      },
+      [](MjLogMessageWrapper& d, const std::string& rhs) {
+        std::strncpy(d.get()->subject, rhs.c_str(), 1023);
+        d.get()->subject[1023] = '\0';
+      });
+  mjLogMessage.def_property_readonly(
+      "body",
+      [](const MjLogMessageWrapper& d) -> py::object {
+        if (d.get()->body) return py::str(d.get()->body);
+        return py::none();
+      });
+  mjLogMessage.def_property_readonly(
+      "func",
+      [](const MjLogMessageWrapper& d) -> py::object {
+        if (d.get()->func) return py::str(d.get()->func);
+        return py::none();
+      });
+  mjLogMessage.def_property_readonly(
+      "file",
+      [](const MjLogMessageWrapper& d) -> py::object {
+        if (d.get()->file) return py::str(d.get()->file);
+        return py::none();
+      });
+  mjLogMessage.def_property(
+      "line", [](const MjLogMessageWrapper& d) { return d.get()->line; },
+      [](MjLogMessageWrapper& d, int rhs) { d.get()->line = rhs; });
+  mjLogMessage.def_property(
+      "timestamp",
+      [](const MjLogMessageWrapper& d) { return d.get()->timestamp; },
+      [](MjLogMessageWrapper& d, bool rhs) { d.get()->timestamp = rhs; });
+
   // ==================== MJTIMERSTAT ==========================================
   py::class_<MjTimerStatWrapper> mjTimerStat(m, "MjTimerStat");
   mjTimerStat.def(py::init<>());
@@ -671,6 +738,33 @@ This is useful for example when the MJB is not available as a file on disk.)"));
   X(int, nupdate);
 #undef X
 
+  // ==================== MJPRECONTACT =========================================
+  py::class_<MjPreContactWrapper> mjPreContact(m, "MjPreContact");
+  mjPreContact.def(py::init<>());
+  mjPreContact.def("__copy__", [](const MjPreContactWrapper& self) {
+    return MjPreContactWrapper(self);
+  });
+  mjPreContact.def("__deepcopy__",
+                   [](const MjPreContactWrapper& self, py::dict) {
+                     return MjPreContactWrapper(self);
+                   });
+  DefineStructFunctions(mjPreContact);
+
+#define X(var)                                                           \
+  mjPreContact.def_property(                                             \
+      #var, [](const MjPreContactWrapper& c) { return c.get()->var; },   \
+      [](MjPreContactWrapper& c, decltype(raw::MjPreContact::var) rhs) { \
+        c.get()->var = rhs;                                              \
+      })
+  X(dist);
+#undef X
+
+#define X(var) DefinePyArray(mjPreContact, #var, &MjPreContactWrapper::var)
+  X(pos);
+  X(normal);
+  X(tangent);
+#undef X
+
   // ==================== MJCONTACT ============================================
   py::class_<MjContactWrapper> mjContact(m, "MjContact");
   mjContact.def(py::init<>());
@@ -690,6 +784,7 @@ This is useful for example when the MJB is not available as a file on disk.)"));
       })
   X(dist);
   X(includemargin);
+  X(adhesion);
   X(mu);
   X(dim);
   X(geom1);
@@ -741,6 +836,7 @@ This is useful for example when the MJB is not available as a file on disk.)"));
   XN(mjtNum, solref);
   XN(mjtNum, solreffriction);
   XN(mjtNum, solimp);
+  X(mjtNum, adhesion);
   X(mjtNum, mu);
   XN(mjtNum, H);
   X(int, dim);
@@ -828,6 +924,7 @@ This is useful for example when the MJB is not available as a file on disk.)"));
   MJDATA_ARENA_POINTERS_SOLVER
   MJDATA_ARENA_POINTERS_DUAL
   MJDATA_ARENA_POINTERS_ISLAND
+  MJDATA_ARENA_POINTERS_EFM
 
 #undef MJ_M
 #define MJ_M(x) (x)
@@ -927,20 +1024,18 @@ This is useful for example when the MJB is not available as a file on disk.)"));
                   });
   DefineStructFunctions(mjStatistic);
 
-#define X(var)                                                         \
+#define X(var, dim)                                                    \
   mjStatistic.def_property(                                            \
       #var, [](const MjStatisticWrapper& c) { return c.get()->var; },  \
       [](MjStatisticWrapper& c, decltype(raw::MjStatistic::var) rhs) { \
         c.get()->var = rhs;                                            \
-      })
-  X(meaninertia);
-  X(meanmass);
-  X(meansize);
-  X(extent);
-#undef X
+      });
+#define XVEC(var, dim) \
+  DefinePyArray(mjStatistic, #var, &MjStatisticWrapper::var);
 
-#define X(var) DefinePyArray(mjStatistic, #var, &MjStatisticWrapper::var)
-  X(center);
+  MJSTATISTIC_FIELDS
+
+#undef XVEC
 #undef X
 
   // ==================== MJLROPT ==============================================
@@ -963,6 +1058,48 @@ This is useful for example when the MJB is not available as a file on disk.)"));
   X(inttotal);
   X(interval);
   X(tolrange);
+#undef X
+
+
+  // ==================== MJRRECT ==============================================
+  py::class_<raw::MjrRect> mjrRect(m, "MjrRect");
+  mjrRect.def(py::init([](int left, int bottom, int width, int height) {
+                return raw::MjrRect{left, bottom, width, height};
+              }),
+              py::arg("left"), py::arg("bottom"), py::arg("width"),
+              py::arg("height"));
+  mjrRect.def("__copy__",
+              [](const raw::MjrRect& other) { return raw::MjrRect(other); });
+  mjrRect.def("__deepcopy__", [](const raw::MjrRect& other, py::dict) {
+    return raw::MjrRect(other);
+  });
+  DefineStructFunctions(mjrRect);
+#define X(var) mjrRect.def_readwrite(#var, &raw::MjrRect::var)
+  X(left);
+  X(bottom);
+  X(width);
+  X(height);
+#undef X
+
+  // ==================== MJRVERTEXATTRIBUTE ===================================
+  py::class_<raw::MjrVertexAttribute> mjrVertexAttribute(m,
+                                                         "MjrVertexAttribute");
+  mjrVertexAttribute.def(py::init([](int usage, int type) {
+                           return raw::MjrVertexAttribute{usage, type};
+                         }),
+                         py::arg("usage") = 0, py::arg("type") = 0);
+  mjrVertexAttribute.def("__copy__", [](const raw::MjrVertexAttribute& other) {
+    return raw::MjrVertexAttribute(other);
+  });
+  mjrVertexAttribute.def("__deepcopy__",
+                         [](const raw::MjrVertexAttribute& other, py::dict) {
+                           return raw::MjrVertexAttribute(other);
+                         });
+  DefineStructFunctions(mjrVertexAttribute);
+#define X(var) \
+  mjrVertexAttribute.def_readwrite(#var, &raw::MjrVertexAttribute::var)
+  X(usage);
+  X(type);
 #undef X
 
   // ==================== MJVPERTURB ===========================================
@@ -1080,6 +1217,8 @@ This is useful for example when the MJB is not available as a file on disk.)"));
   X(objid);
   X(category);
   X(matid);
+  X(texid);
+  X(texuniform);
   X(texcoord);
   X(segid);
   X(emission);
@@ -1096,6 +1235,7 @@ This is useful for example when the MJB is not available as a file on disk.)"));
   X(pos);
   X(mat);
   X(rgba);
+  X(texrepeat);
 #undef X
 
   DefinePyStr(mjvGeom, "label", &raw::MjvGeom::label);
@@ -1126,6 +1266,7 @@ This is useful for example when the MJB is not available as a file on disk.)"));
   X(bulbradius);
   X(intensity);
   X(range);
+  X(softness);
 #undef X
 
 #define X(var) DefinePyArray(mjvLight, #var, &MjvLightWrapper::var)
@@ -1288,9 +1429,10 @@ This is useful for example when the MJB is not available as a file on disk.)"));
 
   mjvFigure.def_readonly("linename", &MjvFigureWrapper::linename);
 
-  // mjv_averageCamera returns an mjvGLCamera and we need to call the wrapper's
-  // constructor on the return value. Defining the binding for this function
-  // in this file to avoid symbol dependency across modules.
+  // mjv_averageCamera and mjv_camera2GLCamera both return an mjvGLCamera.
+  // We need to call the wrapper's constructor on the return value. Defining the
+  // binding for these functions in this file to avoid symbol dependency across
+  // modules.
   m.def(
       "mjv_averageCamera",
       [](const MjvGLCameraWrapper& cam1, const MjvGLCameraWrapper& cam2) {
@@ -1301,6 +1443,19 @@ This is useful for example when the MJB is not available as a file on disk.)"));
       },
       py::arg("cam1"), py::arg("cam2"),
       py::doc(python_traits::mjv_averageCamera::doc));
+
+  m.def(
+      "mjv_camera2GLCamera",
+      [](const MjModelWrapper& m, const MjDataWrapper& d,
+         const MjvCameraWrapper& cam) {
+        return MjvGLCameraWrapper([&m, &d, &cam]() {
+          py::gil_scoped_release no_gil;
+          return InterceptMjErrors(mjv_camera2GLCamera)(m.get(), d.get(),
+                                                        cam.get());
+        }());
+      },
+      py::arg("m"), py::arg("d"), py::arg("cam"),
+      py::doc(python_traits::mjv_camera2GLCamera::doc));
 
   m.def("_recompile_spec_addr", [](uintptr_t spec_addr, const MjModelWrapper& m,
                                    const MjDataWrapper& d) {

@@ -122,7 +122,7 @@ do_curl_getinfo_raw(CurlObject *self, PyObject *args)
     if (!PyArg_ParseTuple(args, "i:getinfo_raw", &option)) {
         return NULL;
     }
-    if (check_curl_state(self, 1 | 2, "getinfo") != 0) {
+    if (check_curl_state(self, PYCURL_REQUIRE_HANDLE | PYCURL_REQUIRE_NOT_RUNNING, "getinfo") != 0) {
         return NULL;
     }
 
@@ -158,6 +158,15 @@ do_curl_getinfo_raw(CurlObject *self, PyObject *args)
 #ifdef HAVE_CURL_7_19_4_OPTS
     case CURLINFO_CONDITION_UNMET:
 #endif
+#if LIBCURL_VERSION_NUM >= MAKE_LIBCURL_VERSION(7, 52, 0)
+    case CURLINFO_PROXY_SSL_VERIFYRESULT:
+#endif
+#if LIBCURL_VERSION_NUM >= MAKE_LIBCURL_VERSION(7, 73, 0)
+    case CURLINFO_PROXY_ERROR:
+#endif
+#if LIBCURL_VERSION_NUM >= MAKE_LIBCURL_VERSION(8, 7, 0)
+    case CURLINFO_USED_PROXY:
+#endif
         {
             /* Return PyInt as result */
             long l_res = -1;
@@ -174,6 +183,12 @@ do_curl_getinfo_raw(CurlObject *self, PyObject *args)
     case CURLINFO_EFFECTIVE_URL:
 #if LIBCURL_VERSION_NUM >= MAKE_LIBCURL_VERSION(7, 72, 0)
     case CURLINFO_EFFECTIVE_METHOD:
+#endif
+#if LIBCURL_VERSION_NUM >= MAKE_LIBCURL_VERSION(7, 52, 0)
+    case CURLINFO_SCHEME:
+#endif
+#if LIBCURL_VERSION_NUM >= MAKE_LIBCURL_VERSION(7, 76, 0)
+    case CURLINFO_REFERER:
 #endif
     case CURLINFO_FTP_ENTRY_PATH:
     case CURLINFO_REDIRECT_URL:
@@ -276,6 +291,13 @@ PYCURL_IGNORE_DEPRECATED_END
     case CURLINFO_STARTTRANSFER_TIME_T:
     case CURLINFO_TOTAL_TIME_T:
 #endif
+#if LIBCURL_VERSION_NUM >= MAKE_LIBCURL_VERSION(7, 66, 0)
+    case CURLINFO_RETRY_AFTER:
+#endif
+#if LIBCURL_VERSION_NUM >= MAKE_LIBCURL_VERSION(8, 2, 0)
+    case CURLINFO_CONN_ID:
+    case CURLINFO_XFER_ID:
+#endif
 #if LIBCURL_VERSION_NUM >= MAKE_LIBCURL_VERSION(8, 6, 0)
     case CURLINFO_QUEUE_TIME_T:
 #endif
@@ -284,6 +306,9 @@ PYCURL_IGNORE_DEPRECATED_END
 #endif
 #if LIBCURL_VERSION_NUM >= MAKE_LIBCURL_VERSION(8, 11, 0)
     case CURLINFO_EARLYDATA_SENT_T:
+#endif
+#if LIBCURL_VERSION_NUM >= MAKE_LIBCURL_VERSION(8, 20, 0)
+    case CURLINFO_SIZE_DELIVERED:
 #endif
         {
             /* Return PyLong as result */
@@ -394,6 +419,12 @@ do_curl_getinfo(CurlObject *self, PyObject *args)
 #if LIBCURL_VERSION_NUM >= MAKE_LIBCURL_VERSION(7, 72, 0)
     case CURLINFO_EFFECTIVE_METHOD:
 #endif
+#if LIBCURL_VERSION_NUM >= MAKE_LIBCURL_VERSION(7, 52, 0)
+    case CURLINFO_SCHEME:
+#endif
+#if LIBCURL_VERSION_NUM >= MAKE_LIBCURL_VERSION(7, 76, 0)
+    case CURLINFO_REFERER:
+#endif
     case CURLINFO_FTP_ENTRY_PATH:
     case CURLINFO_REDIRECT_URL:
     case CURLINFO_PRIMARY_IP:
@@ -431,7 +462,7 @@ do_curl_getinfo(CurlObject *self, PyObject *args)
 PYCURL_INTERNAL PyObject *
 do_curl_errstr(CurlObject *self, PyObject *Py_UNUSED(ignored))
 {
-    if (check_curl_state(self, 1 | 2, "errstr") != 0) {
+    if (check_curl_state(self, PYCURL_REQUIRE_HANDLE | PYCURL_REQUIRE_NOT_RUNNING, "errstr") != 0) {
         return NULL;
     }
     self->error[sizeof(self->error) - 1] = 0;
@@ -443,7 +474,7 @@ do_curl_errstr(CurlObject *self, PyObject *Py_UNUSED(ignored))
 PYCURL_INTERNAL PyObject *
 do_curl_errstr_raw(CurlObject *self, PyObject *Py_UNUSED(ignored))
 {
-    if (check_curl_state(self, 1 | 2, "errstr") != 0) {
+    if (check_curl_state(self, PYCURL_REQUIRE_HANDLE | PYCURL_REQUIRE_NOT_RUNNING, "errstr") != 0) {
         return NULL;
     }
     self->error[sizeof(self->error) - 1] = 0;

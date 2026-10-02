@@ -1,6 +1,7 @@
 import gc
 import io
 import json
+import sys
 import weakref
 
 import pytest
@@ -93,18 +94,18 @@ def data_value(request):
 def test_mime_lifecycle_and_context_manager():
     with pycurl.Curl() as curl:
         mime = pycurl.CurlMime(curl)
-        assert mime.closed() is False
+        assert not mime.closed
 
         mime.close()
-        assert mime.closed() is True
+        assert mime.closed
 
         mime.close()
-        assert mime.closed() is True
+        assert mime.closed
 
         with pycurl.CurlMime(curl) as second:
-            assert second.closed() is False
+            assert not second.closed
 
-        assert second.closed() is True
+        assert second.closed
 
 
 def test_mime_exit_requires_exception_tuple():
@@ -198,6 +199,31 @@ def test_mimepost_replacement_keeps_new_pin():
         assert new_ref() is None
     finally:
         curl.close()
+
+
+def _replace_httppost_with_mimepost(curl):
+    with pytest.warns(DeprecationWarning, match="HTTPPOST is deprecated"):
+        curl.setopt(
+            pycurl.HTTPPOST, [("formfield", [pycurl.FORM_CONTENTS, "form-value"])]
+        )
+
+    mime = pycurl.CurlMime(curl)
+    mime.add_field("mimefield", "mime-value")
+    curl.setopt(pycurl.MIMEPOST, mime)
+    return {"mimefield": "mime-value"}
+
+
+def test_mimepost_replacing_httppost_sends_the_mime(app):
+    with pycurl.Curl() as curl:
+        expected = _replace_httppost_with_mimepost(curl)
+        assert _perform_json(curl, f"{app}/postfields") == expected
+
+
+def test_duphandle_after_mimepost_replaced_httppost(app):
+    with pycurl.Curl() as curl:
+        expected = _replace_httppost_with_mimepost(curl)
+        with curl.duphandle() as dup:
+            assert _perform_json(dup, f"{app}/postfields") == expected
 
 
 def test_mime_data_cb_duphandle_free_called_once():
@@ -377,6 +403,16 @@ def test_mime_addpart_and_part_methods(fixture_data_path):
         mime.close()
 
 
+@pytest.mark.parametrize("method", ["name", "filename", "type", "encoder", "filedata"])
+def test_mimepart_text_methods_reject_non_text(method):
+    with pycurl.Curl() as curl, pycurl.CurlMime(curl) as mime:
+        part = mime.addpart()
+        with pytest.raises(
+            TypeError, match=r"^expected bytes or an ASCII string, got int$"
+        ):
+            getattr(part, method)(123)
+
+
 def test_mimepart_data_accepts_common_value_types(data_value):
     with pycurl.Curl() as curl:
         mime = pycurl.CurlMime(curl)
@@ -409,6 +445,34 @@ def test_mimepart_data_cb_streams_field_value(app):
         assert _perform_json(curl, f"{app}/postfields") == {
             "field": state["payload"].decode()
         }
+
+
+def test_mimepart_data_cb_oversized_return_fails_the_transfer(app, capfd):
+    calls = []
+
+    def oversized_return(userdata, size):
+        calls.append(size)
+        return 2**70
+
+    with pycurl.Curl() as curl:
+        mime = pycurl.CurlMime(curl)
+        part = mime.addpart()
+        part.name("field")
+        part.data_cb(10, oversized_return)
+        curl.setopt(pycurl.MIMEPOST, mime)
+        curl.setopt(pycurl.URL, f"{app}/postfields")
+        curl.setopt(pycurl.WRITEFUNCTION, io.BytesIO().write)
+
+        with pytest.raises(pycurl.error) as excinfo:
+            curl.perform()
+
+    assert calls, f"read callback never invoked; curl error was {excinfo.value!r}"
+    assert excinfo.value.args[0] == pycurl.E_ABORTED_BY_CALLBACK, excinfo.value
+
+    sys.stderr.flush()
+    err = capfd.readouterr().err
+    assert "OverflowError" in err
+    assert "must return a buffer object" not in err
 
 
 def test_mimepart_data_cb_requires_callable_read():
@@ -554,11 +618,11 @@ def test_mime_subparts_transfers_ownership():
 
         parent_part = parent.addpart()
         parent_part.subparts(child)
-        assert child.closed() is False
+        assert not child.closed
 
         child.addpart()
         parent.close()
-        assert child.closed() is True
+        assert child.closed
 
         with pytest.raises(pycurl.error, match="no mime handle"):
             child.addpart()
@@ -683,10 +747,10 @@ def test_mime_add_multipart_helper():
         child = parent.add_multipart(name="nested")
 
         assert isinstance(child, pycurl.CurlMime)
-        assert child.closed() is False
+        assert not child.closed
 
         child.add_field("inner", "value")
         parent.add_multipart(name="without-type", subtype=None)
 
         parent.close()
-        assert child.closed() is True
+        assert child.closed

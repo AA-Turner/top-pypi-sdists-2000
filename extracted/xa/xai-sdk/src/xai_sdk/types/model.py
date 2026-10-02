@@ -28,6 +28,9 @@ ChatModel: TypeAlias = Literal[
     "grok-4.20-multi-agent-latest",
     "grok-4.3",
     "grok-4.3-latest",
+    "grok-4.5",
+    "grok-4.5-latest",
+    "grok-4.6",
     "grok-code-fast-1",
     "grok-build-0.1",
     "grok-3",
@@ -41,13 +44,13 @@ ChatModel: TypeAlias = Literal[
 
 ImageGenerationModel: TypeAlias = Literal[
     "grok-imagine-image",
-    "grok-imagine-image-pro",
+    "grok-imagine-image-2.0",
     "grok-imagine-image-quality",
 ]
 
 VideoGenerationModel: TypeAlias = Literal[
     "grok-imagine-video",
-    "grok-imagine-video-1.5-preview",
+    "grok-imagine-video-1.5",
 ]
 
 AllModels: TypeAlias = Union[

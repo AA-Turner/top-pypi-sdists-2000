@@ -20,6 +20,7 @@ import sys
 import threading
 import time
 import traceback
+import warnings
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -42,7 +43,13 @@ import newrelic.console
 import newrelic.core.agent
 import newrelic.core.config
 from newrelic.common.log_file import initialize_logging
-from newrelic.common.object_names import callable_name, expand_builtin_exception_name
+from newrelic.common.object_names import expand_builtin_exception_name
+from newrelic.common.opentelemetry_tracers import (
+    ALL_LIBRARY_TRACERS_TO_NR_HOOKS,
+    OPENTELEMETRY_ONLY_TRACERS_TO_NR_HOOKS,
+    TEMPORARILY_DISABLED_OPENTELEMETRY_FRAMEWORKS,
+)
+from newrelic.common.package_version_utils import get_package_version
 from newrelic.core import trace_cache
 from newrelic.core.agent_control_health import (
     HealthStatus,
@@ -53,9 +60,24 @@ from newrelic.core.config import Settings, apply_config_setting, default_host
 
 __all__ = ["filter_app_factory", "initialize"]
 
+
+# Add trace log level to logging module
+def trace(self, message, *args, **kws):
+    self.log(logging.TRACE, message, args, **kws)
+
+
+logging.TRACE = 5
+logging.addLevelName(logging.TRACE, "TRACE")
+logging.Logger.trace = trace
 _logger = logging.getLogger(__name__)
 
 DEPRECATED_MODULES = {"aioredis": datetime(2022, 2, 22, 0, 0, tzinfo=timezone.utc)}
+
+LAMBDA_IN_CONFIG_WARNING_MESSAGE = "Using lambdas in configuration files has been removed for security reasons. If dynamic naming is required, consider defining your custom callables in your code rather than configuration, and supplying them as arguments to our decorator or wrapper APIs. (See our API documentation for more information: https://docs.newrelic.com/docs/apm/agents/python-agent/python-agent-api/guide-using-python-agent-api#dynamically-name-segments-and-segment-attributes)"
+
+
+def _lambda_in_config_warning():
+    warnings.warn(LAMBDA_IN_CONFIG_WARNING_MESSAGE, DeprecationWarning, stacklevel=2)
 
 
 def _map_aws_account_id(s):
@@ -66,7 +88,7 @@ def _map_aws_account_id(s):
 # triggering of callbacks to monkey patch modules before import
 # returns them to caller.
 
-sys.meta_path.insert(0, newrelic.api.import_hook.ImportHookFinder())
+newrelic.api.import_hook.enable_import_hook_finder()
 
 # The set of valid feature flags that the agent currently uses.
 # This will be used to validate what is provided and issue warnings
@@ -95,20 +117,29 @@ _settings = newrelic.api.settings.settings()
 # modules to look up customised settings defined in the loaded
 # configuration file.
 
-_config_object = configparser.RawConfigParser()
+
+def ratio(value):
+    try:
+        val = float(value)
+        if 0 < val <= 1:
+            return val
+    except ValueError:
+        pass
+
+
+_config_object = configparser.RawConfigParser(converters={"ratio": ratio})
 
 # Cache of the parsed global settings found in the configuration
 # file. We cache these so can dump them out to the log file once
 # all the settings have been read.
 
 _cache_object = []
-agent_control_health = agent_control_health_instance()
 
 
 def _reset_config_parser():
     global _config_object
     global _cache_object
-    _config_object = configparser.RawConfigParser()
+    _config_object = configparser.RawConfigParser(converters={"ratio": ratio})
     _cache_object = []
 
 
@@ -150,6 +181,7 @@ _LOG_LEVEL = {
     "WARNING": logging.WARNING,
     "INFO": logging.INFO,
     "DEBUG": logging.DEBUG,
+    "TRACE": logging.TRACE,
 }
 
 _RECORD_SQL = {
@@ -192,6 +224,10 @@ def _map_compressed_content_encoding(s):
 
 def _map_split_strings(s):
     return s.split()
+
+
+def _map_split_string_by_comma(s):
+    return newrelic.core.config.parse_comma_separated_into_set(s)
 
 
 def _map_console_listener_socket(s):
@@ -247,7 +283,7 @@ def _raise_configuration_error(section, option=None):
         options = _config_object.options(section)
 
         _logger.error("Options = %s", options)
-        _logger.exception("Exception Details")
+        _logger.exception("Exception Details")  # noqa: LOG004
 
         if not _ignore_errors:
             if section:
@@ -260,7 +296,7 @@ def _raise_configuration_error(section, option=None):
 
     else:
         _logger.error("Option = %s", option)
-        _logger.exception("Exception Details")
+        _logger.exception("Exception Details")  # noqa: LOG004
 
         if not _ignore_errors:
             if section:
@@ -299,6 +335,191 @@ def _process_setting(section, option, getter, mapper):
             if len(fields) == 1:
                 setattr(target, fields[0], value)
                 break
+            target = getattr(target, fields[0])
+            fields = fields[1].split(".", 1)
+
+        # Cache the configuration so can be dumped out to
+        # log file when whole main configuration has been
+        # processed. This ensures that the log file and log
+        # level entries have been set.
+
+        _cache_object.append((option, value))
+
+    except configparser.NoSectionError:
+        pass
+
+    except configparser.NoOptionError:
+        pass
+
+    except Exception:
+        _raise_configuration_error(section, option)
+
+
+def _process_deprecated_setting(section, option_stored, option_config, getter, mapper):
+    """
+    Store max_samples settings into event_harvest_config setting locations.
+
+    Background:
+    The collector/server side agent configuration uses the
+    `event_harvest_config` naming convention for their harvest
+    limit settings.  The original intent was for the language
+    agents to switch to this convention.  However, this only
+    happened for the Python agent.  Eventually, to remain
+    consistent with the other language agents, the decision
+    was made to change this back.  However, because the server
+    side configuration settings override the client-side settings,
+    the agent will insist on employing the `max_samples` naming
+    convention from the user's end but translate the settings
+    to their deprecated `event_harvest_config` counterparts during
+    the configuration process.
+
+    Here, the user will still get warnings about deprecated settings
+    being used.  However, the agent will also translate the settings
+    to their deprecated `event_harvest_config` counterparts during
+    the configuration process.
+
+    option_stored: the configuration setting name to store the value as in the settings object
+    option_config: an alternative configuration setting name used by customers to configure the value
+    """
+    try:
+        # The type of a value is dictated by the getter
+        # function supplied.
+
+        # value_config is the new name and value_stored is the deprecated name so
+        # value_config takes precendence over value_stored
+        try:
+            value_stored = getattr(_config_object, getter)(section, option_stored)
+        except configparser.NoOptionError:
+            value_stored = None
+        try:
+            value_config = getattr(_config_object, getter)(section, option_config)
+        except configparser.NoOptionError:
+            value_config = None
+        # Use an explicit "is not None" check rather than "or"
+        # so a legitimate value of 0 is not dropped.
+        value = value_config if value_config is not None else value_stored
+
+        # This means neither config option was found in the config file so there's nothing to do.
+        if value is None:
+            return
+
+        if value_stored is not None and value_config is None:
+            _logger.info(
+                "Deprecated setting found: %r. Please use new setting: %r. Applying value of deprecated setting %r to %r.",
+                option_stored,
+                option_config,
+                option_stored,
+                option_config,
+            )
+        elif value_stored is not None and value_config is not None:
+            _logger.info("Ignoring deprecated setting: %r. Using new setting: %r.", option_stored, option_config)
+
+        # The getter parsed the value okay but want to
+        # pass this through a mapping function to change
+        # it to internal value suitable for internal
+        # settings object. This is usually one where the
+        # value was a string.
+
+        if mapper:
+            value = mapper(value)
+
+        # Now need to apply the option from the
+        # configuration file to the internal settings
+        # object. Walk the object path and assign it.
+
+        target = _settings
+        fields = option_stored.split(".", 1)
+
+        while True:
+            if len(fields) == 1:
+                setattr(target, fields[0], value)
+                break
+            target = getattr(target, fields[0])
+            fields = fields[1].split(".", 1)
+
+        # Cache the configuration so can be dumped out to
+        # log file when whole main configuration has been
+        # processed. This ensures that the log file and log
+        # level entries have been set.
+
+        _cache_object.append((option_config, value))
+
+    except configparser.NoSectionError:
+        pass
+
+    except configparser.NoOptionError:
+        pass
+
+    except Exception:
+        _raise_configuration_error(section, option_stored)
+
+
+def _process_dt_hidden_setting(section, option, getter):
+    try:
+        # The type of a value is dictated by the getter
+        # function supplied.
+
+        value = getattr(_config_object, getter)(section, option)
+
+        # Now need to apply the option from the
+        # configuration file to the internal settings
+        # object. Walk the object path and assign it.
+
+        target = _settings
+        fields = option.split(".", 1)
+
+        if value == "trace_id_ratio_based":
+            raise configparser.NoOptionError("trace_id_ratio_sampler option can only be set by configuring the ratio")
+        while True:
+            if len(fields) == 1:
+                value = value or "default"
+                # Store the value at the underscored location so if option is
+                # distributed_tracing.sampler.full_granularity.remote_parent_sampled
+                # store it at location
+                # distributed_tracing.sampler.full_granularity._remote_parent_sampled
+                setattr(target, f"_{fields[0]}", value)
+                break
+            target = getattr(target, fields[0])
+            fields = fields[1].split(".", 1)
+
+        # Cache the configuration so can be dumped out to
+        # log file when whole main configuration has been
+        # processed. This ensures that the log file and log
+        # level entries have been set.
+
+        _cache_object.append((option, value))
+
+    except configparser.NoSectionError:
+        pass
+
+    except configparser.NoOptionError:
+        pass
+
+    except Exception:
+        _raise_configuration_error(section, option)
+
+
+def _process_dt_sampler_setting(section, option, getter):
+    try:
+        # The type of a value is dictated by the getter
+        # function supplied.
+
+        value = getattr(_config_object, getter)(section, option)
+
+        # Now need to apply the option from the
+        # configuration file to the internal settings
+        # object. Walk the object path and assign it.
+
+        target = _settings
+        fields = option.split(".", 1)
+
+        while True:
+            if len(fields) == 1:
+                setattr(target, f"{fields[0]}", value)
+                break
+            elif fields[0] in ("root", "remote_parent_sampled", "remote_parent_not_sampled"):
+                sampler = fields[1].split(".", 1)[0]
+                setattr(target, f"_{fields[0]}", sampler)
             target = getattr(target, fields[0])
             fields = fields[1].split(".", 1)
 
@@ -373,7 +594,13 @@ def _process_configuration(section):
     _process_setting(section, "transaction_tracer.attributes.include", "get", _map_inc_excl_attributes)
     _process_setting(section, "error_collector.enabled", "getboolean", None)
     _process_setting(section, "error_collector.capture_events", "getboolean", None)
-    _process_setting(section, "error_collector.max_event_samples_stored", "getint", None)
+    _process_deprecated_setting(
+        section,
+        "event_harvest_config.harvest_limits.error_event_data",
+        "error_collector.max_event_samples_stored",
+        "getint",
+        None,
+    )
     _process_setting(section, "error_collector.capture_source", "getboolean", None)
     _process_setting(section, "error_collector.ignore_classes", "get", _map_split_strings)
     _process_setting(section, "error_collector.ignore_status_codes", "get", _merge_ignore_status_codes)
@@ -385,6 +612,7 @@ def _process_configuration(section):
     _process_setting(section, "browser_monitoring.enabled", "getboolean", None)
     _process_setting(section, "browser_monitoring.auto_instrument", "getboolean", None)
     _process_setting(section, "browser_monitoring.loader", "get", None)
+    _process_setting(section, "browser_monitoring.version", "get", None)
     _process_setting(section, "browser_monitoring.debug", "getboolean", None)
     _process_setting(section, "browser_monitoring.ssl_for_http", "getboolean", None)
     _process_setting(section, "browser_monitoring.content_type", "get", _map_split_strings)
@@ -394,20 +622,84 @@ def _process_configuration(section):
     _process_setting(section, "slow_sql.enabled", "getboolean", None)
     _process_setting(section, "synthetics.enabled", "getboolean", None)
     _process_setting(section, "transaction_events.enabled", "getboolean", None)
-    _process_setting(section, "transaction_events.max_samples_stored", "getint", None)
+    _process_deprecated_setting(
+        section,
+        "event_harvest_config.harvest_limits.analytic_event_data",
+        "transaction_events.max_samples_stored",
+        "getint",
+        None,
+    )
     _process_setting(section, "transaction_events.attributes.enabled", "getboolean", None)
     _process_setting(section, "transaction_events.attributes.exclude", "get", _map_inc_excl_attributes)
     _process_setting(section, "transaction_events.attributes.include", "get", _map_inc_excl_attributes)
     _process_setting(section, "custom_insights_events.enabled", "getboolean", None)
-    _process_setting(section, "custom_insights_events.max_samples_stored", "getint", None)
+    _process_deprecated_setting(
+        section,
+        "event_harvest_config.harvest_limits.custom_event_data",
+        "custom_insights_events.max_samples_stored",
+        "getint",
+        None,
+    )
     _process_setting(section, "custom_insights_events.max_attribute_value", "getint", None)
     _process_setting(section, "ml_insights_events.enabled", "getboolean", None)
     _process_setting(section, "distributed_tracing.enabled", "getboolean", None)
     _process_setting(section, "distributed_tracing.exclude_newrelic_header", "getboolean", None)
-    _process_setting(section, "distributed_tracing.sampler.remote_parent_sampled", "get", None)
-    _process_setting(section, "distributed_tracing.sampler.remote_parent_not_sampled", "get", None)
+    _process_setting(section, "distributed_tracing.sampler.adaptive_sampling_target", "getint", None)
+    _process_dt_hidden_setting(section, "distributed_tracing.sampler.root", "get")
+    _process_dt_sampler_setting(section, "distributed_tracing.sampler.root.adaptive.sampling_target", "getint")
+    _process_dt_sampler_setting(section, "distributed_tracing.sampler.root.trace_id_ratio_based.ratio", "getratio")
+    _process_dt_hidden_setting(section, "distributed_tracing.sampler.remote_parent_sampled", "get")
+    _process_dt_sampler_setting(
+        section, "distributed_tracing.sampler.remote_parent_sampled.adaptive.sampling_target", "getint"
+    )
+    _process_dt_sampler_setting(
+        section, "distributed_tracing.sampler.remote_parent_sampled.trace_id_ratio_based.ratio", "getratio"
+    )
+    _process_dt_hidden_setting(section, "distributed_tracing.sampler.remote_parent_not_sampled", "get")
+    _process_dt_sampler_setting(
+        section, "distributed_tracing.sampler.remote_parent_not_sampled.adaptive.sampling_target", "getint"
+    )
+    _process_dt_sampler_setting(
+        section, "distributed_tracing.sampler.remote_parent_not_sampled.trace_id_ratio_based.ratio", "getratio"
+    )
+    _process_setting(section, "distributed_tracing.sampler.full_granularity.enabled", "getboolean", None)
+    _process_setting(section, "distributed_tracing.sampler.partial_granularity.enabled", "getboolean", None)
+    _process_setting(section, "distributed_tracing.sampler.partial_granularity.type", "get", None)
+    _process_dt_hidden_setting(section, "distributed_tracing.sampler.partial_granularity.root", "get")
+    _process_dt_sampler_setting(
+        section, "distributed_tracing.sampler.partial_granularity.root.adaptive.sampling_target", "getint"
+    )
+    _process_dt_sampler_setting(
+        section, "distributed_tracing.sampler.partial_granularity.root.trace_id_ratio_based.ratio", "getratio"
+    )
+    _process_dt_hidden_setting(section, "distributed_tracing.sampler.partial_granularity.remote_parent_sampled", "get")
+    _process_dt_sampler_setting(
+        section,
+        "distributed_tracing.sampler.partial_granularity.remote_parent_sampled.adaptive.sampling_target",
+        "getint",
+    )
+    _process_dt_sampler_setting(
+        section,
+        "distributed_tracing.sampler.partial_granularity.remote_parent_sampled.trace_id_ratio_based.ratio",
+        "getratio",
+    )
+    _process_dt_hidden_setting(
+        section, "distributed_tracing.sampler.partial_granularity.remote_parent_not_sampled", "get"
+    )
+    _process_dt_sampler_setting(
+        section,
+        "distributed_tracing.sampler.partial_granularity.remote_parent_not_sampled.adaptive.sampling_target",
+        "getint",
+    )
+    _process_dt_sampler_setting(
+        section,
+        "distributed_tracing.sampler.partial_granularity.remote_parent_not_sampled.trace_id_ratio_based.ratio",
+        "getratio",
+    )
     _process_setting(section, "span_events.enabled", "getboolean", None)
-    _process_setting(section, "span_events.max_samples_stored", "getint", None)
+    _process_deprecated_setting(
+        section, "event_harvest_config.harvest_limits.span_event_data", "span_events.max_samples_stored", "getint", None
+    )
     _process_setting(section, "span_events.attributes.enabled", "getboolean", None)
     _process_setting(section, "span_events.attributes.exclude", "get", _map_inc_excl_attributes)
     _process_setting(section, "span_events.attributes.include", "get", _map_inc_excl_attributes)
@@ -453,7 +745,6 @@ def _process_configuration(section):
     _process_setting(section, "debug.disable_harvest_until_shutdown", "getboolean", None)
     _process_setting(section, "debug.connect_span_stream_in_developer_mode", "getboolean", None)
     _process_setting(section, "debug.otlp_content_encoding", "get", None)
-    _process_setting(section, "cross_application_tracer.enabled", "getboolean", None)
     _process_setting(section, "message_tracer.segment_parameters_enabled", "getboolean", None)
     _process_setting(section, "process_host.display_name", "get", None)
     _process_setting(section, "utilization.detect_aws", "getboolean", None)
@@ -476,12 +767,7 @@ def _process_configuration(section):
     _process_setting(section, "apdex_t", "getfloat", None)
     _process_setting(section, "event_loop_visibility.enabled", "getboolean", None)
     _process_setting(section, "event_loop_visibility.blocking_threshold", "getfloat", None)
-    _process_setting(section, "event_harvest_config.harvest_limits.analytic_event_data", "getint", None)
-    _process_setting(section, "event_harvest_config.harvest_limits.custom_event_data", "getint", None)
     _process_setting(section, "event_harvest_config.harvest_limits.ml_event_data", "getint", None)
-    _process_setting(section, "event_harvest_config.harvest_limits.span_event_data", "getint", None)
-    _process_setting(section, "event_harvest_config.harvest_limits.error_event_data", "getint", None)
-    _process_setting(section, "event_harvest_config.harvest_limits.log_event_data", "getint", None)
     _process_setting(section, "infinite_tracing.trace_observer_host", "get", None)
     _process_setting(section, "infinite_tracing.trace_observer_port", "getint", None)
     _process_setting(section, "infinite_tracing.compression", "getboolean", None)
@@ -490,7 +776,13 @@ def _process_configuration(section):
     _process_setting(section, "code_level_metrics.enabled", "getboolean", None)
 
     _process_setting(section, "application_logging.enabled", "getboolean", None)
-    _process_setting(section, "application_logging.forwarding.max_samples_stored", "getint", None)
+    _process_deprecated_setting(
+        section,
+        "event_harvest_config.harvest_limits.log_event_data",
+        "application_logging.forwarding.max_samples_stored",
+        "getint",
+        None,
+    )
     _process_setting(section, "application_logging.forwarding.enabled", "getboolean", None)
     _process_setting(section, "application_logging.forwarding.custom_attributes", "get", _map_as_mapping)
     _process_setting(section, "application_logging.forwarding.labels.enabled", "getboolean", None)
@@ -518,6 +810,10 @@ def _process_configuration(section):
     _process_setting(section, "instrumentation.middleware.django.enabled", "getboolean", None)
     _process_setting(section, "instrumentation.middleware.django.exclude", "get", _map_inc_excl_middleware)
     _process_setting(section, "instrumentation.middleware.django.include", "get", _map_inc_excl_middleware)
+    _process_setting(section, "opentelemetry.enabled", "getboolean", None)
+    _process_setting(section, "opentelemetry.traces.enabled", "getboolean", None)
+    _process_setting(section, "opentelemetry.traces.exclude", "get", _map_split_string_by_comma)
+    _process_setting(section, "opentelemetry.traces.include", "get", _map_split_string_by_comma)
 
 
 # Loading of configuration from specified file and for specified
@@ -547,7 +843,7 @@ def _process_app_name_setting():
     name = app_name_list[0].strip() or "Python Application"
 
     if len(app_name_list) > 3:
-        agent_control_health.set_health_status(HealthStatus.MAX_APP_NAME.value)
+        agent_control_health_instance().set_health_status(HealthStatus.MAX_APP_NAME.value)
 
     linked = []
     for altname in app_name_list[1:]:
@@ -632,67 +928,8 @@ def delete_setting(settings_object, name):
         target = getattr(target, fields[0])
         fields = fields[1].split(".", 1)
 
-    try:
+    if hasattr(target, fields[0]):
         delattr(target, fields[0])
-    except AttributeError:
-        _logger.debug("Failed to delete setting: %r", name)
-
-
-def translate_event_harvest_config_settings(settings, cached_settings):
-    """Translate event_harvest_config settings to max_samples settings.
-
-    Background:
-    The collector/server side agent configuration uses the
-    `event_harvest_config` naming convention for their harvest
-    limit settings.  The original intent was for the language
-    agents to switch to this convention.  However, this only
-    happened for the Python agent.  Eventually, to remain
-    consistent with the other language agents, the decision
-    was made to change this back.  However, because the server
-    side configuration settings override the client-side settings,
-    the agent will insist on employing the `max_samples` naming
-    convention from the user's end but translate the settings
-    to their deprecated `event_harvest_config` counterparts during
-    the configuration process.
-
-    Here, the user will still get warnings about deprecated settings
-    being used.  However, the agent will also translate the settings
-    to their deprecated `event_harvest_config` counterparts during
-    the configuration process.
-    """
-
-    cached = dict(cached_settings)
-
-    event_harvest_to_max_samples_settings_map = [
-        ("event_harvest_config.harvest_limits.analytic_event_data", "transaction_events.max_samples_stored"),
-        ("event_harvest_config.harvest_limits.span_event_data", "span_events.max_samples_stored"),
-        ("event_harvest_config.harvest_limits.error_event_data", "error_collector.max_event_samples_stored"),
-        ("event_harvest_config.harvest_limits.custom_event_data", "custom_insights_events.max_samples_stored"),
-        ("event_harvest_config.harvest_limits.log_event_data", "application_logging.forwarding.max_samples_stored"),
-    ]
-
-    for event_harvest_key, max_samples_key in event_harvest_to_max_samples_settings_map:
-        if event_harvest_key in cached:
-            _logger.info(
-                "Deprecated setting found: %r. Please use new setting: %r.", event_harvest_key, max_samples_key
-            )
-
-            if max_samples_key in cached:
-                # Since there is the max_samples key as well as the event_harvest key,
-                # we need to apply the max_samples value to the event_harvest key.
-                apply_config_setting(settings, event_harvest_key, cached[max_samples_key])
-                _logger.info(
-                    "Ignoring deprecated setting: %r. Using new setting: %r.", event_harvest_key, max_samples_key
-                )
-            else:
-                # Translation to event_harvest_config has already happened
-                _logger.info("Applying value of deprecated setting %r to %r.", event_harvest_key, max_samples_key)
-        elif max_samples_key in cached:
-            apply_config_setting(settings, event_harvest_key, cached[max_samples_key])
-
-        delete_setting(settings, max_samples_key)
-
-    return settings
 
 
 def translate_deprecated_settings(settings, cached_settings):
@@ -754,15 +991,6 @@ def translate_deprecated_settings(settings, cached_settings):
             "new setting: attributes.exclude. To disable capturing all "
             'request parameters, add "request.parameters.*" to '
             "attributes.exclude."
-        )
-
-    if "cross_application_tracer.enabled" in cached:
-        # CAT Deprecation Warning
-        _logger.info(
-            "Deprecated setting found: cross_application_tracer.enabled. Please replace Cross Application Tracing "
-            "(CAT) with the newer Distributed Tracing by setting 'distributed_tracing.enabled' to True in your agent "
-            "configuration. For further details on distributed tracing, please refer to our documentation: "
-            "https://docs.newrelic.com/docs/distributed-tracing/concepts/distributed-tracing-planning-guide/#changes."
         )
 
     return settings
@@ -830,6 +1058,14 @@ def apply_local_high_security_mode_setting(settings):
     if settings.ai_monitoring.enabled:
         settings.ai_monitoring.enabled = False
         _logger.info(log_template, "ai_monitoring.enabled", True, False)
+
+    if settings.ai_monitoring.streaming.enabled:
+        settings.ai_monitoring.streaming.enabled = False
+        _logger.info(log_template, "ai_monitoring.streaming.enabled", True, False)
+
+    if settings.ai_monitoring.record_content.enabled:
+        settings.ai_monitoring.record_content.enabled = False
+        _logger.info(log_template, "ai_monitoring.record_content.enabled", True, False)
 
     return settings
 
@@ -954,7 +1190,7 @@ def _load_configuration(config_file=None, environment=None, ignore_errors=True, 
         elif not _config_object.read([config_file]):
             raise newrelic.api.exceptions.ConfigurationError(f"Unable to open configuration file {config_file}.")
     except Exception:
-        agent_control_health.set_health_status(HealthStatus.INVALID_CONFIG.value)
+        agent_control_health_instance().set_health_status(HealthStatus.INVALID_CONFIG.value)
         raise
 
     _settings.config_file = config_file
@@ -1024,16 +1260,12 @@ def _load_configuration(config_file=None, environment=None, ignore_errors=True, 
 
     translate_deprecated_settings(_settings, _cache_object)
 
-    # Translate event_harvest_config settings to max_samples settings (from user's side)
-
-    translate_event_harvest_config_settings(_settings, _cache_object)
-
     # Apply High Security Mode policy if enabled in local agent
     # configuration file.
 
     apply_local_high_security_mode_setting(_settings)
 
-    # Look for an app_name setting which is actually a semi colon
+    # Look for an app_name setting which is actually a semicolon
     # list of application names and adjust app_name setting and
     # registered linked applications for later handling.
 
@@ -1128,7 +1360,7 @@ def _raise_instrumentation_error(instrumentation_type, locals_dict):
     _logger.error("INSTRUMENTATION ERROR")
     _logger.error("Type = %s", instrumentation_type)
     _logger.error("Locals = %s", locals_dict)
-    _logger.exception("Exception Details")
+    _logger.exception("Exception Details")  # noqa: LOG004
 
     if not _ignore_errors:
         raise newrelic.api.exceptions.InstrumentationError(
@@ -1363,8 +1595,7 @@ def _process_background_task_configuration():
                 group = _config_object.get(section, "group")
 
             if name and name.startswith("lambda "):
-                callable_vars = {"callable_name": callable_name}
-                name = eval(name, callable_vars)  # noqa: S307
+                _lambda_in_config_warning()
 
             _logger.debug("register background-task %s", ((module, object_path, application, name, group),))
 
@@ -1413,8 +1644,7 @@ def _process_database_trace_configuration():
             sql = _config_object.get(section, "sql")
 
             if sql.startswith("lambda "):
-                callable_vars = {"callable_name": callable_name}
-                sql = eval(sql, callable_vars)  # noqa: S307
+                _lambda_in_config_warning()
 
             _logger.debug("register database-trace %s", ((module, object_path, sql),))
 
@@ -1468,12 +1698,10 @@ def _process_external_trace_configuration():
                 method = _config_object.get(section, "method")
 
             if url.startswith("lambda "):
-                callable_vars = {"callable_name": callable_name}
-                url = eval(url, callable_vars)  # noqa: S307
+                _lambda_in_config_warning()
 
             if method and method.startswith("lambda "):
-                callable_vars = {"callable_name": callable_name}
-                method = eval(method, callable_vars)  # noqa: S307
+                _lambda_in_config_warning()
 
             _logger.debug("register external-trace %s", ((module, object_path, library, url, method),))
 
@@ -1540,8 +1768,7 @@ def _process_function_trace_configuration():
                 rollup = _config_object.get(section, "rollup")
 
             if name and name.startswith("lambda "):
-                callable_vars = {"callable_name": callable_name}
-                name = eval(name, callable_vars)  # noqa: S307
+                _lambda_in_config_warning()
 
             _logger.debug(
                 "register function-trace %s", ((module, object_path, name, group, label, params, terminal, rollup),)
@@ -1598,8 +1825,7 @@ def _process_generator_trace_configuration():
                 group = _config_object.get(section, "group")
 
             if name and name.startswith("lambda "):
-                callable_vars = {"callable_name": callable_name}
-                name = eval(name, callable_vars)  # noqa: S307
+                _lambda_in_config_warning()
 
             _logger.debug("register generator-trace %s", ((module, object_path, name, group),))
 
@@ -1657,8 +1883,7 @@ def _process_profile_trace_configuration():
                 depth = _config_object.get(section, "depth")
 
             if name and name.startswith("lambda "):
-                callable_vars = {"callable_name": callable_name}
-                name = eval(name, callable_vars)  # noqa: S307
+                _lambda_in_config_warning()
 
             _logger.debug("register profile-trace %s", ((module, object_path, name, group, depth),))
 
@@ -1707,8 +1932,7 @@ def _process_memcache_trace_configuration():
             command = _config_object.get(section, "command")
 
             if command.startswith("lambda "):
-                callable_vars = {"callable_name": callable_name}
-                command = eval(command, callable_vars)  # noqa: S307
+                _lambda_in_config_warning()
 
             _logger.debug("register memcache-trace %s", (module, object_path, command))
 
@@ -1767,8 +1991,7 @@ def _process_transaction_name_configuration():
                 priority = _config_object.getint(section, "priority")
 
             if name and name.startswith("lambda "):
-                callable_vars = {"callable_name": callable_name}
-                name = eval(name, callable_vars)  # noqa: S307
+                _lambda_in_config_warning()
 
             _logger.debug("register transaction-name %s", ((module, object_path, name, group, priority),))
 
@@ -1986,6 +2209,10 @@ def _process_function_profile_configuration():
             _raise_configuration_error(section)
 
 
+opentelemetry_instrumentation = []
+opentelemetry_entrypoints = []
+
+
 def _process_module_definition(target, module, function="instrument"):
     enabled = True
     execute = None
@@ -2005,6 +2232,9 @@ def _process_module_definition(target, module, function="instrument"):
         pass
     except Exception:
         _raise_configuration_error(section)
+
+    if target in opentelemetry_instrumentation:
+        enabled = False
 
     try:
         if _config_object.has_option(section, "execute"):
@@ -2081,6 +2311,16 @@ def _process_module_builtin_defaults():
     _process_module_definition("google.genai.models", "newrelic.hooks.mlmodel_gemini", "instrument_genai_models")
 
     _process_module_definition(
+        "anthropic.resources.messages.messages", "newrelic.hooks.mlmodel_anthropic", "instrument_anthropic_messages"
+    )
+
+    _process_module_definition(
+        "agent_framework_bedrock",
+        "newrelic.hooks.mlmodel_agentframework",
+        "instrument_agent_framwork_bedrock__chat_client",
+    )
+
+    _process_module_definition(
         "asyncio.base_events", "newrelic.hooks.coroutines_asyncio", "instrument_asyncio_base_events"
     )
 
@@ -2090,6 +2330,15 @@ def _process_module_builtin_defaults():
 
     _process_module_definition(
         "langgraph.prebuilt.tool_node", "newrelic.hooks.mlmodel_langgraph", "instrument_langgraph_prebuilt_tool_node"
+    )
+    _process_module_definition(
+        "langgraph.pregel._executor", "newrelic.hooks.mlmodel_langgraph", "instrument_langgraph_pregel_executor"
+    )
+    _process_module_definition(
+        "langgraph._internal._runnable", "newrelic.hooks.mlmodel_langgraph", "instrument_langgraph_internal_runnable"
+    )
+    _process_module_definition(
+        "langgraph.stream.run_stream", "newrelic.hooks.mlmodel_langgraph", "instrument_langgraph_stream_run_stream"
     )
 
     _process_module_definition(
@@ -2763,6 +3012,10 @@ def _process_module_builtin_defaults():
     _process_module_definition("flask_restplus.api", "newrelic.hooks.component_flask_rest", "instrument_flask_rest")
     _process_module_definition("flask_restx.api", "newrelic.hooks.component_flask_rest", "instrument_flask_rest")
 
+    _process_module_definition(
+        "wagtail.models.pages", "newrelic.hooks.framework_django", "instrument_wagtail_models_pages"
+    )
+
     _process_module_definition("graphql_server", "newrelic.hooks.component_graphqlserver", "instrument_graphqlserver")
 
     _process_module_definition(
@@ -2770,6 +3023,8 @@ def _process_module_builtin_defaults():
     )
 
     _process_module_definition("httpx._client", "newrelic.hooks.external_httpx", "instrument_httpx_client")
+
+    _process_module_definition("httpx2._client", "newrelic.hooks.external_httpx2", "instrument_httpx2_client")
 
     _process_module_definition("gluon.contrib.feedparser", "newrelic.hooks.external_feedparser")
     _process_module_definition("gluon.contrib.memcache.memcache", "newrelic.hooks.memcache_memcache")
@@ -2955,6 +3210,32 @@ def _process_module_builtin_defaults():
         "instrument_autogen_agentchat_agents__assistant_agent",
     )
     _process_module_definition(
+        "google.adk.agents.llm_agent", "newrelic.hooks.mlmodel_googleadk", "instrument_googleadk_agents_llm_agent"
+    )
+    _process_module_definition(
+        "google.adk.agents.loop_agent", "newrelic.hooks.mlmodel_googleadk", "instrument_googleadk_agents_loop_agent"
+    )
+    _process_module_definition(
+        "google.adk.agents.parallel_agent",
+        "newrelic.hooks.mlmodel_googleadk",
+        "instrument_googleadk_agents_parallel_agent",
+    )
+    _process_module_definition(
+        "google.adk.agents.sequential_agent",
+        "newrelic.hooks.mlmodel_googleadk",
+        "instrument_googleadk_agents_sequential_agent",
+    )
+    _process_module_definition(
+        "google.adk.flows.llm_flows.functions",
+        "newrelic.hooks.mlmodel_googleadk",
+        "instrument_googleadk_flows_llm_flows_functions",
+    )
+    _process_module_definition(
+        "google.adk.flows.llm_flows._tool_caller",
+        "newrelic.hooks.mlmodel_googleadk",
+        "instrument_googleadk_flows_llm_flows__tool_caller",
+    )
+    _process_module_definition(
         "strands.agent.agent", "newrelic.hooks.mlmodel_strands", "instrument_strands_agent_agent"
     )
     _process_module_definition(
@@ -2984,7 +3265,11 @@ def _process_module_builtin_defaults():
         "newrelic.hooks.adapter_mcp",
         "instrument_mcp_server_fastmcp_tools_tool_manager",
     )
-
+    _process_module_definition(
+        "mcp.server.mcpserver.tools.tool_manager",
+        "newrelic.hooks.adapter_mcp",
+        "instrument_mcp_server_fastmcp_tools_tool_manager",
+    )
     _process_module_definition("structlog._base", "newrelic.hooks.logger_structlog", "instrument_structlog__base")
     _process_module_definition("structlog._frames", "newrelic.hooks.logger_structlog", "instrument_structlog__frames")
     _process_module_definition("paste.httpserver", "newrelic.hooks.adapter_paste", "instrument_paste_httpserver")
@@ -3012,6 +3297,10 @@ def _process_module_builtin_defaults():
     _process_module_definition("pyodbc", "newrelic.hooks.database_pyodbc", "instrument_pyodbc")
 
     _process_module_definition("pymssql", "newrelic.hooks.database_pymssql", "instrument_pymssql")
+
+    _process_module_definition(
+        "mssql_python.db_connection", "newrelic.hooks.database_mssqlpython", "instrument_mssqlpython"
+    )
 
     _process_module_definition("psycopg", "newrelic.hooks.database_psycopg", "instrument_psycopg")
     _process_module_definition("psycopg.sql", "newrelic.hooks.database_psycopg", "instrument_psycopg_sql")
@@ -3088,7 +3377,6 @@ def _process_module_builtin_defaults():
     _process_module_definition(
         "requests.packages.urllib3.connection", "newrelic.hooks.external_urllib3", "instrument_urllib3_connection"
     )
-
     _process_module_definition(
         "starlette.requests", "newrelic.hooks.framework_starlette", "instrument_starlette_requests"
     )
@@ -3369,6 +3657,22 @@ def _process_module_builtin_defaults():
         "elastic_transport._async_transport",
         "newrelic.hooks.datastore_elasticsearch",
         "instrument_async_elastic_transport__transport",
+    )
+
+    _process_module_definition(
+        "opensearchpy.client", "newrelic.hooks.datastore_opensearch", "instrument_opensearch_client"
+    )
+    _process_module_definition(
+        "opensearchpy._async.client", "newrelic.hooks.datastore_opensearch", "instrument_async_opensearch_client"
+    )
+    _process_module_definition(
+        "opensearchpy.connection.base", "newrelic.hooks.datastore_opensearch", "instrument_opensearch_connection_base"
+    )
+    _process_module_definition(
+        "opensearchpy.transport", "newrelic.hooks.datastore_opensearch", "instrument_opensearch_transport"
+    )
+    _process_module_definition(
+        "opensearchpy._async.transport", "newrelic.hooks.datastore_opensearch", "instrument_async_opensearch_transport"
     )
 
     _process_module_definition("pika.adapters", "newrelic.hooks.messagebroker_pika", "instrument_pika_adapters")
@@ -4195,6 +4499,7 @@ def _process_module_builtin_defaults():
 
     _process_module_definition("botocore.endpoint", "newrelic.hooks.external_botocore", "instrument_botocore_endpoint")
     _process_module_definition("botocore.client", "newrelic.hooks.external_botocore", "instrument_botocore_client")
+    _process_module_definition("botocore.auth", "newrelic.hooks.external_botocore", "instrument_botocore_auth")
 
     _process_module_definition(
         "s3transfer.futures", "newrelic.hooks.external_s3transfer", "instrument_s3transfer_futures"
@@ -4224,21 +4529,66 @@ def _process_module_builtin_defaults():
         "pyzeebe.worker.job_executor", "newrelic.hooks.external_pyzeebe", "instrument_pyzeebe_worker_job_executor"
     )
 
+    # Hybrid Agent Hooks
+    _process_module_definition(
+        "opentelemetry.context", "newrelic.hooks.hybridagent_opentelemetry", "instrument_context_api"
+    )
+
+    _process_module_definition(
+        "opentelemetry.instrumentation.propagators",
+        "newrelic.hooks.hybridagent_opentelemetry",
+        "instrument_global_propagators_api",
+    )
+
+    _process_module_definition(
+        "opentelemetry.trace", "newrelic.hooks.hybridagent_opentelemetry", "instrument_trace_api"
+    )
+
+    _process_module_definition(
+        "opentelemetry.util.http", "newrelic.hooks.hybridagent_opentelemetry", "instrument_util_http"
+    )
+
+    _process_module_definition(
+        "opentelemetry.instrumentation.utils", "newrelic.hooks.hybridagent_opentelemetry", "instrument_utils"
+    )
+
+    _process_module_definition(
+        "opentelemetry.instrumentation.pika.utils", "newrelic.hooks.hybridagent_opentelemetry", "instrument_pika_utils"
+    )
+
+    _process_module_definition(
+        "azure.cosmos.cosmos_client", "newrelic.hooks.datastore_azurecosmos", "instrument_cosmos_client"
+    )
+
+    _process_module_definition(
+        "azure.cosmos.database", "newrelic.hooks.datastore_azurecosmos", "instrument_cosmos_database"
+    )
+
+    _process_module_definition(
+        "azure.cosmos.container", "newrelic.hooks.datastore_azurecosmos", "instrument_cosmos_container"
+    )
+
+    _process_module_definition("azure.cosmos.user", "newrelic.hooks.datastore_azurecosmos", "instrument_cosmos_user")
+
+    _process_module_definition(
+        "azure.cosmos.aio._cosmos_client", "newrelic.hooks.datastore_azurecosmos", "instrument_cosmos_aio_client"
+    )
+
+    _process_module_definition(
+        "azure.cosmos.aio._database", "newrelic.hooks.datastore_azurecosmos", "instrument_cosmos_aio_database"
+    )
+
+    _process_module_definition(
+        "azure.cosmos.aio._container", "newrelic.hooks.datastore_azurecosmos", "instrument_cosmos_aio_container"
+    )
+
+    _process_module_definition(
+        "azure.cosmos.aio._user", "newrelic.hooks.datastore_azurecosmos", "instrument_cosmos_aio_user"
+    )
+
 
 def _process_module_entry_points():
-    try:
-        # importlib.metadata was introduced into the standard library starting in Python 3.8.
-        from importlib.metadata import entry_points
-    except ImportError:
-        try:
-            # importlib_metadata is a backport library installable from PyPI.
-            from importlib_metadata import entry_points
-        except ImportError:
-            try:
-                # Fallback to pkg_resources, which is available in older versions of setuptools.
-                from pkg_resources import iter_entry_points as entry_points
-            except ImportError:
-                return
+    from importlib.metadata import entry_points
 
     group = "newrelic.hooks"
 
@@ -4273,6 +4623,85 @@ def _reset_instrumentation_done():
     _instrumentation_done = False
 
 
+def _is_installed(req):
+    version = get_package_version(req)
+
+    if version:
+        return True
+    return False
+
+
+def _tracer_include_and_exclude_filter():
+    """Uses the values in `opentelemetry.traces.include` and
+    `opentelemetry.traces.exclude` settings, along with the
+    internal included defaults, to determine which tracers
+    should be used.
+    """
+
+    user_exclude = _settings.opentelemetry.traces.exclude or newrelic.core.config._environ_as_comma_separated_set(
+        "NEW_RELIC_OPENTELEMETRY_TRACES_EXCLUDE"
+    )
+    user_include = _settings.opentelemetry.traces.include or newrelic.core.config._environ_as_comma_separated_set(
+        "NEW_RELIC_OPENTELEMETRY_TRACES_INCLUDE"
+    )
+
+    tracer_include_union = {*OPENTELEMETRY_ONLY_TRACERS_TO_NR_HOOKS.keys(), *user_include}
+    mask = tracer_include_union & user_exclude
+    final_include_set = tracer_include_union ^ mask
+
+    return final_include_set
+
+
+def _process_opentelemetry_instrumentation_entry_points():
+    if not _settings.opentelemetry.enabled or not _is_installed("opentelemetry-api"):
+        return
+
+    include_set = _tracer_include_and_exclude_filter()
+
+    from importlib.metadata import entry_points
+
+    group = "opentelemetry_instrumentor"
+
+    try:
+        # group kwarg was only added to importlib.metadata.entry_points in Python 3.10.
+        _entry_points = entry_points(group=group)
+    except TypeError:
+        # Grab entire entry_points dictionary and select group from it.
+        _entry_points = entry_points().get(group, ())
+
+    entry_points_generator = (
+        entrypoint
+        for entrypoint in _entry_points
+        if entrypoint.name in include_set and entrypoint.name not in TEMPORARILY_DISABLED_OPENTELEMETRY_FRAMEWORKS
+    )
+
+    for entrypoint in entry_points_generator:
+        opentelemetry_entrypoints.append(entrypoint)
+        opentelemetry_instrumentation.extend(ALL_LIBRARY_TRACERS_TO_NR_HOOKS[entrypoint.name])
+
+    # Check for native installations
+    # NOTE: for native instrumentation to work, the tracer name must be
+    # explicitly included in the opentelemetry.traces.include setting.
+    for lib in ["strawberry-graphql", "ariadne", "elasticsearch"]:
+        if _is_installed(lib) and (lib in include_set):
+            opentelemetry_instrumentation.extend(ALL_LIBRARY_TRACERS_TO_NR_HOOKS[lib])
+
+
+def _process_opentelemetry_instrumentors():
+    if not _settings.opentelemetry.enabled or not _is_installed("opentelemetry-api"):
+        return
+
+    tracer_provider = newrelic.core.agent.opentelemetry_tracer_provider()
+    for entrypoint in opentelemetry_entrypoints:
+        try:
+            instrumentor_class = entrypoint.load()
+            instrumentor = instrumentor_class()
+            instrumentor.instrument(tracer_provider=tracer_provider)
+            _logger.debug("Successfully instrumented OpenTelemetry tracer '%s' via entry point.", entrypoint.name)
+        except Exception as exc:
+            _logger.warning("Failed to instrument OpenTelemetry tracer '%s' via entry point: %s", entrypoint.name, exc)
+
+
 def _setup_instrumentation():
     global _instrumentation_done
 
@@ -4283,6 +4712,10 @@ def _setup_instrumentation():
 
     _process_module_configuration()
     _process_module_entry_points()
+    # Collection of NR disabled hooks must happen before _process_module_builtin_defaults()
+    # but the loading of the entrypoints must not happen until after the NR hooks are registered.
+    _process_opentelemetry_instrumentation_entry_points()
+
     _process_trace_cache_import_hooks()
     _process_module_builtin_defaults()
 
@@ -4304,21 +4737,11 @@ def _setup_instrumentation():
 
     _process_function_profile_configuration()
 
+    _process_opentelemetry_instrumentors()
+
 
 def _setup_extensions():
-    try:
-        # importlib.metadata was introduced into the standard library starting in Python 3.8.
-        from importlib.metadata import entry_points
-    except ImportError:
-        try:
-            # importlib_metadata is a backport library installable from PyPI.
-            from importlib_metadata import entry_points
-        except ImportError:
-            try:
-                # Fallback to pkg_resources, which is available in older versions of setuptools.
-                from pkg_resources import iter_entry_points as entry_points
-            except ImportError:
-                return
+    from importlib.metadata import entry_points
 
     group = "newrelic.extension"
 
@@ -4363,13 +4786,14 @@ def _setup_agent_control_health():
         return
 
     try:
-        if agent_control_health.health_check_enabled:
+        if agent_control_health_instance().health_check_enabled:
             agent_control_health_thread.start()
     except Exception:
         _logger.warning("Unable to start Agent Control health check thread. Health checks will not be enabled.")
 
 
 def initialize(config_file=None, environment=None, ignore_errors=None, log_file=None, log_level=None):
+    agent_control_health = agent_control_health_instance()
     agent_control_health.start_time_unix_nano = time.time_ns()
 
     if config_file is None:

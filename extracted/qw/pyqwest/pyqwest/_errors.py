@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from enum import IntEnum
+from typing import Any
 
 
 class StreamErrorCode(IntEnum):
@@ -22,11 +23,19 @@ class StreamErrorCode(IntEnum):
     HTTP_1_1_REQUIRED = 13
 
     @classmethod
-    def _missing_(cls, _value: int) -> StreamErrorCode:
+    def _missing_(cls, value: object) -> Any:  # noqa: ANN401, ARG003
         return cls.INTERNAL_ERROR
 
 
-class StreamError(Exception):
+class ConnectTimeout(ConnectionError, TimeoutError):
+    """An error indicating a timeout while establishing a connection."""
+
+
+class RemoteProtocolError(Exception):
+    """An error indicating the peer violated the HTTP protocol."""
+
+
+class StreamError(RemoteProtocolError):
     """An error representing an HTTP/2+ stream error."""
 
     code: StreamErrorCode

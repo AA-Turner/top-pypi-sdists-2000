@@ -47,7 +47,13 @@ def test_simple(method_name, streaming_request, mock_grpc_server, stub):
     @override_application_settings({"attributes.include": ["request.*"]})
     @validate_transaction_event_attributes(
         required_params={
-            "agent": ["request.uri", "request.headers.userAgent", "response.status", "response.headers.contentType"],
+            "agent": [
+                "request.uri",
+                "request.headers.userAgent",
+                "response.status",
+                "http.statusCode",
+                "response.headers.contentType",
+            ],
             "user": [],
             "intrinsic": ["port"],
         },
@@ -75,7 +81,7 @@ def test_raises_response_status(method_name, streaming_request, mock_grpc_server
     _transaction_name = f"sample_application:SampleApplicationServicer.{method_name}"
     method = getattr(stub, method_name)
 
-    status_code = str(grpc.StatusCode.UNKNOWN.value[0])
+    status_code = int(grpc.StatusCode.UNKNOWN.value[0])
 
     @validate_code_level_metrics("sample_application.SampleApplicationServicer", method_name)
     @validate_transaction_errors(errors=["builtins:AssertionError"])
@@ -83,11 +89,15 @@ def test_raises_response_status(method_name, streaming_request, mock_grpc_server
     @override_application_settings({"attributes.include": ["request.*"]})
     @validate_transaction_event_attributes(
         required_params={
-            "agent": ["request.uri", "request.headers.userAgent", "response.status"],
+            "agent": ["request.uri", "request.headers.userAgent", "response.status", "http.statusCode"],
             "user": [],
             "intrinsic": ["port"],
         },
-        exact_attrs={"agent": {"response.status": status_code}, "user": {}, "intrinsic": {"port": port}},
+        exact_attrs={
+            "agent": {"response.status": str(status_code), "http.statusCode": status_code},
+            "user": {},
+            "intrinsic": {"port": port},
+        },
     )
     @wait_for_transaction_completion
     def _doit():

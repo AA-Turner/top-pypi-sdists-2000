@@ -102,7 +102,7 @@ def wrap_Producer_publish(wrapped, instance, args, kwargs):
         return wrapped(*args, **kwargs)
 
     headers = bound_args["headers"]
-    headers = headers if headers else {}
+    headers = headers or {}
     exchange = getattr(bound_args["exchange"], "name", None) or "Default"
 
     transaction.add_messagebroker_info("Kombu", get_package_version("kombu"))
@@ -115,7 +115,7 @@ def wrap_Producer_publish(wrapped, instance, args, kwargs):
         source=wrapped,
         terminal=False,
     ):
-        dt_headers = {k: v.encode("utf-8") for k, v in MessageTrace.generate_request_headers(transaction)}
+        dt_headers = dict(MessageTrace.generate_request_headers(transaction))
         if headers:
             dt_headers.update(headers)
 

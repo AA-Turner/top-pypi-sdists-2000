@@ -1,23 +1,21 @@
+from collections.abc import Iterable, Iterator, Sequence
 from datetime import date, datetime
 from functools import cached_property, partialmethod
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Dict,
-    Iterable,
-    Iterator,
-    List,
-    Literal,
-    Optional,
-    Union,
-)
+from typing import TYPE_CHECKING, Any, Literal
 
 import pydantic
 from typing_extensions import Self
 
+from pyairtable.exceptions import InvalidParameterError, MissingRecordError
 from pyairtable.models._base import AirtableModel, rebuild_models
 from pyairtable.models.audit import AuditLogResponse
-from pyairtable.models.schema import EnterpriseInfo, NestedId, UserGroup, UserInfo
+from pyairtable.models.schema import (
+    EnterpriseInfo,
+    NestedId,
+    Package,
+    UserGroup,
+    UserInfo,
+)
 from pyairtable.utils import (
     Url,
     UrlBuilder,
@@ -29,6 +27,8 @@ from pyairtable.utils import (
 
 if TYPE_CHECKING:
     from pyairtable.api.api import Api
+    from pyairtable.api.base import Base
+    from pyairtable.api.workspace import Workspace
 
 
 @enterprise_only
@@ -66,6 +66,27 @@ class Enterprise:
         #: URL for moving workspaces between enterprise accounts.
         move_workspaces = meta / "moveWorkspaces"
 
+        #: URL for creating a new workspace.
+        create_workspace = Url("meta/workspaces")
+
+        #: URL for listing enterprise packages.
+        packages = meta / "packages"
+
+        #: URL for listing personal access tokens.
+        access_tokens = meta / "personalAccessTokens"
+
+        #: URL for revoking personal access tokens.
+        revoke_access_tokens = access_tokens / "revoke"
+
+        #: URL for updating the workspace AI allowlist.
+        workspace_ai_allowlist = meta / "workspaceAiAllowlist"
+
+        def package_install(self, package_id: str) -> Url:
+            """
+            URL for installing a package (creating a base from a package).
+            """
+            return self.meta / "packages" / package_id / "install"
+
         def user(self, user_id: str) -> Url:
             """
             URL for retrieving information about a single user.
@@ -98,10 +119,10 @@ class Enterprise:
 
     urls = cached_property(_urls)
 
-    def __init__(self, api: "Api", workspace_id: str):
+    def __init__(self, api: "Api", enterprise_id: str):
         self.api = api
-        self.id = workspace_id
-        self._info: Optional[EnterpriseInfo] = None
+        self.id = enterprise_id
+        self._info: EnterpriseInfo | None = None
 
     @cache_unless_forced
     def info(
@@ -175,7 +196,7 @@ class Enterprise:
         collaborations: bool = True,
         aggregated: bool = False,
         descendants: bool = False,
-    ) -> List[UserInfo]:
+    ) -> list[UserInfo]:
         """
         Retrieve information on the users with the given IDs or emails.
 
@@ -191,8 +212,8 @@ class Enterprise:
             descendants: If ``True``, includes information about the user
                 in a ``dict`` keyed per descendant enterprise account.
         """
-        user_ids: List[str] = []
-        emails: List[str] = []
+        user_ids: list[str] = []
+        emails: list[str] = []
         for value in ids_or_emails:
             (emails if "@" in value else user_ids).append(value)
 
@@ -223,17 +244,17 @@ class Enterprise:
     def audit_log(
         self,
         *,
-        page_size: Optional[int] = None,
-        page_limit: Optional[int] = None,
-        sort_asc: Optional[bool] = False,
-        previous: Optional[str] = None,
-        next: Optional[str] = None,
-        start_time: Optional[Union[str, date, datetime]] = None,
-        end_time: Optional[Union[str, date, datetime]] = None,
-        user_id: Optional[Union[str, Iterable[str]]] = None,
-        event_type: Optional[Union[str, Iterable[str]]] = None,
-        model_id: Optional[Union[str, Iterable[str]]] = None,
-        category: Optional[Union[str, Iterable[str]]] = None,
+        page_size: int | None = None,
+        page_limit: int | None = None,
+        sort_asc: bool | None = False,
+        previous: str | None = None,
+        next: str | None = None,
+        start_time: str | date | datetime | None = None,
+        end_time: str | date | datetime | None = None,
+        user_id: str | Iterable[str] | None = None,
+        event_type: str | Iterable[str] | None = None,
+        model_id: str | Iterable[str] | None = None,
+        category: str | Iterable[str] | None = None,
     ) -> Iterator[AuditLogResponse]:
         """
         Retrieve and yield results from the `Audit Log <https://airtable.com/developers/web/api/audit-logs-integration-guide>`__,
@@ -294,7 +315,7 @@ class Enterprise:
                 for more information on pagination parameters.
             start_time: Earliest timestamp to retrieve (inclusive).
             end_time: Latest timestamp to retrieve (inclusive).
-            originating_user_id: Retrieve audit log events originating
+            user_id: Retrieve audit log events originating
                 from the provided user ID or IDs (maximum 100).
             event_type: Retrieve audit log events falling under the provided
                 `audit log event type <https://airtable.com/developers/web/api/audit-log-event-types>`__
@@ -345,7 +366,7 @@ class Enterprise:
     def remove_user(
         self,
         user_id: str,
-        replacement: Optional[str] = None,
+        replacement: str | None = None,
         *,
         descendants: bool = False,
     ) -> "UserRemoved":
@@ -365,7 +386,7 @@ class Enterprise:
             descendants: If ``True``, removes the user from descendant enterprise accounts.
         """
         url = self.urls.remove_user(user_id)
-        payload: Dict[str, Any] = {"isDryRun": False}
+        payload: dict[str, Any] = {"isDryRun": False}
         if replacement:
             payload["replacementOwnerId"] = replacement
         if descendants:
@@ -374,7 +395,7 @@ class Enterprise:
         return UserRemoved.from_api(response, self.api, context=self)
 
     def claim_users(
-        self, users: Dict[str, Literal["managed", "unmanaged"]]
+        self, users: dict[str, Literal["managed", "unmanaged"]]
     ) -> "ManageUsersResponse":
         """
         Batch manage organizations enterprise account users. This endpoint allows you
@@ -410,7 +431,7 @@ class Enterprise:
         response = self.api.delete(self.urls.users, params={"email": list(emails)})
         return DeleteUsersResponse.from_api(response, self.api, context=self)
 
-    def grant_admin(self, *users: Union[str, UserInfo]) -> "ManageUsersResponse":
+    def grant_admin(self, *users: str | UserInfo) -> "ManageUsersResponse":
         """
         Grant admin access to one or more users.
 
@@ -420,7 +441,7 @@ class Enterprise:
         """
         return self._post_admin_access("grant", users)
 
-    def revoke_admin(self, *users: Union[str, UserInfo]) -> "ManageUsersResponse":
+    def revoke_admin(self, *users: str | UserInfo) -> "ManageUsersResponse":
         """
         Revoke admin access to one or more users.
 
@@ -431,7 +452,7 @@ class Enterprise:
         return self._post_admin_access("revoke", users)
 
     def _post_admin_access(
-        self, action: Literal["grant", "revoke"], users: Iterable[Union[str, UserInfo]]
+        self, action: Literal["grant", "revoke"], users: Iterable[str | UserInfo]
     ) -> "ManageUsersResponse":
         response = self.api.post(
             self.urls.admin_access(action),
@@ -462,7 +483,7 @@ class Enterprise:
     def move_groups(
         self,
         group_ids: Iterable[str],
-        target: Union[str, Self],
+        target: str | Self,
     ) -> "MoveGroupsResponse":
         """
         Move one or more user groups from the current enterprise account
@@ -479,7 +500,7 @@ class Enterprise:
         response = self.api.post(
             self.urls.move_groups,
             json={
-                "groupIds": group_ids,
+                "groupIds": list(group_ids),
                 "targetEnterpriseAccountId": target,
             },
         )
@@ -488,7 +509,7 @@ class Enterprise:
     def move_workspaces(
         self,
         workspace_ids: Iterable[str],
-        target: Union[str, Self],
+        target: str | Self,
     ) -> "MoveWorkspacesResponse":
         """
         Move one or more workspaces from the current enterprise account
@@ -505,11 +526,249 @@ class Enterprise:
         response = self.api.post(
             self.urls.move_workspaces,
             json={
-                "workspaceIds": workspace_ids,
+                "workspaceIds": list(workspace_ids),
                 "targetEnterpriseAccountId": target,
             },
         )
         return MoveWorkspacesResponse.from_api(response, self.api, context=self)
+
+    def create_workspace(self, name: str) -> "Workspace":
+        """
+        Creates a new workspace with the provided name within the enterprise account
+        and returns the workspace ID. The requesting user must be an active effective
+        admin of the enterprise account; the created workspace's owner will be the user
+        who makes the request.
+
+        See `Create workspace <https://airtable.com/developers/web/api/create-workspace>`__.
+
+        Args:
+            name: The name of the workspace to be created.
+
+        Returns:
+            The ID of the newly created workspace.
+        """
+        response = self.api.post(
+            self.urls.create_workspace,
+            json={
+                "enterpriseAccountId": self.id,
+                "name": name,
+            },
+        )
+        return self.api.workspace(str(response["id"]))
+
+    @cache_unless_forced
+    def packages(
+        self,
+        *,
+        all_enterprises: bool = False,
+    ) -> list[Package]:
+        """
+        List all packages for the enterprise account.
+
+        See `List packages <https://airtable.com/developers/web/api/list-enterprise-packages>`__.
+
+        Args:
+            all_enterprises: If True and the enterprise account is the root
+                enterprise account, returns all packages across the entire
+                enterprise grid. Defaults to False.
+
+        Returns:
+            A list of Package objects representing the enterprise packages.
+        """
+        params: dict[str, Any] = {}
+        if all_enterprises:
+            params["shouldGetAllPackagesInGrid"] = True
+
+        response = self.api.get(self.urls.packages, params=params)
+        return [
+            Package.from_api(pkg, self.api, context=self)
+            for pkg in response.get("packages", [])
+        ]
+
+    def package(self, package_id: str, *, force: bool = False) -> Package:
+        """
+        Retrieve information about a single package by ID.
+
+        Args:
+            package_id: The ID of the package to retrieve.
+            force: If ``True``, forces a refresh of the cached package list.
+
+        Returns:
+            A Package object representing the enterprise package.
+        """
+        try:
+            return next(
+                package
+                for package in self.packages(force=force)
+                if package.id == package_id
+            )
+        except StopIteration:
+            raise MissingRecordError(package_id)
+
+    def create_base(
+        self,
+        workspace: "str | Workspace",
+        name: str,
+        tables: Sequence[dict[str, Any]],
+    ) -> "Base":
+        """
+        Create a base in the given workspace.
+
+        See https://airtable.com/developers/web/api/create-base
+
+        Args:
+            workspace: The ID of the workspace or a :class:`~pyairtable.Workspace` object.
+            name: The name to give to the new base. Does not need to be unique.
+            tables: A list of ``dict`` objects that conform to Airtable's
+                `Table model <https://airtable.com/developers/web/api/model/table-model>`__.
+        """
+        if isinstance(workspace, str):
+            workspace = self.api.workspace(workspace)
+        return workspace.create_base(name, tables)
+
+    def create_base_from_package(
+        self,
+        workspace: "str | Workspace",
+        name: str,
+        package_or_release: str | Package,
+        *,
+        description: str | None = None,
+    ) -> "Base":
+        """
+        Create a base from an enterprise package template in the specified workspace.
+
+        See https://airtable.com/developers/web/api/create-base-from-package-enterprise
+
+        Args:
+            workspace: The ID of the workspace or a :class:`~pyairtable.Workspace` object.
+            name: The name for the new base.
+            package_or_release: A :class:`~pyairtable.models.schema.Package` object,
+                a package ID (``pkg...``), or a package release ID. When a package
+                or package ID is given, the package's latest release is installed.
+                Any other string is forwarded to the API as the release ID.
+            description: Optional description for the base.
+
+        Returns:
+            The newly created Base object.
+
+        Raises:
+            MissingRecordError: If the given package ID is not found.
+            InvalidParameterError: If the resolved package has no latest release.
+        """
+        workspace_id = workspace if isinstance(workspace, str) else workspace.id
+
+        if isinstance(package_or_release, Package):
+            package_id = package_or_release.id
+            release_id = package_or_release.latest_release_id
+        elif package_or_release.startswith("pkg"):
+            package = self.package(package_or_release)
+            package_id = package.id
+            release_id = package.latest_release_id
+        else:
+            package_id = release_id = package_or_release
+
+        if release_id is None:
+            raise InvalidParameterError(
+                f"Package {package_id!r} has no latest release to install"
+            )
+
+        payload = {
+            "name": name,
+            "packageReleaseId": release_id,
+            "workspaceId": workspace_id,
+        }
+        if description is not None:
+            payload["description"] = description
+
+        response = self.api.post(self.urls.package_install(package_id), json=payload)
+        return self.api.base(response["id"], validate=True, force=True)
+
+    def access_tokens(
+        self,
+        *,
+        resources: bool = False,
+    ) -> list["PersonalAccessToken"]:
+        """
+        List personal access tokens for users administered by this
+        enterprise account. Only supported for root (organization-level)
+        enterprise accounts.
+
+        See `List personal access tokens <https://airtable.com/developers/web/api/list-enterprise-personal-access-tokens>`__.
+
+        Args:
+            resources: If ``True``, the API will include information
+                about the resources that each token can access.
+        """
+        params: dict[str, Any] = {}
+        if resources:
+            params["includeResources"] = True
+        response = self.api.get(self.urls.access_tokens, params=params)
+        return [
+            PersonalAccessToken.from_api(token, self.api, context=self)
+            for token in response.get("personalAccessTokens", [])
+        ]
+
+    def revoke_access_tokens(
+        self,
+        token_ids: str | Iterable[str],
+    ) -> "RevokeTokensResponse":
+        """
+        Revoke personal access tokens for users administered by this
+        enterprise account. Only supported for root (organization-level)
+        enterprise accounts. The response includes both revoked tokens and
+        errors, so that callers can handle partial success.
+
+        See `Revoke personal access tokens <https://airtable.com/developers/web/api/revoke-enterprise-personal-access-tokens>`__.
+
+        Args:
+            token_ids: One or more personal access token IDs (maximum of 100).
+        """
+        token_ids = coerce_list_str(token_ids)
+        response = self.api.post(
+            self.urls.revoke_access_tokens,
+            json={"tokenIds": token_ids},
+        )
+        return RevokeTokensResponse.from_api(response, self.api, context=self)
+
+    def allow_ai(
+        self,
+        workspaces: "dict[str | Workspace, bool]",
+        *,
+        descendants: bool = False,
+    ) -> "UpdateAiAllowlistResponse":
+        """
+        Add or remove workspaces from the enterprise AI allowlist
+        (maximum of 10 workspaces per request). Only applicable when the
+        enterprise AI workspace restriction policy is set to allow
+        specified workspaces.
+
+        See `Update workspace AI allowlist <https://airtable.com/developers/web/api/update-workspace-ai-allowlist>`__.
+
+        Usage:
+            >>> enterprise.allow_ai(
+            ...     {"wspmhESAta6clCCwF": True, "wspHvvm4dAktsStZH": False}
+            ... )
+
+        Args:
+            workspaces: A ``dict`` mapping workspace IDs or instances of
+                :class:`~pyairtable.Workspace` to whether each workspace
+                should be allowed to use AI features.
+            descendants: If ``True``, changes will also be applied to
+                workspaces belonging to descendant org units.
+        """
+        payload: dict[str, Any] = {
+            "workspaces": [
+                {
+                    "workspaceId": ws if isinstance(ws, str) else ws.id,
+                    "isAllowed": is_allowed,
+                }
+                for (ws, is_allowed) in workspaces.items()
+            ]
+        }
+        if descendants:
+            payload["includeDescendantWorkspaces"] = True
+        response = self.api.post(self.urls.workspace_ai_allowlist, json=payload)
+        return UpdateAiAllowlistResponse.from_api(response, self.api, context=self)
 
 
 class UserRemoved(AirtableModel):
@@ -523,28 +782,28 @@ class UserRemoved(AirtableModel):
     unshared: "UserRemoved.Unshared"
 
     class Shared(AirtableModel):
-        workspaces: List["UserRemoved.Shared.Workspace"]
+        workspaces: list["UserRemoved.Shared.Workspace"]
 
         class Workspace(AirtableModel):
             permission_level: str
             workspace_id: str
             workspace_name: str
             user_id: str = ""
-            deleted_time: Optional[datetime] = None
-            enterprise_account_id: Optional[str] = None
+            deleted_time: datetime | None = None
+            enterprise_account_id: str | None = None
 
     class Unshared(AirtableModel):
-        bases: List["UserRemoved.Unshared.Base"]
-        interfaces: List["UserRemoved.Unshared.Interface"]
-        workspaces: List["UserRemoved.Unshared.Workspace"]
+        bases: list["UserRemoved.Unshared.Base"]
+        interfaces: list["UserRemoved.Unshared.Interface"]
+        workspaces: list["UserRemoved.Unshared.Workspace"]
 
         class Base(AirtableModel):
             user_id: str
             base_id: str
             base_name: str
             former_permission_level: str
-            deleted_time: Optional[datetime] = None
-            enterprise_account_id: Optional[str] = None
+            deleted_time: datetime | None = None
+            enterprise_account_id: str | None = None
 
         class Interface(AirtableModel):
             user_id: str
@@ -552,16 +811,16 @@ class UserRemoved(AirtableModel):
             interface_id: str
             interface_name: str
             former_permission_level: str
-            deleted_time: Optional[datetime] = None
-            enterprise_account_id: Optional[str] = None
+            deleted_time: datetime | None = None
+            enterprise_account_id: str | None = None
 
         class Workspace(AirtableModel):
             user_id: str
             former_permission_level: str
             workspace_id: str
             workspace_name: str
-            deleted_time: Optional[datetime] = None
-            enterprise_account_id: Optional[str] = None
+            deleted_time: datetime | None = None
+            enterprise_account_id: str | None = None
 
 
 class DeleteUsersResponse(AirtableModel):
@@ -570,8 +829,8 @@ class DeleteUsersResponse(AirtableModel):
     endpoint.
     """
 
-    deleted_users: List["DeleteUsersResponse.UserInfo"]
-    errors: List["DeleteUsersResponse.Error"]
+    deleted_users: list["DeleteUsersResponse.UserInfo"]
+    errors: list["DeleteUsersResponse.Error"]
 
     class UserInfo(AirtableModel):
         id: str
@@ -580,7 +839,7 @@ class DeleteUsersResponse(AirtableModel):
     class Error(AirtableModel):
         type: str
         email: str
-        message: Optional[str] = None
+        message: str | None = None
 
 
 class ManageUsersResponse(AirtableModel):
@@ -591,11 +850,11 @@ class ManageUsersResponse(AirtableModel):
     endpoints.
     """
 
-    errors: List["ManageUsersResponse.Error"] = pydantic.Field(default_factory=list)
+    errors: list["ManageUsersResponse.Error"] = pydantic.Field(default_factory=list)
 
     class Error(AirtableModel):
-        id: Optional[str] = None
-        email: Optional[str] = None
+        id: str | None = None
+        email: str | None = None
         type: str
         message: str
 
@@ -611,8 +870,8 @@ class MoveGroupsResponse(AirtableModel):
     Returned by `Move user groups <https://airtable.com/developers/web/api/move-user-groups>`__.
     """
 
-    moved_groups: List[NestedId] = pydantic.Field(default_factory=list)
-    errors: List[MoveError] = pydantic.Field(default_factory=list)
+    moved_groups: list[NestedId] = pydantic.Field(default_factory=list)
+    errors: list[MoveError] = pydantic.Field(default_factory=list)
 
 
 class MoveWorkspacesResponse(AirtableModel):
@@ -620,8 +879,67 @@ class MoveWorkspacesResponse(AirtableModel):
     Returned by `Move workspaces <https://airtable.com/developers/web/api/move-workspaces>`__.
     """
 
-    moved_workspaces: List[NestedId] = pydantic.Field(default_factory=list)
-    errors: List[MoveError] = pydantic.Field(default_factory=list)
+    moved_workspaces: list[NestedId] = pydantic.Field(default_factory=list)
+    errors: list[MoveError] = pydantic.Field(default_factory=list)
+
+
+class PersonalAccessToken(AirtableModel):
+    """
+    A personal access token, as returned by the
+    `List personal access tokens <https://airtable.com/developers/web/api/list-enterprise-personal-access-tokens>`__
+    endpoint.
+    """
+
+    id: str
+    name: str
+    state: str
+    scopes: list[str] = pydantic.Field(default_factory=list)
+    resource_access: "PersonalAccessToken.ResourceAccess"
+    created_time: datetime
+    user_id: str
+    created_by_user_id: str
+
+    class ResourceAccess(AirtableModel):
+        mode: str
+        enterprise_account_id: str | None = None
+        resource_model_ids: list[str] | None = None
+
+
+class RevokeTokensResponse(AirtableModel):
+    """
+    Returned by the `Revoke personal access tokens <https://airtable.com/developers/web/api/revoke-enterprise-personal-access-tokens>`__
+    endpoint.
+    """
+
+    revoked_tokens: list["RevokeTokensResponse.RevokedToken"] = pydantic.Field(
+        default_factory=list
+    )
+    errors: list["RevokeTokensResponse.Error"] = pydantic.Field(default_factory=list)
+
+    class RevokedToken(AirtableModel):
+        id: str
+        user_id: str
+
+    class Error(AirtableModel):
+        type: str
+        message: str
+        token_id: str
+
+
+class UpdateAiAllowlistResponse(AirtableModel):
+    """
+    Returned by the `Update workspace AI allowlist <https://airtable.com/developers/web/api/update-workspace-ai-allowlist>`__
+    endpoint.
+    """
+
+    errors: list["UpdateAiAllowlistResponse.Error"] = pydantic.Field(
+        default_factory=list
+    )
+
+    class Error(AirtableModel):
+        type: str
+        message: str
+        workspace_id: str
 
 
 rebuild_models(vars())

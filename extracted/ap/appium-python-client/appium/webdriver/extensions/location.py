@@ -12,9 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Dict, Union
 
-from selenium.common.exceptions import UnknownMethodException
 from typing_extensions import Self
 
 from appium.protocols.webdriver.can_execute_commands import CanExecuteCommands
@@ -33,20 +31,16 @@ class Location(CanExecuteCommands, CanExecuteScripts):
         Returns:
             Union['WebDriver', 'Location']: Self instance
         """
-        try:
-            self.execute_script('mobile: toggleGps')
-        except UnknownMethodException:
-            # TODO: Remove the fallback
-            self.execute(Command.TOGGLE_LOCATION_SERVICES)
+        self.execute_script('mobile: toggleGps')
         return self
 
     def set_location(
         self,
-        latitude: Union[float, str],
-        longitude: Union[float, str],
-        altitude: Union[float, str, None] = None,
-        speed: Union[float, str, None] = None,
-        satellites: Union[float, str, None] = None,
+        latitude: float | str,
+        longitude: float | str,
+        altitude: float | str | None = None,
+        speed: float | str | None = None,
+        satellites: float | str | None = None,
     ) -> Self:
         """Set the location of the device
 
@@ -76,7 +70,7 @@ class Location(CanExecuteCommands, CanExecuteScripts):
         return self
 
     @property
-    def location(self) -> Dict[str, float]:
+    def location(self) -> dict[str, float]:
         """Retrieves the current location
 
         Returns:
@@ -89,10 +83,5 @@ class Location(CanExecuteCommands, CanExecuteScripts):
 
     def _add_commands(self) -> None:
         """Add location endpoints. They are not int w3c spec."""
-        self.command_executor.add_command(
-            Command.TOGGLE_LOCATION_SERVICES,
-            'POST',
-            '/session/$sessionId/appium/device/toggle_location_services',
-        )
         self.command_executor.add_command(Command.GET_LOCATION, 'GET', '/session/$sessionId/location')
         self.command_executor.add_command(Command.SET_LOCATION, 'POST', '/session/$sessionId/location')

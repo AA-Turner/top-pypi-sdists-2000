@@ -22,6 +22,7 @@ import google
 from newrelic.api.function_trace import FunctionTrace
 from newrelic.api.time_trace import get_trace_linking_metadata
 from newrelic.api.transaction import current_transaction
+from newrelic.common.llm_utils import AsyncLLMStreamProxy, LLMStreamProxy
 from newrelic.common.object_wrapper import wrap_function_wrapper
 from newrelic.common.package_version_utils import get_package_version
 from newrelic.core.config import global_settings
@@ -36,6 +37,8 @@ RECORD_EVENTS_FAILURE_LOG_MESSAGE = (
     "Exception occurred in Gemini instrumentation: Failed to record LLM events. "
     "Please report this issue to New Relic Support.\n "
 )
+STREAM_PARSING_FAILURE_LOG_MESSAGE = "Exception occurred in Gemini instrumentation: Failed to process event stream information. Please report this issue to New Relic Support.\n"
+
 
 _logger = logging.getLogger(__name__)
 
@@ -64,14 +67,23 @@ def wrap_embed_content_sync(wrapped, instance, args, kwargs):
     except Exception as exc:
         # In error cases, exit the function trace in _record_embedding_error before recording the LLM error event so
         # that the duration is calculated correctly.
-        _record_embedding_error(transaction, embedding_id, linking_metadata, kwargs, ft, exc)
+        _record_embedding_error(
+            transaction=transaction,
+            embedding_id=embedding_id,
+            linking_metadata=linking_metadata,
+            kwargs=kwargs,
+            ft=ft,
+            exc=exc,
+        )
         raise
     ft.__exit__(None, None, None)
 
     if not response:
         return response
 
-    _record_embedding_success(transaction, embedding_id, linking_metadata, kwargs, ft)
+    _record_embedding_success(
+        transaction=transaction, embedding_id=embedding_id, linking_metadata=linking_metadata, kwargs=kwargs, ft=ft
+    )
     return response
 
 
@@ -99,18 +111,27 @@ async def wrap_embed_content_async(wrapped, instance, args, kwargs):
     except Exception as exc:
         # In error cases, exit the function trace in _record_embedding_error before recording the LLM error event so
         # that the duration is calculated correctly.
-        _record_embedding_error(transaction, embedding_id, linking_metadata, kwargs, ft, exc)
+        _record_embedding_error(
+            transaction=transaction,
+            embedding_id=embedding_id,
+            linking_metadata=linking_metadata,
+            kwargs=kwargs,
+            ft=ft,
+            exc=exc,
+        )
         raise
     ft.__exit__(None, None, None)
 
     if not response:
         return response
 
-    _record_embedding_success(transaction, embedding_id, linking_metadata, kwargs, ft)
+    _record_embedding_success(
+        transaction=transaction, embedding_id=embedding_id, linking_metadata=linking_metadata, kwargs=kwargs, ft=ft
+    )
     return response
 
 
-def _record_embedding_error(transaction, embedding_id, linking_metadata, kwargs, ft, exc):
+def _record_embedding_error(*, transaction, embedding_id, linking_metadata, kwargs, ft, exc):
     settings = transaction.settings or global_settings()
     span_id = linking_metadata.get("span.id")
     trace_id = linking_metadata.get("trace.id")
@@ -165,7 +186,7 @@ def _record_embedding_error(transaction, embedding_id, linking_metadata, kwargs,
         _logger.warning(RECORD_EVENTS_FAILURE_LOG_MESSAGE, exc_info=True)
 
 
-def _record_embedding_success(transaction, embedding_id, linking_metadata, kwargs, ft):
+def _record_embedding_success(*, transaction, embedding_id, linking_metadata, kwargs, ft):
     settings = transaction.settings or global_settings()
     span_id = linking_metadata.get("span.id")
     trace_id = linking_metadata.get("trace.id")
@@ -176,15 +197,18 @@ def _record_embedding_success(transaction, embedding_id, linking_metadata, kwarg
         embedding_content = str(embedding_content)
         request_model = kwargs.get("model")
 
+        embedding_token_count = (
+            settings.ai_monitoring.llm_token_count_callback(request_model, embedding_content)
+            if settings.ai_monitoring.llm_token_count_callback
+            else None
+        )
+
         full_embedding_response_dict = {
             "id": embedding_id,
             "span_id": span_id,
             "trace_id": trace_id,
-            "token_count": (
-                settings.ai_monitoring.llm_token_count_callback(request_model, embedding_content)
-                if settings.ai_monitoring.llm_token_count_callback
-                else None
-            ),
+            # Replace values of 0 for token counts with None
+            "response.usage.total_tokens": embedding_token_count or None,
             "request.model": request_model,
             "duration": ft.duration * 1000,
             "vendor": "gemini",
@@ -238,14 +262,98 @@ def wrap_generate_content_sync(wrapped, instance, args, kwargs):
     except Exception as exc:
         # In error cases, exit the function trace in _record_generation_error before recording the LLM error event so
         # that the duration is calculated correctly.
-        _record_generation_error(transaction, linking_metadata, completion_id, kwargs, ft, exc, request_timestamp)
+        _record_generation_error(
+            transaction=transaction,
+            linking_metadata=linking_metadata,
+            completion_id=completion_id,
+            kwargs=kwargs,
+            ft=ft,
+            exc=exc,
+            request_timestamp=request_timestamp,
+        )
         raise
 
     ft.__exit__(None, None, None)
 
-    _handle_generation_success(transaction, linking_metadata, completion_id, kwargs, ft, return_val, request_timestamp)
+    _handle_generation_success(
+        transaction=transaction,
+        linking_metadata=linking_metadata,
+        completion_id=completion_id,
+        kwargs=kwargs,
+        ft=ft,
+        return_val=return_val,
+        request_timestamp=request_timestamp,
+    )
 
     return return_val
+
+
+def wrap_generate_content_stream_sync(wrapped, instance, args, kwargs):
+    transaction = current_transaction()
+    if not transaction:
+        return wrapped(*args, **kwargs)
+
+    settings = transaction.settings or global_settings()
+    if not settings.ai_monitoring.enabled:
+        return wrapped(*args, **kwargs)
+
+    # Framework metric also used for entity tagging in the UI
+    transaction.add_ml_model_info("Gemini", GEMINI_VERSION)
+    transaction._add_agent_attribute("llm", True)
+
+    completion_id = str(uuid.uuid4())
+    request_timestamp = int(1000.0 * time.time())
+
+    ft = FunctionTrace(name=wrapped.__name__, group="Llm/completion/Gemini")
+    ft.__enter__()
+    linking_metadata = get_trace_linking_metadata()
+    try:
+        return_val = wrapped(*args, **kwargs)
+    except Exception as exc:
+        # In error cases, exit the function trace in _record_generation_error before recording the LLM error event so
+        # that the duration is calculated correctly.
+        _record_generation_error(
+            transaction=transaction,
+            linking_metadata=linking_metadata,
+            completion_id=completion_id,
+            kwargs=kwargs,
+            ft=ft,
+            exc=exc,
+            request_timestamp=request_timestamp,
+        )
+        raise
+
+    try:
+        streaming_events = []
+        # Wrap returned generator in a generator proxy
+        proxied_return_val = LLMStreamProxy(
+            return_val,
+            on_stream_chunk=_handle_stream_chunk(
+                streaming_events=streaming_events, request_timestamp=request_timestamp
+            ),
+            on_stop_iteration=_handle_streaming_generation_success(
+                linking_metadata=linking_metadata,
+                completion_id=completion_id,
+                kwargs=kwargs,
+                ft=ft,
+                streaming_events=streaming_events,
+                request_timestamp=request_timestamp,
+            ),
+            on_error=_handle_streaming_generation_error(
+                linking_metadata=linking_metadata,
+                completion_id=completion_id,
+                kwargs=kwargs,
+                ft=ft,
+                request_timestamp=request_timestamp,
+            ),
+        )
+        proxied_return_val._nr_ft = ft
+        proxied_return_val._nr_metadata = linking_metadata
+        return proxied_return_val
+    except Exception:
+        # If proxy creation fails, clean up the function trace and return original value
+        ft.__exit__(*sys.exc_info())
+        return return_val
 
 
 async def wrap_generate_content_async(wrapped, instance, args, kwargs):
@@ -272,17 +380,101 @@ async def wrap_generate_content_async(wrapped, instance, args, kwargs):
     except Exception as exc:
         # In error cases, exit the function trace in _record_generation_error before recording the LLM error event so
         # that the duration is calculated correctly.
-        _record_generation_error(transaction, linking_metadata, completion_id, kwargs, ft, exc, request_timestamp)
+        _record_generation_error(
+            transaction=transaction,
+            linking_metadata=linking_metadata,
+            completion_id=completion_id,
+            kwargs=kwargs,
+            ft=ft,
+            exc=exc,
+            request_timestamp=request_timestamp,
+        )
         raise
 
     ft.__exit__(None, None, None)
 
-    _handle_generation_success(transaction, linking_metadata, completion_id, kwargs, ft, return_val, request_timestamp)
+    _handle_generation_success(
+        transaction=transaction,
+        linking_metadata=linking_metadata,
+        completion_id=completion_id,
+        kwargs=kwargs,
+        ft=ft,
+        return_val=return_val,
+        request_timestamp=request_timestamp,
+    )
 
     return return_val
 
 
-def _record_generation_error(transaction, linking_metadata, completion_id, kwargs, ft, exc, request_timestamp=None):
+async def wrap_generate_content_stream_async(wrapped, instance, args, kwargs):
+    transaction = current_transaction()
+    if not transaction:
+        return await wrapped(*args, **kwargs)
+
+    settings = transaction.settings or global_settings()
+    if not settings.ai_monitoring.enabled:
+        return await wrapped(*args, **kwargs)
+
+    # Framework metric also used for entity tagging in the UI
+    transaction.add_ml_model_info("Gemini", GEMINI_VERSION)
+    transaction._add_agent_attribute("llm", True)
+
+    completion_id = str(uuid.uuid4())
+    request_timestamp = int(1000.0 * time.time())
+
+    ft = FunctionTrace(name=wrapped.__name__, group="Llm/completion/Gemini")
+    ft.__enter__()
+    linking_metadata = get_trace_linking_metadata()
+    try:
+        return_val = await wrapped(*args, **kwargs)
+    except Exception as exc:
+        # In error cases, exit the function trace in _record_generation_error before recording the LLM error event so
+        # that the duration is calculated correctly.
+        _record_generation_error(
+            transaction=transaction,
+            linking_metadata=linking_metadata,
+            completion_id=completion_id,
+            kwargs=kwargs,
+            ft=ft,
+            exc=exc,
+            request_timestamp=request_timestamp,
+        )
+        raise
+
+    try:
+        streaming_events = []
+        # Wrap returned async generator in an async generator proxy
+        proxied_return_val = AsyncLLMStreamProxy(
+            return_val,
+            on_stream_chunk=_handle_stream_chunk(
+                streaming_events=streaming_events, request_timestamp=request_timestamp
+            ),
+            on_stop_iteration=_handle_streaming_generation_success(
+                linking_metadata=linking_metadata,
+                completion_id=completion_id,
+                kwargs=kwargs,
+                ft=ft,
+                streaming_events=streaming_events,
+                request_timestamp=request_timestamp,
+            ),
+            on_error=_handle_streaming_generation_error(
+                linking_metadata=linking_metadata,
+                completion_id=completion_id,
+                kwargs=kwargs,
+                ft=ft,
+                request_timestamp=request_timestamp,
+            ),
+        )
+        proxied_return_val._nr_ft = ft
+        proxied_return_val._nr_metadata = linking_metadata
+        return proxied_return_val
+    except Exception:
+        # If proxy creation fails, clean up the function trace and return original value
+        ft.__exit__(*sys.exc_info())
+        return return_val
+
+
+def _record_generation_error(*, transaction, linking_metadata, completion_id, kwargs, ft, exc, request_timestamp=None):
     span_id = linking_metadata.get("span.id")
     trace_id = linking_metadata.get("trace.id")
 
@@ -292,25 +484,9 @@ def _record_generation_error(transaction, linking_metadata, completion_id, kwarg
     # multiple lists to capture each input to the LLM (only inputs and not responses)
     messages = kwargs.get("contents")
 
-    if isinstance(messages, str):
-        input_message = messages
-    else:
-        try:
-            input_message = messages[-1]
-        except Exception:
-            input_message = None
-            _logger.warning(
-                "Unable to parse input message to Gemini LLM. Message content and role will be omitted from "
-                "corresponding LlmChatCompletionMessage event. "
-            )
+    input_message_content, input_role = _parse_input_message(messages)
 
-    generation_config = kwargs.get("config")
-    if generation_config:
-        request_temperature = getattr(generation_config, "temperature", None)
-        request_max_tokens = getattr(generation_config, "max_output_tokens", None)
-    else:
-        request_temperature = None
-        request_max_tokens = None
+    request_temperature, request_max_tokens = _extract_generation_config(kwargs)
 
     notice_error_attributes = {
         "http.statusCode": getattr(exc, "code", None),
@@ -351,24 +527,42 @@ def _record_generation_error(transaction, linking_metadata, completion_id, kwarg
         output_message_list = []
 
         create_chat_completion_message_event(
-            transaction,
-            input_message,
-            completion_id,
-            span_id,
-            trace_id,
+            transaction=transaction,
+            input_message_content=input_message_content,
+            input_role=input_role,
+            chat_completion_id=completion_id,
+            span_id=span_id,
+            trace_id=trace_id,
             # Passing the request model as the response model here since we do not have access to a response model
-            request_model,
-            request_model,
-            llm_metadata,
-            output_message_list,
-            request_timestamp,
+            response_model=request_model,
+            llm_metadata=llm_metadata,
+            output_message_list=output_message_list,
+            # We do not record token counts in error cases, so set all_token_counts to True so the pipeline tokenizer does not run
+            all_token_counts=True,
+            request_timestamp=request_timestamp,
         )
     except Exception:
         _logger.warning(RECORD_EVENTS_FAILURE_LOG_MESSAGE, exc_info=True)
 
 
+def _handle_streaming_generation_error(*, linking_metadata, completion_id, kwargs, ft, request_timestamp=None):
+    def _on_stop_iteration(self, transaction):
+        exc = sys.exc_info()[1]
+        _record_generation_error(
+            transaction=transaction,
+            linking_metadata=linking_metadata,
+            completion_id=completion_id,
+            kwargs=kwargs,
+            ft=ft,
+            exc=exc,
+            request_timestamp=request_timestamp,
+        )
+
+    return _on_stop_iteration
+
+
 def _handle_generation_success(
-    transaction, linking_metadata, completion_id, kwargs, ft, return_val, request_timestamp=None
+    *, transaction, linking_metadata, completion_id, kwargs, ft, return_val, request_timestamp=None
 ):
     if not return_val:
         return
@@ -376,9 +570,17 @@ def _handle_generation_success(
     try:
         # Response objects are pydantic models so this function call converts the response into a dict
         response = return_val.model_dump() if hasattr(return_val, "model_dump") else return_val
+        output_message_list = [response.get("candidates")[0].get("content")]
 
         _record_generation_success(
-            transaction, linking_metadata, completion_id, kwargs, ft, response, request_timestamp
+            transaction=transaction,
+            linking_metadata=linking_metadata,
+            completion_id=completion_id,
+            kwargs=kwargs,
+            ft=ft,
+            response=response,
+            output_message_list=output_message_list,
+            request_timestamp=request_timestamp,
         )
 
     except Exception:
@@ -386,8 +588,18 @@ def _handle_generation_success(
 
 
 def _record_generation_success(
-    transaction, linking_metadata, completion_id, kwargs, ft, response, request_timestamp=None
+    *,
+    transaction,
+    linking_metadata,
+    completion_id,
+    kwargs,
+    ft,
+    response,
+    output_message_list=None,
+    request_timestamp=None,
+    time_to_first_token=None,
 ):
+    settings = transaction.settings or global_settings()
     span_id = linking_metadata.get("span.id")
     trace_id = linking_metadata.get("trace.id")
     try:
@@ -395,13 +607,14 @@ def _record_generation_success(
             response_model = response.get("model_version")
             # finish_reason is an enum, so grab just the stringified value from it to report
             finish_reason = response.get("candidates")[0].get("finish_reason").value
-            output_message_list = [response.get("candidates")[0].get("content")]
+            token_usage = response.get("usage_metadata") or {}
         else:
             # Set all values to NoneTypes since we cannot access them through kwargs or another method that doesn't
             # require the response object
             response_model = None
             output_message_list = []
             finish_reason = None
+            token_usage = {}
 
         request_model = kwargs.get("model")
 
@@ -411,25 +624,33 @@ def _record_generation_success(
         # multiple lists to capture each input to the LLM (only inputs and not responses)
         messages = kwargs.get("contents")
 
-        if isinstance(messages, str):
-            input_message = messages
-        else:
-            try:
-                input_message = messages[-1]
-            except Exception:
-                input_message = None
-                _logger.warning(
-                    "Unable to parse input message to Gemini LLM. Message content and role will be omitted from "
-                    "corresponding LlmChatCompletionMessage event. "
-                )
+        input_message_content, input_role = _parse_input_message(messages)
 
-        generation_config = kwargs.get("config")
-        if generation_config:
-            request_temperature = getattr(generation_config, "temperature", None)
-            request_max_tokens = getattr(generation_config, "max_output_tokens", None)
-        else:
-            request_temperature = None
-            request_max_tokens = None
+        output_message_content = _parse_output_message(output_message_list)
+
+        # Token counts default to those reported in the response object if available,
+        # but the user registered callback below may override them.
+        response_prompt_tokens = token_usage.get("prompt_token_count")
+        response_completion_tokens = token_usage.get("candidates_token_count")
+        response_total_tokens = token_usage.get("total_token_count")
+
+        # If the user has registered a callback to compute token counts it should always be preferred.
+        token_count_callback = settings.ai_monitoring.llm_token_count_callback
+        if token_count_callback:
+            if input_message_content:
+                response_prompt_tokens = token_count_callback(request_model, input_message_content)
+            if output_message_content:
+                response_completion_tokens = token_count_callback(response_model, output_message_content)
+
+        # Prefer the sum of individual counts as the total whenever both are available.
+        # This ensures consistency in the event that the token counting callback has reported
+        # different values for prompt or completion tokens.
+        if response_prompt_tokens and response_completion_tokens:
+            response_total_tokens = response_prompt_tokens + response_completion_tokens
+
+        all_token_counts = bool(response_prompt_tokens and response_completion_tokens and response_total_tokens)
+
+        request_temperature, request_max_tokens = _extract_generation_config(kwargs)
 
         full_chat_completion_summary_dict = {
             "id": completion_id,
@@ -448,70 +669,196 @@ def _record_generation_success(
             # separate request (every input and output from the LLM)
             "response.number_of_messages": 1 + len(output_message_list),
             "timestamp": request_timestamp,
+            "time_to_first_token": time_to_first_token,
         }
+
+        if all_token_counts:
+            full_chat_completion_summary_dict["response.usage.prompt_tokens"] = response_prompt_tokens
+            full_chat_completion_summary_dict["response.usage.completion_tokens"] = response_completion_tokens
+            full_chat_completion_summary_dict["response.usage.total_tokens"] = response_total_tokens
 
         llm_metadata = _get_llm_attributes(transaction)
         full_chat_completion_summary_dict.update(llm_metadata)
         transaction.record_custom_event("LlmChatCompletionSummary", full_chat_completion_summary_dict)
 
         create_chat_completion_message_event(
-            transaction,
-            input_message,
-            completion_id,
-            span_id,
-            trace_id,
-            response_model,
-            request_model,
-            llm_metadata,
-            output_message_list,
-            request_timestamp,
+            transaction=transaction,
+            input_message_content=input_message_content,
+            input_role=input_role,
+            chat_completion_id=completion_id,
+            span_id=span_id,
+            trace_id=trace_id,
+            response_model=response_model,
+            llm_metadata=llm_metadata,
+            output_message_list=output_message_list,
+            all_token_counts=all_token_counts,
+            request_timestamp=request_timestamp,
         )
     except Exception:
         _logger.warning(RECORD_EVENTS_FAILURE_LOG_MESSAGE, exc_info=True)
 
 
+def _parse_input_message(messages):
+    # The input_message will be a string if generate_content was called directly. In this case, we don't have
+    # access to the role, so we default to user since this was an input message
+    if isinstance(messages, str):
+        input_message = messages
+        return input_message, "user"
+    elif isinstance(messages, list):
+        input_message = messages[-1]
+        if isinstance(input_message, str):
+            return input_message, "user"
+        # The input_message will be a Google Content type if send_message was called, so we parse out the message
+        # text and role (which should be "user")
+        # Note that the "text" attribute will exist but may not be populated.
+        else:
+            try:
+                # If there is a tool call involved, this is needed to find the input
+                # since the input message will not be the last one in the message list
+                input_message = next(
+                    (message for message in messages for part in message.parts if getattr(part, "text", None)), None
+                )
+                if isinstance(input_message, google.genai.types.Content):
+                    return input_message.parts[0].text, input_message.role
+            except Exception:
+                input_message = None
+                _logger.warning(
+                    "Unable to parse input message to Gemini LLM. Message content and role will be omitted from "
+                    "corresponding LlmChatCompletionMessage event. "
+                )
+    return None, None
+
+
+def _parse_output_message(output_message_list=None):
+    # Parse output message content
+    # This list should have a length of 1 to represent the output message
+    # Parse the message text out to pass to any registered token counting callback
+    try:
+        output_message_content = next(
+            (part.get("text") for output_message in output_message_list for part in output_message.get("parts")), None
+        )
+    except AttributeError:
+        output_message_content = None
+        _logger.debug("output_message_list = %s", output_message_list, stack_info=True)
+        _logger.warning(
+            "Unable to parse output message to Gemini LLM. Message content and role will be omitted from "
+            "corresponding LlmChatCompletionMessage event. "
+        )
+
+    return output_message_content
+
+
+def _extract_generation_config(kwargs):
+    generation_config = kwargs.get("config")
+    if generation_config:
+        request_temperature = getattr(generation_config, "temperature", None)
+        request_max_tokens = getattr(generation_config, "max_output_tokens", None)
+    else:
+        request_temperature = None
+        request_max_tokens = None
+
+    return request_temperature, request_max_tokens
+
+
+def _handle_streaming_generation_success(
+    *, linking_metadata, completion_id, kwargs, ft, streaming_events, request_timestamp=None
+):
+    def _on_stop_iteration(self, transaction):
+        if hasattr(self, "_nr_ft"):
+            # We first check for our saved linking metadata before making a new call to get_trace_linking_metadata
+            # Directly calling get_trace_linking_metadata() causes the incorrect span ID to be captured and associated with the LLM call
+            # This leads to incorrect linking of the LLM call in the UI
+            linking_metadata = self._nr_metadata or get_trace_linking_metadata()
+            self._nr_ft.__exit__(None, None, None)
+            try:
+                # Streaming chunk objects are pydantic models so this function call converts the response into a dict
+                response = streaming_events[-1]
+                response = response.model_dump()
+
+                # Concatenate all chunk texts together to get the full response text
+                try:
+                    full_content = "".join(
+                        [(chunk.text if chunk.text is not None else "") for chunk in streaming_events]
+                    )
+                    if full_content == "":
+                        raise TypeError
+                except TypeError:
+                    # This is to account for tool calls, where the tool call response contains
+                    # the text that is required.  If a response is not available, this will
+                    # trigger an AttributeError and not record a streaming success (yet).
+                    full_content = kwargs["contents"][-1].parts[0].function_response.response["output"][0]["text"]
+
+                # Streaming responses will be a list of chunks, and we can grab metadata from the last chunk to get the final token counts.
+                last_message = streaming_events[-1].candidates[0].content.model_dump()
+                last_message["parts"][0]["text"] = full_content
+                output_message_list = [last_message]
+
+                _record_generation_success(
+                    transaction=transaction,
+                    linking_metadata=linking_metadata,
+                    completion_id=completion_id,
+                    kwargs=kwargs,
+                    ft=ft,
+                    response=response,
+                    output_message_list=output_message_list,
+                    request_timestamp=request_timestamp,
+                    time_to_first_token=getattr(self, "_nr_time_to_first_token", None),
+                )
+            except AttributeError:
+                # During a tool call, the agent will loop back to this,
+                # allowing this segment to properly handle the streaming
+                # generation recording.  In the meantime, we do not
+                # want to log a warning.
+
+                _logger.debug(
+                    "When using tools, this AttributeError is an expected "
+                    "intermediary step.  However, if this stops being the "
+                    "case, running the agent in debug mode will allow us to "
+                    "view the value of `streaming_events` at this step."
+                )
+                _logger.debug("streaming_events: %s", streaming_events, stack_info=True)
+            except Exception:
+                _logger.warning(STREAM_PARSING_FAILURE_LOG_MESSAGE, exc_info=True)
+            finally:
+                # Clear cached data as this can be very large.
+                streaming_events.clear()
+
+    return _on_stop_iteration
+
+
+def _handle_stream_chunk(*, streaming_events, request_timestamp=None):
+    def _on_stream_chunk(self, chunk):
+        streaming_events.append(chunk)
+        if not hasattr(self, "_nr_time_to_first_token") and request_timestamp:
+            self._nr_time_to_first_token = int(1000.0 * time.time()) - request_timestamp
+
+    return _on_stream_chunk
+
+
 def create_chat_completion_message_event(
+    *,
     transaction,
-    input_message,
+    input_message_content,
+    input_role,
     chat_completion_id,
     span_id,
     trace_id,
     response_model,
-    request_model,
     llm_metadata,
     output_message_list,
+    all_token_counts,
     request_timestamp=None,
 ):
     try:
         settings = transaction.settings or global_settings()
 
-        if input_message:
-            # The input_message will be a string if generate_content was called directly. In this case, we don't have
-            # access to the role, so we default to user since this was an input message
-            if isinstance(input_message, str):
-                input_message_content = input_message
-                input_role = "user"
-            # The input_message will be a Google Content type if send_message was called, so we parse out the message
-            # text and role (which should be "user")
-            elif isinstance(input_message, google.genai.types.Content):
-                input_message_content = input_message.parts[0].text
-                input_role = input_message.role
-            # Set input data to NoneTypes to ensure token_count callback is not called
-            else:
-                input_message_content = None
-                input_role = None
-
+        if input_message_content:
             message_id = str(uuid.uuid4())
 
             chat_completion_input_message_dict = {
                 "id": message_id,
                 "span_id": span_id,
                 "trace_id": trace_id,
-                "token_count": (
-                    settings.ai_monitoring.llm_token_count_callback(request_model, input_message_content)
-                    if settings.ai_monitoring.llm_token_count_callback and input_message_content
-                    else None
-                ),
                 "role": input_role,
                 "completion_id": chat_completion_id,
                 # The input message will always be the first message in our request/ response sequence so this will
@@ -521,6 +868,8 @@ def create_chat_completion_message_event(
                 "vendor": "gemini",
                 "ingest_source": "Python",
             }
+            if all_token_counts:
+                chat_completion_input_message_dict["token_count"] = 0
 
             if settings.ai_monitoring.record_content.enabled:
                 chat_completion_input_message_dict["content"] = input_message_content
@@ -539,7 +888,7 @@ def create_chat_completion_message_event(
 
                 # Add one to the index to account for the single input message so our sequence value is accurate for
                 # the output message
-                if input_message:
+                if input_message_content:
                     index += 1
 
                 message_id = str(uuid.uuid4())
@@ -548,11 +897,6 @@ def create_chat_completion_message_event(
                     "id": message_id,
                     "span_id": span_id,
                     "trace_id": trace_id,
-                    "token_count": (
-                        settings.ai_monitoring.llm_token_count_callback(response_model, message_content)
-                        if settings.ai_monitoring.llm_token_count_callback
-                        else None
-                    ),
                     "role": message.get("role"),
                     "completion_id": chat_completion_id,
                     "sequence": index,
@@ -561,6 +905,9 @@ def create_chat_completion_message_event(
                     "ingest_source": "Python",
                     "is_response": True,
                 }
+
+                if all_token_counts:
+                    chat_completion_output_message_dict["token_count"] = 0
 
                 if settings.ai_monitoring.record_content.enabled:
                     chat_completion_output_message_dict["content"] = message_content
@@ -575,8 +922,10 @@ def create_chat_completion_message_event(
 def instrument_genai_models(module):
     if hasattr(module, "Models"):
         wrap_function_wrapper(module, "Models.generate_content", wrap_generate_content_sync)
+        wrap_function_wrapper(module, "Models.generate_content_stream", wrap_generate_content_stream_sync)
         wrap_function_wrapper(module, "Models.embed_content", wrap_embed_content_sync)
 
     if hasattr(module, "AsyncModels"):
         wrap_function_wrapper(module, "AsyncModels.generate_content", wrap_generate_content_async)
+        wrap_function_wrapper(module, "AsyncModels.generate_content_stream", wrap_generate_content_stream_async)
         wrap_function_wrapper(module, "AsyncModels.embed_content", wrap_embed_content_async)

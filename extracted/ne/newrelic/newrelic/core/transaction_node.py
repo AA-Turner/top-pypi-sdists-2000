@@ -66,8 +66,6 @@ _TransactionNode = namedtuple(
         "guid",
         "cpu_time",
         "suppress_transaction_trace",
-        "client_cross_process_id",
-        "referring_transaction_guid",
         "record_tt",
         "synthetics_resource_id",
         "synthetics_job_id",
@@ -77,11 +75,6 @@ _TransactionNode = namedtuple(
         "synthetics_initiator",
         "synthetics_attributes",
         "synthetics_info_header",
-        "is_part_of_cat",
-        "trip_id",
-        "path_hash",
-        "referring_path_hash",
-        "alternate_path_hashes",
         "trace_intrinsics",
         "agent_attributes",
         "distributed_trace_intrinsics",
@@ -98,6 +91,7 @@ _TransactionNode = namedtuple(
         "root_span_guid",
         "trace_id",
         "loop_time",
+        "partial_granularity_sampled",
     ],
 )
 
@@ -465,23 +459,12 @@ class TransactionNode(_TransactionNode):
 
         apdex_perf_zone = self.apdex_perf_zone()
         _add_if_not_empty("apdexPerfZone", apdex_perf_zone)
-        _add_if_not_empty("nr.apdexPerfZone", apdex_perf_zone)
 
         if self.errors:
             intrinsics["error"] = True
 
-        if self.path_hash:
-            intrinsics["nr.guid"] = self.guid
-            intrinsics["nr.tripId"] = self.trip_id
-            intrinsics["nr.pathHash"] = self.path_hash
-
-            _add_if_not_empty("nr.referringPathHash", self.referring_path_hash)
-            _add_if_not_empty("nr.alternatePathHashes", ",".join(self.alternate_path_hashes))
-            _add_if_not_empty("nr.referringTransactionGuid", self.referring_transaction_guid)
-
         if self.synthetics_resource_id:
             intrinsics["nr.guid"] = self.guid
-
         if self.parent_tx:
             intrinsics["parentId"] = self.parent_tx
 
@@ -542,9 +525,6 @@ class TransactionNode(_TransactionNode):
         intrinsics["spanId"] = error.span_id
 
         intrinsics["nr.transactionGuid"] = self.guid
-        if self.referring_transaction_guid:
-            guid = self.referring_transaction_guid
-            intrinsics["nr.referringTransactionGuid"] = guid
 
         return intrinsics
 
@@ -633,5 +613,38 @@ class TransactionNode(_TransactionNode):
                 ("priority", self.priority),
             )
         )
-
-        yield from self.root.span_events(settings, base_attrs, parent_guid=self.parent_span, attr_class=attr_class)
+        if not self.partial_granularity_sampled:
+            yield from self.root.span_events_full_granularity(
+                settings, base_attrs, parent_guid=self.parent_span, attr_class=attr_class
+            )
+        else:
+            ct_exit_spans = {"instrumented": 0, "kept": 0, "dropped_ids": 0, "dropped_span_links": 0}
+            partial_type = settings.distributed_tracing.sampler.partial_granularity.type
+            # Get the appropriate span_event method for the partial granularity type.
+            # If the type does not exist fallback on the default "essential".
+            span_event_method = self.root.PARTIAL_GRANULARITY_SPAN_EVENT_METHODS.get(
+                partial_type, self.root.PARTIAL_GRANULARITY_SPAN_EVENT_METHODS["essential"]
+            )
+            # In corner case scenarios where there is a harvest while spans are being added
+            # to the reservoir, a compact or span with links may be sent before its agent
+            # attributes (including links) have been updated. This is solved by cacheing all
+            # spans and not adding them to the reservoir until all spans are touched.
+            events = list(
+                self.root.span_events_partial_granularity(
+                    settings,
+                    span_event_method,
+                    base_attrs,
+                    parent_guid=self.parent_span,
+                    attr_class=attr_class,
+                    ct_exit_spans=ct_exit_spans,
+                )
+            )
+            yield from events
+            # If this transaction is partial granularity sampled, record the number of spans
+            # instrumented and the number of spans kept to monitor cost savings of partial
+            # granularity tracing.
+            # Also record the number of span ids dropped (fragmentation) in compact mode.
+            self.spans_instrumented = ct_exit_spans["instrumented"]
+            self.spans_kept = ct_exit_spans["kept"]
+            self.partial_granularity_dropped_ids = ct_exit_spans["dropped_ids"]
+            self.partial_granularity_dropped_span_links = ct_exit_spans["dropped_span_links"]

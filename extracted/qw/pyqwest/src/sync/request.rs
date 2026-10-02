@@ -5,8 +5,7 @@ use pyo3::{
     types::{PyAnyMethods as _, PyIterator, PyString},
     Borrowed, Bound, FromPyObject, IntoPyObjectExt as _, Py, PyAny, PyErr, PyResult, Python,
 };
-use pyo3_async_runtimes::tokio::get_runtime;
-use tokio::sync::mpsc;
+use tokio::sync::{mpsc, oneshot};
 use tokio_stream::wrappers::ReceiverStream;
 
 use crate::{
@@ -14,8 +13,10 @@ use crate::{
     shared::{
         constants::Constants,
         request::{
-            maybe_encode_json_content, RequestHead, RequestStreamError, RequestStreamResult,
+            maybe_encode_json_content, maybe_encode_multipart_content, RequestHead,
+            RequestStreamError, RequestStreamResult, StartOnPoll,
         },
+        runtime::get_runtime,
     },
     sync::timeout::get_timeout,
 };
@@ -90,10 +91,18 @@ impl SyncRequest {
         params: Option<Bound<'py, PyAny>>,
         constants: &Constants,
     ) -> PyResult<Self> {
-        let headers = Headers::from_option(py, headers)?;
+        let mut headers = Headers::from_option(py, headers)?;
         let (content, json) =
             if let Some(content) = maybe_encode_json_content(py, content.as_ref(), constants)? {
                 (Some(content), true)
+            } else if let Some(content) = maybe_encode_multipart_content(
+                py,
+                content.as_ref(),
+                &mut headers,
+                &constants.sync_multipart_class,
+                &constants.multipart_content_sync,
+            )? {
+                (Some(content), false)
             } else {
                 (content, false)
             };
@@ -133,30 +142,37 @@ impl SyncRequest {
             )),
             Some(Content::Iter(iter)) => {
                 let (tx, rx) = mpsc::channel::<RequestStreamResult<Bytes>>(1);
+                let (start_tx, start_rx) = oneshot::channel();
                 let read_iter = iter.clone_ref(py);
-                get_runtime().spawn_blocking(move || {
-                    Python::attach(|py| {
-                        let mut read_iter = read_iter.into_bound(py);
-                        loop {
-                            let res = match read_iter.next() {
-                                Some(Ok(item)) => item.extract::<Bytes>().map_err(|e| {
-                                    RequestStreamError::new(format!("Invalid bytes item: {e}"))
-                                }),
-                                Some(Err(e)) => {
-                                    let e_py = e.into_value(py);
-                                    Err(RequestStreamError::from_py(e_py.bind(py).as_any()))
+                get_runtime().spawn(async move {
+                    if start_rx.await.is_err() || tx.is_closed() {
+                        return;
+                    }
+                    let _ = tokio::task::spawn_blocking(move || {
+                        Python::attach(|py| {
+                            let mut read_iter = read_iter.into_bound(py);
+                            loop {
+                                let res = match read_iter.next() {
+                                    Some(Ok(item)) => item.extract::<Bytes>().map_err(|e| {
+                                        RequestStreamError::new(format!("Invalid bytes item: {e}"))
+                                    }),
+                                    Some(Err(e)) => {
+                                        let e_py = e.into_value(py);
+                                        Err(RequestStreamError::from_py(e_py.bind(py).as_any()))
+                                    }
+                                    None => break,
+                                };
+                                let errored = res.is_err();
+                                if py.detach(|| tx.blocking_send(res)).is_err() || errored {
+                                    break;
                                 }
-                                None => break,
-                            };
-                            let errored = res.is_err();
-                            if py.detach(|| tx.blocking_send(res)).is_err() || errored {
-                                break;
                             }
-                        }
-                    });
+                        });
+                    })
+                    .await;
                 });
                 Some((
-                    reqwest::Body::wrap_stream(ReceiverStream::new(rx)),
+                    reqwest::Body::wrap_stream(StartOnPoll::new(ReceiverStream::new(rx), start_tx)),
                     Some(iter.clone_ref(py).into_any()),
                 ))
             }

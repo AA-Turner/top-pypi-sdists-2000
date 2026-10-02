@@ -9,11 +9,14 @@
 # isort: skip_file
 from .....schema_classes import AccessClass
 from .....schema_classes import AccessLevelClass
+from .....schema_classes import AiContextClass
+from .....schema_classes import AliasesClass
 from .....schema_classes import AuditStampClass
 from .....schema_classes import BrowsePathEntryClass
 from .....schema_classes import BrowsePathsClass
 from .....schema_classes import BrowsePathsV2Class
 from .....schema_classes import ChangeAuditStampsClass
+from .....schema_classes import CompressionTypeClass
 from .....schema_classes import CostClass
 from .....schema_classes import CostCostClass
 from .....schema_classes import CostCostDiscriminatorClass
@@ -48,6 +51,7 @@ from .....schema_classes import InputFieldsClass
 from .....schema_classes import InstitutionalMemoryClass
 from .....schema_classes import InstitutionalMemoryMetadataClass
 from .....schema_classes import InstitutionalMemoryMetadataSettingsClass
+from .....schema_classes import LargeStringClass
 from .....schema_classes import MLFeatureDataTypeClass
 from .....schema_classes import MediaClass
 from .....schema_classes import MediaTypeClass
@@ -64,6 +68,7 @@ from .....schema_classes import OwnershipSourceTypeClass
 from .....schema_classes import OwnershipTypeClass
 from .....schema_classes import RoleAssociationClass
 from .....schema_classes import SemanticContentClass
+from .....schema_classes import SemanticTextClass
 from .....schema_classes import SerializedValueClass
 from .....schema_classes import SerializedValueContentTypeClass
 from .....schema_classes import SerializedValueSchemaTypeClass
@@ -72,6 +77,7 @@ from .....schema_classes import StatusClass
 from .....schema_classes import SubTypesClass
 from .....schema_classes import TagAssociationClass
 from .....schema_classes import TimeStampClass
+from .....schema_classes import UpstreamMetricsClass
 from .....schema_classes import VersionPropertiesClass
 from .....schema_classes import VersionTagClass
 from .....schema_classes import WindowDurationClass
@@ -79,11 +85,14 @@ from .....schema_classes import WindowDurationClass
 
 Access = AccessClass
 AccessLevel = AccessLevelClass
+AiContext = AiContextClass
+Aliases = AliasesClass
 AuditStamp = AuditStampClass
 BrowsePathEntry = BrowsePathEntryClass
 BrowsePaths = BrowsePathsClass
 BrowsePathsV2 = BrowsePathsV2Class
 ChangeAuditStamps = ChangeAuditStampsClass
+CompressionType = CompressionTypeClass
 Cost = CostClass
 CostCost = CostCostClass
 CostCostDiscriminator = CostCostDiscriminatorClass
@@ -118,6 +127,7 @@ InputFields = InputFieldsClass
 InstitutionalMemory = InstitutionalMemoryClass
 InstitutionalMemoryMetadata = InstitutionalMemoryMetadataClass
 InstitutionalMemoryMetadataSettings = InstitutionalMemoryMetadataSettingsClass
+LargeString = LargeStringClass
 MLFeatureDataType = MLFeatureDataTypeClass
 Media = MediaClass
 MediaType = MediaTypeClass
@@ -134,6 +144,7 @@ OwnershipSourceType = OwnershipSourceTypeClass
 OwnershipType = OwnershipTypeClass
 RoleAssociation = RoleAssociationClass
 SemanticContent = SemanticContentClass
+SemanticText = SemanticTextClass
 SerializedValue = SerializedValueClass
 SerializedValueContentType = SerializedValueContentTypeClass
 SerializedValueSchemaType = SerializedValueSchemaTypeClass
@@ -142,6 +153,7 @@ Status = StatusClass
 SubTypes = SubTypesClass
 TagAssociation = TagAssociationClass
 TimeStamp = TimeStampClass
+UpstreamMetrics = UpstreamMetricsClass
 VersionProperties = VersionPropertiesClass
 VersionTag = VersionTagClass
 WindowDuration = WindowDurationClass

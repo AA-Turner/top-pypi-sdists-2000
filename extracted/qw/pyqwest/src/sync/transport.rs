@@ -4,14 +4,16 @@ use arc_swap::ArcSwapOption;
 use pyo3::exceptions::PyRuntimeError;
 use pyo3::sync::PyOnceLock;
 use pyo3::{prelude::*, IntoPyObjectExt as _};
-use pyo3_async_runtimes::tokio::get_runtime;
 use tokio::sync::oneshot;
 
 use crate::common::httpversion::HTTPVersion;
 use crate::pyerrors;
 use crate::shared::constants::Constants;
 use crate::shared::otel::{Instrumentation, Operation};
-use crate::shared::transport::{get_default_reqwest_client, new_reqwest_client, ClientParams};
+use crate::shared::runtime::get_runtime;
+use crate::shared::transport::{
+    get_default_reqwest_client, new_reqwest_client, ClientParams, DEFAULT_MAX_REDIRECTS,
+};
 use crate::sync::request::SyncRequest;
 use crate::sync::response::{close_request_iter, RequestIterHandle, SyncResponse};
 
@@ -37,9 +39,11 @@ impl SyncHttpTransport {
     #[pyo3(signature = (
         *,
         tls_ca_cert = None,
+        tls_include_system_certs = false,
         tls_key = None,
         tls_cert = None,
         http_version = None,
+        proxy = None,
         timeout = None,
         connect_timeout = 30.0,
         read_timeout = None,
@@ -51,6 +55,8 @@ impl SyncHttpTransport {
         enable_zstd = true,
         use_system_dns = false,
         enable_cookie_store = false,
+        follow_redirects = true,
+        max_redirects = DEFAULT_MAX_REDIRECTS,
         enable_otel = true,
         meter_provider = None,
         tracer_provider = None,
@@ -58,9 +64,11 @@ impl SyncHttpTransport {
     pub(crate) fn new(
         py: Python<'_>,
         tls_ca_cert: Option<&[u8]>,
+        tls_include_system_certs: bool,
         tls_key: Option<&[u8]>,
         tls_cert: Option<&[u8]>,
         http_version: Option<Bound<'_, HTTPVersion>>,
+        proxy: Option<Bound<'_, PyAny>>,
         timeout: Option<f64>,
         connect_timeout: Option<f64>,
         read_timeout: Option<f64>,
@@ -72,15 +80,19 @@ impl SyncHttpTransport {
         enable_zstd: bool,
         use_system_dns: bool,
         enable_cookie_store: bool,
+        follow_redirects: bool,
+        max_redirects: usize,
         enable_otel: bool,
         meter_provider: Option<Bound<'_, PyAny>>,
         tracer_provider: Option<Bound<'_, PyAny>>,
     ) -> PyResult<Self> {
         let (client, http3) = new_reqwest_client(ClientParams {
             tls_ca_cert,
+            tls_include_system_certs,
             tls_key,
             tls_cert,
             http_version,
+            proxy,
             timeout,
             connect_timeout,
             read_timeout,
@@ -92,6 +104,8 @@ impl SyncHttpTransport {
             enable_zstd,
             use_system_dns,
             enable_cookie_store,
+            follow_redirects,
+            max_redirects,
         })?;
         let constants = Constants::get(py)?;
         Ok(Self {

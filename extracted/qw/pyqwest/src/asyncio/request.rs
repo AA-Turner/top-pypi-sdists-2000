@@ -10,14 +10,21 @@ use pyo3::{
     types::{PyAnyMethods as _, PyModule, PyString},
     Bound, IntoPyObjectExt as _, Py, PyAny, PyResult, Python,
 };
+use tokio::sync::oneshot;
 use tokio_stream::StreamExt as _;
 
 use crate::{
-    asyncio::stream::into_stream,
+    asyncio::{
+        runtime::{into_awaitable, AsyncLibrary},
+        stream::into_stream,
+    },
     headers::Headers,
     shared::{
         constants::Constants,
-        request::{maybe_encode_json_content, RequestHead, RequestStreamResult},
+        request::{
+            maybe_encode_json_content, maybe_encode_multipart_content, RequestHead,
+            RequestStreamResult, StartOnPoll,
+        },
     },
 };
 
@@ -92,10 +99,18 @@ impl Request {
         params: Option<Bound<'py, PyAny>>,
         constants: Constants,
     ) -> PyResult<Self> {
-        let headers = Headers::from_option(py, headers)?;
+        let mut headers = Headers::from_option(py, headers)?;
         let (content, json) =
             if let Some(content) = maybe_encode_json_content(py, content.as_ref(), &constants)? {
                 (Some(content), true)
+            } else if let Some(content) = maybe_encode_multipart_content(
+                py,
+                content.as_ref(),
+                &mut headers,
+                &constants.multipart_class,
+                &constants.multipart_content,
+            )? {
+                (Some(content), false)
             } else {
                 (content, false)
             };
@@ -114,10 +129,11 @@ impl Request {
         &self,
         py: Python<'_>,
         http3: bool,
+        library: AsyncLibrary,
     ) -> PyResult<(reqwest::Request, Arc<ArcSwapOption<Py<PyAny>>>)> {
         let mut req = self.head.new_reqwest(py, http3)?;
         let request_iter_task: Arc<ArcSwapOption<Py<PyAny>>> = Arc::new(ArcSwapOption::empty());
-        if let (Some(body), task) = self.content_into_reqwest(py)? {
+        if let (Some(body), task) = self.content_into_reqwest(py, library)? {
             *req.body_mut() = Some(body);
             if let Some(task) = task {
                 request_iter_task.store(Some(Arc::new(task)));
@@ -129,6 +145,7 @@ impl Request {
     fn content_into_reqwest(
         &self,
         py: Python<'_>,
+        library: AsyncLibrary,
     ) -> PyResult<(Option<reqwest::Body>, Option<Py<PyAny>>)> {
         match &self.content {
             Some(Content::Bytes(bytes)) => Ok((
@@ -136,9 +153,10 @@ impl Request {
                 None,
             )),
             Some(Content::AsyncIter(iter)) => {
-                let iter = wrap_async_iter(py, iter)?;
-                let (stream, task) = into_stream(py, iter, &self.constants)?;
-                let res = stream.map(bytes_from_chunk);
+                let (start_tx, start_rx) = oneshot::channel();
+                let iter = wrap_async_iter(py, iter, start_rx, library, &self.constants)?;
+                let (stream, task) = into_stream(py, iter, &self.constants, library)?;
+                let res = StartOnPoll::new(stream, start_tx).map(bytes_from_chunk);
                 Ok((Some(reqwest::Body::wrap_stream(res)), Some(task)))
             }
             None => Ok((None, None)),
@@ -158,13 +176,19 @@ impl Content {
         }
 
         let aiter = obj.call_method0(&constants.__aiter__).map_err(|_| {
-            PyTypeError::new_err("Content must be bytes or an async iterator of bytes")
+            PyTypeError::new_err("Content must be bytes, an async iterator of bytes, or Multipart")
         })?;
         Ok(Self::AsyncIter(aiter.unbind()))
     }
 }
 
-fn wrap_async_iter<'py>(py: Python<'py>, iter: &Py<PyAny>) -> PyResult<Bound<'py, PyAny>> {
+fn wrap_async_iter<'py>(
+    py: Python<'py>,
+    iter: &Py<PyAny>,
+    start: oneshot::Receiver<()>,
+    library: AsyncLibrary,
+    constants: &Constants,
+) -> PyResult<Bound<'py, PyAny>> {
     static WRAP_FN: PyOnceLock<Py<PyAny>> = PyOnceLock::new();
     static GEN_FN: PyOnceLock<Py<PyAny>> = PyOnceLock::new();
 
@@ -181,7 +205,14 @@ fn wrap_async_iter<'py>(py: Python<'py>, iter: &Py<PyAny>) -> PyResult<Bound<'py
         })?
         .bind(py);
 
-    gen_fn.call1((iter, wrap_fn))
+    let start = into_awaitable(
+        py,
+        library,
+        constants,
+        async move { Ok(start.await.is_ok()) },
+        None,
+    )?;
+    gen_fn.call1((iter, wrap_fn, start))
 }
 
 #[pyclass(module = "_pyqwest.async", frozen)]

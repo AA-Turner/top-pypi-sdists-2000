@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import collections
 import multiprocessing
 import os
@@ -130,6 +128,38 @@ def test_write_string():
     proto.write_val(b, TType.STRING, "你好世界")
     b.flush()
     assert "00 00 00 0c e4 bd a0 e5 a5 bd e4 b8 96 e7 95 8c" == \
+        hexlify(b.getvalue())
+
+
+def test_write_memoryview():
+    # contiguous 8-bit items
+    b = TCyMemoryBuffer()
+    data = memoryview(b"hello world!\x01")
+    proto.write_val(b, TType.BINARY, data)
+    b.flush()
+    assert "00 00 00 0d 68 65 6c 6c 6f 20 77 6f 72 6c 64 21 01" == \
+        hexlify(b.getvalue())
+
+    # not 8-bit items
+    b = TCyMemoryBuffer()
+    data = memoryview(b"0000111122223333").cast("h")
+    proto.write_val(b, TType.BINARY, data)
+    b.flush()
+    assert "00 00 00 10 30 30 30 30 31 31 31 31 32 32 32 32 33 33 33 33" == \
+        hexlify(b.getvalue())
+
+    # not contiguous
+    with pytest.raises(BufferError, match="contiguous"):
+        b = TCyMemoryBuffer()
+        data = memoryview(b"0123")[::-1]
+        proto.write_val(b, TType.BINARY, data)
+
+
+def test_write_bytearray():
+    b = TCyMemoryBuffer()
+    proto.write_val(b, TType.BINARY, bytearray("hello world!", "utf-8"))
+    b.flush()
+    assert "00 00 00 0c 68 65 6c 6c 6f 20 77 6f 72 6c 64 21" == \
         hexlify(b.getvalue())
 
 
@@ -474,3 +504,119 @@ def test_type_tolerance():
 
     for obj in cases:
         p.write_struct(obj)
+
+
+class TTree(TPayload):
+    thrift_spec = {
+        1: (TType.I32, "v", False),
+        2: (TType.STRUCT, "child", None, False),
+        3: (TType.LIST, "children", None, False),
+    }
+    default_spec = [("v", None), ("child", None), ("children", None)]
+
+
+TTree.thrift_spec[2] = (TType.STRUCT, "child", TTree, False)
+TTree.thrift_spec[3] = (TType.LIST, "children", (TType.STRUCT, TTree), False)
+
+
+def make_tree(depth, in_list=False):
+    root = TTree(v=0)
+    node = root
+    for i in range(1, depth + 1):
+        child = TTree(v=i)
+        if in_list:
+            node.children = [child]
+        else:
+            node.child = child
+        node = child
+    return root
+
+
+def tree_depth(obj):
+    depth = 0
+    while obj.child is not None or obj.children:
+        obj = obj.child if obj.child is not None else obj.children[0]
+        depth += 1
+    return depth
+
+
+def encode(obj, **kwargs):
+    buf = TCyMemoryBuffer()
+    proto.TCyBinaryProtocol(buf, **kwargs).write_struct(obj)
+    return buf.getvalue()
+
+
+def decode(blob, cls=TTree, **kwargs):
+    buf = TCyMemoryBuffer(blob)
+    return proto.TCyBinaryProtocol(buf, **kwargs).read_struct(cls())
+
+
+# The root struct counts as a level too, and the extra struct above the list
+# chain makes it overflow on a list instead of a struct.
+LIMIT = proto.DEFAULT_MAX_DEPTH
+DEEPEST = make_tree(LIMIT - 1)
+DEEPEST_LIST = make_tree((LIMIT - 2) // 2, in_list=True)
+TOO_DEEP = make_tree(LIMIT)
+TOO_DEEP_LIST = TTree(v=0, child=make_tree(LIMIT // 2, in_list=True))
+
+
+def test_nested_struct_within_limit():
+    assert tree_depth(decode(encode(DEEPEST))) == LIMIT - 1
+    assert tree_depth(decode(encode(DEEPEST_LIST))) == (LIMIT - 2) // 2
+
+
+def test_deeply_nested_write_raises_recursion_error():
+    with pytest.raises(RecursionError, match="while writing a Thrift struct"):
+        encode(TOO_DEEP)
+    with pytest.raises(RecursionError,
+                       match="while writing a Thrift container"):
+        encode(TOO_DEEP_LIST)
+
+
+def test_deeply_nested_read_raises_recursion_error():
+    blob = encode(TOO_DEEP, max_depth=LIMIT + 8)
+    with pytest.raises(RecursionError, match="while reading a Thrift struct"):
+        decode(blob)
+    blob = encode(TOO_DEEP_LIST, max_depth=LIMIT + 8)
+    with pytest.raises(RecursionError,
+                       match="while reading a Thrift container"):
+        decode(blob)
+
+
+def test_deeply_nested_skip_raises_recursion_error():
+    # TItem has a list where TTree has its child struct, so the subtree is
+    # skipped rather than read.
+    blob = encode(TOO_DEEP, max_depth=LIMIT + 8)
+    with pytest.raises(RecursionError, match="while skipping a Thrift struct"):
+        decode(blob, TItem)
+    with pytest.raises(RecursionError):
+        proto.skip(TCyMemoryBuffer(blob), TType.STRUCT)
+    with pytest.raises(RecursionError):
+        proto.TCyBinaryProtocol(TCyMemoryBuffer(blob)).skip(TType.STRUCT)
+
+    blob = encode(TOO_DEEP_LIST, max_depth=LIMIT + 8)
+    with pytest.raises(RecursionError,
+                       match="while skipping a Thrift container"):
+        decode(blob, TItem)
+
+
+def test_max_depth_is_configurable():
+    depth = LIMIT * 4
+    obj = make_tree(depth)
+    blob = encode(obj, max_depth=depth + 1)
+    assert tree_depth(decode(blob, max_depth=depth + 1)) == depth
+    decode(blob, TItem, max_depth=depth + 1)
+    p = proto.TCyBinaryProtocol(TCyMemoryBuffer(blob), max_depth=depth + 1)
+    p.skip(TType.STRUCT)
+
+    with pytest.raises(RecursionError):
+        encode(obj, max_depth=depth)
+    with pytest.raises(RecursionError):
+        decode(blob, max_depth=depth)
+    with pytest.raises(RecursionError):
+        decode(blob, TItem, max_depth=depth)
+
+    factory = proto.TCyBinaryProtocolFactory(max_depth=depth + 1)
+    p = factory.get_protocol(TCyMemoryBuffer(blob))
+    assert p.max_depth == depth + 1
+    assert tree_depth(p.read_struct(TTree())) == depth

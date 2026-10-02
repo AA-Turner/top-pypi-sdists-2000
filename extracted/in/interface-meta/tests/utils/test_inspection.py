@@ -22,12 +22,13 @@ from interface_meta.utils.inspection import (
     set_functional_docs,
     set_quirk_docs_method,
     set_quirk_docs_mro,
+    set_skip,
+    should_skip,
     signature,
 )
 
 
 class Test:
-
     __doc_attrs = "Documented attributes"
 
     attribute = False
@@ -108,9 +109,7 @@ def test_get_functional_wrapper():
             "__override_force__",
         ]:
             if functional_hasattr(functional, attr):
-                assert functional_getattr(wrapped, attr) == functional_getattr(
-                    functional, attr
-                )
+                assert functional_getattr(wrapped, attr) == functional_getattr(functional, attr)
 
         if functional is PROPERTY:
             assert wrapped.fset is PROPERTY.fset
@@ -119,12 +118,8 @@ def test_get_functional_wrapper():
 
 def test_get_functional_signature():
     assert get_functional_signature(METHOD) == signature(METHOD)
-    assert get_functional_signature(CLASS_METHOD) == signature(
-        CLASS_METHOD.__get__(object, object).__func__
-    )
-    assert get_functional_signature(STATIC_METHOD) == signature(
-        STATIC_METHOD.__get__(object, object)
-    )
+    assert get_functional_signature(CLASS_METHOD) == signature(CLASS_METHOD.__get__(object, object).__func__)
+    assert get_functional_signature(STATIC_METHOD) == signature(STATIC_METHOD.__get__(object, object))
 
 
 def test_functional_attrs():
@@ -197,3 +192,20 @@ def test_set_functional_docs():
 
     assert get_functional_docs(PROPERTY, orig=True) == "Property Docs"
     assert get_functional_docs(PROPERTY, orig=False) == "New Docs"
+
+
+def test__get_member_bound_method():
+    # inspect.ismethod is True for bound methods; _get_member should return __func__
+    bound = Test().method
+    assert is_method(_get_member(bound))
+
+
+def test_skip():
+    def my_method(self):
+        pass
+
+    assert not should_skip(my_method)
+    set_skip(my_method)
+    assert should_skip(my_method)
+    set_skip(my_method, False)
+    assert not should_skip(my_method)

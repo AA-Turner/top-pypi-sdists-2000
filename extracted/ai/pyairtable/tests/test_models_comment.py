@@ -31,6 +31,13 @@ def test_parse(comment):
     assert comment.author.id == "usrLkNDICXNqxSDhG"
     assert comment.mentioned["usr00000mentioned"].display_name == "Alice Doe"
     assert comment.reactions[0].emoji == "👍"
+    assert comment.reactions[1].emoji == "👨‍👩‍👦"
+    assert comment.attachments[0].id == "attLkNDICXNqxSDhG"
+    assert comment.attachments[0].filename == "cat.png"
+    assert (
+        comment.attachments[0].thumbnails.small.url
+        == "https://example.com/cat-small.png"
+    )
 
 
 def test_missing_attributes(comment_json):
@@ -135,4 +142,25 @@ def test_table_add_comment(table, comment_json, comments_url, requests_mock):
     text = "I'd like to weigh in here."
     comment = table.add_comment(RECORD_ID, text)
     assert m.call_count == 1
+    assert m.last_request.json() == {"text": text}
     assert comment.text == text
+
+
+def test_table_add_comment__parent_comment_id(
+    table, comment_json, comments_url, requests_mock
+):
+    def _callback(request, context):
+        return {**comment_json, **request.json()}
+
+    m = requests_mock.post(comments_url, json=_callback)
+
+    text = "I'd like to reply here."
+    parent_comment_id = "comkNDICXNqxSDhGL"
+    comment = table.add_comment(RECORD_ID, text, parent_comment_id=parent_comment_id)
+    assert m.call_count == 1
+    assert m.last_request.json() == {
+        "text": text,
+        "parentCommentId": parent_comment_id,
+    }
+    assert comment.text == text
+    assert comment.parent_comment_id == parent_comment_id

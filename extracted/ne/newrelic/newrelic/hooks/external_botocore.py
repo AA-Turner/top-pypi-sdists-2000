@@ -34,6 +34,7 @@ from newrelic.common.object_wrapper import ObjectProxy, function_wrapper, wrap_f
 from newrelic.common.package_version_utils import get_package_version
 from newrelic.common.signature import bind_args
 from newrelic.core.config import global_settings
+from newrelic.core.database_utils import generate_dynamodb_arn
 
 QUEUE_URL_PATTERN = re.compile(r"https://sqs.([\w\d-]+).amazonaws.com/(\d+)/([^/]+)")
 BOTOCORE_VERSION = get_package_version("botocore")
@@ -48,6 +49,14 @@ RESPONSE_PROCESSING_FAILURE_LOG_MESSAGE = "Exception occurred in botocore instru
 EMBEDDING_STREAMING_UNSUPPORTED_LOG_MESSAGE = "Response streaming with embedding models is unsupported in botocore instrumentation for AWS Bedrock. If this feature is now supported by AWS and botocore, report this issue to New Relic Support."
 
 UNSUPPORTED_MODEL_WARNING_SENT = False
+
+NEWRELIC_SIGNED_HEADERS_DENYLIST = (
+    "traceparent",
+    "tracestate",
+    "newrelic",
+    "x-newrelic-synthetics",
+    "x-newrelic-synthetics-info",
+)
 
 
 def extract_sqs(*args, **kwargs):
@@ -101,7 +110,7 @@ def extract_kinesis_agent_attrs(instance, *args, **kwargs):
         stream_name = kwargs.get("StreamName", None)
         if stream_name is not None:
             transaction = current_transaction()
-            settings = transaction.settings if transaction.settings else global_settings()
+            settings = transaction.settings or global_settings()
             account_id = settings.cloud.aws.account_id if settings and settings.cloud.aws.account_id else None
             region = None
             if hasattr(instance, "_client_config") and hasattr(instance._client_config, "region_name"):
@@ -130,7 +139,7 @@ def extract_firehose_agent_attrs(instance, *args, **kwargs):
         stream_name = kwargs.get("DeliveryStreamName", None)
         if stream_name:
             transaction = current_transaction()
-            settings = transaction.settings if transaction.settings else global_settings()
+            settings = transaction.settings or global_settings()
             account_id = settings.cloud.aws.account_id if settings and settings.cloud.aws.account_id else None
             region = None
             if hasattr(instance, "_client_config") and hasattr(instance._client_config, "region_name"):
@@ -193,6 +202,7 @@ def create_chat_completion_message_event(
     request_model,
     request_id,
     llm_metadata_dict,
+    all_token_counts,
     response_id=None,
     request_timestamp=None,
 ):
@@ -214,11 +224,6 @@ def create_chat_completion_message_event(
             "request_id": request_id,
             "span_id": span_id,
             "trace_id": trace_id,
-            "token_count": (
-                settings.ai_monitoring.llm_token_count_callback(request_model, content)
-                if settings.ai_monitoring.llm_token_count_callback
-                else None
-            ),
             "role": message.get("role"),
             "completion_id": chat_completion_id,
             "sequence": index,
@@ -226,6 +231,8 @@ def create_chat_completion_message_event(
             "vendor": "bedrock",
             "ingest_source": "Python",
         }
+        if all_token_counts:
+            chat_completion_message_dict["token_count"] = 0
 
         if settings.ai_monitoring.record_content.enabled:
             chat_completion_message_dict["content"] = content
@@ -254,11 +261,6 @@ def create_chat_completion_message_event(
             "request_id": request_id,
             "span_id": span_id,
             "trace_id": trace_id,
-            "token_count": (
-                settings.ai_monitoring.llm_token_count_callback(request_model, content)
-                if settings.ai_monitoring.llm_token_count_callback
-                else None
-            ),
             "role": message.get("role"),
             "completion_id": chat_completion_id,
             "sequence": index,
@@ -267,6 +269,8 @@ def create_chat_completion_message_event(
             "ingest_source": "Python",
             "is_response": True,
         }
+        if all_token_counts:
+            chat_completion_message_dict["token_count"] = 0
 
         if settings.ai_monitoring.record_content.enabled:
             chat_completion_message_dict["content"] = content
@@ -276,15 +280,42 @@ def create_chat_completion_message_event(
         transaction.record_custom_event("LlmChatCompletionMessage", chat_completion_message_dict)
 
 
-def extract_bedrock_titan_text_model_request(request_body, bedrock_attrs):
+def extract_bedrock_titan_embedding_model_request(request_body, bedrock_attrs):
     request_body = json.loads(request_body)
-    request_config = request_body.get("textGenerationConfig", {})
 
-    input_message_list = [{"role": "user", "content": request_body.get("inputText")}]
+    bedrock_attrs["input"] = request_body.get("inputText")
 
-    bedrock_attrs["input_message_list"] = input_message_list
-    bedrock_attrs["request.max_tokens"] = request_config.get("maxTokenCount")
-    bedrock_attrs["request.temperature"] = request_config.get("temperature")
+    return bedrock_attrs
+
+
+def extract_bedrock_titan_embedding_model_response(response_body, bedrock_attrs):
+    if response_body:
+        response_body = json.loads(response_body)
+
+        input_tokens = response_body.get("inputTextTokenCount")
+        if input_tokens is not None:
+            bedrock_attrs["response.usage.total_tokens"] = input_tokens
+
+    return bedrock_attrs
+
+
+def extract_bedrock_titan_text_model_response(response_body, bedrock_attrs):
+    if response_body:
+        response_body = json.loads(response_body)
+
+        results = response_body.get("results", [])
+        input_tokens = response_body.get("inputTextTokenCount")
+        completion_tokens = sum(result.get("tokenCount", 0) for result in results)
+
+        output_message_list = [{"role": "assistant", "content": result.get("outputText")} for result in results]
+
+        if results:
+            bedrock_attrs["response.choices.finish_reason"] = results[0].get("completionReason")
+        if input_tokens is not None:
+            bedrock_attrs["response.usage.prompt_tokens"] = input_tokens
+            bedrock_attrs["response.usage.completion_tokens"] = completion_tokens
+            bedrock_attrs["response.usage.total_tokens"] = input_tokens + completion_tokens
+        bedrock_attrs["output_message_list"] = output_message_list
 
     return bedrock_attrs
 
@@ -294,20 +325,6 @@ def extract_bedrock_mistral_text_model_request(request_body, bedrock_attrs):
     bedrock_attrs["input_message_list"] = [{"role": "user", "content": request_body.get("prompt")}]
     bedrock_attrs["request.max_tokens"] = request_body.get("max_tokens")
     bedrock_attrs["request.temperature"] = request_body.get("temperature")
-    return bedrock_attrs
-
-
-def extract_bedrock_titan_text_model_response(response_body, bedrock_attrs):
-    if response_body:
-        response_body = json.loads(response_body)
-
-        output_message_list = [
-            {"role": "assistant", "content": result["outputText"]} for result in response_body.get("results", [])
-        ]
-
-        bedrock_attrs["response.choices.finish_reason"] = response_body["results"][0]["completionReason"]
-        bedrock_attrs["output_message_list"] = output_message_list
-
     return bedrock_attrs
 
 
@@ -323,17 +340,6 @@ def extract_bedrock_mistral_text_model_response(response_body, bedrock_attrs):
     return bedrock_attrs
 
 
-def extract_bedrock_titan_text_model_streaming_response(response_body, bedrock_attrs):
-    if response_body:
-        if "outputText" in response_body:
-            bedrock_attrs["output_message_list"] = messages = bedrock_attrs.get("output_message_list", [])
-            messages.append({"role": "assistant", "content": response_body["outputText"]})
-
-        bedrock_attrs["response.choices.finish_reason"] = response_body.get("completionReason", None)
-
-    return bedrock_attrs
-
-
 def extract_bedrock_mistral_text_model_streaming_response(response_body, bedrock_attrs):
     if response_body:
         outputs = response_body.get("outputs")
@@ -342,14 +348,40 @@ def extract_bedrock_mistral_text_model_streaming_response(response_body, bedrock
                 "output_message_list", [{"role": "assistant", "content": ""}]
             )
             bedrock_attrs["output_message_list"][0]["content"] += outputs[0].get("text", "")
-            bedrock_attrs["response.choices.finish_reason"] = outputs[0].get("stop_reason", None)
+            bedrock_attrs["response.choices.finish_reason"] = outputs[0].get("stop_reason")
     return bedrock_attrs
 
 
-def extract_bedrock_titan_embedding_model_request(request_body, bedrock_attrs):
+def extract_bedrock_titan_text_model_request(request_body, bedrock_attrs):
     request_body = json.loads(request_body)
+    request_config = request_body.get("textGenerationConfig", {})
 
-    bedrock_attrs["input"] = request_body.get("inputText")
+    input_message_list = [{"role": "user", "content": request_body.get("inputText")}]
+
+    bedrock_attrs["input_message_list"] = input_message_list
+    bedrock_attrs["request.max_tokens"] = request_config.get("maxTokenCount")
+    bedrock_attrs["request.temperature"] = request_config.get("temperature")
+
+    return bedrock_attrs
+
+
+def extract_bedrock_titan_text_model_streaming_response(response_body, bedrock_attrs):
+    if response_body:
+        if "outputText" in response_body:
+            bedrock_attrs["output_message_list"] = messages = bedrock_attrs.get("output_message_list", [])
+            messages.append({"role": "assistant", "content": response_body["outputText"]})
+
+        bedrock_attrs["response.choices.finish_reason"] = response_body.get("completionReason")
+
+        # Extract token information (only present on the final streaming chunk)
+        invocation_metrics = response_body.get("amazon-bedrock-invocationMetrics")
+        if invocation_metrics:
+            prompt_tokens = invocation_metrics.get("inputTokenCount")
+            completion_tokens = invocation_metrics.get("outputTokenCount")
+            if prompt_tokens is not None and completion_tokens is not None:
+                bedrock_attrs["response.usage.prompt_tokens"] = prompt_tokens
+                bedrock_attrs["response.usage.completion_tokens"] = completion_tokens
+                bedrock_attrs["response.usage.total_tokens"] = prompt_tokens + completion_tokens
 
     return bedrock_attrs
 
@@ -420,6 +452,21 @@ def extract_bedrock_claude_model_response(response_body, bedrock_attrs):
         bedrock_attrs["response.choices.finish_reason"] = response_body.get("stop_reason")
         bedrock_attrs["output_message_list"] = output_message_list
 
+        # Only set response_id if it exists and is not None
+        response_id = response_body.get("id")
+        if response_id:
+            bedrock_attrs["response_id"] = str(response_id)
+
+        # Extract token information
+        token_usage = response_body.get("usage")
+        if token_usage:
+            prompt_tokens = token_usage.get("input_tokens")
+            completion_tokens = token_usage.get("output_tokens")
+            if prompt_tokens is not None and completion_tokens is not None:
+                bedrock_attrs["response.usage.prompt_tokens"] = prompt_tokens
+                bedrock_attrs["response.usage.completion_tokens"] = completion_tokens
+                bedrock_attrs["response.usage.total_tokens"] = prompt_tokens + completion_tokens
+
     return bedrock_attrs
 
 
@@ -430,6 +477,16 @@ def extract_bedrock_claude_model_streaming_response(response_body, bedrock_attrs
             bedrock_attrs["output_message_list"] = [{"role": "assistant", "content": ""}]
         bedrock_attrs["output_message_list"][0]["content"] += content
         bedrock_attrs["response.choices.finish_reason"] = response_body.get("stop_reason")
+
+        # Extract token information (only present on the final streaming chunk)
+        invocation_metrics = response_body.get("amazon-bedrock-invocationMetrics")
+        if invocation_metrics:
+            prompt_tokens = invocation_metrics.get("inputTokenCount")
+            completion_tokens = invocation_metrics.get("outputTokenCount")
+            if prompt_tokens is not None and completion_tokens is not None:
+                bedrock_attrs["response.usage.prompt_tokens"] = prompt_tokens
+                bedrock_attrs["response.usage.completion_tokens"] = completion_tokens
+                bedrock_attrs["response.usage.total_tokens"] = prompt_tokens + completion_tokens
 
     return bedrock_attrs
 
@@ -451,6 +508,13 @@ def extract_bedrock_llama_model_response(response_body, bedrock_attrs):
         response_body = json.loads(response_body)
 
         output_message_list = [{"role": "assistant", "content": response_body.get("generation")}]
+        prompt_tokens = response_body.get("prompt_token_count")
+        completion_tokens = response_body.get("generation_token_count")
+
+        if prompt_tokens is not None and completion_tokens is not None:
+            bedrock_attrs["response.usage.completion_tokens"] = completion_tokens
+            bedrock_attrs["response.usage.prompt_tokens"] = prompt_tokens
+            bedrock_attrs["response.usage.total_tokens"] = prompt_tokens + completion_tokens
         bedrock_attrs["response.choices.finish_reason"] = response_body.get("stop_reason")
         bedrock_attrs["output_message_list"] = output_message_list
 
@@ -464,6 +528,16 @@ def extract_bedrock_llama_model_streaming_response(response_body, bedrock_attrs)
             bedrock_attrs["output_message_list"] = [{"role": "assistant", "content": ""}]
         bedrock_attrs["output_message_list"][0]["content"] += content
         bedrock_attrs["response.choices.finish_reason"] = response_body.get("stop_reason")
+
+        # Extract token information (only present on the final streaming chunk)
+        invocation_metrics = response_body.get("amazon-bedrock-invocationMetrics")
+        if invocation_metrics:
+            prompt_tokens = invocation_metrics.get("inputTokenCount")
+            completion_tokens = invocation_metrics.get("outputTokenCount")
+            if prompt_tokens is not None and completion_tokens is not None:
+                bedrock_attrs["response.usage.prompt_tokens"] = prompt_tokens
+                bedrock_attrs["response.usage.completion_tokens"] = completion_tokens
+                bedrock_attrs["response.usage.total_tokens"] = prompt_tokens + completion_tokens
     return bedrock_attrs
 
 
@@ -504,12 +578,27 @@ def extract_bedrock_cohere_model_streaming_response(response_body, bedrock_attrs
         bedrock_attrs["response.choices.finish_reason"] = response_body["generations"][0]["finish_reason"]
         bedrock_attrs["response_id"] = str(response_body.get("id"))
 
+        # Extract token information (only present on the final streaming chunk)
+        invocation_metrics = response_body.get("amazon-bedrock-invocationMetrics")
+        if invocation_metrics:
+            prompt_tokens = invocation_metrics.get("inputTokenCount")
+            completion_tokens = invocation_metrics.get("outputTokenCount")
+            if prompt_tokens is not None and completion_tokens is not None:
+                bedrock_attrs["response.usage.prompt_tokens"] = prompt_tokens
+                bedrock_attrs["response.usage.completion_tokens"] = completion_tokens
+                bedrock_attrs["response.usage.total_tokens"] = prompt_tokens + completion_tokens
+
     return bedrock_attrs
 
 
 NULL_EXTRACTOR = lambda *args: {}  # noqa: E731  # Empty extractor that returns nothing
 MODEL_EXTRACTORS = [  # Order is important here, avoiding dictionaries
-    ("amazon.titan-embed", extract_bedrock_titan_embedding_model_request, NULL_EXTRACTOR, NULL_EXTRACTOR),
+    (
+        "amazon.titan-embed",
+        extract_bedrock_titan_embedding_model_request,
+        extract_bedrock_titan_embedding_model_response,
+        NULL_EXTRACTOR,
+    ),
     ("cohere.embed", extract_bedrock_cohere_embedding_model_request, NULL_EXTRACTOR, NULL_EXTRACTOR),
     (
         "amazon.titan",
@@ -573,8 +662,8 @@ def handle_bedrock_exception(
                 input_message_list = []
 
             bedrock_attrs["input_message_list"] = input_message_list
-            bedrock_attrs["request.max_tokens"] = kwargs.get("inferenceConfig", {}).get("maxTokens", None)
-            bedrock_attrs["request.temperature"] = kwargs.get("inferenceConfig", {}).get("temperature", None)
+            bedrock_attrs["request.max_tokens"] = kwargs.get("inferenceConfig", {}).get("maxTokens")
+            bedrock_attrs["request.temperature"] = kwargs.get("inferenceConfig", {}).get("temperature")
 
         try:
             request_extractor(request_body, bedrock_attrs)
@@ -842,6 +931,7 @@ def wrap_bedrock_runtime_converse(response_streaming=False):
         try:
             # For aioboto3 clients, this will call make_api_call instrumentation in external_aiobotocore
             response = wrapped(*args, **kwargs)
+
         except Exception as exc:
             handle_bedrock_exception(
                 exc,
@@ -933,15 +1023,22 @@ def extract_bedrock_converse_attrs(kwargs, response, response_headers, model, sp
             exc_info=True,
         )
 
+    response_prompt_tokens = response.get("usage", {}).get("inputTokens") if response else None
+    response_completion_tokens = response.get("usage", {}).get("outputTokens") if response else None
+    response_total_tokens = response.get("usage", {}).get("totalTokens") if response else None
+
     bedrock_attrs = {
         "request_id": response_headers.get("x-amzn-requestid"),
         "model": model,
         "span_id": span_id,
         "trace_id": trace_id,
         "response.choices.finish_reason": response.get("stopReason"),
-        "request.max_tokens": kwargs.get("inferenceConfig", {}).get("maxTokens", None),
-        "request.temperature": kwargs.get("inferenceConfig", {}).get("temperature", None),
+        "request.max_tokens": kwargs.get("inferenceConfig", {}).get("maxTokens"),
+        "request.temperature": kwargs.get("inferenceConfig", {}).get("temperature"),
         "input_message_list": input_message_list,
+        "response.usage.prompt_tokens": response_prompt_tokens,
+        "response.usage.completion_tokens": response_completion_tokens,
+        "response.usage.total_tokens": response_total_tokens,
     }
 
     if output_message_list is not None:
@@ -962,6 +1059,8 @@ class BedrockRecordEventMixin:
 
             try:
                 bedrock_attrs["duration"] = self._nr_ft.duration * 1000
+                if hasattr(self, "_nr_time_to_first_token"):
+                    bedrock_attrs["time_to_first_token"] = self._nr_time_to_first_token
                 handle_chat_completion_event(transaction, bedrock_attrs, request_timestamp)
             except Exception:
                 _logger.warning(RESPONSE_PROCESSING_FAILURE_LOG_MESSAGE, exc_info=True)
@@ -1011,8 +1110,23 @@ class BedrockRecordEventMixin:
 
     def invoke_record_stream_chunk(self, event, transaction, request_timestamp=None):
         bedrock_attrs = getattr(self, "_nr_bedrock_attrs", {})
+
+        # Store time to first token now, but only attach it if we successfully parse the chunk.
+        # Record the time here since parsing may be a bit slow, and can inflate the metric.
+        time_to_first_token = (
+            int(1000.0 * time.time()) - self._nr_request_timestamp
+            if not hasattr(self, "_nr_time_to_first_token")
+            else None
+        )
+
+        # Load and parse the chunk to extract model specific data
         chunk = json.loads(event["chunk"]["bytes"].decode("utf-8"))
         self._nr_model_extractor(chunk, bedrock_attrs)
+
+        # Attach time to first token after parsing to ensure there are no errors
+        if time_to_first_token is not None:
+            self._nr_time_to_first_token = time_to_first_token
+
         # In Langchain, the bedrock iterator exits early if type is "content_block_stop".
         # So we need to call the record events here since stop iteration will not be raised.
         _type = chunk.get("type")
@@ -1026,9 +1140,13 @@ class BedrockRecordEventMixin:
                 return
 
             content = ((event.get("contentBlockDelta") or {}).get("delta") or {}).get("text", "")
+
             if "output_message_list" not in bedrock_attrs:
                 bedrock_attrs["output_message_list"] = [{"role": "assistant", "content": ""}]
             bedrock_attrs["output_message_list"][0]["content"] += content
+
+            if content and not hasattr(self, "_nr_time_to_first_token"):
+                self._nr_time_to_first_token = int(1000.0 * time.time()) - self._nr_request_timestamp
 
         if "messageStop" in event:
             bedrock_attrs["response.choices.finish_reason"] = (event.get("messageStop") or {}).get("stopReason", "")
@@ -1036,7 +1154,7 @@ class BedrockRecordEventMixin:
 
 class EventStreamWrapper(ObjectProxy):
     def __iter__(self):
-        g = GeneratorProxy(self.__wrapped__.__iter__())
+        g = LLMStreamProxy(self.__wrapped__.__iter__())
         g._nr_ft = getattr(self, "_nr_ft", None)
         g._nr_bedrock_attrs = getattr(self, "_nr_bedrock_attrs", {})
         g._nr_model_extractor = getattr(self, "_nr_model_extractor", NULL_EXTRACTOR)
@@ -1044,7 +1162,7 @@ class EventStreamWrapper(ObjectProxy):
         return g
 
 
-class GeneratorProxy(BedrockRecordEventMixin, ObjectProxy):
+class LLMStreamProxy(BedrockRecordEventMixin, ObjectProxy):
     def __init__(self, wrapped):
         super().__init__(wrapped)
         self._nr_request_timestamp = int(1000.0 * time.time())
@@ -1075,7 +1193,7 @@ class GeneratorProxy(BedrockRecordEventMixin, ObjectProxy):
 
 class AsyncEventStreamWrapper(ObjectProxy):
     def __aiter__(self):
-        g = AsyncGeneratorProxy(self.__wrapped__.__aiter__())
+        g = AsyncLLMStreamProxy(self.__wrapped__.__aiter__())
         g._nr_ft = getattr(self, "_nr_ft", None)
         g._nr_bedrock_attrs = getattr(self, "_nr_bedrock_attrs", {})
         g._nr_model_extractor = getattr(self, "_nr_model_extractor", NULL_EXTRACTOR)
@@ -1083,7 +1201,7 @@ class AsyncEventStreamWrapper(ObjectProxy):
         return g
 
 
-class AsyncGeneratorProxy(BedrockRecordEventMixin, ObjectProxy):
+class AsyncLLMStreamProxy(BedrockRecordEventMixin, ObjectProxy):
     def __init__(self, wrapped):
         super().__init__(wrapped)
         self._nr_request_timestamp = int(1000.0 * time.time())
@@ -1120,11 +1238,19 @@ def handle_embedding_event(transaction, bedrock_attrs):
     custom_attrs_dict = transaction._custom_params
     llm_metadata_dict = {key: value for key, value in custom_attrs_dict.items() if key.startswith("llm.")}
 
-    span_id = bedrock_attrs.get("span_id", None)
-    trace_id = bedrock_attrs.get("trace_id", None)
-    request_id = bedrock_attrs.get("request_id", None)
-    model = bedrock_attrs.get("model", None)
+    span_id = bedrock_attrs.get("span_id")
+    trace_id = bedrock_attrs.get("trace_id")
+    request_id = bedrock_attrs.get("request_id")
+    model = bedrock_attrs.get("model")
     input_ = bedrock_attrs.get("input")
+
+    response_total_tokens = bedrock_attrs.get("response.usage.total_tokens")
+
+    total_tokens = (
+        settings.ai_monitoring.llm_token_count_callback(model, input_)
+        if settings.ai_monitoring.llm_token_count_callback and input_
+        else response_total_tokens
+    )
 
     embedding_dict = {
         "vendor": "bedrock",
@@ -1132,17 +1258,14 @@ def handle_embedding_event(transaction, bedrock_attrs):
         "id": embedding_id,
         "span_id": span_id,
         "trace_id": trace_id,
-        "token_count": (
-            settings.ai_monitoring.llm_token_count_callback(model, input_)
-            if settings.ai_monitoring.llm_token_count_callback
-            else None
-        ),
         "request_id": request_id,
-        "duration": bedrock_attrs.get("duration", None),
+        "duration": bedrock_attrs.get("duration"),
         "request.model": model,
         "response.model": model,
-        "error": bedrock_attrs.get("error", None),
+        "response.usage.total_tokens": total_tokens,
+        "error": bedrock_attrs.get("error"),
     }
+
     embedding_dict.update(llm_metadata_dict)
 
     if settings.ai_monitoring.record_content.enabled:
@@ -1153,6 +1276,7 @@ def handle_embedding_event(transaction, bedrock_attrs):
 
 
 def handle_chat_completion_event(transaction, bedrock_attrs, request_timestamp=None):
+    settings = transaction.settings or global_settings()
     chat_completion_id = str(uuid.uuid4())
     # Grab LLM-related custom attributes off of the transaction to store as metadata on LLM events
     custom_attrs_dict = transaction._custom_params
@@ -1161,11 +1285,17 @@ def handle_chat_completion_event(transaction, bedrock_attrs, request_timestamp=N
     llm_context_attrs = getattr(transaction, "_llm_context_attrs", None)
     if llm_context_attrs:
         llm_metadata_dict.update(llm_context_attrs)
-    span_id = bedrock_attrs.get("span_id", None)
-    trace_id = bedrock_attrs.get("trace_id", None)
-    request_id = bedrock_attrs.get("request_id", None)
-    response_id = bedrock_attrs.get("response_id", None)
-    model = bedrock_attrs.get("model", None)
+    span_id = bedrock_attrs.get("span_id")
+    trace_id = bedrock_attrs.get("trace_id")
+    request_id = bedrock_attrs.get("request_id")
+    response_id = bedrock_attrs.get("response_id")
+    model = bedrock_attrs.get("model")
+
+    # Token counts default to those reported in the response object if available,
+    # but the user registered callback below may override them.
+    response_prompt_tokens = bedrock_attrs.get("response.usage.prompt_tokens")
+    response_completion_tokens = bedrock_attrs.get("response.usage.completion_tokens")
+    response_total_tokens = bedrock_attrs.get("response.usage.total_tokens")
 
     input_message_list = bedrock_attrs.get("input_message_list", [])
     output_message_list = bedrock_attrs.get("output_message_list", [])
@@ -1180,6 +1310,24 @@ def handle_chat_completion_event(transaction, bedrock_attrs, request_timestamp=N
         len(input_message_list) + len(output_message_list)
     ) or None  # If 0, attribute will be set to None and removed
 
+    # If the user has registered a callback to compute token counts it should always be preferred.
+    token_count_callback = settings.ai_monitoring.llm_token_count_callback
+    if token_count_callback:
+        input_message_content = " ".join(content for msg in input_message_list if (content := msg.get("content")))
+        if input_message_content:
+            response_prompt_tokens = token_count_callback(model, input_message_content)
+        output_message_content = " ".join(content for msg in output_message_list if (content := msg.get("content")))
+        if output_message_content:
+            response_completion_tokens = token_count_callback(model, output_message_content)
+
+    # Prefer the sum of individual counts as the total whenever both are available.
+    # This ensures consistency in the event that the token counting callback has reported
+    # different values for prompt or completion tokens.
+    all_token_counts = False
+    if response_prompt_tokens is not None and response_completion_tokens is not None:
+        response_total_tokens = response_prompt_tokens + response_completion_tokens
+        all_token_counts = True
+
     chat_completion_summary_dict = {
         "vendor": "bedrock",
         "ingest_source": "Python",
@@ -1188,16 +1336,23 @@ def handle_chat_completion_event(transaction, bedrock_attrs, request_timestamp=N
         "trace_id": trace_id,
         "request_id": request_id,
         "response_id": response_id,
-        "duration": bedrock_attrs.get("duration", None),
-        "request.max_tokens": bedrock_attrs.get("request.max_tokens", None),
-        "request.temperature": bedrock_attrs.get("request.temperature", None),
+        "duration": bedrock_attrs.get("duration"),
+        "request.max_tokens": bedrock_attrs.get("request.max_tokens"),
+        "request.temperature": bedrock_attrs.get("request.temperature"),
         "request.model": model,
         "response.model": model,  # Duplicate data required by the UI
         "response.number_of_messages": number_of_messages,
         "response.choices.finish_reason": bedrock_attrs.get("response.choices.finish_reason", None),
         "error": bedrock_attrs.get("error", None),
         "timestamp": request_timestamp or None,
+        "time_to_first_token": bedrock_attrs.get("time_to_first_token", None),
     }
+
+    if all_token_counts:
+        chat_completion_summary_dict["response.usage.prompt_tokens"] = response_prompt_tokens
+        chat_completion_summary_dict["response.usage.completion_tokens"] = response_completion_tokens
+        chat_completion_summary_dict["response.usage.total_tokens"] = response_total_tokens
+
     chat_completion_summary_dict.update(llm_metadata_dict)
     chat_completion_summary_dict = {k: v for k, v in chat_completion_summary_dict.items() if v is not None}
     transaction.record_custom_event("LlmChatCompletionSummary", chat_completion_summary_dict)
@@ -1212,6 +1367,7 @@ def handle_chat_completion_event(transaction, bedrock_attrs, request_timestamp=N
         request_model=model,
         request_id=request_id,
         llm_metadata_dict=llm_metadata_dict,
+        all_token_counts=all_token_counts,
         response_id=response_id,
         request_timestamp=request_timestamp,
     )
@@ -1290,24 +1446,13 @@ def dynamodb_datastore_trace(
                 region = instance._client_config.region_name
 
             transaction = current_transaction()
-            settings = transaction.settings if transaction.settings else global_settings()
+            settings = transaction.settings or global_settings()
             account_id = settings.cloud.aws.account_id if settings and settings.cloud.aws.account_id else None
 
-            # There are 3 different partition options.
-            # See  https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html for details.
-            partition = None
-            if hasattr(instance, "_endpoint") and hasattr(instance._endpoint, "host"):
-                _db_host = instance._endpoint.host
-                partition = "aws"
-                if "amazonaws.cn" in _db_host:
-                    partition = "aws-cn"
-                elif "amazonaws-us-gov.com" in _db_host:
-                    partition = "aws-us-gov"
-
-            if partition and region and account_id and _target:
-                agent_attrs["cloud.resource_id"] = (
-                    f"arn:{partition}:dynamodb:{region}:{account_id:012d}:table/{_target}"
-                )
+            _db_host = getattr(getattr(instance, "_endpoint", None), "host", None)
+            resource_id = generate_dynamodb_arn(_db_host, region, account_id, _target)
+            if resource_id:
+                agent_attrs["cloud.resource_id"] = resource_id
 
         except Exception:
             _logger.debug("Failed to capture AWS DynamoDB info.", exc_info=True)
@@ -1474,6 +1619,9 @@ CUSTOM_TRACE_POINTS = {
     ("kinesis", "add_tags_to_stream"): aws_function_trace(
         "add_tags_to_stream", extract_kinesis, extract_agent_attrs=extract_kinesis_agent_attrs, library="Kinesis"
     ),
+    ("kinesis", "create_channel"): aws_function_trace(
+        "create_channel", extract_kinesis, extract_agent_attrs=extract_kinesis_agent_attrs, library="Kinesis"
+    ),
     ("kinesis", "create_stream"): aws_function_trace(
         "create_stream", extract_kinesis, extract_agent_attrs=extract_kinesis_agent_attrs, library="Kinesis"
     ),
@@ -1482,6 +1630,12 @@ CUSTOM_TRACE_POINTS = {
         extract_kinesis,
         extract_agent_attrs=extract_kinesis_agent_attrs,
         library="Kinesis",
+    ),
+    ("kinesis", "delete_channel"): aws_function_trace(
+        "delete_channel", extract_kinesis, extract_agent_attrs=extract_kinesis_agent_attrs, library="Kinesis"
+    ),
+    ("kinesis", "describe_channel"): aws_function_trace(
+        "describe_channel", extract_kinesis, extract_agent_attrs=extract_kinesis_agent_attrs, library="Kinesis"
     ),
     ("kinesis", "delete_resource_policy"): aws_function_trace(
         "delete_resource_policy", extract_kinesis, extract_agent_attrs=extract_kinesis_agent_attrs, library="Kinesis"
@@ -1530,6 +1684,9 @@ CUSTOM_TRACE_POINTS = {
         extract_agent_attrs=extract_kinesis_agent_attrs,
         library="Kinesis",
     ),
+    ("kinesis", "list_channels"): aws_function_trace(
+        "list_channels", extract_kinesis, extract_agent_attrs=extract_kinesis_agent_attrs, library="Kinesis"
+    ),
     ("kinesis", "list_shards"): aws_function_trace(
         "list_shards", extract_kinesis, extract_agent_attrs=extract_kinesis_agent_attrs, library="Kinesis"
     ),
@@ -1574,6 +1731,9 @@ CUSTOM_TRACE_POINTS = {
         "untag_resource", extract_kinesis, extract_agent_attrs=extract_kinesis_agent_attrs, library="Kinesis"
     ),
     ("kinesis", "update_account_settings"): aws_function_trace("update_account_settings", library="Kinesis"),
+    ("kinesis", "update_channel"): aws_function_trace(
+        "update_channel", extract_kinesis, extract_agent_attrs=extract_kinesis_agent_attrs, library="Kinesis"
+    ),
     ("kinesis", "update_max_record_size"): aws_function_trace(
         "update_max_record_size", extract_kinesis, extract_agent_attrs=extract_kinesis_agent_attrs, library="Kinesis"
     ),
@@ -1725,3 +1885,12 @@ def instrument_botocore_client(module):
         wrap_function_wrapper(module, "ClientCreator._create_methods", _nr_clientcreator__create_methods)
     if hasattr(module, "BaseClient"):
         wrap_function_wrapper(module, "BaseClient._emit_api_params", wrap_emit_api_params)
+
+
+def instrument_botocore_auth(module):
+    # botocore uses the term "Blacklist" while this library typically uses "Denylist" instead.
+    # We can't change the name of the symbol in the botocore package so avoid typos when referring to both.
+    if hasattr(module, "SIGNED_HEADERS_BLACKLIST") and isinstance(module.SIGNED_HEADERS_BLACKLIST, list):
+        for header in NEWRELIC_SIGNED_HEADERS_DENYLIST:
+            if header not in module.SIGNED_HEADERS_BLACKLIST:
+                module.SIGNED_HEADERS_BLACKLIST.append(header)

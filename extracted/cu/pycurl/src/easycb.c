@@ -6,7 +6,36 @@
  */
 
 #define PYCURL_BEGIN_CALLBACK(callback_name, retval) \
-    PYCURL_BEGIN_CALLBACK_COMMON(PYCURL_ACQUIRE_THREAD(), retval, callback_name)
+    PYCURL_BEGIN_CALLBACK_COMMON(PYCURL_GET_THREAD_STATE, retval, callback_name)
+
+/* Keeps reporting a non-integer return on stderr, as raising here would replace
+   the libcurl error the callers report for it. KeyboardInterrupt and SystemExit
+   raised while building the report are left pending, so that perform() still
+   reports them. */
+static void
+report_non_integer_return(const char *callback_name, PyObject *ret_obj)
+{
+    PyObject *repr = PyObject_Repr(ret_obj);
+    PyObject *encoded = NULL;
+
+    if (repr == NULL) {
+        if (PyErr_Occurred() && PyErr_ExceptionMatches(PyExc_Exception)) {
+            PyErr_Clear();
+        }
+    }
+    else {
+        /* backslashreplace, so a non-ASCII repr still encodes */
+        encoded = PyUnicode_AsEncodedString(repr, "ascii", "backslashreplace");
+        if (encoded == NULL
+                && PyErr_Occurred() && PyErr_ExceptionMatches(PyExc_Exception)) {
+            PyErr_Clear();
+        }
+        Py_DECREF(repr);
+    }
+    fprintf(stderr, "%s callback returned %s which is not an integer\n",
+        callback_name, encoded != NULL ? PyBytes_AS_STRING(encoded) : "a value");
+    Py_XDECREF(encoded);
+}
 
 PYCURL_INTERNAL int
 callback_return_value_to_int(PyObject *ret_obj, const char *callback_name, int *ret_out)
@@ -15,17 +44,19 @@ callback_return_value_to_int(PyObject *ret_obj, const char *callback_name, int *
         return -1;
     }
     if (!PyLong_Check(ret_obj)) {
-        PyObject *ret_repr = PyObject_Repr(ret_obj);
-        if (ret_repr) {
-            PyObject *encoded_obj;
-            char *str = PyText_AsString_NoNUL(ret_repr, &encoded_obj);
-            fprintf(stderr, "%s callback returned %s which is not an integer\n", callback_name, str);
-            Py_XDECREF(encoded_obj);
-            Py_DECREF(ret_repr);
+        report_non_integer_return(callback_name, ret_obj);
+        return -1;
+    }
+    /* Truncating to int would turn an abort request into a continue */
+    if (pycurl_long_as_int(ret_obj, ret_out) != 0) {
+        if (PyErr_ExceptionMatches(PyExc_OverflowError)) {
+            PyErr_Clear();
+            PyErr_Format(PyExc_OverflowError,
+                "%s callback returned %R which does not fit in an int",
+                callback_name, ret_obj);
         }
         return -1;
     }
-    *ret_out = (int) PyLong_AsLong(ret_obj);
     return 0;
 }
 
@@ -34,11 +65,13 @@ static size_t
 util_write_callback(int flags, char *ptr, size_t size, size_t nmemb, void *stream)
 {
     CurlObject *self;
+    PyObject *arg;
     PyObject *arglist;
     PyObject *result = NULL;
     size_t ret = 0;     /* assume error */
     PyObject *cb;
     Py_ssize_t total_size;
+    int as_memoryview;
     int track_ws_write_callback;
     int prev_ws_write_callback = 0;
     PYCURL_DECLARE_THREAD_STATE;
@@ -61,7 +94,17 @@ util_write_callback(int flags, char *ptr, size_t size, size_t nmemb, void *strea
     }
 
     /* run callback */
-    arglist = Py_BuildValue("(y#)", ptr, total_size);
+    as_memoryview = flags ? self->h_cb_memoryview : self->w_cb_memoryview;
+    if (as_memoryview) {
+        arg = PyMemoryView_FromMemory(ptr, total_size, PyBUF_READ);
+    } else {
+        arg = PyBytes_FromStringAndSize(ptr, total_size);
+    }
+    if (arg == NULL) {
+        goto verbose_error;
+    }
+    arglist = PyTuple_Pack(1, arg);
+    Py_DECREF(arg);
     if (arglist == NULL)
         goto verbose_error;
     track_ws_write_callback = (flags == 0);
@@ -73,6 +116,15 @@ util_write_callback(int flags, char *ptr, size_t size, size_t nmemb, void *strea
     if (track_ws_write_callback) {
         self->ws_write_cb_running = prev_ws_write_callback;
     }
+    if (as_memoryview) {
+        PyObject *mv = PyTuple_GET_ITEM(arglist, 0);
+        PyObject *exc_type, *exc_val, *exc_tb;
+
+        /* invalidate stashed references; preserve any callback exception */
+        PyErr_Fetch(&exc_type, &exc_val, &exc_tb);
+        Py_XDECREF(PyObject_CallMethod(mv, "release", NULL));
+        PyErr_Restore(exc_type, exc_val, exc_tb);
+    }
     Py_DECREF(arglist);
     if (result == NULL)
         goto verbose_error;
@@ -82,8 +134,12 @@ util_write_callback(int flags, char *ptr, size_t size, size_t nmemb, void *strea
         ret = total_size;           /* None means success */
     }
     else if (PyLong_Check(result)) {
-        /* if the cast to long fails, PyLong_AsLong() returns -1L */
-        ret = (size_t) PyLong_AsLong(result);
+        long value = PyLong_AsLong(result);
+
+        if (value == -1 && PyErr_Occurred()) {
+            goto verbose_error;
+        }
+        ret = (size_t) value;
     }
     else {
         PyErr_SetString(ErrorObject, "write callback must return int or None");
@@ -197,7 +253,7 @@ opensocket_callback(void *clientp, curlsocktype purpose,
     PYCURL_DECLARE_THREAD_STATE;
 
     self = (CurlObject *)clientp;
-    
+
     PYCURL_BEGIN_CALLBACK(opensocket_callback, ret);
 
     converted_address = convert_protocol_address(&address->addr, address->addrlen);
@@ -497,7 +553,11 @@ seek_callback(void *stream, curl_off_t offset, int origin)
         ret = 0;           /* None means success */
     }
     else if (PyLong_Check(result)) {
-        int ret_code = PyLong_AsLong(result);
+        int ret_code;
+
+        if (callback_return_value_to_int(result, "seek", &ret_code) != 0) {
+            goto verbose_error;
+        }
         if (ret_code < 0 || ret_code > 2) {
             PyErr_Format(ErrorObject, "invalid return value for seek callback %d not in (0, 1, 2)", ret_code);
             goto verbose_error;
@@ -610,6 +670,9 @@ read_callback(char *ptr, size_t size, size_t nmemb, void *stream)
     }
     else if (PyLong_Check(result)) {
         long r = PyLong_AsLong(result);
+        if (r == -1 && PyErr_Occurred()) {
+            goto verbose_error;
+        }
         if (r != CURL_READFUNC_ABORT && r != CURL_READFUNC_PAUSE)
             goto type_error;
         ret = r; /* either CURL_READFUNC_ABORT or CURL_READFUNC_PAUSE */
@@ -663,10 +726,15 @@ progress_callback(void *stream,
         ret = 0;        /* None means success */
     }
     else if (PyLong_Check(result)) {
-        ret = (int) PyLong_AsLong(result);
+        if (callback_return_value_to_int(result, "progress", &ret) != 0) {
+            goto verbose_error;
+        }
     }
     else {
-        ret = PyObject_IsTrue(result);  /* FIXME ??? */
+        ret = PyObject_IsTrue(result);
+        if (ret == -1) {
+            goto verbose_error;
+        }
     }
 
 silent_error:
@@ -715,10 +783,15 @@ xferinfo_callback(void *stream,
         ret = 0;        /* None means success */
     }
     else if (PyLong_Check(result)) {
-        ret = (int) PyLong_AsLong(result);
+        if (callback_return_value_to_int(result, "xferinfo", &ret) != 0) {
+            goto verbose_error;
+        }
     }
     else {
-        ret = PyObject_IsTrue(result);  /* FIXME ??? */
+        ret = PyObject_IsTrue(result);
+        if (ret == -1) {
+            goto verbose_error;
+        }
     }
 
 silent_error:
@@ -757,7 +830,7 @@ debug_callback(CURL *curlobj, curl_infotype type,
     }
 
     /* run callback */
-    arglist = Py_BuildValue("(iy#)", (int)type, buffer, (int)total_size);
+    arglist = Py_BuildValue("(iy#)", (int)type, buffer, (Py_ssize_t)total_size);
     if (arglist == NULL)
         goto verbose_error;
     result = PyObject_Call(self->debug_cb, arglist, NULL);
@@ -810,7 +883,9 @@ ioctl_callback(CURL *curlobj, int cmd, void *stream)
         ret = CURLIOE_OK;        /* None means success */
     }
     else if (PyLong_Check(result)) {
-        ret = (int) PyLong_AsLong(result);
+        if (callback_return_value_to_int(result, "ioctl", &ret) != 0) {
+            goto verbose_error;
+        }
         if (ret >= CURLIOE_LAST || ret < 0) {
             PyErr_SetString(ErrorObject, "ioctl callback returned invalid value");
             goto verbose_error;
@@ -887,7 +962,11 @@ add_ca_certs(SSL_CTX *context, void *data, Py_ssize_t len)
         ERR_clear_error();
         retval = 0;
     } else {
-        PyErr_SetString(ErrorObject, ERR_reason_error_string(err));
+        /* NULL for an error code OpenSSL cannot map */
+        const char *reason = ERR_reason_error_string(err);
+
+        PyErr_SetString(ErrorObject,
+            reason != NULL ? reason : "unknown OpenSSL error");
         ERR_clear_error();
         retval = -1;
     }

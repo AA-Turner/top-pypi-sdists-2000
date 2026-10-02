@@ -1,7 +1,10 @@
 import pytest
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
+from django.forms.models import modelform_factory
 from django.urls import reverse
 
+from oauth2_provider.forms import ApplicationForm, _is_hashed
 from oauth2_provider.models import get_application_model
 from oauth2_provider.views.application import ApplicationRegistration
 
@@ -61,6 +64,113 @@ class TestApplicationRegistrationView(BaseTest):
         self.assertEqual(app.client_type, form_data["client_type"])
         self.assertEqual(app.authorization_grant_type, form_data["authorization_grant_type"])
         self.assertEqual(app.algorithm, form_data["algorithm"])
+
+
+@pytest.mark.usefixtures("oauth2_settings")
+class TestApplicationFormFieldErrors(BaseTest):
+    """Model validation errors are reported on the field they belong to (#1343)."""
+
+    def _register(self, **overrides):
+        self.client.login(username="foo_user", password="123456")
+        form_data = {
+            "name": "Foo app",
+            "client_id": "client_id",
+            "client_secret": "client_secret",
+            "client_type": Application.CLIENT_CONFIDENTIAL,
+            "redirect_uris": "http://example.com",
+            "post_logout_redirect_uris": "http://other_example.com",
+            "authorization_grant_type": Application.GRANT_AUTHORIZATION_CODE,
+            "algorithm": "",
+        }
+        form_data.update(overrides)
+        return self.client.post(reverse("oauth2_provider:register"), form_data)
+
+    def test_invalid_redirect_uri_error_is_on_redirect_uris(self):
+        response = self._register(redirect_uris="invalid")
+        self.assertEqual(response.status_code, 200)
+        form = response.context["form"]
+        self.assertEqual(list(form.errors), ["redirect_uris"])
+        self.assertEqual(form.non_field_errors(), [])
+
+    def test_missing_redirect_uris_error_is_on_redirect_uris(self):
+        response = self._register(redirect_uris="")
+        self.assertEqual(response.status_code, 200)
+        form = response.context["form"]
+        self.assertIn("redirect_uris cannot be empty", form.errors["redirect_uris"][0])
+        self.assertEqual(form.non_field_errors(), [])
+
+    def test_invalid_allowed_origin_error_is_on_allowed_origins(self):
+        response = self._register(allowed_origins="http://example.com")
+        self.assertEqual(response.status_code, 200)
+        form = response.context["form"]
+        self.assertEqual(list(form.errors), ["allowed_origins"])
+        self.assertEqual(form.non_field_errors(), [])
+
+    def test_hs256_with_public_client_error_is_on_algorithm(self):
+        response = self._register(
+            algorithm=Application.HS256_ALGORITHM,
+            client_type=Application.CLIENT_PUBLIC,
+        )
+        self.assertEqual(response.status_code, 200)
+        form = response.context["form"]
+        self.assertIn("algorithm", form.errors)
+        self.assertEqual(form.non_field_errors(), [])
+
+    def test_hs256_with_hashed_secret_error_is_on_hash_client_secret(self):
+        response = self._register(
+            algorithm=Application.HS256_ALGORITHM,
+            hash_client_secret="on",
+        )
+        self.assertEqual(response.status_code, 200)
+        form = response.context["form"]
+        self.assertEqual(list(form.errors), ["hash_client_secret"])
+        self.assertEqual(form.non_field_errors(), [])
+
+    def test_every_error_is_reported_in_a_single_submit(self):
+        response = self._register(
+            redirect_uris="invalid",
+            allowed_origins="http://example.com",
+            algorithm=Application.HS256_ALGORITHM,
+            client_type=Application.CLIENT_PUBLIC,
+        )
+        self.assertEqual(response.status_code, 200)
+        form = response.context["form"]
+        self.assertEqual(
+            set(form.errors),
+            {"redirect_uris", "allowed_origins", "algorithm"},
+        )
+
+    def test_error_is_rendered_next_to_its_field(self):
+        response = self._register(redirect_uris="invalid")
+        self.assertContains(response, "invalid_scheme: invalid")
+        content = response.content.decode()
+        # The message renders inside the redirect_uris control group -- everything from
+        # its label up to the close of the surrounding controls div -- rather than in the
+        # non-field block at the bottom of the form.
+        controls = content.split('for="id_redirect_uris"')[1].split("</div>")[0]
+        self.assertIn("invalid_scheme: invalid", controls)
+
+    def test_error_for_a_field_the_form_omits_falls_back_to_non_field(self):
+        """A narrower form must still show the message rather than raise ValueError.
+
+        Django raises ``ValueError`` when model validation names a field the form does
+        not include; ApplicationForm re-keys those to non-field errors instead.
+        """
+        form_class = modelform_factory(
+            Application,
+            form=ApplicationForm,
+            fields=("name", "client_id", "client_type", "authorization_grant_type"),
+        )
+        form = form_class(
+            data={
+                "name": "Foo app",
+                "client_id": "client_id",
+                "client_type": Application.CLIENT_CONFIDENTIAL,
+                "authorization_grant_type": Application.GRANT_AUTHORIZATION_CODE,
+            }
+        )
+        self.assertFalse(form.is_valid())
+        self.assertIn("redirect_uris cannot be empty", form.non_field_errors()[0])
 
 
 @pytest.mark.usefixtures("oauth2_settings")
@@ -281,3 +391,211 @@ class TestApplicationViews(BaseTest):
         self.assertEqual(self.app_foo_1.post_logout_redirect_uris, form_data["post_logout_redirect_uris"])
         self.assertEqual(self.app_foo_1.client_type, form_data["client_type"])
         self.assertEqual(self.app_foo_1.authorization_grant_type, form_data["authorization_grant_type"])
+
+    def test_client_secret_help_text_new_application(self):
+        self.client.login(username="foo_user", password="123456")
+        response = self.client.get(reverse("oauth2_provider:register"))
+        form = response.context["form"]
+        self.assertIn("Copy and store this secret now", form.fields["client_secret"].help_text)
+        self.assertContains(response, "Copy and store this secret now")
+
+    def test_client_secret_help_text_existing_application(self):
+        self.client.login(username="foo_user", password="123456")
+        response = self.client.get(reverse("oauth2_provider:update", args=(self.app_foo_1.pk,)))
+        form = response.context["form"]
+        self.assertIn("can no longer be viewed", form.fields["client_secret"].help_text)
+        self.assertContains(response, "can no longer be viewed")
+
+    def test_client_secret_help_text_existing_application_unhashed(self):
+        # Create with hashing disabled from the start so the stored secret stays cleartext.
+        app = Application.objects.create(
+            name="app foo_user unhashed",
+            redirect_uris="http://example.com",
+            client_type=Application.CLIENT_CONFIDENTIAL,
+            authorization_grant_type=Application.GRANT_AUTHORIZATION_CODE,
+            user=self.foo_user,
+            hash_client_secret=False,
+            client_secret="cleartext-secret",
+        )
+        self.assertEqual(app.client_secret, "cleartext-secret")  # sanity: not hashed on save
+        self.client.login(username="foo_user", password="123456")
+        response = self.client.get(reverse("oauth2_provider:update", args=(app.pk,)))
+        form = response.context["form"]
+        self.assertIn("stores its client secret unhashed", form.fields["client_secret"].help_text)
+        self.assertContains(response, "stores its client secret unhashed")
+
+    def test_client_secret_help_text_existing_application_hashed_after_disable(self):
+        # Disabling hash_client_secret does not unhash an already-hashed stored secret,
+        # so the edit form must still show the "hashed / cannot be viewed" message.
+        app = self._create_application("app foo_user was hashed", self.foo_user)
+        self.assertTrue(app.hash_client_secret)  # hashed on create by default
+        app.hash_client_secret = False
+        app.save()
+        self.client.login(username="foo_user", password="123456")
+        response = self.client.get(reverse("oauth2_provider:update", args=(app.pk,)))
+        form = response.context["form"]
+        self.assertIn("can no longer be viewed", form.fields["client_secret"].help_text)
+
+    def test_client_secret_help_text_existing_unhashed_enabling_hashing(self):
+        # Existing cleartext secret + hashing being enabled (e.g. failed-POST
+        # re-render): the secret will be hashed on save, so the form must warn
+        # rather than say the value "remains usable".
+        app = Application.objects.create(
+            name="app foo_user enabling hashing",
+            redirect_uris="http://example.com",
+            client_type=Application.CLIENT_CONFIDENTIAL,
+            authorization_grant_type=Application.GRANT_AUTHORIZATION_CODE,
+            user=self.foo_user,
+            hash_client_secret=False,
+            client_secret="cleartext-secret",
+        )
+        form_class = ApplicationRegistration().get_form_class()
+        form = form_class(data={"hash_client_secret": "on"}, instance=app)
+        self.assertIn("it will be hashed and cannot be recovered", form.fields["client_secret"].help_text)
+
+    def test_client_secret_help_text_new_application_unhashed(self):
+        form_class = ApplicationRegistration().get_form_class()
+        form = form_class(instance=Application(hash_client_secret=False))
+        self.assertIn("stores the secret unhashed", form.fields["client_secret"].help_text)
+
+    def test_client_secret_help_text_new_application_honors_submitted_value(self):
+        # After a failed POST the help text should reflect the submitted
+        # hash_client_secret value, not just the model default.
+        form_class = ApplicationRegistration().get_form_class()
+        form = form_class(data={"name": "incomplete"})  # bound, hash checkbox unchecked -> False
+        self.assertIn("stores the secret unhashed", form.fields["client_secret"].help_text)
+
+    def test_client_secret_help_text_live_toggle_rendered_on_register(self):
+        # The register page must ship both help variants (as checkbox data-attributes)
+        # plus the shared application_form.js so the message updates live as
+        # hash_client_secret is toggled, rather than being frozen at the
+        # server-rendered value.
+        self.client.login(username="foo_user", password="123456")
+        response = self.client.get(reverse("oauth2_provider:register"))
+        self.assertContains(response, "data-client-secret-help-when-hashed")
+        self.assertContains(response, "data-client-secret-help-when-unhashed")
+        self.assertContains(response, "it will be hashed and cannot be recovered")
+        self.assertContains(response, "stores the secret unhashed")
+        self.assertContains(response, "id_hash_client_secret")
+        self.assertContains(response, "oauth2_provider/js/application_form.js")
+
+    def test_client_secret_help_text_no_live_toggle_when_already_hashed(self):
+        # An already-hashed secret cannot be reverted by unchecking the box, so the
+        # toggle data-attributes must not be rendered on that edit page.
+        self.client.login(username="foo_user", password="123456")
+        response = self.client.get(reverse("oauth2_provider:update", args=(self.app_foo_1.pk,)))
+        self.assertContains(response, "can no longer be viewed")
+        self.assertNotContains(response, "data-client-secret-help-when-hashed")
+
+    def test_application_form_without_client_secret_field(self):
+        # ApplicationForm must not assume client_secret / hash_client_secret are
+        # present in the field set when used as a modelform_factory base.
+        form_class = modelform_factory(Application, form=ApplicationForm, fields=("name",))
+        form_class()  # should not raise KeyError
+
+    def test_is_hashed_helper(self):
+        self.assertFalse(_is_hashed(""))  # empty/falsy
+        self.assertFalse(_is_hashed(None))  # None (guards against identify_hasher TypeError)
+        self.assertFalse(_is_hashed("cleartext-secret"))  # unrecognized -> ValueError
+        self.assertTrue(_is_hashed(make_password("cleartext-secret")))  # real hash
+
+    def test_hs256_warning_attrs_new_application(self):
+        # The algorithm field carries the data the live HS256 warning needs, including
+        # the message shown next to the hash_client_secret checkbox.
+        form = ApplicationRegistration().get_form_class()(instance=Application())
+        attrs = form.fields["algorithm"].widget.attrs
+        self.assertEqual(attrs.get("data-hs256-value"), Application.HS256_ALGORITHM)
+        self.assertEqual(attrs.get("data-client-secret-stored-hashed"), "false")
+        self.assertIn("must be stored unhashed", str(attrs.get("data-hs256-hashed-secret-warning")))
+        self.assertIn(
+            "HS256 requires an unhashed client secret",
+            str(attrs.get("data-hs256-hash-checkbox-warning")),
+        )
+
+    def test_hs256_warning_attrs_present_even_when_secret_hashed(self):
+        # Regression: an already-hashed secret short-circuits the client_secret help
+        # wiring, but the HS256 warning must still be wired -- that is exactly the case
+        # (edit an app whose secret is hashed, pick HS256) that needs it.
+        self.assertTrue(_is_hashed(self.app_foo_1.client_secret))  # hashed on create by default
+        form = ApplicationRegistration().get_form_class()(instance=self.app_foo_1)
+        attrs = form.fields["algorithm"].widget.attrs
+        self.assertEqual(attrs.get("data-hs256-value"), Application.HS256_ALGORITHM)
+        self.assertEqual(attrs.get("data-client-secret-stored-hashed"), "true")
+
+    def test_hs256_warning_rendered_on_register(self):
+        self.client.login(username="foo_user", password="123456")
+        response = self.client.get(reverse("oauth2_provider:register"))
+        self.assertContains(response, 'data-hs256-value="HS256"')
+        self.assertContains(response, "data-hs256-hashed-secret-warning")
+        self.assertContains(response, "data-hs256-hash-checkbox-warning")
+        self.assertContains(response, "oauth2_provider/js/application_form.js")
+
+
+class TestApplicationAdminHashClientSecretUX(BaseTest):
+    """The admin change form must offer the same hash_client_secret-driven
+    client_secret help text (and live toggle) as the front-end views."""
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.admin_user = UserModel.objects.create_superuser("admin_user", "admin@example.com", "123456")
+        cls.hashed_app = Application.objects.create(
+            name="hashed app",
+            redirect_uris="http://example.com",
+            client_type=Application.CLIENT_CONFIDENTIAL,
+            authorization_grant_type=Application.GRANT_AUTHORIZATION_CODE,
+            user=cls.foo_user,
+        )
+        cls.unhashed_app = Application.objects.create(
+            name="unhashed app",
+            redirect_uris="http://example.com",
+            client_type=Application.CLIENT_CONFIDENTIAL,
+            authorization_grant_type=Application.GRANT_AUTHORIZATION_CODE,
+            user=cls.foo_user,
+            hash_client_secret=False,
+            client_secret="cleartext-secret",
+        )
+
+    def test_admin_add_form_ships_live_toggle(self):
+        # A new application's secret is still readable, so the admin add form must
+        # expose both help variants and load the shared toggle script.
+        self.client.login(username="admin_user", password="123456")
+        response = self.client.get(reverse("admin:oauth2_provider_application_add"))
+        self.assertContains(response, "data-client-secret-help-when-hashed")
+        self.assertContains(response, "data-client-secret-help-when-unhashed")
+        self.assertContains(response, "it will be hashed and cannot be recovered")
+        self.assertContains(response, "oauth2_provider/js/application_form.js")
+
+    def test_admin_change_form_unhashed_shows_toggle(self):
+        # An application that stores its secret unhashed keeps a readable secret,
+        # so the admin edit form must still ship the live toggle.
+        self.client.login(username="admin_user", password="123456")
+        response = self.client.get(
+            reverse("admin:oauth2_provider_application_change", args=(self.unhashed_app.pk,))
+        )
+        self.assertContains(response, "data-client-secret-help-when-hashed")
+        self.assertContains(response, "stores its client secret unhashed")
+        self.assertContains(response, "oauth2_provider/js/application_form.js")
+
+    def test_admin_change_form_hashed_has_no_toggle(self):
+        # An already-hashed secret cannot be reverted, so no live toggle is offered;
+        # the admin shows the same static "cannot be viewed" message as the front-end.
+        self.client.login(username="admin_user", password="123456")
+        response = self.client.get(
+            reverse("admin:oauth2_provider_application_change", args=(self.hashed_app.pk,))
+        )
+        self.assertContains(response, "can no longer be viewed")
+        self.assertNotContains(response, "data-client-secret-help-when-hashed")
+
+    def test_admin_change_form_ships_hs256_warning(self):
+        # Editing an application whose secret is hashed (the default) and selecting
+        # HS256 is invalid; the admin must ship the data the live warning needs, even
+        # though the client_secret help toggle is (correctly) absent for a hashed secret.
+        self.client.login(username="admin_user", password="123456")
+        response = self.client.get(
+            reverse("admin:oauth2_provider_application_change", args=(self.hashed_app.pk,))
+        )
+        self.assertContains(response, 'data-hs256-value="HS256"')
+        self.assertContains(response, 'data-client-secret-stored-hashed="true"')
+        self.assertContains(response, "must be stored unhashed")
+        self.assertContains(response, "oauth2_provider/js/application_form.js")

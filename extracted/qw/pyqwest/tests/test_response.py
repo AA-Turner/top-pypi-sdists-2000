@@ -1,16 +1,17 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+import asyncio
+from typing import TYPE_CHECKING, Any
 
 import pytest
 
 from pyqwest import FullResponse, Headers, HTTPVersion, Response, SyncResponse
 
 if TYPE_CHECKING:
-    from collections.abc import AsyncIterator, Iterator
+    from collections.abc import AsyncIterator, Awaitable, Generator, Iterator
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_response_minimal():
     response = Response(status=404)
     assert response.status == 404
@@ -18,10 +19,10 @@ async def test_response_minimal():
     assert response.headers == Headers()
     assert await anext(response.content, None) is None
     assert response.trailers == Headers()
-    assert not response._read_pending  # pyright: ignore[reportAttributeAccessIssue]
+    assert not response._read_pending  # ty: ignore[unresolved-attribute]
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_response_content_bytes():
     response = Response(
         status=500,
@@ -39,7 +40,7 @@ async def test_response_content_bytes():
     assert await anext(content, None) is None
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_response_content_iterator():
     async def content() -> AsyncIterator[bytes]:
         yield b"Part 1, "
@@ -63,7 +64,7 @@ def test_sync_response_minimal():
     assert response.headers == Headers()
     assert next(response.content, None) is None
     assert response.trailers == Headers()
-    assert not response._read_pending  # pyright: ignore[reportAttributeAccessIssue]
+    assert not response._read_pending  # ty: ignore[unresolved-attribute]
 
 
 def test_sync_response_content_bytes():
@@ -96,6 +97,40 @@ def test_sync_response_content_iterator():
     for chunk in response.content:
         parts.append(chunk)
     assert parts == [b"Part 1, ", b"Part 2."]
+
+
+def yield_from_await(awaitable: Awaitable[Any]) -> Generator[Any, None, Any]:
+    # Python < 3.12 use yield from on an awaitable's iterator in methods like
+    # ensure_future, we test compatibility with that pattern.
+    return (yield from awaitable.__await__())
+
+
+def test_response_content_awaitable_supports_yield_from():
+    content = Response(status=200, content=b"Sample body").content
+    with pytest.raises(StopIteration) as exc_info:
+        yield_from_await(content.__anext__()).send(None)
+    assert bytes(exc_info.value.value) == b"Sample body"
+    with pytest.raises(StopAsyncIteration):
+        yield_from_await(content.__anext__()).send(None)
+
+
+def test_response_empty_content_awaitable_supports_yield_from():
+    content = Response(status=200).content
+    with pytest.raises(StopAsyncIteration):
+        yield_from_await(content.__anext__()).send(None)
+
+
+def test_response_aclose_awaitable_supports_yield_from():
+    response = Response(status=200)
+    with pytest.raises(StopIteration):
+        yield_from_await(response.aclose()).send(None)
+
+
+@pytest.mark.anyio
+@pytest.mark.asyncio_only
+async def test_response_content_awaitable_ensure_future():
+    content = Response(status=200, content=b"Sample body").content
+    assert bytes(await asyncio.ensure_future(content.__anext__())) == b"Sample body"
 
 
 def test_full_response_decode_utf8_no_content_type():

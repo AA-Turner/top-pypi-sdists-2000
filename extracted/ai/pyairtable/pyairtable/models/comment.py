@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Dict, List, Optional
 
 import pydantic
 
@@ -59,19 +58,22 @@ class Comment(
     created_time: datetime
 
     #: The ISO 8601 timestamp of when the comment was last edited.
-    last_updated_time: Optional[datetime] = None
+    last_updated_time: datetime | None = None
 
     #: The account which created the comment.
     author: Collaborator
 
     #: Users or groups that were mentioned in the text.
-    mentioned: Dict[str, "Mentioned"] = pydantic.Field(default_factory=dict)
+    mentioned: dict[str, "Mentioned"] = pydantic.Field(default_factory=dict)
 
     #: The comment ID of the parent comment, if this comment is a threaded reply.
-    parent_comment_id: Optional[str] = None
+    parent_comment_id: str | None = None
 
     #: List of reactions to this comment.
-    reactions: List["Reaction"] = pydantic.Field(default_factory=list)
+    reactions: list["Reaction"] = pydantic.Field(default_factory=list)
+
+    #: List of attachments on this comment.
+    attachments: list["Attachment"] = pydantic.Field(default_factory=list)
 
 
 class Mentioned(AirtableModel):
@@ -96,7 +98,7 @@ class Mentioned(AirtableModel):
     id: str
     type: str
     display_name: str
-    email: Optional[str] = None
+    email: str | None = None
 
 
 class Reaction(AirtableModel):
@@ -109,8 +111,8 @@ class Reaction(AirtableModel):
 
     class ReactingUser(AirtableModel):
         user_id: str
-        email: Optional[str] = None
-        name: Optional[str] = None
+        email: str | None = None
+        name: str | None = None
 
     emoji_info: EmojiInfo = pydantic.Field(alias="emoji")
     reacting_user: ReactingUser
@@ -120,7 +122,38 @@ class Reaction(AirtableModel):
         """
         The emoji character used for the reaction.
         """
-        return chr(int(self.emoji_info.unicode_character, 16))
+        return "".join(
+            chr(int(codepoint, 16))
+            for codepoint in self.emoji_info.unicode_character.split("-")
+        )
+
+
+class Attachment(AirtableModel):
+    """
+    An attachment on a comment. URLs returned will expire 2 hours after being
+    returned from the API.
+
+    See `List comments <https://airtable.com/developers/web/api/list-comments>`_.
+    """
+
+    class Thumbnails(AirtableModel):
+        class Thumbnail(AirtableModel):
+            url: str
+            height: int | None = None
+            width: int | None = None
+
+        full: Thumbnail | None = None
+        large: Thumbnail | None = None
+        small: Thumbnail | None = None
+
+    id: str
+    url: str
+    filename: str
+    type: str | None = None
+    size: int | None = None
+    height: int | None = None
+    width: int | None = None
+    thumbnails: Thumbnails | None = None
 
 
 rebuild_models(vars())

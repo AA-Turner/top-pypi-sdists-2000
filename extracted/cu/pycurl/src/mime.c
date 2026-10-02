@@ -29,7 +29,7 @@ curlmime_check_state(CurlMimeObject *self, const char *name)
         PyErr_Format(ErrorObject, "cannot invoke %s() - no curl handle", name);
         return -1;
     }
-    return check_curl_state(self->curl, 1 | 2, name);
+    return check_curl_state(self->curl, PYCURL_REQUIRE_HANDLE | PYCURL_REQUIRE_NOT_RUNNING, name);
 }
 
 static int
@@ -49,7 +49,7 @@ curlmimepart_check_state(CurlMimePartObject *self, const char *name)
         PyErr_Format(ErrorObject, "cannot invoke %s() - no curl handle", name);
         return -1;
     }
-    return check_curl_state(mime->curl, 1 | 2, name);
+    return check_curl_state(mime->curl, PYCURL_REQUIRE_HANDLE | PYCURL_REQUIRE_NOT_RUNNING, name);
 }
 
 static void
@@ -324,6 +324,9 @@ curlmimepart_read_callback(char *ptr, size_t size, size_t nmemb, void *arg)
     }
     else if (PyLong_Check(result)) {
         long long_res = PyLong_AsLong(result);
+        if (long_res == -1 && PyErr_Occurred()) {
+            goto verbose_error;
+        }
         if (long_res != CURL_READFUNC_ABORT && long_res != CURL_READFUNC_PAUSE) {
             PyErr_SetString(ErrorObject, "mime read callback must return a buffer object, an ASCII-only Unicode string, READFUNC_ABORT, or READFUNC_PAUSE");
             goto verbose_error;
@@ -401,8 +404,9 @@ curlmimepart_seek_callback(void *arg, curl_off_t offset, int origin)
         ret = CURL_SEEKFUNC_OK;
     }
     else if (PyLong_Check(result)) {
-        int ret_code = (int)PyLong_AsLong(result);
-        if (PyErr_Occurred()) {
+        int ret_code;
+
+        if (callback_return_value_to_int(result, "mime seek", &ret_code) != 0) {
             goto verbose_error;
         }
         if (ret_code < CURL_SEEKFUNC_OK || ret_code > CURL_SEEKFUNC_CANTSEEK) {
@@ -612,7 +616,7 @@ do_curlmime_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds)
     if (!PyArg_ParseTupleAndKeywords(args, kwds, "O!", kwlist, p_Curl_Type, &curl)) {
         return NULL;
     }
-    if (check_curl_state(curl, 1 | 2, "CurlMime") != 0) {
+    if (check_curl_state(curl, PYCURL_REQUIRE_HANDLE | PYCURL_REQUIRE_NOT_RUNNING, "CurlMime") != 0) {
         return NULL;
     }
 
@@ -697,7 +701,7 @@ do_curlmime_dealloc(CurlMimeObject *self)
 static PyObject *
 do_curlmime_close(CurlMimeObject *self, PyObject *Py_UNUSED(ignored))
 {
-    if (self->curl != NULL && check_curl_state(self->curl, 2, "close") != 0) {
+    if (self->curl != NULL && check_curl_state(self->curl, PYCURL_REQUIRE_NOT_RUNNING, "close") != 0) {
         return NULL;
     }
     if (curlmime_detach_if_pinned(self, 1) != 0) {
@@ -709,7 +713,7 @@ do_curlmime_close(CurlMimeObject *self, PyObject *Py_UNUSED(ignored))
 }
 
 static PyObject *
-do_curlmime_closed(CurlMimeObject *self, PyObject *Py_UNUSED(ignored))
+do_curlmime_get_closed(CurlMimeObject *self, void *Py_UNUSED(closure))
 {
     if (self->mime == NULL) {
         Py_RETURN_TRUE;
@@ -783,34 +787,6 @@ static PyObject *do_curlmimepart_headers(CurlMimePartObject *self, PyObject *arg
 static PyObject *do_curlmimepart_subparts(CurlMimePartObject *self, PyObject *arg);
 
 static int
-curlmimepart_data_as_string_or_buffer(PyObject *arg,
-    char **data,
-    Py_ssize_t *data_len,
-    PyObject **encoded_obj,
-    Py_buffer *view,
-    int *view_active)
-{
-    if (PyObject_CheckBuffer(arg)) {
-        if (PyObject_GetBuffer(arg, view, PyBUF_SIMPLE) != 0) {
-            return -1;
-        }
-
-        *view_active = 1;
-        *data = (char *)view->buf;
-        *data_len = view->len;
-        return 0;
-    }
-
-    if (PyBytes_Check(arg) || PyUnicode_Check(arg)) {
-        return PyText_AsStringAndSize(arg, data, data_len, encoded_obj);
-    }
-
-    PyErr_SetString(PyExc_TypeError,
-        "data() argument must be a byte string, ASCII-only Unicode string, or a buffer object");
-    return -1;
-}
-
-static int
 curlmime_validate_text_arg(PyObject *obj, const char *name)
 {
     char *value;
@@ -847,8 +823,8 @@ curlmime_validate_data_arg(PyObject *obj)
         return 0;
     }
 
-    if (curlmimepart_data_as_string_or_buffer(obj, &data, &data_len,
-            &encoded_obj, &view, &view_active) != 0)
+    if (PyText_OrBuffer_AsStringAndSize(obj, &data, &data_len,
+            &encoded_obj, &view, &view_active, "data() argument") != 0)
     {
         return -1;
     }
@@ -1285,11 +1261,15 @@ static PyMethodDef curlmimeobject_methods[] = {
     {"add_file", (PyCFunction)do_curlmime_add_file, METH_VARARGS | METH_KEYWORDS, "Add a file upload part."},
     {"add_multipart", (PyCFunction)do_curlmime_add_multipart, METH_VARARGS | METH_KEYWORDS, "Add and attach a nested multipart CurlMime."},
     {"close", (PyCFunction)do_curlmime_close, METH_NOARGS, "Release the underlying curl_mime handle."},
-    {"closed", (PyCFunction)do_curlmime_closed, METH_NOARGS, "Return whether this CurlMime object is closed."},
     {"addpart", (PyCFunction)do_curlmime_addpart, METH_NOARGS, "Create and return a new MIME part."},
     {"__enter__", (PyCFunction)do_curlmime_enter, METH_NOARGS, NULL},
     {"__exit__", (PyCFunction)do_curlmime_exit, METH_VARARGS, NULL},
     {NULL, NULL, 0, NULL}
+};
+
+static PyGetSetDef curlmimeobject_getsets[] = {
+    {"closed", (getter)do_curlmime_get_closed, NULL, "Whether this CurlMime object is closed.", NULL},
+    {NULL, NULL, NULL, NULL, NULL}
 };
 
 static PyTypeObject CurlMimeDataCbOwner_Type = {
@@ -1364,7 +1344,7 @@ PYCURL_INTERNAL PyTypeObject CurlMime_Type = {
     0,                          /* tp_iternext */
     curlmimeobject_methods,     /* tp_methods */
     0,                          /* tp_members */
-    0,                          /* tp_getset */
+    curlmimeobject_getsets,     /* tp_getset */
     0,                          /* tp_base */
     0,                          /* tp_dict */
     0,                          /* tp_descr_get */
@@ -1449,8 +1429,8 @@ do_curlmimepart_data(CurlMimePartObject *self, PyObject *arg)
         return NULL;
     }
 
-    if (curlmimepart_data_as_string_or_buffer(arg, &data, &data_len,
-            &encoded_obj, &view, &view_active) != 0)
+    if (PyText_OrBuffer_AsStringAndSize(arg, &data, &data_len,
+            &encoded_obj, &view, &view_active, "data() argument") != 0)
     {
         return NULL;
     }

@@ -23,7 +23,6 @@ import traceback
 from functools import partial
 
 from newrelic.common.object_names import callable_name
-from newrelic.core.adaptive_sampler import AdaptiveSampler
 from newrelic.core.agent_control_health import (
     HealthStatus,
     agent_control_health_instance,
@@ -37,6 +36,7 @@ from newrelic.core.environment import environment_settings, plugins
 from newrelic.core.internal_metrics import InternalTrace, InternalTraceContext, internal_count_metric, internal_metric
 from newrelic.core.profile_sessions import profile_session_manager
 from newrelic.core.rules_engine import RulesEngine, SegmentCollapseEngine
+from newrelic.core.samplers.sampler_proxy import SamplerProxy
 from newrelic.core.stats_engine import CustomMetrics, StatsEngine
 from newrelic.network.exceptions import (
     DiscardDataForRequest,
@@ -49,7 +49,7 @@ from newrelic.samplers.data_sampler import DataSampler
 
 _logger = logging.getLogger(__name__)
 
-MAX_PACKAGE_CAPTURE_TIME_PER_SLOW_HARVEST = 2.0
+MAX_PACKAGE_CAPTURE_TIME_PER_FAST_HARVEST = 0.5
 
 
 class Application:
@@ -78,7 +78,7 @@ class Application:
         self._transaction_count = 0
         self._last_transaction = 0.0
 
-        self.adaptive_sampler = None
+        self.sampler = None
 
         self._global_events_account = 0
 
@@ -104,8 +104,6 @@ class Application:
         self._agent_commands_lock = threading.Lock()
         self._data_samplers_lock = threading.Lock()
         self._data_samplers_started = False
-
-        self._remaining_plugins = True
 
         self._agent_control_health_thread = threading.Thread(
             name="Agent-Control-Health-Session-Thread", target=agent_control_healthcheck_loop
@@ -156,11 +154,23 @@ class Application:
     def active(self):
         return self.configuration is not None
 
-    def compute_sampled(self):
-        if self.adaptive_sampler is None:
+    def compute_sampled(self, full_granularity, section, *args, **kwargs):
+        if self.sampler is None:
             return False
 
-        return self.adaptive_sampler.compute_sampled()
+        return self.sampler.compute_sampled(full_granularity, section, *args, **kwargs)
+
+    def _flattened_span_samples(self, spans, flattened_list=None):
+        if flattened_list is None:
+            flattened_list = []
+
+        if isinstance(spans[-1], dict):
+            flattened_list.append(spans)
+        elif isinstance(spans[-1], list):
+            for span in spans:
+                self._flattened_span_samples(span, flattened_list)
+
+        return flattened_list
 
     def dump(self, file):
         """Dumps details about the application to the file object."""
@@ -501,12 +511,7 @@ class Application:
 
         with self._stats_lock:
             self._stats_engine.reset_stats(configuration, reset_stream=True)
-
-            if configuration.serverless_mode.enabled:
-                sampling_target_period = 60.0
-            else:
-                sampling_target_period = configuration.sampling_target_period_in_seconds
-            self.adaptive_sampler = AdaptiveSampler(configuration.sampling_target, sampling_target_period)
+            self.sampler = SamplerProxy(configuration)
 
         active_session.connect_span_stream(self._stats_engine.span_stream, self.record_custom_metric)
 
@@ -591,6 +596,33 @@ class Application:
                     f"Supportability/InfiniteTracing/gRPC/Compression/{'enabled' if infinite_tracing_compression else 'disabled'}",
                     1,
                 )
+            if configuration.distributed_tracing.enabled:
+                if configuration.distributed_tracing.sampler.full_granularity.enabled:
+                    internal_metric(
+                        f"Supportability/Python/FullGranularity/Root/{configuration.distributed_tracing.sampler._root}",
+                        1,
+                    )
+                    internal_metric(
+                        f"Supportability/Python/FullGranularity/RemoteParentSampled/{configuration.distributed_tracing.sampler._remote_parent_sampled}",
+                        1,
+                    )
+                    internal_metric(
+                        f"Supportability/Python/FullGranularity/RemoteParentNotSampled/{configuration.distributed_tracing.sampler._remote_parent_not_sampled}",
+                        1,
+                    )
+                if configuration.distributed_tracing.sampler.partial_granularity.enabled:
+                    internal_metric(
+                        f"Supportability/Python/PartialGranularity/Root/{configuration.distributed_tracing.sampler.partial_granularity._root}",
+                        1,
+                    )
+                    internal_metric(
+                        f"Supportability/Python/PartialGranularity/RemoteParentSampled/{configuration.distributed_tracing.sampler.partial_granularity._remote_parent_sampled}",
+                        1,
+                    )
+                    internal_metric(
+                        f"Supportability/Python/PartialGranularity/RemoteParentNotSampled/{configuration.distributed_tracing.sampler.partial_granularity._remote_parent_not_sampled}",
+                        1,
+                    )
 
             # Agent Control health check metric
             if self._agent_control.health_check_enabled:
@@ -600,6 +632,10 @@ class Application:
             # Note: This environment variable will be set by the Azure Functions runtime
             if os.environ.get("FUNCTIONS_WORKER_RUNTIME", None):
                 internal_metric("Supportability/Python/AzureFunctionMode/enabled", 1)
+
+            # OpenTelemetry Bridge toggle metric
+            opentelemetry_bridge = "enabled" if configuration.opentelemetry.enabled else "disabled"
+            internal_metric(f"Supportability/Tracing/Python/OpenTelemetryBridge/{opentelemetry_bridge}", 1)
 
         self._stats_engine.merge_custom_metrics(internal_metrics.metrics())
 
@@ -1246,28 +1282,6 @@ class Application:
                                 data_sampler.name,
                             )
 
-                    # Send environment plugin list
-
-                    stopwatch_start = time.time()
-                    while (
-                        configuration
-                        and configuration.package_reporting.enabled
-                        and self._remaining_plugins
-                        and ((time.time() - stopwatch_start) < MAX_PACKAGE_CAPTURE_TIME_PER_SLOW_HARVEST)
-                    ):
-                        try:
-                            module_info = next(self.plugins)
-                            self.modules.append(module_info)
-                        except StopIteration:
-                            self._remaining_plugins = False
-
-                    # Send the accumulated environment plugin list if not empty
-                    if self.modules:
-                        self._active_session.send_loaded_modules(self.modules)
-
-                        # Reset the modules list every harvest cycle
-                        self.modules = []
-
                     # Add a metric we can use to track how many harvest
                     # periods have occurred.
 
@@ -1361,9 +1375,9 @@ class Application:
                             spans = stats.span_events
                             if spans:
                                 if spans.num_samples > 0:
-                                    span_samples = list(spans)
+                                    span_samples = self._flattened_span_samples(list(spans))
 
-                                    _logger.debug("Sending span event data for harvest of %r.", self._app_name)
+                                    _logger.debug("Sending Span event data for harvest of %r.", self._app_name)
 
                                     self._active_session.send_span_events(spans.sampling_info, span_samples)
                                     span_samples = None
@@ -1373,7 +1387,6 @@ class Application:
                                 spans_sampled = spans.num_samples
                                 internal_count_metric("Supportability/SpanEvent/TotalEventsSeen", spans_seen)
                                 internal_count_metric("Supportability/SpanEvent/TotalEventsSent", spans_sampled)
-
                                 stats.reset_span_events()
 
                     # Send error events
@@ -1477,6 +1490,18 @@ class Application:
                             _logger.debug("Sending error data for harvest of %r.", self._app_name)
 
                             self._active_session.send_errors(error_data)
+
+                    # Send environment plugin.
+
+                    if configuration and configuration.package_reporting.enabled:
+                        package_list = []
+                        start = time.time()
+                        for package in self.plugins:
+                            package_list.append(package)
+                            if (time.time() - start) > MAX_PACKAGE_CAPTURE_TIME_PER_FAST_HARVEST:
+                                break
+                        if package_list:
+                            self._active_session.send_loaded_modules(package_list)
 
                     if not flexible:
                         if configuration.collect_traces:
@@ -1704,19 +1729,14 @@ class Application:
 
         self.stop_data_samplers()
 
-        # Finishes collecting environment plugin information
-        # if this has not been completed during harvest
-        # lifetime of the application
-
-        while self.configuration and self.configuration.package_reporting.enabled and self._remaining_plugins:
-            try:
-                module_info = next(self.plugins)
-                self.modules.append(module_info)
-            except StopIteration:
-                self._remaining_plugins = False
-                if self.modules:
-                    self._active_session.send_loaded_modules(self.modules)
-                    self.modules = []
+        # Finishes collecting environment plugin information if this has
+        # not been completed during harvest lifetime of the application.
+        if self.configuration and self.configuration.package_reporting.enabled:
+            # Anything that was left in the plugins
+            # generator will be resolved here.
+            plugins_list = list(self.plugins)
+            if plugins_list:
+                self._active_session.send_loaded_modules(plugins_list)
 
         # Now shutdown the actual agent session.
 
@@ -1741,6 +1761,9 @@ class Application:
         if restart:
             self._agent_restart += 1
             self.activate_session()
+
+            # Re-initialize the generator upon restart
+            self.plugins = plugins()
 
         else:
             self._agent_shutdown = True

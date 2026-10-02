@@ -7,17 +7,18 @@ use pyo3::{
     types::{PyAnyMethods as _, PyBytes, PyInt},
     Bound, IntoPyObjectExt as _, Py, PyAny, PyResult, Python,
 };
-use pyo3_async_runtimes::tokio::future_into_py;
 
 use crate::{
     asyncio::awaitable::{
         EmptyAsyncIterator, EmptyAwaitable, ErrorAwaitable, ValueAsyncIterator, ValueAwaitable,
     },
+    asyncio::runtime::{into_awaitable, AsyncLibrary},
     common::httpversion::HTTPVersion,
     headers::Headers,
     shared::{
         buffer::BytesMemoryView,
         constants::Constants,
+        exception::without_pending_exception,
         response::{ResponseBody, ResponseHead, RustFullResponse},
     },
 };
@@ -32,22 +33,30 @@ pub(crate) struct Response {
     pub(super) head: ResponseHead,
     content: Content,
     trailers: Py<Headers>,
-    request_iter_task: ArcSwapOption<Py<PyAny>>,
+    request_iter_task: RequestIterTask,
 
     constants: Constants,
 }
 
 impl Response {
-    pub(super) fn pending(py: Python<'_>, constants: Constants) -> PyResult<Response> {
+    pub(super) fn pending(
+        py: Python<'_>,
+        constants: Constants,
+        library: AsyncLibrary,
+    ) -> PyResult<Response> {
         let trailers = Py::new(py, Headers::empty())?;
         Ok(Response {
             head: ResponseHead::pending(py),
             content: Content::Http(Py::new(
                 py,
-                ContentGenerator::new(ResponseBody::pending(trailers.clone_ref(py))),
+                ContentGenerator::new(
+                    ResponseBody::pending(trailers.clone_ref(py)),
+                    library,
+                    constants.clone(),
+                ),
             )?),
             trailers,
-            request_iter_task: ArcSwapOption::empty(),
+            request_iter_task: RequestIterTask::empty(constants.clone()),
             constants,
         })
     }
@@ -66,10 +75,8 @@ impl Response {
         }
     }
 
-    pub(super) fn set_request_iter_task(&self, task: &Arc<ArcSwapOption<Py<PyAny>>>) {
-        if let Some(task) = task.swap(None) {
-            self.request_iter_task.store(Some(task));
-        }
+    pub(super) fn set_request_iter_task(&self, task: Arc<Py<PyAny>>) {
+        self.request_iter_task.store(task);
     }
 
     pub(super) async fn into_full_response(self) -> PyResult<RustFullResponse> {
@@ -115,7 +122,7 @@ impl Response {
             head: ResponseHead::new(py, status, http_version, headers)?,
             content: Content::Custom(content.unbind()),
             trailers,
-            request_iter_task: ArcSwapOption::empty(),
+            request_iter_task: RequestIterTask::empty(constants.clone()),
             constants,
         })
     }
@@ -176,7 +183,7 @@ impl Response {
     }
 
     fn aclose<'py>(&self, py: Python<'py>) -> PyResult<Bound<'py, PyAny>> {
-        if let Some(task) = self.request_iter_task.swap(None) {
+        if let Some(task) = self.request_iter_task.take() {
             task.call_method0(py, &self.constants.cancel)?;
         }
         match &self.content {
@@ -213,19 +220,72 @@ impl Response {
     }
 
     fn _set_request_iter_task(&self, task: Py<PyAny>) {
-        self.request_iter_task.store(Some(Arc::from(task)));
+        self.request_iter_task.store(Arc::from(task));
+    }
+}
+
+/// Holder of the request body task of a streamed execution, cancelling it on
+/// drop if the response was never closed.
+struct RequestIterTask {
+    task: ArcSwapOption<Py<PyAny>>,
+    constants: Constants,
+}
+
+impl RequestIterTask {
+    fn empty(constants: Constants) -> Self {
+        RequestIterTask {
+            task: ArcSwapOption::empty(),
+            constants,
+        }
+    }
+
+    fn store(&self, task: Arc<Py<PyAny>>) {
+        self.task.store(Some(task));
+    }
+
+    fn take(&self) -> Option<Arc<Py<PyAny>>> {
+        self.task.swap(None)
+    }
+}
+
+impl Drop for RequestIterTask {
+    fn drop(&mut self) {
+        let Some(task) = self.task.swap(None) else {
+            return;
+        };
+        // SAFETY - the task is only stored on a Response that Python owns (the
+        // response future's done callback and `_set_request_iter_task`), so a
+        // Response with a task is always dropped during Python deallocation. This
+        // attach is reentrant and cannot happen on a tokio worker thread as a
+        // result.
+        Python::attach(|py| {
+            // Needed since this is a Drop implementation.
+            without_pending_exception(py, || {
+                let task = task.bind(py);
+                // Deallocation may run on any thread holding the GIL, so
+                // `cancel_soon` schedules the cancellation on the task's own event
+                // loop or trio run instead of cancelling it directly.
+                if let Err(e) = task.call_method0(&self.constants.cancel_soon) {
+                    e.write_unraisable(py, Some(task));
+                }
+            });
+        });
     }
 }
 
 #[pyclass(module = "_pyqwest.async", frozen)]
 struct ContentGenerator {
     body: ArcSwapOption<ResponseBody>,
+    library: AsyncLibrary,
+    constants: Constants,
 }
 
 impl ContentGenerator {
-    fn new(body: ResponseBody) -> Self {
+    fn new(body: ResponseBody, library: AsyncLibrary, constants: Constants) -> Self {
         ContentGenerator {
             body: ArcSwapOption::from_pointee(body),
+            library,
+            constants,
         }
     }
 }
@@ -245,14 +305,20 @@ impl ContentGenerator {
             .into_bound_py_any(py);
         };
         let body = body.clone();
-        future_into_py(py, async move {
-            let chunk = body.chunk().await?;
-            if let Some(bytes) = chunk {
-                Ok(BytesMemoryView::new(bytes))
-            } else {
-                Err(PyStopAsyncIteration::new_err(()))
-            }
-        })
+        into_awaitable(
+            py,
+            self.library,
+            &self.constants,
+            async move {
+                let chunk = body.chunk().await?;
+                if let Some(bytes) = chunk {
+                    Ok(BytesMemoryView::new(bytes))
+                } else {
+                    Err(PyStopAsyncIteration::new_err(()))
+                }
+            },
+            None,
+        )
     }
 
     fn aclose<'py>(&self, py: Python<'py>) -> PyResult<Bound<'py, PyAny>> {
@@ -262,9 +328,15 @@ impl ContentGenerator {
         if body.try_close() {
             return EmptyAwaitable.into_bound_py_any(py);
         }
-        future_into_py(py, async move {
-            body.close().await;
-            Ok(())
-        })
+        into_awaitable(
+            py,
+            self.library,
+            &self.constants,
+            async move {
+                body.close().await;
+                Ok(())
+            },
+            None,
+        )
     }
 }

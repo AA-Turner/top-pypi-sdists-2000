@@ -19,7 +19,6 @@ of data.
 
 import base64
 import gzip
-import hashlib
 import io
 import itertools
 import json
@@ -232,23 +231,6 @@ def unpack_field(field):
     return data
 
 
-def generate_path_hash(name, seed):
-    """Algorithm for generating the path hash:
-    * Rotate Left the seed value and truncate to 32-bits.
-    * Compute the md5 digest of the name, take the last 4 bytes (32-bits).
-    * XOR the 4 bytes of digest with the seed and return the result.
-
-    """
-
-    rotated = ((seed << 1) | (seed >> 31)) & 0xFFFFFFFF
-
-    if not isinstance(name, bytes):
-        name = name.encode("UTF-8")
-
-    path_hash = rotated ^ int(hashlib.md5(name).hexdigest()[-8:], base=16)  # noqa: S324
-    return f"{path_hash:08x}"
-
-
 def base64_encode(text):
     """Base 64 encodes the UTF-8 encoded representation of the text. In Python
     2 either a byte string or Unicode string can be provided for the text
@@ -368,15 +350,6 @@ def decode_newrelic_header(encoded_header, encoding_key):
     return decoded_header
 
 
-def convert_to_cat_metadata_value(nr_headers):
-    if not nr_headers:
-        return None
-
-    payload = json_encode(nr_headers)
-    cat_linking_value = base64_encode(payload)
-    return cat_linking_value
-
-
 class DistributedTracePayload(dict):
     version = (0, 1)
 
@@ -418,7 +391,9 @@ class W3CTraceParent(dict):
         else:
             guid = f"{random.getrandbits(64):016x}"
 
-        return f"00-{self['tr'].lower().zfill(32)}-{guid}-{int(self.get('sa', 0)):02x}"
+        v = self.get("v", "00")
+
+        return f"{v}-{self['tr'].lower().zfill(32)}-{guid}-{int(self.get('sa', 0)):02x}"
 
     @classmethod
     def decode(cls, payload):
@@ -459,7 +434,7 @@ class W3CTraceParent(dict):
         # Sampled flag
         sa = bool(int(fields[3], 2) & FLAG_SAMPLED)
 
-        return cls(tr=trace_id, id=parent_id, sa=sa)
+        return cls(tr=trace_id, id=parent_id, sa=sa, v=version)
 
 
 class W3CTraceState(OrderedDict):
@@ -483,14 +458,27 @@ class W3CTraceState(OrderedDict):
 
 
 class NrTraceState(dict):
-    FIELDS = ("ty", "ac", "ap", "id", "tx", "sa", "pr")
+    FIELDS = ("v", "ty", "ac", "ap", "id", "tx", "sa", "pr")
+    # Fields Key:
+    # v: version
+    # ty: type; {"0": "App", "1": "Browser", "2": "Mobile"}
+    # ac: account ID
+    # ap: application ID
+    # id: span ID
+    # tx: transaction guid
+    # sa: sampled
+    # pr: priority
+    # tk: trusted account key
+    # ti: time
 
     def text(self):
         pr = self.get("pr", "")
         if pr:
             pr = f"{pr:.6f}".rstrip("0").rstrip(".")
-
-        payload = f"0-0-{self['ac']}-{self['ap']}-{self.get('id', '')}-{self.get('tx', '')}-{'1' if self.get('sa') else '0'}-{pr}-{self['ti']!s}"
+        version = self.get("v", "0")
+        ty = "0"  # Hardcode this as it will always be App.
+        # Do not send the span id-this has been deprecated.
+        payload = f"{version}-{ty}-{self['ac']}-{self['ap']}--{self.get('tx', '')}-{'1' if self.get('sa') else '0'}-{pr}-{self['ti']!s}"
         return f"{self.get('tk', self['ac'])}@nr={payload}"
 
     @classmethod
@@ -504,7 +492,7 @@ class NrTraceState(dict):
             except:
                 return
 
-            for name, value in zip(cls.FIELDS, fields[1:]):
+            for name, value in zip(cls.FIELDS, fields):
                 if value:
                     data[name] = value
 

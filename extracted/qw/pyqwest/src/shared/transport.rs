@@ -1,21 +1,32 @@
 use std::time::Duration;
 
 use pyo3::{
-    exceptions::{PyRuntimeError, PyValueError},
+    exceptions::{PyRuntimeError, PyTypeError, PyValueError},
     sync::PyOnceLock,
-    Bound, PyResult, Python,
+    types::{PyAnyMethods as _, PyString, PyStringMethods as _},
+    Bound, PyAny, PyResult, Python,
 };
-use pyo3_async_runtimes::tokio::get_runtime;
 
-use crate::{common::httpversion::HTTPVersion, shared::validation::validate_timeout};
+use crate::{
+    common::{
+        httpversion::HTTPVersion,
+        proxy::{proxy_from_url, Proxy},
+    },
+    shared::{runtime::get_runtime, validation::validate_timeout},
+};
 
 static DEFAULT_REQWEST_CLIENT: PyOnceLock<reqwest::Client> = PyOnceLock::new();
 
+/// The number of redirects followed by default when redirects are enabled.
+pub(crate) const DEFAULT_MAX_REDIRECTS: usize = 10;
+
 pub(crate) struct ClientParams<'a> {
     pub(crate) tls_ca_cert: Option<&'a [u8]>,
+    pub(crate) tls_include_system_certs: bool,
     pub(crate) tls_key: Option<&'a [u8]>,
     pub(crate) tls_cert: Option<&'a [u8]>,
     pub(crate) http_version: Option<Bound<'a, HTTPVersion>>,
+    pub(crate) proxy: Option<Bound<'a, PyAny>>,
     pub(crate) timeout: Option<f64>,
     pub(crate) connect_timeout: Option<f64>,
     pub(crate) read_timeout: Option<f64>,
@@ -27,6 +38,8 @@ pub(crate) struct ClientParams<'a> {
     pub(crate) enable_zstd: bool,
     pub(crate) use_system_dns: bool,
     pub(crate) enable_cookie_store: bool,
+    pub(crate) follow_redirects: bool,
+    pub(crate) max_redirects: usize,
 }
 
 pub(crate) fn new_reqwest_client(params: ClientParams) -> PyResult<(reqwest::Client, bool)> {
@@ -48,9 +61,20 @@ pub(crate) fn new_reqwest_client(params: ClientParams) -> PyResult<(reqwest::Cli
         }
     }
     if let Some(ca_cert) = params.tls_ca_cert {
-        let cert = reqwest::Certificate::from_pem(ca_cert)
-            .map_err(|e| PyRuntimeError::new_err(format!("Failed to parse CA certificate: {e}")))?;
-        builder = builder.tls_certs_only([cert]);
+        let certs = reqwest::Certificate::from_pem_bundle(ca_cert)
+            .map_err(|e| PyValueError::new_err(format!("Failed to parse CA certificate: {e}")))?;
+        if certs.is_empty() {
+            return Err(PyValueError::new_err(
+                "tls_ca_cert did not contain any PEM certificates",
+            ));
+        }
+        if params.tls_include_system_certs {
+            builder = builder.tls_certs_merge(certs);
+        } else {
+            builder = builder.tls_certs_only(certs);
+        }
+    } else if !params.tls_include_system_certs {
+        builder = builder.tls_certs_only([]);
     }
     if let (Some(cert), Some(key)) = (params.tls_cert, params.tls_key) {
         let pem = [cert, key].concat();
@@ -61,6 +85,11 @@ pub(crate) fn new_reqwest_client(params: ClientParams) -> PyResult<(reqwest::Cli
         return Err(PyValueError::new_err(
             "Both tls_key and tls_cert must be provided",
         ));
+    }
+    if let Some(proxy) = params.proxy {
+        for proxy in proxies_from_py(&proxy)? {
+            builder = builder.proxy(proxy);
+        }
     }
 
     if let Some(timeout) = validate_timeout(params.timeout)? {
@@ -88,6 +117,11 @@ pub(crate) fn new_reqwest_client(params: ClientParams) -> PyResult<(reqwest::Cli
     builder = builder.zstd(params.enable_zstd);
     builder = builder.hickory_dns(!params.use_system_dns);
     builder = builder.cookie_store(params.enable_cookie_store);
+    builder = builder.redirect(if params.follow_redirects {
+        reqwest::redirect::Policy::limited(params.max_redirects)
+    } else {
+        reqwest::redirect::Policy::none()
+    });
 
     let client = if http3 {
         // Workaround https://github.com/seanmonstar/reqwest/issues/2910
@@ -102,6 +136,29 @@ pub(crate) fn new_reqwest_client(params: ClientParams) -> PyResult<(reqwest::Cli
     Ok((client, http3))
 }
 
+const PROXY_TYPE_ERROR: &str = "proxy must be a str, Proxy, or sequence of str | Proxy";
+
+fn proxy_from_item(item: &Bound<'_, PyAny>) -> PyResult<reqwest::Proxy> {
+    if let Ok(url) = item.cast::<PyString>() {
+        return proxy_from_url(url.to_str()?);
+    }
+    if let Ok(proxy) = item.cast::<Proxy>() {
+        return Ok(proxy.get().as_reqwest());
+    }
+    Err(PyTypeError::new_err(PROXY_TYPE_ERROR))
+}
+
+fn proxies_from_py(proxy: &Bound<'_, PyAny>) -> PyResult<Vec<reqwest::Proxy>> {
+    if proxy.cast::<PyString>().is_ok() || proxy.cast::<Proxy>().is_ok() {
+        return Ok(vec![proxy_from_item(proxy)?]);
+    }
+    let mut proxies = Vec::new();
+    for item in proxy.try_iter()? {
+        proxies.push(proxy_from_item(&item?)?);
+    }
+    Ok(proxies)
+}
+
 pub(crate) fn get_default_reqwest_client(py: Python<'_>) -> reqwest::Client {
     DEFAULT_REQWEST_CLIENT
         .get_or_init(py, || {
@@ -109,7 +166,9 @@ pub(crate) fn get_default_reqwest_client(py: Python<'_>) -> reqwest::Client {
                 tls_ca_cert: None,
                 tls_key: None,
                 tls_cert: None,
+                tls_include_system_certs: true,
                 http_version: None,
+                proxy: None,
                 timeout: None,
                 connect_timeout: Some(30.0),
                 read_timeout: None,
@@ -121,6 +180,8 @@ pub(crate) fn get_default_reqwest_client(py: Python<'_>) -> reqwest::Client {
                 enable_zstd: true,
                 use_system_dns: false,
                 enable_cookie_store: false,
+                follow_redirects: true,
+                max_redirects: DEFAULT_MAX_REDIRECTS,
             })
             .unwrap();
             client

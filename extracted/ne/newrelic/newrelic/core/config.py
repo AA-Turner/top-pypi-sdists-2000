@@ -72,6 +72,13 @@ _logger = logging.getLogger(__name__)
 _logger.addHandler(_NullHandler())
 
 
+def parse_comma_separated_into_set(string):
+    if not string:
+        return set()
+    # Strip the string in case user has separated by string and space
+    return {item.strip() for item in string.split(",")}
+
+
 def parse_space_separated_into_list(string):
     return string.split()
 
@@ -257,10 +264,6 @@ class DebugSettings(Settings):
     pass
 
 
-class CrossApplicationTracerSettings(Settings):
-    pass
-
-
 class TransactionEventsSettings(Settings):
     pass
 
@@ -334,6 +337,90 @@ class DistributedTracingSettings(Settings):
 
 
 class DistributedTracingSamplerSettings(Settings):
+    _root = "default"
+    _remote_parent_sampled = "default"
+    _remote_parent_not_sampled = "default"
+
+
+class DistributedTracingSamplerFullGranularitySettings(Settings):
+    pass
+
+
+class DistributedTracingSamplerRootSettings:
+    pass
+
+
+class DistributedTracingSamplerRootAdaptiveSettings:
+    pass
+
+
+class DistributedTracingSamplerRootTraceIdRatioBasedSettings:
+    pass
+
+
+class DistributedTracingSamplerRemoteParentSampledSettings:
+    pass
+
+
+class DistributedTracingSamplerRemoteParentSampledAdaptiveSettings:
+    pass
+
+
+class DistributedTracingSamplerRemoteParentSampledTraceIdRatioBasedSettings:
+    pass
+
+
+class DistributedTracingSamplerRemoteParentNotSampledSettings:
+    pass
+
+
+class DistributedTracingSamplerRemoteParentNotSampledAdaptiveSettings:
+    pass
+
+
+class DistributedTracingSamplerRemoteParentNotSampledTraceIdRatioBasedSettings:
+    pass
+
+
+class DistributedTracingSamplerPartialGranularitySettings(Settings):
+    _root = "default"
+    _remote_parent_sampled = "default"
+    _remote_parent_not_sampled = "default"
+
+
+class DistributedTracingSamplerPartialGranularityRootSettings:
+    pass
+
+
+class DistributedTracingSamplerPartialGranularityRootAdaptiveSettings:
+    pass
+
+
+class DistributedTracingSamplerPartialGranularityRootTraceIdRatioBasedSettings:
+    pass
+
+
+class DistributedTracingSamplerPartialGranularityRemoteParentSampledSettings:
+    pass
+
+
+class DistributedTracingSamplerPartialGranularityRemoteParentSampledAdaptiveSettings:
+    pass
+
+
+class DistributedTracingSamplerPartialGranularityRemoteParentSampledTraceIdRatioBasedSettings:
+    pass
+
+
+class DistributedTracingSamplerPartialGranularityRemoteParentNotSampledSettings:
+    pass
+
+
+class DistributedTracingSamplerPartialGranularityRemoteParentNotSampledAdaptiveSettings:
+    pass
+
+
+class DistributedTracingSamplerPartialGranularityRemoteParentNotSampledTraceIdRatioBasedSettings:
     pass
 
 
@@ -474,6 +561,14 @@ class EventHarvestConfigHarvestLimitSettings(Settings):
     nested = True
 
 
+class OpentelemetrySettings(Settings):
+    pass
+
+
+class OpentelemetryTracesSettings(Settings):
+    pass
+
+
 _settings = TopLevelSettings()
 _settings.agent_limits = AgentLimitsSettings()
 _settings.application_logging = ApplicationLoggingSettings()
@@ -498,7 +593,6 @@ _settings.browser_monitoring = BrowserMonitorSettings()
 _settings.browser_monitoring.attributes = BrowserMonitorAttributesSettings()
 _settings.code_level_metrics = CodeLevelMetricsSettings()
 _settings.console = ConsoleSettings()
-_settings.cross_application_tracer = CrossApplicationTracerSettings()
 _settings.custom_insights_events = CustomInsightsEventsSettings()
 _settings.ml_insights_events = MlInsightsEventsSettings()
 _settings.datastore_tracer = DatastoreTracerSettings()
@@ -507,6 +601,59 @@ _settings.datastore_tracer.instance_reporting = DatastoreTracerInstanceReporting
 _settings.debug = DebugSettings()
 _settings.distributed_tracing = DistributedTracingSettings()
 _settings.distributed_tracing.sampler = DistributedTracingSamplerSettings()
+_settings.distributed_tracing.sampler.full_granularity = DistributedTracingSamplerFullGranularitySettings()
+_settings.distributed_tracing.sampler.root = DistributedTracingSamplerRootSettings()
+_settings.distributed_tracing.sampler.root.adaptive = DistributedTracingSamplerRootAdaptiveSettings()
+_settings.distributed_tracing.sampler.root.trace_id_ratio_based = (
+    DistributedTracingSamplerRootTraceIdRatioBasedSettings()
+)
+_settings.distributed_tracing.sampler.remote_parent_sampled = DistributedTracingSamplerRemoteParentSampledSettings()
+_settings.distributed_tracing.sampler.remote_parent_sampled.adaptive = (
+    DistributedTracingSamplerRemoteParentSampledAdaptiveSettings()
+)
+_settings.distributed_tracing.sampler.remote_parent_sampled.trace_id_ratio_based = (
+    DistributedTracingSamplerRemoteParentSampledTraceIdRatioBasedSettings()
+)
+_settings.distributed_tracing.sampler.remote_parent_not_sampled = (
+    DistributedTracingSamplerRemoteParentNotSampledSettings()
+)
+_settings.distributed_tracing.sampler.remote_parent_not_sampled.adaptive = (
+    DistributedTracingSamplerRemoteParentNotSampledAdaptiveSettings()
+)
+_settings.distributed_tracing.sampler.remote_parent_not_sampled.trace_id_ratio_based = (
+    DistributedTracingSamplerRemoteParentNotSampledTraceIdRatioBasedSettings()
+)
+_settings.distributed_tracing.sampler.partial_granularity = DistributedTracingSamplerPartialGranularitySettings()
+_settings.distributed_tracing.sampler.partial_granularity.root = (
+    DistributedTracingSamplerPartialGranularityRootSettings()
+)
+_settings.distributed_tracing.sampler.partial_granularity.root.adaptive = (
+    DistributedTracingSamplerPartialGranularityRootAdaptiveSettings()
+)
+_settings.distributed_tracing.sampler.partial_granularity.root.trace_id_ratio_based = (
+    DistributedTracingSamplerPartialGranularityRootTraceIdRatioBasedSettings()
+)
+_settings.distributed_tracing.sampler.partial_granularity.remote_parent_sampled = (
+    DistributedTracingSamplerPartialGranularityRemoteParentSampledSettings()
+)
+_settings.distributed_tracing.sampler.partial_granularity.remote_parent_sampled.adaptive = (
+    DistributedTracingSamplerPartialGranularityRemoteParentSampledAdaptiveSettings()
+)
+_settings.distributed_tracing.sampler.partial_granularity.remote_parent_sampled.trace_id_ratio_based = (
+    DistributedTracingSamplerPartialGranularityRemoteParentSampledTraceIdRatioBasedSettings()
+)
+_settings.distributed_tracing.sampler.partial_granularity.remote_parent_sampled.trace_id_ratio_based = (
+    DistributedTracingSamplerPartialGranularityRemoteParentSampledAdaptiveSettings()
+)
+_settings.distributed_tracing.sampler.partial_granularity.remote_parent_not_sampled = (
+    DistributedTracingSamplerPartialGranularityRemoteParentNotSampledSettings()
+)
+_settings.distributed_tracing.sampler.partial_granularity.remote_parent_not_sampled.adaptive = (
+    DistributedTracingSamplerPartialGranularityRemoteParentNotSampledAdaptiveSettings()
+)
+_settings.distributed_tracing.sampler.partial_granularity.remote_parent_not_sampled.trace_id_ratio_based = (
+    DistributedTracingSamplerPartialGranularityRemoteParentNotSampledTraceIdRatioBasedSettings()
+)
 _settings.error_collector = ErrorCollectorSettings()
 _settings.error_collector.attributes = ErrorCollectorAttributesSettings()
 _settings.event_harvest_config = EventHarvestConfigSettings()
@@ -524,6 +671,8 @@ _settings.instrumentation.kombu.consumer = InstrumentationKombuConsumerSettings(
 _settings.instrumentation.middleware = InstrumentationMiddlewareSettings()
 _settings.instrumentation.middleware.django = InstrumentationDjangoMiddlewareSettings()
 _settings.message_tracer = MessageTracerSettings()
+_settings.opentelemetry = OpentelemetrySettings()
+_settings.opentelemetry.traces = OpentelemetryTracesSettings()
 _settings.process_host = ProcessHostSettings()
 _settings.rum = RumSettings()
 _settings.serverless_mode = ServerlessModeSettings()
@@ -548,9 +697,19 @@ _settings.log_file = os.environ.get("NEW_RELIC_LOG", None)
 _settings.audit_log_file = os.environ.get("NEW_RELIC_AUDIT_LOG", None)
 
 
+def _environ_as_sampler(name, default):
+    val = os.environ.get(name, default)
+    # The trace_id_ratio_based value can only be set by setting the ratio
+    if val == "trace_id_ratio_based":
+        return default
+    return val
+
+
 def _environ_as_int(name, default=0):
     val = os.environ.get(name, default)
     try:
+        if default is None and val is None:
+            return None
         return int(val)
     except ValueError:
         return default
@@ -560,9 +719,25 @@ def _environ_as_float(name, default=0.0):
     val = os.environ.get(name, default)
 
     try:
+        if default is None and val is None:
+            return None
         return float(val)
     except ValueError:
         return default
+
+
+def _environ_as_ratio(name, default=0.0):
+    val = os.environ.get(name, default)
+
+    try:
+        if default is None and val is None:
+            return None
+        f_val = float(val)
+        if 0 < f_val <= 1:
+            return f_val
+    except ValueError:
+        return default
+    return default
 
 
 def _environ_as_bool(name, default=False):
@@ -583,6 +758,11 @@ def _environ_as_bool(name, default=False):
 def _environ_as_set(name, default=""):
     value = os.environ.get(name, default)
     return set(value.split())
+
+
+def _environ_as_comma_separated_set(name, default=""):
+    value = os.environ.get(name, default)
+    return parse_comma_separated_into_set(value)
 
 
 def _environ_as_mapping(name, default=""):
@@ -792,7 +972,6 @@ _settings.transaction_name_rules = []
 _settings.transaction_segment_terms = []
 
 _settings.account_id = os.environ.get("NEW_RELIC_ACCOUNT_ID")
-_settings.cross_process_id = None
 _settings.primary_application_id = os.environ.get("NEW_RELIC_PRIMARY_APPLICATION_ID", "Unknown")
 _settings.trusted_account_ids = []
 _settings.trusted_account_key = os.environ.get("NEW_RELIC_TRUSTED_ACCOUNT_KEY")
@@ -808,7 +987,6 @@ _settings.attributes.exclude = _environ_as_set(os.environ.get("NEW_RELIC_ATTRIBU
 _settings.attributes.include = _environ_as_set(os.environ.get("NEW_RELIC_ATTRIBUTES_INCLUDE", ""))
 
 _settings.thread_profiler.enabled = True
-_settings.cross_application_tracer.enabled = False
 
 _settings.gc_runtime_metrics.enabled = _environ_as_bool("NEW_RELIC_GC_RUNTIME_METRICS_ENABLED", default=False)
 _settings.gc_runtime_metrics.top_object_count_limit = 5
@@ -842,13 +1020,166 @@ _settings.custom_insights_events.max_attribute_value = _environ_as_int(
 _settings.ml_insights_events.enabled = False
 
 _settings.distributed_tracing.enabled = _environ_as_bool("NEW_RELIC_DISTRIBUTED_TRACING_ENABLED", default=True)
-_settings.distributed_tracing.sampler.remote_parent_sampled = os.environ.get(
-    "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_REMOTE_PARENT_SAMPLED", "default"
+_settings.distributed_tracing.sampler.adaptive_sampling_target = _environ_as_int(
+    "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_ADAPTIVE_SAMPLING_TARGET", default=10
 )
-_settings.distributed_tracing.sampler.remote_parent_not_sampled = os.environ.get(
-    "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_REMOTE_PARENT_NOT_SAMPLED", "default"
+_settings.distributed_tracing.sampler.full_granularity.enabled = _environ_as_bool(
+    "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_FULL_GRANULARITY_ENABLED", default=True
 )
-_settings.distributed_tracing.exclude_newrelic_header = False
+_settings.distributed_tracing.sampler._root = (
+    (
+        "trace_id_ratio_based"
+        if _environ_as_ratio("NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_ROOT_TRACE_ID_RATIO_BASED_RATIO", None)
+        else None
+    )
+    or (
+        "adaptive"
+        if os.environ.get("NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_ROOT_ADAPTIVE_SAMPLING_TARGET", None)
+        else None
+    )
+    or _environ_as_sampler("NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_ROOT", "default")
+)
+_settings.distributed_tracing.sampler.root.adaptive.sampling_target = _environ_as_int(
+    "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_ROOT_ADAPTIVE_SAMPLING_TARGET", None
+)
+_settings.distributed_tracing.sampler.root.trace_id_ratio_based.ratio = _environ_as_ratio(
+    "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_ROOT_TRACE_ID_RATIO_BASED_RATIO", None
+)
+_settings.distributed_tracing.sampler._remote_parent_sampled = (
+    (
+        "trace_id_ratio_based"
+        if _environ_as_ratio(
+            "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_REMOTE_PARENT_SAMPLED_TRACE_ID_RATIO_BASED_RATIO", None
+        )
+        else None
+    )
+    or (
+        "adaptive"
+        if os.environ.get("NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_REMOTE_PARENT_SAMPLED_ADAPTIVE_SAMPLING_TARGET", None)
+        else None
+    )
+    or _environ_as_sampler("NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_REMOTE_PARENT_SAMPLED", "default")
+)
+_settings.distributed_tracing.sampler.remote_parent_sampled.adaptive.sampling_target = _environ_as_int(
+    "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_REMOTE_PARENT_SAMPLED_ADAPTIVE_SAMPLING_TARGET", None
+)
+_settings.distributed_tracing.sampler.remote_parent_sampled.trace_id_ratio_based.ratio = _environ_as_ratio(
+    "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_REMOTE_PARENT_SAMPLED_TRACE_ID_RATIO_BASED_RATIO", None
+)
+_settings.distributed_tracing.sampler._remote_parent_not_sampled = (
+    (
+        "trace_id_ratio_based"
+        if _environ_as_ratio(
+            "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_REMOTE_PARENT_NOT_SAMPLED_TRACE_ID_RATIO_BASED_RATIO", None
+        )
+        else None
+    )
+    or (
+        "adaptive"
+        if os.environ.get(
+            "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_REMOTE_PARENT_NOT_SAMPLED_ADAPTIVE_SAMPLING_TARGET", None
+        )
+        else None
+    )
+    or _environ_as_sampler("NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_REMOTE_PARENT_NOT_SAMPLED", "default")
+)
+_settings.distributed_tracing.sampler.remote_parent_not_sampled.adaptive.sampling_target = _environ_as_int(
+    "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_REMOTE_PARENT_NOT_SAMPLED_ADAPTIVE_SAMPLING_TARGET", None
+)
+_settings.distributed_tracing.sampler.remote_parent_not_sampled.trace_id_ratio_based.ratio = _environ_as_ratio(
+    "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_REMOTE_PARENT_NOT_SAMPLED_TRACE_ID_RATIO_BASED_RATIO", None
+)
+_settings.distributed_tracing.sampler.partial_granularity.enabled = _environ_as_bool(
+    "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_ENABLED", default=False
+)
+_settings.distributed_tracing.sampler.partial_granularity.type = os.environ.get(
+    "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_TYPE", "essential"
+)
+_settings.distributed_tracing.sampler.partial_granularity._root = (
+    (
+        "trace_id_ratio_based"
+        if _environ_as_ratio(
+            "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_ROOT_TRACE_ID_RATIO_BASED_RATIO", None
+        )
+        else None
+    )
+    or (
+        "adaptive"
+        if os.environ.get(
+            "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_ROOT_ADAPTIVE_SAMPLING_TARGET", None
+        )
+        else None
+    )
+    or _environ_as_sampler("NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_ROOT", "default")
+)
+_settings.distributed_tracing.sampler.partial_granularity.root.adaptive.sampling_target = _environ_as_int(
+    "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_ROOT_ADAPTIVE_SAMPLING_TARGET", None
+)
+_settings.distributed_tracing.sampler.partial_granularity.root.trace_id_ratio_based.ratio = _environ_as_ratio(
+    "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_ROOT_TRACE_ID_RATIO_BASED_RATIO", None
+)
+_settings.distributed_tracing.sampler.partial_granularity._remote_parent_sampled = (
+    (
+        "trace_id_ratio_based"
+        if _environ_as_ratio(
+            "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_REMOTE_PARENT_SAMPLED_TRACE_ID_RATIO_BASED_RATIO",
+            None,
+        )
+        else None
+    )
+    or (
+        "adaptive"
+        if os.environ.get(
+            "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_REMOTE_PARENT_SAMPLED_ADAPTIVE_SAMPLING_TARGET",
+            None,
+        )
+        else None
+    )
+    or _environ_as_sampler("NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_REMOTE_PARENT_SAMPLED", "default")
+)
+_settings.distributed_tracing.sampler.partial_granularity.remote_parent_sampled.adaptive.sampling_target = (
+    _environ_as_int(
+        "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_REMOTE_PARENT_SAMPLED_ADAPTIVE_SAMPLING_TARGET", None
+    )
+)
+_settings.distributed_tracing.sampler.partial_granularity.remote_parent_sampled.trace_id_ratio_based.ratio = (
+    _environ_as_ratio(
+        "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_REMOTE_PARENT_SAMPLED_TRACE_ID_RATIO_BASED_RATIO",
+        None,
+    )
+)
+_settings.distributed_tracing.sampler.partial_granularity._remote_parent_not_sampled = (
+    (
+        "trace_id_ratio_based"
+        if _environ_as_ratio(
+            "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_REMOTE_PARENT_NOT_SAMPLED_TRACE_ID_RATIO_BASED_RATIO",
+            None,
+        )
+        else None
+    )
+    or (
+        "adaptive"
+        if os.environ.get(
+            "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_REMOTE_PARENT_NOT_SAMPLED_ADAPTIVE_SAMPLING_TARGET",
+            None,
+        )
+        else None
+    )
+    or _environ_as_sampler(
+        "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_REMOTE_PARENT_NOT_SAMPLED", "default"
+    )
+)
+_settings.distributed_tracing.sampler.partial_granularity.remote_parent_not_sampled.adaptive.sampling_target = (
+    _environ_as_int(
+        "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_REMOTE_PARENT_NOT_SAMPLED_ADAPTIVE_SAMPLING_TARGET",
+        None,
+    )
+)
+_settings.distributed_tracing.sampler.partial_granularity.remote_parent_not_sampled.trace_id_ratio_based.ratio = _environ_as_ratio(
+    "NEW_RELIC_DISTRIBUTED_TRACING_SAMPLER_PARTIAL_GRANULARITY_REMOTE_PARENT_NOT_SAMPLED_TRACE_ID_RATIO_BASED_RATIO",
+    None,
+)
+_settings.distributed_tracing.exclude_newrelic_header = True
 _settings.span_events.enabled = _environ_as_bool("NEW_RELIC_SPAN_EVENTS_ENABLED", default=True)
 _settings.event_harvest_config.harvest_limits.span_event_data = _environ_as_int(
     "NEW_RELIC_SPAN_EVENTS_MAX_SAMPLES_STORED", default=SPAN_EVENT_RESERVOIR_SIZE
@@ -918,6 +1249,7 @@ _settings.browser_monitoring.loader_version = None
 _settings.browser_monitoring.debug = False
 _settings.browser_monitoring.ssl_for_http = None
 _settings.browser_monitoring.content_type = ["text/html"]
+_settings.browser_monitoring.version = None
 _settings.browser_monitoring.attributes.enabled = _environ_as_bool(
     "NEW_RELIC_BROWSER_MONITORING_ATTRIBUTES_ENABLED", default=False
 )
@@ -1088,6 +1420,14 @@ _settings.k8s_operator.enabled = _environ_as_bool("NEW_RELIC_K8S_OPERATOR_ENABLE
 _settings.azure_operator.enabled = _environ_as_bool("NEW_RELIC_AZURE_OPERATOR_ENABLED", default=False)
 _settings.package_reporting.enabled = _environ_as_bool("NEW_RELIC_PACKAGE_REPORTING_ENABLED", default=True)
 _settings.ml_insights_events.enabled = _environ_as_bool("NEW_RELIC_ML_INSIGHTS_EVENTS_ENABLED", default=False)
+_settings.opentelemetry.enabled = _environ_as_bool("NEW_RELIC_OPENTELEMETRY_ENABLED", default=False)
+_settings.opentelemetry.traces.enabled = _environ_as_bool("NEW_RELIC_OPENTELEMETRY_TRACES_ENABLED", default=True)
+_settings.opentelemetry.traces.exclude = _environ_as_comma_separated_set(
+    "NEW_RELIC_OPENTELEMETRY_TRACES_EXCLUDE", default=""
+)
+_settings.opentelemetry.traces.include = _environ_as_comma_separated_set(
+    "NEW_RELIC_OPENTELEMETRY_TRACES_INCLUDE", default=""
+)
 
 
 def global_settings():
@@ -1119,8 +1459,7 @@ def flatten_settings(settings):
         for key, value in vars(o).items():
             # Remove any leading underscores on keys accessed through
             # properties for reporting.
-            if key.startswith("_"):
-                key = key[1:]
+            key = key.removeprefix("_")
 
             if name:
                 key = f"{name}.{key}"
@@ -1315,6 +1654,16 @@ def apply_server_side_settings(server_side_config=None, settings=_settings):
         if value == "apdex_f":
             agent_config["transaction_tracer.transaction_threshold"] = None
 
+    # collect_ai is the account-level toggle to disable AIM.
+    # The value of ai_monitoring.enabled sent from SSC always takes
+    # precedence over the value of collect_ai.
+    # Apply collect_ai first so that when agent_config settings from SSC
+    # are applied, they will override collect_ai if needed.
+    collect_ai = server_side_config.pop("collect_ai", None)
+    if collect_ai is not None:
+        apply_config_setting(settings_snapshot, "ai_monitoring.enabled", collect_ai)
+        _logger.debug("Setting ai_monitoring.enabled to value of collect_ai=%s", collect_ai)
+
     # Overlay with agent server side configuration settings.
 
     for name, value in agent_config.items():
@@ -1328,8 +1677,24 @@ def apply_server_side_settings(server_side_config=None, settings=_settings):
         apply_config_setting(settings_snapshot, name, value)
 
     event_harvest_config = server_side_config.get("event_harvest_config", {})
-    harvest_limits = event_harvest_config.get("harvest_limits", ())
+    harvest_limits = event_harvest_config.get("harvest_limits", {})
+
+    # Override this setting here so that the allowlist that is pulled from
+    # the harvest_limits includes the ml_event harvest limit.
+    # Since the server does not override this setting as it's an OTLP setting,
+    # we must override it here manually by converting it into a per harvest cycle
+    # value.
+    # override ml_events / (60s/5s) harvest
+    harvest_limits["ml_event_data"] = settings_snapshot.event_harvest_config.harvest_limits.ml_event_data // 12
+
     apply_config_setting(settings_snapshot, "event_harvest_config.allowlist", frozenset(harvest_limits))
+
+    # Override ML event harvest config
+    ml_event_harvest_config = harvest_limits.get("ml_event_data", {})
+    if ml_event_harvest_config is not None:
+        apply_config_setting(
+            settings_snapshot, "event_harvest_config.harvest_limits.ml_event_data", harvest_limits["ml_event_data"]
+        )
 
     # Override span event harvest config
     span_event_harvest_config = server_side_config.get("span_event_harvest_config", {})
@@ -1339,47 +1704,40 @@ def apply_server_side_settings(server_side_config=None, settings=_settings):
             settings_snapshot, "event_harvest_config.harvest_limits.span_event_data", span_event_harvest_limit
         )
 
-    # Check to see if collect_ai appears in the connect response to handle account-level AIM toggling
-    collect_ai = server_side_config.get("collect_ai", None)
-    if collect_ai is not None:
-        apply_config_setting(settings_snapshot, "ai_monitoring.enabled", collect_ai)
-        _logger.debug("Setting ai_monitoring.enabled to value of collect_ai=%s", collect_ai)
-
-    # Since the server does not override this setting as it's an OTLP setting,
-    # we must override it here manually by converting it into a per harvest cycle
-    # value.
-    apply_config_setting(
-        settings_snapshot,
-        "event_harvest_config.harvest_limits.ml_event_data",
-        # override ml_events / (60s/5s) harvest
-        settings_snapshot.event_harvest_config.harvest_limits.ml_event_data / 12,
-    )
+    # Enforce High Security Mode on AIM settings as defense-in-depth in case
+    # they get re-enabled during SSC overlay
+    if settings_snapshot.high_security:
+        apply_config_setting(settings_snapshot, "ai_monitoring.enabled", False)
+        apply_config_setting(settings_snapshot, "ai_monitoring.streaming.enabled", False)
+        apply_config_setting(settings_snapshot, "ai_monitoring.record_content.enabled", False)
 
     # Since the server does not override this setting we must override it here manually
-    # by caping it at the max value of 4095.
+    # by capping it at the max value of 4095.
     apply_config_setting(
         settings_snapshot,
         "custom_insights_events.max_attribute_value",
         min(settings_snapshot.custom_insights_events.max_attribute_value, 4095),
     )
 
-    # This will be removed at some future point
-    # Special case for account_id which will be sent instead of
-    # cross_process_id in the future
+    # Partial granularity tracing is not available in infinite tracing mode.
+    if (
+        settings_snapshot.infinite_tracing.enabled
+        and settings_snapshot.distributed_tracing.sampler.partial_granularity.enabled
+    ):
+        _logger.warning(
+            "Improper configuration. Infinite tracing cannot be enabled at the same time as partial granularity tracing. Setting distributed_tracing.sampler.partial_granularity.enabled=False."
+        )
+        apply_config_setting(settings_snapshot, "distributed_tracing.sampler.partial_granularity.enabled", False)
 
-    if settings_snapshot.cross_process_id is not None:
-        vals = [settings_snapshot.account_id, settings_snapshot.application_id]
-        derived_vals = settings_snapshot.cross_process_id.split("#")
-
-        if len(derived_vals) == 2:
-            for idx, _val in enumerate(derived_vals):
-                # only override the value if the server side does not provide
-                # the value specifically
-                if vals[idx] is None:
-                    vals[idx] = derived_vals[idx]
-
-            settings_snapshot.account_id = vals[0]
-            settings_snapshot.application_id = vals[1]
+    # If browser_monitoring.version is set but no js_agent_loader is returned, we infer
+    # the customer-supplied browser agent version is unsupported, malformed, etc. and
+    # log a warning.
+    if settings_snapshot.browser_monitoring.version and not settings_snapshot.js_agent_loader:
+        _logger.warning(
+            "Requested browser_monitoring.version '%s' did not return a browser agent loader; "
+            "please ensure it is available and supported. No browser monitoring will be injected.",
+            settings_snapshot.browser_monitoring.version,
+        )
 
     # Reapply on top any local setting overrides.
 

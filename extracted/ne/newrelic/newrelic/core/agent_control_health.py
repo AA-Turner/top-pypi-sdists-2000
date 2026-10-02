@@ -24,6 +24,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 from urllib.request import url2pathname
 
+from newrelic.api.time_trace import get_linking_metadata
 from newrelic.core.config import _environ_as_bool, _environ_as_int
 
 _logger = logging.getLogger(__name__)
@@ -93,6 +94,7 @@ class AgentControlHealth:
         self.start_time_unix_nano = None
         self.pid_file_id_map = {}
         self._health_delivery_location_cache = {}
+        self._shutdown = False
 
     @property
     def health_check_enabled(self):
@@ -217,7 +219,8 @@ class AgentControlHealth:
 
     def write_to_health_file(self):
         status_time_unix_nano = time.time_ns()
-
+        service_metadata = get_linking_metadata()
+        entity_guid = service_metadata.get("entity.guid", "") if service_metadata else ""
         try:
             health_dir_path = self.health_delivery_location
             if health_dir_path is None:
@@ -229,6 +232,7 @@ class AgentControlHealth:
             is_healthy = self.is_healthy  # Cache property value to avoid multiple calls
 
             with health_file_path.open("w") as f:
+                f.write(f"entity_guid: {entity_guid}\n")
                 f.write(f"healthy: {is_healthy}\n")
                 f.write(f"status: {self.status_message}\n")
                 f.write(f"start_time_unix_nano: {self.start_time_unix_nano}\n")
@@ -251,6 +255,14 @@ class AgentControlHealth:
 
         return self.pid_file_id_map[pid]
 
+    def _shutdown_health_thread(self):
+        """Internal method used to force shutdown of the health check thread. Only used for testing."""
+        self._shutdown = True
+        with AgentControlHealth._instance_lock:
+            # Delete previous instance so that starting a new thread
+            # will create a new instance that isn't shutdown.
+            AgentControlHealth._instance = None
+
 
 def agent_control_health_instance():
     # Helper function directly returns the singleton instance similar to agent_instance()
@@ -271,6 +283,7 @@ def agent_control_healthcheck_loop():
 
 
 def agent_control_healthcheck(scheduler, reporting_frequency):
-    scheduler.enter(reporting_frequency, 1, agent_control_healthcheck, (scheduler, reporting_frequency))
-
-    agent_control_health_instance().write_to_health_file()
+    agent_control_health = agent_control_health_instance()
+    if not agent_control_health._shutdown:
+        scheduler.enter(reporting_frequency, 1, agent_control_healthcheck, (scheduler, reporting_frequency))
+        agent_control_health.write_to_health_file()

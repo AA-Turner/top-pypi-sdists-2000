@@ -1,10 +1,15 @@
-use std::fmt;
+use std::{
+    fmt,
+    pin::Pin,
+    task::{Context, Poll},
+};
 
+use futures_core::Stream;
 use http::HeaderValue;
-use pyo3::sync::MutexExt as _;
 use pyo3::types::{PyAnyMethods as _, PyDict, PyDictMethods as _, PyString, PyStringMethods as _};
 use pyo3::{exceptions::PyValueError, Py, PyResult, Python};
 use pyo3::{Bound, PyAny};
+use tokio::sync::oneshot;
 use url::form_urlencoded::Serializer;
 use url::UrlQuery;
 
@@ -62,10 +67,7 @@ impl RequestHead {
         if http3 {
             *req.version_mut() = http::Version::HTTP_3;
         }
-        let hdrs = self.headers.bind(py).borrow();
-        for (name, value) in hdrs.store.lock_py_attached(py).unwrap().iter() {
-            req.headers_mut().append(name, value.as_http(py)?);
-        }
+        self.headers.get().append_to(py, req.headers_mut())?;
         if self.json && !req.headers().contains_key(http::header::CONTENT_TYPE) {
             req.headers_mut()
                 .insert(http::header::CONTENT_TYPE, CONTENT_TYPE_JSON);
@@ -111,30 +113,68 @@ impl RequestHead {
 
 pub(crate) type RequestStreamResult<T> = Result<T, RequestStreamError>;
 
-#[derive(Debug)]
-pub(crate) struct RequestStreamError {
-    msg: String,
+pub(crate) struct StartOnPoll<S> {
+    inner: S,
+    start: Option<oneshot::Sender<()>>,
 }
 
-impl RequestStreamError {
-    pub(crate) fn new(msg: String) -> Self {
-        Self { msg }
-    }
-
-    pub(crate) fn from_py(err: &Bound<'_, PyAny>) -> Self {
-        if let Ok(msg) = err.str() {
-            Self {
-                msg: msg.to_string(),
-            }
-        } else {
-            Self {
-                msg: "Unknown Error".to_string(),
-            }
+impl<S> StartOnPoll<S> {
+    pub(crate) fn new(inner: S, start: oneshot::Sender<()>) -> Self {
+        Self {
+            inner,
+            start: Some(start),
         }
     }
 }
 
-impl std::error::Error for RequestStreamError {}
+impl<S: Stream + Unpin> Stream for StartOnPoll<S> {
+    type Item = S::Item;
+
+    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        let this = self.get_mut();
+        if let Some(start) = this.start.take() {
+            let _ = start.send(());
+        }
+        Pin::new(&mut this.inner).poll_next(cx)
+    }
+}
+
+#[derive(Debug)]
+pub(crate) struct RequestStreamError {
+    msg: String,
+    /// hyper resets an HTTP/2 stream with the reason of an `h2::Error` it
+    /// finds among an error's sources, and with `INTERNAL_ERROR` otherwise.
+    source: Option<h2::Error>,
+}
+
+impl RequestStreamError {
+    pub(crate) fn new(msg: String) -> Self {
+        Self { msg, source: None }
+    }
+
+    /// The error for a body that ended before it was complete. The body was
+    /// abandoned rather than broken, so HTTP/2 resets its stream with `CANCEL`.
+    pub(crate) fn unfinished() -> Self {
+        Self {
+            msg: "Request body ended before it was complete".to_string(),
+            source: Some(h2::Error::from(h2::Reason::CANCEL)),
+        }
+    }
+
+    pub(crate) fn from_py(err: &Bound<'_, PyAny>) -> Self {
+        if let Ok(msg) = err.str() {
+            Self::new(msg.to_string())
+        } else {
+            Self::new("Unknown Error".to_string())
+        }
+    }
+}
+
+impl std::error::Error for RequestStreamError {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        self.source.as_ref().map(|e| e as _)
+    }
+}
 
 impl fmt::Display for RequestStreamError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -170,4 +210,33 @@ pub(crate) fn maybe_encode_json_content<'py>(
     }
     let json_str = constants.json_dumps.bind(py).call1((value,))?;
     Ok(Some(json_str.cast::<PyString>()?.encode_utf8()?.into_any()))
+}
+
+/// If `value` is an instance of `multipart_class`, encodes it with
+/// `encode_fn`, a Python glue function returning a (content-type, bytes
+/// iterator) tuple, and replaces `headers` with a copy holding the
+/// content-type of the generated boundary.
+pub(crate) fn maybe_encode_multipart_content<'py>(
+    py: Python<'py>,
+    value: Option<&Bound<'py, PyAny>>,
+    headers: &mut Py<Headers>,
+    multipart_class: &Py<PyAny>,
+    encode_fn: &Py<PyAny>,
+) -> PyResult<Option<Bound<'py, PyAny>>> {
+    let Some(value) = value else {
+        return Ok(None);
+    };
+    if !value.is_instance(multipart_class.bind(py))? {
+        return Ok(None);
+    }
+    let encoded = encode_fn.bind(py).call1((value,))?;
+    let content_type = encoded.get_item(0)?;
+    let content = encoded.get_item(1)?;
+    *headers = Py::new(
+        py,
+        headers
+            .get()
+            .copy_with_content_type(py, content_type.cast::<PyString>()?)?,
+    )?;
+    Ok(Some(content))
 }

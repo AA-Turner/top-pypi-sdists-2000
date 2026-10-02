@@ -7,6 +7,9 @@
 # pylint: skip-file
 # fmt: off
 # isort: skip_file
+from ......schema_classes import AIAgentKeyClass
+from ......schema_classes import AgentSkillKeyClass
+from ......schema_classes import ApiKeyClass
 from ......schema_classes import AssertionKeyClass
 from ......schema_classes import ChartKeyClass
 from ......schema_classes import ContainerKeyClass
@@ -47,24 +50,30 @@ from ......schema_classes import GlossaryNodeKeyClass
 from ......schema_classes import GlossaryTermKeyClass
 from ......schema_classes import IncidentKeyClass
 from ......schema_classes import InviteTokenKeyClass
+from ......schema_classes import LifecycleStageTypeKeyClass
 from ......schema_classes import MLFeatureKeyClass
 from ......schema_classes import MLFeatureTableKeyClass
 from ......schema_classes import MLModelDeploymentKeyClass
 from ......schema_classes import MLModelGroupKeyClass
 from ......schema_classes import MLModelKeyClass
 from ......schema_classes import MLPrimaryKeyKeyClass
+from ......schema_classes import MetricKeyClass
 from ......schema_classes import NotebookKeyClass
 from ......schema_classes import OwnershipTypeKeyClass
 from ......schema_classes import PostKeyClass
 from ......schema_classes import QueryKeyClass
 from ......schema_classes import RoleKeyClass
 from ......schema_classes import SchemaFieldKeyClass
+from ......schema_classes import SemanticModelKeyClass
 from ......schema_classes import TagKeyClass
 from ......schema_classes import TelemetryKeyClass
 from ......schema_classes import TestKeyClass
 from ......schema_classes import VersionSetKeyClass
 
 
+AIAgentKey = AIAgentKeyClass
+AgentSkillKey = AgentSkillKeyClass
+ApiKey = ApiKeyClass
 AssertionKey = AssertionKeyClass
 ChartKey = ChartKeyClass
 ContainerKey = ContainerKeyClass
@@ -105,18 +114,21 @@ GlossaryNodeKey = GlossaryNodeKeyClass
 GlossaryTermKey = GlossaryTermKeyClass
 IncidentKey = IncidentKeyClass
 InviteTokenKey = InviteTokenKeyClass
+LifecycleStageTypeKey = LifecycleStageTypeKeyClass
 MLFeatureKey = MLFeatureKeyClass
 MLFeatureTableKey = MLFeatureTableKeyClass
 MLModelDeploymentKey = MLModelDeploymentKeyClass
 MLModelGroupKey = MLModelGroupKeyClass
 MLModelKey = MLModelKeyClass
 MLPrimaryKeyKey = MLPrimaryKeyKeyClass
+MetricKey = MetricKeyClass
 NotebookKey = NotebookKeyClass
 OwnershipTypeKey = OwnershipTypeKeyClass
 PostKey = PostKeyClass
 QueryKey = QueryKeyClass
 RoleKey = RoleKeyClass
 SchemaFieldKey = SchemaFieldKeyClass
+SemanticModelKey = SemanticModelKeyClass
 TagKey = TagKeyClass
 TelemetryKey = TelemetryKeyClass
 TestKey = TestKeyClass

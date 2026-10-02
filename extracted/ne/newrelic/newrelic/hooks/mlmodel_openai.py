@@ -39,13 +39,15 @@ STREAM_PARSING_FAILURE_LOG_MESSAGE = "Exception occurred in OpenAI instrumentati
 _logger = logging.getLogger(__name__)
 
 
+def _is_streaming_response_wrapper(kwargs):
+    # The SDK's with_streaming_response path re-wraps the same create method we instrument, so
+    # this header it injects is the only signal that distinguishes it at the level we wrap.
+    return (kwargs.get("extra_headers") or {}).get("X-Stainless-Raw-Response") == "stream"
+
+
 def wrap_embedding_sync(wrapped, instance, args, kwargs):
     transaction = current_transaction()
-    if (
-        not transaction
-        or kwargs.get("stream", False)
-        or (kwargs.get("extra_headers") or {}).get("X-Stainless-Raw-Response") == "stream"
-    ):
+    if not transaction or kwargs.get("stream", False) or _is_streaming_response_wrapper(kwargs):
         return wrapped(*args, **kwargs)
     settings = transaction.settings if transaction.settings is not None else global_settings()
     if not settings.ai_monitoring.enabled:
@@ -64,14 +66,28 @@ def wrap_embedding_sync(wrapped, instance, args, kwargs):
     try:
         response = wrapped(*args, **kwargs)
     except Exception as exc:
-        _record_embedding_error(transaction, embedding_id, linking_metadata, kwargs, ft, exc)
+        _record_embedding_error(
+            transaction=transaction,
+            embedding_id=embedding_id,
+            linking_metadata=linking_metadata,
+            kwargs=kwargs,
+            ft=ft,
+            exc=exc,
+        )
         raise
     ft.__exit__(None, None, None)
 
     if not response:
         return response
 
-    _record_embedding_success(transaction, embedding_id, linking_metadata, kwargs, ft, response)
+    _record_embedding_success(
+        transaction=transaction,
+        embedding_id=embedding_id,
+        linking_metadata=linking_metadata,
+        kwargs=kwargs,
+        ft=ft,
+        response=response,
+    )
     return response
 
 
@@ -80,9 +96,8 @@ def wrap_chat_completion_sync(wrapped, instance, args, kwargs):
     if not transaction:
         return wrapped(*args, **kwargs)
 
-    # If `.with_streaming_response.` wrapper used, switch to streaming
-    # For now, we will exit and instrument this later
-    if (kwargs.get("extra_headers") or {}).get("X-Stainless-Raw-Response") == "stream":
+    # The .with_streaming_response. wrapper is not yet instrumented. Skip it for now.
+    if _is_streaming_response_wrapper(kwargs):
         return wrapped(*args, **kwargs)
 
     request_timestamp = int(1000.0 * time.time())
@@ -103,10 +118,26 @@ def wrap_chat_completion_sync(wrapped, instance, args, kwargs):
     try:
         return_val = wrapped(*args, **kwargs)
     except Exception as exc:
-        _record_completion_error(transaction, linking_metadata, completion_id, kwargs, ft, exc, request_timestamp)
+        _record_completion_error(
+            transaction=transaction,
+            linking_metadata=linking_metadata,
+            completion_id=completion_id,
+            kwargs=kwargs,
+            ft=ft,
+            exc=exc,
+            request_timestamp=request_timestamp,
+        )
         raise
 
-    _handle_completion_success(transaction, linking_metadata, completion_id, kwargs, ft, return_val, request_timestamp)
+    _handle_completion_success(
+        transaction=transaction,
+        linking_metadata=linking_metadata,
+        completion_id=completion_id,
+        kwargs=kwargs,
+        ft=ft,
+        return_val=return_val,
+        request_timestamp=request_timestamp,
+    )
     return return_val
 
 
@@ -127,17 +158,18 @@ def check_rate_limit_header(response_headers, header_name, is_int):
 
 
 def create_chat_completion_message_event(
+    *,
     transaction,
     input_message_list,
-    chat_completion_id,
+    completion_id,
     span_id,
     trace_id,
     response_model,
-    request_model,
     response_id,
     request_id,
     llm_metadata,
     output_message_list,
+    all_token_counts,
     request_timestamp=None,
 ):
     settings = transaction.settings if transaction.settings is not None else global_settings()
@@ -158,20 +190,20 @@ def create_chat_completion_message_event(
             "request_id": request_id,
             "span_id": span_id,
             "trace_id": trace_id,
-            "token_count": (
-                settings.ai_monitoring.llm_token_count_callback(request_model, message_content)
-                if settings.ai_monitoring.llm_token_count_callback
-                else None
-            ),
             "role": message.get("role"),
-            "completion_id": chat_completion_id,
+            "completion_id": completion_id,
             "sequence": index,
             "response.model": response_model,
             "vendor": "openai",
             "ingest_source": "Python",
         }
+
         if settings.ai_monitoring.record_content.enabled and message_content:
             chat_completion_input_message_dict["content"] = message_content
+
+        if all_token_counts:
+            chat_completion_input_message_dict["token_count"] = 0
+
         if request_timestamp:
             chat_completion_input_message_dict["timestamp"] = request_timestamp
 
@@ -199,13 +231,8 @@ def create_chat_completion_message_event(
                 "request_id": request_id,
                 "span_id": span_id,
                 "trace_id": trace_id,
-                "token_count": (
-                    settings.ai_monitoring.llm_token_count_callback(response_model, message_content)
-                    if settings.ai_monitoring.llm_token_count_callback
-                    else None
-                ),
                 "role": message.get("role"),
-                "completion_id": chat_completion_id,
+                "completion_id": completion_id,
                 "sequence": index,
                 "response.model": response_model,
                 "vendor": "openai",
@@ -216,6 +243,9 @@ def create_chat_completion_message_event(
             if settings.ai_monitoring.record_content.enabled and message_content:
                 chat_completion_output_message_dict["content"] = message_content
 
+            if all_token_counts:
+                chat_completion_output_message_dict["token_count"] = 0
+
             chat_completion_output_message_dict.update(llm_metadata)
 
             transaction.record_custom_event("LlmChatCompletionMessage", chat_completion_output_message_dict)
@@ -223,11 +253,7 @@ def create_chat_completion_message_event(
 
 async def wrap_embedding_async(wrapped, instance, args, kwargs):
     transaction = current_transaction()
-    if (
-        not transaction
-        or kwargs.get("stream", False)
-        or (kwargs.get("extra_headers") or {}).get("X-Stainless-Raw-Response") == "stream"
-    ):
+    if not transaction or kwargs.get("stream", False) or _is_streaming_response_wrapper(kwargs):
         return await wrapped(*args, **kwargs)
 
     settings = transaction.settings if transaction.settings is not None else global_settings()
@@ -247,18 +273,32 @@ async def wrap_embedding_async(wrapped, instance, args, kwargs):
     try:
         response = await wrapped(*args, **kwargs)
     except Exception as exc:
-        _record_embedding_error(transaction, embedding_id, linking_metadata, kwargs, ft, exc)
+        _record_embedding_error(
+            transaction=transaction,
+            embedding_id=embedding_id,
+            linking_metadata=linking_metadata,
+            kwargs=kwargs,
+            ft=ft,
+            exc=exc,
+        )
         raise
     ft.__exit__(None, None, None)
 
     if not response:
         return response
 
-    _record_embedding_success(transaction, embedding_id, linking_metadata, kwargs, ft, response)
+    _record_embedding_success(
+        transaction=transaction,
+        embedding_id=embedding_id,
+        linking_metadata=linking_metadata,
+        kwargs=kwargs,
+        ft=ft,
+        response=response,
+    )
     return response
 
 
-def _record_embedding_success(transaction, embedding_id, linking_metadata, kwargs, ft, response):
+def _record_embedding_success(*, transaction, embedding_id, linking_metadata, kwargs, ft, response):
     settings = transaction.settings if transaction.settings is not None else global_settings()
     span_id = linking_metadata.get("span.id")
     trace_id = linking_metadata.get("trace.id")
@@ -286,15 +326,18 @@ def _record_embedding_success(transaction, embedding_id, linking_metadata, kwarg
             else getattr(attribute_response, "organization", None)
         )
 
+        response_total_tokens = attribute_response.get("usage", {}).get("total_tokens") if response else None
+
+        total_tokens = (
+            settings.ai_monitoring.llm_token_count_callback(response_model, input_)
+            if settings.ai_monitoring.llm_token_count_callback and input_
+            else response_total_tokens
+        )
+
         full_embedding_response_dict = {
             "id": embedding_id,
             "span_id": span_id,
             "trace_id": trace_id,
-            "token_count": (
-                settings.ai_monitoring.llm_token_count_callback(response_model, input_)
-                if settings.ai_monitoring.llm_token_count_callback
-                else None
-            ),
             "request.model": kwargs.get("model") or kwargs.get("engine"),
             "request_id": request_id,
             "duration": ft.duration * 1000,
@@ -319,6 +362,7 @@ def _record_embedding_success(transaction, embedding_id, linking_metadata, kwarg
             "response.headers.ratelimitRemainingRequests": check_rate_limit_header(
                 response_headers, "x-ratelimit-remaining-requests", True
             ),
+            "response.usage.total_tokens": total_tokens,
             "vendor": "openai",
             "ingest_source": "Python",
         }
@@ -330,7 +374,7 @@ def _record_embedding_success(transaction, embedding_id, linking_metadata, kwarg
         _logger.warning(RECORD_EVENTS_FAILURE_LOG_MESSAGE, traceback.format_exception(*sys.exc_info()))
 
 
-def _record_embedding_error(transaction, embedding_id, linking_metadata, kwargs, ft, exc):
+def _record_embedding_error(*, transaction, embedding_id, linking_metadata, kwargs, ft, exc):
     settings = transaction.settings if transaction.settings is not None else global_settings()
     span_id = linking_metadata.get("span.id")
     trace_id = linking_metadata.get("trace.id")
@@ -404,9 +448,8 @@ async def wrap_chat_completion_async(wrapped, instance, args, kwargs):
     if not transaction:
         return await wrapped(*args, **kwargs)
 
-    # If `.with_streaming_response.` wrapper used, switch to streaming
-    # For now, we will exit and instrument this later
-    if (kwargs.get("extra_headers") or {}).get("X-Stainless-Raw-Response") == "stream":
+    # The .with_streaming_response. wrapper is not yet instrumented. Skip it for now.
+    if _is_streaming_response_wrapper(kwargs):
         return await wrapped(*args, **kwargs)
 
     request_timestamp = int(1000.0 * time.time())
@@ -427,15 +470,31 @@ async def wrap_chat_completion_async(wrapped, instance, args, kwargs):
     try:
         return_val = await wrapped(*args, **kwargs)
     except Exception as exc:
-        _record_completion_error(transaction, linking_metadata, completion_id, kwargs, ft, exc, request_timestamp)
+        _record_completion_error(
+            transaction=transaction,
+            linking_metadata=linking_metadata,
+            completion_id=completion_id,
+            kwargs=kwargs,
+            ft=ft,
+            exc=exc,
+            request_timestamp=request_timestamp,
+        )
         raise
 
-    _handle_completion_success(transaction, linking_metadata, completion_id, kwargs, ft, return_val, request_timestamp)
+    _handle_completion_success(
+        transaction=transaction,
+        linking_metadata=linking_metadata,
+        completion_id=completion_id,
+        kwargs=kwargs,
+        ft=ft,
+        return_val=return_val,
+        request_timestamp=request_timestamp,
+    )
     return return_val
 
 
 def _handle_completion_success(
-    transaction, linking_metadata, completion_id, kwargs, ft, return_val, request_timestamp=None
+    *, transaction, linking_metadata, completion_id, kwargs, ft, return_val, request_timestamp=None
 ):
     settings = transaction.settings if transaction.settings is not None else global_settings()
     stream = kwargs.get("stream", False)
@@ -480,15 +539,23 @@ def _handle_completion_success(
                 response = json.loads(response.http_response.text.strip())
 
         _record_completion_success(
-            transaction, linking_metadata, completion_id, kwargs, ft, response_headers, response, request_timestamp
+            transaction=transaction,
+            linking_metadata=linking_metadata,
+            completion_id=completion_id,
+            kwargs=kwargs,
+            ft=ft,
+            response_headers=response_headers,
+            response=response,
+            request_timestamp=request_timestamp,
         )
     except Exception:
         _logger.warning(RECORD_EVENTS_FAILURE_LOG_MESSAGE, traceback.format_exception(*sys.exc_info()))
 
 
 def _record_completion_success(
-    transaction, linking_metadata, completion_id, kwargs, ft, response_headers, response, request_timestamp=None
+    *, transaction, linking_metadata, completion_id, kwargs, ft, response_headers, response, request_timestamp=None
 ):
+    settings = transaction.settings if transaction.settings is not None else global_settings()
     span_id = linking_metadata.get("span.id")
     trace_id = linking_metadata.get("trace.id")
 
@@ -496,6 +563,7 @@ def _record_completion_success(
         if response:
             response_model = response.get("model")
             response_id = response.get("id")
+            token_usage = response.get("usage") or {}
             output_message_list = []
             finish_reason = None
             choices = response.get("choices") or []
@@ -509,21 +577,50 @@ def _record_completion_success(
         else:
             response_model = kwargs.get("response.model")
             response_id = kwargs.get("id")
-            output_message_list = []
+            token_usage = kwargs.get("response.usage") or {}
             finish_reason = kwargs.get("finish_reason")
-            if "content" in kwargs:
-                output_message_list = [{"content": kwargs.get("content"), "role": kwargs.get("role")}]
-            # When tools are involved, the content key may hold an empty string which we do not want to report
-            # In this case, the content we are interested in capturing will already be covered in the input_message_list
-            # We empty out the output_message_list so that we do not report an empty message
-            if "tool_call" in finish_reason and not kwargs.get("content"):
+            content = kwargs.get("content")
+            # Tool-call responses may carry an empty content string; in that case the
+            # relevant content is already captured in input_message_list, so we skip
+            # recording an empty output message.
+            is_empty_tool_call_response = finish_reason and "tool_call" in finish_reason and not content
+            if not is_empty_tool_call_response and content is not None:
+                output_message_list = [{"content": content, "role": kwargs.get("role")}]
+            else:
                 output_message_list = []
+
         request_model = kwargs.get("model") or kwargs.get("engine")
+
+        messages = kwargs.get("messages") or [{"content": kwargs.get("prompt"), "role": "user"}]
+        input_message_list = list(messages)
+
+        # Token counts default to those reported in the response object if available,
+        # but the user registered callback below may override them.
+        response_prompt_tokens = token_usage.get("prompt_tokens")
+        response_completion_tokens = token_usage.get("completion_tokens")
+        response_total_tokens = token_usage.get("total_tokens")
+
+        # If the user has registered a callback to compute token counts it should always be preferred.
+        token_count_callback = settings.ai_monitoring.llm_token_count_callback
+        if token_count_callback:
+            input_message_content = " ".join(content for msg in input_message_list if (content := msg.get("content")))
+            if input_message_content:
+                response_prompt_tokens = token_count_callback(request_model, input_message_content)
+            output_message_content = " ".join(content for msg in output_message_list if (content := msg.get("content")))
+            if output_message_content:
+                response_completion_tokens = token_count_callback(response_model, output_message_content)
+
+        # Prefer the sum of individual counts as the total whenever both are available.
+        # This ensures consistency in the event that the token counting callback has reported
+        # different values for prompt or completion tokens.
+        if response_prompt_tokens and response_completion_tokens:
+            response_total_tokens = response_prompt_tokens + response_completion_tokens
+
+        all_token_counts = bool(response_prompt_tokens and response_completion_tokens and response_total_tokens)
 
         request_id = response_headers.get("x-request-id")
         organization = response_headers.get("openai-organization") or getattr(response, "organization", None)
-        messages = kwargs.get("messages") or [{"content": kwargs.get("prompt"), "role": "user"}]
-        input_message_list = list(messages)
+
         full_chat_completion_summary_dict = {
             "id": completion_id,
             "span_id": span_id,
@@ -570,33 +667,44 @@ def _record_completion_success(
             "response.number_of_messages": len(input_message_list) + len(output_message_list),
             "timestamp": request_timestamp,
         }
+
+        if all_token_counts:
+            full_chat_completion_summary_dict["response.usage.prompt_tokens"] = response_prompt_tokens
+            full_chat_completion_summary_dict["response.usage.completion_tokens"] = response_completion_tokens
+            full_chat_completion_summary_dict["response.usage.total_tokens"] = response_total_tokens
+
         llm_metadata = _get_llm_attributes(transaction)
+
+        if "time_to_first_token" in kwargs:
+            full_chat_completion_summary_dict["time_to_first_token"] = kwargs.get("time_to_first_token")
+
         full_chat_completion_summary_dict.update(llm_metadata)
         transaction.record_custom_event("LlmChatCompletionSummary", full_chat_completion_summary_dict)
 
         create_chat_completion_message_event(
-            transaction,
-            input_message_list,
-            completion_id,
-            span_id,
-            trace_id,
-            response_model,
-            request_model,
-            response_id,
-            request_id,
-            llm_metadata,
-            output_message_list,
-            request_timestamp,
+            transaction=transaction,
+            input_message_list=input_message_list,
+            completion_id=completion_id,
+            span_id=span_id,
+            trace_id=trace_id,
+            response_model=response_model,
+            response_id=response_id,
+            request_id=request_id,
+            llm_metadata=llm_metadata,
+            output_message_list=output_message_list,
+            all_token_counts=all_token_counts,
+            request_timestamp=request_timestamp,
         )
     except Exception:
         _logger.warning(RECORD_EVENTS_FAILURE_LOG_MESSAGE, traceback.format_exception(*sys.exc_info()))
 
 
-def _record_completion_error(transaction, linking_metadata, completion_id, kwargs, ft, exc, request_timestamp=None):
+def _record_completion_error(*, transaction, linking_metadata, completion_id, kwargs, ft, exc, request_timestamp=None):
     span_id = linking_metadata.get("span.id")
     trace_id = linking_metadata.get("trace.id")
     request_message_list = kwargs.get("messages", None) or []
     notice_error_attributes = {}
+
     try:
         if OPENAI_V1:
             response = getattr(exc, "response", None)
@@ -662,19 +770,21 @@ def _record_completion_error(transaction, linking_metadata, completion_id, kwarg
         output_message_list = []
         if "content" in kwargs:
             output_message_list = [{"content": kwargs.get("content"), "role": kwargs.get("role")}]
+
         create_chat_completion_message_event(
-            transaction,
-            request_message_list,
-            completion_id,
-            span_id,
-            trace_id,
-            kwargs.get("response.model"),
-            request_model,
-            response_id,
-            request_id,
-            llm_metadata,
-            output_message_list,
-            request_timestamp,
+            transaction=transaction,
+            input_message_list=request_message_list,
+            completion_id=completion_id,
+            span_id=span_id,
+            trace_id=trace_id,
+            response_model=kwargs.get("response.model"),
+            response_id=response_id,
+            request_id=request_id,
+            llm_metadata=llm_metadata,
+            output_message_list=output_message_list,
+            # We do not record token counts in error cases, so set all_token_counts to True so the pipeline tokenizer does not run
+            all_token_counts=True,
+            request_timestamp=request_timestamp,
         )
     except Exception:
         _logger.warning(RECORD_EVENTS_FAILURE_LOG_MESSAGE, traceback.format_exception(*sys.exc_info()))
@@ -736,7 +846,7 @@ async def wrap_base_client_process_response_async(wrapped, instance, args, kwarg
     return return_val
 
 
-class GeneratorProxy(ObjectProxy):
+class LLMStreamProxy(ObjectProxy):
     def __init__(self, wrapped):
         super().__init__(wrapped)
         self._nr_request_timestamp = int(1000.0 * time.time())
@@ -757,49 +867,61 @@ class GeneratorProxy(ObjectProxy):
             _record_events_on_stop_iteration(self, transaction, self._nr_request_timestamp)
             raise
         except Exception as exc:
-            _handle_streaming_completion_error(self, transaction, exc, self._nr_request_timestamp)
+            _handle_streaming_completion_error(
+                stream_proxy=self, transaction=transaction, exc=exc, request_timestamp=self._nr_request_timestamp
+            )
             raise
+
         return return_val
 
     def close(self):
         return self.__wrapped__.close()
 
 
-def _record_stream_chunk(self, return_val):
+def _record_stream_chunk(stream_proxy, return_val):
+    transaction = current_transaction()
     if return_val:
         try:
             if OPENAI_V1:
                 if getattr(return_val, "data", "").startswith("[DONE]"):
+                    _record_events_on_stop_iteration(stream_proxy, transaction, stream_proxy._nr_request_timestamp)
                     return
                 return_val = return_val.json()
-                self._nr_openai_attrs["response_headers"] = getattr(self, "_nr_response_headers", {})
+                stream_proxy._nr_openai_attrs["response_headers"] = getattr(stream_proxy, "_nr_response_headers", {})
             else:
-                self._nr_openai_attrs["response_headers"] = getattr(return_val, "_nr_response_headers", {})
+                stream_proxy._nr_openai_attrs["response_headers"] = getattr(return_val, "_nr_response_headers", {})
             choices = return_val.get("choices") or []
-            self._nr_openai_attrs["response.model"] = return_val.get("model")
-            self._nr_openai_attrs["id"] = return_val.get("id")
-            self._nr_openai_attrs["response.organization"] = return_val.get("organization")
+            stream_proxy._nr_openai_attrs["response.model"] = return_val.get("model")
+            stream_proxy._nr_openai_attrs["id"] = return_val.get("id")
+            stream_proxy._nr_openai_attrs["response.organization"] = return_val.get("organization")
+            stream_proxy._nr_openai_attrs["response.usage"] = return_val.get("usage")
             if choices:
                 delta = choices[0].get("delta") or {}
                 if delta:
-                    self._nr_openai_attrs["content"] = self._nr_openai_attrs.get("content", "") + (
+                    if delta.get("content") and "time_to_first_token" not in stream_proxy._nr_openai_attrs:
+                        stream_proxy._nr_openai_attrs["time_to_first_token"] = (
+                            int(1000.0 * time.time()) - stream_proxy._nr_request_timestamp
+                        )
+                    stream_proxy._nr_openai_attrs["content"] = stream_proxy._nr_openai_attrs.get("content", "") + (
                         delta.get("content") or ""
                     )
-                    self._nr_openai_attrs["role"] = self._nr_openai_attrs.get("role") or delta.get("role")
-                self._nr_openai_attrs["finish_reason"] = choices[0].get("finish_reason")
+                    stream_proxy._nr_openai_attrs["role"] = stream_proxy._nr_openai_attrs.get("role") or delta.get(
+                        "role"
+                    )
+                stream_proxy._nr_openai_attrs["finish_reason"] = choices[0].get("finish_reason")
         except Exception:
             _logger.warning(STREAM_PARSING_FAILURE_LOG_MESSAGE, traceback.format_exception(*sys.exc_info()))
 
 
-def _record_events_on_stop_iteration(self, transaction, request_timestamp=None):
-    if hasattr(self, "_nr_ft"):
+def _record_events_on_stop_iteration(stream_proxy, transaction, request_timestamp=None):
+    if hasattr(stream_proxy, "_nr_ft"):
         # We first check for our saved linking metadata before making a new call to get_trace_linking_metadata
         # Directly calling get_trace_linking_metadata() causes the incorrect span ID to be captured and associated with the LLM call
         # This leads to incorrect linking of the LLM call in the UI
-        linking_metadata = self._nr_metadata or get_trace_linking_metadata()
-        self._nr_ft.__exit__(None, None, None)
+        linking_metadata = stream_proxy._nr_metadata or get_trace_linking_metadata()
+        stream_proxy._nr_ft.__exit__(None, None, None)
         try:
-            openai_attrs = getattr(self, "_nr_openai_attrs", {})
+            openai_attrs = getattr(stream_proxy, "_nr_openai_attrs", {})
 
             # If there are no openai attrs exit early as there's no data to record.
             if not openai_attrs:
@@ -808,14 +930,14 @@ def _record_events_on_stop_iteration(self, transaction, request_timestamp=None):
             completion_id = str(uuid.uuid4())
             response_headers = openai_attrs.get("response_headers") or {}
             _record_completion_success(
-                transaction,
-                linking_metadata,
-                completion_id,
-                openai_attrs,
-                self._nr_ft,
-                response_headers,
-                None,
-                request_timestamp,
+                transaction=transaction,
+                linking_metadata=linking_metadata,
+                completion_id=completion_id,
+                kwargs=openai_attrs,
+                ft=stream_proxy._nr_ft,
+                response_headers=response_headers,
+                response=None,
+                request_timestamp=request_timestamp,
             )
         except Exception:
             _logger.warning(RECORD_EVENTS_FAILURE_LOG_MESSAGE, traceback.format_exception(*sys.exc_info()))
@@ -826,26 +948,32 @@ def _record_events_on_stop_iteration(self, transaction, request_timestamp=None):
             # stream since there is a condition where the iterator may exit before all the
             # stream contents is read. This results in StopIteration being raised twice
             # instead of once at the end of the loop.
-            if hasattr(self, "_nr_openai_attrs"):
-                self._nr_openai_attrs.clear()
+            if hasattr(stream_proxy, "_nr_openai_attrs"):
+                stream_proxy._nr_openai_attrs.clear()
 
 
-def _handle_streaming_completion_error(self, transaction, exc, request_timestamp=None):
-    if hasattr(self, "_nr_ft"):
-        openai_attrs = getattr(self, "_nr_openai_attrs", {})
+def _handle_streaming_completion_error(*, stream_proxy, transaction, exc, request_timestamp=None):
+    if hasattr(stream_proxy, "_nr_ft"):
+        openai_attrs = getattr(stream_proxy, "_nr_openai_attrs", {})
 
         # If there are no openai attrs exit early as there's no data to record.
         if not openai_attrs:
-            self._nr_ft.__exit__(*sys.exc_info())
+            stream_proxy._nr_ft.__exit__(*sys.exc_info())
             return
         linking_metadata = get_trace_linking_metadata()
         completion_id = str(uuid.uuid4())
         _record_completion_error(
-            transaction, linking_metadata, completion_id, openai_attrs, self._nr_ft, exc, request_timestamp
+            transaction=transaction,
+            linking_metadata=linking_metadata,
+            completion_id=completion_id,
+            kwargs=openai_attrs,
+            ft=stream_proxy._nr_ft,
+            exc=exc,
+            request_timestamp=request_timestamp,
         )
 
 
-class AsyncGeneratorProxy(ObjectProxy):
+class AsyncLLMStreamProxy(ObjectProxy):
     def __init__(self, wrapped):
         super().__init__(wrapped)
         self._nr_request_timestamp = int(1000.0 * time.time())
@@ -867,7 +995,9 @@ class AsyncGeneratorProxy(ObjectProxy):
             _record_events_on_stop_iteration(self, transaction, self._nr_request_timestamp)
             raise
         except Exception as exc:
-            _handle_streaming_completion_error(self, transaction, exc, self._nr_request_timestamp)
+            _handle_streaming_completion_error(
+                stream_proxy=self, transaction=transaction, exc=exc, request_timestamp=self._nr_request_timestamp
+            )
             raise
         return return_val
 
@@ -885,7 +1015,7 @@ def wrap_stream_iter_events_sync(wrapped, instance, args, kwargs):
         return wrapped(*args, **kwargs)
 
     return_val = wrapped(*args, **kwargs)
-    proxied_return_val = GeneratorProxy(return_val)
+    proxied_return_val = LLMStreamProxy(return_val)
     set_attrs_on_generator_proxy(proxied_return_val, instance)
     return proxied_return_val
 
@@ -900,7 +1030,7 @@ def wrap_stream_iter_events_async(wrapped, instance, args, kwargs):
         return wrapped(*args, **kwargs)
 
     return_val = wrapped(*args, **kwargs)
-    proxied_return_val = AsyncGeneratorProxy(return_val)
+    proxied_return_val = AsyncLLMStreamProxy(return_val)
     set_attrs_on_generator_proxy(proxied_return_val, instance)
     return proxied_return_val
 
@@ -929,7 +1059,7 @@ def wrap_engine_api_resource_create_sync(wrapped, instance, args, kwargs):
     stream = is_stream(wrapped, args, kwargs)
     return_val = wrapped(*args, **kwargs)
     if stream and settings.ai_monitoring.streaming.enabled:
-        return GeneratorProxy(return_val)
+        return LLMStreamProxy(return_val)
     else:
         return return_val
 
@@ -946,7 +1076,7 @@ async def wrap_engine_api_resource_create_async(wrapped, instance, args, kwargs)
     stream = is_stream(wrapped, args, kwargs)
     return_val = await wrapped(*args, **kwargs)
     if stream and settings.ai_monitoring.streaming.enabled:
-        return AsyncGeneratorProxy(return_val)
+        return AsyncLLMStreamProxy(return_val)
     else:
         return return_val
 

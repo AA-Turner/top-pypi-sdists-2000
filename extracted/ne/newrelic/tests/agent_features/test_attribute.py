@@ -56,7 +56,7 @@ def target_wsgi_application(environ, start_response):
     return [output]
 
 
-_required_intrinsics = ["trip_id", "totalTime"]
+_required_intrinsics = ["totalTime"]
 _forgone_intrinsics = []
 
 
@@ -71,6 +71,7 @@ _required_agent = [
     "request.method",
     "wsgi.output.seconds",
     "response.status",
+    "http.statusCode",
     "request.headers.host",
     "request.headers.accept",
     "request.uri",
@@ -417,6 +418,7 @@ agent_attributes = {
     "response.headers.contentLength": int,
     "response.headers.contentType": str,
     "response.status": str,
+    "http.statusCode": int,
 }
 
 

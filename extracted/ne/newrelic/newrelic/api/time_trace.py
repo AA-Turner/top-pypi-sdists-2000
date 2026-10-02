@@ -21,7 +21,7 @@ import traceback
 
 from newrelic.api.settings import STRIP_EXCEPTION_MESSAGE
 from newrelic.common.object_names import parse_exc_info
-from newrelic.core.attribute import MAX_NUM_USER_ATTRIBUTES, process_user_attribute
+from newrelic.core.attribute import MAX_NUM_SPAN_LINK_EVENTS, MAX_NUM_USER_ATTRIBUTES, process_user_attribute
 from newrelic.core.code_level_metrics import extract_code_from_callable, extract_code_from_traceback
 from newrelic.core.config import is_expected_error, should_ignore_error
 from newrelic.core.trace_cache import trace_cache
@@ -51,6 +51,8 @@ class TimeTrace:
         self.guid = f"{random.getrandbits(64):016x}"
         self.agent_attributes = {}
         self.user_attributes = {}
+        self.span_link_events = []
+        self.span_event_events = []
 
         self._source = source
 
@@ -214,6 +216,66 @@ class TimeTrace:
                     source,
                     exc,
                 )
+
+    def _add_span_link_event(self, span_id, trace_id, linked_span_id, linked_trace_id, timestamp=None, attributes=None):
+        settings = self.settings
+        if not settings:
+            return
+
+        if not settings.opentelemetry.enabled:
+            return
+
+        if len(self.span_link_events) >= MAX_NUM_SPAN_LINK_EVENTS:
+            self.transaction._record_supportability("Supportability/SpanEvent/Links/Dropped")
+            return
+
+        if attributes:
+            attributes = dict(attributes)
+        else:
+            attributes = {}
+
+        event = [
+            {
+                "type": "SpanLink",
+                "timestamp": timestamp or int(time.time() * 1e3),
+                "id": span_id,
+                "trace.id": trace_id,
+                "linkedSpanId": linked_span_id,
+                "linkedTraceId": linked_trace_id,
+            },
+            attributes,
+            {},
+        ]
+
+        self.span_link_events.append(event)
+
+    def _add_span_event_event(self, name, span_id, trace_id, timestamp=None, attributes=None):
+        settings = self.settings
+        if not settings:
+            return
+
+        if not settings.opentelemetry.enabled:
+            return
+
+        if len(self.span_event_events) >= 100:
+            self.transaction._record_supportability("Supportability/SpanEvent/Events/Dropped")
+            return
+
+        attributes = dict(attributes) or {}
+
+        event = [
+            {
+                "type": "SpanEvent",
+                "timestamp": timestamp or int(time.time() * 1e3),
+                "span.id": span_id,
+                "trace.id": trace_id,
+                "name": name,
+            },
+            attributes,
+            {},
+        ]
+
+        self.span_event_events.append(event)
 
     def _observe_exception(self, exc_info=None, ignore=None, expected=None, status_code=None):
         # Bail out if the transaction is not active or
@@ -682,7 +744,7 @@ def get_service_linking_metadata(application=None, settings=None):
 
 
 def get_linking_metadata(application=None):
-    metadata = get_service_linking_metadata()
+    metadata = get_service_linking_metadata(application)
     trace = current_trace()
     if trace:
         metadata.update(trace._get_trace_linking_metadata())

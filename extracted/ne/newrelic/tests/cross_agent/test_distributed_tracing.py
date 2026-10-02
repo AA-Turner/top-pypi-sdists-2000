@@ -47,6 +47,7 @@ _parameters_list = [
     "transport_type",
     "trusted_account_key",
     "web_transaction",
+    "exclude_newrelic_header",
 ]
 _parameters = ",".join(_parameters_list)
 
@@ -65,7 +66,7 @@ def load_tests():
 
 
 def override_compute_sampled(override):
-    @transient_function_wrapper("newrelic.core.adaptive_sampler", "AdaptiveSampler.compute_sampled")
+    @transient_function_wrapper("newrelic.core.samplers.adaptive_sampler", "AdaptiveSampler.compute_sampled")
     def _override_compute_sampled(wrapped, instance, args, kwargs):
         if override:
             return True
@@ -161,6 +162,7 @@ def test_distributed_tracing(
     transport_type,
     trusted_account_key,
     web_transaction,
+    exclude_newrelic_header,
 ):
     extra_inbound_payloads = []
     if not inbound_payloads:
@@ -193,6 +195,7 @@ def test_distributed_tracing(
         "span_events.enabled": span_events_enabled,
         "account_id": account_id,
         "trusted_account_key": trusted_account_key,
+        "distributed_tracing.exclude_newrelic_header": exclude_newrelic_header,
     }
 
     common_required = intrinsics["common"]["expected"]
@@ -219,7 +222,6 @@ def test_distributed_tracing(
     @override_application_settings(override_settings)
     def _test():
         response = test_application.get("/", headers=headers)
-        assert "X-NewRelic-App-Data" not in response.headers
 
     if "Span" in intrinsics:
         span_intrinsics = intrinsics.get("Span")

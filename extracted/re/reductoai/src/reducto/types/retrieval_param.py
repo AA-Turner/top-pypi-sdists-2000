@@ -1,0 +1,36 @@
+from __future__ import annotations
+
+from typing import List
+from typing_extensions import Literal, TypedDict
+
+from .shared_params.chunking import Chunking
+
+__all__ = ["RetrievalParam"]
+
+
+class RetrievalParam(TypedDict, total=False):
+    chunking: Chunking
+
+    embedding_optimized: bool
+    """If True, use embedding optimized mode. Defaults to False."""
+
+    filter_blocks: List[
+        Literal[
+            "Header",
+            "Footer",
+            "Title",
+            "Section Header",
+            "Page Number",
+            "List Item",
+            "Figure",
+            "Table",
+            "Key Value",
+            "Text",
+            "Comment",
+            "Signature",
+        ]
+    ]
+    """A list of block types to filter out from 'content' and 'embed' fields.
+
+    By default, no blocks are filtered.
+    """

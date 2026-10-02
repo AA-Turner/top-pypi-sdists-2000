@@ -22,7 +22,6 @@ from oauth2_provider.views import ProtectedResourceView, ScopedProtectedResource
 
 from . import presets
 from .common_testing import OAuth2ProviderTestCase as TestCase
-from .common_testing import retrieve_current_databases
 from .utils import get_basic_auth_header, spy_on
 
 
@@ -60,7 +59,9 @@ class BaseTest(TestCase):
         cls.application = Application(
             name="Hybrid Test Application",
             redirect_uris=(
-                "http://localhost http://example.com http://example.org custom-scheme://example.com"
+                "http://localhost http://example.com http://example.org custom-scheme://example.com "
+                "http://example.com?foo=bar http://example.org?foo=bar "
+                "http://example.com?bar=baz&foo=bar"
             ),
             user=cls.hy_dev_user,
             client_type=Application.CLIENT_CONFIDENTIAL,
@@ -1108,7 +1109,7 @@ class TestHybridTokenView(BaseTest):
         Tests code exchange succeed when redirect uri matches the one used for code request
         """
         self.client.login(username="hy_test_user", password="123456")
-        self.application.redirect_uris = "http://localhost http://example.com?foo=bar"
+        self.application.redirect_uris = "http://localhost http://example.com?bar=baz&foo=bar"
         self.application.save()
 
         # retrieve a valid authorization code
@@ -1145,7 +1146,7 @@ class TestHybridTokenView(BaseTest):
         Tests code exchange succeed when redirect uri matches the one used for code request
         """
         self.client.login(username="hy_test_user", password="123456")
-        self.application.redirect_uris = "http://localhost http://example.com?foo=bar"
+        self.application.redirect_uris = "http://localhost http://example.com?bar=baz&foo=bar"
         self.application.save()
 
         # retrieve a valid authorization code
@@ -1320,7 +1321,7 @@ class TestDefaultScopesHybrid(BaseTest):
         self.assertEqual(form["client_id"].value(), self.application.client_id)
 
 
-@pytest.mark.django_db(databases=retrieve_current_databases())
+@pytest.mark.django_db(databases="__all__")
 @pytest.mark.oauth2_settings(presets.OIDC_SETTINGS_RW)
 def test_id_token_nonce_in_token_response(oauth2_settings, test_user, hybrid_application, client, oidc_key):
     client.force_login(test_user)
@@ -1369,7 +1370,7 @@ def test_id_token_nonce_in_token_response(oauth2_settings, test_user, hybrid_app
     assert claims["nonce"] == "random_nonce_string"
 
 
-@pytest.mark.django_db(databases=retrieve_current_databases())
+@pytest.mark.django_db(databases="__all__")
 @pytest.mark.oauth2_settings(presets.OIDC_SETTINGS_RW)
 def test_claims_passed_to_code_generation(
     oauth2_settings, test_user, hybrid_application, client, mocker, oidc_key

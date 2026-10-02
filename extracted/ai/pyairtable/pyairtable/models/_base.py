@@ -1,17 +1,7 @@
+from collections.abc import Iterable, Mapping
 from datetime import datetime
 from functools import partial
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    ClassVar,
-    Dict,
-    Iterable,
-    Mapping,
-    Optional,
-    Set,
-    Type,
-    Union,
-)
+from typing import TYPE_CHECKING, Any, ClassVar
 
 import inflection
 import pydantic
@@ -38,14 +28,14 @@ class AirtableModel(pydantic.BaseModel):
         populate_by_name=True,
     )
 
-    _raw: Dict[str, Any] = pydantic.PrivateAttr()
+    _raw: dict[str, Any] = pydantic.PrivateAttr()
 
     def __init__(self, **data: Any) -> None:
         raw = data.copy()
 
         # Convert JSON-serializable input data to the types expected by our model.
         # For now this only converts ISO 8601 strings to datetime objects.
-        for field_name, field_model in self.model_fields.items():
+        for field_name, field_model in self.__class__.model_fields.items():
             for name in {field_name, field_model.alias}:
                 if not name or not (value := data.get(name)):
                     continue
@@ -59,10 +49,10 @@ class AirtableModel(pydantic.BaseModel):
     @classmethod
     def from_api(
         cls,
-        obj: Dict[str, Any],
+        obj: dict[str, Any],
         api: "Api",
         *,
-        context: Optional[Any] = None,
+        context: Any | None = None,
     ) -> SelfType:
         """
         Construct an instance which is able to update itself using an
@@ -89,7 +79,7 @@ def cascade_api(
     obj: Any,
     api: "Api",
     *,
-    context: Optional[Any] = None,
+    context: Any | None = None,
 ) -> None:
     """
     Ensure all nested objects have access to the given Api instance,
@@ -106,7 +96,7 @@ def cascade_api(
         context = {_context_name(context): context}
 
     # Ensure we don't get stuck in infinite loops
-    visited: Set[int] = context.setdefault("__visited__", set())
+    visited: set[int] = context.setdefault("__visited__", set())
     if id(obj) in visited:
         return
     visited.add(id(obj))
@@ -154,7 +144,7 @@ class RestfulModel(AirtableModel):
         cls.__url_pattern = kwargs.pop("url", cls.__url_pattern)
         super().__init_subclass__()
 
-    def _set_api(self, api: "Api", context: Dict[str, Any]) -> None:
+    def _set_api(self, api: "Api", context: dict[str, Any]) -> None:
         """
         Set a link to the API and build the REST URL used for this resource.
         """
@@ -171,7 +161,7 @@ class RestfulModel(AirtableModel):
         if self._url and not self._url.startswith("http"):
             self._url = api.build_url(self._url)
 
-    def _reload(self, obj: Optional[Dict[str, Any]] = None) -> None:
+    def _reload(self, obj: dict[str, Any] | None = None) -> None:
         """
         Reload the model's contents from the given object, or by making a GET request to the API.
         """
@@ -218,8 +208,8 @@ class CanUpdateModel(RestfulModel):
         * ``save_null_values=``: boolean indicating whether ``save()`` should write nulls (default: true)
     """
 
-    __writable: ClassVar[Optional[Iterable[str]]] = None
-    __readonly: ClassVar[Optional[Iterable[str]]] = None
+    __writable: ClassVar[Iterable[str] | None] = None
+    __readonly: ClassVar[Iterable[str] | None] = None
     __save_none: ClassVar[bool] = True
     __save_http_method: ClassVar[str] = "PATCH"
     __reload_after_save: ClassVar[bool] = True
@@ -235,16 +225,16 @@ class CanUpdateModel(RestfulModel):
             kwargs.pop("reload_after_save", cls.__reload_after_save)
         )
         if cls.__writable:
-            _append_docstring_text(
+            _append_docstring_refs(
                 cls,
-                "The following fields can be modified and saved: "
-                + ", ".join(f"``{field}``" for field in cls.__writable),
+                "The following fields can be modified and saved",
+                cls.__writable,
             )
         if cls.__readonly:
-            _append_docstring_text(
+            _append_docstring_refs(
                 cls,
-                "The following fields are read-only and cannot be modified:\n"
-                + ", ".join(f"``{field}``" for field in cls.__readonly),
+                "The following fields are read-only and cannot be modified",
+                cls.__readonly,
             )
         super().__init_subclass__(**kwargs)
 
@@ -286,9 +276,27 @@ class CanUpdateModel(RestfulModel):
         super().__setattr__(name, value)
 
 
+def _append_docstring_refs(
+    cls: type[CanUpdateModel],
+    explanation: str,
+    field_names: Iterable[str],
+) -> None:
+    """
+    Used by CanUpdateModel to append a list of field names to the class docstring.
+    """
+    field_refs = [
+        f":attr:`~{cls.__module__}.{cls.__qualname__}.{field}`" for field in field_names
+    ]
+    _append_docstring_text(
+        cls,
+        f"{explanation}: " + ", ".join(field_refs),
+        before_re=r"^\s+Usage:",
+    )
+
+
 def rebuild_models(
-    obj: Union[Type[AirtableModel], Mapping[str, Any]],
-    memo: Optional[Set[int]] = None,
+    obj: type[AirtableModel] | Mapping[str, Any],
+    memo: set[int] | None = None,
 ) -> None:
     """
     Convenience method to ensure we update forward references for all nested models.
@@ -299,12 +307,12 @@ def rebuild_models(
 
     Only intended for use within pyAirtable, like:
 
-        >>> from pyairtable.models._base import AirtableModel, update_forward_refs
+        >>> from pyairtable.models._base import AirtableModel, rebuild_models
         >>> class A(AirtableModel): ...
         >>> class B(AirtableModel): ...
         ...     class B_One(AirtableModel): ...
         ...     class B_Two(AirtableModel): ...
-        >>> update_forward_refs(vars())
+        >>> rebuild_models(vars())
     """
     memo = set() if memo is None else memo
     # If it's a type, update its refs, then do the same for any nested classes.

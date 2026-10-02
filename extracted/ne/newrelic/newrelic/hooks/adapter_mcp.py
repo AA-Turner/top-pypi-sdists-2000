@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import json
 import logging
+from urllib.parse import urlsplit
 
 from newrelic.api.function_trace import FunctionTrace
 from newrelic.api.transaction import current_transaction
@@ -37,8 +39,10 @@ async def wrap_call_tool(wrapped, instance, args, kwargs):
     bound_args = bind_args(wrapped, args, kwargs)
     tool_name = bound_args.get("name") or "tool"
     function_trace_name = f"{func_name}/{tool_name}"
+    agentic_subcomponent_data = {"type": "APM-AI_TOOL", "name": tool_name}
 
-    with FunctionTrace(name=function_trace_name, group="Llm/tool/MCP", source=wrapped):
+    with FunctionTrace(name=function_trace_name, group="Llm/tool/MCP", source=wrapped) as ft:
+        ft._add_agent_attribute("subcomponent", json.dumps(agentic_subcomponent_data))
         return await wrapped(*args, **kwargs)
 
 
@@ -58,9 +62,10 @@ async def wrap_read_resource(wrapped, instance, args, kwargs):
 
     try:
         resource_uri = bound_args.get("uri")
-        resource_scheme = getattr(resource_uri, "scheme", "resource")
+        split_uri = urlsplit(str(resource_uri))
+        resource_scheme = getattr(split_uri, "scheme", "resource") or "resource"
     except Exception:
-        _logger.warning("Unable to parse resource URI scheme for MCP read_resource call")
+        _logger.debug("Unable to parse resource URI scheme for MCP read_resource call.", exc_info=True)
 
     function_trace_name = f"{func_name}/{resource_scheme}"
 

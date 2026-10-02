@@ -440,12 +440,6 @@ def catch_background_exceptions(wrapped, instance, args, kwargs):
             raise_background_exceptions.event.set()
 
 
-def make_cross_agent_headers(payload, encoding_key, cat_id):
-    value = obfuscate(json_encode(payload), encoding_key)
-    id_value = obfuscate(cat_id, encoding_key)
-    return {"X-NewRelic-Transaction": value, "X-NewRelic-ID": id_value}
-
-
 def make_synthetics_headers(
     encoding_key,
     account_id,
@@ -510,7 +504,11 @@ def check_event_attributes(event_data, required_params=None, forgone_params=None
     forgone_params = forgone_params or {}
     exact_attrs = exact_attrs or {}
 
-    intrinsics, user_attributes, agent_attributes = next(iter(event_data))
+    try:
+        intrinsics, user_attributes, agent_attributes = next(iter(event_data))
+    except StopIteration:
+        # If this happens it means there are no events.
+        intrinsics, user_attributes, agent_attributes = {}, {}, {}
 
     if required_params:
         for param in required_params["agent"]:
@@ -874,12 +872,6 @@ def _validate_event_attributes(intrinsics, user_attributes, required_intrinsics,
     else:
         assert "queueDuration" not in intrinsics
 
-    if "nr.referringTransactionGuid" in required_intrinsics:
-        guid = required_intrinsics["nr.referringTransactionGuid"]
-        assert intrinsics["nr.referringTransactionGuid"] == guid
-    else:
-        assert "nr.referringTransactionGuid" not in intrinsics
-
     if "nr.syntheticsResourceId" in required_intrinsics:
         res_id = required_intrinsics["nr.syntheticsResourceId"]
         job_id = required_intrinsics["nr.syntheticsJobId"]
@@ -1048,7 +1040,7 @@ def override_application_name(app_name):
 
 @function_wrapper
 def dt_enabled(wrapped, instance, args, kwargs):
-    @transient_function_wrapper("newrelic.core.adaptive_sampler", "AdaptiveSampler.compute_sampled")
+    @transient_function_wrapper("newrelic.core.samplers.adaptive_sampler", "AdaptiveSampler.compute_sampled")
     def force_sampled(wrapped, instance, args, kwargs):
         wrapped(*args, **kwargs)
         return True
@@ -1056,14 +1048,6 @@ def dt_enabled(wrapped, instance, args, kwargs):
     settings = {"distributed_tracing.enabled": True}
     wrapped = override_application_settings(settings)(wrapped)
     wrapped = force_sampled(wrapped)
-
-    return wrapped(*args, **kwargs)
-
-
-@function_wrapper
-def cat_enabled(wrapped, instance, args, kwargs):
-    settings = {"cross_application_tracer.enabled": True, "distributed_tracing.enabled": False}
-    wrapped = override_application_settings(settings)(wrapped)
 
     return wrapped(*args, **kwargs)
 

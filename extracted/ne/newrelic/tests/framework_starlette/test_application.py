@@ -36,21 +36,17 @@ def target_application():
 
 FRAMEWORK_METRIC = (f"Python/Framework/Starlette/{starlette.__version__}", 1)
 
-if starlette_version >= (0, 20, 1):
-    DEFAULT_MIDDLEWARE_METRICS = [
-        ("Function/starlette.middleware.errors:ServerErrorMiddleware.__call__", 1),
-        ("Function/starlette.middleware.exceptions:ExceptionMiddleware.__call__", 1),
-    ]
+if starlette_version < (1, 0, 0):
+    # This style of middleware was removed
+    OLDER_MIDDLEWARE_METRICS = [("Function/_test_application:middleware_decorator", 1)]
 else:
-    DEFAULT_MIDDLEWARE_METRICS = [
-        ("Function/starlette.middleware.errors:ServerErrorMiddleware.__call__", 1),
-        ("Function/starlette.exceptions:ExceptionMiddleware.__call__", 1),
-    ]
+    OLDER_MIDDLEWARE_METRICS = []
 
 MIDDLEWARE_METRICS = [
     ("Function/_test_application:middleware_factory.<locals>.middleware", 2),
-    ("Function/_test_application:middleware_decorator", 1),
-    *DEFAULT_MIDDLEWARE_METRICS,
+    ("Function/starlette.middleware.errors:ServerErrorMiddleware.__call__", 1),
+    ("Function/starlette.middleware.exceptions:ExceptionMiddleware.__call__", 1),
+    *OLDER_MIDDLEWARE_METRICS,
 ]
 
 
@@ -70,15 +66,83 @@ def test_application_index(target_application, app_name):
 
 @pytest.mark.parametrize("app_name", ("no_error_handler",))
 @validate_transaction_metrics(
-    "_test_application:non_async",
-    scoped_metrics=[*MIDDLEWARE_METRICS, ("Function/_test_application:non_async", 1)],
+    "_test_application:async_handler_async_streaming_response",
+    scoped_metrics=[
+        *MIDDLEWARE_METRICS,
+        ("Function/_test_application:async_handler_async_streaming_response", 1),
+        ("Function/_test_application:async_streaming_generator", 1),
+        ("Function/_test_application:async_handler_view", 1),
+    ],
     rollup_metrics=[FRAMEWORK_METRIC],
 )
-@validate_code_level_metrics("_test_application", "non_async")
-@validate_code_level_metrics("_test_application.middleware_factory.<locals>", "middleware", count=2)
-def test_application_non_async(target_application, app_name):
+def test_application_async_handler_async_streaming_response(target_application, app_name):
     app = target_application[app_name]
-    response = app.get("/non_async")
+    response = app.get("/async_handler_async_streaming_response")
+    assert response.status == 200
+
+
+@pytest.mark.parametrize("app_name", ("no_error_handler",))
+@validate_transaction_metrics(
+    "_test_application:async_handler_sync_streaming_response",
+    scoped_metrics=[
+        *MIDDLEWARE_METRICS,
+        ("Function/_test_application:async_handler_sync_streaming_response", 1),
+        ("Function/_test_application:sync_streaming_generator", 1),
+        ("Function/_test_application:async_handler_view", 1),
+    ],
+    rollup_metrics=[FRAMEWORK_METRIC],
+)
+def test_application_async_handler_sync_streaming_response(target_application, app_name):
+    app = target_application[app_name]
+    response = app.get("/async_handler_sync_streaming_response")
+    assert response.status == 200
+
+
+@pytest.mark.parametrize("app_name", ("no_error_handler",))
+@validate_transaction_metrics(
+    "_test_application:sync_handler_async_streaming_response",
+    scoped_metrics=[
+        *MIDDLEWARE_METRICS,
+        ("Function/_test_application:sync_handler_async_streaming_response", 1),
+        ("Function/_test_application:async_streaming_generator", 1),
+        ("Function/_test_application:sync_handler_view", 1),
+    ],
+    rollup_metrics=[FRAMEWORK_METRIC],
+)
+def test_application_sync_handler_async_streaming_response(target_application, app_name):
+    app = target_application[app_name]
+    response = app.get("/sync_handler_async_streaming_response")
+    assert response.status == 200
+
+
+@pytest.mark.parametrize("app_name", ("no_error_handler",))
+@validate_transaction_metrics(
+    "_test_application:sync_handler_sync_streaming_response",
+    scoped_metrics=[
+        *MIDDLEWARE_METRICS,
+        ("Function/_test_application:sync_handler_sync_streaming_response", 1),
+        ("Function/_test_application:sync_streaming_generator", 1),
+        ("Function/_test_application:sync_handler_view", 1),
+    ],
+    rollup_metrics=[FRAMEWORK_METRIC],
+)
+def test_application_sync_handler_sync_streaming_response(target_application, app_name):
+    app = target_application[app_name]
+    response = app.get("/sync_handler_sync_streaming_response")
+    assert response.status == 200
+
+
+@pytest.mark.parametrize("app_name", ("no_error_handler",))
+@validate_transaction_metrics(
+    "_test_application:sync",
+    scoped_metrics=[*MIDDLEWARE_METRICS, ("Function/_test_application:sync", 1)],
+    rollup_metrics=[FRAMEWORK_METRIC],
+)
+@validate_code_level_metrics("_test_application", "sync")
+@validate_code_level_metrics("_test_application.middleware_factory.<locals>", "middleware", count=2)
+def test_application_sync(target_application, app_name):
+    app = target_application[app_name]
+    response = app.get("/sync")
     assert response.status == 200
 
 
@@ -94,10 +158,7 @@ DEFAULT_MIDDLEWARE_METRICS = [
 
 middleware_test = (
     ("no_error_handler", f"starlette{version_tweak_string}.exceptions:ExceptionMiddleware.__call__"),
-    (
-        "non_async_error_handler_no_middleware",
-        f"starlette{version_tweak_string}.exceptions:ExceptionMiddleware.__call__",
-    ),
+    ("sync_error_handler_no_middleware", f"starlette{version_tweak_string}.exceptions:ExceptionMiddleware.__call__"),
 )
 
 
@@ -119,7 +180,6 @@ def test_exception_in_middleware(target_application, app_name):
     app = target_application[app_name]
 
     # Starlette >=0.15 and <0.17 raises an exception group instead of reraising the ValueError
-    # This only occurs on Python versions >=3.8
     if (0, 15, 0) <= starlette_version < (0, 17, 0):
         from anyio._backends._asyncio import ExceptionGroup
 
@@ -143,7 +203,7 @@ def test_exception_in_middleware(target_application, app_name):
 @pytest.mark.parametrize(
     "app_name,transaction_name,path,scoped_metrics",
     (
-        ("non_async_error_handler_no_middleware", "_test_application:runtime_error", "/runtime_error", []),
+        ("sync_error_handler_no_middleware", "_test_application:runtime_error", "/runtime_error", []),
         (
             "async_error_handler_no_middleware",
             "_test_application:runtime_error",
@@ -190,9 +250,9 @@ def test_server_error_middleware(target_application, app_name, transaction_name,
             "_test_application:HandledError",
         ),
         (
-            "non_async_error_handler_no_middleware",
-            "_test_application:non_async_handled_error",
-            "/non_async_handled_error",
+            "sync_error_handler_no_middleware",
+            "_test_application:sync_handled_error",
+            "/sync_handled_error",
             "_test_application:NonAsyncHandledError",
         ),
     ),
@@ -214,11 +274,7 @@ def test_application_handled_error(target_application, app_name, transaction_nam
     "app_name,transaction_name,path",
     (
         ("async_error_handler_no_middleware", "_test_application:handled_error", "/handled_error"),
-        (
-            "non_async_error_handler_no_middleware",
-            "_test_application:non_async_handled_error",
-            "/non_async_handled_error",
-        ),
+        ("sync_error_handler_no_middleware", "_test_application:sync_handled_error", "/sync_handled_error"),
     ),
 )
 @override_ignore_status_codes({500})

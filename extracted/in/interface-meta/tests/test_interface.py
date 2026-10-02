@@ -1,3 +1,5 @@
+import pytest
+
 from interface_meta import InterfaceMeta
 
 
@@ -86,24 +88,36 @@ def test_consistency():
             assert issubclass(type(value), type(SubBase.__dict__[key]))
 
 
+def test_annotation_only_attribute_override():
+    class Base(metaclass=InterfaceMeta):
+        x: int  # annotation only, no value
+
+    class Child(Base):
+        x = 42
+
+    assert Child.x == 42
+
+
+def test_raise_on_violation():
+    with pytest.raises(RuntimeError):
+
+        class Base(metaclass=InterfaceMeta):
+            INTERFACE_RAISE_ON_VIOLATION = True
+
+            def method(self, a):
+                pass
+
+        class Child(Base):
+            def method(self, a, b):  # extra required arg: signature mismatch
+                pass
+
+
 def test_docstrings():
-    assert (
-        SubBase.__doc__
-        == "SubBase class\n\nAttributes inherited from Base:\n    ATTRIBUTE (str): An attribute."
-    )
+    assert SubBase.__doc__ == "SubBase class\n\nAttributes inherited from Base:\n    ATTRIBUTE (str): An attribute."
     assert SubBase.__init__.__doc__ == "Subclass Constructor"
     assert SubBase.property_method.__doc__ == "Property Method"
-    assert (
-        SubBase.regular_method.__doc__
-        == "Regular Method\n\nSubBase Quirks:\n    Subclass Regular Method"
-    )
-    assert (
-        SubBase.static_method.__doc__
-        == "Static Method\n\nSubBase Quirks:\n    Subclass Static Method"
-    )
+    assert SubBase.regular_method.__doc__ == "Regular Method\n\nSubBase Quirks:\n    Subclass Regular Method"
+    assert SubBase.static_method.__doc__ == "Static Method\n\nSubBase Quirks:\n    Subclass Static Method"
     assert SubBase.class_method.__doc__ == "Subclass Class Method"
-    assert (
-        SubBase.split_method.__doc__
-        == "Split Method\n\nSubBase Quirks:\n    Subclass split_method quirks"
-    )
+    assert SubBase.split_method.__doc__ == "Split Method\n\nSubBase Quirks:\n    Subclass split_method quirks"
     assert SubBase.mro_documented.__doc__ == "Documentation in SubBase"

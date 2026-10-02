@@ -1,0 +1,119 @@
+from __future__ import annotations
+
+from typing import List, Union, Iterable, Optional
+from typing_extensions import Literal, Required, TypeAlias, TypedDict
+
+from .._types import SequenceNotStr
+from .shared_params import page_range
+
+__all__ = ["SettingsParam", "HybridVpc", "PageRange", "TenantThrottling"]
+
+
+class HybridVpc(TypedDict, total=False):
+    """Hybrid VPC request-scoped settings."""
+
+    environment: Optional[str]
+    """Named Hybrid VPC environment to use for this request.
+
+    Only applies when your organization has Hybrid VPC environments configured.
+    """
+
+
+PageRange: TypeAlias = Union[page_range.PageRange, Iterable[page_range.PageRange], Iterable[int], SequenceNotStr[str]]
+
+
+class TenantThrottling(TypedDict, total=False):
+    """Per-tenant throttling for multi-tenant applications."""
+
+    tenant_id: Required[str]
+    """
+    Your identifier for the tenant (customer, workspace, organization) this request
+    belongs to. Used only for noisy-neighbor throttling inside your account.
+    """
+
+    max_share: float
+    """
+    Maximum fraction of your account's concurrency ceiling this tenant may use,
+    between 0 (exclusive) and 1. Defaults to 0.5.
+    """
+
+
+class SettingsParam(TypedDict, total=False):
+    document_password: Optional[str]
+    """Password to decrypt password-protected documents."""
+
+    embed_pdf_metadata: bool
+    """If True, embed OCR metadata into the returned PDF. Defaults to False."""
+
+    embed_pdf_metadata_dpi: int
+    """
+    Render DPI used when rasterizing the source PDF before embedding the OCR text
+    layer (only applies when `embed_pdf_metadata` is True). Lower values produce
+    dramatically smaller output PDFs; higher values preserve more detail when zoomed
+    past 200%. Defaults to 100.
+    """
+
+    extract_document_properties: bool
+    """If True, return properties embedded in the original document.
+
+    Defaults to False.
+    """
+
+    extraction_mode: Literal["ocr", "hybrid"]
+    """The mode to use for text extraction from PDFs.
+
+    OCR mode uses optical character recognition only. Hybrid mode combines OCR with
+    embedded PDF text for best accuracy (default).
+    """
+
+    force_file_extension: Optional[str]
+    """Force the URL to be downloaded as a specific file extension (e.g. `.png`)."""
+
+    force_url_result: bool
+    """Force the result to be returned in URL form."""
+
+    hybrid_vpc: HybridVpc
+    """Hybrid VPC request-scoped settings."""
+
+    model: Optional[Literal["r-1", "legacy"]]
+    """The parse model used for the request.
+
+    Setting `r-1` will use Reducto's latest flagship Parse model. `legacy` pins the
+    previous parsing pipeline.
+    """
+
+    ocr_system: Literal["standard", "legacy"]
+    """Standard is our best multilingual OCR system.
+
+    Legacy only supports germanic languages and is available for backwards
+    compatibility.
+    """
+
+    page_range: Optional[PageRange]
+    """The page range to process (1-indexed).
+
+    By default, the entire document is processed. For spreadsheets, you can also
+    provide a list of sheet names.
+    """
+
+    persist_results: bool
+    """If True, persist the results indefinitely. Defaults to False."""
+
+    return_images: List[Literal["figure", "table", "page"]]
+    """Whether to return images for the specified block types.
+
+    'page' returns full page images. By default, no images are returned.
+    """
+
+    return_ocr_data: bool
+    """If True, return OCR data in the result. Defaults to False."""
+
+    tenant_throttling: Optional[TenantThrottling]
+    """Per-tenant throttling for multi-tenant applications.
+
+    Tag each request with your tenant's id to bound how much of your account's
+    concurrency a single tenant can consume. Account-level throttles still apply.
+    """
+
+    timeout: Optional[float]
+    """The timeout for the job in seconds."""

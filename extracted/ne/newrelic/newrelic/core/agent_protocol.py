@@ -145,6 +145,8 @@ class AgentProtocol:
         "application_logging.forwarding.enabled",
         "machine_learning.inference_events_value.enabled",
         "ai_monitoring.enabled",
+        "ai_monitoring.streaming.enabled",
+        "ai_monitoring.record_content.enabled",
     )
 
     LOGGER_FUNC_MAPPING = {  # noqa: RUF012
@@ -296,7 +298,11 @@ class AgentProtocol:
         connect_settings = {}
         connect_settings["browser_monitoring.loader"] = settings["browser_monitoring.loader"]
         connect_settings["browser_monitoring.debug"] = settings["browser_monitoring.debug"]
+        connect_settings["browser_monitoring.version"] = settings["browser_monitoring.version"]
         connect_settings["ai_monitoring.enabled"] = settings["ai_monitoring.enabled"]
+        connect_settings["distributed_tracing.sampler.adaptive_sampling_target"] = settings[
+            "distributed_tracing.sampler.adaptive_sampling_target"
+        ]
 
         security_settings = {}
         security_settings["capture_params"] = settings["capture_params"]
@@ -530,7 +536,7 @@ class ServerlessModeProtocol(AgentProtocol):
     @classmethod
     def connect(cls, app_name, linked_applications, environment, settings, client_cls=ServerlessModeClient):
         aws_lambda_metadata = settings.aws_lambda_metadata
-        settings = finalize_application_settings({"cross_application_tracer.enabled": False}, settings)
+        settings = finalize_application_settings(settings=settings)
         # Metadata must come from the original settings object since it
         # can be modified later
         settings.aws_lambda_metadata = aws_lambda_metadata

@@ -9,7 +9,7 @@ global_stop = False
 
 
 class Server:
-    quiet = False
+    quiet = True
 
     def __init__(self, host, port, **options):
         self.options = options
@@ -21,13 +21,22 @@ class Server:
         self.serve()
 
     def make_server(self, handler):
-        from wsgiref.simple_server import make_server, WSGIRequestHandler
+        import socketserver
+        from wsgiref.simple_server import WSGIRequestHandler, WSGIServer, make_server
+
+        class ThreadingWSGIServer(socketserver.ThreadingMixIn, WSGIServer):
+            # A client that never closes its connection leaves its worker
+            # running, so workers must not keep the interpreter from exiting.
+            daemon_threads = True
+            request_queue_size = 128
+
+        self.options.setdefault("server_class", ThreadingWSGIServer)
 
         if self.quiet:
             base = self.options.get("handler_class", WSGIRequestHandler)
 
             class QuietHandler(base):
-                def log_request(*args, **kw):
+                def log_request(self, *args, **kw):
                     pass
 
             self.options["handler_class"] = QuietHandler
@@ -62,11 +71,11 @@ def start_bottle_server(app, port, server, **kwargs):
     server_thread.daemon = True
     server_thread.start()
 
-    ok = util.wait_for_network_service(("127.0.0.1", port), 0.1, 10)
+    ok = util.wait_for_network_service(("127.0.0.1", port), 0.1, 300)
     if not ok:
         import warnings
 
-        warnings.warn("Server did not start after 1 second")
+        warnings.warn("Server did not start after 30 seconds")
 
     return server_thread.server
 

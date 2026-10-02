@@ -1,0 +1,32 @@
+from __future__ import annotations
+
+from typing import List, Optional
+from typing_extensions import Literal, TypedDict
+
+from .shared_params.split_large_tables import SplitLargeTables
+
+__all__ = ["SpreadsheetParam"]
+
+
+class SpreadsheetParam(TypedDict, total=False):
+    clustering: Literal["accurate", "fast", "disabled"]
+    """
+    In a spreadsheet with different tables inside, we enable splitting up the tables
+    by default. Accurate mode applies more powerful models for superior accuracy, at
+    5× the default per-cell rate. Disabling will register as one large table.
+    """
+
+    exclude: List[Literal["hidden_sheets", "hidden_rows", "hidden_cols", "styling", "spreadsheet_images"]]
+    """Whether to exclude hidden sheets, rows, or columns in the output."""
+
+    include: List[Literal["cell_colors", "formula", "dropdowns"]]
+    """Whether to include cell color, formula, and dropdown information in the output."""
+
+    max_cell_count: Optional[int]
+    """Maximum total non-empty cells allowed across all sheets.
+
+    If exceeded, the request is rejected with a 422 error. Set to null to disable
+    the limit. Defaults to null.
+    """
+
+    split_large_tables: SplitLargeTables
