@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 import errno
 import functools
 import time
-from typing import Final
+from typing import Final, Literal
 import urllib.parse
 
 import anyio.to_thread
@@ -20,12 +20,14 @@ from mcp.client.auth import (
     OAuthTokenError,
     TokenStorage,
 )
+from mcp.client.auth.oauth2 import OAuthContext
 from mcp.shared.auth import OAuthClientInformationFull, OAuthClientMetadata, OAuthToken
 from mcp.types import LATEST_PROTOCOL_VERSION
 from pydantic import AnyUrl, BaseModel, ConfigDict
 
 from vibe import __version__
 from vibe.core.config import MCPHttp, MCPOAuth, MCPStreamableHttp
+from vibe.core.utils.exceptions import first_of_type
 from vibe.utils.http import VibeAsyncHTTPClient, build_ssl_context
 from vibe.utils.keyring import (
     delete_api_key_from_keyring,
@@ -36,6 +38,10 @@ from vibe.utils.keyring import (
 _USERNAME_PREFIX: Final = "mcp-oauth"
 _CLIENT_NAME: Final = "Mistral Vibe"
 _LOGIN_TIMEOUT_SECONDS: Final = 300.0
+# A login whose browser callback never arrives must not pin the loopback port
+# until the process exits, so the callback wait is bounded: an abandoned login
+# fails loudly after this long and releases the port for later attempts.
+_CALLBACK_TIMEOUT_SECONDS: Final = 600.0
 # What a streamable HTTP endpoint accepts: a POST that says both, per the spec.
 _MCP_ACCEPT: Final = "application/json, text/event-stream"
 _MIN_REQUEST_LINE_PARTS: Final = 2
@@ -61,6 +67,23 @@ class MCPOAuthPortInUse(MCPOAuthError):
             f"Loopback callback port {self.port} is already in use; cannot complete "
             f"OAuth login for MCP server {self.server_alias!r}. "
             "Set `auth.redirect_port` to a free port in this server's config and retry."
+        )
+
+
+class MCPOAuthCallbackTimeout(MCPOAuthError):
+    def __init__(self, *, port: int, server_alias: str, timeout_seconds: float) -> None:
+        self.port = port
+        self.server_alias = server_alias
+        self.timeout_seconds = timeout_seconds
+        super().__init__(self._fmt())
+
+    def _fmt(self) -> str:
+        minutes = self.timeout_seconds / 60
+        return (
+            f"Timed out after {minutes:g} minutes waiting for the OAuth browser "
+            f"callback for MCP server {self.server_alias!r}. The loopback port "
+            f"{self.port} has been released; retry the login and complete the "
+            "browser authorization this time."
         )
 
 
@@ -530,7 +553,15 @@ class LoopbackCallbackHandler:
             raise
 
         try:
-            return await future
+            # Bounded so an abandoned login releases the port instead of
+            # blocking every later login on this machine.
+            return await asyncio.wait_for(future, timeout=_CALLBACK_TIMEOUT_SECONDS)
+        except TimeoutError:
+            raise MCPOAuthCallbackTimeout(
+                port=self._port,
+                server_alias=self._server_alias,
+                timeout_seconds=_CALLBACK_TIMEOUT_SECONDS,
+            ) from None
         finally:
             server.close()
             with _suppress_close_errors():
@@ -570,25 +601,58 @@ async def _classify_refresh_error(response: httpx.Response) -> tuple[str, bool]:
     return reason, error == _OAUTH_INVALID_GRANT
 
 
-def _first_of_type[E: BaseException](exc: BaseException, target: type[E]) -> E | None:
-    if isinstance(exc, target):
-        return exc
-    if isinstance(exc, BaseExceptionGroup):
-        for sub in exc.exceptions:
-            if (found := _first_of_type(sub, target)) is not None:
-                return found
-    return None
-
-
 def unwrap_oauth_refresh_error(
     exc: BaseException,
 ) -> MCPOAuthInvalidGrant | MCPOAuthTransientRefreshError | OAuthFlowError | None:
     """Find a known OAuth error inside a possibly-grouped exception (streamable_http wraps auth-flow errors in an ExceptionGroup)."""
-    if (invalid_grant := _first_of_type(exc, MCPOAuthInvalidGrant)) is not None:
+    if (invalid_grant := first_of_type(exc, MCPOAuthInvalidGrant)) is not None:
         return invalid_grant
-    if (transient := _first_of_type(exc, MCPOAuthTransientRefreshError)) is not None:
+    if (transient := first_of_type(exc, MCPOAuthTransientRefreshError)) is not None:
         return transient
-    return _first_of_type(exc, OAuthFlowError)
+    return first_of_type(exc, OAuthFlowError)
+
+
+class _ServerIssuedSecretContext(OAuthContext):
+    """``OAuthContext`` that authenticates a server-issued client secret.
+
+    Some authorization servers (e.g. Supabase) accept a registration with
+    ``token_endpoint_auth_method="none"`` but register a confidential client
+    anyway: the response carries a ``client_secret`` while omitting the auth
+    method, and their token endpoint then rejects requests without client
+    authentication. RFC 7591 §2 defaults an omitted method to
+    ``client_secret_basic``, and RFC 6749 §2.3.1 requires servers that issue
+    a client password to support HTTP Basic, so pick the method from what the
+    server advertises in ``token_endpoint_auth_methods_supported`` and only
+    fall back to ``client_secret_post`` when Basic is not an option. The
+    derived value is per request, never persisted, so keyring entries saved
+    before this class existed (method absent or ``"none"``) self-heal.
+    """
+
+    def prepare_token_auth(
+        self, data: dict[str, str], headers: dict[str, str] | None = None
+    ) -> tuple[dict[str, str], dict[str, str]]:
+        client_info = self.client_info
+        if (
+            client_info is not None
+            and client_info.client_secret
+            and client_info.token_endpoint_auth_method in {None, "none"}
+        ):
+            client_info.token_endpoint_auth_method = self._secret_auth_method()
+        return super().prepare_token_auth(data, headers)
+
+    def _secret_auth_method(
+        self,
+    ) -> Literal["client_secret_basic", "client_secret_post"]:
+        supported = (
+            self.oauth_metadata.token_endpoint_auth_methods_supported
+            if self.oauth_metadata is not None
+            else None
+        )
+        if not supported or "client_secret_basic" in supported:
+            return "client_secret_basic"
+        if "client_secret_post" in supported:
+            return "client_secret_post"
+        return "client_secret_basic"
 
 
 class RefreshAwareOAuthClientProvider(OAuthClientProvider):
@@ -606,6 +670,16 @@ class RefreshAwareOAuthClientProvider(OAuthClientProvider):
         client_metadata_url: str | None = None,
     ) -> None:
         super().__init__(
+            server_url=server_url,
+            client_metadata=client_metadata,
+            storage=storage,
+            redirect_handler=redirect_handler,
+            callback_handler=callback_handler,
+            client_metadata_url=client_metadata_url,
+        )
+        # The base class builds a plain OAuthContext; swap it for the one that
+        # authenticates a server-issued client secret on every token request.
+        self.context = _ServerIssuedSecretContext(
             server_url=server_url,
             client_metadata=client_metadata,
             storage=storage,
@@ -735,6 +809,12 @@ async def perform_oauth_login(
         ) from exc
     except (OAuthTokenError, OAuthFlowError, httpx.HTTPError, OSError) as exc:
         raise MCPOAuthLoginFailed(server_alias=server.name, reason=str(exc)) from exc
+    # A probe the server never challenges leaves no token, so fail loudly rather than save a false-success fingerprint.
+    if await KeyringTokenStorage(alias=server.name).get_tokens() is None:
+        raise MCPOAuthLoginFailed(
+            server_alias=server.name,
+            reason="the server never issued an OAuth challenge, so no token was obtained",
+        )
     await Fingerprint.compute(server).save(server.name)
 
 

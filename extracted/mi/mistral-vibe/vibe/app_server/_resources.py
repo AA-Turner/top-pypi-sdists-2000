@@ -9,6 +9,7 @@ from pydantic import JsonValue
 
 from vibe.app_server._account import AccountController, AccountGateway
 from vibe.app_server._admin_config import (
+    apply_admin_config as _apply_admin_config,
     refresh_admin_layer,
     report_admin_config_outcome,
 )
@@ -112,11 +113,7 @@ from vibe.app_server.protocol import (
 )
 from vibe.core.agent_loop import AgentLoop
 from vibe.core.config import VibeConfigSchema
-from vibe.core.config.admin_config import (
-    MANAGED_CONFIG_TIMEOUT,
-    AdminConfigApplyResult,
-    AdminConfigOutcome,
-)
+from vibe.core.config.admin_config import MANAGED_CONFIG_TIMEOUT, AdminConfigApplyResult
 from vibe.core.config.orchestrator import ConfigOrchestrator, ConfigPatchValidationError
 from vibe.core.feedback import (
     record_feedback_asked,
@@ -134,7 +131,8 @@ from vibe.core.proxy_setup import (
     unset_proxy_var,
 )
 from vibe.core.types import Role, ScheduledLoop as CoreScheduledLoop
-from vibe.observability.logging import logger
+from vibe.feedback import FEEDBACK_SNOOZED_COOLDOWN_SECONDS
+from vibe.observability.logging import logger, set_config_log_level
 
 
 class _LegacySkillsHost:
@@ -533,7 +531,8 @@ class ResourceRequestHandler:
                             user_messages + params.pending_user_messages
                         ),
                         cache_store=self._agent_loop.cache_store,
-                    )
+                    ),
+                    snooze_duration_seconds=FEEDBACK_SNOOZED_COOLDOWN_SECONDS,
                 )
             case "feedback/record":
                 params = validate_wire(FeedbackRecordParams, raw_params)
@@ -634,6 +633,9 @@ class ResourceRequestHandler:
                     runtime=self.runtime_snapshot(),
                     failures=[str(failure) for failure in failures],
                 )
+        # The config tier is latched once per process at session start, so without
+        # this a written log_level only takes effect after a restart.
+        set_config_log_level(self._agent_loop.config.log_level)
         if params.reload_runtime:
             self._clear_mcp_discovery_errors()
             await self._agent_loop.reload_with_initial_messages(reload_hooks=True)
@@ -672,19 +674,14 @@ class ResourceRequestHandler:
         admin layer stays empty and has no impact on the client. Returns whether
         the effective config changed, so the caller can push a runtime update.
         """
-        result = await self._refresh_admin_layer()
-        if not result.applied:
-            self._report_admin_config_outcome(result)
-            return False
-        try:
-            await self._agent_loop.refresh_config()
-        except Exception as exc:
-            logger.warning("Failed to apply admin-managed config", exc_info=exc)
-            self._agent_loop.telemetry_client.send_admin_config_applied(
-                outcome=AdminConfigOutcome.APPLY_FAILED, error=str(exc)
-            )
-            return False
-        self._report_admin_config_outcome(result)
+        return await _apply_admin_config(
+            self._agent_loop.config_orchestrator,
+            apply=self._refresh_agent_config,
+            telemetry=self._agent_loop.telemetry_client,
+        )
+
+    async def _refresh_agent_config(self) -> bool:
+        await self._agent_loop.refresh_config()
         return True
 
     def _report_admin_config_outcome(self, result: AdminConfigApplyResult) -> None:

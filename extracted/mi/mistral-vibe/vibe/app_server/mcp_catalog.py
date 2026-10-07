@@ -412,6 +412,10 @@ class MCPCatalogService:
                 name=params.name, tool_name=None, reason="remove"
             )
         try:
+            if context.control is None:
+                await self._authentication.bind_catalog(
+                    context.orchestrator.config.mcp_servers, owner=context.catalog_owner
+                )
             result = await _remove_server_with_credentials(
                 self._authentication,
                 context.orchestrator,
@@ -1013,8 +1017,9 @@ def project_mcp_sources(
     for plugin_source in plugin_sources:
         if plugin_source.name in configured:
             continue
-        sources.append(_project_plugin_source(plugin_source))
-        if plugin_source.error is not None:
+        state_for_plugin = states.get(plugin_source.name)
+        sources.append(_project_plugin_source(plugin_source, state_for_plugin))
+        if state_for_plugin is None and plugin_source.error is not None:
             errors.setdefault(plugin_source.name, plugin_source.error)
     return sources, errors
 
@@ -1026,9 +1031,21 @@ _PLUGIN_SOURCE_STATUS: dict[PluginMCPStatus, MCPSourceStatus] = {
 }
 
 
-def _project_plugin_source(source: PluginMCPSource) -> MCPSourceSummary:
+def _project_plugin_source(
+    source: PluginMCPSource, state: SessionMCPSourceState | None
+) -> MCPSourceSummary:
     # Deliberately the same kind as a configured server: only ``plugin_name``
     # says where it came from. Nothing here is toggleable.
+    if state is not None:
+        # The session's own connection, the one its tool calls go through.
+        return MCPSourceSummary(
+            name=source.name,
+            kind=MCPSourceKind.SERVER,
+            transport=source.transport,
+            status=MCPSourceStatus(state.status),
+            tools=_project_tools(state),
+            plugin_name=source.plugin_name,
+        )
     return MCPSourceSummary(
         name=source.name,
         kind=MCPSourceKind.SERVER,

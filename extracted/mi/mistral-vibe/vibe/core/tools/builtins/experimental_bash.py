@@ -39,12 +39,15 @@ from vibe.core.tools.base import (
 )
 from vibe.core.tools.builtins._shell_command_policy import (
     analyze_shell_command_policy,
+    git_repository_requires_approval,
     path_candidates,
 )
 from vibe.core.tools.builtins._shell_permission_analysis import analyze_shell_command
 from vibe.core.tools.builtins.bash import (
     BashToolConfig,
     _expand_guardrail_commands,
+    _git_repository_permission_pattern,
+    _update_guardrail_cwds,
     command_session_pattern,
     needs_exact_command_scope,
     scoped_command_parts,
@@ -62,11 +65,21 @@ from vibe.core.tools.permissions import (
     RequiredPermission,
 )
 from vibe.core.tools.ui import ToolCallDisplay, ToolResultDisplay, ToolUIData
-from vibe.core.tools.utils import ToolPath, is_path_within_workdir, resolve_tool_path
+from vibe.core.tools.utils import (
+    ToolPath,
+    is_path_within_workdir,
+    resolve_tool_path,
+    shell_path_scope_root,
+)
 from vibe.core.types import ToolResultEvent, ToolStreamEvent
 from vibe.core.utils import is_windows
 from vibe.core.workspace import Workspace
 from vibe.observability.logging import logger
+from vibe.permissions import (
+    PathGrantScope,
+    path_grant_pattern,
+    path_grant_pattern_matches,
+)
 from vibe.utils.io import decode_console_safe
 from vibe.utils.tool_presentation import ToolEffectKind
 
@@ -313,9 +326,11 @@ _PATH_COMMANDS = _MUTATING_PATH_COMMANDS | set(_READ_ONLY_COMMANDS_POSIX)
 
 
 def _split_command_tokens(
-    command: str, *, preserve_backslashes: bool = False
+    command: str, *, preserve_backslashes: bool | None = None
 ) -> list[str]:
     try:
+        if preserve_backslashes is None:
+            preserve_backslashes = is_windows()
         if preserve_backslashes:
             lexer = shlex.shlex(command, posix=True)
             lexer.whitespace_split = True
@@ -336,7 +351,7 @@ def _looks_like_path(token: str) -> bool:
     )
 
 
-def _collect_outside_dirs(
+def _collect_outside_paths(
     command_parts: list[str],
     *,
     command_cwd: Path,
@@ -346,11 +361,11 @@ def _collect_outside_dirs(
     case_sensitive_commands: bool = True,
     preserve_backslashes: bool = False,
 ) -> set[str]:
-    dirs: set[str] = set()
+    paths: set[str] = set()
     if not is_path_within_workdir(
         str(command_cwd), workspace=workspace
     ) and not is_scratchpad_path(str(command_cwd), scratchpad_dir=scratchpad_dir):
-        dirs.add(str(command_cwd))
+        paths.add(str(command_cwd))
 
     for part in command_parts:
         tokens = _split_command_tokens(part, preserve_backslashes=preserve_backslashes)
@@ -371,9 +386,33 @@ def _collect_outside_dirs(
             if is_scratchpad_path(str(resolved), scratchpad_dir=scratchpad_dir):
                 continue
 
-            parent = str(resolved) if resolved.is_dir() else str(resolved.parent)
-            dirs.add(parent)
-    return dirs
+            paths.add(str(resolved))
+    return paths
+
+
+def _collect_outside_dirs(
+    command_parts: list[str],
+    *,
+    command_cwd: Path,
+    workspace: Workspace,
+    scratchpad_dir: Path | None,
+    path_commands: Collection[str] = _PATH_COMMANDS,
+    case_sensitive_commands: bool = True,
+    preserve_backslashes: bool = False,
+) -> set[str]:
+    """Compatibility helper returning parents for outside paths."""
+    paths = _collect_outside_paths(
+        command_parts,
+        command_cwd=command_cwd,
+        workspace=workspace,
+        scratchpad_dir=scratchpad_dir,
+        path_commands=path_commands,
+        case_sensitive_commands=case_sensitive_commands,
+        preserve_backslashes=preserve_backslashes,
+    )
+    return {
+        str(Path(path) if Path(path).is_dir() else Path(path).parent) for path in paths
+    }
 
 
 def _matches_pattern(command: str, pattern: str) -> bool:
@@ -1411,10 +1450,10 @@ class BashLogFileResult(BaseModel):
 
 
 class _BashPermissionMixin[ConfigT: BashToolConfig]:
-    # A shell reads its allowlist as command prefixes, so an outside-workdir
-    # glob persisted there would match no command at all.
+    # Command prefixes and typed path grants are what a shell reads back.
     allowlist_scopes: ClassVar[frozenset[PermissionScope]] = frozenset({
-        PermissionScope.COMMAND_PATTERN
+        PermissionScope.COMMAND_PATTERN,
+        PermissionScope.OUTSIDE_DIRECTORY,
     })
 
     if TYPE_CHECKING:
@@ -1444,12 +1483,13 @@ class _BashPermissionMixin[ConfigT: BashToolConfig]:
         )
 
     @staticmethod
-    def _build_outside_directory_permission(glob: str) -> RequiredPermission:
+    def _build_outside_directory_permission(path: str) -> RequiredPermission:
         return RequiredPermission(
             scope=PermissionScope.OUTSIDE_DIRECTORY,
-            invocation_pattern=glob,
-            session_pattern=glob,
-            label=f"outside workdir ({glob})",
+            invocation_pattern=path,
+            session_pattern=path_grant_pattern(path, PathGrantScope.EXACT),
+            label=f"outside workdir ({path})",
+            path_scope_root=shell_path_scope_root(path),
         )
 
     def _find_denylist_match(self, command: str) -> str | None:
@@ -1487,10 +1527,15 @@ class _BashPermissionMixin[ConfigT: BashToolConfig]:
         return tokens[0] in self.config.sensitive_patterns
 
     def _resolve_guardrail_permission(
-        self, command_parts: list[str]
+        self,
+        command_parts: list[str],
+        *,
+        command_cwd: Path,
+        preserve_backslashes: bool | None = None,
     ) -> PermissionContext | None:
-        option_required: list[RequiredPermission] = []
-        seen_option_required: set[str] = set()
+        option_required_by_command: dict[str, RequiredPermission] = {}
+        possible_cwds = {command_cwd}
+        cwd_is_unknown = False
 
         for part in _expand_guardrail_commands(command_parts):
             if matched := self._find_denylist_match(part):
@@ -1503,32 +1548,45 @@ class _BashPermissionMixin[ConfigT: BashToolConfig]:
                     permission=ToolPermission.NEVER,
                     reason=f"Command denied: '{part}' is not allowed as a standalone command. Do not attempt to run this command.",
                 )
-            if not analyze_shell_command_policy(
-                _split_command_tokens(part)
-            ).requires_approval:
-                continue
-            if part in seen_option_required:
-                continue
-            seen_option_required.add(part)
-            option_required.append(
-                self._build_command_required_permission(
-                    invocation_pattern=part,
-                    session_pattern=part,
-                    label=part,
-                    literal=True,
+            tokens = _split_command_tokens(
+                part, preserve_backslashes=preserve_backslashes
+            )
+            cwd_is_unknown = (
+                _update_guardrail_cwds(tokens, possible_cwds) or cwd_is_unknown
+            )
+            policy = analyze_shell_command_policy(tokens)
+            repository_requires_approval = policy.inspect_git_repository and (
+                cwd_is_unknown
+                or any(
+                    git_repository_requires_approval(tokens, cwd=cwd)
+                    for cwd in possible_cwds
                 )
             )
+            if not (policy.requires_approval or repository_requires_approval):
+                continue
+            permission_pattern = part
+            if policy.inspect_git_repository:
+                permission_pattern = _git_repository_permission_pattern(
+                    part, possible_cwds, cwd_is_unknown=cwd_is_unknown
+                )
+            option_required_by_command[part] = self._build_command_required_permission(
+                invocation_pattern=permission_pattern,
+                session_pattern=permission_pattern,
+                label=part,
+                literal=True,
+            )
 
-        if not option_required:
+        if not option_required_by_command:
             return None
         return PermissionContext(
-            permission=ToolPermission.ASK, required_permissions=option_required
+            permission=ToolPermission.ASK,
+            required_permissions=list(option_required_by_command.values()),
         )
 
     def _is_unconditionally_allowed(
         self,
         command_parts: list[str],
-        outside_dirs: set[str],
+        outside_paths: set[str],
         required_context_permissions: list[RequiredPermission] | None = None,
     ) -> bool:
         required_context_permissions = required_context_permissions or []
@@ -1539,13 +1597,13 @@ class _BashPermissionMixin[ConfigT: BashToolConfig]:
         if self.config.permission == ToolPermission.ALWAYS:
             return True
         return all(self._is_allowlisted(part) for part in command_parts) and (
-            not outside_dirs
+            not outside_paths
         )
 
     def _build_required_permissions(
         self,
         command_parts: list[str],
-        outside_dirs: set[str],
+        outside_paths: set[str],
         *,
         include_allowlisted: bool = False,
     ) -> list[RequiredPermission]:
@@ -1598,8 +1656,8 @@ class _BashPermissionMixin[ConfigT: BashToolConfig]:
                 )
             )
 
-        for glob in sorted(str(Path(directory) / "*") for directory in outside_dirs):
-            required.append(self._build_outside_directory_permission(glob))
+        for path in sorted(outside_paths):
+            required.append(self._build_outside_directory_permission(path))
 
         return required
 
@@ -1615,24 +1673,34 @@ class _BashPermissionMixin[ConfigT: BashToolConfig]:
         if not command_parts and not analysis.requires_approval:
             return None
 
-        guardrail_permission = self._resolve_guardrail_permission(command_parts)
+        command_cwd = resolve_tool_path(cwd, self.cwd)
+        guardrail_permission = self._resolve_guardrail_permission(
+            command_parts, command_cwd=command_cwd
+        )
         if (
             guardrail_permission
             and guardrail_permission.permission == ToolPermission.NEVER
         ):
             return guardrail_permission
 
-        command_cwd = resolve_tool_path(cwd, self.cwd)
-        outside_dirs = _collect_outside_dirs(
+        outside_paths = _collect_outside_paths(
             command_parts,
             command_cwd=command_cwd,
             workspace=self.workspace,
             scratchpad_dir=self.scratchpad_dir,
         )
+        outside_paths = {
+            path
+            for path in outside_paths
+            if not any(
+                path_grant_pattern_matches(path, pattern)
+                for pattern in self.config.allowlist
+            )
+        }
         context_required = required_context_permissions or []
         if (
             self._is_unconditionally_allowed(
-                command_parts, outside_dirs, context_required
+                command_parts, outside_paths, context_required
             )
             and not guardrail_permission
             and not analysis.requires_approval
@@ -1643,7 +1711,7 @@ class _BashPermissionMixin[ConfigT: BashToolConfig]:
             analysis, command_parts
         )
         required = self._build_required_permissions(
-            scoped_parts, outside_dirs, include_allowlisted=include_allowlisted
+            scoped_parts, outside_paths, include_allowlisted=include_allowlisted
         )
         if guardrail_permission:
             required.extend(guardrail_permission.required_permissions)
@@ -2024,6 +2092,11 @@ class BashStdin(
     shell_family: ClassVar[str] = "posix"
     session_prefix: ClassVar[str] = "bash"
     session_label: ClassVar[str] = "bash"
+    _PAGER_SESSION_COMMANDS: ClassVar[frozenset[str]] = frozenset({
+        "git",
+        "less",
+        "more",
+    })
 
     @classmethod
     def is_available(cls, config: VibeConfigSchema | None = None) -> bool:
@@ -2059,6 +2132,64 @@ class BashStdin(
         return _manager(
             self, shell_family=self.shell_family, session_prefix=self.session_prefix
         )
+
+    @staticmethod
+    def _pager_input_permission(session_id: str) -> PermissionContext:
+        label = f"input to pager session {session_id}"
+        return PermissionContext(
+            permission=ToolPermission.ASK,
+            required_permissions=[
+                RequiredPermission(
+                    scope=PermissionScope.COMMAND_PATTERN,
+                    invocation_pattern=label,
+                    session_pattern=label,
+                    label=label,
+                )
+            ],
+        )
+
+    def resolve_permission(self, args: BashStdinArgs) -> PermissionContext | None:
+        if self.shell_family not in {"posix", "git_bash", "powershell", "windows"}:
+            return None
+        try:
+            command = self._session_manager().info(args.session_id).command
+        except (ManagedShellError, ManagedShellBackendError):
+            return self._pager_input_permission(args.session_id)
+
+        if self.shell_family in {"powershell", "windows"}:
+            # Imported lazily because windows_shell subclasses BashStdin.
+            from vibe.core.tools.builtins.windows_shell import (
+                _split_windows_command_parts,
+                _split_windows_command_tokens,
+                _windows_command_name,
+                _windows_invoked_command,
+            )
+
+            command_parts = _expand_guardrail_commands(
+                _split_windows_command_parts(command)
+            )
+            for part in command_parts:
+                tokens = _split_windows_command_tokens(part)
+                if not tokens:
+                    continue
+                executable, _arguments = _windows_invoked_command(tokens)
+                command_name = _windows_command_name(executable)
+                if command_name in self._PAGER_SESSION_COMMANDS:
+                    return self._pager_input_permission(args.session_id)
+            return None
+
+        command_parts = _expand_guardrail_commands(
+            list(analyze_shell_command(command).command_parts)
+        )
+        for part in command_parts:
+            tokens = _split_command_tokens(
+                part, preserve_backslashes=self.shell_family == "git_bash"
+            )
+            if tokens:
+                command_name = os.path.basename(tokens[0]).lower().removesuffix(".exe")
+                if command_name in self._PAGER_SESSION_COMMANDS:
+                    return self._pager_input_permission(args.session_id)
+        return None
 
     async def run(
         self, args: BashStdinArgs, ctx: InvokeContext | None = None

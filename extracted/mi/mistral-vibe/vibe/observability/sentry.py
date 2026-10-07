@@ -12,8 +12,8 @@ from vibe import __version__
 if TYPE_CHECKING:
     from sentry_sdk.types import Event, Hint
 
-_CLI_SENTRY_DSN = "https://ff60802de3bbb471e9b15c7a0fe64a7b@o4507101628137472.ingest.de.sentry.io/4511630498332752"
-_ACP_SENTRY_DSN = "https://e5cefbd71b8c4658f72123098cf5358f@o4507101628137472.ingest.de.sentry.io/4511709880647760"
+_CLI_SENTRY_DSN = None
+_ACP_SENTRY_DSN = None
 
 
 class SentryTarget(StrEnum):

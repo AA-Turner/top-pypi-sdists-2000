@@ -26,9 +26,13 @@ from vibe.app_server._session_backend_port import (
     SessionBackendExtension,
     SessionBackendHistoryClearHost,
     SessionBackendHost,
+    SessionBackendHostArchive,
     SessionBackendHostBackgroundTasks,
+    SessionBackendHostConfigRead,
     SessionBackendHostDelete,
+    SessionBackendHostHistoryList,
     SessionBackendHostPin,
+    SessionBackendHostSeenState,
     SessionBackendNotificationSink,
     SessionBackendOpenCallbacks,
     SessionBackendQueuedTurnSteering,
@@ -47,6 +51,7 @@ from vibe.app_server.events import (
 from vibe.app_server.models import OpenCallbackState, PublicCallbackEntry
 from vibe.app_server.protocol import (
     SERVER_METHODS,
+    AgentInstallParams,
     AgentSwitchParams,
     AppServerResponseError,
     CallbackCallParams,
@@ -55,6 +60,7 @@ from vibe.app_server.protocol import (
     CallbackResultParams,
     ClientCapabilities,
     ClientInfo,
+    ConfigReadParams,
     ConfigReloadParams,
     ConfigWriteParams,
     ContextInjectParams,
@@ -68,6 +74,7 @@ from vibe.app_server.protocol import (
     JsonRpcErrorResponse,
     JsonRpcProtocolError,
     JsonRpcSuccessResponse,
+    MCPAuthUrlParams,
     ModelConfigWriteParams,
     Notification,
     PageRequest,
@@ -75,6 +82,7 @@ from vibe.app_server.protocol import (
     ProtocolErrorCode,
     ServerInfo,
     ServerRequest,
+    SessionArchiveParams,
     SessionCompactParams,
     SessionContinueParams,
     SessionContinueResponse,
@@ -83,7 +91,9 @@ from vibe.app_server.protocol import (
     SessionHandoffParams,
     SessionHistoryClearParams,
     SessionHistoryClearResponse,
+    SessionHistoryListParams,
     SessionListParams,
+    SessionMarkAsSeenParams,
     SessionPinParams,
     SessionReadParams,
     SessionReadResponse,
@@ -153,6 +163,8 @@ _SESSION_OPTIONAL_METHODS = frozenset({
 })
 
 _SESSION_BACKEND_METHODS = frozenset({
+    "agents/install",
+    "agents/uninstall",
     "callback/result",
     "config/reload",
     "config/model/write",
@@ -738,15 +750,29 @@ class AppServer:
         if method in {
             "config/schema",
             "session/history/get",
+            "setup/status",
+            "setup/store-credential",
+            "setup/submit-choices",
             "workspace/git/checkouts",
             "workspace/git/worktrees/limit/update",
             "workspace/git/worktrees/list",
             "workspace/git/worktrees/prune",
+            "workspace/git/worktrees/reap",
+            "workspace/git/worktrees/reap/cancel",
             "workspace/git/worktrees/remove",
             "workspace/trust/status",
             "workspace/trust/untrustedConfig",
         } or method.startswith("projectLinks/"):
-            return await self._host_handler.dispatch(method, raw_params)
+            # The attached session is the caller; its own worktree holder does
+            # not count as in use for the worktree-remove questions it asks.
+            # The setup methods are session-less by construction: the wizard
+            # runs before any session, so they never build or read a runtime.
+            return await self._host_handler.dispatch(
+                method,
+                raw_params,
+                session_id=self._root.session_id if self._root is not None else None,
+                client_info=self._initialized_client_info(),
+            )
         if method == "session/delete":
             return await self._delete_session(raw_params)
         if _omits_session_id(method, raw_params):
@@ -812,6 +838,8 @@ class AppServer:
             return await self._open_initial_session(method, raw_params)
         if result := await self._dispatch_backend_host_operation(method, raw_params):
             return result
+        if method == "session/history/list":
+            return await self._dispatch_stored_session(method, raw_params)
         if self._host_handler.handles(method):
             return await self._host_handler.dispatch(method, raw_params)
         return await self._open_initial_session(method, raw_params)
@@ -847,7 +875,7 @@ class AppServer:
                 "session/read",
                 "session/history/list",
             }:
-                return await self._host_handler.dispatch(method, raw_params)
+                return await self._dispatch_stored_session(method, raw_params)
             raise
         if result.session_attached and root.session_id != previous_session_id:
             subscription = await root.subscribe(
@@ -862,10 +890,28 @@ class AppServer:
         await self._flush_backend_events(root)
         return result
 
+    async def _dispatch_stored_session(
+        self, method: str, raw_params: dict[str, Any]
+    ) -> DispatchResult:
+        host = self._session_backend_host
+        if method == "session/history/list" and isinstance(
+            host, SessionBackendHostHistoryList
+        ):
+            try:
+                return DispatchResult(
+                    await host.list_history(
+                        validate_wire(SessionHistoryListParams, raw_params)
+                    )
+                )
+            except SessionBackendError as exc:
+                if exc.code is not ProtocolErrorCode.NOT_FOUND:
+                    raise
+        return await self._host_handler.dispatch(method, raw_params)
+
     async def _dispatch_backend_host_operation(
         self, method: str, raw_params: dict[str, Any]
     ) -> DispatchResult | None:
-        if method in {"session/list", "session/read"}:
+        if method in {"session/list", "session/read", "config/read"}:
             return await self._dispatch_backend_host_read(method, raw_params)
         if method == "session/rename":
             params = validate_wire(SessionTitleUpdateParams, raw_params)
@@ -873,17 +919,8 @@ class AppServer:
             if self._root is not None and self._root.session_id == params.session_id:
                 await self._flush_backend_events(self._root)
             return DispatchResult(response)
-        if method == "session/pin":
-            if not isinstance(self._session_backend_host, SessionBackendHostPin):
-                raise method_not_found(method)
-            pin_params = validate_wire(SessionPinParams, raw_params)
-            pin_response = await self._session_backend_host.pin(pin_params)
-            if (
-                self._root is not None
-                and self._root.session_id == pin_params.session_id
-            ):
-                await self._flush_backend_events(self._root)
-            return DispatchResult(pin_response)
+        if method in {"session/pin", "session/archive", "session/markAsSeen"}:
+            return await self._dispatch_backend_host_metadata(method, raw_params)
         if method == "session/fork":
             params = validate_wire(SessionForkParams, raw_params)
             result = await self._session_backend_host.fork(params)
@@ -907,9 +944,51 @@ class AppServer:
             return handoff
         return await self._dispatch_backend_host_lifecycle(method, raw_params)
 
-    async def _dispatch_backend_host_read(
+    async def _read_stored_session_config(
+        self, raw_params: dict[str, Any]
+    ) -> DispatchResult | None:
+        """A stored session's configuration, answered without resuming it.
+
+        The attached session answers for itself: it is the one holding the
+        configuration the next turn will run. Only a session this connection is
+        not sitting on reaches the store.
+        """
+        params = validate_wire(ConfigReadParams, raw_params)
+        if params.session_id is None:
+            return None
+        if self._root is not None and self._root.session_id == params.session_id:
+            return None
+        if not isinstance(self._session_backend_host, SessionBackendHostConfigRead):
+            return None
+        return DispatchResult(await self._session_backend_host.read_config(params))
+
+    async def _dispatch_backend_host_metadata(
         self, method: str, raw_params: dict[str, Any]
     ) -> DispatchResult:
+        if method == "session/pin":
+            if not isinstance(self._session_backend_host, SessionBackendHostPin):
+                raise method_not_found(method)
+            params = validate_wire(SessionPinParams, raw_params)
+            response: ProtocolModel = await self._session_backend_host.pin(params)
+        elif method == "session/archive":
+            if not isinstance(self._session_backend_host, SessionBackendHostArchive):
+                raise method_not_found(method)
+            params = validate_wire(SessionArchiveParams, raw_params)
+            response = await self._session_backend_host.archive(params)
+        else:
+            if not isinstance(self._session_backend_host, SessionBackendHostSeenState):
+                raise method_not_found(method)
+            params = validate_wire(SessionMarkAsSeenParams, raw_params)
+            response = await self._session_backend_host.mark_as_seen(params)
+        if self._root is not None and self._root.session_id == params.session_id:
+            await self._flush_backend_events(self._root)
+        return DispatchResult(response)
+
+    async def _dispatch_backend_host_read(
+        self, method: str, raw_params: dict[str, Any]
+    ) -> DispatchResult | None:
+        if method == "config/read":
+            return await self._read_stored_session_config(raw_params)
         if method == "session/list":
             response = await self._session_backend_host.list(
                 validate_wire(SessionListParams, raw_params)
@@ -1045,12 +1124,14 @@ class AppServer:
             backend.session_id,
         )
 
-    async def _dispatch_backend_operation(
+    async def _dispatch_backend_operation(  # noqa: PLR0911 - explicit route ownership
         self, root: SessionBackend, method: str, raw_params: dict[str, Any]
     ) -> DispatchResult | None:
         if method.startswith("session/turn/"):
             return await self._dispatch_backend_turn(root, method, raw_params)
         match method.partition("/")[0]:
+            case "agents":
+                return await self._dispatch_backend_agents(root, method, raw_params)
             case "session":
                 return await self._dispatch_backend_session(root, method, raw_params)
             case "turn":
@@ -1092,6 +1173,24 @@ class AppServer:
                 on_response_abandoned=result.on_response_abandoned,
             )
         return None
+
+    @staticmethod
+    async def _dispatch_backend_agents(
+        root: SessionBackend, method: str, raw_params: dict[str, Any]
+    ) -> DispatchResult | None:
+        if method == "agents/install":
+            result = await root.install_agent(
+                validate_wire(AgentInstallParams, raw_params)
+            )
+        elif method == "agents/uninstall":
+            result = await root.uninstall_agent(
+                validate_wire(AgentInstallParams, raw_params)
+            )
+        else:
+            return None
+        return DispatchResult(
+            result.response, after_response=result.after_response, runtime_updated=True
+        )
 
     @staticmethod
     async def _dispatch_backend_turn(
@@ -1334,7 +1433,12 @@ class AppServer:
         if self._attaching:
             self._pending_notifications.append(PendingNotification(method, params))
             return
-        if not self._connection_attached:
+        sessionless_auth_url = (
+            self._root is None
+            and self._initialization is InitializationState.INITIALIZED
+            and isinstance(params, MCPAuthUrlParams)
+        )
+        if not self._connection_attached and not sessionless_auth_url:
             return
         await self._send_notification(method, params)
 

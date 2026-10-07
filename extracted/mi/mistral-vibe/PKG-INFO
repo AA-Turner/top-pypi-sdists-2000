@@ -1,37 +1,31 @@
-Metadata-Version: 2.4
+Metadata-Version: 2.3
 Name: mistral-vibe
-Version: 2.25.5
+Version: 2.26.0
 Summary: Minimal CLI coding agent by Mistral
-Project-URL: Homepage, https://github.com/mistralai/mistral-vibe
-Project-URL: Repository, https://github.com/mistralai/mistral-vibe
-Project-URL: Issues, https://github.com/mistralai/mistral-vibe/issues
-Project-URL: Documentation, https://github.com/mistralai/mistral-vibe#readme
+Keywords: ai,cli,coding-assistant,mistral,llm,developer-tools
 Author: Mistral AI
 License: Apache-2.0
-License-File: LICENSE
-Keywords: ai,cli,coding-assistant,developer-tools,llm,mistral
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: Apache Software License
-Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Topic :: Software Development
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Classifier: Topic :: Utilities
-Requires-Python: >=3.12
 Requires-Dist: agent-client-protocol==0.11.0
 Requires-Dist: annotated-types==0.7.0
-Requires-Dist: anyio==4.14.1
+Requires-Dist: anyio==4.15.1
 Requires-Dist: attrs==26.1.0
 Requires-Dist: beautifulsoup4==4.14.3
 Requires-Dist: cachetools==7.0.6
 Requires-Dist: certifi==2026.7.22
-Requires-Dist: cffi==2.0.0
+Requires-Dist: cffi==2.0.0 ; platform_machine != 'aarch64' or platform_python_implementation != 'PyPy' or sys_platform != 'linux'
 Requires-Dist: charset-normalizer==3.4.7
-Requires-Dist: click==8.3.3; sys_platform != 'emscripten'
-Requires-Dist: colorama==0.4.6; sys_platform == 'win32'
+Requires-Dist: click==8.3.3 ; sys_platform != 'emscripten'
+Requires-Dist: colorama==0.4.6 ; sys_platform == 'win32'
+Requires-Dist: croniter==6.2.4
 Requires-Dist: cryptography==50.0.0
 Requires-Dist: eval-type-backport==0.3.1
 Requires-Dist: gitdb==4.0.12
@@ -41,20 +35,20 @@ Requires-Dist: google-auth==2.49.2
 Requires-Dist: googleapis-common-protos==1.74.0
 Requires-Dist: h11==0.16.0
 Requires-Dist: httpcore==1.0.9
-Requires-Dist: httpx-sse==0.4.3
 Requires-Dist: httpx==0.28.1
+Requires-Dist: httpx-sse==0.4.3
 Requires-Dist: humanize==4.16.0
 Requires-Dist: idna==3.18
 Requires-Dist: importlib-metadata==8.7.1
 Requires-Dist: jaraco-classes==3.4.0
 Requires-Dist: jaraco-context==6.1.2
 Requires-Dist: jaraco-functools==4.4.0
-Requires-Dist: jeepney==0.9.0; sys_platform == 'linux'
+Requires-Dist: jeepney==0.9.0 ; sys_platform == 'linux'
 Requires-Dist: jsonpatch==1.33
 Requires-Dist: jsonpath-python==1.1.5
 Requires-Dist: jsonpointer==3.1.1
-Requires-Dist: jsonschema-specifications==2025.9.1
 Requires-Dist: jsonschema==4.26.0
+Requires-Dist: jsonschema-specifications==2025.9.1
 Requires-Dist: keyring==25.7.0
 Requires-Dist: linkify-it-py==2.1.0
 Requires-Dist: markdown-it-py==4.0.0
@@ -62,8 +56,7 @@ Requires-Dist: markdownify==1.2.3
 Requires-Dist: mcp==1.28.1
 Requires-Dist: mdit-py-plugins==0.5.0
 Requires-Dist: mdurl==0.1.2
-Requires-Dist: miniaudio==1.71
-Requires-Dist: mistralai-vibe-local-harness==0.5.1
+Requires-Dist: miniaudio==1.71 ; platform_machine != 'aarch64' or sys_platform != 'linux'
 Requires-Dist: mistralai==2.6.0
 Requires-Dist: more-itertools==11.0.2
 Requires-Dist: opentelemetry-api==1.39.1
@@ -77,50 +70,57 @@ Requires-Dist: pexpect==4.9.0
 Requires-Dist: platformdirs==4.9.6
 Requires-Dist: protobuf==6.33.6
 Requires-Dist: ptyprocess==0.7.0
-Requires-Dist: pyasn1-modules==0.4.2
 Requires-Dist: pyasn1==0.6.4
-Requires-Dist: pycparser==3.0; implementation_name != 'PyPy'
+Requires-Dist: pyasn1-modules==0.4.2
+Requires-Dist: pycparser==3.0 ; (implementation_name != 'PyPy' and platform_machine != 'aarch64') or (implementation_name != 'PyPy' and platform_python_implementation != 'PyPy') or (implementation_name != 'PyPy' and sys_platform != 'linux')
+Requires-Dist: pydantic==2.13.4
 Requires-Dist: pydantic-core==2.46.4
 Requires-Dist: pydantic-settings==2.14.2
-Requires-Dist: pydantic==2.13.4
 Requires-Dist: pygments==2.20.0
-Requires-Dist: pyjwt==2.13.0
+Requires-Dist: pyjwt==2.15.1
 Requires-Dist: pyperclip==1.11.0
 Requires-Dist: python-dateutil==2.9.0.post0
 Requires-Dist: python-dotenv==1.2.2
 Requires-Dist: python-multipart==0.0.32
-Requires-Dist: pywin32-ctypes==0.2.3; sys_platform == 'win32'
-Requires-Dist: pywin32==311; sys_platform == 'win32'
-Requires-Dist: pywinpty==3.0.5; sys_platform == 'win32'
+Requires-Dist: pywin32==311 ; sys_platform == 'win32'
+Requires-Dist: pywin32-ctypes==0.2.3 ; sys_platform == 'win32'
+Requires-Dist: pywinpty==3.0.5 ; sys_platform == 'win32'
 Requires-Dist: pyyaml==6.0.3
 Requires-Dist: referencing==0.37.0
 Requires-Dist: requests==2.34.2
 Requires-Dist: rfc8785==0.1.4
 Requires-Dist: rich==15.0.0
 Requires-Dist: rpds-py==0.30.0
-Requires-Dist: secretstorage==3.5.0; sys_platform == 'linux'
+Requires-Dist: secretstorage==3.5.0 ; sys_platform == 'linux'
 Requires-Dist: sentry-sdk==2.64.0
 Requires-Dist: setproctitle==1.3.7
 Requires-Dist: six==1.17.0
 Requires-Dist: smmap==5.0.3
-Requires-Dist: soupsieve==2.8.4
+Requires-Dist: soupsieve==2.9.2
 Requires-Dist: sse-starlette==3.4.1
 Requires-Dist: starlette==1.3.1
-Requires-Dist: textual-speedups==0.2.1
 Requires-Dist: textual==8.2.8
+Requires-Dist: textual-speedups==0.2.1
 Requires-Dist: tomli-w==1.2.0
-Requires-Dist: tree-sitter-bash==0.25.1
 Requires-Dist: tree-sitter==0.26.0
+Requires-Dist: tree-sitter-bash==0.25.1
 Requires-Dist: truststore==0.10.4
-Requires-Dist: typing-extensions==4.15.0
+Requires-Dist: typing-extensions==4.16.0
 Requires-Dist: typing-inspection==0.4.2
 Requires-Dist: uc-micro-py==2.0.0
-Requires-Dist: urllib3==2.7.0
-Requires-Dist: uvicorn==0.46.0; sys_platform != 'emscripten'
+Requires-Dist: urllib3==2.8.0
+Requires-Dist: uvicorn==0.46.0 ; sys_platform != 'emscripten'
 Requires-Dist: watchfiles==1.2.0
 Requires-Dist: websockets==16.0
 Requires-Dist: zipp==3.23.1
 Requires-Dist: zstandard==0.25.0
+Requires-Dist: miniaudio>=1.59 ; extra == 'voice-aarch64'
+Requires-Python: >=3.12
+Project-URL: Homepage, https://github.com/mistralai/mistral-vibe
+Project-URL: Repository, https://github.com/mistralai/mistral-vibe
+Project-URL: Issues, https://github.com/mistralai/mistral-vibe/issues
+Project-URL: Documentation, https://github.com/mistralai/mistral-vibe#readme
+Provides-Extra: voice-aarch64
 Description-Content-Type: text/markdown
 
 # Mistral Vibe
@@ -191,6 +191,7 @@ pip install mistral-vibe
   - [Interactive Mode](#interactive-mode)
   - [Trust Folder System](#trust-folder-system)
   - [Programmatic Mode](#programmatic-mode)
+  - [TUI Implementations](#tui-implementations)
 - [Voice Mode](#voice-mode)
 - [Slash Commands](#slash-commands)
   - [Built-in Slash Commands](#built-in-slash-commands)
@@ -225,7 +226,7 @@ pip install mistral-vibe
   - Manage a `todo` list to track the agent's work.
   - Ask interactive questions to gather user input (`ask_user_question`).
   - Delegate tasks to subagents for parallel work (`task`).
-- **Project-Aware Context**: Vibe automatically scans your project's file structure and Git status to provide relevant context to the agent, improving its understanding of your codebase.
+- **Project-Aware Context**: Vibe automatically provides your project's location, Git branch, and recent commit history to the agent, improving its understanding of your codebase.
 - **Advanced CLI Experience**: Built with modern libraries for a smooth and efficient workflow.
   - Autocompletion for slash commands (`/`) and file paths (`@`).
   - Image attachments via `@` mentions — `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp` files are sent to vision-capable models (e.g. Mistral Medium 3.5) as native multimodal content.
@@ -402,7 +403,7 @@ vibe "Refactor the main function in cli/main.py to be more modular."
 
 Vibe includes a trust folder system to ensure you only run the agent in directories you trust. When you first run Vibe in a new directory which contains a `.vibe` subfolder, it may ask you to confirm whether you trust the folder.
 
-Trusted folders are remembered for future sessions. You can manage trusted folders through its configuration file `~/.vibe/trusted_folders.toml`.
+Trusted folders are remembered for future sessions. You can manage trusted folders through its configuration file `~/.vibe/trusted_folders.toml`. In the trust prompt, use Up/Down or the mouse wheel to scroll the detected-file list. Text is selectable there too: double-click selects a word, triple-click selects a paragraph, and dragging near the list edges scrolls while extending the selection.
 
 This safety feature helps prevent accidental execution in sensitive directories.
 
@@ -443,6 +444,28 @@ Example:
 ```bash
 vibe --prompt "Analyze the codebase" --max-turns 5 --max-price 1.0 --max-tokens 50000 --output json
 ```
+
+### TUI Implementations
+
+The `vibe` command starts through a small launcher that picks the terminal
+client from the `VIBE_CLI` environment variable:
+
+- `VIBE_CLI=rust vibe` starts the Rust TUI.
+- `VIBE_CLI=python vibe` runs the legacy Python (Textual) TUI.
+- With `VIBE_CLI` unset (or set to any other value), `vibe` runs the legacy
+  Python TUI.
+
+The commands above use POSIX shell syntax, where the assignment only applies
+to that command. On Windows, set the variable for the session instead:
+
+- PowerShell: `$env:VIBE_CLI = "python"; vibe` (unset with
+  `Remove-Item Env:VIBE_CLI`)
+- cmd: `set VIBE_CLI=python`, then run `vibe` (unset with `set VIBE_CLI=`)
+
+When the `VIBE_CLI` environment variable is set to `rust`, every `vibe`
+invocation selects the Rust client. To run a nested command (e.g.
+`vibe mcp add ...`) with the legacy Python client instead, set `VIBE_CLI` to
+`python` for that invocation.
 
 ## Voice Mode
 
@@ -487,6 +510,15 @@ from the partial response. Add optional guidance after the command, for example
 Use `/mcp` or `/connectors` to browse configured MCP servers and workspace
 connectors. The browser starts on the first item; press Up or Left to focus its
 fuzzy search bar, then Up again to wrap to the last item.
+
+With the Unified Harness, `/loop every two minutes check the build` asks the
+model to schedule a recurring prompt. Calendar requests such as `/loop weekdays
+at 9am review CI` work too, using the machine's local timezone. Ask the model to
+list or cancel schedules; `/loop` has no TUI management subcommands. Requests
+submitted while busy join the normal prompt queue. Schedules survive resume,
+but only run while Vibe is open and idle; missed runs do not accumulate.
+The `cron` tool is enabled and allowed by default; explicit tool filters and
+`tools.cron.permission` settings still apply.
 
 ### Custom Slash Commands via Skills
 
@@ -828,6 +860,14 @@ for the complete command reference. `vibe mcp remove <name>` removes the server
 from the user configuration. Removing an OAuth server also deletes its stored
 tokens, client information, and configuration fingerprint when available.
 
+With `VIBE_CLI` set to `rust`, shell `mcp add` uses the OAuth-only
+`/mcp add` syntax: `vibe mcp add https://mcp.linear.app/mcp --name linear
+--no-login`. It accepts `--scope` (repeatable), `--transport`, and
+`--allow-insecure-http`; without `--no-login`, it starts browser login. Both
+`add` and `remove NAME` update the user configuration without opening a chat
+session. For stdio or static-auth additions, set `VIBE_CLI` to `python` and run
+`vibe mcp add` with the flags above.
+
 Hosted OAuth MCP servers can also be added from inside Vibe:
 
 ```text
@@ -1099,9 +1139,9 @@ only Git-dependent metadata and features are unavailable.
 
 ### Update Settings
 
-Vibe checks PyPI at most once per day during a session. When a newer version is found, the next launch shows an update prompt before opening the chat, offering to either update immediately (via `uv tool upgrade mistral-vibe` or `brew upgrade mistral-vibe`) or continue with the current version.
+Vibe checks for updates at most once per day during a session. When Vibe is installed from a package index with `uv tool install`, the check runs `uv tool list --outdated`, so your uv settings (such as `exclude-newer`) decide which version is offered, and an exact version pin (`mistral-vibe==X`) suppresses the offer. Other installs (git or local path, Homebrew, pip, or a uv too old for `--outdated`) query PyPI. When a newer version is found, the next launch shows an update prompt before opening the chat, offering to either update immediately (via `uv tool upgrade mistral-vibe` or `brew upgrade mistral-vibe`) or continue with the current version. Vibe reports success only once `vibe --version` shows the new version. If a uv install stays on the old version, for example because of a version pin, Vibe asks whether to run `uv tool install --force mistral-vibe@latest`, which drops the pin, extras and `--with` packages.
 
-Run `vibe --check-upgrade` to check PyPI immediately, prompt to install a newer version if one exists, and exit.
+Run `vibe --check-upgrade` to check immediately, prompt to install a newer version if one exists, and exit.
 
 To disable the daily check entirely, add this to your `config.toml`:
 

@@ -19,6 +19,7 @@ from pydantic import (
 
 from vibe.core.agents.models import BuiltinAgentName
 from vibe.core.config._defaults import (
+    AUTO_COMPACT_WINDOW_RATIO,
     DEFAULT_API_CONNECT_TIMEOUT,
     DEFAULT_API_POOL_TIMEOUT,
     DEFAULT_API_RETRY_MAX_ELAPSED_TIME,
@@ -32,6 +33,7 @@ from vibe.core.config._defaults import (
     DEFAULT_MISTRAL_SERVER_URL,
     DEFAULT_THEME,
     DEFAULT_VIBE_BASE_URL,
+    UNSET_AUTO_COMPACT_THRESHOLD,
 )
 
 # DEFAULT_LOG_LEVEL is not imported here to avoid a circular dependency
@@ -40,6 +42,7 @@ from vibe.core.config._defaults import (
 from vibe.core.config.harness_files import get_harness_files_manager
 from vibe.core.config.layers.admin import AdminConfigLayer
 from vibe.core.config.models import (
+    ACTIVE_MODEL_SELECTOR,
     ConnectorConfig,
     ExperimentsConfig,
     MCPServer,
@@ -53,6 +56,8 @@ from vibe.core.config.models import (
     TranscribeProviderConfig,
     TTSModelConfig,
     TTSProviderConfig,
+    UtilityFeature,
+    UtilityModelsConfig,
     normalize_model_configs,
     serialize_model_configs,
 )
@@ -222,6 +227,11 @@ def _non_empty(items: list[Any]) -> list[Any]:
     return items
 
 
+def _suppress_unset_default(schema: dict[str, Any]) -> None:
+    """Keep the unset sentinel out of the published config schema."""
+    schema.pop("default", None)
+
+
 def _expand_paths(v: Any) -> list[Path]:
     if not v:
         return []
@@ -292,6 +302,15 @@ class VibeConfigSchema(ConfigSchema):
     @classmethod
     def validate_merged(cls, data: dict[str, Any], *, origins: dict[str, str]) -> Self:
         config = super().validate_merged(data, origins=origins)
+        # Model validators run before origins are assigned.
+        if (
+            config.origin_of("allowed_models") == AdminConfigLayer.NAME
+            and config.allowed_models
+            and not config.available_models()
+        ):
+            raise ValueError(
+                "Admin allowed_models matches none of the configured models."
+            )
         if config.origin_of("auto_compact_threshold") != AdminConfigLayer.NAME:
             return config
 
@@ -338,18 +357,42 @@ class VibeConfigSchema(ConfigSchema):
     allowed_models: Annotated[list[str], WithReplaceMerge()] = Field(
         default_factory=list,
         description=(
-            "An explicit list of model aliases/patterns to allow. If set, only these"
+            "An explicit list of model names/patterns to allow. If set, only these"
             " models are selectable. An empty list allows all configured models."
             " Supports glob patterns (e.g., 'mistral-*') and regex with 're:' prefix."
         ),
     )
     compaction_model: Annotated[ModelConfig | None, WithShallowMerge()] = None
-    auto_compact_threshold: Annotated[int, WithReplaceMerge()] = Field(
-        default=DEFAULT_AUTO_COMPACT_THRESHOLD,
+    vision_model: Annotated[ModelConfig | None, WithShallowMerge()] = Field(
+        default=None,
         description=(
-            "Fallback token count before automatic compaction for models that "
-            "do not define their own threshold."
+            "Vision-capable model that describes attached images for an active"
+            " model that cannot see them. Only needed to override the default,"
+            " which is any vision-capable model on the active model's own"
+            " provider; set this to reach a different provider."
         ),
+    )
+    # Shallow: a layer setting one feature must not reset the other.
+    utility_models: Annotated[UtilityModelsConfig, WithShallowMerge()] = Field(
+        default_factory=UtilityModelsConfig,
+        description=(
+            "Per-feature model for secondary completions (session titles, the"
+            " smart-approve classifier). Each value is a model alias from 'models'"
+            f" or '{ACTIVE_MODEL_SELECTOR}' to use the session's active model."
+            " Unset leaves the feature on automatic selection."
+        ),
+    )
+    auto_compact_threshold: Annotated[int, WithReplaceMerge()] = Field(
+        default=UNSET_AUTO_COMPACT_THRESHOLD,
+        description=(
+            "Token count before automatic compaction for models that declare "
+            "neither their own threshold nor a context window. Models with a "
+            f"window compact at {int(AUTO_COMPACT_WINDOW_RATIO * 100)}% of it "
+            "instead."
+        ),
+        # The sentinel means "no layer set one" and resolves to a rule, not a
+        # number; the published schema must not advertise it as the default.
+        json_schema_extra=_suppress_unset_default,
     )
     active_transcribe_model: Annotated[str, WithReplaceMerge()] = (
         DEFAULT_ACTIVE_TRANSCRIBE_MODEL_CONFIG.alias
@@ -454,7 +497,7 @@ class VibeConfigSchema(ConfigSchema):
         default=BuiltinAgentName.ACCEPT_EDITS,
         description=(
             "Agent profile to use when no --agent flag is passed. "
-            "Builtin: ask, plan, accept-edits, auto-approve. "
+            "Builtin: ask, plan, accept-edits, smart-approve, auto-approve. "
             "Applies in both interactive and programmatic (-p/--prompt) mode."
         ),
     )
@@ -510,12 +553,6 @@ class VibeConfigSchema(ConfigSchema):
             " Requires a Mistral provider and API key. Local and builtin skills take"
             " precedence on name collision."
         ),
-    )
-
-    # Internal
-    vibe_code_enabled: Annotated[bool, WithReplaceMerge()] = True
-    vibe_code_api_key_env_var: Annotated[str, WithReplaceMerge()] = (
-        DEFAULT_MISTRAL_API_ENV_KEY
     )
 
     # Tracing
@@ -650,10 +687,15 @@ class VibeConfigSchema(ConfigSchema):
         allowed = {
             alias: model
             for alias, model in self.models.items()
-            if name_matches(alias, self.allowed_models)
+            if name_matches(model.name, self.allowed_models)
         }
-        # A filter that matches nothing degrades to "allow all" rather than
-        # bricking model selection; the mismatch already surfaces as a warning.
+        if self.origin_of("allowed_models") == "admin":
+            # An administrator's policy must fail closed: an invalid policy must
+            # not allow a user-configured model to run.
+            return allowed
+        # A filter that matches nothing in a non-enforced config degrades to
+        # "allow all" rather than bricking model selection; the mismatch already
+        # surfaces as a warning.
         return allowed or self.models
 
     def get_active_model(self) -> ModelConfig:
@@ -683,14 +725,59 @@ class VibeConfigSchema(ConfigSchema):
             f"Provider '{model.provider}' for model '{model.name}' not found in configuration."
         )
 
-    @property
-    def vibe_code_api_key(self) -> str:
-        return resolve_api_key(self.vibe_code_api_key_env_var) or ""
-
     def get_compaction_model(self) -> ModelConfig:
-        if self.compaction_model is not None:
+        if self.compaction_model is not None and self._shares_active_provider(
+            self.compaction_model
+        ):
             return self.compaction_model
         return self.get_active_model()
+
+    def _shares_active_provider(self, model: ModelConfig) -> bool:
+        # Compaction rides the active model's connection, so a model on another
+        # provider would be sent to the wrong endpoint.
+        try:
+            active_provider = self.get_provider_for_model(self.get_active_model())
+        except ValueError:
+            return True
+        return model.provider == active_provider.name
+
+    def get_vision_fallback_model(self) -> ModelConfig | None:
+        try:
+            active = self.get_active_model()
+        except ValueError:
+            return self.vision_model
+        # Describing an image the model is about to receive anyway only loses
+        # detail.
+        if active.supports_images:
+            return None
+        if self.vision_model is not None:
+            return self.vision_model
+        # Same provider means same key and same endpoint, so a blind model
+        # picks up vision with no config and no image leaves where the session
+        # was already talking. Crossing providers stays the user's call.
+        return next(
+            (
+                model
+                for model in self.available_models().values()
+                if model.supports_images and model.provider == active.provider
+            ),
+            None,
+        )
+
+    def get_utility_model(self, feature: UtilityFeature) -> ModelConfig | None:
+        """The model configured for ``feature``; None means automatic selection.
+
+        A model aliased ``active`` wins over the active-model selector.
+        """
+        alias = self.utility_models.alias_for(feature)
+        if not alias:
+            return None
+        available = self.available_models()
+        if alias in available:
+            return available[alias]
+        if alias == ACTIVE_MODEL_SELECTOR and alias not in self.models:
+            return self.get_active_model()
+        return None
 
     def connectors_by_name(self) -> dict[str, ConnectorConfig]:
         return {c.name: c for c in self.connectors}
@@ -715,6 +802,12 @@ class VibeConfigSchema(ConfigSchema):
         except ValueError:
             pass
         return next((p for p in self.providers if p.backend == Backend.MISTRAL), None)
+
+    def resolve_mistral_api_key(self) -> str:
+        provider = self.get_mistral_provider()
+        if provider is None:
+            return ""
+        return resolve_api_key(provider.api_key_env_var) or ""
 
     def is_active_model_mistral(self) -> bool:
         try:
@@ -853,17 +946,32 @@ class VibeConfigSchema(ConfigSchema):
         return self
 
     @model_validator(mode="after")
-    def _apply_global_auto_compact_threshold(self) -> VibeConfigSchema:
-        models = {
-            alias: (
-                model
-                if "auto_compact_threshold" in model.model_fields_set
-                else model.model_copy(
-                    update={"auto_compact_threshold": self.auto_compact_threshold}
-                )
+    def _apply_auto_compact_threshold(self) -> VibeConfigSchema:
+        # A threshold is a deliberate cap when a layer actually provided it:
+        # UNSET marks "no layer set one" (the default layer materializes field
+        # defaults into the merge, so unset-ness must live in the value). A
+        # cap is honored while it can fire — at or above a declared window the
+        # provider rejects the request before compaction ever runs — and 0
+        # stays a cap meaning "never compact".
+        global_cap = self.auto_compact_threshold
+        global_set = global_cap != UNSET_AUTO_COMPACT_THRESHOLD
+        global_value = global_cap if global_set else DEFAULT_AUTO_COMPACT_THRESHOLD
+        models = {}
+        for alias, model in self.models.items():
+            window = model.max_context_length
+            cap = model.auto_compact_threshold
+            if cap != UNSET_AUTO_COMPACT_THRESHOLD and (window is None or cap < window):
+                models[alias] = model
+                continue
+            if global_set and (window is None or global_value < window):
+                threshold = global_value
+            elif window:
+                threshold = int(window * AUTO_COMPACT_WINDOW_RATIO)
+            else:
+                threshold = global_value
+            models[alias] = model.model_copy(
+                update={"auto_compact_threshold": threshold}
             )
-            for alias, model in self.models.items()
-        }
         object.__setattr__(self, "models", models)
         return self
 
@@ -892,7 +1000,9 @@ class VibeConfigSchema(ConfigSchema):
         for pattern in self.allowed_models:
             if not (pattern or "").strip():
                 continue
-            if any(name_matches(alias, [pattern]) for alias in self.models):
+            if any(
+                name_matches(model.name, [pattern]) for model in self.models.values()
+            ):
                 continue
             logger.warning(
                 "Allowed model '%s' matches none of your configured models.", pattern
@@ -903,21 +1013,88 @@ class VibeConfigSchema(ConfigSchema):
         return self
 
     @model_validator(mode="after")
-    def _check_compaction_model_provider(self) -> VibeConfigSchema:
+    def _warn_disallowed_active_model(self) -> VibeConfigSchema:
+        if not self.active_model or self.active_model in self.available_models():
+            return self
+        fallback = self.resolve_default_model_alias()
+        logger.warning(
+            "Active model '%s' is excluded by allowed_models; "
+            "falling back to default model '%s'.",
+            self.active_model,
+            fallback,
+        )
+        self._validation_warnings.append(
+            f"Active model '{self.active_model}' is excluded by allowed_models "
+            f"— falling back to default model '{fallback}'."
+        )
+        return self
+
+    @model_validator(mode="after")
+    def _warn_unknown_utility_models(self) -> VibeConfigSchema:
+        # Mirrors get_utility_model without resolving the active model, which
+        # can raise under a fail-closed allowlist and would fail config loading.
+        available = self.available_models()
+        for feature, alias in self.utility_models.configured():
+            if alias in available:
+                continue
+            if alias == ACTIVE_MODEL_SELECTOR and alias not in self.models:
+                continue
+            reason = (
+                "is excluded by allowed_models"
+                if alias in self.models
+                else "is not one of your configured models"
+            )
+            logger.warning(
+                "Utility model '%s' for '%s' %s; "
+                "that feature falls back to automatic model selection.",
+                alias,
+                feature.value,
+                reason,
+            )
+            self._validation_warnings.append(
+                f"Utility model '{alias}' for '{feature.value}' {reason} — that "
+                "feature falls back to automatic model selection."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def _warn_cross_provider_compaction_model(self) -> VibeConfigSchema:
         if self.compaction_model is None:
             return self
 
         compaction_provider = self.get_provider_for_model(self.compaction_model)
-        try:
-            active_provider = self.get_provider_for_model(self.get_active_model())
-        except ValueError:
+        if self._shares_active_provider(self.compaction_model):
             return self
-        if active_provider.name != compaction_provider.name:
+        active_model = self.get_active_model()
+        logger.warning(
+            "Compaction model '%s' uses provider '%s' but active model '%s' uses "
+            "provider '%s'; compacting with the active model instead.",
+            self.compaction_model.alias,
+            compaction_provider.name,
+            active_model.alias,
+            active_model.provider,
+        )
+        self._validation_warnings.append(
+            f"Compaction model '{self.compaction_model.alias}' uses provider "
+            f"'{compaction_provider.name}', not the active model's "
+            f"'{active_model.provider}' — compacting with '{active_model.alias}' "
+            "instead."
+        )
+        return self
+
+    @model_validator(mode="after")
+    def _check_vision_model(self) -> VibeConfigSchema:
+        if self.vision_model is None:
+            return self
+        if not self.vision_model.supports_images:
             raise ValueError(
-                f"Compaction model '{self.compaction_model.alias}' uses provider "
-                f"'{compaction_provider.name}' but active model uses provider "
-                f"'{active_provider.name}'. They must share the same provider."
+                f"Vision model '{self.vision_model.alias}' must set "
+                "supports_images = true."
             )
+        # Deliberately no same-provider check, unlike `compaction_model`:
+        # crossing providers is the whole point of setting this, and the
+        # description is a standalone completion on its own backend.
+        self.get_provider_for_model(self.vision_model)
         return self
 
     @model_validator(mode="after")
@@ -937,6 +1114,10 @@ def create_default_config() -> dict[str, Any]:
     config_dict = VibeConfigSchema.model_construct().model_dump(
         mode="json", exclude_none=True
     )
+    # The unset sentinel is merge-internal; a default config handed to an
+    # external consumer must not carry it into a human-facing file.
+    if config_dict.get("auto_compact_threshold") == UNSET_AUTO_COMPACT_THRESHOLD:
+        del config_dict["auto_compact_threshold"]
     if isinstance(config_dict.get("models"), dict):
         config_dict["models"] = serialize_model_configs(config_dict["models"])
     if tool_defaults := ToolManager.discover_tool_defaults():

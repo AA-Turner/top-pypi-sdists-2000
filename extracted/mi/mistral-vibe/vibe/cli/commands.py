@@ -9,7 +9,6 @@ from vibe.cli.constants import CLIPBOARD_IMAGE_PASTE_SUPPORTED_SYSTEM
 
 @dataclass(frozen=True)
 class CommandContext:
-    vibe_code_enabled: bool = False
     registry_skills_enabled: bool = False
     experimental_harness: bool = False
 
@@ -25,6 +24,7 @@ class Command:
     exits: bool = False
     side_channel: bool = False
     is_available: CommandAvailability | None = None
+    forwards_to_model: bool = False
 
 
 class CommandRegistry:
@@ -128,7 +128,7 @@ class CommandRegistry:
             ),
             "status": Command(
                 aliases=frozenset(["/status"]),
-                description="Display agent statistics",
+                description="Display agent statistics and model and provider details",
                 handler="_show_status",
                 side_channel=True,
             ),
@@ -142,13 +142,11 @@ class CommandRegistry:
                 aliases=frozenset(["/teleport"]),
                 description="Teleport session to Vibe Code Web",
                 handler="_teleport_command",
-                is_available=lambda ctx: ctx.vibe_code_enabled,
             ),
             "remote-project": Command(
                 aliases=frozenset(["/remote-project"]),
                 description="Select the Vibe Code Web project for this repository",
                 handler="_vibe_code_project_command",
-                is_available=lambda ctx: ctx.vibe_code_enabled,
             ),
             "proxy-setup": Command(
                 aliases=frozenset(["/proxy-setup"]),
@@ -234,10 +232,13 @@ class CommandRegistry:
             "loop": Command(
                 aliases=frozenset(["/loop"]),
                 description=(
-                    "Schedule a recurring prompt. "
+                    "Schedule a recurring prompt in natural language: `/loop [schedule] [prompt]`"
+                    if self._context.experimental_harness
+                    else "Schedule a recurring prompt. "
                     "Use `/loop <interval> <prompt>`, `/loop list`, or `/loop cancel <id|all>`"
                 ),
                 handler="_loop_command",
+                forwards_to_model=self._context.experimental_harness,
             ),
             "data-retention": Command(
                 aliases=frozenset(["/data-retention"]),

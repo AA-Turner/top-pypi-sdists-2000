@@ -26,6 +26,7 @@ from vibe.core.utils import kill_async_subprocess
 from vibe.core.utils.shell import spawn_shell_command
 
 type ShellOutputObserver = Callable[[str], Awaitable[None]]
+type ShellStartObserver = Callable[[], Awaitable[None]]
 
 DEFAULT_MAX_OUTPUT_BYTES = 16_000
 
@@ -190,6 +191,44 @@ def restored_shell_effect_state(context: ManualShellContext) -> EffectState:
     )
 
 
+def capped_shell_effect_state(state: EffectState, limit: int) -> EffectState:
+    """Bound every output field of a terminal shell effect state.
+
+    A durable record must never hold more output than the model itself was
+    shown, so each field is capped with the same truncation marker the
+    model-visible text uses and the structured output reports that it was
+    truncated. States that were already within the limit come back unchanged.
+    """
+    if not isinstance(
+        state, CompletedEffectState | FailedEffectState | CancelledEffectState
+    ):
+        # Only terminal shell states carry output; a non-terminal state has
+        # nothing a durable record needs to bound.
+        return state
+    output_text = _cap_output(state.output_text, limit)
+    if isinstance(state, CompletedEffectState | FailedEffectState):
+        output = state.output
+        if isinstance(output, dict):
+            capped_output = {
+                key: _cap_output(value, limit) if isinstance(value, str) else value
+                for key, value in output.items()
+            }
+            truncated = output_text != state.output_text or capped_output != output
+        else:
+            capped_output = output
+            truncated = output_text != state.output_text
+        if not truncated:
+            return state
+        if isinstance(capped_output, dict):
+            capped_output = {**capped_output, "truncated": True}
+        return state.model_copy(
+            update={"output": capped_output, "output_text": output_text}
+        )
+    if output_text == state.output_text:
+        return state
+    return state.model_copy(update={"output_text": output_text})
+
+
 class ShellController:
     def __init__(self, cwd: Path) -> None:
         self._cwd = cwd
@@ -198,7 +237,10 @@ class ShellController:
         self._interrupted: set[str] = set()
 
     async def run(
-        self, params: ShellRunParams, observe_output: ShellOutputObserver | None = None
+        self,
+        params: ShellRunParams,
+        observe_output: ShellOutputObserver | None = None,
+        observe_start: ShellStartObserver | None = None,
     ) -> ShellRunResponse:
         if params.operation_id in self._operations:
             raise ShellConflictError(
@@ -214,6 +256,8 @@ class ShellController:
         timed_out = False
         interrupted = False
         try:
+            if observe_start is not None:
+                await observe_start()
             process = await spawn_shell_command(params.command, cwd=cwd)
             self._processes[params.operation_id] = process
             readers = [
