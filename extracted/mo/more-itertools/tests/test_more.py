@@ -27,15 +27,16 @@ from itertools import (
     product,
     repeat,
 )
+from math import factorial
 from operator import add, mul, itemgetter, not_
 from pickle import loads, dumps
 from random import Random, choices, random, randrange, seed
 from statistics import mean, median
 from string import ascii_letters
-from threading import Thread, Lock
+from threading import Event, Thread, Lock
 from time import sleep
 from typing import NamedTuple
-from unittest import TestCase, mock
+from unittest import TestCase, mock, skipUnless
 
 import more_itertools as mi
 
@@ -68,6 +69,15 @@ class ChunkedTests(TestCase):
         """Test when ``n`` has the value ``None``."""
         self.assertEqual(
             list(mi.chunked('ABCDE', None)), [['A', 'B', 'C', 'D', 'E']]
+        )
+
+    def test_negative(self):
+        """Test that a negative ``n`` raises a clear ``ValueError``, matching
+        the behavior of :func:`sliced`."""
+        self.assertRaisesRegex(
+            ValueError,
+            "n must be at least 0",
+            lambda: list(mi.chunked('ABCDE', -1)),
         )
 
     def test_strict_false(self):
@@ -552,6 +562,17 @@ class DistinctPermutationsTests(TestCase):
         expected = list(mi.unique_everseen(permutations(iterable), key=str))
         self.assertCountEqual(actual, expected)
 
+    def test_sortable_input_produces_sorted_output(self):
+        for iterable in [
+            [4, 3, 2, 1],
+            [2, 2, 3, 1],
+        ]:
+            for r in range(len(iterable) + 1):
+                with self.subTest(iterable=iterable, r=r):
+                    actual = list(mi.distinct_permutations(iterable, r=r))
+                    expected = sorted(set(permutations(iterable, r=r)))
+                    self.assertEqual(actual, expected)
+
 
 class DerangementsTests(TestCase):
     def test_unique_values(self):
@@ -696,6 +717,20 @@ class MinMaxTests(TestCase):
             mi.minmax((x for x in [10, 3, 25]), key=str), (10, 3)
         )
 
+    def test_key_matches_builtins(self):
+        # The keyed code path compares items pairwise, so a single example
+        # only reaches some of its branches. Exhausting the short orderings
+        # covers each one. `x % 7` keeps every key distinct, so there are no
+        # ties and `min`/`max` pick the same items `minmax` does.
+        key = lambda x: x % 7
+        for n in range(1, 5):
+            for values in permutations(range(1, 8), n):
+                with self.subTest(values=values):
+                    self.assertTupleEqual(
+                        mi.minmax(values, key=key),
+                        (min(values, key=key), max(values, key=key)),
+                    )
+
     def test_default(self):
         with self.assertRaises(ValueError):
             mi.minmax([])
@@ -754,6 +789,33 @@ class OneTests(TestCase):
             "iterable, but got 0, 1, and "
             "perhaps more.",
             lambda: mi.one(it),
+        )
+
+    def test_falsy_custom_exception(self):
+        # An exception whose instances are falsy must still be raised, rather
+        # than being treated as "no custom exception given".
+        class FalsyError(Exception):
+            def __bool__(self):
+                return False
+
+        too_long = FalsyError('too many')
+        self.assertRaises(
+            FalsyError, lambda: mi.one(count(), too_long=too_long)
+        )
+
+        too_short = FalsyError('too few')
+        self.assertRaises(FalsyError, lambda: mi.one([], too_short=too_short))
+
+    def test_too_long_does_not_evaluate_repr(self):
+        # When too_long is given, the default message (which reprs the first two
+        # items) should never be built.
+        class NoRepr:
+            def __repr__(self):
+                raise RuntimeError('repr should not be called')
+
+        it = (NoRepr() for _ in count())
+        self.assertRaises(
+            OverflowError, lambda: mi.one(it, too_long=OverflowError)
         )
 
 
@@ -1047,6 +1109,54 @@ class BucketTests(TestCase):
         self.assertEqual(list(D[20]), [])
         self.assertEqual(list(D[30]), [30, 31, 33])
 
+    def test_falsey_validator_is_honoured(self):
+        # A falsey callable is still a valid validator and must not be
+        # replaced by the default (see #1308).
+        class AllowedKeys(set):
+            def __call__(self, key):
+                return key in self
+
+        allowed = AllowedKeys()
+        self.assertFalse(allowed)  # Sanity: the validator itself is falsey
+        D = mi.bucket(
+            iter([10, 20, 11, 21]), key=lambda x: x, validator=allowed
+        )
+        self.assertEqual(list(D[10]), [])
+        self.assertNotIn(10, D)
+        self.assertEqual(set(D), set())
+
+    def test_in_does_not_add_key(self):
+        # A failed membership test must not invent a key (see #1284)
+        iterable = [10, 20, 11, 21]
+        D = mi.bucket(iterable, key=lambda x: 10 * (x // 10))
+        self.assertFalse(30 in D)
+        self.assertEqual(set(D), {10, 20})
+        self.assertEqual(list(D[30]), [])
+
+    def test_getitem_miss_does_not_add_key(self):
+        # Selecting an absent bucket must not invent a key either
+        iterable = [10, 20, 11, 21]
+        D = mi.bucket(iterable, key=lambda x: 10 * (x // 10))
+        self.assertEqual(list(D[30]), [])
+        self.assertEqual(set(D), {10, 20})
+
+    def test_in_does_not_add_key_with_validator(self):
+        # A key the validator accepts but the iterable never produces
+        iterable = [10, 20, 11, 21]
+        key = lambda x: 10 * (x // 10)
+        validator = lambda x: x in {10, 20, 30}
+        D = mi.bucket(iterable, key, validator=validator)
+        self.assertFalse(30 in D)
+        self.assertEqual(set(D), {10, 20})
+
+    def test_keys_are_only_those_seen(self):
+        # Every reported key must have had at least one matching item
+        iterable = [10, 20, 11]
+        D = mi.bucket(iterable, key=lambda x: 10 * (x // 10))
+        for missing in (30, 40, 50):
+            self.assertFalse(missing in D)
+        self.assertEqual(set(D), {10, 20})
+
 
 class SpyTests(TestCase):
     """Tests for ``spy()``"""
@@ -1172,6 +1282,10 @@ class InterleaveEvenlyTests(TestCase):
         expected = [1, 2, 3]
         actual = list(mi.interleave_evenly([a, b]))
         self.assertEqual(actual, expected)
+
+    def test_no_iterables(self):
+        self.assertEqual(list(mi.interleave_evenly([])), [])
+        self.assertEqual(list(mi.interleave_evenly([], lengths=[])), [])
 
     def test_three_iters(self):
         a = ["a1", "a2", "a3", "a4", "a5"]
@@ -1403,6 +1517,15 @@ class SlicedTests(TestCase):
         with self.assertRaises(ValueError):
             list(mi.sliced(seq, 4, strict=True))
 
+    def test_negative(self):
+        """Negative slice sizes should raise instead of silently
+        yielding a wrong result."""
+        seq = 'ABCDEFG'
+        self.assertRaises(ValueError, lambda: list(mi.sliced(seq, -1)))
+        self.assertRaises(
+            ValueError, lambda: list(mi.sliced(seq, -1, strict=True))
+        )
+
     def test_numpy_like_array(self):
         # Numpy arrays don't behave like Python lists - calling bool()
         # on them doesn't return False for empty lists and True for non-empty
@@ -1443,17 +1566,17 @@ class SplitAtTests(TestCase):
                 self.assertEqual(actual, expected)
 
     def test_maxsplit(self):
-        iterable = 'a,bb,ccc,dddd'
         separator = ','
         pred = lambda x: x == separator
 
-        for maxsplit in range(-1, 4):
-            with self.subTest(maxsplit=maxsplit):
-                it = iter(iterable)
-                result = mi.split_at(it, pred, maxsplit=maxsplit)
-                actual = [''.join(x) for x in result]
-                expected = iterable.split(separator, maxsplit)
-                self.assertEqual(actual, expected)
+        for iterable in ['a,bb,ccc,dddd', '']:
+            for maxsplit in range(-1, 4):
+                with self.subTest(iterable=iterable, maxsplit=maxsplit):
+                    it = iter(iterable)
+                    result = mi.split_at(it, pred, maxsplit=maxsplit)
+                    actual = [''.join(x) for x in result]
+                    expected = iterable.split(separator, maxsplit)
+                    self.assertEqual(actual, expected)
 
     def test_keep_separator(self):
         separator = ','
@@ -1499,9 +1622,13 @@ class SplitBeforeTest(TestCase):
         self.assertEqual(actual, expected)
 
     def test_empty_collection(self):
-        actual = list(mi.split_before([], lambda c: bool(c)))
-        expected = []
-        self.assertEqual(actual, expected)
+        for maxsplit in range(-1, 4):
+            with self.subTest(maxsplit=maxsplit):
+                actual = list(
+                    mi.split_before([], lambda c: bool(c), maxsplit=maxsplit)
+                )
+                expected = []
+                self.assertEqual(actual, expected)
 
     def test_max_split(self):
         for args, expected in [
@@ -1555,6 +1682,15 @@ class SplitAfterTest(TestCase):
         actual = list(mi.split_after('ooo', lambda c: c == 'x'))
         expected = [['o', 'o', 'o']]
         self.assertEqual(actual, expected)
+
+    def test_empty_collection(self):
+        for maxsplit in range(-1, 4):
+            with self.subTest(maxsplit=maxsplit):
+                actual = list(
+                    mi.split_after([], lambda c: bool(c), maxsplit=maxsplit)
+                )
+                expected = []
+                self.assertEqual(actual, expected)
 
     def test_max_split(self):
         for args, expected in [
@@ -1640,9 +1776,13 @@ class SplitWhenTests(TestCase):
 
     # edge cases
     def test_empty_iterable(self):
-        actual = list(mi.split_when('', lambda a, b: a != b))
-        expected = []
-        self.assertEqual(actual, expected)
+        for maxsplit in range(-1, 4):
+            with self.subTest(maxsplit=maxsplit):
+                actual = list(
+                    mi.split_when('', lambda a, b: a != b, maxsplit=maxsplit)
+                )
+                expected = []
+                self.assertEqual(actual, expected)
 
     def test_one_element(self):
         actual = list(mi.split_when('o', lambda a, b: a == b))
@@ -2597,7 +2737,7 @@ class NumericRangeTests(TestCase):
             ((0.0,), []),
             ((1, 0), []),
             ((1.0, 0.0), []),
-            ((0.1, 0.30000000000000001, 0.2), [0.1]),  # IEE 754 !
+            ((0.1, 0.30000000000000001, 0.2), [0.1]),  # IEEE 754 !
             (
                 (
                     Decimal("0.1"),
@@ -2735,7 +2875,47 @@ class NumericRangeTests(TestCase):
                 self.assertFalse(v in r)
                 self.assertTrue(v not in r)
 
+    def test_contains_items_with_inexact_step(self):
+        # The items are produced by repeated multiplication, so with a step
+        # that has no exact float representation they do not land on an exact
+        # multiple of it. Every item must still be a member, and index() must
+        # locate it where __getitem__ puts it.
+        for args in [
+            (0.0, 1.0, 0.1),
+            (0.0, 3.0, 0.7),
+            (1.0, 0.0, -0.1),
+            (2.1, 5.1, 0.5),
+            (-1.0, 1.0, 0.25),
+        ]:
+            r = mi.numeric_range(*args)
+            for i, v in enumerate(r):
+                self.assertIn(v, r)
+                self.assertEqual(i, r.index(v))
+                self.assertEqual(v, r[i])
+                self.assertEqual(1, r.count(v))
+
+    def test_contains_non_items_with_inexact_step(self):
+        # Values the range does not produce stay out of it.
+        r = mi.numeric_range(0.0, 1.0, 0.1)
+        items = set(r)
+        for i in range(1000):
+            v = i / 1000
+            if v not in items:
+                self.assertNotIn(v, r)
+                self.assertRaises(ValueError, r.index, v)
+
     def test_eq(self):
+        # numeric_range objects are equal to themselves
+        range_1 = mi.numeric_range(2, 4, 1)
+        self.assertEqual(range_1, range_1)
+
+        # ...and to distinct objects covering the same values
+        self.assertEqual(range_1, mi.numeric_range(2, 4, 1))
+
+        # numeric_range objects are not equal other types of objects
+        self.assertNotEqual(mi.numeric_range(7.0), 1)
+        self.assertNotEqual(mi.numeric_range(7.0), "abc")
+
         for args1, args2 in [
             ((0, 5, 2), (0, 6, 2)),
             ((1.0, 9.9, 1.5), (1.0, 8.6, 1.5)),
@@ -2761,10 +2941,12 @@ class NumericRangeTests(TestCase):
                     timedelta(hours=10),
                 ),
             ),
+            ((2, 3, 1), (2, 3, 5)),
         ]:
-            self.assertEqual(
-                mi.numeric_range(*args1), mi.numeric_range(*args2)
-            )
+            range1 = mi.numeric_range(*args1)
+            range2 = mi.numeric_range(*args2)
+            self.assertEqual(range1, range2)
+            self.assertEqual(hash(range1), hash(range2))
 
         for args1, args2 in [
             ((0, 5, 2), (0, 7, 2)),
@@ -2796,12 +2978,10 @@ class NumericRangeTests(TestCase):
                 ),
             ),
         ]:
-            self.assertNotEqual(
-                mi.numeric_range(*args1), mi.numeric_range(*args2)
-            )
-
-        self.assertNotEqual(mi.numeric_range(7.0), 1)
-        self.assertNotEqual(mi.numeric_range(7.0), "abc")
+            range1 = mi.numeric_range(*args1)
+            range2 = mi.numeric_range(*args2)
+            self.assertNotEqual(range1, range2)
+            self.assertNotEqual(hash(range1), hash(range2))
 
     def test_get_item_by_index(self):
         for args, index, expected in [
@@ -2898,39 +3078,6 @@ class NumericRangeTests(TestCase):
                 mi.numeric_range(*expected_args), mi.numeric_range(*args)[sl]
             )
 
-    def test_hash(self):
-        for args, expected in [
-            ((1.0, 6.0, 1.5), hash((1.0, 5.5, 1.5))),
-            ((1.0, 7.0, 1.5), hash((1.0, 5.5, 1.5))),
-            ((1.0, 7.5, 1.5), hash((1.0, 7.0, 1.5))),
-            ((1.0, 1.5, 1.5), hash((1.0, 1.0, 1.5))),
-            ((1.5, 1.0, 1.5), hash(range(0, 0))),
-            ((1.5, 1.5, 1.5), hash(range(0, 0))),
-            (
-                (Decimal("1.0"), Decimal("9.0"), Decimal("1.5")),
-                hash((Decimal("1.0"), Decimal("8.5"), Decimal("1.5"))),
-            ),
-            (
-                (Fraction(1, 1), Fraction(5, 1), Fraction(3, 2)),
-                hash((Fraction(1, 1), Fraction(4, 1), Fraction(3, 2))),
-            ),
-            (
-                (
-                    datetime(2019, 3, 29),
-                    datetime(2019, 3, 30),
-                    timedelta(hours=10),
-                ),
-                hash(
-                    (
-                        datetime(2019, 3, 29),
-                        datetime(2019, 3, 29, 20),
-                        timedelta(hours=10),
-                    )
-                ),
-            ),
-        ]:
-            self.assertEqual(expected, hash(mi.numeric_range(*args)))
-
     def test_iter_twice(self):
         r1 = mi.numeric_range(1.0, 9.9, 1.5)
         r2 = mi.numeric_range(8.5, 0.0, -1.5)
@@ -2945,7 +3092,7 @@ class NumericRangeTests(TestCase):
             ((1.0, 7.01, 1.5), 5),
             ((7.0, 1.0, -1.5), 4),
             ((7.01, 1.0, -1.5), 5),
-            ((0.1, 0.30000000000000001, 0.2), 1),  # IEE 754 !
+            ((0.1, 0.30000000000000001, 0.2), 1),  # IEEE 754 !
             (
                 (
                     Decimal("0.1"),
@@ -2966,6 +3113,28 @@ class NumericRangeTests(TestCase):
             ),
         ]:
             self.assertEqual(expected, len(mi.numeric_range(*args)))
+
+    def test_len_matches_iteration(self):
+        # len() is derived by division while the items come from repeated
+        # multiplication; the two must not disagree, or the last index reports
+        # an item the range never yields.
+        for args in [
+            # the division overshoots: len() counted an item past the stop
+            (-8.732, -13.532, -2.4),
+            (4.51, 10.375, 0.255),
+            # the division falls short: len() missed an item the range yields
+            (-69.37276490678778, -29.8339073344664, 4.942357196540172),
+            (32.50227965239458, 9.003418351482358, -1.9582384417426848),
+            (0.0, 1.0, 0.1),
+            (0.0, 3.0, 0.7),
+            (10.0, -10.0, -0.7),
+            (2.1, 5.1, 0.5),
+        ]:
+            r = mi.numeric_range(*args)
+            items = list(r)
+            self.assertEqual(len(items), len(r))
+            if items:
+                self.assertEqual(items[-1], r[len(r) - 1])
 
     def test_repr(self):
         for args, *expected in [
@@ -3031,6 +3200,25 @@ class NumericRangeTests(TestCase):
             ),
         ]:
             self.assertEqual(expected, list(reversed(mi.numeric_range(*args))))
+
+    def test_reversed_preserves_float_values(self):
+        for args in [
+            (0.0, 1.0, 0.1),
+            (1.0, 0.0, -0.1),
+            (0.1, 0.5, 0.1),
+        ]:
+            with self.subTest(args=args):
+                values = mi.numeric_range(*args)
+                self.assertEqual(list(values)[::-1], list(reversed(values)))
+
+    def test_reversed_datetime_limits(self):
+        for start, step in [
+            (datetime.min, timedelta(days=1)),
+            (datetime.max, -timedelta(days=1)),
+        ]:
+            with self.subTest(start=start, step=step):
+                values = mi.numeric_range(start, start + 2 * step, step)
+                self.assertEqual(list(values)[::-1], list(reversed(values)))
 
     def test_count(self):
         for args, v, c in [
@@ -3608,6 +3796,44 @@ class SeekableTest(PeekableMixinTests, TestCase):
         s = mi.seekable(iterable, maxlen=0)
         self.assertEqual(list(s), iterable)
         self.assertEqual(list(s.elements()), [])
+
+    def test_maxlen_zero_peek_does_not_drop_items(self):
+        s = mi.seekable([10, 20, 30], maxlen=0)
+        self.assertEqual(s.peek(), 10)
+        self.assertEqual(s.peek(), 10)
+        self.assertEqual(list(s), [10, 20, 30])
+
+    def test_maxlen_zero_bool_does_not_drop_items(self):
+        s = mi.seekable([10, 20, 30], maxlen=0)
+        self.assertTrue(s)
+        self.assertEqual(list(s), [10, 20, 30])
+
+        s = mi.seekable([], maxlen=0)
+        self.assertFalse(s)
+
+    @skipUnless(
+        platform.python_implementation() == 'CPython',
+        'retained allocation check uses CPython tracemalloc',
+    )
+    def test_repeated_zero_cache_peek_has_bounded_memory(self):
+        import tracemalloc
+
+        if tracemalloc.is_tracing():
+            self.skipTest('do not disturb an existing allocation trace')
+        iterator = mi.seekable(range(3), maxlen=0)
+        iterator.peek()
+        tracemalloc.start()
+        try:
+            for _ in range(10000):
+                iterator.peek()
+                bool(iterator)
+            retained = tracemalloc.get_traced_memory()[0]
+        finally:
+            tracemalloc.stop()
+        # A lookahead needs one item, not one iterator per peek/truth test.
+        self.assertLess(retained, 256 * 1024)
+        self.assertEqual(list(iterator.elements()), [])
+        self.assertEqual(list(iterator), [0, 1, 2])
 
     def test_relative_seek(self):
         iterable = [str(x) for x in range(5)]
@@ -4291,6 +4517,28 @@ class OnlyTests(TestCase):
             lambda: mi.only(['foo', 'bar', 'baz']),
         )
 
+    def test_falsy_custom_exception(self):
+        class FalsyError(Exception):
+            def __bool__(self):
+                return False
+
+        too_long = FalsyError('too many')
+        self.assertRaises(
+            FalsyError, lambda: mi.only([1, 2], too_long=too_long)
+        )
+
+    def test_too_long_does_not_evaluate_repr(self):
+        class NoRepr:
+            def __repr__(self):
+                raise RuntimeError('repr should not be called')
+
+        self.assertRaises(
+            OverflowError,
+            lambda: mi.only(
+                [NoRepr(), NoRepr(), NoRepr()], too_long=OverflowError
+            ),
+        )
+
 
 class IchunkedTests(TestCase):
     def test_even(self):
@@ -4311,10 +4559,22 @@ class IchunkedTests(TestCase):
         expected = []
         self.assertEqual(actual, expected)
 
+    def test_zero_nonempty(self):
+        # chunked(..., 0) yields nothing; ichunked should match, including
+        # when the source still has items (the empty-iterable case hid this).
+        iterable = [1, 2, 3]
+        actual = [list(c) for c in mi.ichunked(iterable, 0)]
+        self.assertEqual(actual, [])
+
+        source = iter([1, 2, 3])
+        self.assertEqual([list(c) for c in mi.ichunked(source, 0)], [])
+        self.assertEqual(list(source), [1, 2, 3])
+
     def test_negative(self):
         iterable = count()
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError) as cm:
             [list(c) for c in mi.ichunked(iterable, -1)]
+        self.assertIn('n must be at least 0', str(cm.exception))
 
     def test_out_of_order(self):
         iterable = map(str, count())
@@ -4783,6 +5043,24 @@ class CallbackIterTests(TestCase):
             with self.assertRaises(RuntimeError):
                 it.result
 
+    def test_no_result_while_running(self):
+        # Unlike test_no_result, here the function has started but hasn't
+        # returned, so there is a pending future to interrogate.
+        gate = Event()
+
+        def func(callback=None):
+            callback(1, 'a', intermediate_total=1)
+            gate.wait()
+            return 6
+
+        with mi.callback_iter(func, wait_seconds=0.01) as it:
+            self.assertEqual(next(it), ((1, 'a'), {'intermediate_total': 1}))
+            self.assertFalse(it.done)
+            with self.assertRaises(RuntimeError):
+                it.result
+
+            gate.set()
+
     def test_exception(self):
         func = lambda callback=None: self._target(cb=callback, exc=ValueError)
         with mi.callback_iter(func) as it:
@@ -4980,6 +5258,28 @@ class ValueChainTests(TestCase):
         expected = [1, (2, (3,)), 'foo', ['bar', ['baz']], 'tic', 'key', obj]
         self.assertEqual(actual, expected)
 
+    def test_type_error_while_iterating(self):
+        # A TypeError raised while consuming an argument means the argument
+        # is broken, not that it is a scalar - it should propagate.
+        def gen():
+            yield 1
+            yield 2
+            raise TypeError('failure inside the iterable')
+
+        it = mi.value_chain(gen(), 3)
+        self.assertEqual([next(it), next(it)], [1, 2])
+        with self.assertRaises(TypeError):
+            next(it)
+
+    def test_type_error_from_iter(self):
+        # An object that cannot be iterated at all is still emitted as-is.
+        class NotIterable:
+            def __iter__(self):
+                raise TypeError('not iterable')
+
+        obj = NotIterable()
+        self.assertEqual(list(mi.value_chain(1, obj, [2, 3])), [1, obj, 2, 3])
+
 
 class ProductIndexTests(TestCase):
     def test_basic(self):
@@ -5097,6 +5397,36 @@ class CombinationIndexTests(TestCase):
 
 
 class CombinationWithReplacementIndexTests(TestCase):
+    def test_none_values(self):
+        for iterable in (
+            [None, 1, 2],
+            [1, None, 2],
+            [1, 2, None],
+            [None, 1, None],
+        ):
+            for r in range(4):
+                first_index = {}
+                for index, element in enumerate(
+                    combinations_with_replacement(iterable, r)
+                ):
+                    with self.subTest(iterable=iterable, element=element):
+                        actual = mi.combination_with_replacement_index(
+                            iter(element), iter(iterable)
+                        )
+                        expected = first_index.setdefault(element, index)
+                        self.assertEqual(actual, expected)
+
+    def test_invalid_none_values(self):
+        for element, iterable in (
+            ((None,), [1, 2]),
+            ((1, None), [1, 2]),
+            ((1, None), [None, 1]),
+            ((None, 2), [1, None]),
+        ):
+            with self.subTest(element=element, iterable=iterable):
+                with self.assertRaises(ValueError):
+                    mi.combination_with_replacement_index(element, iterable)
+
     def test_r_less_than_n(self):
         iterable = 'abcdefg'
         r = 4
@@ -5277,6 +5607,27 @@ class ChunkedEvenTests(TestCase):
 
 
 class ZipBroadcastTests(TestCase):
+    def test_single_use_iterable(self):
+        class SingleUseIterable:
+            def __init__(self, values):
+                self.values = values
+                self.opened = False
+
+            def __iter__(self):
+                if self.opened:
+                    raise RuntimeError('input already opened')
+                self.opened = True
+                return iter(self.values)
+
+        for values in ([], [1, 2]):
+            for strict in (False, True):
+                with self.subTest(values=values, strict=strict):
+                    source = SingleUseIterable(values)
+                    self.assertEqual(
+                        list(mi.zip_broadcast('label', source, strict=strict)),
+                        [('label', value) for value in values],
+                    )
+
     def test_zip(self):
         for objects, zipped, strict_ok in [
             # Empty
@@ -5953,6 +6304,23 @@ class ConstrainedBatchesTests(TestCase):
         expected = [('1', '1'), ('12345678',), ('12345', '12345')]
         self.assertEqual(actual, expected)
 
+    def test_max_count_one(self):
+        self.assertEqual(
+            list(mi.constrained_batches(['', 'a', ''], 10, max_count=1)),
+            [('',), ('a',), ('',)],
+        )
+
+    def test_nonpositive_max_count(self):
+        for max_count in (0, -1):
+            for items in ([], ['a', 'b']):
+                with self.subTest(max_count=max_count, items=items):
+                    source = iter(items)
+                    with self.assertRaisesRegex(
+                        ValueError, 'maximum count must be greater than zero'
+                    ):
+                        list(mi.constrained_batches(source, 10, max_count))
+                    self.assertEqual(list(source), items)
+
     def test_strict(self):
         iterable = ['1', '123456789', '1']
         size = 8
@@ -6302,14 +6670,19 @@ class PowersetOfSetsTests(TestCase):
         hash_count = 0
 
         class Str(str):
-            def __hash__(true_self):
+            def __hash__(self):
                 nonlocal hash_count
                 hash_count += 1
-                return super.__hash__(true_self)
+                return super().__hash__()
 
-        iterable = map(Str, 'ABBBCDD')
-        self.assertEqual(len(list(mi.powerset_of_sets(iterable))), 128)
-        self.assertLessEqual(hash_count, 14)
+        # Six distinct input values should have 2 ** 6 subsets.
+        iterable = map(Str, 'ABBBCDDEEEF')
+        self.assertEqual(mi.ilen(mi.powerset_of_sets(iterable)), 2**6)
+
+        # Eleven input values should have 11 hash calls.
+        # However, PyPy's version of dict.fromkeys calls hash a
+        # second time for set inputs. This doubles the 11 to 22.
+        self.assertIn(hash_count, {11, 22})
 
     def test_baseset(self):
         iterable = [0, 1, 2]
@@ -6805,6 +7178,14 @@ class TestRunningMin(TestCase):
             list(mi.running_min(iter(data))),
         )
 
+    def test_stability(self):
+        # min(x, y) returns x when x == y
+        data = [0, 0.0, Fraction(0)]
+        self.assertEqual(
+            list(map(type, mi.running_min(data, maxlen=2))),
+            [type(min(data[0:1])), type(min(data[0:2])), type(min(data[1:3]))],
+        )
+
 
 class TestRunningMax(TestCase):
     def test_basic(self):
@@ -6849,6 +7230,14 @@ class TestRunningMax(TestCase):
         self.assertEqual(
             list(mi.running_max(iter(data), maxlen=len(data) * 2)),
             list(mi.running_max(iter(data))),
+        )
+
+    def test_stability(self):
+        # max(x, y) returns x when x == y
+        data = [0, 0.0, Fraction(0)]
+        self.assertEqual(
+            list(map(type, mi.running_max(data, maxlen=2))),
+            [type(max(data[0:1])), type(max(data[0:2])), type(max(data[1:3]))],
         )
 
 
@@ -6993,3 +7382,63 @@ class TestRunningStats(TestCase):
             list(mi.running_statistics(map(complex, data)))
         with self.assertRaises(TypeError):
             list(mi.running_statistics(map(complex, data), maxlen=3))
+
+
+class TestSubfactorial(TestCase):
+    def test_oeis_baseline(self):
+        # https://oeis.org/A000166
+        reference_cases = """
+        1, 0, 1, 2, 9, 44, 265, 1854, 14833, 133496, 1334961, 14684570,
+        176214841, 2290792932, 32071101049, 481066515734, 7697064251745,
+        130850092279664, 2355301661033953, 44750731559645106,
+        895014631192902121, 18795307255050944540, 413496759611120779881,
+        9510425471055777937262
+        """.replace(',', ' ').split()
+        for n, target_str in enumerate(reference_cases):
+            with self.subTest(n=n):
+                self.assertEqual(mi.subfactorial(n), int(target_str))
+
+    def test_vs_derangements(self):
+        for n in range(10):
+            with self.subTest(n=n):
+                self.assertEqual(
+                    mi.subfactorial(n), mi.ilen(mi.derangements('.' * n))
+                )
+
+    def test_error_cases(self):
+        with self.assertRaises(TypeError):
+            mi.subfactorial(5.0)  # float input
+        with self.assertRaises(TypeError):
+            mi.subfactorial('5')  # string input
+        with self.assertRaises(ValueError):
+            mi.subfactorial(-1)  # negative input
+
+
+class TestRandomOrderedRange(TestCase):
+    test_inputs = [
+        (-1,),
+        (0,),
+        (1,),
+        (2,),
+        (3,),
+        (4,),
+        (10,),
+        (50,),
+        (10_000,),
+        (100, 200),
+        (1000, 2000, 10),
+        (2000, 1000, -10),
+    ]
+
+    def test_vs_ordered_baseline(self):
+        # Verify that the randomized values match the ordered values.
+        for args in self.test_inputs:
+            with self.subTest(args=args):
+                randomized = sorted(mi.random_ordered_range(*args))
+                ordered = sorted(range(*args))
+                self.assertEqual(randomized, ordered)
+
+    def test_lcg_mitigation(self):
+        # Without mitigation the LCG doesn't produce many distinct permutations
+        perms = set(tuple(mi.random_ordered_range(6)) for _ in range(10**5))
+        self.assertEqual(len(perms), factorial(6))

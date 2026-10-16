@@ -2,6 +2,7 @@
 
 import contextlib
 import csv
+import json
 import os
 import platform
 import shutil
@@ -472,25 +473,30 @@ def test_load_tensor_uint8():
 
 
 def test_predict_gray_and_4ch(tmp_path):
-    """Test YOLO prediction on SOURCE converted to grayscale and 4-channel images with various filenames."""
+    """Test YOLO prediction on grayscale, 4-channel, and EXIF-rotated images with various filenames."""
     im = Image.open(SOURCE)
 
     source_grayscale = tmp_path / "grayscale.jpg"
     source_rgba = tmp_path / "4ch.png"
     source_non_utf = tmp_path / "non_UTF_测试文件_tést_image.jpg"
     source_spaces = tmp_path / "image with spaces.jpg"
+    source_exif = tmp_path / "exif.jpg"
 
     im.convert("L").save(source_grayscale)  # grayscale
     im.convert("RGBA").save(source_rgba)  # 4-ch PNG with alpha
     im.save(source_non_utf)  # non-UTF characters in filename
     im.save(source_spaces)  # spaces in filename
+    exif = im.getexif()
+    exif[274] = 6  # stored landscape, displayed portrait
+    im.rotate(90, expand=True).save(source_exif, exif=exif)
 
     # Inference
     model = YOLO(MODEL)
-    for f in source_rgba, source_grayscale, source_non_utf, source_spaces:
+    for f in source_rgba, source_grayscale, source_non_utf, source_spaces, source_exif:
         for source in Image.open(f), cv2.imread(str(f)), f:
             results = model(source, save=True, verbose=True, imgsz=32)
             assert len(results) == 1, f"Expected 1 result for {f.name}, got {len(results)}"
+            np.testing.assert_array_equal(results[0].orig_img, cv2.imread(str(f)))
         f.unlink()  # cleanup
 
 
@@ -1520,6 +1526,41 @@ def test_verify_image_label_keeps_polygons_sharing_a_box(tmp_path):
     assert len(labels) == len(segments) == 2
 
 
+def test_grounding_dataset_keeps_polygons_sharing_a_box(tmp_path):
+    """Keep distinct grounding polygons and exact-repeat deduplication across cached task switches."""
+    from ultralytics.data.dataset import GroundingDataset
+    from ultralytics.utils import DEFAULT_CFG
+
+    cv2.imwrite(str(tmp_path / "image.jpg"), np.zeros((32, 32, 3), np.uint8))
+    polygons = [[4, 4, 28, 4, 28, 28], [4, 4, 4, 28, 28, 28]]
+    annotations = [
+        {"image_id": 1, "bbox": [4, 4, 24, 24], "iscrowd": 0, "tokens_positive": [[0, 6]], "segmentation": [p]}
+        for p in [*polygons, polygons[0]]
+    ]
+    path = tmp_path / "annotations.json"
+    path.write_text(
+        json.dumps(
+            {
+                "images": [{"id": 1, "width": 32, "height": 32, "file_name": "image.jpg", "caption": "object"}],
+                "annotations": annotations,
+            }
+        )
+    )
+    for task, count in (("segment", 2), ("detect", 1), ("segment", 2), ("segment", 2)):
+        ds = GroundingDataset(
+            img_path=str(tmp_path),
+            json_file=str(path),
+            task=task,
+            imgsz=32,
+            batch_size=1,
+            augment=False,
+            hyp=DEFAULT_CFG,
+        )
+        assert len(ds.labels[0]["cls"]) == len(ds.labels[0]["segments"]) == count
+        if task == "segment":
+            assert ds[0]["masks"].unique().tolist() == [0, 1, 2]
+
+
 def test_depth_dataset_ignores_unreadable_targets(tmp_path):
     """Drop unreadable depth maps and accept single-class mode with empty class labels."""
     from ultralytics.data.dataset import DepthDataset
@@ -1618,6 +1659,36 @@ def test_utils_torchutils():
 
     profile_ops(x, [m], n=3)
     time_sync()
+
+
+@pytest.mark.parametrize("momentum", [0.0, 0.9])
+def test_rmsprop_checkpoint_preserves_square_avg(tmp_path, momentum):
+    """RMSprop checkpoint compression must preserve small second moments and resumed update magnitudes."""
+    from copy import deepcopy
+
+    from ultralytics.utils.patches import torch_load
+    from ultralytics.utils.torch_utils import convert_optimizer_state_dict_to_fp16
+
+    param = torch.nn.Parameter(torch.ones(1))
+    optimizer = torch.optim.RMSprop([param], lr=0.01, momentum=momentum)
+    for _ in range(100):
+        param.grad = torch.full_like(param, 1e-4)
+        optimizer.step()
+    state = deepcopy(optimizer.state_dict())
+    checkpoint = tmp_path / "optimizer.pt"
+    torch.save(convert_optimizer_state_dict_to_fp16(deepcopy(state)), checkpoint)
+    saved = torch_load(checkpoint)
+    assert torch.equal(saved["state"][0]["square_avg"], state["state"][0]["square_avg"])
+
+    updates = []
+    for checkpoint_state in (state, saved):
+        resumed_param = torch.nn.Parameter(torch.ones(1))
+        resumed = torch.optim.RMSprop([resumed_param], lr=0.01, momentum=momentum)
+        resumed.load_state_dict(checkpoint_state)
+        resumed_param.grad = torch.full_like(resumed_param, 1e-6)
+        resumed.step()
+        updates.append(1 - resumed_param.detach())
+    assert torch.allclose(updates[0], updates[1], rtol=1e-3, atol=1e-6)
 
 
 def test_rtdetr_remap_cls_by_names():
@@ -1760,6 +1831,29 @@ def test_utils_ops():
     assert segment2box(np.empty((0, 2)), 640, 640).tolist() == [0, 0, 0, 0]
     seg = np.array([[-100.0, -100.0], [740.0, -100.0], [740.0, 740.0], [-100.0, 740.0]])  # surrounds the image
     assert segment2box(seg, 640, 640).tolist() == [0, 0, 640, 640]
+
+
+@pytest.mark.parametrize("imgsz", [32, (32, 64), (64, 32)])
+def test_rtdetr_validation_shape_and_boxes(imgsz, tmp_path):
+    """RT-DETR resizing and normalized predictions must share the export shape and invert to source coordinates."""
+    from ultralytics.models.rtdetr.val import RTDETRValidator
+    from ultralytics.utils import ops
+
+    images, labels = tmp_path / "images", tmp_path / "labels"
+    images.mkdir()
+    labels.mkdir()
+    cv2.imwrite(str(images / "image.jpg"), np.zeros((40, 80, 3), dtype=np.uint8))
+    (labels / "image.txt").write_text("0 0.5 0.5 0.5 0.5\n")
+    validator = RTDETRValidator(args={"imgsz": 32}, save_dir=tmp_path / "val")
+    validator.args.imgsz = imgsz  # static export metadata is applied after validator initialization
+    validator.data = {"names": {0: "object"}, "nc": 1, "channels": 3}
+    sample = validator.build_dataset(str(images), batch=1)[0]
+    h, w = (imgsz, imgsz) if isinstance(imgsz, int) else imgsz
+    assert sample["img"].shape[-2:] == (h, w)
+    boxes = validator.postprocess(torch.tensor([[[0.5, 0.5, 0.5, 0.5, 0.9, 0]]]))[0]["bboxes"]
+    assert torch.equal(boxes, torch.tensor([[w / 4, h / 4, 3 * w / 4, 3 * h / 4]]))
+    boxes = ops.scale_boxes((h, w), boxes, sample["ori_shape"], sample["ratio_pad"])
+    assert torch.allclose(boxes, torch.tensor([[20.0, 10.0, 60.0, 30.0]]))
 
 
 def test_scale_coords_nonuniform_letterbox():

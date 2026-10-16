@@ -37,8 +37,7 @@ from .fields.resolver import StrawberryResolver
 
 if TYPE_CHECKING:
     import builtins
-    from typing import Literal
-    from typing_extensions import Self
+    from typing import Literal, Self
 
     from strawberry.extensions.field_extension import FieldExtension
     from strawberry.permission import BasePermission
@@ -362,7 +361,10 @@ class StrawberryField(dataclasses.Field):
                         type_annotation._evaluated_annotation
                     )
 
-                resolved = type_annotation.resolve(type_definition=type_definition)
+                resolved = type_annotation.resolve(
+                    type_definition=type_definition,
+                    origin=self.origin if isinstance(self.origin, type) else None,
+                )
                 self._validated_type_annotation = type_annotation
             elif self.base_resolver is not None and self.base_resolver.type is not None:
                 # Handle unannotated functions (such as lambdas)

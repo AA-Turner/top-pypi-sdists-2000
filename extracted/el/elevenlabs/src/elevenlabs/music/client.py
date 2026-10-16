@@ -61,6 +61,9 @@ class MusicClient:
         description: typing.Optional[str] = OMIT,
         tags: typing.Optional[typing.List[str]] = OMIT,
         model_id: typing.Optional[MusicModelId] = OMIT,
+        add_sfx: typing.Optional[bool] = OMIT,
+        separate_tracks: typing.Optional[bool] = OMIT,
+        use_audio_as_reference: typing.Optional[bool] = OMIT,
         sign_with_c_2_pa: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Iterator[bytes]:
@@ -76,13 +79,22 @@ class MusicClient:
             Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.
 
         description : typing.Optional[str]
-            Optional text description of the music you want. A maximum of 1000 characters is allowed.
+            Optional text description of the music you want. A maximum of 4100 characters is allowed.
 
         tags : typing.Optional[typing.List[str]]
             Optional list of style tags (e.g. ['upbeat', 'cinematic']). A maximum of 10 tags is allowed.
 
         model_id : typing.Optional[MusicModelId]
             The model to use for the generation.
+
+        add_sfx : typing.Optional[bool]
+            When true, incorporate SFX cues from the video.
+
+        separate_tracks : typing.Optional[bool]
+            When true, return a ZIP with separate music and SFX audio tracks instead of a single mixed file. Use this for more flexibility to layer the tracks.
+
+        use_audio_as_reference : typing.Optional[bool]
+            When true, analyze the video's audio track and use its genres, BPM, instrumentation, mood, and arc as reference characteristics for music generation.
 
         sign_with_c_2_pa : typing.Optional[bool]
             Whether to sign the generated song with C2PA. Applicable only for mp3 files.
@@ -101,6 +113,9 @@ class MusicClient:
             description=description,
             tags=tags,
             model_id=model_id,
+            add_sfx=add_sfx,
+            separate_tracks=separate_tracks,
+            use_audio_as_reference=use_audio_as_reference,
             sign_with_c_2_pa=sign_with_c_2_pa,
             request_options=request_options,
         ) as r:
@@ -600,6 +615,9 @@ class AsyncMusicClient:
         description: typing.Optional[str] = OMIT,
         tags: typing.Optional[typing.List[str]] = OMIT,
         model_id: typing.Optional[MusicModelId] = OMIT,
+        add_sfx: typing.Optional[bool] = OMIT,
+        separate_tracks: typing.Optional[bool] = OMIT,
+        use_audio_as_reference: typing.Optional[bool] = OMIT,
         sign_with_c_2_pa: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.AsyncIterator[bytes]:
@@ -615,13 +633,22 @@ class AsyncMusicClient:
             Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.
 
         description : typing.Optional[str]
-            Optional text description of the music you want. A maximum of 1000 characters is allowed.
+            Optional text description of the music you want. A maximum of 4100 characters is allowed.
 
         tags : typing.Optional[typing.List[str]]
             Optional list of style tags (e.g. ['upbeat', 'cinematic']). A maximum of 10 tags is allowed.
 
         model_id : typing.Optional[MusicModelId]
             The model to use for the generation.
+
+        add_sfx : typing.Optional[bool]
+            When true, incorporate SFX cues from the video.
+
+        separate_tracks : typing.Optional[bool]
+            When true, return a ZIP with separate music and SFX audio tracks instead of a single mixed file. Use this for more flexibility to layer the tracks.
+
+        use_audio_as_reference : typing.Optional[bool]
+            When true, analyze the video's audio track and use its genres, BPM, instrumentation, mood, and arc as reference characteristics for music generation.
 
         sign_with_c_2_pa : typing.Optional[bool]
             Whether to sign the generated song with C2PA. Applicable only for mp3 files.
@@ -640,6 +667,9 @@ class AsyncMusicClient:
             description=description,
             tags=tags,
             model_id=model_id,
+            add_sfx=add_sfx,
+            separate_tracks=separate_tracks,
+            use_audio_as_reference=use_audio_as_reference,
             sign_with_c_2_pa=sign_with_c_2_pa,
             request_options=request_options,
         ) as r:

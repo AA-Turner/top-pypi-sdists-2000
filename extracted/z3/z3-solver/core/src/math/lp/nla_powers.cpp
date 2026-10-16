@@ -50,8 +50,10 @@ General case:
 
   For now the solver integrates just weak monotonicity lemmas:
 
-  - x >= x0 > 0, y >= y0 => x^y >= x0^y0
-  - 0 < x <= x0, y <= y0 => x^y <= x0^y0
+  - x >= x0 >= 1, y >= y0 >= 0 => x^y >= x0^y0
+  - x >= x0 > 0, x0 < 1, 0 <= y <= y0 => x^y >= x0^y0
+  - 0 < x <= x0, x0 >= 1, 0 <= y <= y0 => x^y <= x0^y0
+  - 0 < x <= x0 < 1, y >= y0 >= 0 => x^y <= x0^y0
 
 
 TODO:
@@ -128,9 +130,9 @@ namespace nla {
         };
 
         auto x_ge_3 = [&]() {
-            lemma_builder lemma(c, "x >= 3, y != 0 => x^y > ln(x)y + 1");
+            lemma_builder lemma(c, "x >= 3, y > 0 => x^y > ln(x)y + 1");
             lemma |= ineq(x, llc::LT, rational(3));
-            lemma |= ineq(y, llc::EQ, rational::zero());
+            lemma |= ineq(y, llc::LE, rational::zero());
             lemma |= ineq(lp::lar_term(r, rational::minus_one(), y), llc::GT, rational::one());
             return l_false;
         };
@@ -138,10 +140,17 @@ namespace nla {
         bool use_rational = !c.use_nra_model();
         rational xval, yval, rval;
         if (use_rational) {
+            // the lemmas below are checked against the values used by core::val,
+            // which ignores the infinitesimal parts, so bail out when the model
+            // assigns an infinitesimal to one of x, y, r.
+            if (!c.lra.get_column_value(x).y.is_zero() ||
+                !c.lra.get_column_value(y).y.is_zero() ||
+                !c.lra.get_column_value(r).y.is_zero())
+                return l_undef;
 
-            xval = c.lra.get_value(x);
-            yval = c.lra.get_value(y);
-            rval = c.lra.get_value(r);
+            xval = c.val(x);
+            yval = c.val(y);
+            rval = c.val(r);
         } 
         else {
             auto& am = c.m_nra.am();
@@ -166,7 +175,7 @@ namespace nla {
                 return y_lt_1();
             else if (xval > 1 && yval > 0 && rval <= 1)
                 return y_gt_1();
-            else if (xval >= 3 && yval != 0 && rval <= yval + 1)
+            else if (xval >= 3 && yval > 0 && rval <= yval + 1)
                 return x_ge_3();
             else if (xval > 0 && yval.is_unsigned()) {
                 auto r2val = power(xval, yval.get_unsigned());
@@ -180,17 +189,27 @@ namespace nla {
                     return l_false;
                 }
                 if (yval > 0 && r2val > rval) {
-                    lemma_builder lemma(c, "x >= x0 > 0, y >= y0 > 0 => r >= x0^y0");
+                    bool increasing = xval >= 1;
+                    lemma_builder lemma(c, increasing
+                        ? "x >= x0 >= 1, y >= y0 > 0 => r >= x0^y0"
+                        : "x >= x0 > 0, x0 < 1, 0 <= y <= y0 => r >= x0^y0");
                     lemma |= ineq(x, llc::LT, xval);
-                    lemma |= ineq(y, llc::LT, yval);
+                    lemma |= ineq(y, increasing ? llc::LT : llc::GT, yval);
+                    if (!increasing)
+                        lemma |= ineq(y, llc::LT, rational::zero());
                     lemma |= ineq(r, llc::GE, r2val);
                     return l_false;
                 }
                 if (r2val < rval) {
-                    lemma_builder lemma(c, "0 < x <= x0, y <= y0 => r <= x0^y0");
+                    bool increasing = xval >= 1;
+                    lemma_builder lemma(c, increasing
+                        ? "0 < x <= x0, x0 >= 1, 0 <= y <= y0 => r <= x0^y0"
+                        : "0 < x <= x0 < 1, y >= y0 >= 0 => r <= x0^y0");
                     lemma |= ineq(x, llc::LE, rational::zero());
                     lemma |= ineq(x, llc::GT, xval);
-                    lemma |= ineq(y, llc::GT, yval);
+                    lemma |= ineq(y, increasing ? llc::GT : llc::LT, yval);
+                    if (increasing)
+                        lemma |= ineq(y, llc::LT, rational::zero());
                     lemma |= ineq(r, llc::LE, r2val);
                     return l_false;
                 }
@@ -226,7 +245,7 @@ namespace nla {
                 return y_lt_1();
             else if (xval > 1 && yval > 0 && rval <= 1)
                 return y_gt_1();
-            else if (xval >= 3 && yval != 0 && rval <= yval + 1)
+            else if (xval >= 3 && yval > 0 && rval <= yval + 1)
                 return x_ge_3();
             else if (xval > 0 && yval > 0 && am.is_rational(yval)) {
                 rational yr;

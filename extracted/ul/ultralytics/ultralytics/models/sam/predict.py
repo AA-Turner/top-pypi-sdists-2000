@@ -206,12 +206,6 @@ class Predictor(BasePredictor):
             >>> predictor.set_image("image.jpg")
             >>> results = predictor(bboxes=[[0, 0, 100, 100]])
         """
-        # Override prompts if any stored in self.prompts
-        bboxes = self.prompts.pop("bboxes", bboxes)
-        points = self.prompts.pop("points", points)
-        masks = self.prompts.pop("masks", masks)
-        labels = self.prompts.pop("labels", labels)
-
         if all(i is None for i in [bboxes, points, masks]):
             return self.generate(im, *args, **kwargs)
 
@@ -271,6 +265,10 @@ class Predictor(BasePredictor):
             pred_scores (torch.Tensor): Quality scores for each mask, with length C.
         """
         points = (points, labels) if points is not None else None
+        if masks is not None:  # (N, 1, H, W) full-res --> (N, 1, H/4, W/4) low-res, as the prompt encoder expects
+            masks = F.interpolate(
+                masks.float(), size=(masks.shape[-2] // 4, masks.shape[-1] // 4), mode="bilinear", align_corners=False
+            ).to(self.torch_dtype)
         # Embed prompts
         sparse_embeddings, dense_embeddings = self.model.prompt_encoder(points=points, boxes=bboxes, masks=masks)
 
@@ -322,20 +320,21 @@ class Predictor(BasePredictor):
             assert points.shape[-2] == labels.shape[-1], (
                 f"Number of points {points.shape[-2]} should match number of labels {labels.shape[-1]}."
             )
-            points *= r
+            points = points * r
             if points.ndim == 2:
                 # (N, 2) --> (N, 1, 2), (N, ) --> (N, 1)
                 points, labels = points[:, None, :], labels[:, None]
         if bboxes is not None:
             bboxes = torch.as_tensor(bboxes, dtype=self.torch_dtype, device=self.device)
             bboxes = bboxes[None] if bboxes.ndim == 1 else bboxes
-            bboxes *= r
+            bboxes = bboxes * r
         if masks is not None:
             masks = np.asarray(masks, dtype=np.uint8)
             masks = masks[None] if masks.ndim == 2 else masks
             letterbox = LetterBox(dst_shape, auto=False, center=False, padding_value=0, interpolation=cv2.INTER_NEAREST)
             masks = np.stack([letterbox(image=x).squeeze() for x in masks], axis=0)
-            masks = torch.tensor(masks, dtype=self.torch_dtype, device=self.device)
+            # (N, H, W) --> (N, 1, H, W), kept at full resolution: the SAM2 video path downsamples mask prompts itself
+            masks = torch.as_tensor(masks, dtype=self.torch_dtype, device=self.device)[:, None]
         return bboxes, points, labels, masks
 
     def generate(
@@ -601,6 +600,11 @@ class Predictor(BasePredictor):
             self.features = self.get_im_features(im)
             break
 
+    def stream_inference(self, source=None, model=None, *args, **kwargs):
+        """Run inference, passing prompts stored by `set_prompts` to every image of the source, not only the first."""
+        prompts, self.prompts = {k: v for k, v in self.prompts.items() if v is not None}, {}
+        return super().stream_inference(source, model, *args, **{**kwargs, **prompts})
+
     def setup_source(self, source):
         """Set up the data source for SAM inference."""
         if source is None:  # handle the situation when set_imgsz in advance
@@ -846,6 +850,12 @@ class SAM2Predictor(Predictor):
             pred_scores (torch.Tensor): Quality scores for each mask, with length C.
         """
         points = (points, labels) if points is not None else None
+        if masks is not None:  # downsize full-res mask prompts to the low-res mask size the encoder expects
+            enc = self.model.sam_prompt_encoder
+            if tuple(masks.shape[-2:]) != tuple(enc.mask_input_size):
+                masks = F.interpolate(masks.float(), size=enc.mask_input_size, mode="bilinear", align_corners=False).to(
+                    self.torch_dtype
+                )
         sparse_embeddings, dense_embeddings = self.model.sam_prompt_encoder(
             points=points,
             boxes=None,
@@ -952,19 +962,12 @@ class SAM2VideoPredictor(SAM2Predictor):
             masks (np.ndarray, optional): Binary object masks with shape (N, H, W).
 
         Returns:
-            pred_masks (torch.Tensor): The non-empty output mask logits with shape (C, H, W), where C is the number of
-                masks.
-            pred_scores (torch.Tensor): A tensor of ones with length C, as the video predictor does not score masks.
+            pred_masks (torch.Tensor): The output mask logits with shape (C, H, W), one per tracked object.
+            pred_scores (torch.Tensor): Scores with length C, 1 for non-empty masks and 0 for blank ones.
 
         Raises:
             RuntimeError: If no prompts have been added before tracking.
         """
-        # Override prompts if any stored in self.prompts
-        bboxes = self.prompts.pop("bboxes", bboxes)
-        points = self.prompts.pop("points", points)
-        masks = self.prompts.pop("masks", masks)
-        labels = self.prompts.pop("labels", labels)
-
         frame = self.dataset.frame
         self.inference_state["im"] = im
         output_dict = self.inference_state["output_dict"]
@@ -1011,9 +1014,7 @@ class SAM2VideoPredictor(SAM2Predictor):
         self._add_output_per_object(frame, current_out, storage_key)
         self.inference_state["frames_already_tracked"].add(frame)
         pred_masks = current_out["pred_masks"].flatten(0, 1)
-        pred_masks = pred_masks[(pred_masks > self.model.mask_threshold).sum((1, 2)) > 0]  # filter blank masks
-
-        return pred_masks, torch.ones(pred_masks.shape[0], dtype=pred_masks.dtype, device=pred_masks.device)
+        return pred_masks, (pred_masks > self.model.mask_threshold).flatten(1).any(1).to(pred_masks.dtype)
 
     @smart_inference_mode()
     def add_new_prompts(
@@ -1975,8 +1976,8 @@ class SAM2DynamicInteractivePredictor(SAM2Predictor):
             update_memory (bool): Flag to indicate whether to update the memory with new objects.
 
         Returns:
-            pred_masks (torch.Tensor): The output mask logits with shape (C, H, W) for the C added objects.
-            pred_scores (torch.Tensor): Object presence scores for each mask with shape (C,), mapped to [0, 1].
+            pred_masks (torch.Tensor): The output mask logits with shape (C, H, W), one per object slot.
+            pred_scores (torch.Tensor): Object presence scores with shape (C,), mapped to [0, 1]; 0 for empty slots.
 
         Raises:
             RuntimeError: If no objects have been added to the memory yet.
@@ -2008,15 +2009,14 @@ class SAM2DynamicInteractivePredictor(SAM2Predictor):
 
         current_out = self.track_step()
         pred_masks, pred_scores = current_out["pred_masks"], current_out["object_score_logits"]
-        # filter the masks and logits based on the object indices
         if len(self.obj_idx_set) == 0:
             raise RuntimeError("No objects have been added to the state. Please add objects before inference.")
-        idx = list(self.obj_idx_set)  # cls id
-        pred_masks, pred_scores = pred_masks[idx], pred_scores[idx]
+        idx = list(self.obj_idx_set)  # cls id; slots without an object keep score 0
         # The original scores are in [-32, 32]. An object score larger than 0 means the object is present.
         # Map scores to [0, 1] so that the object score logits are non-negative and can be used as a mask.
-        pred_scores = torch.clamp_(pred_scores / 32, min=0)
-        return pred_masks.flatten(0, 1), pred_scores.flatten(0, 1)
+        scores = torch.zeros_like(pred_scores)
+        scores[idx] = torch.clamp(pred_scores[idx] / 32, min=0)
+        return pred_masks.flatten(0, 1), scores.flatten(0, 1)
 
     def get_im_features(self, img: torch.Tensor | np.ndarray) -> None:
         """Extract the image features for the current image and store them on the predictor.
@@ -2391,9 +2391,6 @@ class SAM3SemanticPredictor(SAM3Predictor):
 
     def inference(self, im, bboxes=None, labels=None, text: str | list[str] | None = None, *args, **kwargs):
         """Perform inference on a single image with optional box and text prompts."""
-        bboxes = self.prompts.pop("bboxes", bboxes)
-        labels = self.prompts.pop("labels", labels)
-        text = self.prompts.pop("text", text)
         features = self.get_im_features(im) if self.features is None else self.features
         prompts = self._prepare_geometric_prompts(self.src_shape, bboxes, labels)
         return self._inference_features(features, *prompts, text=text)

@@ -28,6 +28,7 @@ Author:
 #include "ast/ast_ll_pp.h"
 #include "ast/rewriter/array_rewriter.h"
 #include "ast/rewriter/var_subst.h"
+#include <climits>
 
 
 namespace euf {
@@ -41,6 +42,7 @@ namespace euf {
             imitate_s, 
             eq_s,
             ite_s,
+            store_s,
             done_s
         };
         state m_state = state::init_s;
@@ -71,6 +73,9 @@ namespace euf {
         bool is_ite() const {
             return m_state == state::ite_s;
         }
+        bool is_store() const {
+            return m_state == state::store_s;
+        }
         void set_project() {
             set_state(state::project_s);
         }
@@ -82,6 +87,9 @@ namespace euf {
         }
         void set_ite() {
             set_state(state::ite_s);
+        }
+        void set_store() {
+            set_state(state::store_s);
         }
         void set_term(expr *t) {
             m_t = t;
@@ -356,8 +364,12 @@ namespace euf {
         ptr_vector<match_goal> m_backtrack;
         unsigned         m_max_depth = 10;        // bound on imitation/projection depth (secondary safety cap)
         unsigned         m_max_iterations = 10000; // per-search expansion-step budget to guarantee termination
+        unsigned         m_max_matches = UINT_MAX;
+        unsigned         m_num_matches = 0;
+        bool             m_match_limit_reached = false;
         mutable array_rewriter   m_rewriter;
         array_util       m_array;
+        arith_util       m_arith;
         obj_map<app, app*>     m_pat2hopat, m_hopat2pat;
         obj_map<quantifier, quantifier*> m_q2hoq, m_hoq2q;
         obj_map<app, expr_free_vars> m_hopat2free_vars;
@@ -392,6 +404,10 @@ namespace euf {
         };
 
         // Populate `fr` from the select chain `pats`.
+        bool is_repeated_functional_projection(match_goal const& wi, expr* arg, expr* t) const;
+
+        bool process_functional_projection(match_goal &wi, var* v, ptr_vector<app> const& pats, expr* arg, expr* t);
+
         void init_flex_frame(ptr_vector<app> const &pats, flex_frame &fr);
 
         // Allocate a fresh meta-variable of range sort `range` over the frame,
@@ -411,6 +427,44 @@ namespace euf {
         bool process_eq(match_goal &wi, var *v, ptr_vector<app> const &pats, expr *t);
 
         bool process_ite(match_goal &wi, var *v, ptr_vector<app> const &pats, expr *t);
+
+        // Last-resort inference for `select(F, idx...) ~ t` where F is a flex
+        // array-valued meta-variable, `idx` is already ground, and `t` is a
+        // ground value. Rather than inventing a fresh constant/ite-shaped
+        // array (as project/imitate/eq/ite would), anchor F to an existing
+        // ground array term of the same sort (queried via m_enum_terms, e.g.
+        // an asserted array constant) and bind
+        //   F -> store(anchor, idx, t)
+        // This directly produces the kind of witness (`store(g, a, 0)`-like)
+        // that counterexample-guided instantiation would derive from a
+        // model, without requiring model access: `select` over `store`
+        // satisfies the needed equation definitionally, by the ground
+        // array theory's own store axiom, once the ground solver checks the
+        // proposed instance. Tried after eq/ite since it is purely a
+        // heuristic fallback with no structural justification from the
+        // pattern itself.
+        bool process_store(match_goal &wi, var *v, ptr_vector<app> const &pats, expr *t);
+
+        // Returns true if `e` is a sub-goal that syntactic matching can never
+        // decide: a bare (nested) quantifier, or an equation whose one side
+        // is a meta-variable occurring (modulo de Bruijn shift) free inside
+        // the other side (an occurs-check failure, e.g. the self-referential
+        // "canonical form" equations produced by inlined define-funs such as
+        // `f = lambda y. ite(c y, select f y, d)`). ho_matcher only proposes
+        // candidate instantiations - the ground solver validates whatever
+        // instance is ultimately produced - so treating such a conjunct as a
+        // don't-care placeholder rather than hard-failing is a safe (never
+        // unsound) relaxation, not a soundness-relevant decision.
+        bool is_undecidable_conjunct(expr *e, unsigned pat_offset) const;
+
+        // Bridges an arithmetic comparison atom whose one side is a ground
+        // numeral and whose other side is `select(F, idx...)` for a flex
+        // array-valued meta-variable F, matched against true/false, into a
+        // concrete equation `select(F, idx...) ~ witness`, which the existing
+        // flex-select-head machinery (process_project/imitation/eq/ite) can
+        // then solve by binding F. Returns true if such a bridging subgoal
+        // was pushed.
+        bool process_arith_select(match_goal &wi, expr *p, expr *t);
 
         bool block_inference(match_goal const& wi);
 
@@ -463,6 +517,7 @@ namespace euf {
         std::function<expr *(expr *)> m_root;                   // root of equivalence class
         std::function<expr *(expr *)> m_next;                   // next element in equivalence class
         std::function<bool(expr *)> m_is_cgr_root;              // is root of congruence class
+        std::function<void(expr *, ptr_vector<expr>&)> m_enum_terms;
 
         bool use_cgr() const {
             SASSERT(!m_are_equal || (m_are_distinct && m_root && m_next && m_is_cgr_root));
@@ -480,6 +535,7 @@ namespace euf {
             m_unitary(m),
             m_rewriter(m),
             m_array(m),
+            m_arith(m),
             m_ho_patterns(m),
             m_ho_qs(m)
         {
@@ -502,14 +558,21 @@ namespace euf {
         void set_is_cgr_root(std::function<bool(expr *)> &is_cgr_root) {
             m_is_cgr_root = is_cgr_root;
         }
+        void set_enum_terms(std::function<void(expr *, ptr_vector<expr>&)>& enum_terms) {
+            m_enum_terms = enum_terms;
+        }
 
         void set_max_depth(unsigned d) { m_max_depth = d; }
 
         void set_max_iterations(unsigned n) { m_max_iterations = n; }
 
+        void set_max_matches(unsigned n) { m_max_matches = n; }
+
         void operator()(expr *pat, expr *t, unsigned num_vars);
 
         void operator()(expr* pat, expr* t, unsigned num_bound, unsigned num_vars);
+
+        void operator()(unsigned num_goals, expr* const* pats, expr* const* terms, unsigned num_vars);
 
         std::pair<quantifier*, app*> compile_ho_pattern(quantifier* q, app* p);
 
@@ -530,7 +593,11 @@ namespace euf {
 
         bool is_free(app* p, unsigned i) const { return m_hopat2free_vars[p].contains(i); }
 
-        quantifier* hoq2q(quantifier* q) const { return m_hoq2q[q]; }
+        quantifier* hoq2q(quantifier* q) const {
+            quantifier* result = nullptr;
+            m_hoq2q.find(q, result);
+            return result;
+        }
 
 
         svector<std::pair<unsigned, expr*>> const* get_flex_subterms(app* p) const {

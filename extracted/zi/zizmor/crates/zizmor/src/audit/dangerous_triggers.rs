@@ -52,32 +52,54 @@ impl Audit for DangerousTriggers {
         _config: &Config,
     ) -> Result<Vec<Finding<'doc>>, AuditError> {
         let mut findings = vec![];
-        if workflow.has_pull_request_target() && !Self::is_labeler_exception(workflow) {
+
+        // Bug #2448: we dropped the entire `on:` span when we switched to more
+        // precise trigger spans, so users who had an ignore comment elsewhere in
+        // the `on:` block stopped getting suppressions.
+        let on_location = workflow.location().with_keys(["on".into()]);
+
+        if let Some(location) = workflow.pull_request_target()
+            && !Self::is_labeler_exception(workflow)
+        {
             findings.push(
                 Self::finding()
                     .confidence(Confidence::Medium)
                     .severity(Severity::High)
+                    .add_location(on_location.clone().hidden())
                     .add_location(
-                        workflow
-                            .location()
+                        location
                             .primary()
-                            .with_keys(["on".into()])
                             .annotated("pull_request_target is almost always used insecurely"),
                     )
                     .build(workflow)?,
             );
         }
-        if workflow.has_workflow_run() {
+
+        if let Some(location) = workflow.workflow_run() {
             findings.push(
                 Self::finding()
                     .confidence(Confidence::Medium)
                     .severity(Severity::High)
+                    .add_location(on_location.clone().hidden())
                     .add_location(
-                        workflow
-                            .location()
+                        location
                             .primary()
-                            .with_keys(["on".into()])
                             .annotated("workflow_run is almost always used insecurely"),
+                    )
+                    .build(workflow)?,
+            );
+        }
+
+        if let Some(location) = workflow.issue_comment() {
+            findings.push(
+                Self::finding()
+                    .confidence(Confidence::Medium)
+                    .severity(Severity::High)
+                    .add_location(on_location.clone().hidden())
+                    .add_location(
+                        location
+                            .primary()
+                            .annotated("issue_comment is almost always used insecurely"),
                     )
                     .build(workflow)?,
             );
