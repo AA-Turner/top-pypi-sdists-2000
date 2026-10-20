@@ -17,6 +17,10 @@ from workos.common.models.connected_account_input_state import (
 class ConnectedAccountInput:
     """Connected Account Input model."""
 
+    account_display_name: str | None = None
+    """A mutable, non-unique connection label; null clears it. Not an account identifier."""
+    account_identifier: str | None = None
+    """A developer-attested account identifier; null clears it."""
     access_token: str | None = None
     """The OAuth access token for the connected account."""
     refresh_token: str | None = None
@@ -33,6 +37,8 @@ class ConnectedAccountInput:
         """Deserialize from a dictionary."""
         try:
             return cls(
+                account_display_name=data.get("account_display_name"),
+                account_identifier=data.get("account_identifier"),
                 access_token=data.get("access_token"),
                 refresh_token=data.get("refresh_token"),
                 expires_at=_parse_datetime(_v_expires_at)
@@ -49,6 +55,14 @@ class ConnectedAccountInput:
     def to_dict(self) -> dict[str, Any]:
         """Serialize to a dictionary."""
         result: dict[str, Any] = {}
+        if self.account_display_name is not None:
+            result["account_display_name"] = self.account_display_name
+        else:
+            result["account_display_name"] = None
+        if self.account_identifier is not None:
+            result["account_identifier"] = self.account_identifier
+        else:
+            result["account_identifier"] = None
         if self.access_token is not None:
             result["access_token"] = self.access_token
         if self.refresh_token is not None:
