@@ -17,6 +17,7 @@ class OpenAiTurnDetection(UncheckedBaseModel):
     threshold: typing.Optional[float] = None
     prefix_padding_ms: typing.Optional[int] = None
     silence_duration_ms: typing.Optional[int] = None
+    turn_timeout: typing.Optional[float] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
