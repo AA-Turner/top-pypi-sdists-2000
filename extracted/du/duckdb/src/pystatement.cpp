@@ -4,19 +4,19 @@ namespace duckdb {
 
 enum class ExpectedResultType : uint8_t { QUERY_RESULT, NOTHING, CHANGED_ROWS, UNKNOWN };
 
-static void InitializeReadOnlyProperties(py::class_<DuckDBPyStatement, unique_ptr<DuckDBPyStatement>> &m) {
-	m.def_property_readonly("type", &DuckDBPyStatement::Type, "Get the type of the statement.")
-	    .def_property_readonly("query", &DuckDBPyStatement::Query, "Get the query equivalent to this statement.")
-	    .def_property_readonly("named_parameters", &DuckDBPyStatement::NamedParameters,
-	                           "Get the map of named parameters this statement has.")
-	    .def_property_readonly("expected_result_type", &DuckDBPyStatement::ExpectedResultType,
-	                           "Get the expected type of result produced by this statement, actual type may vary "
-	                           "depending on the statement.");
+static void InitializeReadOnlyProperties(nb::class_<DuckDBPyStatement> &m) {
+	m.def_prop_ro("type", &DuckDBPyStatement::Type, "Get the type of the statement.")
+	    .def_prop_ro("query", &DuckDBPyStatement::Query, "Get the query equivalent to this statement.")
+	    .def_prop_ro("named_parameters", &DuckDBPyStatement::NamedParameters,
+	                 "Get the map of named parameters this statement has.")
+	    .def_prop_ro("expected_result_type", &DuckDBPyStatement::ExpectedResultType,
+	                 "Get the expected type of result produced by this statement, actual type may vary "
+	                 "depending on the statement.");
 }
 
-void DuckDBPyStatement::Initialize(py::handle &m) {
-	auto relation_module =
-	    py::class_<DuckDBPyStatement, unique_ptr<DuckDBPyStatement>>(m, "Statement", py::module_local());
+void DuckDBPyStatement::Initialize(nb::handle &m) {
+	// nanobind types aren't weak-referenceable by default.
+	auto relation_module = nb::class_<DuckDBPyStatement>(m, "Statement", nb::is_weak_referenceable());
 	InitializeReadOnlyProperties(relation_module);
 }
 
@@ -29,21 +29,20 @@ unique_ptr<SQLStatement> DuckDBPyStatement::GetStatement() {
 
 string DuckDBPyStatement::Query() const {
 	auto &loc = statement->stmt_location;
-	auto &length = statement->stmt_length;
-	return statement->query.substr(loc, length);
+	return statement->query.substr(loc.offset, loc.length);
 }
 
-py::set DuckDBPyStatement::NamedParameters() const {
-	py::set result;
+nb::set DuckDBPyStatement::NamedParameters() const {
+	nb::set result;
 	auto &named_parameters = statement->named_param_map;
 	for (auto &param : named_parameters) {
-		result.add(param.first);
+		result.add(param.first.GetIdentifierName());
 	}
 	return result;
 }
 
-py::list DuckDBPyStatement::ExpectedResultType() const {
-	py::list possibilities;
+nb::list DuckDBPyStatement::ExpectedResultType() const {
+	nb::list possibilities;
 	switch (statement->type) {
 	case StatementType::PREPARE_STATEMENT:
 	case StatementType::VACUUM_STATEMENT:
@@ -87,6 +86,12 @@ py::list DuckDBPyStatement::ExpectedResultType() const {
 	case StatementType::EXTENSION_STATEMENT:
 	case StatementType::CREATE_STATEMENT:
 	case StatementType::MULTI_STATEMENT: {
+		possibilities.append(StatementReturnType::CHANGED_ROWS);
+		possibilities.append(StatementReturnType::QUERY_RESULT);
+		possibilities.append(StatementReturnType::NOTHING);
+		break;
+	}
+	case StatementType::MERGE_INTO_STATEMENT: {
 		possibilities.append(StatementReturnType::CHANGED_ROWS);
 		possibilities.append(StatementReturnType::QUERY_RESULT);
 		possibilities.append(StatementReturnType::NOTHING);

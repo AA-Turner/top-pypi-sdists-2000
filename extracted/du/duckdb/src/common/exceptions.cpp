@@ -1,12 +1,12 @@
-#include "duckdb_python/pybind11/exceptions.hpp"
+#include "duckdb_python/exceptions.hpp"
 
 #include "duckdb/common/exception.hpp"
 #include "duckdb/common/exception/list.hpp"
 #include "duckdb/common/error_data.hpp"
 #include "duckdb/common/string_util.hpp"
-#include "duckdb_python/pybind11/pybind_wrapper.hpp"
+#include "duckdb_python/nb/casters.hpp"
 
-namespace py = pybind11;
+namespace nb = nanobind;
 
 namespace duckdb {
 
@@ -117,6 +117,12 @@ public:
 class PyOutOfMemoryException : public OperationalError {
 public:
 	explicit PyOutOfMemoryException(const string &err) : OperationalError(err) {
+	}
+};
+
+class PyResourceInUseException : public OperationalError {
+public:
+	explicit PyResourceInUseException(const string &err) : OperationalError(err) {
 	}
 };
 
@@ -241,9 +247,10 @@ void PyThrowException(ErrorData &error, PyObject *http_exception) {
 	switch (error.Type()) {
 	case ExceptionType::HTTP: {
 		// construct exception object
-		auto e = py::handle(http_exception)(py::str(error.Message()));
+		auto exc_msg = error.Message();
+		auto e = nb::handle(http_exception)(nb::str(exc_msg.c_str(), exc_msg.size()));
 
-		auto headers = py::dict();
+		auto headers = nb::dict();
 		for (auto &entry : error.ExtraInfo()) {
 			if (entry.first == "status_code") {
 				e.attr("status_code") = std::stoi(entry.second);
@@ -252,7 +259,8 @@ void PyThrowException(ErrorData &error, PyObject *http_exception) {
 			} else if (entry.first == "reason") {
 				e.attr("reason") = entry.second;
 			} else if (StringUtil::StartsWith(entry.first, "header_")) {
-				headers[py::str(entry.first.substr(7))] = entry.second;
+				auto header_name = entry.first.substr(7);
+				headers[nb::str(header_name.c_str(), header_name.size())] = entry.second;
 			}
 		}
 		e.attr("headers") = std::move(headers);
@@ -285,6 +293,8 @@ void PyThrowException(ErrorData &error, PyObject *http_exception) {
 		throw PyOutOfMemoryException(error.Message());
 	case ExceptionType::CONNECTION:
 		throw PyConnectionException(error.Message());
+	case ExceptionType::RESOURCE_IN_USE:
+		throw PyResourceInUseException(error.Message());
 	case ExceptionType::SERIALIZATION:
 		throw PySerializationException(error.Message());
 	case ExceptionType::CONSTRAINT:
@@ -310,79 +320,97 @@ void PyThrowException(ErrorData &error, PyObject *http_exception) {
 	}
 }
 
+static void UnsetPythonException() {
+	if (PyErr_Occurred()) {
+		PyErr_Clear();
+	}
+}
+
 /**
  * @see https://peps.python.org/pep-0249/#exceptions
  */
-void RegisterExceptions(const py::module &m) {
+void RegisterExceptions(const nb::module_ &m) {
 	// The base class is mapped to Error in python to somewhat match the DBAPI 2.0 specifications
-	py::register_exception<Warning>(m, "Warning");
-	auto error = py::register_exception<PyError>(m, "Error").ptr();
-	auto db_error = py::register_exception<DatabaseError>(m, "DatabaseError", error).ptr();
+	nb::exception<Warning>(m, "Warning");
+	auto error = nb::exception<PyError>(m, "Error").ptr();
+	auto db_error = nb::exception<DatabaseError>(m, "DatabaseError", error).ptr();
 
 	// order of declaration matters, and this needs to be checked last
 	// Unknown
-	py::register_exception<PyFatalException>(m, "FatalException", db_error);
-	py::register_exception<PyInterruptException>(m, "InterruptException", db_error);
-	py::register_exception<PyPermissionException>(m, "PermissionException", db_error);
-	py::register_exception<PySequenceException>(m, "SequenceException", db_error);
-	py::register_exception<PyDependencyException>(m, "DependencyException", db_error);
+	nb::exception<PyFatalException>(m, "FatalException", db_error);
+	nb::exception<PyInterruptException>(m, "InterruptException", db_error);
+	nb::exception<PyPermissionException>(m, "PermissionException", db_error);
+	nb::exception<PySequenceException>(m, "SequenceException", db_error);
+	nb::exception<PyDependencyException>(m, "DependencyException", db_error);
 
 	// DataError
-	auto data_error = py::register_exception<DataError>(m, "DataError", db_error).ptr();
-	py::register_exception<PyOutOfRangeException>(m, "OutOfRangeException", data_error);
-	py::register_exception<PyConversionException>(m, "ConversionException", data_error);
+	auto data_error = nb::exception<DataError>(m, "DataError", db_error).ptr();
+	nb::exception<PyOutOfRangeException>(m, "OutOfRangeException", data_error);
+	nb::exception<PyConversionException>(m, "ConversionException", data_error);
 	// no unknown type error, or decimal type
-	py::register_exception<PyTypeMismatchException>(m, "TypeMismatchException", data_error);
+	nb::exception<PyTypeMismatchException>(m, "TypeMismatchException", data_error);
 
 	// OperationalError
-	auto operational_error = py::register_exception<OperationalError>(m, "OperationalError", db_error).ptr();
-	py::register_exception<PyTransactionException>(m, "TransactionException", operational_error);
-	py::register_exception<PyOutOfMemoryException>(m, "OutOfMemoryException", operational_error);
-	py::register_exception<PyConnectionException>(m, "ConnectionException", operational_error);
+	auto operational_error = nb::exception<OperationalError>(m, "OperationalError", db_error).ptr();
+	nb::exception<PyTransactionException>(m, "TransactionException", operational_error);
+	nb::exception<PyOutOfMemoryException>(m, "OutOfMemoryException", operational_error);
+	nb::exception<PyConnectionException>(m, "ConnectionException", operational_error);
+	nb::exception<PyResourceInUseException>(m, "ResourceInUseException", operational_error);
 	// no object size error
 	// no null pointer errors
-	auto io_exception = py::register_exception<PyIOException>(m, "IOException", operational_error).ptr();
-	py::register_exception<PySerializationException>(m, "SerializationException", operational_error);
+	auto io_exception = nb::exception<PyIOException>(m, "IOException", operational_error).ptr();
+	nb::exception<PySerializationException>(m, "SerializationException", operational_error);
 
-	static py::exception<PyHTTPException> HTTP_EXCEPTION(m, "HTTPException", io_exception);
-	const auto string_type = py::type::of(py::str());
-	const auto Dict = py::module_::import("typing").attr("Dict");
-	HTTP_EXCEPTION.attr("__annotations__") =
-	    py::dict(py::arg("status_code") = py::type::of(py::int_()), py::arg("body") = string_type,
-	             py::arg("reason") = string_type, py::arg("headers") = Dict[py::make_tuple(string_type, string_type)]);
-	HTTP_EXCEPTION.doc() = "Thrown when an error occurs in the httpfs extension, or whilst downloading an extension.";
+	// Use a raw pointer to avoid destructor running after Python finalization.
+	// The module holds a reference to the exception type, keeping it alive.
+	static PyObject *HTTP_EXCEPTION = nullptr;
+	{
+		auto http_exc = nb::exception<PyHTTPException>(m, "HTTPException", io_exception);
+		HTTP_EXCEPTION = http_exc.ptr();
+		const auto string_type = (nb::str("")).type();
+		const auto Dict = nb::module_::import_("typing").attr("Dict");
+		// nanobind nb::dict has no kwargs constructor; build the annotations dict explicitly.
+		nb::dict annotations;
+		annotations["status_code"] = (nb::int_(0)).type();
+		annotations["body"] = string_type;
+		annotations["reason"] = string_type;
+		annotations["headers"] = Dict[nb::make_tuple(string_type, string_type)];
+		http_exc.attr("__annotations__") = annotations;
+		http_exc.doc() = "Thrown when an error occurs in the httpfs extension, or whilst downloading an extension.";
+	}
 
 	// IntegrityError
-	auto integrity_error = py::register_exception<IntegrityError>(m, "IntegrityError", db_error).ptr();
-	py::register_exception<PyConstraintException>(m, "ConstraintException", integrity_error);
+	auto integrity_error = nb::exception<IntegrityError>(m, "IntegrityError", db_error).ptr();
+	nb::exception<PyConstraintException>(m, "ConstraintException", integrity_error);
 
 	// InternalError
-	auto internal_error = py::register_exception<InternalError>(m, "InternalError", db_error).ptr();
-	py::register_exception<PyInternalException>(m, "InternalException", internal_error);
+	auto internal_error = nb::exception<InternalError>(m, "InternalError", db_error).ptr();
+	nb::exception<PyInternalException>(m, "InternalException", internal_error);
 
 	//// ProgrammingError
-	auto programming_error = py::register_exception<ProgrammingError>(m, "ProgrammingError", db_error).ptr();
-	py::register_exception<PyParserException>(m, "ParserException", programming_error);
-	py::register_exception<PySyntaxException>(m, "SyntaxException", programming_error);
-	py::register_exception<PyBinderException>(m, "BinderException", programming_error);
-	py::register_exception<PyInvalidInputException>(m, "InvalidInputException", programming_error);
-	py::register_exception<PyInvalidTypeException>(m, "InvalidTypeException", programming_error);
+	auto programming_error = nb::exception<ProgrammingError>(m, "ProgrammingError", db_error).ptr();
+	nb::exception<PyParserException>(m, "ParserException", programming_error);
+	nb::exception<PySyntaxException>(m, "SyntaxException", programming_error);
+	nb::exception<PyBinderException>(m, "BinderException", programming_error);
+	nb::exception<PyInvalidInputException>(m, "InvalidInputException", programming_error);
+	nb::exception<PyInvalidTypeException>(m, "InvalidTypeException", programming_error);
 	// no type for expression exceptions?
-	py::register_exception<PyCatalogException>(m, "CatalogException", programming_error);
+	nb::exception<PyCatalogException>(m, "CatalogException", programming_error);
 
 	// NotSupportedError
-	auto not_supported_error = py::register_exception<NotSupportedError>(m, "NotSupportedError", db_error).ptr();
-	py::register_exception<PyNotImplementedException>(m, "NotImplementedException", not_supported_error);
+	auto not_supported_error = nb::exception<NotSupportedError>(m, "NotSupportedError", db_error).ptr();
+	nb::exception<PyNotImplementedException>(m, "NotImplementedException", not_supported_error);
 
-	py::register_exception_translator([](std::exception_ptr p) { // NOLINT(performance-unnecessary-value-param)
+	nb::register_exception_translator([](const std::exception_ptr &p, void *) {
 		try {
 			if (p) {
 				std::rethrow_exception(p);
 			}
 		} catch (const duckdb::Exception &ex) {
 			duckdb::ErrorData error(ex);
-			PyThrowException(error, HTTP_EXCEPTION.ptr());
-		} catch (const py::builtin_exception &ex) {
+			UnsetPythonException();
+			PyThrowException(error, HTTP_EXCEPTION);
+		} catch (const nb::builtin_exception &ex) {
 			// These represent Python exceptions, we don't want to catch these
 			throw;
 		} catch (const std::exception &ex) {
@@ -391,7 +419,8 @@ void RegisterExceptions(const py::module &m) {
 				// we need to pass non-DuckDB exceptions through as-is
 				throw;
 			}
-			PyThrowException(error, HTTP_EXCEPTION.ptr());
+			UnsetPythonException();
+			PyThrowException(error, HTTP_EXCEPTION);
 		}
 	});
 }

@@ -1,148 +1,174 @@
-#include "duckdb_python/pyrelation.hpp"
+#include "duckdb_python/pyresult.hpp"
 #include "duckdb_python/pyconnection/pyconnection.hpp"
 #include "duckdb_python/pyresult.hpp"
 #include "duckdb_python/python_objects.hpp"
 #include "duckdb_python/numpy/numpy_type.hpp"
 
-#include "duckdb_python/arrow/arrow_array_stream.hpp"
-#include "duckdb/common/arrow/arrow.hpp"
-#include "duckdb/common/arrow/arrow_util.hpp"
-#include "duckdb/common/arrow/arrow_converter.hpp"
-#include "duckdb/common/arrow/arrow_wrapper.hpp"
-#include "duckdb/common/arrow/result_arrow_wrapper.hpp"
-#include "duckdb/common/types/date.hpp"
-#include "duckdb/common/types/hugeint.hpp"
-#include "duckdb/common/types/uhugeint.hpp"
-#include "duckdb/common/types/time.hpp"
-#include "duckdb/common/types/timestamp.hpp"
-#include "duckdb/common/types/uuid.hpp"
-#include "duckdb_python/numpy/array_wrapper.hpp"
-#include "duckdb/common/exception.hpp"
-#include "duckdb/common/enums/stream_execution_result.hpp"
 #include "duckdb_python/arrow/arrow_export_utils.hpp"
-#include "duckdb/main/chunk_scan_state/query_result.hpp"
-#include "duckdb/common/arrow/arrow_query_result.hpp"
+#include "duckdb/common/arrow/arrow.hpp"
+#include "duckdb/common/arrow/arrow_wrapper.hpp"
+#include "duckdb/common/types/uuid.hpp"
+#include "duckdb/common/exception.hpp"
+#include "duckdb/common/arrow/nanoarrow/nanoarrow.hpp"
+
+#include <cerrno>
+
+using namespace nanobind::literals;
 
 namespace duckdb {
 
-DuckDBPyResult::DuckDBPyResult(unique_ptr<QueryResult> result_p) : result(std::move(result_p)) {
+DuckDBPyResult::DuckDBPyResult(shared_ptr<engine::Result> result_p, vector<Identifier> names_override_p)
+    : result(std::move(result_p)), names_override(std::move(names_override_p)) {
 	if (!result) {
 		throw InternalException("PyResult created without a result object");
 	}
 }
 
 DuckDBPyResult::~DuckDBPyResult() {
+	// The destructor must run with the GIL held: `result` and `current_chunk`
+	// can transitively own Python references (registered
+	// objects, arrow release callbacks, PYTHON_OBJECT vector values, etc.),
+	// whose teardown calls into the Python C API. Releasing the GIL here
+	// (as the previous implementation did) causes Py_DECREF / PyObject_Free
+	// to run without a valid PyThreadState — see duckdb-python#456.
 	try {
-		D_ASSERT(py::gil_check());
-		py::gil_scoped_release gil;
-		result.reset();
-		current_chunk.reset();
+		DUCKDB_PY_ASSERT_GIL_HELD();
+		Close();
 	} catch (...) { // NOLINT
 	}
 }
 
-const vector<string> &DuckDBPyResult::GetNames() {
-	if (!result) {
-		throw InternalException("Calling GetNames without a result object");
+DuckDBPyResult::Use::Use(DuckDBPyResult &result_p) : result(result_p) {
+	if (result.in_use.exchange(true)) {
+		throw ResourceInUseException(
+		    "result is busy with another call; it refuses instead of waiting, so read one result from one thread at "
+		    "a time");
 	}
-	return result->names;
+	if (!result.result) {
+		result.in_use = false;
+		throw InvalidInputException("The result is closed");
+	}
+	pinned = result.result;
 }
 
-const vector<LogicalType> &DuckDBPyResult::GetTypes() {
-	if (!result) {
+DuckDBPyResult::Use::~Use() {
+	result.in_use = false;
+}
+
+const vector<Identifier> &DuckDBPyResult::ResultNames() const {
+	if (!names_override.empty()) {
+		return names_override;
+	}
+	return result->Names();
+}
+
+const ClientProperties &DuckDBPyResult::GetClientProperties() const {
+	return result->GetClientProperties();
+}
+
+vector<string> DuckDBPyResult::GetNames() {
+	if (Empty()) {
+		throw InternalException("Calling GetNames without a result object");
+	}
+	return IdentifiersToStrings(ResultNames());
+}
+
+const vector<LogicalType> &DuckDBPyResult::GetTypes() const {
+	if (Empty()) {
 		throw InternalException("Calling GetTypes without a result object");
 	}
-	return result->types;
+	return result->Types();
 }
 
 unique_ptr<DataChunk> DuckDBPyResult::FetchChunk() {
-	if (!result) {
+	if (Empty()) {
 		throw InternalException("FetchChunk called without a result object");
 	}
-	return FetchNext(*result);
+	return FetchNext();
 }
 
-unique_ptr<DataChunk> DuckDBPyResult::FetchNext(QueryResult &query_result) {
-	if (!result_closed && query_result.type == QueryResultType::STREAM_RESULT &&
-	    !query_result.Cast<StreamQueryResult>().IsOpen()) {
-		result_closed = true;
-		return nullptr;
-	}
-	if (query_result.type == QueryResultType::STREAM_RESULT) {
-		auto &stream_result = query_result.Cast<StreamQueryResult>();
-		StreamExecutionResult execution_result;
-		while (!StreamQueryResult::IsChunkReady(execution_result = stream_result.ExecuteTask())) {
-			{
-				py::gil_scoped_acquire gil;
-				if (PyErr_CheckSignals() != 0) {
-					throw std::runtime_error("Query interrupted");
-				}
-			}
-			if (execution_result == StreamExecutionResult::BLOCKED) {
-				stream_result.WaitForTask();
-			}
-		}
-		if (execution_result == StreamExecutionResult::EXECUTION_CANCELLED) {
-			throw InvalidInputException("The execution of the query was cancelled before it could finish, likely "
-			                            "caused by executing a different query");
-		}
-		if (execution_result == StreamExecutionResult::EXECUTION_ERROR) {
-			stream_result.ThrowError();
-		}
-	}
-	auto chunk = query_result.Fetch();
-	if (query_result.HasError()) {
-		query_result.ThrowError();
+unique_ptr<DataChunk> DuckDBPyResult::FetchNext() {
+	auto chunk = FetchNextRaw();
+	if (chunk) {
+		chunk->Flatten();
 	}
 	return chunk;
 }
 
-unique_ptr<DataChunk> DuckDBPyResult::FetchNextRaw(QueryResult &query_result) {
-	if (!result_closed && query_result.type == QueryResultType::STREAM_RESULT &&
-	    !query_result.Cast<StreamQueryResult>().IsOpen()) {
-		result_closed = true;
-		return nullptr;
+unique_ptr<DataChunk> DuckDBPyResult::FetchNextRaw() {
+	if (result->GetFormat().IsArrow()) {
+		throw InternalException("Rows fetched from a result submitted in the Arrow format");
 	}
-	auto chunk = query_result.FetchRaw();
-	if (query_result.HasError()) {
-		query_result.ThrowError();
-	}
-	return chunk;
+	return result->FetchChunk(DuckDBPyConnection::CheckSignals);
 }
 
-Optional<py::tuple> DuckDBPyResult::Fetchone() {
+unique_ptr<DataChunk> DuckDBPyResult::TakeBufferedRows() {
+	unique_ptr<DataChunk> remainder;
+	if (current_chunk && chunk_offset < current_chunk->size()) {
+		remainder = make_uniq<DataChunk>();
+		remainder->Initialize(Allocator::DefaultAllocator(), current_chunk->GetTypes());
+		current_chunk->Copy(*remainder, chunk_offset);
+	}
+	current_chunk.reset();
+	chunk_offset = 0;
+	return remainder;
+}
+
+unique_ptr<ColumnDataCollection> DuckDBPyResult::TakeRows(const engine::InterruptCheck &check) {
+	if (Empty()) {
+		throw InternalException("TakeRows called without a result object");
+	}
+	auto buffered = TakeBufferedRows();
+	unique_ptr<ColumnDataCollection> rows;
 	{
-		D_ASSERT(py::gil_check());
-		py::gil_scoped_release release;
-		if (!result) {
-			throw InvalidInputException("result closed");
+		DUCKDB_PY_ASSERT_GIL_HELD();
+		nb::gil_scoped_release release;
+		auto taken = result->TakeChunks(check);
+		if (!buffered) {
+			return taken;
 		}
-		if (!current_chunk || chunk_offset >= current_chunk->size()) {
-			current_chunk = FetchNext(*result);
-			chunk_offset = 0;
-		}
+		// Combine only appends, so the buffered rows, which come first, go into a new collection and the taken rows
+		// follow
+		rows = make_uniq<ColumnDataCollection>(Allocator::DefaultAllocator(), result->Types());
+		rows->Append(*buffered);
+		rows->Combine(*taken);
+	}
+	return rows;
+}
+
+Optional<nb::tuple> DuckDBPyResult::Fetchone() {
+	if (Empty()) {
+		throw InvalidInputException("result closed");
+	}
+	// Asking the engine on every row costs two locks and a GIL switch, so an interrupt or a failure is reported once
+	// the rows of the current chunk run out
+	if (!current_chunk || chunk_offset >= current_chunk->size()) {
+		nb::gil_scoped_release release;
+		current_chunk = FetchNext();
+		chunk_offset = 0;
 	}
 
 	if (!current_chunk || current_chunk->size() == 0) {
-		return py::none();
+		return nb::none();
 	}
-	py::tuple res(result->types.size());
-
-	for (idx_t col_idx = 0; col_idx < result->types.size(); col_idx++) {
+	auto &types = GetTypes();
+	auto &client_properties = GetClientProperties();
+	duckdb::PyUtil::TupleBuilder row(types.size());
+	for (idx_t col_idx = 0; col_idx < types.size(); col_idx++) {
 		auto &mask = FlatVector::Validity(current_chunk->data[col_idx]);
 		if (!mask.RowIsValid(chunk_offset)) {
-			res[col_idx] = py::none();
-			continue;
+			row.append(nb::none());
+		} else {
+			auto val = current_chunk->data[col_idx].GetValue(chunk_offset);
+			row.append(PythonObject::FromValue(val, types[col_idx], client_properties));
 		}
-		auto val = current_chunk->data[col_idx].GetValue(chunk_offset);
-		res[col_idx] = PythonObject::FromValue(val, result->types[col_idx], result->client_properties);
 	}
 	chunk_offset++;
-	return res;
+	return row.take();
 }
 
-py::list DuckDBPyResult::Fetchmany(idx_t size) {
-	py::list res;
+nb::list DuckDBPyResult::Fetchmany(idx_t size) {
+	nb::list res;
 	for (idx_t i = 0; i < size; i++) {
 		auto fres = Fetchone();
 		if (fres.is_none()) {
@@ -153,8 +179,8 @@ py::list DuckDBPyResult::Fetchmany(idx_t size) {
 	return res;
 }
 
-py::list DuckDBPyResult::Fetchall() {
-	py::list res;
+nb::list DuckDBPyResult::Fetchall() {
+	nb::list res;
 	while (true) {
 		auto fres = Fetchone();
 		if (fres.is_none()) {
@@ -165,12 +191,12 @@ py::list DuckDBPyResult::Fetchall() {
 	return res;
 }
 
-py::dict DuckDBPyResult::FetchNumpy() {
+nb::dict DuckDBPyResult::FetchNumpy() {
 	return FetchNumpyInternal();
 }
 
-void DuckDBPyResult::FillNumpy(py::dict &res, idx_t col_idx, NumpyResultConversion &conversion, const char *name) {
-	if (result->types[col_idx].id() == LogicalTypeId::ENUM) {
+void DuckDBPyResult::FillNumpy(nb::dict &res, idx_t col_idx, NumpyResultConversion &conversion, const char *name) {
+	if (GetTypes()[col_idx].id() == LogicalTypeId::ENUM) {
 		auto &import_cache = *DuckDBPyConnection::ImportCache();
 		auto pandas_categorical = import_cache.pandas.Categorical();
 		auto categorical_dtype = import_cache.pandas.CategoricalDtype();
@@ -185,7 +211,7 @@ void DuckDBPyResult::FillNumpy(py::dict &res, idx_t col_idx, NumpyResultConversi
 		}
 		// Equivalent to: pandas.Categorical.from_codes(codes=[0, 1, 0, 1], dtype=dtype)
 		res[name] = pandas_categorical.attr("from_codes")(conversion.ToArray(col_idx),
-		                                                  py::arg("dtype") = categories_type[col_idx]);
+		                                                  nb::arg("dtype") = categories_type[col_idx]);
 		if (!conversion.ToPandas()) {
 			res[name] = res[name].attr("to_numpy")();
 		}
@@ -194,113 +220,116 @@ void DuckDBPyResult::FillNumpy(py::dict &res, idx_t col_idx, NumpyResultConversi
 	}
 }
 
-void InsertCategory(QueryResult &result, unordered_map<idx_t, py::list> &categories) {
-	for (idx_t col_idx = 0; col_idx < result.types.size(); col_idx++) {
-		auto &type = result.types[col_idx];
+void InsertCategory(const vector<LogicalType> &types, unordered_map<idx_t, nb::list> &categories) {
+	for (idx_t col_idx = 0; col_idx < types.size(); col_idx++) {
+		auto &type = types[col_idx];
 		if (type.id() == LogicalTypeId::ENUM) {
 			// It's an ENUM type, in addition to converting the codes we must convert the categories
 			if (categories.find(col_idx) == categories.end()) {
 				auto &categories_list = EnumType::GetValuesInsertOrder(type);
 				auto categories_size = EnumType::GetSize(type);
 				for (idx_t i = 0; i < categories_size; i++) {
-					categories[col_idx].append(py::cast(categories_list.GetValue(i).ToString()));
+					categories[col_idx].append(nb::cast(categories_list.GetValue(i).ToString()));
 				}
 			}
 		}
 	}
 }
 
-unique_ptr<NumpyResultConversion> DuckDBPyResult::InitializeNumpyConversion(bool pandas) {
-	if (!result) {
+std::unique_ptr<NumpyResultConversion> DuckDBPyResult::InitializeNumpyConversion(bool pandas) {
+	if (Empty()) {
 		throw InvalidInputException("result closed");
 	}
 
 	idx_t initial_capacity = STANDARD_VECTOR_SIZE * 2ULL;
-	if (result->type == QueryResultType::MATERIALIZED_RESULT) {
-		// materialized query result: we know exactly how much space we need
-		auto &materialized = result->Cast<MaterializedQueryResult>();
-		initial_capacity = materialized.RowCount();
+	if (result->IsRetained()) {
+		DUCKDB_PY_ASSERT_GIL_HELD();
+		nb::gil_scoped_release release;
+		initial_capacity = result->RowCount(DuckDBPyConnection::CheckSignals);
 	}
 
 	auto conversion =
-	    make_uniq<NumpyResultConversion>(result->types, initial_capacity, result->client_properties, pandas);
+	    std::make_unique<NumpyResultConversion>(GetTypes(), initial_capacity, GetClientProperties(), pandas);
 	return conversion;
 }
 
-py::dict DuckDBPyResult::FetchNumpyInternal(bool stream, idx_t vectors_per_chunk,
-                                            unique_ptr<NumpyResultConversion> conversion_p) {
-	if (!result) {
+nb::dict DuckDBPyResult::FetchNumpyInternal(bool chunked, idx_t vectors_per_chunk,
+                                            std::unique_ptr<NumpyResultConversion> conversion_p) {
+	if (Empty()) {
 		throw InvalidInputException("result closed");
 	}
 	if (!conversion_p) {
 		conversion_p = InitializeNumpyConversion();
 	}
 	auto &conversion = *conversion_p;
+	if (!chunked) {
+		vectors_per_chunk = NumericLimits<idx_t>::Maximum();
+	}
 
-	if (result->type == QueryResultType::MATERIALIZED_RESULT) {
-		auto &materialized = result->Cast<MaterializedQueryResult>();
-		for (auto &chunk : materialized.Collection().Chunks()) {
-			conversion.Append(chunk);
-		}
-		InsertCategory(materialized, categories);
-		materialized.Collection().Reset();
-	} else {
-		D_ASSERT(result->type == QueryResultType::STREAM_RESULT);
-		if (!stream) {
-			vectors_per_chunk = NumericLimits<idx_t>::Maximum();
-		}
-		auto &stream_result = result->Cast<StreamQueryResult>();
-		for (idx_t count_vec = 0; count_vec < vectors_per_chunk; count_vec++) {
-			if (!stream_result.IsOpen()) {
-				break;
-			}
-			unique_ptr<DataChunk> chunk;
-			{
-				D_ASSERT(py::gil_check());
-				py::gil_scoped_release release;
-				chunk = FetchNextRaw(stream_result);
-			}
-			if (!chunk || chunk->size() == 0) {
-				//! finished
-				break;
-			}
-			conversion.Append(*chunk);
-			InsertCategory(stream_result, categories);
+	idx_t count_vec = 0;
+	if (vectors_per_chunk > 0) {
+		auto buffered = TakeBufferedRows();
+		if (buffered) {
+			conversion.Append(*buffered);
+			count_vec++;
 		}
 	}
+	for (; count_vec < vectors_per_chunk; count_vec++) {
+		unique_ptr<DataChunk> chunk;
+		{
+			DUCKDB_PY_ASSERT_GIL_HELD();
+			nb::gil_scoped_release release;
+			chunk = FetchNextRaw();
+		}
+		if (!chunk || chunk->size() == 0) {
+			break;
+		}
+		conversion.Append(*chunk);
+	}
+	InsertCategory(GetTypes(), categories);
 
 	// now that we have materialized the result in contiguous arrays, construct the actual NumPy arrays or categorical
 	// types
-	py::dict res;
-	auto names = result->names;
+	nb::dict res;
+	auto names = ResultNames();
 	QueryResult::DeduplicateColumns(names);
-	for (idx_t col_idx = 0; col_idx < result->names.size(); col_idx++) {
+	for (idx_t col_idx = 0; col_idx < names.size(); col_idx++) {
 		auto &name = names[col_idx];
 		FillNumpy(res, col_idx, conversion, name.c_str());
 	}
 	return res;
 }
 
-// TODO: unify these with an enum/flag to indicate which conversions to do
-void DuckDBPyResult::ChangeToTZType(PandasDataFrame &df) {
-	auto names = df.attr("columns").cast<vector<string>>();
+static void ReplaceDFColumn(PandasDataFrame &df, const char *col_name, idx_t idx, const nb::handle &new_value) {
+	df.attr("drop")("columns"_a = col_name, "inplace"_a = true);
+	df.attr("insert")(idx, col_name, new_value, "allow_duplicates"_a = false);
+}
 
-	for (idx_t i = 0; i < result->ColumnCount(); i++) {
-		if (result->types[i] == LogicalType::TIMESTAMP_TZ) {
+// TODO: unify these with an enum/flag to indicate which conversions to do
+void DuckDBPyResult::ConvertDateTimeTypes(PandasDataFrame &df, bool date_as_object) const {
+	auto names = nb::cast<vector<string>>(df.attr("columns"));
+
+	auto &types = GetTypes();
+	for (idx_t i = 0; i < types.size(); i++) {
+		if (types[i] == LogicalType::TIMESTAMP_TZ) {
 			// first localize to UTC then convert to timezone_config
 			auto utc_local = df[names[i].c_str()].attr("dt").attr("tz_localize")("UTC");
-			df.attr("__setitem__")(names[i].c_str(),
-			                       utc_local.attr("dt").attr("tz_convert")(result->client_properties.time_zone));
+			auto new_value = utc_local.attr("dt").attr("tz_convert")(GetClientProperties().time_zone);
+			// We need to create the column anew because the exact dt changed to a new timezone
+			ReplaceDFColumn(df, names[i].c_str(), i, new_value);
+		} else if (date_as_object && types[i] == LogicalType::DATE) {
+			nb::object new_value = df[names[i].c_str()].attr("dt").attr("date");
+			ReplaceDFColumn(df, names[i].c_str(), i, new_value);
 		}
 	}
 }
 
-static py::object ConvertNumpyDtype(py::handle numpy_array) {
-	D_ASSERT(py::gil_check());
+static nb::object ConvertNumpyDtype(nb::handle numpy_array) {
+	DUCKDB_PY_ASSERT_GIL_HELD();
 	auto &import_cache = *DuckDBPyConnection::ImportCache();
 
 	auto dtype = numpy_array.attr("dtype");
-	if (!py::isinstance(numpy_array, import_cache.numpy.ma.masked_array())) {
+	if (!duckdb::PyUtil::IsInstance(numpy_array, import_cache.numpy.ma.masked_array())) {
 		return dtype;
 	}
 
@@ -341,43 +370,36 @@ static py::object ConvertNumpyDtype(py::handle numpy_array) {
 	}
 }
 
-PandasDataFrame DuckDBPyResult::FrameFromNumpy(bool date_as_object, const py::handle &o) {
-	D_ASSERT(py::gil_check());
+PandasDataFrame DuckDBPyResult::FrameFromNumpy(bool date_as_object, const nb::handle &o) {
+	DUCKDB_PY_ASSERT_GIL_HELD();
 	auto &import_cache = *DuckDBPyConnection::ImportCache();
 	auto pandas = import_cache.pandas();
 	if (!pandas) {
 		throw InvalidInputException("'pandas' is required for this operation but it was not installed");
 	}
 
-	py::object items = o.attr("items")();
-	for (const py::handle &item : items) {
+	nb::object items = o.attr("items")();
+	for (const nb::handle &item : items) {
 		// Each item is a tuple of (key, value)
-		auto key_value = py::cast<py::tuple>(item);
-		py::handle key = key_value[0];   // Access the first element (key)
-		py::handle value = key_value[1]; // Access the second element (value)
+		auto key_value = nb::cast<nb::tuple>(item);
+		nb::handle key = key_value[0];   // Access the first element (key)
+		nb::handle value = key_value[1]; // Access the second element (value)
 
 		auto dtype = ConvertNumpyDtype(value);
-		if (py::isinstance(value, import_cache.numpy.ma.masked_array())) {
+		if (duckdb::PyUtil::IsInstance(value, import_cache.numpy.ma.masked_array())) {
 			// o[key] = pd.Series(value.filled(pd.NA), dtype=dtype)
-			auto series = pandas.attr("Series")(value.attr("data"), py::arg("dtype") = dtype);
+			auto series = pandas.attr("Series")(value.attr("data"), nb::arg("dtype") = dtype);
 			series.attr("__setitem__")(value.attr("mask"), import_cache.pandas.NA());
 			o.attr("__setitem__")(key, series);
 		}
 	}
 
-	PandasDataFrame df = py::cast<PandasDataFrame>(pandas.attr("DataFrame").attr("from_dict")(o));
-	// Unfortunately we have to do a type change here for timezones since these types are not supported by numpy
-	ChangeToTZType(df);
+	PandasDataFrame df = nb::cast<PandasDataFrame>(pandas.attr("DataFrame").attr("from_dict")(o));
+	// Convert TZ and (optionally) Date types
+	ConvertDateTimeTypes(df, date_as_object);
 
-	auto names = df.attr("columns").cast<vector<string>>();
-	D_ASSERT(result->ColumnCount() == names.size());
-	if (date_as_object) {
-		for (idx_t i = 0; i < result->ColumnCount(); i++) {
-			if (result->types[i] == LogicalType::DATE) {
-				df.attr("__setitem__")(names[i].c_str(), df[names[i].c_str()].attr("dt").attr("date"));
-			}
-		}
-	}
+	auto names = nb::cast<vector<string>>(df.attr("columns"));
+	D_ASSERT(GetTypes().size() == names.size());
 	return df;
 }
 
@@ -391,202 +413,325 @@ PandasDataFrame DuckDBPyResult::FetchDFChunk(idx_t num_of_vectors, bool date_as_
 	return FrameFromNumpy(date_as_object, FetchNumpyInternal(true, num_of_vectors, std::move(conversion)));
 }
 
-py::dict DuckDBPyResult::FetchPyTorch() {
+nb::dict DuckDBPyResult::FetchPyTorch() {
 	auto result_dict = FetchNumpyInternal();
-	auto from_numpy = py::module::import("torch").attr("from_numpy");
-	for (auto &item : result_dict) {
+	auto from_numpy = nb::module_::import_("torch").attr("from_numpy");
+	for (auto item : result_dict) { // nanobind dict iteration yields std::pair<handle,handle> by value
 		result_dict[item.first] = from_numpy(item.second);
 	}
 	return result_dict;
 }
 
-py::dict DuckDBPyResult::FetchTF() {
+nb::dict DuckDBPyResult::FetchTF() {
 	auto result_dict = FetchNumpyInternal();
-	auto convert_to_tensor = py::module::import("tensorflow").attr("convert_to_tensor");
-	for (auto &item : result_dict) {
+	auto convert_to_tensor = nb::module_::import_("tensorflow").attr("convert_to_tensor");
+	for (auto item : result_dict) { // nanobind dict iteration yields std::pair<handle,handle> by value
 		result_dict[item.first] = convert_to_tensor(item.second);
 	}
 	return result_dict;
 }
 
-duckdb::pyarrow::Table DuckDBPyResult::FetchArrowTable(idx_t rows_per_batch, bool to_polars) {
-	if (!result) {
-		throw InvalidInputException("There is no query result");
+//! Arrow is produced only by results submitted in the Arrow format
+static void RequireArrowFormat(const engine::Result &result) {
+	if (!result.GetFormat().IsArrow()) {
+		throw InternalException("Arrow fetched from a result not submitted in the Arrow format");
 	}
-	auto names = result->names;
-	if (to_polars) {
-		QueryResult::DeduplicateColumns(names);
-	}
-
-	if (!result) {
-		throw InvalidInputException("result closed");
-	}
-	auto pyarrow_lib_module = py::module::import("pyarrow").attr("lib");
-
-	py::list batches;
-	if (result->type == QueryResultType::ARROW_RESULT) {
-		auto &arrow_result = result->Cast<ArrowQueryResult>();
-		auto arrays = arrow_result.ConsumeArrays();
-		for (auto &array : arrays) {
-			ArrowSchema arrow_schema;
-			auto result_names = arrow_result.names;
-			if (to_polars) {
-				QueryResult::DeduplicateColumns(result_names);
-			}
-			ArrowArray data = array->arrow_array;
-			array->arrow_array.release = nullptr;
-			ArrowConverter::ToArrowSchema(&arrow_schema, arrow_result.types, result_names,
-			                              arrow_result.client_properties);
-			TransformDuckToArrowChunk(arrow_schema, data, batches);
-		}
-	} else {
-		QueryResultChunkScanState scan_state(*result.get());
-		while (true) {
-			ArrowArray data;
-			idx_t count;
-			auto &query_result = *result.get();
-			{
-				D_ASSERT(py::gil_check());
-				py::gil_scoped_release release;
-				count = ArrowUtil::FetchChunk(scan_state, query_result.client_properties, rows_per_batch, &data,
-				                              ArrowTypeExtensionData::GetExtensionTypes(
-				                                  *query_result.client_properties.client_context, query_result.types));
-			}
-			if (count == 0) {
-				break;
-			}
-			ArrowSchema arrow_schema;
-			auto result_names = query_result.names;
-			if (to_polars) {
-				QueryResult::DeduplicateColumns(result_names);
-			}
-			ArrowConverter::ToArrowSchema(&arrow_schema, query_result.types, result_names,
-			                              query_result.client_properties);
-			TransformDuckToArrowChunk(arrow_schema, data, batches);
-		}
-	}
-
-	return pyarrow::ToArrowTable(result->types, names, std::move(batches), result->client_properties);
 }
 
-ArrowArrayStream DuckDBPyResult::FetchArrowArrayStream(idx_t rows_per_batch) {
-	if (!result) {
+template <typename T>
+T DuckDBPyResult::RunWithArrowSchema(const std::function<T(const ArrowSchema &)> &fun, bool dedup_col_names) {
+	D_ASSERT(!Empty());
+	auto identifiers = ResultNames();
+	if (dedup_col_names) {
+		QueryResult::DeduplicateColumns(identifiers);
+	}
+	auto names = IdentifiersToStrings(identifiers);
+
+	ArrowSchema arrow_schema;
+	result->BuildArrowSchema(names, arrow_schema);
+	return fun(arrow_schema);
+}
+
+duckdb::pyarrow::Table DuckDBPyResult::FetchArrowTable(const idx_t rows_per_batch, const bool to_polars) {
+	if (Empty()) {
 		throw InvalidInputException("There is no query result");
 	}
-	ResultArrowArrayStreamWrapper *result_stream = new ResultArrowArrayStreamWrapper(std::move(result), rows_per_batch);
-	// The 'result_stream' is part of the 'private_data' of the ArrowArrayStream and its lifetime is bound to that of
-	// the ArrowArrayStream.
-	return result_stream->stream;
+	RequireArrowFormat(*result);
+	return RunWithArrowSchema<duckdb::pyarrow::Table>(
+	    [&](const ArrowSchema &schema) -> duckdb::pyarrow::Table {
+		    auto pyarrow_schema = pyarrow::ToPyArrowSchema(schema);
+		    vector<unique_ptr<ArrowArrayWrapper>> arrays;
+		    {
+			    DUCKDB_PY_ASSERT_GIL_HELD();
+			    nb::gil_scoped_release release;
+			    arrays = result->TakeArrays(DuckDBPyConnection::CheckSignals);
+		    }
+		    nb::list batches;
+		    for (auto &array : arrays) {
+			    ArrowArray data;
+			    array->MoveTo(data);
+			    TransformDuckToArrowChunk(pyarrow_schema, data, batches);
+		    }
+		    return pyarrow::ToArrowTable(std::move(batches), pyarrow_schema);
+	    },
+	    to_polars);
+}
+
+void DuckDBPyResult::CheckBatchSize(idx_t rows_per_batch) {
+	if (rows_per_batch == 0) {
+		throw std::runtime_error("Approximate Batch Size of Record Batch MUST be higher than 0");
+	}
+}
+
+namespace {
+
+//! pyarrow releases an imported stream with the GIL held, and releasing the engine's stream ends
+//! the query and joins its tasks, one of which may be inside a Python UDF waiting for the GIL.
+//! Pulling batches has the same shape when a caller holds the GIL, so every callback drops it.
+template <class FUN>
+auto WithoutGil(FUN &&fun) -> decltype(fun()) {
+	duckdb::PyUtil::GilReleaseIfHeld release;
+	return fun();
+}
+
+//! The result the arrays are popped from, and its schema, copied while the producing transaction was live
+//! because get_schema cannot read the catalog again.
+struct ArrowStreamState {
+	shared_ptr<engine::Result> result;
+	ArrowSchema cached_schema {};
+	ErrorData last_error;
+
+	~ArrowStreamState() {
+		if (cached_schema.release) {
+			cached_schema.release(&cached_schema);
+		}
+	}
+};
+
+ArrowStreamState &StreamState(ArrowArrayStream *stream) {
+	return *static_cast<ArrowStreamState *>(stream->private_data);
+}
+
+//! No exception may cross a C callback, so each one reports through the errno-style return code.
+int ArrowStreamGetSchema(ArrowArrayStream *stream, ArrowSchema *out) {
+	if (!stream->release || !stream->private_data) {
+		return EINVAL;
+	}
+	auto &state = StreamState(stream);
+	return WithoutGil([&]() -> int {
+		try {
+			if (!state.cached_schema.release) {
+				state.last_error = ErrorData("arrow stream: the schema is unavailable");
+				return EINVAL;
+			}
+			// The consumer owns and releases what get_schema returns, independently of the stream
+			if (duckdb_nanoarrow::ArrowSchemaDeepCopy(&state.cached_schema, out) != NANOARROW_OK) {
+				state.last_error = ErrorData("arrow stream: failed to copy the schema");
+				return ENOMEM;
+			}
+			return 0;
+		} catch (std::exception &ex) {
+			try {
+				state.last_error = ErrorData(ex);
+			} catch (...) { // NOLINT: best-effort
+			}
+			return EIO;
+		} catch (...) {
+			return EIO;
+		}
+	});
+}
+
+int ArrowStreamGetNext(ArrowArrayStream *stream, ArrowArray *out) {
+	if (!stream->release || !stream->private_data) {
+		return EINVAL;
+	}
+	auto &state = StreamState(stream);
+	return WithoutGil([&]() -> int {
+		try {
+			// The consumer drives the stream and owns interruption, so no signal check runs here
+			auto array = state.result->FetchArray([]() {});
+			if (!array) {
+				// The end of the stream, which the interface spells as a released array
+				out->release = nullptr;
+				return 0;
+			}
+			array->MoveTo(*out);
+			return 0;
+		} catch (std::exception &ex) {
+			try {
+				state.last_error = ErrorData(ex);
+			} catch (...) { // NOLINT: best-effort
+			}
+			return EIO;
+		} catch (...) {
+			return EIO;
+		}
+	});
+}
+
+const char *ArrowStreamGetLastError(ArrowArrayStream *stream) {
+	if (!stream->release || !stream->private_data) {
+		return "arrow stream was released";
+	}
+	auto &error = StreamState(stream).last_error;
+	return error.HasError() ? error.Message().c_str() : nullptr;
+}
+
+void ArrowStreamRelease(ArrowArrayStream *stream) {
+	if (!stream || !stream->release) {
+		return;
+	}
+	stream->release = nullptr;
+	auto state = static_cast<ArrowStreamState *>(stream->private_data);
+	stream->private_data = nullptr;
+	if (!state) {
+		return;
+	}
+	WithoutGil([&]() {
+		try {
+			state->result->Close();
+		} catch (...) { // NOLINT: best-effort cleanup
+		}
+	});
+	delete state;
+}
+
+//! Releases a stream that was never handed over, for example when the import into pyarrow throws
+struct ArrowArrayStreamGuard {
+	ArrowArrayStream stream;
+	~ArrowArrayStreamGuard() {
+		if (stream.release) {
+			stream.release(&stream);
+		}
+	}
+};
+
+} // namespace
+
+ArrowArrayStream DuckDBPyResult::FetchArrowArrayStream(idx_t rows_per_batch) {
+	RequireArrowFormat(*result);
+	auto state = make_uniq<ArrowStreamState>();
+	if (names_override.empty()) {
+		result->CopyArrowSchema(state->cached_schema);
+	} else {
+		result->BuildArrowSchema(IdentifiersToStrings(names_override), state->cached_schema);
+	}
+	state->result = std::move(result);
+	current_chunk.reset();
+	chunk_offset = 0;
+
+	ArrowArrayStream result_stream;
+	result_stream.get_schema = ArrowStreamGetSchema;
+	result_stream.get_next = ArrowStreamGetNext;
+	result_stream.get_last_error = ArrowStreamGetLastError;
+	result_stream.release = ArrowStreamRelease;
+	result_stream.private_data = state.release();
+	return result_stream;
 }
 
 duckdb::pyarrow::RecordBatchReader DuckDBPyResult::FetchRecordBatchReader(idx_t rows_per_batch) {
-	if (!result) {
+	if (Empty()) {
 		throw InvalidInputException("There is no query result");
 	}
-	py::gil_scoped_acquire acquire;
-	auto pyarrow_lib_module = py::module::import("pyarrow").attr("lib");
+	CheckBatchSize(rows_per_batch);
+	auto pyarrow_lib_module = nb::module_::import_("pyarrow").attr("lib");
 	auto record_batch_reader_func = pyarrow_lib_module.attr("RecordBatchReader").attr("_import_from_c");
-	auto stream = FetchArrowArrayStream(rows_per_batch);
-	py::object record_batch_reader = record_batch_reader_func((uint64_t)&stream); // NOLINT
-	return py::cast<duckdb::pyarrow::RecordBatchReader>(record_batch_reader);
+	ArrowArrayStreamGuard guard {FetchArrowArrayStream(rows_per_batch)};
+	nb::object record_batch_reader = record_batch_reader_func((uint64_t)&guard.stream); // NOLINT
+	return nb::cast<duckdb::pyarrow::RecordBatchReader>(record_batch_reader);
 }
 
-static void ArrowArrayStreamPyCapsuleDestructor(PyObject *object) {
-	auto data = PyCapsule_GetPointer(object, "arrow_array_stream");
+static void ArrowArrayStreamPyCapsuleDestructor(void *data) noexcept {
 	if (!data) {
 		return;
 	}
-	auto stream = reinterpret_cast<ArrowArrayStream *>(data);
-	if (stream->release) {
-		stream->release(stream);
+	auto arrow_stream = reinterpret_cast<ArrowArrayStream *>(data);
+	if (arrow_stream->release) {
+		arrow_stream->release(arrow_stream);
 	}
-	delete stream;
+	delete arrow_stream;
 }
 
-py::object DuckDBPyResult::FetchArrowCapsule(idx_t rows_per_batch) {
-	auto stream_p = FetchArrowArrayStream(rows_per_batch);
-	auto stream = new ArrowArrayStream();
-	*stream = stream_p;
-	return py::capsule(stream, "arrow_array_stream", ArrowArrayStreamPyCapsuleDestructor);
+nb::object DuckDBPyResult::FetchArrowCapsule(const idx_t rows_per_batch) {
+	if (Empty()) {
+		throw InvalidInputException("There is no query result");
+	}
+	CheckBatchSize(rows_per_batch);
+	auto inner_stream = FetchArrowArrayStream(rows_per_batch);
+	auto arrow_stream = new ArrowArrayStream();
+	*arrow_stream = inner_stream;
+	return nb::capsule(arrow_stream, "arrow_array_stream", ArrowArrayStreamPyCapsuleDestructor);
 }
 
-py::str GetTypeToPython(const LogicalType &type) {
-	switch (type.id()) {
-	case LogicalTypeId::BOOLEAN:
-		return py::str("bool");
-	case LogicalTypeId::TINYINT:
-	case LogicalTypeId::SMALLINT:
-	case LogicalTypeId::INTEGER:
-	case LogicalTypeId::BIGINT:
-	case LogicalTypeId::UTINYINT:
-	case LogicalTypeId::USMALLINT:
-	case LogicalTypeId::UINTEGER:
-	case LogicalTypeId::UBIGINT:
-	case LogicalTypeId::HUGEINT:
-	case LogicalTypeId::UHUGEINT:
-	case LogicalTypeId::FLOAT:
-	case LogicalTypeId::DOUBLE:
-	case LogicalTypeId::DECIMAL: {
-		return py::str("NUMBER");
-	}
-	case LogicalTypeId::VARCHAR: {
-		if (type.HasAlias() && type.GetAlias() == "JSON") {
-			return py::str("JSON");
-		} else {
-			return py::str("STRING");
-		}
-	}
-	case LogicalTypeId::BLOB:
-	case LogicalTypeId::BIT:
-		return py::str("BINARY");
-	case LogicalTypeId::TIMESTAMP:
-	case LogicalTypeId::TIMESTAMP_TZ:
-	case LogicalTypeId::TIMESTAMP_MS:
-	case LogicalTypeId::TIMESTAMP_NS:
-	case LogicalTypeId::TIMESTAMP_SEC: {
-		return py::str("DATETIME");
-	}
-	case LogicalTypeId::TIME:
-	case LogicalTypeId::TIME_TZ: {
-		return py::str("Time");
-	}
-	case LogicalTypeId::DATE: {
-		return py::str("Date");
-	}
-	case LogicalTypeId::STRUCT:
-	case LogicalTypeId::MAP:
-		return py::str("dict");
-	case LogicalTypeId::LIST: {
-		return py::str("list");
-	}
-	case LogicalTypeId::INTERVAL: {
-		return py::str("TIMEDELTA");
-	}
-	case LogicalTypeId::UUID: {
-		return py::str("UUID");
-	}
-	default:
-		return py::str(type.ToString());
-	}
-}
-
-py::list DuckDBPyResult::GetDescription(const vector<string> &names, const vector<LogicalType> &types) {
-	py::list desc;
+nb::list DuckDBPyResult::GetDescription(const vector<string> &names, const vector<LogicalType> &types) {
+	nb::list desc;
 
 	for (idx_t col_idx = 0; col_idx < names.size(); col_idx++) {
-		auto py_name = py::str(names[col_idx]);
-		auto py_type = GetTypeToPython(types[col_idx]);
-		desc.append(py::make_tuple(py_name, py_type, py::none(), py::none(), py::none(), py::none(), py::none()));
+		auto py_name = nb::str(names[col_idx].c_str(), names[col_idx].size());
+		auto py_type = DuckDBPyType(types[col_idx]);
+		desc.append(nb::make_tuple(py_name, py_type, nb::none(), nb::none(), nb::none(), nb::none(), nb::none()));
 	}
 	return desc;
 }
 
 void DuckDBPyResult::Close() {
-	result = nullptr;
+	if (result) {
+		// Ending the query waits for its running tasks, and a task inside a Python UDF cannot finish
+		// until the GIL is free.
+		duckdb::PyUtil::GilReleaseIfHeld release;
+		result->Close();
+	}
+	result.reset();
+	current_chunk.reset();
+	chunk_offset = 0;
 }
 
-bool DuckDBPyResult::IsClosed() const {
-	return result_closed;
+void DuckDBPyResult::Complete() {
+	if (Empty()) {
+		return;
+	}
+	current_chunk.reset();
+	chunk_offset = 0;
+	const bool arrow = result->GetFormat().IsArrow();
+	// Each unit is dropped with the GIL held, since a chunk can hold Python objects
+	while (true) {
+		unique_ptr<DataChunk> chunk;
+		unique_ptr<ArrowArrayWrapper> array;
+		{
+			DUCKDB_PY_ASSERT_GIL_HELD();
+			nb::gil_scoped_release release;
+			if (arrow) {
+				array = result->FetchArray(DuckDBPyConnection::CheckSignals);
+			} else {
+				chunk = result->FetchChunk(DuckDBPyConnection::CheckSignals);
+			}
+		}
+		if (!chunk && !array) {
+			break;
+		}
+	}
+	Close();
+}
+
+bool DuckDBPyResult::HasWritesToRun() const {
+	// A result that stopped running, a failed one included, has nothing left to write
+	if (!result || !result->Running()) {
+		return false;
+	}
+	// A statement that expands into several is treated as writing until it ran and its properties are known
+	return !result->MetadataAvailable() || !result->Properties().modified_databases.empty();
+}
+
+int64_t DuckDBPyResult::Rowcount() {
+	if (rowcount_override >= 0) {
+		return rowcount_override;
+	}
+	return result ? result->ChangedRows() : -1;
+}
+
+void DuckDBPyResult::OverrideRowcount(int64_t rowcount) {
+	rowcount_override = rowcount;
 }
 
 } // namespace duckdb

@@ -2,44 +2,59 @@
 
 #include "duckdb/common/file_system.hpp"
 #include "duckdb/common/string_util.hpp"
-#include "duckdb_python/pybind11/pybind_wrapper.hpp"
-#include "duckdb_python/pybind11/gil_wrapper.hpp"
+#include "duckdb_python/nb/casters.hpp"
 #include "duckdb/common/vector.hpp"
+#include "duckdb/common/types/timestamp.hpp"
 
 namespace duckdb {
 
-class ModifiedMemoryFileSystem : public py::object {
+class ModifiedMemoryFileSystem : public nb::object {
 public:
-	using py::object::object;
-	ModifiedMemoryFileSystem(py::object object) : py::object(object) {
+	using nb::object::object;
+	ModifiedMemoryFileSystem(nb::object object) : nb::object(object) {
 	}
 
 public:
-	static bool check_(const py::handle &object) {
-		return py::isinstance(object, py::module::import("duckdb.filesystem").attr("ModifiedMemoryFileSystem"));
+	static bool check_(const nb::handle &object) {
+		// Non-throwing: nanobind can invoke check_ from noexcept caster / isinstance contexts, where a
+		// thrown import error or an IsInstance failure (PyObject_IsInstance == -1) would std::terminate.
+		// Mirror AbstractFileSystem::check_ and report "not an instance" on any error.
+		try {
+			return duckdb::PyUtil::IsInstance(
+			    object, nb::module_::import_("duckdb.filesystem").attr("ModifiedMemoryFileSystem"));
+		} catch (...) {
+			return false;
+		}
 	}
 };
 
-class AbstractFileSystem : public py::object {
+class AbstractFileSystem : public nb::object {
 public:
-	using py::object::object;
+	using nb::object::object;
 
 public:
-	static bool check_(const py::handle &object) {
-		return py::isinstance(object, py::module::import("fsspec").attr("AbstractFileSystem"));
+	static bool check_(const nb::handle &object) {
+		// Non-throwing: if fsspec isn't installed, nothing is an AbstractFileSystem. nanobind invokes check_ from
+		// noexcept contexts (argument casters, isinstance), so a thrown import error would std::terminate rather
+		// than propagate. register_filesystem() re-imports fsspec in a throwing context to surface ModuleNotFoundError.
+		try {
+			return duckdb::PyUtil::IsInstance(object, nb::module_::import_("fsspec").attr("AbstractFileSystem"));
+		} catch (...) {
+			return false;
+		}
 	}
 };
 
 class PythonFileHandle : public FileHandle {
 public:
-	PythonFileHandle(FileSystem &file_system, const string &path, const py::object &handle, FileOpenFlags flags);
+	PythonFileHandle(FileSystem &file_system, const string &path, const nb::object &handle, FileOpenFlags flags);
 	~PythonFileHandle() override;
 	void Close() override;
 
-	static const py::object &GetHandle(const FileHandle &handle);
+	static const nb::object &GetHandle(const FileHandle &handle);
 
 private:
-	py::object handle;
+	nb::object handle;
 };
 
 class PythonFilesystem : public FileSystem {
@@ -90,7 +105,7 @@ public:
 	int64_t GetFileSize(FileHandle &handle) override;
 	void RemoveFile(const string &filename, optional_ptr<FileOpener> opener = nullptr) override;
 	void MoveFile(const string &source, const string &dest, optional_ptr<FileOpener> opener = nullptr) override;
-	time_t GetLastModifiedTime(FileHandle &handle) override;
+	timestamp_t GetLastModifiedTime(FileHandle &handle) override;
 	void FileSync(FileHandle &handle) override;
 	bool DirectoryExists(const string &directory, optional_ptr<FileOpener> opener = nullptr) override;
 	void CreateDirectory(const string &directory, optional_ptr<FileOpener> opener = nullptr) override;
@@ -103,12 +118,3 @@ public:
 };
 
 } // namespace duckdb
-
-namespace pybind11 {
-namespace detail {
-template <>
-struct handle_type_name<duckdb::AbstractFileSystem> {
-	static constexpr auto name = const_name("fsspec.AbstractFileSystem");
-};
-} // namespace detail
-} // namespace pybind11

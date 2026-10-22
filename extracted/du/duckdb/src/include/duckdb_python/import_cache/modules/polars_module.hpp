@@ -13,10 +13,10 @@
 
 //! Note: This class is generated using scripts.
 //! If you need to add a new object to the cache you must:
-//! 1. adjust tools/pythonpkg/scripts/imports.py
-//! 2. run python3 tools/pythonpkg/scripts/generate_import_cache_json.py
-//! 3. run python3 tools/pythonpkg/scripts/generate_import_cache_cpp.py
-//! 4. run make format-main (the generator doesn't respect the formatting rules ;))
+//! 1. adjust scripts/imports.py
+//! 2. run python scripts/generate_import_cache_json.py
+//! 3. run python scripts/generate_import_cache_cpp.py
+//! 4. run pre-commit to fix formatting errors
 
 namespace duckdb {
 
@@ -26,13 +26,19 @@ public:
 	static constexpr const char *Name = "polars";
 
 public:
-	PolarsCacheItem() : PythonImportCacheItem("polars"), DataFrame("DataFrame", this), LazyFrame("LazyFrame", this) {
+	PolarsCacheItem()
+	    : PythonImportCacheItem("polars"), DataFrame("DataFrame", this), LazyFrame("LazyFrame", this), col("col", this),
+	      lit("lit", this), Series("Series", this), Decimal("Decimal", this) {
 	}
 	~PolarsCacheItem() override {
 	}
 
 	PythonImportCacheItem DataFrame;
 	PythonImportCacheItem LazyFrame;
+	PythonImportCacheItem col;
+	PythonImportCacheItem lit;
+	PythonImportCacheItem Series;
+	PythonImportCacheItem Decimal;
 
 protected:
 	bool IsRequired() const override final {

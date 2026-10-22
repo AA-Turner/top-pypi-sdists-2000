@@ -1,5 +1,5 @@
 #include "duckdb_python/path_like.hpp"
-#include "duckdb_python/pyrelation.hpp"
+#include "duckdb_python/pyresult.hpp"
 #include "duckdb_python/pyconnection/pyconnection.hpp"
 #include "duckdb/common/string_util.hpp"
 #include "duckdb_python/pyfilesystem.hpp"
@@ -10,12 +10,11 @@ namespace duckdb {
 
 struct PathLikeProcessor {
 public:
-	PathLikeProcessor(DuckDBPyConnection &connection, PythonImportCache &import_cache)
-	    : connection(connection), import_cache(import_cache) {
+	explicit PathLikeProcessor(DuckDBPyConnection &connection) : connection(connection) {
 	}
 
 public:
-	void AddFile(const py::object &object);
+	void AddFile(const nb::object &object);
 	PathLike Finalize();
 
 protected:
@@ -29,20 +28,21 @@ protected:
 public:
 	DuckDBPyConnection &connection;
 	optional_ptr<ModifiedMemoryFileSystem> object_store;
-	PythonImportCache &import_cache;
 	// The list containing every file
 	vector<string> all_files;
 	// The list of files that are registered in the object_store;
 	vector<string> fs_files;
 };
 
-void PathLikeProcessor::AddFile(const py::object &object) {
-	if (py::isinstance<py::str>(object)) {
-		all_files.push_back(std::string(py::str(object)));
+void PathLikeProcessor::AddFile(const nb::object &object) {
+	if (nb::isinstance<nb::str>(object)) {
+		all_files.push_back(nb::cast<std::string>(nb::str(object)));
 		return;
 	}
-	if (py::isinstance(object, import_cache.pathlib.Path())) {
-		all_files.push_back(std::string(py::str(object)));
+	if (nb::isinstance<nb::bytes>(object) || nb::hasattr(object, "__fspath__")) {
+		// A bytes path or an os.PathLike object (e.g. pathlib.Path) - decode it to a string
+		auto fsdecode = nb::module_::import_("os").attr("fsdecode");
+		all_files.push_back(nb::cast<std::string>(nb::str(fsdecode(object))));
 		return;
 	}
 	// This is (assumed to be) a file-like object
@@ -78,14 +78,12 @@ PathLike PathLikeProcessor::Finalize() {
 	return result;
 }
 
-PathLike PathLike::Create(const py::object &object, DuckDBPyConnection &connection) {
-	auto &import_cache = *DuckDBPyConnection::ImportCache();
-
-	PathLikeProcessor processor(connection, import_cache);
-	if (py::isinstance<py::list>(object)) {
-		auto list = py::list(object);
-		for (auto &item : list) {
-			processor.AddFile(py::reinterpret_borrow<py::object>(item));
+PathLike PathLike::Create(const nb::object &object, DuckDBPyConnection &connection) {
+	PathLikeProcessor processor(connection);
+	if (nb::isinstance<nb::list>(object)) {
+		auto list = nb::list(object);
+		for (auto item : list) { // nanobind list iteration yields temporary handles; bind by value (cheap handle)
+			processor.AddFile(nb::borrow<nb::object>(item));
 		}
 	} else {
 		// Single object

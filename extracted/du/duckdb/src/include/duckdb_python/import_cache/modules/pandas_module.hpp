@@ -13,12 +13,26 @@
 
 //! Note: This class is generated using scripts.
 //! If you need to add a new object to the cache you must:
-//! 1. adjust tools/pythonpkg/scripts/imports.py
-//! 2. run python3 tools/pythonpkg/scripts/generate_import_cache_json.py
-//! 3. run python3 tools/pythonpkg/scripts/generate_import_cache_cpp.py
-//! 4. run make format-main (the generator doesn't respect the formatting rules ;))
+//! 1. adjust scripts/imports.py
+//! 2. run python scripts/generate_import_cache_json.py
+//! 3. run python scripts/generate_import_cache_cpp.py
+//! 4. run pre-commit to fix formatting errors
 
 namespace duckdb {
+
+struct PandasArraysCacheItem : public PythonImportCacheItem {
+
+public:
+	PandasArraysCacheItem(optional_ptr<PythonImportCacheItem> parent)
+	    : PythonImportCacheItem("arrays", parent), ArrowStringArray("ArrowStringArray", this),
+	      StringArray("StringArray", this) {
+	}
+	~PandasArraysCacheItem() override {
+	}
+
+	PythonImportCacheItem ArrowStringArray;
+	PythonImportCacheItem StringArray;
+};
 
 struct PandasCacheItem : public PythonImportCacheItem {
 
@@ -33,7 +47,7 @@ public:
 	      UInt8Dtype("UInt8Dtype", this), UInt16Dtype("UInt16Dtype", this), UInt32Dtype("UInt32Dtype", this),
 	      UInt64Dtype("UInt64Dtype", this), Int8Dtype("Int8Dtype", this), Int16Dtype("Int16Dtype", this),
 	      Int32Dtype("Int32Dtype", this), Int64Dtype("Int64Dtype", this), Float32Dtype("Float32Dtype", this),
-	      Float64Dtype("Float64Dtype", this) {
+	      Float64Dtype("Float64Dtype", this), arrays(this) {
 	}
 	~PandasCacheItem() override {
 	}
@@ -57,6 +71,7 @@ public:
 	PythonImportCacheItem Int64Dtype;
 	PythonImportCacheItem Float32Dtype;
 	PythonImportCacheItem Float64Dtype;
+	PandasArraysCacheItem arrays;
 
 protected:
 	bool IsRequired() const override final {

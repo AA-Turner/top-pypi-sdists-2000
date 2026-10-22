@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "duckdb_python/pybind11/pybind_wrapper.hpp"
+#include "duckdb_python/nb/casters.hpp"
 #include "duckdb_python/numpy/raw_array_wrapper.hpp"
 #include "duckdb.hpp"
 #include "duckdb/common/types.hpp"
@@ -41,8 +41,8 @@ public:
 struct ArrayWrapper {
 	explicit ArrayWrapper(const LogicalType &type, const ClientProperties &client_properties, bool pandas = false);
 
-	unique_ptr<RawArrayWrapper> data;
-	unique_ptr<RawArrayWrapper> mask;
+	std::unique_ptr<RawArrayWrapper> data;
+	std::unique_ptr<RawArrayWrapper> mask;
 	bool requires_mask;
 	const ClientProperties client_properties;
 	bool pandas;
@@ -52,7 +52,7 @@ public:
 	void Resize(idx_t new_capacity);
 	void Append(idx_t current_offset, Vector &input, idx_t source_size, idx_t source_offset = 0,
 	            idx_t count = DConstants::INVALID_INDEX);
-	py::object ToArray() const;
+	nb::object ToArray() const;
 };
 
 } // namespace duckdb

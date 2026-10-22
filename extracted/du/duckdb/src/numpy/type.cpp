@@ -58,11 +58,23 @@ static NumpyNullableType ConvertNumpyTypeInternal(const string &col_type_str) {
 	if (col_type_str == "string") {
 		return NumpyNullableType::STRING;
 	}
+	if (col_type_str == "str") {
+		return NumpyNullableType::STRING;
+	}
 	if (col_type_str == "object") {
 		return NumpyNullableType::OBJECT;
 	}
 	if (col_type_str == "timedelta64[ns]") {
-		return NumpyNullableType::TIMEDELTA;
+		return NumpyNullableType::TIMEDELTA_NS;
+	}
+	if (col_type_str == "timedelta64[us]") {
+		return NumpyNullableType::TIMEDELTA_US;
+	}
+	if (col_type_str == "timedelta64[ms]") {
+		return NumpyNullableType::TIMEDELTA_MS;
+	}
+	if (col_type_str == "timedelta64[s]") {
+		return NumpyNullableType::TIMEDELTA_S;
 	}
 	// We use 'StartsWith' because it might have ', tz' at the end, indicating timezone
 	if (StringUtil::StartsWith(col_type_str, "datetime64[ns")) {
@@ -96,8 +108,8 @@ static NumpyNullableType ConvertNumpyTypeInternal(const string &col_type_str) {
 	throw NotImplementedException("Data type '%s' not recognized", col_type_str);
 }
 
-NumpyType ConvertNumpyType(const py::handle &col_type) {
-	auto col_type_str = string(py::str(col_type));
+NumpyType ConvertNumpyType(const nb::handle &col_type) {
+	auto col_type_str = nb::cast<std::string>(nb::str(col_type));
 	NumpyType numpy_type;
 
 	numpy_type.type = ConvertNumpyTypeInternal(col_type_str);
@@ -140,7 +152,10 @@ LogicalType NumpyToLogicalType(const NumpyType &col_type) {
 		return LogicalType::VARCHAR;
 	case NumpyNullableType::OBJECT:
 		return LogicalType::VARCHAR;
-	case NumpyNullableType::TIMEDELTA:
+	case NumpyNullableType::TIMEDELTA_NS:
+	case NumpyNullableType::TIMEDELTA_US:
+	case NumpyNullableType::TIMEDELTA_MS:
+	case NumpyNullableType::TIMEDELTA_S:
 		return LogicalType::INTERVAL;
 	case NumpyNullableType::DATETIME_MS: {
 		if (col_type.has_timezone) {

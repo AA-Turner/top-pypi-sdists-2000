@@ -13,12 +13,31 @@
 
 //! Note: This class is generated using scripts.
 //! If you need to add a new object to the cache you must:
-//! 1. adjust tools/pythonpkg/scripts/imports.py
-//! 2. run python3 tools/pythonpkg/scripts/generate_import_cache_json.py
-//! 3. run python3 tools/pythonpkg/scripts/generate_import_cache_cpp.py
-//! 4. run make format-main (the generator doesn't respect the formatting rules ;))
+//! 1. adjust scripts/imports.py
+//! 2. run python scripts/generate_import_cache_json.py
+//! 3. run python scripts/generate_import_cache_cpp.py
+//! 4. run pre-commit to fix formatting errors
 
 namespace duckdb {
+
+struct DuckdbPolarsioCacheItem : public PythonImportCacheItem {
+
+public:
+	static constexpr const char *Name = "duckdb.polars_io";
+
+public:
+	DuckdbPolarsioCacheItem() : PythonImportCacheItem("duckdb.polars_io"), duckdb_source("duckdb_source", this) {
+	}
+	~DuckdbPolarsioCacheItem() override {
+	}
+
+	PythonImportCacheItem duckdb_source;
+
+protected:
+	bool IsRequired() const override final {
+		return false;
+	}
+};
 
 struct DuckdbFilesystemCacheItem : public PythonImportCacheItem {
 
@@ -46,13 +65,14 @@ public:
 	static constexpr const char *Name = "duckdb";
 
 public:
-	DuckdbCacheItem() : PythonImportCacheItem("duckdb"), filesystem(), Value("Value", this) {
+	DuckdbCacheItem() : PythonImportCacheItem("duckdb"), filesystem(), Value("Value", this), polars_io() {
 	}
 	~DuckdbCacheItem() override {
 	}
 
 	DuckdbFilesystemCacheItem filesystem;
 	PythonImportCacheItem Value;
+	DuckdbPolarsioCacheItem polars_io;
 };
 
 } // namespace duckdb

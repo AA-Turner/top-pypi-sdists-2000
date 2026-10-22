@@ -1,33 +1,34 @@
 #include "duckdb_python/map.hpp"
+#include "duckdb_python/engine/connection.hpp"
+#include "duckdb/parser/tableref/table_function_ref.hpp"
 #include "duckdb_python/numpy/numpy_scan.hpp"
 #include "duckdb_python/pandas/pandas_bind.hpp"
 #include "duckdb_python/numpy/numpy_result_conversion.hpp"
 #include "duckdb/common/string_util.hpp"
 #include "duckdb_python/pandas/column/pandas_numpy_column.hpp"
 #include "duckdb_python/pandas/pandas_scan.hpp"
-#include "duckdb_python/pybind11/dataframe.hpp"
+#include "duckdb_python/dataframe.hpp"
 #include "duckdb_python/pytype.hpp"
-#include "duckdb_python/pybind11/dataframe.hpp"
+#include "duckdb_python/dataframe.hpp"
 #include "duckdb_python/pyconnection/pyconnection.hpp"
+#include "duckdb/common/vector_operations/vector_operations.hpp"
 
 namespace duckdb {
 
-MapFunction::MapFunction()
-    : TableFunction("python_map_function", {LogicalType::TABLE, LogicalType::POINTER, LogicalType::POINTER}, nullptr,
-                    MapFunctionBind) {
+MapFunction::MapFunction() : TableFunction("python_map_function", {LogicalType::TABLE}, nullptr, MapFunctionBind) {
 	in_out_function = MapFunctionExec;
 }
 
 struct MapFunctionData : public TableFunctionData {
-	MapFunctionData() : function(nullptr) {
+	explicit MapFunctionData(shared_ptr<MapFunctionInfo> info_p) : info(std::move(info_p)) {
 	}
-	PyObject *function;
+	shared_ptr<MapFunctionInfo> info;
 	vector<LogicalType> in_types, out_types;
-	vector<string> in_names, out_names;
+	vector<Identifier> in_names, out_names;
 };
 
-static py::object FunctionCall(NumpyResultConversion &conversion, const vector<string> &names, PyObject *function) {
-	py::dict in_numpy_dict;
+static nb::object FunctionCall(NumpyResultConversion &conversion, const vector<Identifier> &names, PyObject *function) {
+	nb::dict in_numpy_dict;
 	for (idx_t col_idx = 0; col_idx < names.size(); col_idx++) {
 		in_numpy_dict[names[col_idx].c_str()] = conversion.ToArray(col_idx);
 	}
@@ -38,21 +39,22 @@ static py::object FunctionCall(NumpyResultConversion &conversion, const vector<s
 	D_ASSERT(in_df.ptr());
 
 	D_ASSERT(function);
-	auto *df_obj = PyObject_CallObject(function, PyTuple_Pack(1, in_df.ptr()));
+	// Not PyObject_CallOneArg: nanobind links macOS extensions against a fixed list of CPython symbols that lacks it.
+	auto *df_obj = PyObject_CallFunctionObjArgs(function, in_df.ptr(), nullptr);
 	if (!df_obj) {
 		PyErr_PrintEx(1);
 		throw InvalidInputException("Python error. See above for a stack trace.");
 	}
 
-	auto df = py::reinterpret_steal<py::object>(df_obj);
+	auto df = nb::steal<nb::object>(df_obj);
 	if (df.is_none()) { // no return, probably modified in place
 		throw InvalidInputException("No return value from Python function");
 	}
 
-	if (!py::isinstance<PandasDataFrame>(df)) {
+	if (!nb::isinstance<PandasDataFrame>(df)) {
 		throw InvalidInputException(
 		    "Expected the UDF to return an object of type 'pandas.DataFrame', found '%s' instead",
-		    std::string(py::str(df.attr("__class__"))));
+		    nb::cast<std::string>(nb::str(nb::object(df.attr("__class__")))));
 	}
 	if (PandasDataFrame::IsPyArrowBacked(df)) {
 		throw InvalidInputException(
@@ -60,6 +62,11 @@ static py::object FunctionCall(NumpyResultConversion &conversion, const vector<s
 	}
 
 	return df;
+}
+
+//! Converting here releases the traceback, and any DataFrames it holds, under the GIL and the callback scope.
+static Exception AsDuckDBError(const nb::python_error &error) {
+	return Exception(ExceptionType::INVALID, error.what());
 }
 
 static bool ContainsNullType(const vector<LogicalType> &types) {
@@ -71,8 +78,8 @@ static bool ContainsNullType(const vector<LogicalType> &types) {
 	return false;
 }
 
-static void OverrideNullType(vector<LogicalType> &return_types, const vector<string> &return_names,
-                             const vector<LogicalType> &original_types, const vector<string> &original_names) {
+static void OverrideNullType(vector<LogicalType> &return_types, const vector<Identifier> &return_names,
+                             const vector<LogicalType> &original_types, const vector<Identifier> &original_names) {
 	if (!ContainsNullType(return_types)) {
 		// Nothing to override, none of the returned types are NULL
 		return;
@@ -99,26 +106,35 @@ static void OverrideNullType(vector<LogicalType> &return_types, const vector<str
 }
 
 unique_ptr<FunctionData> BindExplicitSchema(unique_ptr<MapFunctionData> function_data, PyObject *schema_p,
-                                            vector<LogicalType> &types, vector<string> &names) {
+                                            vector<LogicalType> &types, vector<Identifier> &names) {
 	D_ASSERT(schema_p != Py_None);
 
-	auto schema_object = py::reinterpret_borrow<py::dict>(schema_p);
-	if (!py::isinstance<py::dict>(schema_object)) {
+	auto schema_object = nb::borrow<nb::dict>(schema_p);
+	if (!nb::isinstance<nb::dict>(schema_object)) {
 		throw InvalidInputException("'schema' should be given as a Dict[str, DuckDBType]");
 	}
-	auto schema = py::dict(schema_object);
+	auto schema = nb::cast<nb::dict>(schema_object);
 
 	auto column_count = schema.size();
 
 	types.reserve(column_count);
 	names.reserve(column_count);
-	for (auto &item : schema) {
-		auto name = item.first;
+	nb::list labels;
+	for (auto item : schema) { // nanobind dict iteration yields std::pair<handle,handle> by value
+		labels.append(item.first);
 		auto type_p = item.second;
-		names.push_back(std::string(py::str(name)));
-		// TODO: replace with py::try_cast so we can catch the error and throw a better exception
-		auto type = py::cast<shared_ptr<DuckDBPyType>>(type_p);
+		// TryConvert applies the same implicit conversions a DuckDBPyType parameter would (DuckDBPyType instance,
+		// a type string, or a Python type object), and reports a clear error instead of a raw cast failure.
+		std::unique_ptr<DuckDBPyType> type;
+		if (!DuckDBPyType::TryConvert(nb::borrow<nb::object>(type_p), type)) {
+			string actual_type = nb::cast<std::string>(nb::str((type_p).type()));
+			throw InvalidInputException("'schema' value could not be converted to a DuckDBPyType, got '%s'",
+			                            actual_type);
+		}
 		types.push_back(type->Type());
+	}
+	for (auto &name : ColumnNamesFromLabels(labels)) {
+		names.emplace_back(name);
 	}
 
 	function_data->out_names = names;
@@ -129,14 +145,13 @@ unique_ptr<FunctionData> BindExplicitSchema(unique_ptr<MapFunctionData> function
 
 // we call the passed function with a zero-row data frame to infer the output columns and their names.
 // they better not change in the actual execution ^^
-unique_ptr<FunctionData> MapFunction::MapFunctionBind(ClientContext &context, TableFunctionBindInput &input,
-                                                      vector<LogicalType> &return_types, vector<string> &names) {
-	py::gil_scoped_acquire acquire;
-
-	auto data_uptr = make_uniq<MapFunctionData>();
+static unique_ptr<FunctionData> BindMap(ClientContext &context, shared_ptr<MapFunctionInfo> info,
+                                        TableFunctionBindInput &input, vector<LogicalType> &return_types,
+                                        vector<Identifier> &names) {
+	auto data_uptr = make_uniq<MapFunctionData>(std::move(info));
 	auto &data = *data_uptr;
-	data.function = reinterpret_cast<PyObject *>(input.inputs[1].GetPointer());
-	auto explicit_schema = reinterpret_cast<PyObject *>(input.inputs[2].GetPointer());
+	auto function = data.info->function.obj.ptr();
+	auto explicit_schema = data.info->schema.obj.ptr();
 
 	data.in_names = input.input_table_names;
 	data.in_types = input.input_table_types;
@@ -145,7 +160,7 @@ unique_ptr<FunctionData> MapFunction::MapFunctionBind(ClientContext &context, Ta
 		return BindExplicitSchema(std::move(data_uptr), explicit_schema, return_types, names);
 	}
 	NumpyResultConversion conversion(data.in_types, 0, context.GetClientProperties());
-	auto df = FunctionCall(conversion, data.in_names, data.function);
+	auto df = PandasScanFunction::PandasWithBoundNames(FunctionCall(conversion, data.in_names, function));
 	vector<PandasColumnBindData> pandas_bind_data; // unused
 	Pandas::Bind(context, df, pandas_bind_data, return_types, names);
 
@@ -157,14 +172,28 @@ unique_ptr<FunctionData> MapFunction::MapFunctionBind(ClientContext &context, Ta
 	return std::move(data_uptr);
 }
 
+unique_ptr<FunctionData> MapFunction::MapFunctionBind(ClientContext &context, TableFunctionBindInput &input,
+                                                      vector<LogicalType> &return_types, vector<Identifier> &names) {
+	if (!input.ref.bind_info) {
+		throw BinderException("python_map_function requires a callable bind input");
+	}
+	DynamicCastCheck<MapFunctionInfo>(input.ref.bind_info.get());
+	auto info = shared_ptr_cast<TableFunctionInfo, MapFunctionInfo>(input.ref.bind_info);
+	nb::gil_scoped_acquire acquire;
+	engine::CallbackScope callback(context);
+	try {
+		return BindMap(context, std::move(info), input, return_types, names);
+	} catch (nb::python_error &error) {
+		throw AsDuckDBError(error);
+	}
+}
+
 static string TypeVectorToString(const vector<LogicalType> &types) {
 	return StringUtil::Join(types, types.size(), ", ", [](const LogicalType &argument) { return argument.ToString(); });
 }
 
-OperatorResultType MapFunction::MapFunctionExec(ExecutionContext &context, TableFunctionInput &data_p, DataChunk &input,
-                                                DataChunk &output) {
-	py::gil_scoped_acquire acquire;
-
+static OperatorResultType ExecuteMap(ExecutionContext &context, TableFunctionInput &data_p, DataChunk &input,
+                                     DataChunk &output) {
 	if (input.size() == 0) {
 		return OperatorResultType::NEED_MORE_INPUT;
 	}
@@ -175,13 +204,14 @@ OperatorResultType MapFunction::MapFunctionExec(ExecutionContext &context, Table
 	NumpyResultConversion conversion(data.in_types, input.size(), context.client.GetClientProperties());
 	conversion.Append(input);
 
-	auto df = FunctionCall(conversion, data.in_names, data.function);
+	auto df = PandasScanFunction::PandasWithBoundNames(
+	    FunctionCall(conversion, data.in_names, data.info->function.obj.ptr()));
 
 	vector<PandasColumnBindData> pandas_bind_data;
 	vector<LogicalType> pandas_return_types;
-	vector<string> pandas_names;
+	vector<Identifier> pandas_names;
 
-	Pandas::Bind(context.client, df, pandas_bind_data, pandas_return_types, pandas_names);
+	auto row_count = Pandas::Bind(context.client, df, pandas_bind_data, pandas_return_types, pandas_names);
 	if (pandas_return_types.size() != output.ColumnCount()) {
 		throw InvalidInputException("Expected %llu columns from UDF, got %llu", output.ColumnCount(),
 		                            pandas_return_types.size());
@@ -196,20 +226,29 @@ OperatorResultType MapFunction::MapFunctionExec(ExecutionContext &context, Table
 		                            StringUtil::Join(data.out_names, ", "), StringUtil::Join(pandas_names, ", "));
 	}
 
-	auto df_columns = py::list(df.attr("columns"));
-	auto get_fun = df.attr("__getitem__");
-
-	idx_t row_count = py::len(get_fun(df_columns[0]));
 	if (row_count > STANDARD_VECTOR_SIZE) {
 		throw InvalidInputException("UDF returned more than %llu rows, which is not allowed.", STANDARD_VECTOR_SIZE);
 	}
 
 	for (idx_t col_idx = 0; col_idx < output.ColumnCount(); col_idx++) {
 		auto &bind_data = pandas_bind_data[col_idx];
-		PandasScanFunction::PandasBackendScanSwitch(bind_data, row_count, 0, output.data[col_idx]);
+		Vector temp(output.data[col_idx].GetType(), row_count);
+		PandasScanFunction::PandasBackendScanSwitch(context.client, bind_data, row_count, 0, temp);
+		VectorOperations::Copy(temp, output.data[col_idx], row_count, 0, 0);
 	}
-	output.SetCardinality(row_count);
+	output.SetChildCardinality(row_count);
 	return OperatorResultType::NEED_MORE_INPUT;
+}
+
+OperatorResultType MapFunction::MapFunctionExec(ExecutionContext &context, TableFunctionInput &data_p, DataChunk &input,
+                                                DataChunk &output) {
+	nb::gil_scoped_acquire acquire;
+	engine::CallbackScope callback(context.client);
+	try {
+		return ExecuteMap(context, data_p, input, output);
+	} catch (nb::python_error &error) {
+		throw AsDuckDBError(error);
+	}
 }
 
 } // namespace duckdb

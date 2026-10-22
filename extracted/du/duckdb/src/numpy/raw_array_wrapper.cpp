@@ -5,7 +5,7 @@
 #include "duckdb/common/types/timestamp.hpp"
 #include "utf8proc_wrapper.hpp"
 #include "duckdb/common/types/interval.hpp"
-#include "duckdb_python/pyrelation.hpp"
+#include "duckdb_python/pyresult.hpp"
 #include "duckdb_python/python_objects.hpp"
 #include "duckdb_python/pyconnection/pyconnection.hpp"
 #include "duckdb_python/pyresult.hpp"
@@ -46,8 +46,10 @@ static idx_t GetNumpyTypeWidth(const LogicalType &type) {
 	case LogicalTypeId::DATE:
 	case LogicalTypeId::INTERVAL:
 	case LogicalTypeId::TIMESTAMP_TZ:
+	case LogicalTypeId::TIMESTAMP_TZ_NS:
 		return sizeof(int64_t);
 	case LogicalTypeId::TIME:
+	case LogicalTypeId::TIME_NS:
 	case LogicalTypeId::TIME_TZ:
 	case LogicalTypeId::VARCHAR:
 	case LogicalTypeId::BIT:
@@ -56,9 +58,13 @@ static idx_t GetNumpyTypeWidth(const LogicalType &type) {
 	case LogicalTypeId::LIST:
 	case LogicalTypeId::MAP:
 	case LogicalTypeId::STRUCT:
+	case LogicalTypeId::TUPLE:
 	case LogicalTypeId::UNION:
 	case LogicalTypeId::UUID:
 	case LogicalTypeId::ARRAY:
+	case LogicalTypeId::VARIANT:
+	case LogicalTypeId::GEOMETRY:
+	case LogicalTypeId::SQLNULL:
 		return sizeof(PyObject *);
 	default:
 		throw NotImplementedException("Unsupported type \"%s\" for DuckDB -> NumPy conversion", type.ToString());
@@ -99,6 +105,7 @@ string RawArrayWrapper::DuckDBToNumpyDtype(const LogicalType &type) {
 		return "datetime64[us]";
 	case LogicalTypeId::TIMESTAMP_TZ:
 		return "datetime64[us]";
+	case LogicalTypeId::TIMESTAMP_TZ_NS:
 	case LogicalTypeId::TIMESTAMP_NS:
 		return "datetime64[ns]";
 	case LogicalTypeId::TIMESTAMP_MS:
@@ -108,8 +115,9 @@ string RawArrayWrapper::DuckDBToNumpyDtype(const LogicalType &type) {
 	case LogicalTypeId::DATE:
 		return "datetime64[us]";
 	case LogicalTypeId::INTERVAL:
-		return "timedelta64[ns]";
+		return "timedelta64[us]";
 	case LogicalTypeId::TIME:
+	case LogicalTypeId::TIME_NS:
 	case LogicalTypeId::TIME_TZ:
 	case LogicalTypeId::VARCHAR:
 	case LogicalTypeId::BIT:
@@ -117,9 +125,13 @@ string RawArrayWrapper::DuckDBToNumpyDtype(const LogicalType &type) {
 	case LogicalTypeId::LIST:
 	case LogicalTypeId::MAP:
 	case LogicalTypeId::STRUCT:
+	case LogicalTypeId::TUPLE:
 	case LogicalTypeId::UNION:
 	case LogicalTypeId::UUID:
 	case LogicalTypeId::ARRAY:
+	case LogicalTypeId::VARIANT:
+	case LogicalTypeId::GEOMETRY:
+	case LogicalTypeId::SQLNULL:
 		return "object";
 	case LogicalTypeId::ENUM: {
 		auto size = EnumType::GetSize(type);
@@ -141,14 +153,16 @@ string RawArrayWrapper::DuckDBToNumpyDtype(const LogicalType &type) {
 void RawArrayWrapper::Initialize(idx_t capacity) {
 	string dtype = DuckDBToNumpyDtype(type);
 
-	array = py::array(py::dtype(dtype), capacity);
-	data = data_ptr_cast(array.mutable_data());
+	array = NumpyArray::Allocate(dtype, capacity);
+	data = data_ptr_cast(array.MutableData());
 }
 
 void RawArrayWrapper::Resize(idx_t new_capacity) {
-	vector<py::ssize_t> new_shape {py::ssize_t(new_capacity)};
-	array.resize(new_shape, false);
-	data = data_ptr_cast(array.mutable_data());
+	// numpy's ndarray.resize() is in-place (no data copy) but REALLOCATES the buffer; NumpyArray::Resize
+	// performs it (refcheck=false) and invalidates+recomputes the cached buffer pointer, so MutableData()
+	// below returns the fresh address.
+	array.Resize(new_capacity);
+	data = data_ptr_cast(array.MutableData());
 }
 
 } // namespace duckdb
