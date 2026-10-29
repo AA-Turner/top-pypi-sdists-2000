@@ -21,8 +21,8 @@ class Fish(Struct):
     fins: int | UnsetType = UNSET
 
 
-class Goldfish(Fish):
-    kind: Literal['goldie']
+class Goldfish(Struct, tag_field='kind', tag='goldie'):
+    fins: int | UnsetType = UNSET
 
 
 class Dog(Struct, tag_field='kind', tag='dog'):
@@ -55,8 +55,8 @@ class Bird(Struct):
     wings: int | UnsetType = UNSET
 
 
-class Parrot(Bird):
-    kind: Literal['bird']
+class Parrot(Struct, tag_field='kind', tag='bird'):
+    wings: int | UnsetType = UNSET
 
 
 Aviary: TypeAlias = Parrot | Dog
