@@ -1,6 +1,9 @@
 # Copyright © 2018 Clarity Movement Co. All rights reserved.
+from collections.abc import Mapping
+
 from pymongo import monitoring
 from aws_xray_sdk.core import xray_recorder
+from aws_xray_sdk.core.models.throwable import _SAFE_FAILURE_FIELDS, _record_full_pymongo_documents
 
 
 class XrayCommandListener(monitoring.CommandListener):
@@ -10,13 +13,19 @@ class XrayCommandListener(monitoring.CommandListener):
 
     name: 'mydb@127.0.0.1:27017'
     records all available information provided by pymongo,
-    except for `command` and `reply`. They may contain business secrets.
-    If you insist to record them, specify `record_full_documents=True`.
+    except for `command`, `reply` and failure details.
+    They may contain business secrets.
+    If you insist to record them, specify `record_full_documents=True`,
+    which also stops the redaction of pymongo exception messages, i.e. of
+    error documents and duplicate key values, in the whole process, from
+    when the listener is created.
     """
 
     def __init__(self, record_full_documents):
         super().__init__()
         self.record_full_documents = record_full_documents
+        if record_full_documents:
+            _record_full_pymongo_documents()
 
     def started(self, event):
         host, port = event.connection_id
@@ -43,7 +52,12 @@ class XrayCommandListener(monitoring.CommandListener):
         subsegment = xray_recorder.current_subsegment()
         subsegment.add_fault_flag()
         subsegment.put_annotation('mongodb_duration_micros', event.duration_micros)
-        subsegment.put_metadata('failure', event.failure)
+        failure = event.failure
+        if not self.record_full_documents:
+            # pymongo may report None or a list as the failure
+            failure = {k: failure[k] for k in _SAFE_FAILURE_FIELDS
+                       if isinstance(failure, Mapping) and k in failure}
+        subsegment.put_metadata('failure', failure)
         xray_recorder.end_subsegment()
 
 

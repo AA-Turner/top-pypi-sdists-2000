@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: aws-xray-sdk
-Version: 2.14.0
+Version: 2.16.0
 Summary: The AWS X-Ray SDK for Python (the SDK) enables Python developers to record and emit information from within their applications to the AWS X-Ray service.
 Home-page: https://github.com/aws/aws-xray-sdk-python
 Author: Amazon Web Services
@@ -23,21 +23,45 @@ License-File: LICENSE
 License-File: NOTICE
 Requires-Dist: wrapt
 Requires-Dist: botocore>=1.11.3
+Dynamic: author
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 ![Build Status](https://github.com/aws/aws-xray-sdk-python/actions/workflows/IntegrationTesting.yaml/badge.svg)
 [![codecov](https://codecov.io/gh/aws/aws-xray-sdk-python/branch/master/graph/badge.svg)](https://codecov.io/gh/aws/aws-xray-sdk-python)
 
-### :mega: OpenTelemetry Python with AWS X-Ray
+# AWS X-Ray SDK for Python
+
+## :mega: Upcoming Maintenance Mode on February 25, 2026
+
+[The AWS X-Ray SDKs will enter maintenance mode on **`February 25, 2026`**][xray-sdk-daemon-timeline]. During maintenance mode, the X-Ray SDKs and Daemon will only receive critical bug fixes and security updates, and will not be updated to support new features.
+
+We recommend that you migrate to [AWS Distro for OpenTelemetry (ADOT) or OpenTelemetry Instrumentation][xray-otel-migration-docs] to generate traces (through manual or zero-code instrumentation) from your application and send them to AWS X-Ray. OpenTelemetry is the industry-wide standard for tracing instrumentation and observability. It has a large open-source community for support and provides more instrumentations and updates. By adopting an OpenTelemetry solution, developers can leverage the latest services and innovations from AWS CloudWatch.
+
+[xray-otel-migration-docs]: https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-migration.html
+[xray-sdk-daemon-timeline]: https://docs.aws.amazon.com/xray/latest/devguide/xray-daemon-eos.html
+
+-------------------------------------
+
+### OpenTelemetry Python with AWS X-Ray
 
 AWS X-Ray supports using OpenTelemetry Python and the AWS Distro for OpenTelemetry (ADOT) Collector to instrument your application and send trace data to X-Ray. The OpenTelemetry SDKs are an industry-wide standard for tracing instrumentation. They provide more instrumentations and have a larger community for support, but may not have complete feature parity with the X-Ray SDKs. See [choosing between the ADOT and X-Ray SDKs](https://docs.aws.amazon.com/xray/latest/devguide/xray-instrumenting-your-app.html#xray-instrumenting-choosing) for more help with choosing between the two.
 
 If you want additional features when tracing your Python applications, please [open an issue on the OpenTelemetry Python Instrumentation repository](https://github.com/open-telemetry/opentelemetry-python-contrib/issues/new?labels=feature-request&template=feature_request.md&title=X-Ray%20Compatible%20Feature%20Request).
 
-### :mega: Python Versions End-of-Support Notice
+### Python Versions End-of-Support Notice
 
 AWS X-Ray SDK for Python versions `>2.11.0` has dropped support for Python 2.7, 3.4, 3.5, and 3.6.
 
-# AWS X-Ray SDK for Python
+-------------------------------------
 
 ![Screenshot of the AWS X-Ray console](/images/example_servicemap.png?raw=true)
 
